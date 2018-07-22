@@ -3,6 +3,7 @@ import * as path from 'path';
 
 export function updateConfig() {
   const cwd = process.cwd();
+  console.log('cwd:', cwd);
   if (cwd.indexOf('xplat/schematics') > -1) {
     // ignore: local development
   } else {
