@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "id": "mode",
+  "title": "mode schema",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "The development mode: 'web' or 'nativescript'",
+      "alias": "n",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      }
+    }
+  }
+}

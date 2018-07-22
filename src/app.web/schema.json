@@ -1,0 +1,82 @@
+{
+    "$schema": "http://json-schema.org/schema",
+    "id": "app.web",
+    "title": "Create a web application",
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string",
+        "description": "Application name",
+        "$default": {
+          "$source": "argv",
+          "index": 0
+        }
+      },
+      "npmScope": {
+        "type": "string",
+        "description": "Calculated stuff"
+      },
+      "sample": {
+        "type": "boolean",
+        "description": "Use sample feature setup.",
+        "default": false
+      },
+      "directory": {
+        "type": "string",
+        "description": "A directory where the app is placed"
+      },
+      "inlineStyle": {
+        "description": "Specifies if the style will be in the ts file.",
+        "type": "boolean",
+        "default": false,
+        "alias": "is"
+      },
+      "inlineTemplate": {
+        "description": "Specifies if the template will be in the ts file.",
+        "type": "boolean",
+        "default": false,
+        "alias": "it"
+      },
+      "viewEncapsulation": {
+        "description": "Specifies the view encapsulation strategy.",
+        "enum": ["Emulated", "Native", "None"],
+        "type": "string"
+      },
+      "changeDetection": {
+        "description": "Specifies the change detection strategy.",
+        "enum": ["Default", "OnPush"],
+        "type": "string",
+        "default": "Default"
+      },
+      "routing": {
+        "type": "boolean",
+        "default": false
+      },
+      "skipTests": {
+        "description": "Skip creating spec files.",
+        "type": "boolean",
+        "default": false,
+        "alias": "st"
+      },
+      "prefix": {
+        "type": "string",
+        "description": "The prefix to apply to generated selectors.",
+        "alias": "p"
+      },
+      "style": {
+        "description": "The file extension to be used for style files.",
+        "type": "string",
+        "default": "css"
+      },
+      "tags": {
+        "type": "string",
+        "description": "Add tags to the application (used for linting)"
+      },
+      "skipFormat": {
+        "description": "Skip formatting files",
+        "type": "boolean",
+        "default": false
+      }
+    },
+    "required": []
+  }

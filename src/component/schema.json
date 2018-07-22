@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "id": "component",
+  "title": "Create a component in xplat.",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Component name",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      }
+    },
+    "feature": {
+      "type": "string",
+      "description": "Target feature"
+    },
+    "projects": {
+      "type": "string",
+      "description": "Target projects"
+    },
+    "onlyProject": {
+      "type": "boolean",
+      "description": "Generate for specified projects only and ignore shared code.",
+      "default": false
+    },
+    "platforms": {
+      "type": "string",
+      "description": "Target platforms"
+    },
+    "ignoreBase": {
+      "type": "boolean",
+      "description": "Ignore base component generation.",
+      "default": false
+    },
+    "skipFormat": {
+      "description": "Skip formatting files",
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": []
+}

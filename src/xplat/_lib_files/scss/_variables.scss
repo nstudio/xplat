@@ -1,0 +1,18 @@
+/**
+ * The following are variables shared across all platforms and apps
+ */
+
+// could use a base theme here, for example:
+// @import '~@angular/material/theming';
+
+/**
+ *  Why NativeScript scss variables here? 
+ *  Because they cover some nice ground level variables.
+ *  You can use them for multi-platform development (web included).
+ *  See here: https://github.com/NativeScript/theme/blob/master/app/scss/_variables.scss
+ *  Although feel free to use your own base variables.
+ */
+
+@import '~nativescript-theme-core/scss/variables'; 
+
+// override any imported variables here...

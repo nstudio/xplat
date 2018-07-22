@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "id": "app-resources",
+  "title": "App Resources Options Schema",
+  "type": "object",
+  "properties": {
+    "path": {
+      "type": "string",
+      "alias": "p"
+    },
+    "name": {
+      "type": "string",
+      "alias": "n",
+      "default": "App_Resources"
+    }
+  },
+  "required": [
+    "path"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "name": "xplat-admin",
+  "version": "1.0.0",
+  "description": "Admin control panel for xplat.",
+  "main": "main.js",
+  "author": "nStudio",
+  "license": "Apache 2.0"
+}

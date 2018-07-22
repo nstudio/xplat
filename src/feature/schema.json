@@ -1,0 +1,49 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "id": "feature",
+  "title": "Create a feature in xplat.",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Feature name",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      }
+    },
+    "projects": {
+      "type": "string",
+      "description": "Project names"
+    },
+    "platforms": {
+      "type": "string",
+      "description": "Target platforms to support."
+    },
+    "onlyProject": {
+      "type": "boolean",
+      "description": "Generate for specified projects only and ignore shared code.",
+      "default": false
+    },
+    "onlyModule": {
+      "type": "boolean",
+      "description": "Generate just the module and ignore the default component.",
+      "default": false
+    },
+    "ignoreBase": {
+      "type": "boolean",
+      "description": "Ignore base component generation.",
+      "default": false
+    },
+    "routing": {
+      "type": "boolean",
+      "default": false
+    },
+    "skipFormat": {
+      "description": "Skip formatting files",
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": []
+}

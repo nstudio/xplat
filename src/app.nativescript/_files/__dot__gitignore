@@ -1,0 +1,30 @@
+# system files
+.DS_Store
+Thumbs.db
+
+# nativescript
+/hooks
+/node_modules
+/platforms
+
+app/**/*.js
+app/**/*.d.ts
+app/**/*.map
+app/**/*.css
+
+# misc
+npm-debug.log
+
+# app
+!app/assets/fontawesome.min.css
+!app/app.module.ngfactory.d.ts
+!webpack.config.js
+/report/
+.nsbuildinfo
+/temp/
+/app/tns_modules/
+
+# app uses platform specific scss which can inadvertently get renamed which will cause problems
+app/app.scss
+
+package-lock.json

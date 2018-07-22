@@ -1,0 +1,123 @@
+{
+  "$schema": "../node_modules/@nrwl/schematics/src/collection.json",
+  "schematics": {
+    "app.nativescript": {
+      "factory": "./app.nativescript",
+      "schema": "./app.nativescript/schema.json",
+      "description": "Create a NativeScript app."
+    },
+    "app.ionic": {
+      "factory": "./app.ionic",
+      "schema": "./app.ionic/schema.json",
+      "description": "Create an Ionic app."
+    },
+    "app-resources": {
+      "factory": "./app-resources",
+      "schema": "./app-resources/schema.json",
+      "description": "Create app resources for NativeScript app."
+    },
+    "mode": {
+      "factory": "./mode",
+      "schema": "./mode/schema.json",
+      "description": "Multi-platform development modes for IDEs."
+    },
+    "ts-config": {
+      "factory": "./ts-config",
+      "schema": "./ts-config/schema.json",
+      "description": "Configure tsconfig for xplat."
+    },
+    "xplat": {
+      "factory": "./xplat",
+      "schema": "./xplat/schema.json",
+      "description": "Add xplat development setup for optimal code reuse."
+    },
+    "app": {
+      "factory": "./app.web",
+      "schema": "./app.web/schema.json",
+      "description": "Nx web app with xplat support."
+    },
+    "feature": {
+      "factory": "./feature",
+      "schema": "./feature/schema.json",
+      "description": "Create a feature module configured for xplat projects and shared code."
+    },
+    "component": {
+      "factory": "./component",
+      "schema": "./component/schema.json",
+      "description": "Create a component configured for xplat projects and shared code.",
+      "aliases": [
+        "c"
+      ]
+    },
+    "directive": {
+      "factory": "./directive",
+      "schema": "./directive/schema.json",
+      "description": "Create a directive configured for xplat projects and shared code.",
+      "aliases": [
+        "d"
+      ]
+    },
+    "pipe": {
+      "factory": "./pipe",
+      "schema": "./pipe/schema.json",
+      "description": "Create a pipe configured for xplat projects and shared code.",
+      "aliases": [
+        "p"
+      ]
+    },
+    "service": {
+      "factory": "./service",
+      "schema": "./service/schema.json",
+      "description": "Create a service configured for xplat projects and shared code.",
+      "aliases": [
+        "s"
+      ]
+    },
+    "ngrx": {
+      "factory": "./ngrx",
+      "schema": "./ngrx/schema.json",
+      "description": "Create a ngrx store."
+    },
+    "admin": {
+      "factory": "./admin",
+      "schema": "./admin/schema.json",
+      "description": "xplat admin tool."
+    },
+    "library": {
+      "extends": "@nrwl/schematics:library"
+    },
+    "workspace-schematic": {
+      "extends": "@nrwl/schematics:workspace-schematic"
+    },
+    "class": {
+      "aliases": [
+        "cl"
+      ],
+      "extends": "@schematics/angular:class"
+    },
+    "module": {
+      "aliases": [
+        "m"
+      ],
+      "extends": "@schematics/angular:module"
+    },
+    "enum": {
+      "aliases": [
+        "e"
+      ],
+      "extends": "@schematics/angular:enum"
+    },
+    "guard": {
+      "aliases": [
+        "g"
+      ],
+      "extends": "@schematics/angular:guard"
+    },
+    "interface": {
+      "aliases": [
+        "i"
+      ],
+      "extends": "@schematics/angular:interface"
+    }
+  }
+}

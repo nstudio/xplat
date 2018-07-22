@@ -1,0 +1,14 @@
+/**
+ * The following are shared across all platforms and apps
+ */
+
+// shared variables 
+@import 'variables';
+
+// shared mixins
+@import '~nativescript-theme-core/scss/mixins/index';
+
+// shared utilities
+@import '~nativescript-theme-core/scss/utilities/index';
+
+// create/import other scss files or define as needed...

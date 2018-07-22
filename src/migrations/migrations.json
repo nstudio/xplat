@@ -1,0 +1,34 @@
+{
+    "schematics": {
+      "update-to-6.1.0": {
+        "version": "6.1.0",
+        "description": "Update {N} and add livesync improvements",
+        "factory": "./update-6-1-0/update-6-1-0"
+      },
+      "update-to-6.1.1": {
+        "version": "6.1.1",
+        "description": "Fix livesync",
+        "factory": "./update-6-1-1/update-6-1-1"
+      },
+      "update-to-6.1.4": {
+        "version": "6.1.4",
+        "description": "Fix {N} start scripts",
+        "factory": "./update-6-1-4/update-6-1-4"
+      },
+      "update-to-6.1.5": {
+        "version": "6.1.5",
+        "description": "Update {N} webpack",
+        "factory": "./update-6-1-5/update-6-1-5"
+      },
+      "update-to-6.1.6": {
+        "version": "6.1.6",
+        "description": "Update {N} webpack with 14.1",
+        "factory": "./update-6-1-6/update-6-1-6"
+      },
+      "update-to-6.1.12": {
+        "version": "6.1.12",
+        "description": "Update {N} @ngtools/webpack",
+        "factory": "./update-6-1-12/update-6-1-12"
+      }
+    }
+  }

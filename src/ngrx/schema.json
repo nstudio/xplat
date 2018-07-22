@@ -1,0 +1,45 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "id": "directive",
+  "title": "Create a directive in xplat.",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Directive name",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      }
+    },
+    "feature": {
+      "type": "string",
+      "description": "Target feature"
+    },
+    "projects": {
+      "type": "string",
+      "description": "Target projects"
+    },
+    "platforms": {
+      "type": "string",
+      "description": "Target platforms"
+    },
+    "module": {
+      "type": "string",
+      "default": "",
+      "description": "Allows specification of the declaring module.",
+      "alias": "m"
+    },
+    "root": {
+      "type": "boolean",
+      "default": false,
+      "description": "Flag to setup the root state or feature state."
+    },
+    "skipFormat": {
+      "description": "Skip formatting files",
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": []
+}
