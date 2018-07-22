@@ -7,7 +7,7 @@ We greatly appreciate your help! You will be attributed to the contributor list 
 After cloning the project: 
 
 ```
-npm i
+npm i --ignore-scripts
 ```
 
 You can publish the schematic locally to test against any Nx workspace using [verdaccio](https://www.npmjs.com/package/verdaccio):
