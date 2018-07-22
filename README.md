@@ -24,15 +24,15 @@ With the strength of [TypeScript](https://www.typescriptlang.org/) paired with t
 
 * [Setup Guide](https://nstudio.io/xplat/)
 * [Generators](https://nstudio.io/xplat/generators/)
-* [Wiki](https://nstudio.io/xplat/generators/)
+* [Wiki](https://github.com/nstudio/xplat/wiki/FAQ)
 
 ### Talks
 
-* [Super Powered, Server Rendered Progressive Native Apps - Nathan Walker, Jeff Whelpley](https://www.youtube.com/watch?v=EqqNexmu3Ug)
+* [Super Powered, Server Rendered Progressive Native Apps](https://www.youtube.com/watch?v=EqqNexmu3Ug) by [Nathan Walker](http://github.com/NathanWalker) and [Jeff Whelpley](https://github.com/jeffwhelpley)
 
 ## Contributing
 
-Please see our [guidelines for contributing](https://github.com/nrwl/nx/blob/master/CONTRIBUTING.md).
+Please see our [guidelines for contributing](https://github.com/nstudio/xplat/blob/master/CONTRIBUTING.md).
 
 
 
