@@ -6,3 +6,7 @@ node_modules
 *_spec.*
 *.tgz
 package-lock.json
+.git
+.travis.yml
+.vscode
+/tsconfig.json
