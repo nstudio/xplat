@@ -29,9 +29,17 @@ updateConfig();
 
 export function fixFormatter() {
   const formatPath = path.join(process.cwd(), '/../..', '@nrwl/schematics/src/command-line/format.js');
-  // console.log('formatPath:', formatPath);
   let formatContent = fs.readFileSync(formatPath, 'UTF-8');
-  const patchLine = `    patterns.push("xplat\/**\/*.ts", "!apps/**/platforms/{android,ios}/**/*.ts");`;
+
+  // Old patch line, globs should've been wrapped in quotes.
+  const oldPatchLine = `    patterns.push("xplat\/**\/*.ts", "!apps/**/platforms/{android,ios}/**/*.ts");`;
+  const patchLine = `    patterns.push("\"xplat\/**\/*.ts\"", "\"!apps/**/platforms/{android,ios}/**/*.ts\"");`;
+  if (formatContent.indexOf(oldPatchLine) !== -1) {
+    console.log('Old patch for nx format have been applied, replace with new patch');
+    fs.writeFileSync(formatPath, formatContent.replace(oldPatchLine, patchLine));
+    return;
+  }
+
   if (formatContent.indexOf(patchLine) !== -1) {
     console.log(`Patch for nx format have already been applied`);
     return;
@@ -45,6 +53,7 @@ export function fixFormatter() {
   const newFormatContent = formatContent.replace(patchRegExp, `$1\n${patchLine}\n$2`);
   if (formatContent !== newFormatContent) {
     fs.writeFileSync(formatPath, newFormatContent);
+    console.log('Patch for nx format have been applied');
   } else {
     throw new Error(`Apply couldn't patch for nx format`);
   }
