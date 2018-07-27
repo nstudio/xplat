@@ -260,42 +260,42 @@ export function addRootDepsIonic(tree: Tree, packageJson?: any) {
     const deps: NodeDependency[] = [];
     let dep: NodeDependency = {
       name: '@ionic-native/core',
-      version: '5.0.0-beta.12',
+      version: '5.0.0-beta.14',
       type: 'dependency'
     };
     deps.push(dep);
 
     dep = {
       name: '@ionic-native/splash-screen',
-      version: '5.0.0-beta.12',
+      version: '5.0.0-beta.14',
       type: 'dependency'
     };
     deps.push(dep);
 
     dep = {
       name: '@ionic-native/status-bar',
-      version: '5.0.0-beta.12',
+      version: '5.0.0-beta.14',
       type: 'dependency'
     };
     deps.push(dep);
 
     dep = {
       name: '@ionic/angular',
-      version: '~4.0.0-alpha.10',
+      version: '~4.0.0-beta.0',
       type: 'dependency'
     };
     deps.push(dep);
 
     dep = {
       name: '@ionic/ng-toolkit',
-      version: '~1.0.0-rc.11',
+      version: '~1.0.0',
       type: 'dependency'
     };
     deps.push(dep);
 
     dep = {
       name: '@ionic/schematics-angular',
-      version: '~1.0.0-rc.11',
+      version: '~1.0.1',
       type: 'dependency'
     };
     deps.push(dep);
