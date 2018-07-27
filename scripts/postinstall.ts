@@ -33,7 +33,7 @@ export function fixFormatter() {
 
   // Old patch line, globs should've been wrapped in quotes.
   const oldPatchLine = `    patterns.push("xplat\/**\/*.ts", "!apps/**/platforms/{android,ios}/**/*.ts");`;
-  const patchLine = `    patterns.push("\"xplat\/**\/*.ts\"", "\"!apps/**/platforms/{android,ios}/**/*.ts\"");`;
+  const patchLine = `    patterns.push('\"xplat\/**\/*.ts\"', '\"!apps/**/platforms/{android,ios}/**/*.ts\"');`;
   if (formatContent.indexOf(oldPatchLine) !== -1) {
     console.log('Old patch for nx format have been applied, replace with new patch');
     fs.writeFileSync(formatPath, formatContent.replace(oldPatchLine, patchLine));

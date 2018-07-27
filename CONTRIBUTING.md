@@ -93,6 +93,7 @@ The scope must be one of the following:
 
 * generators
 * admin
+* scripts
 
 #### Subject
 
