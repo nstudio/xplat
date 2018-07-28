@@ -20,16 +20,17 @@ import { errorXplat } from "./errors";
 import * as fs from "fs";
 import * as ts from "typescript";
 
-export const supportedPlatforms = ["web", "nativescript", "ionic"];
+export const supportedPlatforms = ["web", "nativescript", "ionic", "electron"];
 export interface ITargetPlatforms {
   web?: boolean;
   nativescript?: boolean;
   ionic?: boolean;
+  electron?: boolean;
   ssr?: boolean;
 }
 export const defaultPlatforms = "web,nativescript";
 
-export type IDevMode = "web" | "nativescript" | "ionic" | "fullstack";
+export type IDevMode = "web" | "nativescript" | "ionic" | "electron" | "fullstack";
 
 export interface NodeDependency {
   name: string;
@@ -288,6 +289,15 @@ export function addRootDeps(
         name: `@${getNpmScope()}/web`,
         version: "file:xplat/web",
         type: "dependency"
+      };
+      deps.push(dep);
+    }
+
+    if (targetPlatforms.electron) {
+      dep = {
+        name: 'electron',
+        version: '',
+        type: 'devDependency'
       };
       deps.push(dep);
     }
