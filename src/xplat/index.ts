@@ -114,6 +114,11 @@ export default function(options: xPlatOptions) {
       targetPlatforms.ssr
         ? addPlatformFiles(tree, options, "ssr")(tree, context)
         : noop()(tree, context),
+    // electron (WIP)
+    (tree: Tree, context: SchematicContext) =>
+      targetPlatforms.ssr
+        ? addPlatformFiles(tree, options, "electron")(tree, context)
+        : noop()(tree, context),
     // testing
     (tree: Tree, context: SchematicContext) =>
       addTestingFiles(tree, options)(tree, context),
