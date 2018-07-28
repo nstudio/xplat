@@ -296,7 +296,7 @@ export function addRootDeps(
     if (targetPlatforms.electron) {
       dep = {
         name: 'electron',
-        version: '',
+        version: '2.0.5',
         type: 'devDependency'
       };
       deps.push(dep);
