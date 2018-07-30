@@ -44,7 +44,7 @@ describe('feature schematic', () => {
     expect(files.indexOf('/xplat/nativescript/index.ts')).toBeGreaterThanOrEqual(0);
     expect(files.indexOf('/xplat/web/index.ts')).toBeGreaterThanOrEqual(0);
 
-    // feature
+    // feature in shared code
     expect(files.indexOf('/libs/features/foo/index.ts')).toBeGreaterThanOrEqual(0);
     expect(files.indexOf('/libs/features/foo/base/foo.base-component.ts')).toBeGreaterThanOrEqual(0);
     expect(files.indexOf('/xplat/nativescript/features/foo/index.ts')).toBeGreaterThanOrEqual(0);
@@ -55,6 +55,16 @@ describe('feature schematic', () => {
     expect(files.indexOf('/xplat/web/features/foo/foo.module.ts')).toBeGreaterThanOrEqual(0);
     expect(files.indexOf('/xplat/web/features/foo/components/foo/foo.component.html')).toBeGreaterThanOrEqual(0);
     expect(files.indexOf('/xplat/web/features/foo/components/foo/foo.component.ts')).toBeGreaterThanOrEqual(0);
+
+    // feature should NOT be in projects
+    expect(files.indexOf('/apps/nativescript-viewer/app/features/foo/index.ts')).toBeGreaterThanOrEqual(-1);
+    expect(files.indexOf('/apps/nativescript-viewer/app/features/foo/foo.module.ts')).toBeGreaterThanOrEqual(-1);
+    expect(files.indexOf('/apps/nativescript-viewer/app/features/foo/components/foo/foo.component.html')).toBeGreaterThanOrEqual(-1);
+    expect(files.indexOf('/apps/nativescript-viewer/app/features/foo/components/foo/foo.component.ts')).toBeGreaterThanOrEqual(-1);
+    expect(files.indexOf('/apps/web-viewer/src/app/features/foo/index.ts')).toBeGreaterThanOrEqual(-1);
+    expect(files.indexOf('/apps/web-viewer/src/app/features/foo/foo.module.ts')).toBeGreaterThanOrEqual(-1);
+    expect(files.indexOf('/apps/web-viewer/src/app/features/foo/components/foo/foo.component.html')).toBeGreaterThanOrEqual(-1);
+    expect(files.indexOf('/apps/web-viewer/src/app/features/foo/components/foo/foo.component.ts')).toBeGreaterThanOrEqual(-1);
 
     // file content
     let modulePath = '/xplat/nativescript/features/foo/foo.module.ts';
@@ -206,6 +216,18 @@ describe('feature schematic', () => {
     expect(files.indexOf('/apps/web-viewer/src/app/features/foo/foo.module.ts')).toBeGreaterThanOrEqual(0);
     expect(files.indexOf('/apps/web-viewer/src/app/features/foo/components/foo/foo.component.html')).toBeGreaterThanOrEqual(0);
     expect(files.indexOf('/apps/web-viewer/src/app/features/foo/components/foo/foo.component.ts')).toBeGreaterThanOrEqual(0);
+
+    // NOT in shared code
+    expect(files.indexOf('/libs/features/foo/index.ts')).toBe(-1);
+    expect(files.indexOf('/libs/features/foo/base/foo.base-component.ts')).toBe(-1);
+    expect(files.indexOf('/xplat/nativescript/features/foo/index.ts')).toBeGreaterThanOrEqual(-1);
+    expect(files.indexOf('/xplat/nativescript/features/foo/foo.module.ts')).toBeGreaterThanOrEqual(-1);
+    expect(files.indexOf('/xplat/nativescript/features/foo/components/foo/foo.component.html')).toBe(-1);
+    expect(files.indexOf('/xplat/nativescript/features/foo/components/foo/foo.component.ts')).toBe(-1);
+    expect(files.indexOf('/xplat/web/features/foo/index.ts')).toBeGreaterThanOrEqual(-1);
+    expect(files.indexOf('/xplat/web/features/foo/foo.module.ts')).toBeGreaterThanOrEqual(-1);
+    expect(files.indexOf('/xplat/web/features/foo/components/foo/foo.component.html')).toBeGreaterThanOrEqual(-1);
+    expect(files.indexOf('/xplat/web/features/foo/components/foo/foo.component.ts')).toBeGreaterThanOrEqual(-1);
 
     // file content
     let modulePath = '/apps/nativescript-viewer/app/features/foo/foo.module.ts';

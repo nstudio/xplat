@@ -142,7 +142,7 @@ export default function(options: featureOptions) {
         : noop()(tree, context),
     // add starting component unless onlyModule
     (tree: Tree, context: SchematicContext) =>
-      !options.onlyModule && targetPlatforms.web
+      !options.onlyProject && !options.onlyModule && targetPlatforms.web
         ? addFiles(options, "web", null, "_component")(tree, context)
         : noop()(tree, context),
     // nativescript
@@ -160,7 +160,7 @@ export default function(options: featureOptions) {
         : noop()(tree, context),
     // add starting component unless onlyModule
     (tree: Tree, context: SchematicContext) =>
-      !options.onlyModule && targetPlatforms.nativescript
+      !options.onlyProject && !options.onlyModule && targetPlatforms.nativescript
         ? addFiles(options, "nativescript", null, "_component")(tree, context)
         : noop()(tree, context),
     // ionic
@@ -175,7 +175,7 @@ export default function(options: featureOptions) {
         : noop()(tree, context),
     // add starting component unless onlyModule
     (tree: Tree, context: SchematicContext) =>
-      !options.onlyModule && targetPlatforms.ionic
+      !options.onlyProject && !options.onlyModule && targetPlatforms.ionic
         ? addFiles(options, "ionic", null, "_component")(tree, context)
         : noop()(tree, context),
     // project handling
