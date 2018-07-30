@@ -32,6 +32,11 @@
       "type": "boolean",
       "description": "Skip installing dependencies.",
       "default": false
+    },
+    "skipFormat": {
+      "description": "Skip formatting files",
+      "type": "boolean",
+      "default": false
     }
   },
   "required": []

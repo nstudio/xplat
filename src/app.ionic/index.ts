@@ -14,7 +14,7 @@ import {
   schematic,
   noop,
 } from '@angular-devkit/schematics';
-import { stringUtils, prerun, getNpmScope, getPrefix, addRootDepsIonic, updatePackageScripts, updateAngularProjects, updateNxProjects } from '../utils';
+import { stringUtils, prerun, getNpmScope, getPrefix, addRootDepsIonic, updatePackageScripts, updateAngularProjects, updateNxProjects, formatFiles } from '../utils';
 import { Schema as ApplicationOptions } from './schema';
 
 export default function (options: ApplicationOptions) {
@@ -77,6 +77,9 @@ export default function (options: ApplicationOptions) {
         prefix: getPrefix(),
         onlyIfNone: true,
       }) : noop(),
+    options.skipFormat 
+      ? noop()
+      : formatFiles(options)
   ]);
 }
 

@@ -180,7 +180,9 @@ export default function(options: featureOptions) {
         : noop()(tree, context),
     // project handling
     ...projectChains,
-    formatFiles(options)
+    options.skipFormat 
+      ? noop()
+      : formatFiles(options)
   ]);
 }
 

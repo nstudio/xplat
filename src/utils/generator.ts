@@ -265,7 +265,9 @@ export function generate(type: IGenerateType, options) {
           // ensure ngrx dependencies are added to root package
           ? updatePackageForNgrx(tree)
           : noop()(tree, context),
-       formatFiles(options)
+      options.skipFormat 
+          ? noop()
+          : formatFiles(options)
     ]);
 }
 

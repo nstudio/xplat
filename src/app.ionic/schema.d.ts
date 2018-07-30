@@ -19,4 +19,8 @@ export interface Schema {
      * Skip installing dependencies
      */
     skipInstall?: boolean;
+    /**
+     * Skip formatting files
+     */
+    skipFormat?: boolean;
 }

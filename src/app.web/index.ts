@@ -65,7 +65,9 @@ export default function(options: ApplicationOptions) {
       scripts[`start.web.${appName}`] = `ng serve ${options.name}`;
       return updatePackageScripts(tree, scripts);
     },
-    formatFiles(options)
+    options.skipFormat 
+      ? noop()
+      : formatFiles(options)
   ]);
 }
 
