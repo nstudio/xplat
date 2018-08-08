@@ -12,10 +12,36 @@ import { getJsonFromFile, updateJsonFile, updateJsonInTree, createOrUpdate } fro
 function updateRootPackage(tree: Tree, context: SchematicContext) {
   return updateJsonInTree("package.json", json => {
     json.dependencies = json.dependencies || {};
-    json.dependencies['nativescript-angular'] = '~6.1.0';
-    json.dependencies['tns-core-modules'] = '~4.2.0';
+    if (json.dependencies['nativescript-angular']) {
+      json.dependencies['nativescript-angular'] = '~6.1.0';
+    }
+    if (json.dependencies['tns-core-modules']) {
+      json.dependencies['tns-core-modules'] = '~4.2.0';
+    }
+    if (json.dependencies['@ionic-native/core']) {
+      json.dependencies['@ionic-native/core'] = '5.0.0-beta.14';
+    }
+    if (json.dependencies['@ionic-native/splash-screen']) {
+      json.dependencies['@ionic-native/splash-screen'] = '5.0.0-beta.14';
+    }
+    if (json.dependencies['@ionic-native/status-bar']) {
+      json.dependencies['@ionic-native/status-bar'] = '5.0.0-beta.14';
+    }
+    if (json.dependencies['@ionic/angular']) {
+      json.dependencies['@ionic/angular'] = '~4.0.0-beta.1';
+    }
+    if (json.dependencies['@ionic/ng-toolkit']) {
+      json.dependencies['@ionic/ng-toolkit'] = '~1.0.0';
+    }
+    if (json.dependencies['@ionic/schematics-angular']) {
+      json.dependencies['@ionic/schematics-angular'] = '~1.0.0';
+    }
+
     json.devDependencies = json.devDependencies || {};
-    json.devDependencies['tns-platform-declarations'] = '~4.2.0';
+    if (json.devDependencies['tns-platform-declarations']) {
+      json.devDependencies['tns-platform-declarations'] = '~4.2.0';
+    }
+    
     return json;
   })(tree, context);
 }
@@ -85,6 +111,13 @@ function updateIonicApps(tree: Tree, context: SchematicContext) {
       if (packageJson) {
 
         packageJson.dependencies = packageJson.dependencies || {};
+        packageJson.dependencies = {
+          ...packageJson.dependencies,
+          "@capacitor/android": "^1.0.0-beta.3",
+          "@capacitor/cli": "^1.0.0-beta.3",
+          "@capacitor/core": "^1.0.0-beta.3",
+          "@capacitor/ios": "^1.0.0-beta.3"
+        };
         packageJson.devDependencies = packageJson.devDependencies || {};
         packageJson.devDependencies = {
           ...packageJson.devDependencies,
