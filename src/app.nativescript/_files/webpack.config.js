@@ -3,7 +3,6 @@ const { join, relative, resolve, sep } = require("path");
 const webpack = require("webpack");
 const nsWebpack = require("nativescript-dev-webpack");
 const nativescriptTarget = require("nativescript-dev-webpack/nativescript-target");
-const { PlatformReplacementHost } = require("nativescript-dev-webpack/host/platform");
 const CleanWebpackPlugin = require("clean-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
@@ -23,9 +22,6 @@ module.exports = env => {
         throw new Error("You need to provide a target platform!");
     }
 
-    const extensions = ["tns", platform];
-    const platformHost = new PlatformReplacementHost(extensions);
-
     const projectRoot = __dirname;
 
     // Default destination inside platforms/<platform>/...
@@ -44,13 +40,14 @@ module.exports = env => {
         snapshot, // --env.snapshot
         uglify, // --env.uglify
         report, // --env.report
+        sourceMap, // --env.sourceMap
     } = env;
 
     const appFullPath = resolve(projectRoot, appPath);
     const appResourcesFullPath = resolve(projectRoot, appResourcesPath);
 
     const entryModule = aot ?
-        nsWebpack.getAotEntryModule(appFullPath) :
+        nsWebpack.getAotEntryModule(appFullPath) : 
         `${nsWebpack.getEntryModule(appFullPath)}.ts`;
     const entryPath = `.${sep}${entryModule}`;
 
@@ -100,7 +97,7 @@ module.exports = env => {
             "fs": "empty",
             "__dirname": false,
         },
-        devtool: "none",
+        devtool: sourceMap ? "inline-source-map" : "none",
         optimization: {
             splitChunks: {
                 cacheGroups: {
@@ -128,27 +125,9 @@ module.exports = env => {
                         compress: {
                             // The Android SBG has problems parsing the output
                             // when these options are enabled
-                            collapse_vars: platform !== "android",
-                            sequences: platform !== "android",
-                            // custom
-                            drop_console : true,
-                            drop_debugger: true,
-                            ecma: 6,
-                            keep_infinity: platform === 'android', // for Chrome/V8
-                            // passes       : 1,
-                            reduce_funcs : platform !== 'android', // for Chrome/V8
-                            // reduce_vars  : platform !== 'android', // for asbg
-                            pure_funcs   : [
-                                'this._log.debug',
-                                'this._log.error',
-                                'this._log.info',
-                                'this._log.warn',
-                            ],
-                        },
-                        // custom
-                        ecma: 6,
-                        safari10: platform !== 'android',
-                        // warnings: 'verbose',
+                            'collapse_vars': platform !== "android",
+                            sequences: platform !== "android"
+                        }
                     }
                 })
             ],
@@ -198,7 +177,7 @@ module.exports = env => {
 
                 // Compile TypeScript files with ahead-of-time compiler.
                 {
-                    test: /\.ts$/, use: [
+                    test: /.ts$/, use: [
                         "nativescript-dev-webpack/moduleid-compat-loader",
                         "@ngtools/webpack",
                     ]
@@ -216,6 +195,7 @@ module.exports = env => {
             // Define useful constants like TNS_WEBPACK
             new webpack.DefinePlugin({
                 "global.TNS_WEBPACK": "true",
+                "process": undefined,
             }),
             // Remove all files from the out dir.
             new CleanWebpackPlugin([ `${dist}/**/*` ]),
@@ -229,11 +209,11 @@ module.exports = env => {
             ]),
             // Copy assets to out dir. Add your own globs as needed.
             new CopyWebpackPlugin([
-                { from: 'assets/**' },
-                { from: "fonts/**" },
-                { from: "**/*.jpg" },
-                { from: "**/*.png" },
-                { from: '**/*.xml' },
+              { from: 'assets/**' },
+              { from: "fonts/**" },
+              { from: "**/*.jpg" },
+              { from: "**/*.png" },
+              { from: '**/*.xml' },
             ], { ignore: [`${relative(appPath, appResourcesFullPath)}/**`] }),
             // Generate a bundle starter script and activate it in package.json
             new nsWebpack.GenerateBundleStarterPlugin([
@@ -245,10 +225,11 @@ module.exports = env => {
             new NativeScriptWorkerPlugin(),
 
             new AngularCompilerPlugin({
-                host: platformHost,
+                hostReplacementPaths: nsWebpack.getResolver([platform, "tns"]),
                 entryModule: resolve(appPath, "app.module#AppModule"),
                 tsConfigPath: join(__dirname, "tsconfig.esm.json"),
                 skipCodeGeneration: !aot,
+                sourceMap: !!sourceMap,
             }),
             // Does IPC communication with the {N} CLI to notify events when running in watch mode.
             new nsWebpack.WatchStateLoggerPlugin(),

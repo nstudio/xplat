@@ -23,6 +23,8 @@
     "prepare.android.release": "tns prepare android --release",
     "build.ios": "tns build ios --bundle --env.aot --env.uglify --release",
     "build.android": "tns build android --bundle --env.aot --env.uglify --release",
+    "debug.ios": "tns debug ios --bundle",
+    "debug.android": "tns debug android --bundle",
     "postinstall": "node ./tools/xplat-postinstall.js"
   },
   "dependencies": {
@@ -51,9 +53,9 @@
     "zone.js": "file:../../node_modules/zone.js"
   },
   "devDependencies": {
-    "@angular/compiler-cli": "6.1.0-rc.0",
+    "@angular/compiler-cli": "~6.1.1",
     "@angular/language-service": "file:../../node_modules/@angular/language-service",
-    "@ngtools/webpack": "6.1.0-rc.0",
+    "@ngtools/webpack": "~6.1.1",
     "babel-traverse": "6.26.0",
     "babel-types": "6.26.0",
     "babylon": "6.18.0",
@@ -65,7 +67,7 @@
     "lazy": "1.0.11",
     "nativescript-css-loader": "~0.26.0",
     "nativescript-dev-typescript": "~0.7.1",
-    "nativescript-dev-webpack": "~0.14.1",
+    "nativescript-dev-webpack": "~0.15.0",
     "nativescript-worker-loader": "~0.9.0",
     "raw-loader": "~0.5.1",
     "resolve-url-loader": "~2.3.0",

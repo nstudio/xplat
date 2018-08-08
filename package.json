@@ -1,6 +1,6 @@
 {
   "name": "@nstudio/schematics",
-  "version": "6.1.24",
+  "version": "6.2.0",
   "description": "Cross-platform (xplat) tools for Nx workspaces.",
   "readmeFilename": "README.md",
   "scripts": {
@@ -48,14 +48,14 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@angular-devkit/core": "~0.6.0",
-    "@angular-devkit/schematics": "~0.6.0",
-    "@nrwl/schematics": "^6.1.0",
-    "@schematics/angular": "~0.6.0",
+    "@angular-devkit/core": "~0.7.2",
+    "@angular-devkit/schematics": "~0.7.2",
+    "@nrwl/schematics": "^6.2.0",
+    "@schematics/angular": "~0.7.2",
     "@types/jasmine": "^2.8.7",
     "@types/node": "^10.3.0",
     "jasmine": "^3.1.0",
-    "rxjs": "^6.1.0",
+    "rxjs": "^6.2.2",
     "strip-json-comments": "~2.0.1",
     "typescript": "~2.7.2"
   }
