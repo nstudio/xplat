@@ -185,7 +185,7 @@ export function addRootDeps(tree: Tree, packageJson?: any) {
 
     dep = {
       name: 'nativescript-angular',
-      version: '~6.0.0',
+      version: '~6.1.0',
       type: 'dependency'
     };
     deps.push(dep);
@@ -215,21 +215,21 @@ export function addRootDeps(tree: Tree, packageJson?: any) {
     // remove in future
     dep = {
       name: 'rxjs-compat',
-      version: '^6.1.0',
+      version: '^6.2.2',
       type: 'dependency'
     };
     deps.push(dep);
 
     dep = {
       name: 'tns-core-modules',
-      version: '~4.1.0',
+      version: '~4.2.0',
       type: 'dependency'
     };
     deps.push(dep);
 
     dep = {
       name: 'tns-platform-declarations',
-      version: '~4.1.0',
+      version: '~4.2.0',
       type: 'devDependency'
     };
     deps.push(dep);
@@ -281,7 +281,7 @@ export function addRootDepsIonic(tree: Tree, packageJson?: any) {
 
     dep = {
       name: '@ionic/angular',
-      version: '~4.0.0-beta.0',
+      version: '~4.0.0-beta.1',
       type: 'dependency'
     };
     deps.push(dep);
