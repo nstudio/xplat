@@ -23,6 +23,8 @@
     "prepare.android.release": "tns prepare android --release",
     "build.ios": "tns build ios --bundle --env.aot --env.uglify --release",
     "build.android": "tns build android --bundle --env.aot --env.uglify --release",
+    "debug.ios": "tns debug ios --bundle",
+    "debug.android": "tns debug android --bundle",
     "postinstall": "node ./tools/xplat-postinstall.js"
   },
   "dependencies": {
