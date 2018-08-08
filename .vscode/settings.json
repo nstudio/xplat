@@ -9,7 +9,9 @@
     "**/node_modules": true,
     "**/scripts/**/*.js": true,
     "**/scripts/**/*.js.map": true,
-    "**/src/**/*.js": true,
+    "**/src/**/*.js": {
+      "when": "$(basename).ts"
+    },
     "**/src/**/*.js.map": true
   },
   "search.exclude": {
