@@ -33,7 +33,8 @@ import {
   errorMissingPrefix,
   updateJsonInTree,
   unsupportedPlatformError,
-  formatFiles
+  formatFiles,
+  addTestingFiles
 } from "../utils";
 import { Schema as xPlatOptions } from "./schema";
 
@@ -184,31 +185,6 @@ const addLibFiles = (
           utils: stringUtils
         }),
         move("libs")
-      ])
-    )
-  );
-};
-
-export const addTestingFiles = (
-  tree: Tree,
-  options: xPlatOptions,
-  relativePath: string = "./"
-) => {
-  if (tree.exists(`testing/karma.conf.js`)) {
-    return noop();
-  }
-
-  return branchAndMerge(
-    mergeWith(
-      apply(url(`${relativePath}_testing_files`), [
-        template(<TemplateOptions>{
-          ...(options as any),
-          npmScope: getNpmScope(),
-          prefix: getPrefix(),
-          dot: ".",
-          utils: stringUtils
-        }),
-        move("testing")
       ])
     )
   );

@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { Routes } from '@angular/router';
 import { NativeScriptRouterModule } from 'nativescript-angular/router';
 
@@ -15,6 +15,10 @@ export const routes: Routes = [
 @NgModule({
   imports: [SharedModule, NativeScriptRouterModule.forChild(routes)],
   declarations: [...HOME_COMPONENTS],
-  exports: [...HOME_COMPONENTS]
+  exports: [...HOME_COMPONENTS],
+  schemas: [
+    NO_ERRORS_SCHEMA,
+    CUSTOM_ELEMENTS_SCHEMA
+  ]
 })
 export class HomeModule {}

@@ -1,7 +1,7 @@
 // from workaround:
 // https://github.com/angular/angular-cli/issues/6373#issuecomment-319116889
 
-import { NgModule } from '@angular/core';
+import { NgModule, NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 // libs
 import { NativeScriptRouterModule } from 'nativescript-angular/router';
@@ -14,6 +14,10 @@ import { ItemsModule, ItemsComponent, ItemDetailComponent } from '@<%= npmScope 
     NativeScriptRouterModule.forChild(
       routeItems(ItemsComponent, ItemDetailComponent)
     )
+  ],
+  schemas : [
+    NO_ERRORS_SCHEMA,
+    CUSTOM_ELEMENTS_SCHEMA
   ]
 })
 export class ItemsModuleLoader {}
