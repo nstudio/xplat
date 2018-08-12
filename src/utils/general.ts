@@ -521,6 +521,31 @@ export function getPrefixWarning(prefix: string) {
   return `A default prefix had already been set for your workspace: ${prefix}. Since xplat had already been configured we will be using '${prefix}' as the prefix.`;
 }
 
+export const addTestingFiles = (
+  tree: Tree,
+  options: any,
+  relativePath: string = "./"
+) => {
+  if (tree.exists(`testing/karma.conf.js`)) {
+    return noop();
+  }
+
+  return branchAndMerge(
+    mergeWith(
+      apply(url(`${relativePath}_testing_files`), [
+        template(<TemplateOptions>{
+          ...(options as any),
+          npmScope: getNpmScope(),
+          prefix: getPrefix(),
+          dot: ".",
+          utils: stringUtils
+        }),
+        move("testing")
+      ])
+    )
+  );
+};
+
 export function updateIDESettings(
   tree: Tree,
   platformArg: string,

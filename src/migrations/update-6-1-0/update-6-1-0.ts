@@ -6,8 +6,7 @@ import {
   noop
 } from "@angular-devkit/schematics";
 
-import { getJsonFromFile, updateJsonFile, createOrUpdate, updateJsonInTree, readJsonInTree } from '../../utils';
-import { addTestingFiles } from '../../xplat';
+import { getJsonFromFile, updateJsonFile, createOrUpdate, updateJsonInTree, readJsonInTree, addTestingFiles } from '../../utils';
 
 function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
   const angularConfigPath = `angular.json`;

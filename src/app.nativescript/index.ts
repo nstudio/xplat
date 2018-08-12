@@ -65,14 +65,7 @@ export default function (options: ApplicationOptions) {
         tags: []
       };
       return updateNxProjects(tree, projects);
-    },
-    // add xplat if specified
-    options.xplat ?
-      schematic('xplat', {
-        platforms: 'web,nativescript',
-        prefix: getPrefix(),
-        onlyIfNone: true
-      }) : noop(),
+    }
   ]);
 }
 

@@ -8,10 +8,6 @@ export interface Schema {
      */
     npmScope?: string;
     /**
-     * Whether to create xplat structure
-     */
-    xplat?: boolean;
-    /**
      * The prefix to apply to generated selectors.
      */
     prefix?: string;

@@ -9,6 +9,10 @@
 // {N} variables
 @import 'variables';
 
+// {N} mixins that are used in below imports
+// you could create other helpers (ie: animations, functions, etc.)
+@import 'mixins';
+
 // {N} core theme rulesets (mix/match these or only use what you need)
 @import '~nativescript-theme-core/scss/action-bar';
 @import '~nativescript-theme-core/scss/activity-indicator';
@@ -28,3 +32,7 @@
 // {N} styles (create/import other scss files or define as needed)
 @import 'fonts';
 @import 'tags';
+
+// since {N} core theme utilities are additive to any above class, these should always be last
+// includes (color, spacing, and text helpers): https://github.com/NativeScript/theme/tree/master/app/scss/utilities
+@import '~nativescript-theme-core/scss/utilities/index';

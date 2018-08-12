@@ -1,6 +1,12 @@
 {
   "$schema": "../node_modules/@nrwl/schematics/src/collection.json",
   "schematics": {
+    "ng-add": {
+      "factory": "./ng-add",
+      "schema": "./ng-add/schema.json",
+      "description": "Add xplat to an existing Nx Workspace",
+      "hidden": true
+    },
     "app.nativescript": {
       "factory": "./app.nativescript",
       "schema": "./app.nativescript/schema.json",
@@ -24,7 +30,8 @@
     "ts-config": {
       "factory": "./ts-config",
       "schema": "./ts-config/schema.json",
-      "description": "Configure tsconfig for xplat."
+      "description": "Configure tsconfig for xplat.",
+      "hidden": true
     },
     "xplat": {
       "factory": "./xplat",
@@ -77,11 +84,6 @@
       "factory": "./ngrx",
       "schema": "./ngrx/schema.json",
       "description": "Create a ngrx store."
-    },
-    "admin": {
-      "factory": "./admin",
-      "schema": "./admin/schema.json",
-      "description": "xplat admin tool."
     },
     "library": {
       "extends": "@nrwl/schematics:library"

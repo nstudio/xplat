@@ -22,7 +22,6 @@ export default function (options: ApplicationOptions) {
     throw new SchematicsException(`Missing name argument. Provide a name for your Ionic app. Example: ng g app.ionic sample`);
   }
   const appPath = `ionic-${options.name}`;
-  const xplat = options.xplat;
 
   return chain([
     prerun(options.prefix),
@@ -69,14 +68,6 @@ export default function (options: ApplicationOptions) {
       };
       return updateNxProjects(tree, projects);
     },
-    // add xplat if specified
-    xplat ?
-      schematic('xplat', {
-        ...options as any,
-        platforms: 'web,ionic',
-        prefix: getPrefix(),
-        onlyIfNone: true,
-      }) : noop(),
     options.skipFormat 
       ? noop()
       : formatFiles(options)
