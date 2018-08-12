@@ -24,6 +24,7 @@ With the strength of [TypeScript](https://www.typescriptlang.org/) paired with t
 
 * [Setup Guide](https://nstudio.io/xplat/)
 * [Generators](https://nstudio.io/xplat/generators/)
+* [Design Doc](https://t.co/z2lRxOBFAg)
 * [Wiki](https://github.com/nstudio/xplat/wiki/FAQ)
 
 ### Talks
