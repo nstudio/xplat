@@ -44,14 +44,23 @@ export default function(options: xPlatOptions) {
     throw new SchematicsException(errorMissingPrefix);
   }
 
-  platformArg = options.platforms || defaultPlatforms;
-  const platforms = platformArg.split(",");
   const targetPlatforms: ITargetPlatforms = {};
-  for (const t of platforms) {
-    if (supportedPlatforms.includes(t)) {
-      targetPlatforms[t] = true;
-    } else {
-      throw new Error(unsupportedPlatformError(t));
+  platformArg = options.platforms || defaultPlatforms;
+  if (platformArg === 'all') {
+    // conveniently add support for all supported platforms
+    for (const platform of supportedPlatforms) {
+      targetPlatforms[platform] = true;
+    }
+    platformArg = supportedPlatforms.join(",");
+  } else {
+    const platforms = platformArg.split(",");
+    
+    for (const platform of platforms) {
+      if (supportedPlatforms.includes(platform)) {
+        targetPlatforms[platform] = true;
+      } else {
+        throw new Error(unsupportedPlatformError(platform));
+      }
     }
   }
   // console.log(`Generating xplat support for: ${platforms.toString()}`);
@@ -78,7 +87,7 @@ export default function(options: xPlatOptions) {
         : noop()(tree, context),
     // nativescript w/sample feature
     (tree: Tree, context: SchematicContext) =>
-      targetPlatforms.nativescript && sample
+      sample
         ? addPlatformFiles(tree, options, "nativescript", "sample")(
             tree,
             context
@@ -92,7 +101,7 @@ export default function(options: xPlatOptions) {
         : noop()(tree, context),
     // web w/sample feature
     (tree: Tree, context: SchematicContext) =>
-      targetPlatforms.web && sample
+      sample
         ? addPlatformFiles(tree, options, "web", "sample")(tree, context)
         : noop()(tree, context),
     // ionic
@@ -137,7 +146,7 @@ const addPlatformFiles = (
   platform: string,
   sample: string = ""
 ) => {
-  if (tree.exists(`xplat/${platform}/core/index.ts`)) {
+  if (!sample && tree.exists(`xplat/${platform}/core/index.ts`)) {
     return noop();
   }
 
