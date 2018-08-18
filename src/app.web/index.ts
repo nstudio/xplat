@@ -51,9 +51,10 @@ export default function(options: ApplicationOptions) {
     externalSchematic("@nrwl/schematics", "app", options),
     (tree: Tree, context: SchematicContext) =>
       addAppFiles(options)(tree, context),
-    sample || routing
-      ? addAppFiles(options, sample ? "sample" : "routing")
-      : noop(),
+    (tree: Tree, context: SchematicContext) =>
+      sample || routing
+      ? addAppFiles(options, sample ? "sample" : "routing")(tree, context)
+      : noop()(tree, context),
     // adjust app files
     (tree: Tree) => adjustAppFiles(options, tree),
     // add start/clean scripts

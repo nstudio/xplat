@@ -1,5 +1,7 @@
 {
-  "$schema": "../node_modules/@nrwl/schematics/src/collection.json",
+  "name": "xplat",
+  "version": "6.2.2",
+  "extends": "@nrwl/schematics",
   "schematics": {
     "ng-add": {
       "factory": "./ng-add",
@@ -17,21 +19,10 @@
       "schema": "./app.ionic/schema.json",
       "description": "Create an Ionic app."
     },
-    "app-resources": {
-      "factory": "./app-resources",
-      "schema": "./app-resources/schema.json",
-      "description": "Create app resources for NativeScript app."
-    },
     "mode": {
       "factory": "./mode",
       "schema": "./mode/schema.json",
       "description": "Multi-platform development modes for IDEs."
-    },
-    "ts-config": {
-      "factory": "./ts-config",
-      "schema": "./ts-config/schema.json",
-      "description": "Configure tsconfig for xplat.",
-      "hidden": true
     },
     "xplat": {
       "factory": "./xplat",
@@ -52,74 +43,42 @@
       "factory": "./component",
       "schema": "./component/schema.json",
       "description": "Create a component configured for xplat projects and shared code.",
-      "aliases": [
-        "c"
-      ]
+      "aliases": ["c"]
     },
     "directive": {
       "factory": "./directive",
       "schema": "./directive/schema.json",
       "description": "Create a directive configured for xplat projects and shared code.",
-      "aliases": [
-        "d"
-      ]
+      "aliases": ["d"]
     },
     "pipe": {
       "factory": "./pipe",
       "schema": "./pipe/schema.json",
       "description": "Create a pipe configured for xplat projects and shared code.",
-      "aliases": [
-        "p"
-      ]
+      "aliases": ["p"]
     },
     "service": {
       "factory": "./service",
       "schema": "./service/schema.json",
       "description": "Create a service configured for xplat projects and shared code.",
-      "aliases": [
-        "s"
-      ]
+      "aliases": ["s"]
     },
     "ngrx": {
       "factory": "./ngrx",
       "schema": "./ngrx/schema.json",
       "description": "Create a ngrx store."
     },
-    "library": {
-      "extends": "@nrwl/schematics:library"
+    "app-resources": {
+      "factory": "./app-resources",
+      "schema": "./app-resources/schema.json",
+      "description": "Create app resources for NativeScript app.",
+      "hidden": true
     },
-    "workspace-schematic": {
-      "extends": "@nrwl/schematics:workspace-schematic"
-    },
-    "class": {
-      "aliases": [
-        "cl"
-      ],
-      "extends": "@schematics/angular:class"
-    },
-    "module": {
-      "aliases": [
-        "m"
-      ],
-      "extends": "@schematics/angular:module"
-    },
-    "enum": {
-      "aliases": [
-        "e"
-      ],
-      "extends": "@schematics/angular:enum"
-    },
-    "guard": {
-      "aliases": [
-        "g"
-      ],
-      "extends": "@schematics/angular:guard"
-    },
-    "interface": {
-      "aliases": [
-        "i"
-      ],
-      "extends": "@schematics/angular:interface"
+    "ts-config": {
+      "factory": "./ts-config",
+      "schema": "./ts-config/schema.json",
+      "description": "Configure tsconfig for xplat.",
+      "hidden": true
     }
   }
 }

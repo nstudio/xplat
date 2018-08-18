@@ -260,28 +260,28 @@ export function addRootDepsIonic(tree: Tree, packageJson?: any) {
     const deps: NodeDependency[] = [];
     let dep: NodeDependency = {
       name: '@ionic-native/core',
-      version: '5.0.0-beta.14',
+      version: '^5.0.0-beta.15',
       type: 'dependency'
     };
     deps.push(dep);
 
     dep = {
       name: '@ionic-native/splash-screen',
-      version: '5.0.0-beta.14',
+      version: '^5.0.0-beta.14',
       type: 'dependency'
     };
     deps.push(dep);
 
     dep = {
       name: '@ionic-native/status-bar',
-      version: '5.0.0-beta.14',
+      version: '^5.0.0-beta.14',
       type: 'dependency'
     };
     deps.push(dep);
 
     dep = {
       name: '@ionic/angular',
-      version: '~4.0.0-beta.1',
+      version: '^4.0.0-beta.3',
       type: 'dependency'
     };
     deps.push(dep);
@@ -295,7 +295,7 @@ export function addRootDepsIonic(tree: Tree, packageJson?: any) {
 
     dep = {
       name: '@ionic/schematics-angular',
-      version: '~1.0.1',
+      version: '~1.0.0',
       type: 'dependency'
     };
     deps.push(dep);
@@ -314,9 +314,18 @@ export function addRootDepsIonic(tree: Tree, packageJson?: any) {
     };
     deps.push(dep);
 
+    // for style referencing by npmScope shorthand
     dep = {
       name: `@${getNpmScope()}/scss`,
       version: 'file:libs/scss',
+      type: 'dependency'
+    };
+    deps.push(dep);
+
+    // for style referencing by npmScope shorthand
+    dep = {
+      name: `@${getNpmScope()}/web`,
+      version: 'file:xplat/web',
       type: 'dependency'
     };
     deps.push(dep);

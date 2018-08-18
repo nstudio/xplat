@@ -14,15 +14,15 @@
     },
     "feature": {
       "type": "string",
-      "description": "Target feature"
+      "description": "Generate inside and attach to target feature."
     },
     "projects": {
       "type": "string",
-      "description": "Target projects"
+      "description": "Generate only for specified target projects."
     },
     "platforms": {
       "type": "string",
-      "description": "Target platforms"
+      "description": "If you need platform specific state you can specify them here. By default state is generated in /libs since it often is ordinarily platform agnostic."
     },
     "module": {
       "type": "string",
