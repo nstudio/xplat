@@ -1,7 +1,7 @@
 import { Directive } from '@angular/core';
 
 @Directive({ 
-  name: '[<%= name %>]'
+  selector: '[<%= name %>]'
 })
 export class <%= utils.classify(name) %>Directive {
 
