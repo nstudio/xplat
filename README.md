@@ -27,15 +27,14 @@ With the strength of [TypeScript](https://www.typescriptlang.org/) paired with t
 * [Design Doc](https://t.co/z2lRxOBFAg)
 * [Wiki](https://github.com/nstudio/xplat/wiki/FAQ)
 
-## Recommended tools
-
-* [Angular Console](https://angularconsole.com/)
-  * Shows what xplat will generate before you actually generate anything. Useful to learn how xplat works and how all the options affect generation.
-
 ### Talks
 
 * [Super Powered, Server Rendered Progressive Native Apps](https://www.youtube.com/watch?v=EqqNexmu3Ug) by [Nathan Walker](http://github.com/NathanWalker) and [Jeff Whelpley](https://github.com/jeffwhelpley)
 * [ngAir 172 - xplat (cross-platform) tools for Nx workspaces with Nathan Walker](https://www.youtube.com/watch?v=0I8D25nab5c)
+
+## Recommended extra tooling
+
+* [Angular Console](https://angularconsole.com/)
 
 ## Contributing
 
