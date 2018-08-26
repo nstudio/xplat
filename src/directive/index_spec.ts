@@ -47,7 +47,7 @@ describe('directive schematic', () => {
     let content = getFileContent(tree, '/libs/features/ui/directives/active-link.directive.ts');
     // console.log(content);
     expect(content.indexOf(`@Directive({`)).toBeGreaterThanOrEqual(0);
-    expect(content.indexOf(`name: '[active-link]'`)).toBeGreaterThanOrEqual(0);
+    expect(content.indexOf(`selector: '[active-link]'`)).toBeGreaterThanOrEqual(0);
 
     let modulePath = '/libs/features/ui/ui.module.ts';
     let moduleContent = getFileContent(tree, modulePath);
