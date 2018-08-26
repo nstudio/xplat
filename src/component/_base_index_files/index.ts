@@ -1,1 +1,1 @@
-export * from './<%= name %>.base-component';
+<% if (!forSubFolder && subFolder) { %>export * from './<%= subFolder %>';<% } else { %>export * from './<%= name %>.base-component';<% } %>

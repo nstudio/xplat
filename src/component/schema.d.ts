@@ -1,9 +1,13 @@
 export interface Schema {
   name: string;
   /**
-   * Target feature
+   * Target feature. Default is 'ui' if none specified.
    */
   feature?: string;
+  /**
+   * Group it in a subfolder of the target feature
+   */
+  subFolder?: string;
   /**
    * Target apps 
    */

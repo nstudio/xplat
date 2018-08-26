@@ -14,7 +14,11 @@
     },
     "feature": {
       "type": "string",
-      "description": "Target feature"
+      "description": "Target feature. Default is 'ui' if none specified."
+    },
+    "subFolder": {
+      "type": "string",
+      "description": "Group it in a subfolder of the target feature."
     },
     "projects": {
       "type": "string",
