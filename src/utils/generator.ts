@@ -43,6 +43,7 @@ export type IGenerateType = 'component' | 'directive' | 'pipe' | 'service' | 'st
 export interface IGenerateOptions {
   name: string;
   feature?: string;
+  subFolder?: string;
   projects?: string;
   needsIndex?: boolean;
   root?: boolean;
@@ -293,7 +294,8 @@ export function addToFeature(
   options: IGenerateOptions,
   prefixPath: string,
   tree: Tree,
-  extra: string = ''
+  extra: string = '',
+  forSubFolder?: boolean
 ) {
   let featureName: string = getFeatureName(options);
 
@@ -311,7 +313,7 @@ export function addToFeature(
 
   const featureModulePath = `${featurePath}/${featureName}.module.ts`;
   let moveTo: string;
-  if (extra === '_base') {
+  if (extra === '_base' || extra === '_base_index') {
     // always in libs
     moveTo = `libs/features/${featureName}/base`;
   } else {
@@ -330,6 +332,9 @@ export function addToFeature(
       );
     }
   }
+  if (forSubFolder && options.subFolder) {
+    moveTo += `/${options.subFolder}`;
+  }
   // console.log('moveTo:', moveTo);
 
   const indexPath = `${moveTo}/index.ts`;
@@ -346,6 +351,7 @@ export function addToFeature(
           template(<TemplateOptions>{
             ...(options as any),
             name: options.name.toLowerCase(),
+            forSubFolder,
             npmScope: getNpmScope(),
             prefix: getPrefix(),
             dot: '.',
@@ -400,9 +406,12 @@ export function adjustBarrelIndex(
   options: IGenerateOptions,
   indexFilePath: string,
   inSubFolder?: boolean,
-  isBase?: boolean
+  isBase?: boolean,
+  importIfSubFolder?: boolean
 ): Rule {
   return (host: Tree) => {
+    // console.log('adjustBarrelIndex:', indexFilePath);
+    // console.log('host.exists(indexFilePath):', host.exists(indexFilePath));
     if (host.exists(indexFilePath)) {
       const indexSource = host.read(indexFilePath)!.toString('utf-8');
       const indexSourceFile = ts.createSourceFile(
@@ -417,36 +426,64 @@ export function adjustBarrelIndex(
 
       if (!isBase) {
         // add to barrel collection
-        changes.push(
-          ...addGlobal(
-            indexSourceFile,
-            indexFilePath,
-            `import { ${stringUtils.classify(name)}${stringUtils.capitalize(
-              type
-            )} } from './${inSubFolder ? `${name}/` : ''}${name}.${type}';`
-          ),
-          ...addToCollection(
-            indexSourceFile,
-            indexFilePath,
-            `${stringUtils.classify(name)}${stringUtils.capitalize(type)}`,
-            '  '
-          )
-        );
+        if (importIfSubFolder && options.subFolder) {
+          // import collection from subfolder
+          const symbolName = `${stringUtils.sanitize(options.subFolder).toUpperCase()}_${type.toUpperCase()}S`;
+          changes.push(
+            ...addGlobal(
+              indexSourceFile,
+              indexFilePath,
+              `import { ${symbolName} } from './${options.subFolder}';`
+            ),
+            ...addToCollection(
+              indexSourceFile,
+              indexFilePath,
+              `...${symbolName}`,
+              '  '
+            )
+          );
+        } else {
+          const symbolName = `${stringUtils.classify(name)}${stringUtils.capitalize(type)}`;
+          changes.push(
+            ...addGlobal(
+              indexSourceFile,
+              indexFilePath,
+              `import { ${symbolName} } from './${inSubFolder ? `${name}/` : ''}${name}.${type}';`
+            ),
+            ...addToCollection(
+              indexSourceFile,
+              indexFilePath,
+              symbolName,
+              '  '
+            )
+          );
+        }
       }
 
       if (type === 'component' || type === 'service') {
         // export symbol from barrel
-        const subFolder = inSubFolder ? `${name}/` : '';
-        changes.push(
-          ...addGlobal(
-            indexSourceFile,
-            indexFilePath,
-            `export * from './${subFolder}${name}.${
-              isBase ? 'base-' : ''
-            }${type}';`,
-            true
-          )
-        );
+        if ((isBase || importIfSubFolder) && options.subFolder) {
+          changes.push(
+            ...addGlobal(
+              indexSourceFile,
+              indexFilePath,
+              `export * from './${options.subFolder}';`,
+              true
+            )
+          );
+        } else {
+          const subFolder = inSubFolder ? `${name}/` : '';
+          changes.push(
+            ...addGlobal(
+              indexSourceFile,
+              indexFilePath,
+              `export * from './${subFolder}${name}.${
+                isBase ? 'base-' : ''
+              }${type}';`,
+              true
+            )
+          );
+        }
       }
 
       insert(host, indexFilePath, changes);

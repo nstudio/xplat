@@ -74,6 +74,76 @@ describe('component schematic', () => {
     expect(barrelIndex.indexOf(`SignupComponent\n];`)).toBeGreaterThanOrEqual(0);
   });
 
+  it('should create component for specified platforms with subFolder option', () => {
+    // console.log('appTree:', appTree);
+    let tree = schematicRunner.runSchematic('xplat', {
+      prefix: 'tt'
+    }, appTree);
+    tree = schematicRunner.runSchematic('app.nativescript', {
+      name: 'viewer',
+      prefix: 'tt'
+    }, tree);
+    tree = schematicRunner.runSchematic('feature', {
+      name: 'foo',
+      platforms: 'nativescript,web'
+    }, tree);
+    const options: GenerateOptions = { ...defaultOptions };
+    options.subFolder = 'registration';
+    tree = schematicRunner.runSchematic('component', options, tree);
+    const files = tree.files;
+    // console.log(files.slice(91,files.length));
+
+    // component
+    expect(files.indexOf('/libs/features/foo/base/registration/signup.base-component.ts')).toBeGreaterThanOrEqual(0);
+    expect(files.indexOf('/xplat/nativescript/features/foo/components/registration/signup/signup.component.html')).toBeGreaterThanOrEqual(0);
+    expect(files.indexOf('/xplat/nativescript/features/foo/components/registration/signup/signup.component.ts')).toBeGreaterThanOrEqual(0);
+    expect(files.indexOf('/xplat/web/features/foo/components/registration/signup/signup.component.html')).toBeGreaterThanOrEqual(0);
+    expect(files.indexOf('/xplat/web/features/foo/components/registration/signup/signup.component.ts')).toBeGreaterThanOrEqual(0);
+
+    // ensure base index was modified
+    let barrelPath = '/libs/features/foo/base/registration/index.ts';
+    let barrelIndex = getFileContent(tree, barrelPath);
+    // console.log(barrelPath + ':');
+    // console.log(barrelIndex);
+    expect(barrelIndex.indexOf(`./signup.base-component`)).toBeGreaterThanOrEqual(0);
+
+    barrelPath = '/libs/features/foo/base/index.ts';
+    barrelIndex = getFileContent(tree, barrelPath);
+    // console.log(barrelPath + ':');
+    // console.log(barrelIndex);
+    // component symbol should be at end of components collection
+    expect(barrelIndex.indexOf(`./registration`)).toBeGreaterThanOrEqual(0);
+
+    // file content
+    barrelPath = '/xplat/nativescript/features/foo/components/registration/index.ts';
+    barrelIndex = getFileContent(tree, barrelPath);
+    // console.log(barrelPath + ':');
+    // console.log(barrelIndex);
+    // component symbol should be at end of components collection
+    expect(barrelIndex.indexOf(`SignupComponent\n];`)).toBeGreaterThanOrEqual(0);
+    expect(barrelIndex.indexOf(`./signup/signup.component`)).toBeGreaterThanOrEqual(0);
+
+    barrelPath = '/xplat/web/features/foo/components/registration/index.ts';
+    barrelIndex = getFileContent(tree, barrelPath);
+    // console.log(barrelPath + ':');
+    // console.log(barrelIndex);
+    expect(barrelIndex.indexOf(`SignupComponent\n];`)).toBeGreaterThanOrEqual(0);
+
+    // file content
+    barrelPath = '/xplat/nativescript/features/foo/components/index.ts';
+    barrelIndex = getFileContent(tree, barrelPath);
+    // console.log(barrelPath + ':');
+    // console.log(barrelIndex);
+    // component symbol should be at end of components collection
+    expect(barrelIndex.indexOf(`REGISTRATION_COMPONENTS`)).toBeGreaterThanOrEqual(0);
+
+    barrelPath = '/xplat/web/features/foo/components/index.ts';
+    barrelIndex = getFileContent(tree, barrelPath);
+    // console.log(barrelPath + ':');
+    // console.log(barrelIndex);
+    expect(barrelIndex.indexOf(`REGISTRATION_COMPONENTS`)).toBeGreaterThanOrEqual(0);
+  });
+
   it('should create component for specified projects only', () => {
     // console.log('appTree:', appTree);
     let tree = schematicRunner.runSchematic('xplat', {

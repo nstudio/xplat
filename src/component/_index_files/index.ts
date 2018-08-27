@@ -1,6 +1,6 @@
 import { <%= utils.classify(name) %>Component } from './<%= name %>/<%= name %>.component';
 
-export const <%= utils.sanitize(name).toUpperCase() %>_COMPONENTS = [
+export const <%= subFolder ? utils.sanitize(subFolder).toUpperCase() : utils.sanitize(name).toUpperCase() %>_COMPONENTS = [
   <%= utils.classify(name) %>Component
 ];
 
