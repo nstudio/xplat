@@ -1,6 +1,6 @@
-import { join } from 'path';
+import { join } from "path";
 
-import { 
+import {
   apply,
   url,
   move,
@@ -9,32 +9,32 @@ import {
   TemplateOptions,
   branchAndMerge,
   noop,
-  SchematicsException, 
+  SchematicsException,
   Tree,
   Rule
-} from '@angular-devkit/schematics';
+} from "@angular-devkit/schematics";
 
 // import { configPath, CliConfig } from '@schematics/angular/utility/config';
-import { errorXplat } from './errors';
+import { errorXplat } from "./errors";
 // import * as os from 'os';
-import * as fs from 'fs';
-import * as ts from 'typescript';
+import * as fs from "fs";
+import * as ts from "typescript";
 
-export const supportedPlatforms = ['web', 'nativescript', 'ionic'];
+export const supportedPlatforms = ["web", "nativescript", "ionic"];
 export interface ITargetPlatforms {
   web?: boolean;
   nativescript?: boolean;
   ionic?: boolean;
   ssr?: boolean;
 }
-export const defaultPlatforms = 'web,nativescript';
+export const defaultPlatforms = "web,nativescript";
 
-export type IDevMode = 'web' | 'nativescript' | 'ionic' | 'fullstack';
+export type IDevMode = "web" | "nativescript" | "ionic" | "fullstack";
 
 export interface NodeDependency {
   name: string;
   version: string;
-  type: 'dependency' | 'devDependency';
+  type: "dependency" | "devDependency";
 }
 
 let npmScope: string;
@@ -49,11 +49,11 @@ export function getPrefix() {
 }
 
 export function getFileContent(tree: Tree, path: string) {
-  const file = tree.read(path) || '';
+  const file = tree.read(path) || "";
   if (!file) {
     throw new SchematicsException(`${path} could not be read.`);
   }
-  return file.toString('utf-8');
+  return file.toString("utf-8");
 }
 
 export function serializeJson(json: any): string {
@@ -97,8 +97,8 @@ export function createOrUpdate(host: Tree, path: string, content: string) {
 }
 
 export function getNxWorkspaceConfig(tree: Tree): any {
-  const nxConfig = getJsonFromFile(tree, 'nx.json'); //, 'Project must be an angular cli generated project, missing angular.json');
-  const hasWorkspaceDirs = tree.exists('apps') && tree.exists('libs');
+  const nxConfig = getJsonFromFile(tree, "nx.json"); //, 'Project must be an angular cli generated project, missing angular.json');
+  const hasWorkspaceDirs = tree.exists("apps") && tree.exists("libs");
 
   // determine if Nx workspace
   if (nxConfig) {
@@ -110,7 +110,7 @@ export function getNxWorkspaceConfig(tree: Tree): any {
     }
   }
   throw new SchematicsException(
-    '@nstudio/schematics must be used inside an Nx workspace. Create a workspace first. https://nrwl.io/nx/guide-nx-workspace'
+    "@nstudio/schematics must be used inside an Nx workspace. Create a workspace first. https://nrwl.io/nx/guide-nx-workspace"
   );
 }
 
@@ -132,12 +132,12 @@ export function prerun(prefixArg?: string, init?: boolean) {
   return (tree: Tree) => {
     const nxJson = getNxWorkspaceConfig(tree);
     if (nxJson) {
-      npmScope = nxJson.npmScope || 'workspace';
+      npmScope = nxJson.npmScope || "workspace";
     }
-    const packageJson = getJsonFromFile(tree, 'package.json');
+    const packageJson = getJsonFromFile(tree, "package.json");
 
     if (packageJson) {
-      prefix = packageJson.xplat ? packageJson.xplat.prefix : '';
+      prefix = packageJson.xplat ? packageJson.xplat.prefix : "";
       if (prefixArg) {
         if (prefix) {
           // console.warn(getPrefixWarning(prefix));
@@ -155,185 +155,147 @@ export function prerun(prefixArg?: string, init?: boolean) {
   };
 }
 
-export function addRootDeps(tree: Tree, packageJson?: any) {
-  const packagePath = 'package.json';
+export function addRootDeps(
+  tree: Tree,
+  targetPlatforms: ITargetPlatforms,
+  packageJson?: any
+) {
+  const packagePath = "package.json";
   if (!packageJson) {
     packageJson = getJsonFromFile(tree, packagePath);
   }
   if (packageJson) {
     const deps: NodeDependency[] = [];
+
     let dep: NodeDependency = {
-      name: '@ngx-translate/core',
-      version: '~10.0.1',
-      type: 'dependency'
+      name: "@ngx-translate/core",
+      version: "~10.0.1",
+      type: "dependency"
     };
     deps.push(dep);
 
     dep = {
-      name: '@ngx-translate/http-loader',
-      version: '~3.0.1',
-      type: 'dependency'
+      name: "@ngx-translate/http-loader",
+      version: "~3.0.1",
+      type: "dependency"
     };
     deps.push(dep);
 
-    dep = {
-      name: `@${npmScope}/scss`,
-      version: 'file:libs/scss',
-      type: 'dependency'
-    };
-    deps.push(dep);
-
-    dep = {
-      name: 'nativescript-angular',
-      version: '~6.1.0',
-      type: 'dependency'
-    };
-    deps.push(dep);
-
-    dep = {
-      name: 'nativescript-ngx-fonticon',
-      version: '^4.2.0',
-      type: 'dependency'
-    };
-    deps.push(dep);
-
-    dep = {
-      name: 'nativescript-theme-core',
-      version: '^1.0.4',
-      type: 'dependency'
-    };
-    deps.push(dep);
-
-    dep = {
-      name: 'reflect-metadata',
-      version: '^0.1.12',
-      type: 'dependency'
-    };
-    deps.push(dep);
-
-    // convenience for now since some {N} plugins may not support rxjs 6.x fully yet
-    // remove in future
-    dep = {
-      name: 'rxjs-compat',
-      version: '^6.2.2',
-      type: 'dependency'
-    };
-    deps.push(dep);
-
-    dep = {
-      name: 'tns-core-modules',
-      version: '~4.2.0',
-      type: 'dependency'
-    };
-    deps.push(dep);
-
-    dep = {
-      name: 'tns-platform-declarations',
-      version: '~4.2.0',
-      type: 'devDependency'
-    };
-    deps.push(dep);
-
-    const dependenciesMap = Object.assign({}, packageJson.dependencies);
-    const devDependenciesMap = Object.assign({}, packageJson.devDependencies);
-    for (const dependency of deps) {
-      if (dependency.type === 'dependency') {
-        packageJson.dependencies = setDependency(dependenciesMap, dependency);
-      } else {
-        packageJson.devDependencies = setDependency(
-          devDependenciesMap,
-          dependency
-        );
-      }
-    }
-    return updateJsonFile(tree, packagePath, packageJson);
-  }
-  return tree;
-}
-
-export function addRootDepsIonic(tree: Tree, packageJson?: any) {
-  const packagePath = 'package.json';
-  if (!packageJson) {
-    packageJson = getJsonFromFile(tree, packagePath);
-  }
-  if (packageJson) {
-    const deps: NodeDependency[] = [];
-    let dep: NodeDependency = {
-      name: '@ionic-native/core',
-      version: '^5.0.0-beta.15',
-      type: 'dependency'
-    };
-    deps.push(dep);
-
-    dep = {
-      name: '@ionic-native/splash-screen',
-      version: '^5.0.0-beta.14',
-      type: 'dependency'
-    };
-    deps.push(dep);
-
-    dep = {
-      name: '@ionic-native/status-bar',
-      version: '^5.0.0-beta.14',
-      type: 'dependency'
-    };
-    deps.push(dep);
-
-    dep = {
-      name: '@ionic/angular',
-      version: '^4.0.0-beta.3',
-      type: 'dependency'
-    };
-    deps.push(dep);
-
-    dep = {
-      name: '@ionic/ng-toolkit',
-      version: '~1.0.0',
-      type: 'dependency'
-    };
-    deps.push(dep);
-
-    dep = {
-      name: '@ionic/schematics-angular',
-      version: '~1.0.0',
-      type: 'dependency'
-    };
-    deps.push(dep);
-
-    dep = {
-      name: '@ngx-translate/core',
-      version: '~10.0.1',
-      type: 'dependency'
-    };
-    deps.push(dep);
-
-    dep = {
-      name: '@ngx-translate/http-loader',
-      version: '~3.0.1',
-      type: 'dependency'
-    };
-    deps.push(dep);
-
-    // for style referencing by npmScope shorthand
     dep = {
       name: `@${getNpmScope()}/scss`,
-      version: 'file:libs/scss',
-      type: 'dependency'
+      version: "file:libs/scss",
+      type: "dependency"
     };
     deps.push(dep);
 
-    // for style referencing by npmScope shorthand
     dep = {
-      name: `@${getNpmScope()}/web`,
-      version: 'file:xplat/web',
-      type: 'dependency'
+      name: "reflect-metadata",
+      version: "^0.1.12",
+      type: "dependency"
     };
     deps.push(dep);
+
+    if (targetPlatforms.nativescript) {
+      dep = {
+        name: "nativescript-angular",
+        version: "~6.1.0",
+        type: "dependency"
+      };
+      deps.push(dep);
+
+      dep = {
+        name: "nativescript-ngx-fonticon",
+        version: "^4.2.0",
+        type: "dependency"
+      };
+      deps.push(dep);
+
+      dep = {
+        name: "nativescript-theme-core",
+        version: "^1.0.4",
+        type: "dependency"
+      };
+      deps.push(dep);
+
+      // convenience for now since some {N} plugins may not support rxjs 6.x fully yet
+      // remove in future
+      dep = {
+        name: "rxjs-compat",
+        version: "^6.2.2",
+        type: "dependency"
+      };
+      deps.push(dep);
+
+      dep = {
+        name: "tns-core-modules",
+        version: "~4.2.0",
+        type: "dependency"
+      };
+      deps.push(dep);
+
+      dep = {
+        name: "tns-platform-declarations",
+        version: "~4.2.0",
+        type: "devDependency"
+      };
+      deps.push(dep);
+    }
+
+    if (targetPlatforms.ionic) {
+      dep = {
+        name: "@ionic-native/core",
+        version: "^5.0.0-beta.15",
+        type: "dependency"
+      };
+      deps.push(dep);
+  
+      dep = {
+        name: "@ionic-native/splash-screen",
+        version: "^5.0.0-beta.14",
+        type: "dependency"
+      };
+      deps.push(dep);
+  
+      dep = {
+        name: "@ionic-native/status-bar",
+        version: "^5.0.0-beta.14",
+        type: "dependency"
+      };
+      deps.push(dep);
+  
+      dep = {
+        name: "@ionic/angular",
+        version: "^4.0.0-beta.3",
+        type: "dependency"
+      };
+      deps.push(dep);
+  
+      dep = {
+        name: "@ionic/ng-toolkit",
+        version: "~1.0.0",
+        type: "dependency"
+      };
+      deps.push(dep);
+  
+      dep = {
+        name: "@ionic/schematics-angular",
+        version: "~1.0.0",
+        type: "dependency"
+      };
+      deps.push(dep);
+
+      dep = {
+        name: `@${getNpmScope()}/web`,
+        version: "file:xplat/web",
+        type: "dependency"
+      };
+      deps.push(dep);
+    }
 
     const dependenciesMap = Object.assign({}, packageJson.dependencies);
     const devDependenciesMap = Object.assign({}, packageJson.devDependencies);
     for (const dependency of deps) {
-      if (dependency.type === 'dependency') {
+      if (dependency.type === "dependency") {
         packageJson.dependencies = setDependency(dependenciesMap, dependency);
       } else {
         packageJson.devDependencies = setDependency(
@@ -347,8 +309,11 @@ export function addRootDepsIonic(tree: Tree, packageJson?: any) {
   return tree;
 }
 
-export function updatePackageForXplat(tree: Tree) {
-  const path = 'package.json';
+export function updatePackageForXplat(
+  tree: Tree,
+  targetPlatforms: ITargetPlatforms
+) {
+  const path = "package.json";
   const packageJson = getJsonFromFile(tree, path);
 
   if (packageJson) {
@@ -360,64 +325,67 @@ export function updatePackageForXplat(tree: Tree) {
 
     // core set of supported root dependencies (out of the box)
     // console.log('updatePackageForXplat:', JSON.stringify(packageJson));
-    return addRootDeps(tree, packageJson);
+    return addRootDeps(tree, targetPlatforms, packageJson);
   }
   return tree;
 }
 
-export function updatePackageForNgrx(tree: Tree, packagePath: string = 'package.json') {
+export function updatePackageForNgrx(
+  tree: Tree,
+  packagePath: string = "package.json"
+) {
   if (tree.exists(packagePath)) {
     const packageJson = getJsonFromFile(tree, packagePath);
-  
+
     if (packageJson) {
       // sync version with what user has store set at
-      let rootNgrxVersion = packageJson.dependencies['@ngrx/store'];
-  
+      let rootNgrxVersion = packageJson.dependencies["@ngrx/store"];
+
       const deps: NodeDependency[] = [];
-  
-      if (packagePath.indexOf('apps') === 0) {
+
+      if (packagePath.indexOf("apps") === 0) {
         // update project deps
         let dep: NodeDependency = {
-          name: '@ngrx/entity',
-          version: 'file:../../node_modules/@ngrx/entity',
-          type: 'dependency'
+          name: "@ngrx/entity",
+          version: "file:../../node_modules/@ngrx/entity",
+          type: "dependency"
         };
         deps.push(dep);
         dep = {
-          name: 'ngrx-store-freeze',
-          version: 'file:../../node_modules/ngrx-store-freeze',
-          type: 'dependency'
+          name: "ngrx-store-freeze",
+          version: "file:../../node_modules/ngrx-store-freeze",
+          type: "dependency"
         };
         deps.push(dep);
         dep = {
-          name: '@nrwl/nx',
-          version: 'file:../../node_modules/@nrwl/nx',
-          type: 'dependency'
+          name: "@nrwl/nx",
+          version: "file:../../node_modules/@nrwl/nx",
+          type: "dependency"
         };
         deps.push(dep);
       } else {
         // update root deps
         let dep: NodeDependency = {
-          name: '@ngrx/entity',
+          name: "@ngrx/entity",
           version: rootNgrxVersion,
-          type: 'dependency'
+          type: "dependency"
         };
         deps.push(dep);
-  
-        if (!packageJson.dependencies['@nrwl/nx']) {
+
+        if (!packageJson.dependencies["@nrwl/nx"]) {
           dep = {
-            name: '@nrwl/nx',
-            version: '~6.1.0',
-            type: 'dependency'
+            name: "@nrwl/nx",
+            version: "~6.1.0",
+            type: "dependency"
           };
           deps.push(dep);
         }
       }
-  
+
       const dependenciesMap = Object.assign({}, packageJson.dependencies);
       const devDependenciesMap = Object.assign({}, packageJson.devDependencies);
       for (const dependency of deps) {
-        if (dependency.type === 'dependency') {
+        if (dependency.type === "dependency") {
           packageJson.dependencies = setDependency(dependenciesMap, dependency);
         } else {
           packageJson.devDependencies = setDependency(
@@ -435,16 +403,16 @@ export function updatePackageForNgrx(tree: Tree, packagePath: string = 'package.
 export function updateTsConfig(
   tree: Tree,
   callback: (data: any) => void,
-  targetSuffix: string = ''
+  targetSuffix: string = ""
 ) {
-  const tsConfigPath = `tsconfig${targetSuffix ? '.' + targetSuffix : ''}.json`;
+  const tsConfigPath = `tsconfig${targetSuffix ? "." + targetSuffix : ""}.json`;
   const tsConfig = getJsonFromFile(tree, tsConfigPath);
   callback(tsConfig);
   return updateJsonFile(tree, tsConfigPath, tsConfig);
 }
 
 export function updatePackageScripts(tree: Tree, scripts: any) {
-  const path = 'package.json';
+  const path = "package.json";
   const packageJson = getJsonFromFile(tree, path);
   const scriptsMap = Object.assign({}, packageJson.scripts);
   packageJson.scripts = Object.assign(scriptsMap, scripts);
@@ -452,7 +420,7 @@ export function updatePackageScripts(tree: Tree, scripts: any) {
 }
 
 export function updateAngularProjects(tree: Tree, projects: any) {
-  const path = 'angular.json';
+  const path = "angular.json";
   const angularJson = getJsonFromFile(tree, path);
   const projectsMap = Object.assign({}, angularJson.projects);
   angularJson.projects = Object.assign(projectsMap, projects);
@@ -460,7 +428,7 @@ export function updateAngularProjects(tree: Tree, projects: any) {
 }
 
 export function updateNxProjects(tree: Tree, projects: any) {
-  const path = 'nx.json';
+  const path = "nx.json";
   const nxJson = getJsonFromFile(tree, path);
   const projectsMap = Object.assign({}, nxJson.projects);
   nxJson.projects = Object.assign(projectsMap, projects);
@@ -469,10 +437,10 @@ export function updateNxProjects(tree: Tree, projects: any) {
 
 export function updateGitIgnore() {
   return (tree: Tree) => {
-    const gitIgnorePath = '.gitignore';
+    const gitIgnorePath = ".gitignore";
     let gitIgnore = getFileContent(tree, gitIgnorePath);
     if (gitIgnore) {
-      if (gitIgnore.indexOf('libs/**/*.js') === -1) {
+      if (gitIgnore.indexOf("libs/**/*.js") === -1) {
         gitIgnore += `
 # nativescript
 hooks\n
@@ -485,7 +453,7 @@ libs/**/*.ngfactory.ts
 libs/**/*.ngsummary.json
       `;
       }
-      if (gitIgnore.indexOf('xplat/**/*.js') === -1) {
+      if (gitIgnore.indexOf("xplat/**/*.js") === -1) {
         gitIgnore += `
 # xplat
 xplat/**/*.js
@@ -504,7 +472,7 @@ xplat/**/*.ngsummary.json
 
 export function addReferences() {
   return (tree: Tree) => {
-    const filename = 'references.d.ts';
+    const filename = "references.d.ts";
     if (!tree.exists(filename)) {
       // add references.d.ts
       tree.create(
@@ -565,14 +533,14 @@ export function updateIDESettings(
     // console.log('workspace dir:', process.cwd());
     // const dirName = cwd.split('/').slice(-1);
     const userUpdates: any = {};
-    if (!devMode || devMode === 'fullstack') {
+    if (!devMode || devMode === "fullstack") {
       // show all
       for (const p of supportedPlatforms) {
         userUpdates[`**/apps/${p}-*`] = false;
         userUpdates[`**/xplat/${p}`] = false;
       }
     } else if (platformArg) {
-      const platforms = platformArg.split(',');
+      const platforms = platformArg.split(",");
       // switch on/off platforms
       for (const p of supportedPlatforms) {
         const excluded = platforms.includes(p) ? false : true;
@@ -585,32 +553,32 @@ export function updateIDESettings(
     // const homedir = os.homedir();
     // console.log('os.homedir():',homedir);
     let userSettingsPath =
-      process.platform == 'darwin'
+      process.platform == "darwin"
         ? process.env.HOME +
           `/Library/Application Support/Code/User/settings.json`
-        : '/var/local/Cole/User/settings.json';
+        : "/var/local/Cole/User/settings.json";
     const windowsHome = process.env.APPDATA;
     if (windowsHome) {
-      userSettingsPath = join(windowsHome, 'Code/User/settings.json');
+      userSettingsPath = join(windowsHome, "Code/User/settings.json");
     }
     // console.log('userSettingsPath:',userSettingsPath);
     const isVsCode = fs.existsSync(userSettingsPath);
     // console.log('isVsCode:',isVsCode);
     if (isVsCode) {
-      const userSettings = fs.readFileSync(userSettingsPath, 'UTF-8');
+      const userSettings = fs.readFileSync(userSettingsPath, "UTF-8");
       if (userSettings) {
         const userSettingsJson = JSON.parse(userSettings);
-        let exclude = userSettingsJson['files.exclude'];
+        let exclude = userSettingsJson["files.exclude"];
         if (!exclude) {
           exclude = {};
         }
-        userSettingsJson['files.exclude'] = Object.assign(exclude, userUpdates);
+        userSettingsJson["files.exclude"] = Object.assign(exclude, userUpdates);
 
-        let searchExclude = userSettingsJson['search.exclude'];
+        let searchExclude = userSettingsJson["search.exclude"];
         if (!searchExclude) {
           searchExclude = {};
         }
-        userSettingsJson['search.exclude'] = Object.assign(
+        userSettingsJson["search.exclude"] = Object.assign(
           searchExclude,
           userUpdates
         );
@@ -625,52 +593,52 @@ export function updateIDESettings(
     if (!devMode) {
       // only when not specifying a dev mode
       const workspaceUpdates: any = {
-        '**/node_modules': true,
-        '**/hooks': true,
-        '**/apps/nativescript-*/app/package.json': false,
-        '**/apps/nativescript-*/hooks': true,
-        '**/apps/nativescript-*/platforms': true,
-        '**/apps/nativescript-*/report': true,
-        '**/apps/nativescript-*/app/**/*.js': {
-          when: '$(basename).ts'
+        "**/node_modules": true,
+        "**/hooks": true,
+        "**/apps/nativescript-*/app/package.json": false,
+        "**/apps/nativescript-*/hooks": true,
+        "**/apps/nativescript-*/platforms": true,
+        "**/apps/nativescript-*/report": true,
+        "**/apps/nativescript-*/app/**/*.js": {
+          when: "$(basename).ts"
         },
-        '**/apps/nativescript-*/app/**/*.d.ts': {
-          when: '$(basename).ts'
+        "**/apps/nativescript-*/app/**/*.d.ts": {
+          when: "$(basename).ts"
         },
-        '**/apps/nativescript-*/app/**/*.css': {
-          when: '$(basename).scss'
+        "**/apps/nativescript-*/app/**/*.css": {
+          when: "$(basename).scss"
         },
-        '**/libs/**/*.js': {
-          when: '$(basename).ts'
+        "**/libs/**/*.js": {
+          when: "$(basename).ts"
         },
-        '**/libs/**/*.d.ts': {
-          when: '$(basename).ts'
+        "**/libs/**/*.d.ts": {
+          when: "$(basename).ts"
         },
-        '**/xplat/**/*.js': {
-          when: '$(basename).ts'
+        "**/xplat/**/*.js": {
+          when: "$(basename).ts"
         },
-        '**/xplat/**/*.d.ts': {
-          when: '$(basename).ts'
+        "**/xplat/**/*.d.ts": {
+          when: "$(basename).ts"
         }
       };
-      const workspaceSettingsPath = join(cwd, '.vscode/settings.json');
+      const workspaceSettingsPath = join(cwd, ".vscode/settings.json");
       // console.log('workspaceSettingsPath:',workspaceSettingsPath);
       let workspaceSettingsJson: any = {};
       if (fs.existsSync(workspaceSettingsPath)) {
         const workspaceSettings = fs.readFileSync(
           workspaceSettingsPath,
-          'UTF-8'
+          "UTF-8"
         );
         workspaceSettingsJson = JSON.parse(workspaceSettings);
-        const exclude = workspaceSettingsJson['files.exclude'];
-        workspaceSettingsJson['files.exclude'] = Object.assign(
+        const exclude = workspaceSettingsJson["files.exclude"];
+        workspaceSettingsJson["files.exclude"] = Object.assign(
           exclude,
           workspaceUpdates
         );
       } else {
         // console.log('creating workspace settings...');
-        fs.mkdirSync('.vscode');
-        workspaceSettingsJson['files.exclude'] = workspaceUpdates;
+        fs.mkdirSync(".vscode");
+        workspaceSettingsJson["files.exclude"] = workspaceUpdates;
       }
       fs.writeFileSync(
         workspaceSettingsPath,
@@ -700,9 +668,9 @@ export function updateIDESettings(
 */
 export const sanitize = (str: string): string =>
   str
-    .split('')
+    .split("")
     .filter(char => /[a-zA-Z0-9]/.test(char))
-    .join('');
+    .join("");
 
 /**
  * Cannot read property 'classify' of undefined
@@ -720,7 +688,7 @@ const STRING_CAMELIZE_REGEXP = /(-|_|\.|\s)+(.)?/g;
 function camelize(str) {
   return str
     .replace(STRING_CAMELIZE_REGEXP, (_match, _separator, chr) => {
-      return chr ? chr.toUpperCase() : '';
+      return chr ? chr.toUpperCase() : "";
     })
     .replace(/^([A-Z])/, match => match.toLowerCase());
 }
@@ -731,12 +699,12 @@ function capitalize(str) {
 
 function classify(str) {
   return str
-    .split('.')
+    .split(".")
     .map(part => capitalize(camelize(part)))
-    .join('.');
+    .join(".");
 }
 
-export const stringUtils = { sanitize, classify, capitalize };
+export const stringUtils = { sanitize, classify, capitalize, camelize };
 
 export const toComponentClassName = (name: string) =>
   `${classify(name)}Component`;

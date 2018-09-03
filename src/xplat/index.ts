@@ -126,7 +126,7 @@ export default function(options: xPlatOptions) {
       })(tree, context),
     formatFiles(options),
     // update root package for xplat configuration
-    (tree: Tree) => updatePackageForXplat(tree),
+    (tree: Tree) => updatePackageForXplat(tree, targetPlatforms),
     // clean shared code script ({N} build artifacts that may need to be cleaned up at times)
     (tree: Tree) => {
       const scripts = {};

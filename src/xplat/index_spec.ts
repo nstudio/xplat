@@ -1,6 +1,6 @@
 import { Tree, VirtualTree } from '@angular-devkit/schematics';
 import { SchematicTestRunner, UnitTestTree } from '@angular-devkit/schematics/testing';
-// import { getFileContent } from '@schematics/angular/utility/test';
+import { getFileContent } from '@schematics/angular/utility/test';
 import * as path from 'path';
 
 import { Schema as XPlatOptions } from './schema';
@@ -65,6 +65,13 @@ describe('xplat schematic', () => {
     const files = tree.files;
     expect(files.indexOf('/xplat/web/index.ts')).toBeGreaterThanOrEqual(0);
     expect(files.indexOf('/xplat/nativescript/index.ts')).toBeGreaterThanOrEqual(-1);
+    const packagePath = '/package.json';
+    const packageFile = JSON.parse(getFileContent(tree, packagePath));
+    const hasScss = packageFile.dependencies[`@testing/scss`];
+    expect(hasScss).not.toBeUndefined();
+    // should not include these root packages
+    const hasNativeScript = packageFile.dependencies[`nativescript-angular`];
+    expect(hasNativeScript).toBeUndefined();
   });
 
   it('should create default xplat support for nativescript only', () => {
@@ -75,6 +82,10 @@ describe('xplat schematic', () => {
     const files = tree.files;
     expect(files.indexOf('/xplat/web/index.ts')).toBeGreaterThanOrEqual(-1);
     expect(files.indexOf('/xplat/nativescript/index.ts')).toBeGreaterThanOrEqual(0);
+    const packagePath = '/package.json';
+    const packageFile = JSON.parse(getFileContent(tree, packagePath));
+    const hasNativeScript = packageFile.dependencies[`nativescript-angular`];
+    expect(hasNativeScript).not.toBeUndefined();
   });
 
   // it('should create default xplat support for ssr only', () => {
@@ -108,6 +119,15 @@ describe('xplat schematic', () => {
     expect(files.indexOf('/xplat/web/index.ts')).toBeGreaterThanOrEqual(0);
     expect(files.indexOf('/xplat/ionic/index.ts')).toBeGreaterThanOrEqual(0);
     expect(files.indexOf('/xplat/nativescript/index.ts')).toBeGreaterThanOrEqual(-1);
+    const packagePath = '/package.json';
+    const packageFile = JSON.parse(getFileContent(tree, packagePath));
+    const hasScss = packageFile.dependencies[`@testing/scss`];
+    expect(hasScss).not.toBeUndefined();
+    const hasWebScss = packageFile.dependencies[`@testing/web`];
+    expect(hasWebScss).not.toBeUndefined();
+    // should not include these root packages
+    const hasNativeScript = packageFile.dependencies[`nativescript-angular`];
+    expect(hasNativeScript).toBeUndefined();
   });
 
   it('should create additional xplat support when generated with different platforms', () => {

@@ -14,7 +14,7 @@ import {
   schematic,
   noop,
 } from '@angular-devkit/schematics';
-import { stringUtils, prerun, getNpmScope, getPrefix, addRootDepsIonic, updatePackageScripts, updateAngularProjects, updateNxProjects, formatFiles } from '../utils';
+import { stringUtils, prerun, getNpmScope, getPrefix, addRootDeps, updatePackageScripts, updateAngularProjects, updateNxProjects, formatFiles } from '../utils';
 import { Schema as ApplicationOptions } from './schema';
 
 export default function (options: ApplicationOptions) {
@@ -28,7 +28,7 @@ export default function (options: ApplicationOptions) {
     // create app files
     (tree: Tree, context: SchematicContext) => addAppFiles(options, appPath)(tree, context),
     // add root package dependencies
-    (tree: Tree) => addRootDepsIonic(tree),
+    (tree: Tree) => addRootDeps(tree, {ionic: true}),
     // add start/clean scripts
     (tree: Tree) => {
       const scripts = {};

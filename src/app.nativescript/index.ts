@@ -34,7 +34,7 @@ export default function (options: ApplicationOptions) {
       path: `apps/${appPath}/app`,
     }),
     // add root package dependencies
-    (tree: Tree) => addRootDeps(tree),
+    (tree: Tree) => addRootDeps(tree, {nativescript: true}),
     // add start/clean scripts
     (tree: Tree) => {
       const scripts = {};

@@ -47,7 +47,7 @@ describe("pipe schematic", () => {
       },
       tree
     );
-    const options: GenerateOptions = { ...defaultOptions };
+    let options: GenerateOptions = { ...defaultOptions };
     tree = schematicRunner.runSchematic("pipe", options, tree);
     const files = tree.files;
     // console.log(files.slice(91,files.length));
@@ -65,6 +65,54 @@ describe("pipe schematic", () => {
     // console.log(content);
     expect(content.indexOf(`@Pipe({`)).toBeGreaterThanOrEqual(0);
     expect(content.indexOf(`name: 'truncate'`)).toBeGreaterThanOrEqual(0);
+  });
+
+  it("should create pipe in libs and handle camel case properly", () => {
+    // console.log('appTree:', appTree);
+    let tree = schematicRunner.runSchematic(
+      "xplat",
+      {
+        prefix: "tt"
+      },
+      appTree
+    );
+    tree = schematicRunner.runSchematic(
+      "app.nativescript",
+      {
+        name: "viewer",
+        prefix: "tt"
+      },
+      tree
+    );
+    tree = schematicRunner.runSchematic(
+      "feature",
+      {
+        name: "foo",
+        platforms: "nativescript,web"
+      },
+      tree
+    );
+    let options: GenerateOptions = { 
+      ...defaultOptions,
+      name: 'test-with-dashes'
+    };
+    tree = schematicRunner.runSchematic("pipe", options, tree);
+    const files = tree.files;
+    // console.log(files.slice(91,files.length));
+
+    // component
+    expect(
+      files.indexOf("/libs/features/ui/pipes/test-with-dashes.pipe.ts")
+    ).toBeGreaterThanOrEqual(0);
+
+    // file content
+    let content = getFileContent(
+      tree,
+      "/libs/features/ui/pipes/test-with-dashes.pipe.ts"
+    );
+    // console.log(content);
+    expect(content.indexOf(`@Pipe({`)).toBeGreaterThanOrEqual(0);
+    expect(content.indexOf(`name: 'testWithDashes'`)).toBeGreaterThanOrEqual(0);
   });
 
   it("should THROW if feature module does not exist in libs", () => {
