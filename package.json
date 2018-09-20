@@ -44,7 +44,8 @@
   "contributors": [
     "Nathan Walker",
     "Morten Sjøgren",
-    "Sean Perkins"
+    "Sean Perkins",
+    "Baljeet Singh"
   ],
   "license": "MIT",
   "devDependencies": {
