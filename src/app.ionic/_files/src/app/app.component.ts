@@ -16,7 +16,7 @@ export class AppComponent {
 
   initializeApp() {
     this.platform.ready().then(() => {
-      if (isCapacitorNative(window)) {
+      if (this.platform.is('capacitor')) {
         StatusBar.setStyle({
           style: StatusBarStyle.Dark
         });
