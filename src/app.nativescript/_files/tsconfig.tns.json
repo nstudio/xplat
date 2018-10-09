@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig",
+  "compilerOptions": {
+    "module": "es2015",
+    "moduleResolution": "node"
+  },
+  "include": [
+    "references.d.ts",
+    "app/app.module.ngfactory.d.ts",
+    "app/main.ts",
+    "app/**/*.module.ts"
+  ]
+}

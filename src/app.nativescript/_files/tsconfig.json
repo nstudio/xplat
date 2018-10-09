@@ -33,9 +33,9 @@
       ]
     }
   },
-  "exclude": [
-      "e2e",
-      "node_modules",
-      "platforms"
+  "include": [
+    "references.d.ts",
+    "app/main.ts",
+    "app/**/*.module.ts"
   ]
 }

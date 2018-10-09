@@ -34,7 +34,7 @@ describe('app.nativescript schematic', () => {
     expect(files.indexOf('/apps/nativescript-foo/.gitignore')).toBeGreaterThanOrEqual(0);
     expect(files.indexOf('/apps/nativescript-foo/package.json')).toBeGreaterThanOrEqual(0);
     expect(files.indexOf('/apps/nativescript-foo/references.d.ts')).toBeGreaterThanOrEqual(0);
-    expect(files.indexOf('/apps/nativescript-foo/tsconfig.esm.json')).toBeGreaterThanOrEqual(0);
+    expect(files.indexOf('/apps/nativescript-foo/tsconfig.tns.json')).toBeGreaterThanOrEqual(0);
     expect(files.indexOf('/apps/nativescript-foo/tsconfig.json')).toBeGreaterThanOrEqual(0);
     expect(files.indexOf('/apps/nativescript-foo/webpack.config.js')).toBeGreaterThanOrEqual(0);
 
@@ -55,7 +55,6 @@ describe('app.nativescript schematic', () => {
     expect(files.indexOf('/apps/nativescript-foo/app/app.module.ngfactory.d.ts')).toBeGreaterThanOrEqual(0);
     expect(files.indexOf('/apps/nativescript-foo/app/app.module.ts')).toBeGreaterThanOrEqual(0);
     expect(files.indexOf('/apps/nativescript-foo/app/app.routing.ts')).toBeGreaterThanOrEqual(0);
-    expect(files.indexOf('/apps/nativescript-foo/app/main.aot.ts')).toBeGreaterThanOrEqual(0);
     expect(files.indexOf('/apps/nativescript-foo/app/main.ts')).toBeGreaterThanOrEqual(0);
     expect(files.indexOf('/apps/nativescript-foo/app/package.json')).toBeGreaterThanOrEqual(0);
 
