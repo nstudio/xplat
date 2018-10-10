@@ -37,3 +37,4 @@ typings/
 !.vscode/extensions.json
 **/tests/import.spec.ts
 package-lock.json
+app/app.css

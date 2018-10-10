@@ -1,4 +1,5 @@
 import { async } from '@angular/core/testing';
+import { TNS_TEST_IMPORTS, TNS_TEST_PROVIDERS } from '@lyt3/nativescript/testing';
 import {
   nsTestBedAfterEach,
   nsTestBedBeforeEach,
@@ -10,6 +11,8 @@ describe('<%= utils.classify(name) %>Component', () => {
   beforeEach(
     nsTestBedBeforeEach(
       [<%= utils.classify(name) %>Component],
+      [...TNS_TEST_PROVIDERS()],
+      [...TNS_TEST_IMPORTS()],
     )
   );
 

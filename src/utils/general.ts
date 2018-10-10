@@ -1080,6 +1080,19 @@ export function updateIDESettings(
       const workspaceUpdates: any = {
         "**/node_modules": true,
         "**/hooks": true,
+        "**/testing/nativescript/app/package.json": false,
+        "**/testing/nativescript/hooks": true,
+        "**/testing/nativescript/platforms": true,
+        "**/testing/nativescript/report": true,
+        "**/testing/nativescript/app/**/*.js": {
+          when: "$(basename).ts"
+        },
+        "**/testing/nativescript/app/**/*.d.ts": {
+          when: "$(basename).ts"
+        },
+        "**/testing/nativescript/app/**/*.css": {
+          when: "$(basename).scss"
+        },
         "**/apps/nativescript-*/app/package.json": false,
         "**/apps/nativescript-*/hooks": true,
         "**/apps/nativescript-*/platforms": true,

@@ -50,6 +50,7 @@
     "karma": "3.0.0",
     "karma-jasmine": "1.1.2",
     "karma-nativescript-launcher": "0.4.0",
+    "nativescript-dev-sass": "^1.6.0",
     "nativescript-dev-typescript": "^0.7.4",
     "tns-platform-declarations": "^4.2.1",
     "typescript": "file:../../node_modules/typescript"
