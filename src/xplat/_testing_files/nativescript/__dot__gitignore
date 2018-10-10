@@ -9,8 +9,6 @@ platforms/
 webpack.config.js
 !karma.conf.js
 !import-specs-hook.js
-!postinstall.js
-!preuninstall.js
 
 # Logs
 logs
