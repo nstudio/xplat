@@ -6,11 +6,13 @@ const converter = require('nativescript-dev-sass/lib/converter');
 
 const removeDotTsRegexp = /\.ts$/;
 function makeImportPath(nodeModulesPath, filepath) {
-  return path.relative(nodeModulesPath, filepath).replace(removeDotTsRegexp, '');
+  return path
+    .relative(nodeModulesPath, filepath)
+    .replace(removeDotTsRegexp, "");
 }
 
 function writeImportFile(outputFilePath, imports) {
-  fs.writeFileSync(outputFilePath, imports.join(`\n`), 'UTF-8');
+  fs.writeFileSync(outputFilePath, imports.join(`\n`), "UTF-8");
 }
 
 module.exports = function($logger, $projectData) {
