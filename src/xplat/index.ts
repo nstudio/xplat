@@ -137,6 +137,23 @@ export default function(options: xPlatOptions) {
       scripts[
         `clean.shared`
       ] = `cd libs/ && git clean -dfX && cd ../xplat/ && git clean -dfX`;
+
+      scripts[
+        `test:android`
+      ] =  `cd testing/nativescript && tns test android --syncAllFiles --justlaunch`;
+
+      scripts[
+        `test:ios`
+      ] =  `cd testing/nativescript && tns test ios --syncAllFiles --justlaunch`;
+
+      scripts[
+        `test:android:watch`
+      ] =  `cd testing/nativescript && tns test android --syncAllFiles`;
+
+      scripts[
+        `test:ios:watch`
+      ] =  `cd testing/nativescript && tns test ios --syncAllFiles`;
+
       return updatePackageScripts(tree, scripts);
     },
     // update IDE settings

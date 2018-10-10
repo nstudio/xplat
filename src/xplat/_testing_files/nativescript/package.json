@@ -1,0 +1,56 @@
+{
+  "nativescript": {
+    "id": "io.nstudio.unittest",
+    "tns-android": {
+      "version": "4.2.0"
+    },
+    "tns-ios": {
+      "version": "4.2.0"
+    }
+  },
+  "description": "NativeScript Application",
+  "license": "SEE LICENSE IN <your-license-filename>",
+  "repository": "<fill-your-repository-here>",
+  "dependencies": {
+    "@angular/animations": "file:../../node_modules/@angular/animations",
+    "@angular/common": "file:../../node_modules/@angular/common",
+    "@angular/compiler": "file:../../node_modules/@angular/compiler",
+    "@angular/core": "file:../../node_modules/@angular/core",
+    "@angular/forms": "file:../../node_modules/@angular/forms",
+    "@angular/platform-browser": "file:../../node_modules/@angular/platform-browser",
+    "@angular/platform-browser-dynamic": "file:../../node_modules/@angular/platform-browser-dynamic",
+    "@angular/router": "file:../../node_modules/@angular/router",
+    "@ngrx/effects": "file:../../node_modules/@ngrx/effects",
+    "@ngrx/router-store": "file:../../node_modules/@ngrx/router-store",
+    "@ngrx/store": "file:../../node_modules/@ngrx/store",
+    "@ngx-translate/core": "file:../../node_modules/@ngx-translate/core",
+    "@nrwl/nx": "file:../../node_modules/@nrwl/nx",
+    "@<%= npmScope %>/core": "file:../../libs/core",
+    "@<%= npmScope %>/features": "file:../../libs/features",
+    "@<%= npmScope %>/nativescript": "file:../../xplat/nativescript",
+    "@<%= npmScope %>/scss": "file:../../libs/scss",
+    "@<%= npmScope %>/utils": "file:../../libs/utils",
+    "jasmine-marbles": "file:../../node_modules/jasmine-marbles",
+    "nativescript-angular": "file:../../node_modules/nativescript-angular",
+    "nativescript-ngx-fonticon": "file:../../node_modules/nativescript-ngx-fonticon",
+    "nativescript-theme-core": "file:../../node_modules/nativescript-theme-core",
+    "nativescript-unit-test-runner": "^0.3.4",
+    "reflect-metadata": "file:../../node_modules/reflect-metadata",
+    "rxjs": "file:../../node_modules/rxjs",
+    "rxjs-compat": "file:../../node_modules/rxjs-compat",
+    "tns-core-modules": "file:../../node_modules/tns-core-modules",
+    "tslib": "^1.9.3",
+    "zone.js": "file:../../node_modules/zone.js"
+  },
+  "devDependencies": {
+    "@angular/compiler-cli": "~6.1.0",
+    "@angular/language-service": "file:../../node_modules/@angular/language-service",
+    "jasmine-core": "3.2.1",
+    "karma": "3.0.0",
+    "karma-jasmine": "1.1.2",
+    "karma-nativescript-launcher": "0.4.0",
+    "nativescript-dev-typescript": "^0.7.4",
+    "typescript": "file:../../node_modules/typescript"
+  },
+  "readme": "NativeScript Unit Test Application"
+}

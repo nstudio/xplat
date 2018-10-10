@@ -1,0 +1,6 @@
+{
+    "main": "main.js",
+    "android": {
+        "v8Flags": "--expose_gc"
+    }
+}
