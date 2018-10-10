@@ -1,37 +1,35 @@
-const glob = require("glob");
-const path = require("path");
-const fs = require("fs");
-const rootPkg = require("../../../../package.json");
-const converter = require("nativescript-dev-sass/lib/converter");
+const glob = require('glob');
+const path = require('path');
+const fs = require('fs');
+const rootPkg = require('../../../../package.json');
+const converter = require('nativescript-dev-sass/lib/converter');
 
 const removeDotTsRegexp = /\.ts$/;
 function makeImportPath(nodeModulesPath, filepath) {
-  return path
-    .relative(nodeModulesPath, filepath)
-    .replace(removeDotTsRegexp, "");
+  return path.relative(nodeModulesPath, filepath).replace(removeDotTsRegexp, '');
 }
 
 function writeImportFile(outputFilePath, imports) {
-  fs.writeFileSync(outputFilePath, imports.join(`\n`), "UTF-8");
+  fs.writeFileSync(outputFilePath, imports.join(`\n`), 'UTF-8');
 }
 
 module.exports = function($logger, $projectData) {
-  const nodeModulesPath = path.join($projectData.projectDir, "node_modules");
+  const nodeModulesPath = path.join($projectData.projectDir, 'node_modules');
   const outputFilePath = path.join(
     $projectData.appDirectoryPath,
-    "tests",
-    "import.spec.ts"
+    'tests',
+    'import.spec.ts'
   );
 
   if (!rootPkg.name) {
     throw new Error("Couldn't find prefix");
   }
   const prefix = `@${rootPkg.name}`;
-  const prefixModulePath = path.join(nodeModulesPath, prefix, "nativescript");
+  const prefixModulePath = path.join(nodeModulesPath, prefix, 'nativescript');
 
   return new Promise(function(resolve, reject) {
     glob(
-      path.join(prefixModulePath, "**", "*.spec.ts"),
+      path.join(prefixModulePath, '**', '*.spec.ts'),
       { symlinks: true },
       function(error, files) {
         if (error) {
