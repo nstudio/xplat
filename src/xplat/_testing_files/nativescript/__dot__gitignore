@@ -6,7 +6,8 @@ platforms/
 # NativeScript Template
 *.js.map
 *.js
-!webpack.config.js
+webpack.config.js
+!karma.conf.js
 
 # Logs
 logs
@@ -33,3 +34,4 @@ typings/
 !.vscode/extensions.json
 **/tests/import.spec.ts
 package-lock.json
+
