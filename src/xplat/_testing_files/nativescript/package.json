@@ -1,4 +1,5 @@
 {
+  "name": "io-nstudio-unittest",
   "nativescript": {
     "id": "io.nstudio.unittest",
     "tns-android": {
@@ -51,6 +52,9 @@
     "karma-nativescript-launcher": "0.4.0",
     "nativescript-dev-typescript": "^0.7.4",
     "typescript": "file:../../node_modules/typescript"
+  },
+  "scripts": {
+    "postinstall": "cp import-specs-hook.js hooks/before-prepare/import-specs-hook.js"
   },
   "readme": "NativeScript Unit Test Application"
 }
