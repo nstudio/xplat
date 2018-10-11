@@ -17,6 +17,14 @@ const {
 const directory = parsedArgs._[2] && path.resolve(parsedArgs._[2]);
 const showHelp = help || !directory || !prefix;
 if (showHelp) {
+  if (!directory) {
+    console.log(`directory is required`);
+  }
+
+  if (!prefix) {
+    console.log(`--prefix=PREFIX is required`);
+  }
+
   console.log(`
     Usage: create-xplat-workspace <directory> [options] [ng new options]
     Create a new Nx workspace (that is to say a new angular-cli project using @nrwl/schematics)
@@ -69,8 +77,15 @@ const gitPathsToAdd = [
   'libs/scss',
   'libs/utils',
   'references.d.ts',
-  'xplat'
-]
+  'xplat',
+  'testing',
+  'angular.json',
+  'nx.json',
+  'package-lock.json',
+  'package.json',
+  'tslint.json',
+];
+
 const gitAdd = `git add ${gitPathsToAdd.join(' ')} && git commit -m "Installed @nstudio/schematics"`;
 console.log(gitAdd);
 child_process.execSync(gitAdd, { cwd: directory, stdio: [0, 1, 2] });
