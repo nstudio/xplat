@@ -29,13 +29,13 @@
         "description": "Specifies if the style will be in the ts file.",
         "type": "boolean",
         "default": false,
-        "alias": "is"
+        "alias": "s"
       },
       "inlineTemplate": {
         "description": "Specifies if the template will be in the ts file.",
         "type": "boolean",
         "default": false,
-        "alias": "it"
+        "alias": "t"
       },
       "viewEncapsulation": {
         "description": "Specifies the view encapsulation strategy.",
@@ -56,7 +56,7 @@
         "description": "Skip creating spec files.",
         "type": "boolean",
         "default": false,
-        "alias": "st"
+        "alias": "S"
       },
       "prefix": {
         "type": "string",
