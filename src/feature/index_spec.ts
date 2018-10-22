@@ -46,6 +46,7 @@ describe('feature schematic', () => {
 
     // feature in shared code
     expect(files.indexOf('/libs/features/foo/index.ts')).toBeGreaterThanOrEqual(0);
+    expect(files.indexOf('/libs/features/foo/foo.module.ts')).toBeGreaterThanOrEqual(0);
     expect(files.indexOf('/libs/features/foo/base/foo.base-component.ts')).toBeGreaterThanOrEqual(0);
     expect(files.indexOf('/xplat/nativescript/features/foo/index.ts')).toBeGreaterThanOrEqual(0);
     expect(files.indexOf('/xplat/nativescript/features/foo/foo.module.ts')).toBeGreaterThanOrEqual(0);
@@ -105,7 +106,8 @@ describe('feature schematic', () => {
     expect(files.indexOf('/xplat/web/index.ts')).toBeGreaterThanOrEqual(0);
 
     // feature
-    expect(files.indexOf('/libs/features/foo/index.ts')).toBe(-1);
+    expect(files.indexOf('/libs/features/foo/index.ts')).toBeGreaterThanOrEqual(0);
+    expect(files.indexOf('/libs/features/foo/foo.module.ts')).toBeGreaterThanOrEqual(0);
     expect(files.indexOf('/libs/features/foo/base/foo.base-component.ts')).toBe(-1);
     expect(files.indexOf('/xplat/nativescript/features/foo/index.ts')).toBeGreaterThanOrEqual(0);
     expect(files.indexOf('/xplat/nativescript/features/foo/foo.module.ts')).toBeGreaterThanOrEqual(0);
@@ -143,7 +145,7 @@ describe('feature schematic', () => {
       name: 'viewer',
       prefix: 'tt'
     }, tree);
-    const options: FeatureOptions = { 
+    const options: FeatureOptions = {
       name: 'foo',
       platforms: 'web',
       ignoreBase: true
@@ -158,7 +160,8 @@ describe('feature schematic', () => {
     expect(files.indexOf('/xplat/web/index.ts')).toBeGreaterThanOrEqual(0);
 
     // feature
-    expect(files.indexOf('/libs/features/foo/index.ts')).toBe(-1);
+    expect(files.indexOf('/libs/features/foo/index.ts')).toBeGreaterThanOrEqual(0);
+    expect(files.indexOf('/libs/features/foo/foo.module.ts')).toBeGreaterThanOrEqual(0);
     expect(files.indexOf('/libs/features/foo/base/foo.base-component.ts')).toBe(-1);
     expect(files.indexOf('/xplat/nativescript/features/foo/index.ts')).toBeGreaterThanOrEqual(-1);
     expect(files.indexOf('/xplat/nativescript/features/foo/foo.module.ts')).toBeGreaterThanOrEqual(-1);
@@ -184,7 +187,7 @@ describe('feature schematic', () => {
     // console.log(compPath + ':');
     // console.log(compContent);
     expect(compContent.indexOf('extends BaseComponent')).toBeGreaterThanOrEqual(0);
-    
+
   });
 
   it('should create feature module for specified projects only', () => {
@@ -204,6 +207,7 @@ describe('feature schematic', () => {
 
     // feature should not be in shared code
     expect(files.indexOf('/libs/features/foo/index.ts')).toBe(-1);
+    expect(files.indexOf('/libs/features/foo/foo.module.ts')).toBe(-1);
     expect(files.indexOf('/xplat/nativescript/features/foo/index.ts')).toBe(-1);
     expect(files.indexOf('/xplat/web/features/foo/index.ts')).toBe(-1);
 

@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';<% if (!onlyModule && onlyProject && routing) { %>
 import { RouterModule, Routes } from '@angular/router';<% } %>
+import { <%= utils.classify(name) %>Module as Shared<%= utils.classify(name) %>Module } from '@<%= npmScope %>/features';
 <% if (onlyProject) { %>
 import { SharedModule } from '../shared/shared.module';<% } else { %>
 import { UIModule } from '../ui/ui.module';<% } if (!onlyModule) { %>
@@ -14,8 +15,9 @@ export const routes: Routes = [
 
 @NgModule({
   imports: [
+    Shared<%= utils.classify(name) %>Module,
     <% if (onlyProject) { %>SharedModule<% if (routing) { %>,
-    RouterModule.forChild(routes)<% } } else { %>UIModule<% } %> 
+    RouterModule.forChild(routes)<% } } else { %>UIModule<% } %>
   ],<% if (!onlyModule) { %>
   declarations: [
     ...<%= utils.sanitize(name).toUpperCase() %>_COMPONENTS
@@ -25,5 +27,4 @@ export const routes: Routes = [
   ]<% } %>
 })
 export class <%= utils.classify(name) %>Module {}
-  
-  
+
