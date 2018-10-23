@@ -122,12 +122,17 @@ export default function(options: featureOptions) {
     prerun(),
     // libs
     (tree: Tree, context: SchematicContext) =>
-      options.onlyProject || options.onlyModule || options.ignoreBase
+      options.onlyProject
         ? noop()(tree, context)
         : addFiles(options)(tree, context),
+    // libs
+    (tree: Tree, context: SchematicContext) =>
+      options.onlyProject || options.ignoreBase || options.onlyModule
+        ? noop()(tree, context)
+        : addFiles(options, null, null, "_component")(tree, context),
     // update libs index
     (tree: Tree, context: SchematicContext) =>
-      options.onlyProject || options.onlyModule || options.ignoreBase
+      options.onlyProject
         ? noop()(tree, context)
         : adjustBarrelIndex("libs/features/index.ts")(tree, context),
     // web
@@ -180,7 +185,7 @@ export default function(options: featureOptions) {
         : noop()(tree, context),
     // project handling
     ...projectChains,
-    options.skipFormat 
+    options.skipFormat
       ? noop()
       : formatFiles(options)
   ]);
