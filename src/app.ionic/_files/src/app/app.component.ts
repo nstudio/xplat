@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 
-import { isCapacitorNative } from '@ionic/core';
 import { Platform } from '@ionic/angular';
 import { Plugins, StatusBarStyle } from '@capacitor/core';
 const { StatusBar } = Plugins;
