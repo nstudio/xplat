@@ -196,6 +196,7 @@ export function addRootDeps(
     };
     deps.push(dep);
 
+    /** NATIVESCRIPT */
     if (targetPlatforms.nativescript) {
       dep = {
         name: "nativescript-angular",
@@ -242,6 +243,7 @@ export function addRootDeps(
       deps.push(dep);
     }
 
+    /** IONIC */
     if (targetPlatforms.ionic) {
       dep = {
         name: "@ionic-native/core",
@@ -284,20 +286,24 @@ export function addRootDeps(
         type: "dependency"
       };
       deps.push(dep);
-
-      dep = {
-        name: `@${getNpmScope()}/web`,
-        version: "file:xplat/web",
-        type: "dependency"
-      };
-      deps.push(dep);
     }
 
+    /** ELECTRON */
     if (targetPlatforms.electron) {
       dep = {
         name: 'electron',
         version: '2.0.5',
         type: 'devDependency'
+      };
+      deps.push(dep);
+    }
+
+    if (targetPlatforms.ionic || targetPlatforms.electron) {
+      // ability to import web scss and share it
+      dep = {
+        name: `@${getNpmScope()}/web`,
+        version: "file:xplat/web",
+        type: "dependency"
       };
       deps.push(dep);
     }

@@ -13,7 +13,7 @@ import {
   move
 } from '@angular-devkit/schematics';
 import { Schema as ApplicationOptions } from './schema';
-import { prerun, getPrefix, getNpmScope, stringUtils, addRootDepsElectron } from '../utils';
+import { prerun, getPrefix, getNpmScope, stringUtils, addRootDeps } from '../utils';
 
 export default function (options: ApplicationOptions) {
   if (!options.name) {
@@ -26,14 +26,14 @@ export default function (options: ApplicationOptions) {
     // create app files
     (tree: Tree, context: SchematicContext) => addAppFiles(options, appPath)(tree, context),
     // add root package dependencies
-    (tree: Tree) => addRootDepsElectron(tree),
+    (tree: Tree) => addRootDeps(tree, {electron: true}),
   ]);
 }
 
-function addAppFiles(options: ApplicationOptions, appPath: string, extra: string = ''): Rule {
-  extra = extra ? `${extra}_` : '';
+function addAppFiles(options: ApplicationOptions, appPath: string, sample: string = ''): Rule {
+  sample = '';
   return branchAndMerge(
-    mergeWith(apply(url(`./_${extra}files`), [
+    mergeWith(apply(url(`./_${sample}files`), [
       template(<TemplateOptions>{
         ...options as any,
         utils: stringUtils,

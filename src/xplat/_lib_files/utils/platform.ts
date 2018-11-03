@@ -2,7 +2,7 @@
  * NativeScript helpers
  */
 
-declare var NSObject, NSString, android, java;
+declare var NSObject, NSString, android, java, window;
 
 /**
  * Determine if running on native iOS mobile app
@@ -23,4 +23,11 @@ export function isAndroid() {
  */
 export function isNativeScript() {
   return isIOS() || isAndroid();
+}
+
+/**
+ * Electron helpers
+ */
+export function isElectron() {
+  return window && window.process && window.process.type;
 }

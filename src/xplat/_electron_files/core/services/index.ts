@@ -1,6 +1,6 @@
 import { ElectronService } from './electron.service';;
 
-export const PROVIDERS: any[] = [
+export const ELECTRON_PROVIDERS: any[] = [
   ElectronService
 ];
 

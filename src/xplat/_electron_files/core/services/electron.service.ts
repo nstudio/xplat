@@ -1,33 +1,23 @@
 import { Injectable } from '@angular/core';
+import { WindowService } from '@<%= npmScope %>/core';
+import { isElectron } from '@<%= npmScope %>/utils';
 import * as childProcess from 'child_process';
 import { ipcRenderer } from 'electron';
-
-declare var nodeModule: NodeModule;
-interface NodeModule {
-  id: string;
-}
-declare var window: Window;
-interface Window {
-  process: any;
-  require: any;
-}
 
 @Injectable()
 export class ElectronService {
 
   private _ipc: typeof ipcRenderer;
-  private childProcess: typeof childProcess;
+  private _childProcess: typeof childProcess;
 
-  constructor() {
+  constructor(
+    private _win: WindowService
+  ) {
     // Conditional imports
-    if (this.isElectron()) {
-      this._ipc = window.require('electron').ipcRenderer;
-      this.childProcess = window.require('child_process');
+    if (isElectron()) {
+      this._ipc = this._win.require('electron').ipcRenderer;
+      this._childProcess = this._win.require('child_process');
     }
-  }
-
-  public isElectron() {
-    return window && window.process && window.process.type;
   }
 
   public on(channel: string, listener: Function): void {

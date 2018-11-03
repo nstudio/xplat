@@ -8,11 +8,7 @@
     "**/.DS_Store": true,
     "**/node_modules": true,
     "**/scripts/**/*.js": true,
-    "**/scripts/**/*.js.map": true,
-    "**/src/**/*.js": {
-      "when": "$(basename).ts" 
-    },
-    "**/src/**/*.js.map": true
+    "**/scripts/**/*.js.map": true
   },
   "search.exclude": {
     "**/node_modules": true,

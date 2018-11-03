@@ -1,2 +1,3 @@
 export * from './services';
-export {<%= utils.classify(prefix) %>CoreModule} from './core.module';
+export { <%= utils.classify(prefix) %>ElectronCoreModule } from './core.module';
+
