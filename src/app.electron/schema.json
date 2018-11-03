@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "id": "app.electron",
+  "title": "Nx Electron App Options Schema",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "The name of the app.",
+      "alias": "n",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      }
+    },
+    "prefix": {
+      "type": "string",
+      "description": "The prefix to apply to generated selectors.",
+      "alias": "p"
+    },
+    "npmScope": {
+      "type": "string",
+      "description": "The npm scope to use.",
+      "alias": "wn"
+    },
+    "xplat": {
+      "type": "boolean",
+      "description": "Whether to create xplat structure along with app creation.",
+      "default": false
+    },
+    "sample": {
+      "type": "boolean",
+      "description": "Use sample feature setup.",
+      "default": false
+    },
+    "skipInstall": {
+      "type": "boolean",
+      "description": "Skip installing dependencies.",
+      "default": false
+    }
+  },
+  "required": []
+}

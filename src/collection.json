@@ -19,6 +19,11 @@
       "schema": "./app.ionic/schema.json",
       "description": "Create an Ionic app."
     },
+    "app.electron": {
+      "factory": "./app.electron",
+      "schema": "./app.electron/schema.json",
+      "description": "Create an Electron app."
+    },
     "mode": {
       "factory": "./mode",
       "schema": "./mode/schema.json",
