@@ -29,5 +29,5 @@ export function isNativeScript() {
  * Electron helpers
  */
 export function isElectron() {
-  return window && window.process && window.process.type;
+  return typeof window !== 'undefined' && window.process && window.process.type;
 }
