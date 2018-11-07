@@ -42,10 +42,26 @@
     "url": "https://github.com/nstudio"
   },
   "contributors": [
-    "Nathan Walker",
-    "Morten Sjøgren",
-    "Sean Perkins",
-    "Baljeet Singh"
+    {
+      "name": "Nathan Walker",
+      "url": "https://github.com/NathanWalker"
+    },
+    {
+      "name": "Morten Sjøgren",
+      "url": "https://github.com/m-abs"
+    },
+    {
+      "name": "Sean Perkins",
+      "url": "https://github.com/sean-perkins"
+    },
+    {
+      "name": "Baljeet Singh",
+      "url": "https://github.com/mbaljeetsingh"
+    },
+    {
+      "name": "Miguel Ramos",
+      "url": "https://github.com/miguelramos"
+    }
   ],
   "license": "MIT",
   "devDependencies": {
