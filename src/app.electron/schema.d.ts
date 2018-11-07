@@ -4,6 +4,10 @@ export interface Schema {
    */
   name: string;
   /**
+   * The web app target to use inside the electron app
+   */
+  target: string;
+  /**
    * npm scope - auto detected from nx.json but can specify your own name
    */
   npmScope?: string;

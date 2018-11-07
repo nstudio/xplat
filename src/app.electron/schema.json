@@ -13,6 +13,10 @@
         "index": 0
       }
     },
+    "target": {
+      "type": "string",
+      "description": "The name of the web app to use inside the electron app. ie, web-myapp"
+    },
     "prefix": {
       "type": "string",
       "description": "The prefix to apply to generated selectors.",

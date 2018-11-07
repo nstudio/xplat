@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { WindowService } from '@<%= npmScope %>/core';
+import { LogService, WindowService } from '@<%= npmScope %>/core';
 import { isElectron } from '@<%= npmScope %>/utils';
 import * as childProcess from 'child_process';
 import { ipcRenderer } from 'electron';
@@ -11,12 +11,14 @@ export class ElectronService {
   private _childProcess: typeof childProcess;
 
   constructor(
+    private _log: LogService,
     private _win: WindowService
   ) {
     // Conditional imports
     if (isElectron()) {
       this._ipc = this._win.require('electron').ipcRenderer;
       this._childProcess = this._win.require('child_process');
+      this._log.debug('ElectronService ready.');
     }
   }
 

@@ -1,0 +1,49 @@
+{
+  "name": "electron-<%= utils.sanitize(name) %>",
+  "version": "1.0.0",
+  "description": "<%= utils.classify(name) %> description.",
+  "main": "index.js",
+  "author": {
+    "name": "Your name",
+    "email": "name@company.com"
+  },
+  "homepage": "https://nstudio.io/xplat",
+  "repository": {
+    "url": "https://github.com/nstudio/xplat"
+  },
+  "license": "MIT",
+  "build": {
+    "appId": "com.company.<%= utils.classify(name) %>",
+    "productName": "<%= utils.classify(name) %>",
+    "copyright": "Copyright © 2018-2019 <%= npmScope %>",
+    "asar": false,
+    "npmRebuild": false,
+    "directories": {
+      "buildResources": "icons",
+      "output": "../electron-<%= utils.sanitize(name) %>-packages"
+    },
+    "mac": {
+      "category": "public.app-category.developer-tools",
+      "icon": "icon.png"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "icon.ico"
+    },
+    "linux": {
+      "icon": "icon.png",
+      "target": [
+        "AppImage",
+        "deb",
+        "tar.gz"
+      ],
+      "synopsis": "<%= utils.classify(name) %>",
+      "category": "Development"
+    },
+    "nsis": {
+      "createDesktopShortcut": "always",
+      "installerIcon": "icon.ico",
+      "artifactName": "<%= utils.classify(name) %>-Setup-${version}.${ext}"
+    }
+  }
+}
