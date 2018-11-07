@@ -5,6 +5,7 @@ jsconfig.json
 # Outputs
 scripts/**/*.js
 scripts/**/*.js.map
+!scripts/tools/**/*.js
 src/**/*.js
 src/**/*.js.map
 !src/app.nativescript/_files/tools/*.js

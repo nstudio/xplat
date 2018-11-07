@@ -32,6 +32,10 @@ function updatePaths(options: ConfigOptions) {
       if ( a > b ) return 1;
       return 0;
     } );
+    if ((platforms.includes('ionic') || platforms.includes('electron')) && !platforms.includes('web')) {
+      // ensure web is added since these platforms depend on it
+      platforms.push('web');
+    }
     const updates: any = {};
     // ensure default Nx libs path is in place
     updates[`@${npmScope}/*`] = [

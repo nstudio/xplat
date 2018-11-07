@@ -130,6 +130,28 @@ describe('xplat schematic', () => {
     expect(hasNativeScript).toBeUndefined();
   });
 
+  it('should create default xplat support for electron which should always include web as well', () => {
+    const options: XPlatOptions = { ...defaultOptions };
+    options.platforms = 'electron';
+
+    const tree = schematicRunner.runSchematic('xplat', options, appTree);
+    const files = tree.files;
+    expect(files.indexOf('/xplat/web/index.ts')).toBeGreaterThanOrEqual(0);
+    expect(files.indexOf('/xplat/electron/index.ts')).toBeGreaterThanOrEqual(0);
+    expect(files.indexOf('/xplat/nativescript/index.ts')).toBeGreaterThanOrEqual(-1);
+    const packagePath = '/package.json';
+    const packageFile = JSON.parse(getFileContent(tree, packagePath));
+    const hasScss = packageFile.dependencies[`@testing/scss`];
+    expect(hasScss).not.toBeUndefined();
+    const hasWebScss = packageFile.dependencies[`@testing/web`];
+    expect(hasWebScss).not.toBeUndefined();
+    // should not include these root packages
+    const hasNativeScript = packageFile.dependencies[`nativescript-angular`];
+    expect(hasNativeScript).toBeUndefined();
+    const hasElectron = packageFile.devDependencies[`electron`];
+    expect(hasElectron).toBeDefined();
+  });
+
   it('should create additional xplat support when generated with different platforms', () => {
     const options: XPlatOptions = { ...defaultOptions };
     options.platforms = 'web,ionic';

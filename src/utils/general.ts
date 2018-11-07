@@ -20,16 +20,17 @@ import { errorXplat } from "./errors";
 import * as fs from "fs";
 import * as ts from "typescript";
 
-export const supportedPlatforms = ["web", "nativescript", "ionic"];
+export const supportedPlatforms = ["web", "nativescript", "ionic", "electron"];
 export interface ITargetPlatforms {
   web?: boolean;
   nativescript?: boolean;
   ionic?: boolean;
+  electron?: boolean;
   ssr?: boolean;
 }
 export const defaultPlatforms = "web,nativescript";
 
-export type IDevMode = "web" | "nativescript" | "ionic" | "fullstack";
+export type IDevMode = "web" | "nativescript" | "ionic" | "electron" | "fullstack";
 
 export interface NodeDependency {
   name: string;
@@ -195,6 +196,7 @@ export function addRootDeps(
     };
     deps.push(dep);
 
+    /** NATIVESCRIPT */
     if (targetPlatforms.nativescript) {
       dep = {
         name: "nativescript-angular",
@@ -241,6 +243,7 @@ export function addRootDeps(
       deps.push(dep);
     }
 
+    /** IONIC */
     if (targetPlatforms.ionic) {
       dep = {
         name: "@ionic-native/core",
@@ -283,7 +286,83 @@ export function addRootDeps(
         type: "dependency"
       };
       deps.push(dep);
+    }
 
+    /** ELECTRON */
+    if (targetPlatforms.electron) {
+      dep = {
+        name: 'electron',
+        version: '2.0.8',
+        type: 'devDependency'
+      };
+      deps.push(dep);
+
+      dep = {
+        name: 'electron-builder',
+        version: '20.28.4',
+        type: 'devDependency'
+      };
+      deps.push(dep);
+
+      dep = {
+        name: 'electron-installer-dmg',
+        version: '1.0.0',
+        type: 'devDependency'
+      };
+      deps.push(dep);
+
+      dep = {
+        name: 'electron-packager',
+        version: '12.1.0',
+        type: 'devDependency'
+      };
+      deps.push(dep);
+
+      dep = {
+        name: 'electron-reload',
+        version: '1.2.5',
+        type: 'devDependency'
+      };
+      deps.push(dep);
+
+      dep = {
+        name: 'electron-store',
+        version: '2.0.0',
+        type: 'devDependency'
+      };
+      deps.push(dep);
+
+      dep = {
+        name: 'electron-updater',
+        version: '3.1.2',
+        type: 'devDependency'
+      };
+      deps.push(dep);
+
+      dep = {
+        name: 'npm-run-all',
+        version: '4.1.3',
+        type: 'devDependency'
+      };
+      deps.push(dep);
+
+      dep = {
+        name: 'npx',
+        version: '10.2.0',
+        type: 'devDependency'
+      };
+      deps.push(dep);
+
+      dep = {
+        name: 'wait-on',
+        version: '2.1.0',
+        type: 'devDependency'
+      };
+      deps.push(dep);
+    }
+
+    if (targetPlatforms.ionic || targetPlatforms.electron) {
+      // ability to import web scss and share it
       dep = {
         name: `@${getNpmScope()}/web`,
         version: "file:xplat/web",
@@ -481,6 +560,56 @@ export function addReferences() {
 /// <reference path="./node_modules/tns-platform-declarations/android.d.ts" />
     `
       );
+    }
+    return tree;
+  };
+}
+
+export function addPostinstallers() {
+  return (tree: Tree) => {
+    const postinstallWeb = "/tools/web/postinstall.js";
+    if (!tree.exists(postinstallWeb)) {
+      // add references.d.ts
+      tree.create(
+        postinstallWeb,
+        `// Allow angular using electron module (native node modules)
+const fs = require('fs');
+const f_angular = 'node_modules/@angular-devkit/build-angular/src/angular-cli-files/models/webpack-configs/browser.js';
+
+fs.readFile(f_angular, 'utf8', function (err, data) {
+  if (err) {
+    return console.log(err);
+  }
+  var result = data.replace(/target: "electron-renderer",/g, '');
+  var result = result.replace(/target: "web",/g, '');
+  var result = result.replace(/return \{/g, 'return {target: "web",');
+
+  fs.writeFile(f_angular, result, 'utf8', function (err) {
+    if (err) return console.log(err);
+  });
+});`);
+    }
+    const postinstallElectron = "/tools/electron/postinstall.js";
+    if (!tree.exists(postinstallElectron)) {
+      // add references.d.ts
+      tree.create(
+        postinstallElectron,
+        `// Allow angular using electron module (native node modules)
+const fs = require('fs');
+const f_angular = 'node_modules/@angular-devkit/build-angular/src/angular-cli-files/models/webpack-configs/browser.js';
+
+fs.readFile(f_angular, 'utf8', function (err, data) {
+  if (err) {
+    return console.log(err);
+  }
+  var result = data.replace(/target: "electron-renderer",/g, '');
+  var result = result.replace(/target: "web",/g, '');
+  var result = result.replace(/return \{/g, 'return {target: "electron-renderer",');
+
+  fs.writeFile(f_angular, result, 'utf8', function (err) {
+    if (err) return console.log(err);
+  });
+});`);
     }
     return tree;
   };

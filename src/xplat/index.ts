@@ -95,8 +95,8 @@ export default function(options: xPlatOptions) {
         : noop()(tree, context),
     // web
     (tree: Tree, context: SchematicContext) =>
-      // always generate web if ionic is specified since it depends on it
-      targetPlatforms.web || targetPlatforms.ionic
+      // always generate web if ionic or electron is specified since they depend on it
+      targetPlatforms.web || targetPlatforms.ionic || targetPlatforms.electron
         ? addPlatformFiles(tree, options, "web")(tree, context)
         : noop()(tree, context),
     // web w/sample feature
@@ -108,6 +108,11 @@ export default function(options: xPlatOptions) {
     (tree: Tree, context: SchematicContext) =>
       targetPlatforms.ionic
         ? addPlatformFiles(tree, options, "ionic")(tree, context)
+        : noop()(tree, context),
+    // electron 
+    (tree: Tree, context: SchematicContext) =>
+      targetPlatforms.electron
+        ? addPlatformFiles(tree, options, "electron")(tree, context)
         : noop()(tree, context),
     // ssr (TODO)
     (tree: Tree, context: SchematicContext) =>

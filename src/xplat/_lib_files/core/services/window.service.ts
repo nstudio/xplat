@@ -9,6 +9,8 @@ export class WindowPlatformService {
   public navigator: any = {};
   public location: any = {};
   public localStorage: any;
+  public process: any;
+  public require: any;
   public alert(msg: any) {}
   public confirm(msg: any) {}
   public setTimeout(handler: (...args: any[]) => void, timeout?: number) {
@@ -34,6 +36,14 @@ export class WindowService {
 
   public get location() {
     return this._platformWindow.location;
+  }
+
+  public get process() {
+    return this._platformWindow.process;
+  }
+
+  public get require() {
+    return this._platformWindow.require;
   }
 
   public alert(msg: any): Promise<any> {

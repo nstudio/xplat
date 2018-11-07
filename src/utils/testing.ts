@@ -24,8 +24,53 @@ export function createEmptyWorkspace(tree: Tree): Tree {
     return tree;
 }
 
+export function createXplatWithAppsForElectron(tree: Tree): Tree {
+  tree = createXplatWithApps(tree);
+  tree.overwrite('angular.json', JSON.stringify({
+    $schema: "./node_modules/@angular/cli/lib/config/schema.json",
+    projects: {
+      'web-viewer': {
+        architect: {
+          build: {
+            options: {
+              assets: []
+            }
+          },
+          serve: {
+            options: {
+              
+            },
+            configurations: {
+              production: {
+
+              }
+            }
+          }
+        }
+      }
+    }
+  }));
+  tree.overwrite('/nx.json', JSON.stringify({
+    npmScope: "testing",
+    projects: {
+      'web-viewer': {
+        tags: []
+      }
+    }
+  }));
+  tree.create('/tools/tsconfig.tools.json', JSON.stringify({
+    "extends": "../tsconfig.json"
+  }));
+  return tree;
+}
+
 export function createXplatWithApps(tree: Tree): Tree {
   tree = createEmptyWorkspace(tree);
+  createStandardWebFiles(tree);
+  return tree;
+}
+
+export function createStandardWebFiles(tree: Tree) {
   tree.create('/apps/web-viewer/src/index.html', '');
   tree.create('/apps/web-viewer/src/app/features/core/core.module.ts', '');
   tree.create('/apps/web-viewer/src/app/app.module.ts', '');
@@ -54,7 +99,6 @@ export function createXplatWithApps(tree: Tree): Tree {
     ]
   })
   export class AppRoutingModule {}`);
-  return tree;
 }
 
 export const isInModuleMetadata = (
