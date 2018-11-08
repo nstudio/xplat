@@ -71,28 +71,36 @@ export default function (options: ApplicationOptions) {
         // create to be consistent
         scripts[`start.web.${targetAppName}`] = `${postinstallWeb} && ng serve ${fullTargetAppName}`;
       }
-      const startDefault = scripts[`start`];
+      let startDefault = scripts[`start`];
       if (startDefault) {
         // prefix it
+        if (startDefault.indexOf(fullTargetAppName) === -1) {
+          // set target app as default
+          startDefault = `${startDefault} ${fullTargetAppName}`;
+        }
         scripts[`start`] = `${postinstallWeb} && ${startDefault}`;
       } else {
         scripts[`start`] = `${postinstallWeb} && ng serve ${fullTargetAppName}`;
       }
-      const buildDefault = scripts[`build`];
+      let buildDefault = scripts[`build`];
       if (buildDefault) {
         // prefix it
+        if (buildDefault.indexOf(fullTargetAppName) === -1) {
+          // set target app as default
+          buildDefault = `${buildDefault} ${fullTargetAppName}`;
+        }
         scripts[`build`] = `${postinstallWeb} && ${buildDefault}`;
       } else {
         scripts[`build`] = `${postinstallWeb} && ng build ${fullTargetAppName}`;
       }
-      const testDefault = scripts[`test`];
+      let testDefault = scripts[`test`];
       if (testDefault) {
         // prefix it
         scripts[`test`] = `${postinstallWeb} && ${testDefault}`;
       } else {
         scripts[`test`] = `${postinstallWeb} && ng test`;
       }
-      const e2eDefault = scripts[`e2e`];
+      let e2eDefault = scripts[`e2e`];
       if (e2eDefault) {
         // prefix it
         scripts[`e2e`] = `${postinstallWeb} && ${e2eDefault}`;

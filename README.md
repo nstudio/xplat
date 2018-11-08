@@ -19,6 +19,7 @@ With the strength of [TypeScript](https://www.typescriptlang.org/) paired with t
 
 * [NativeScript](https://www.nativescript.org/)
 * [Ionic](https://ionicframework.com/)
+* [Electron](https://electronjs.org/)
 
 ## Documentation
 
