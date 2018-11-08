@@ -1,6 +1,6 @@
 {
   "name": "@nstudio/schematics",
-  "version": "6.3.0",
+  "version": "6.3.1",
   "description": "Cross-platform (xplat) tools for Nx workspaces.",
   "readmeFilename": "README.md",
   "scripts": {
@@ -30,12 +30,13 @@
     "xplat",
     "cross-platform",
     "multi-platform",
-    "nx",
-    "nstudio",
     "angular",
     "schematics",
     "nativescript",
-    "ionic"
+    "ionic",
+    "electron",
+    "nx",
+    "nstudio"
   ],
   "author": {
     "name": "nstudio",
