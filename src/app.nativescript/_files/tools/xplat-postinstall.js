@@ -7,4 +7,8 @@ const path = require('path');
 const hooksSrc = '../../hooks';
 const hooksDest = 'hooks';
 console.info(`Copying ${hooksSrc} -> ${hooksDest}`);
-fs.copySync(hooksSrc, hooksDest);
+try {
+  fs.copySync(hooksSrc, hooksDest);
+} catch (err) {
+  // ignore
+}
