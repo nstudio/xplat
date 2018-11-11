@@ -1,6 +1,6 @@
 {
   "name": "@nstudio/schematics",
-  "version": "6.3.1",
+  "version": "6.3.2",
   "description": "Cross-platform (xplat) tools for Nx workspaces.",
   "readmeFilename": "README.md",
   "scripts": {
@@ -62,6 +62,10 @@
     {
       "name": "Miguel Ramos",
       "url": "https://github.com/miguelramos"
+    },
+    {
+      "name": "Anders Chan",
+      "url": "https://github.com/sr3dna"
     }
   ],
   "license": "MIT",
