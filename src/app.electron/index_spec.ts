@@ -82,5 +82,11 @@ describe('app.electron schematic', () => {
     checkFile = getFileContent(tree, checkPath);
     // console.log(checkFile);
     expect(checkFile.indexOf(`./app/app.electron.module`)).toBeGreaterThanOrEqual(0);
+
+    // make sure start script is correct
+    checkPath = '/package.json';
+    checkFile = getFileContent(tree, checkPath);
+    // console.log(checkFile);
+    expect(checkFile.indexOf(`npm run prepare.electron.${options.name} && npm-run-all -p serve.electron.${options.name}.target serve.electron.${options.name}`)).toBeGreaterThanOrEqual(0);
   });
 });
