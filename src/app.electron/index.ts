@@ -58,7 +58,7 @@ export default function (options: ApplicationOptions) {
       scripts[`prepare.electron.${options.name}`] = `npm run postinstall.electron && tsc -p apps/electron-${options.name}/tsconfig.json`;
       scripts[`serve.electron.${options.name}.target`] = `ng serve electron-${options.name}`;
       scripts[`serve.electron.${options.name}`] = `wait-on http-get://localhost:4200/ && electron apps/electron-${options.name}/src --serve`;
-      scripts[`start.electron.${options.name}`] = `npm run prepare.electron.myapp && npm-run-all -p serve.electron.${options.name}.target serve.electron.${options.name}`;
+      scripts[`start.electron.${options.name}`] = `npm run prepare.electron.${options.name} && npm-run-all -p serve.electron.${options.name}.target serve.electron.${options.name}`;
 
       // adjust web related scripts to account for postinstall hooks
       const startWeb = scripts[`start.web.${targetAppName}`];
