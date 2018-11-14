@@ -111,4 +111,77 @@ describe('service schematic', () => {
     // console.log(barrelIndex);
     expect(index.indexOf(`AuthService`)).toBeGreaterThanOrEqual(0);
   });
+
+  it('should create service for specified platform with targeted feature only', () => {
+    // console.log('appTree:', appTree);
+    let tree = schematicRunner.runSchematic('xplat', {
+      prefix: 'tt'
+    }, appTree);
+    tree = schematicRunner.runSchematic('feature', {
+      name: 'foo',
+      platforms: 'nativescript'
+    }, tree);
+    const options: GenerateOptions = { 
+      name: 'auth',
+      feature: 'foo',
+      platforms: 'nativescript'
+    };
+    tree = schematicRunner.runSchematic('service', options, tree);
+    const files = tree.files;
+    // console.log(files.slice(91,files.length));
+
+    expect(files.indexOf('/xplat/nativescript/features/foo/services/auth.service.ts')).toBeGreaterThanOrEqual(0);
+    // should NOT add for other platform
+    expect(files.indexOf('/xplat/web/features/foo/services/auth.service.ts')).toBe(-1);
+
+    // file content
+    let content = getFileContent(tree, '/xplat/nativescript/features/foo/services/auth.service.ts');
+    // console.log(content);
+    expect(content.indexOf(`@Injectable()`)).toBeGreaterThanOrEqual(0);
+    expect(content.indexOf(`AuthService`)).toBeGreaterThanOrEqual(0);
+
+    content = getFileContent(tree, '/xplat/nativescript/features/foo/services/index.ts');
+    // console.log(content);
+    expect(content.indexOf(`AuthService`)).toBeGreaterThanOrEqual(0);
+
+    let modulePath = '/xplat/nativescript/features/foo/foo.module.ts';
+    let moduleContent = getFileContent(tree, modulePath);
+    // console.log(modulePath + ':');
+    // console.log(moduleContent);
+    expect(moduleContent.indexOf(`...FOO_PROVIDERS`)).toBeGreaterThanOrEqual(0);
+  });
+
+  it('should create service for specified platform only and by default add to core for that platform', () => {
+    // console.log('appTree:', appTree);
+    let tree = schematicRunner.runSchematic('xplat', {
+      prefix: 'tt'
+    }, appTree);
+    const options: GenerateOptions = { 
+      name: 'auth',
+      platforms: 'nativescript'
+    };
+    tree = schematicRunner.runSchematic('service', options, tree);
+    const files = tree.files;
+    // console.log(files.slice(91,files.length));
+
+    expect(files.indexOf('/xplat/nativescript/core/services/auth.service.ts')).toBeGreaterThanOrEqual(0);
+    // should NOT add for other platform
+    expect(files.indexOf('/xplat/web/core/services/auth.service.ts')).toBe(-1);
+
+    // file content
+    let content = getFileContent(tree, '/xplat/nativescript/core/services/auth.service.ts');
+    // console.log(content);
+    expect(content.indexOf(`@Injectable()`)).toBeGreaterThanOrEqual(0);
+    expect(content.indexOf(`AuthService`)).toBeGreaterThanOrEqual(0);
+
+    content = getFileContent(tree, '/xplat/nativescript/core/services/index.ts');
+    // console.log(content);
+    expect(content.indexOf(`AuthService`)).toBeGreaterThanOrEqual(0);
+
+    let modulePath = '/xplat/nativescript/core/core.module.ts';
+    let moduleContent = getFileContent(tree, modulePath);
+    // console.log(modulePath + ':');
+    // console.log(moduleContent);
+    expect(moduleContent.indexOf(`...CORE_PROVIDERS`)).toBeGreaterThanOrEqual(0);
+  });
 }); 

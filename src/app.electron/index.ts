@@ -41,7 +41,7 @@ export default function (options: ApplicationOptions) {
       }
       const packageConfig = getJsonFromFile(tree, "package.json");
       const scripts = packageConfig.scripts || {};
-      const postinstall = 'npx electron-builder install-app-deps';
+      const postinstall = 'ELECTRON_BUILDER_ALLOW_UNRESOLVED_DEPENDENCIES=true npx electron-builder install-app-deps';
       if (scripts.postinstall) {
         // add to the end of already existing postinstall
         scripts['postinstall'] = `${scripts.postinstall} && ${postinstall}`;

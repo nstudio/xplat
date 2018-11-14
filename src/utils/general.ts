@@ -15,7 +15,7 @@ import {
 } from "@angular-devkit/schematics";
 
 // import { configPath, CliConfig } from '@schematics/angular/utility/config';
-import { errorXplat } from "./errors";
+import { errorXplat, errorMissingPrefix } from "./errors";
 // import * as os from 'os';
 import * as fs from "fs";
 import * as ts from "typescript";
@@ -147,9 +147,14 @@ export function prerun(prefixArg?: string, init?: boolean) {
           prefix = prefixArg;
         }
       }
-      if (!prefix && !init) {
-        // if not prefix was found and we're not initializing, user needs to generate xplat first
-        throw new SchematicsException(errorXplat);
+      if (!prefix) {
+        if (init) {
+          // if no prefix was found and we're initializing, user need to specify a prefix
+          throw new SchematicsException(errorMissingPrefix);
+        } else {
+          // if no prefix was found and we're not initializing, user needs to generate xplat first
+          throw new SchematicsException(errorXplat);
+        }
       }
     }
     return tree;

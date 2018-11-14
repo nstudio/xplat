@@ -35,7 +35,7 @@ export function fixFormatter() {
   const formatPath = path.join(process.cwd(), '/../..', '@nrwl/schematics/src/command-line/format.js');
   let formatContent = fs.readFileSync(formatPath, 'UTF-8');
 
-  const patchLine = `    // PATCHED by @nstudio/xplat\n    patterns.push('"xplat/**/*.ts"', '"!apps/**/platforms/{android,ios}/**/*"');`;
+  const patchLine = `    // PATCHED by @nstudio/schematics\n    patterns.push('"xplat/**/*.ts"', '"!apps/**/platforms/{android,ios}/**/*"');`;
   if (formatContent.indexOf(patchLine) !== -1) {
     console.log(`Patch for nx format have already been applied`);
     return;

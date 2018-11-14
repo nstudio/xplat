@@ -33,8 +33,5 @@
       "type": "boolean",
       "default": false
     }
-  },
-  "required": [
-    "prefix"
-  ]
+  }
 }

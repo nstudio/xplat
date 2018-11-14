@@ -11,7 +11,7 @@ import {
   SchematicContext,
   Tree,
   Rule
-} from '@angular-devkit/schematics';
+} from "@angular-devkit/schematics";
 import {
   addGlobal,
   insert,
@@ -20,12 +20,12 @@ import {
   addProviderToModule,
   addDeclarationToModule,
   _addSymbolToNgModuleMetadata
-} from './ast';
+} from "./ast";
 import {
   generateOptionError,
   unsupportedPlatformError,
   needFeatureModuleError
-} from './errors';
+} from "./errors";
 import {
   supportedPlatforms,
   ITargetPlatforms,
@@ -33,12 +33,17 @@ import {
   getNpmScope,
   getPrefix,
   stringUtils,
-  updatePackageForNgrx,
-} from './general';
-import * as ts from 'typescript';
-import { formatFiles } from './format-files';
+  updatePackageForNgrx
+} from "./general";
+import * as ts from "typescript";
+import { formatFiles } from "./format-files";
 
-export type IGenerateType = 'component' | 'directive' | 'pipe' | 'service' | 'state';
+export type IGenerateType =
+  | "component"
+  | "directive"
+  | "pipe"
+  | "service"
+  | "state";
 
 export interface IGenerateOptions {
   name: string;
@@ -51,225 +56,260 @@ export interface IGenerateOptions {
 }
 
 export function generate(type: IGenerateType, options) {
-    if (!options.name) {
-      throw new Error(generateOptionError(type));
-    }
+  if (!options.name) {
+    throw new Error(generateOptionError(type));
+  }
 
-    let featureName: string = getFeatureName(options);
-    let platforms: Array<string> = [];
+  let featureName: string = getFeatureName(options);
+  let platforms: Array<string> = [];
 
-    if (options.projects) {
-      // building in projects
-      for (const name of options.projects.split(',')) {
-        const platPrefix = name.split('-')[0];
-        if (
-          supportedPlatforms.includes(platPrefix) &&
-          !platforms.includes(platPrefix)
-        ) {
-          // if project name is prefixed with supported platform and not already added
-          platforms.push(platPrefix);
-        }
-      }
-    } else if (options.platforms) {
-      // building in shared code only
-      platforms = options.platforms.split(',');
-    }
-    const targetPlatforms: ITargetPlatforms = {};
-    for (const t of platforms) {
-      if (supportedPlatforms.includes(t)) {
-        targetPlatforms[t] = true;
-      } else {
-        throw new Error(unsupportedPlatformError(t));
+  if (options.projects) {
+    // building in projects
+    for (const name of options.projects.split(",")) {
+      const platPrefix = name.split("-")[0];
+      if (
+        supportedPlatforms.includes(platPrefix) &&
+        !platforms.includes(platPrefix)
+      ) {
+        // if project name is prefixed with supported platform and not already added
+        platforms.push(platPrefix);
       }
     }
-
-    const projectChains = [];
-    if (options.projects) {
-      for (const projectName of options.projects.split(',')) {
-        const platPrefix = projectName.split('-')[0];
-        let srcDir = platPrefix !== 'nativescript' ? 'src/' : '';
-        const prefixPath = `apps/${projectName}/${srcDir}app`;
-
-        let featurePath: string;
-        if (shouldTargetCoreBarrel(type, featureName)) {
-          featureName = 'core';
-          featurePath = `${prefixPath}/${featureName}`;
-        } else {
-          featurePath = `${prefixPath}/features/${featureName}`;
-        }
-        const featureModulePath = `${featurePath}/${featureName}.module.ts`;
-
-        let barrelIndex: string;
-        if (type === 'state') {
-          barrelIndex = `${featurePath}/index.ts`;
-        } else {
-          barrelIndex = `${featurePath}/${type}s/index.ts`;
-        }
-
-        // console.log('will adjustProject:', projectName);
-        projectChains.push((tree: Tree, context: SchematicContext) => {
-          if (!tree.exists(featureModulePath)) {
-            throw new Error(
-              needFeatureModuleError(
-                featureModulePath,
-                featureName,
-                projectName,
-                true
-              )
-            );
-          }
-          return addToFeature(type, options, prefixPath, tree)(tree, context);
-        });
-
-        if (type === 'state') {
-          // ngrx handling
-          projectChains.push((tree: Tree, context: SchematicContext) => {
-            return adjustBarrelIndexForType(type, options, barrelIndex)(tree, context);
-          });
-          projectChains.push((tree: Tree, context: SchematicContext) => {
-            return addToFeature(type, options, prefixPath, tree, '_index')(
-              tree,
-              context
-            );
-          });
-          projectChains.push((tree: Tree, context: SchematicContext) => {
-            return adjustFeatureModuleForState(options, featureModulePath)(
-              tree,
-              context
-            );
-          });
-          projectChains.push((tree: Tree, context: SchematicContext) => {
-            return updatePackageForNgrx(tree, `apps/${projectName}/package.json`);
-          });
-        } else {
-          projectChains.push((tree: Tree, context: SchematicContext) => {
-            return adjustBarrelIndex(type, options, barrelIndex)(tree, context);
-          });
-          projectChains.push((tree: Tree, context: SchematicContext) => {
-            return addToFeature(type, options, prefixPath, tree, '_index')(
-              tree,
-              context
-            );
-          });
-          projectChains.push((tree: Tree, context: SchematicContext) => {
-            return adjustFeatureModule(type, options, featureModulePath)(
-              tree,
-              context
-            );
-          });
-        }
-      }
+  } else if (options.platforms) {
+    // building in shared code only
+    platforms = options.platforms.split(",");
+  }
+  const targetPlatforms: ITargetPlatforms = {};
+  for (const t of platforms) {
+    if (supportedPlatforms.includes(t)) {
+      targetPlatforms[t] = true;
     } else {
-      projectChains.push(noop());
+      throw new Error(unsupportedPlatformError(t));
     }
+  }
 
-    return chain([
-      prerun(),
-      (tree: Tree, context: SchematicContext) =>
-        // for entire workspace usage
-        // no projects and no specific platforms specified
-        !options.projects && platforms.length === 0
-          ? addToFeature(type, options, 'libs', tree)(tree, context)
-          : noop()(tree, context),
-      // adjust libs barrel
-      (tree: Tree, context: SchematicContext) => 
-        !options.projects && platforms.length === 0
-          ? adjustBarrel(type, options, 'libs')(tree, context)
-          : noop()(tree, context),
-      // add index barrel if needed
-      (tree: Tree, context: SchematicContext) =>
-        options.needsIndex
-          ? addToFeature(type, options, 'libs', tree, '_index')(tree, context)
-          : noop()(tree, context),
-      // adjust feature module metadata if needed
-      (tree: Tree, context: SchematicContext) => 
-        !options.projects && platforms.length === 0
-          ? adjustModule(type, options, 'libs')(tree, context)
-          : noop()(tree, context),
-      // add for {N}
-      (tree: Tree, context: SchematicContext) =>
-        !options.projects && targetPlatforms.nativescript
-          ? addToFeature(type, options, 'xplat/nativescript', tree)(
-              tree,
-              context
+  const projectChains = [];
+  if (options.projects) {
+    for (const projectName of options.projects.split(",")) {
+      const platPrefix = projectName.split("-")[0];
+      let srcDir = platPrefix !== "nativescript" ? "src/" : "";
+      const prefixPath = `apps/${projectName}/${srcDir}app`;
+
+      let featurePath: string;
+      if (shouldTargetCoreBarrel(type, featureName)) {
+        featureName = "core";
+        featurePath = `${prefixPath}/${featureName}`;
+      } else {
+        featurePath = `${prefixPath}/features/${featureName}`;
+      }
+      const featureModulePath = `${featurePath}/${featureName}.module.ts`;
+
+      let barrelIndex: string;
+      if (type === "state") {
+        barrelIndex = `${featurePath}/index.ts`;
+      } else {
+        barrelIndex = `${featurePath}/${type}s/index.ts`;
+      }
+
+      // console.log('will adjustProject:', projectName);
+      projectChains.push((tree: Tree, context: SchematicContext) => {
+        if (!tree.exists(featureModulePath)) {
+          throw new Error(
+            needFeatureModuleError(
+              featureModulePath,
+              featureName,
+              projectName,
+              true
             )
-          : noop()(tree, context),
-      // adjust {N} barrel
-      (tree: Tree, context: SchematicContext) =>
-        !options.projects && targetPlatforms.nativescript
-          ? adjustBarrel(type, options, 'xplat/nativescript')(tree, context)
-          : noop()(tree, context),
-      // add index barrel if needed
-      (tree: Tree, context: SchematicContext) =>
-        options.needsIndex
-          ? addToFeature(type, options, 'xplat/nativescript', tree, '_index')(
-              tree,
-              context
-            )
-          : noop()(tree, context),
-      // adjust feature module metadata if needed
-      (tree: Tree, context: SchematicContext) => 
-        !options.projects && targetPlatforms.nativescript
-          ? adjustModule(type, options, 'xplat/nativescript')(tree, context)
-          : noop()(tree, context),
-      // add for web
-      (tree: Tree, context: SchematicContext) =>
-        !options.projects && targetPlatforms.web
-          ? addToFeature(type, options, 'xplat/web', tree)(tree, context)
-          : noop()(tree, context),
-      // adjust web barrel
-      (tree: Tree, context: SchematicContext) =>
-        !options.projects && targetPlatforms.web
-          ? adjustBarrel(type, options, 'xplat/web')(tree, context)
-          : noop()(tree, context),
-      // add index barrel if needed
-      (tree: Tree, context: SchematicContext) =>
-        options.needsIndex
-          ? addToFeature(type, options, 'xplat/web', tree, '_index')(
-              tree,
-              context
-            )
-          : noop()(tree, context),
-      // adjust feature module metadata if needed
-      (tree: Tree, context: SchematicContext) => 
-        !options.projects && targetPlatforms.nativescript
-          ? adjustModule(type, options, 'xplat/web')(tree, context)
-          : noop()(tree, context),
-      // add for ionic
-      (tree: Tree, context: SchematicContext) =>
-        !options.projects && targetPlatforms.ionic
-          ? addToFeature(type, options, 'xplat/ionic', tree)(tree, context)
-          : noop()(tree, context),
-      // adjust ionic barrel
-      (tree: Tree, context: SchematicContext) =>
-        !options.projects && targetPlatforms.ionic
-          ? adjustBarrel(type, options, 'xplat/ionic')(tree, context)
-          : noop()(tree, context),
-      // add index barrel if needed
-      (tree: Tree, context: SchematicContext) =>
-        options.needsIndex
-          ? addToFeature(type, options, 'xplat/ionic', tree, '_index')(
-              tree,
-              context
-            )
-          : noop()(tree, context),
-      // adjust feature module metadata if needed
-      (tree: Tree, context: SchematicContext) => 
-        !options.projects && targetPlatforms.nativescript
-          ? adjustModule(type, options, 'xplat/ionic')(tree, context)
-          : noop()(tree, context),
-      // project handling
-      ...projectChains,
-      // dependency updates
-      (tree: Tree, context: SchematicContext) => 
-        !options.projects && type === 'state'
-          // ensure ngrx dependencies are added to root package
-          ? updatePackageForNgrx(tree)
-          : noop()(tree, context),
-      options.skipFormat 
-          ? noop()
-          : formatFiles(options)
-    ]);
+          );
+        }
+        return addToFeature(type, options, prefixPath, tree)(tree, context);
+      });
+
+      if (type === "state") {
+        // ngrx handling
+        projectChains.push((tree: Tree, context: SchematicContext) => {
+          return adjustBarrelIndexForType(type, options, barrelIndex)(
+            tree,
+            context
+          );
+        });
+        projectChains.push((tree: Tree, context: SchematicContext) => {
+          return addToFeature(type, options, prefixPath, tree, "_index")(
+            tree,
+            context
+          );
+        });
+        projectChains.push((tree: Tree, context: SchematicContext) => {
+          return adjustFeatureModuleForState(options, featureModulePath)(
+            tree,
+            context
+          );
+        });
+        projectChains.push((tree: Tree, context: SchematicContext) => {
+          return updatePackageForNgrx(tree, `apps/${projectName}/package.json`);
+        });
+      } else {
+        projectChains.push((tree: Tree, context: SchematicContext) => {
+          return adjustBarrelIndex(type, options, barrelIndex)(tree, context);
+        });
+        projectChains.push((tree: Tree, context: SchematicContext) => {
+          return addToFeature(type, options, prefixPath, tree, "_index")(
+            tree,
+            context
+          );
+        });
+        projectChains.push((tree: Tree, context: SchematicContext) => {
+          return adjustFeatureModule(type, options, featureModulePath)(
+            tree,
+            context
+          );
+        });
+      }
+    }
+  } else {
+    projectChains.push(noop());
+  }
+
+  return chain([
+    prerun(),
+    (tree: Tree, context: SchematicContext) =>
+      // for entire workspace usage
+      // no projects and no specific platforms specified
+      !options.projects && platforms.length === 0
+        ? addToFeature(type, options, "libs", tree)(tree, context)
+        : noop()(tree, context),
+    // adjust libs barrel
+    (tree: Tree, context: SchematicContext) =>
+      !options.projects && platforms.length === 0
+        ? adjustBarrel(type, options, "libs")(tree, context)
+        : noop()(tree, context),
+    // add index barrel if needed
+    (tree: Tree, context: SchematicContext) =>
+      options.needsIndex
+        ? addToFeature(type, options, "libs", tree, "_index")(tree, context)
+        : noop()(tree, context),
+    // adjust feature module metadata if needed
+    (tree: Tree, context: SchematicContext) =>
+      !options.projects && platforms.length === 0
+        ? adjustModule(type, options, "libs")(tree, context)
+        : noop()(tree, context),
+
+    /**
+     * NATIVESCRIPT
+     **/
+    // add for {N}
+    (tree: Tree, context: SchematicContext) =>
+      !options.projects && targetPlatforms.nativescript
+        ? addToFeature(type, options, "xplat/nativescript", tree)(tree, context)
+        : noop()(tree, context),
+    // adjust {N} barrel
+    (tree: Tree, context: SchematicContext) =>
+      !options.projects && targetPlatforms.nativescript
+        ? adjustBarrel(type, options, "xplat/nativescript")(tree, context)
+        : noop()(tree, context),
+    // add index barrel if needed
+    (tree: Tree, context: SchematicContext) =>
+      options.needsIndex
+        ? addToFeature(type, options, "xplat/nativescript", tree, "_index")(
+            tree,
+            context
+          )
+        : noop()(tree, context),
+    // adjust feature module metadata if needed
+    (tree: Tree, context: SchematicContext) =>
+      !options.projects && targetPlatforms.nativescript
+        ? adjustModule(type, options, "xplat/nativescript")(tree, context)
+        : noop()(tree, context),
+    /**
+     * WEB
+     **/
+    // add for web
+    (tree: Tree, context: SchematicContext) =>
+      !options.projects && targetPlatforms.web
+        ? addToFeature(type, options, "xplat/web", tree)(tree, context)
+        : noop()(tree, context),
+    // adjust web barrel
+    (tree: Tree, context: SchematicContext) =>
+      !options.projects && targetPlatforms.web
+        ? adjustBarrel(type, options, "xplat/web")(tree, context)
+        : noop()(tree, context),
+    // add index barrel if needed
+    (tree: Tree, context: SchematicContext) =>
+      options.needsIndex
+        ? addToFeature(type, options, "xplat/web", tree, "_index")(
+            tree,
+            context
+          )
+        : noop()(tree, context),
+    // adjust feature module metadata if needed
+    (tree: Tree, context: SchematicContext) =>
+      !options.projects && targetPlatforms.web
+        ? adjustModule(type, options, "xplat/web")(tree, context)
+        : noop()(tree, context),
+    /**
+     * IONIC
+     **/
+    // add for ionic
+    (tree: Tree, context: SchematicContext) =>
+      !options.projects && targetPlatforms.ionic
+        ? addToFeature(type, options, "xplat/ionic", tree)(tree, context)
+        : noop()(tree, context),
+    // adjust ionic barrel
+    (tree: Tree, context: SchematicContext) =>
+      !options.projects && targetPlatforms.ionic
+        ? adjustBarrel(type, options, "xplat/ionic")(tree, context)
+        : noop()(tree, context),
+    // add index barrel if needed
+    (tree: Tree, context: SchematicContext) =>
+      options.needsIndex
+        ? addToFeature(type, options, "xplat/ionic", tree, "_index")(
+            tree,
+            context
+          )
+        : noop()(tree, context),
+    // adjust feature module metadata if needed
+    (tree: Tree, context: SchematicContext) =>
+      !options.projects && targetPlatforms.nativescript
+        ? adjustModule(type, options, "xplat/ionic")(tree, context)
+        : noop()(tree, context),
+    /**
+     * ELECTRON
+     **/
+    // add for electron
+    (tree: Tree, context: SchematicContext) =>
+      !options.projects && targetPlatforms.electron
+        ? addToFeature(type, options, "xplat/electron", tree)(tree, context)
+        : noop()(tree, context),
+    // adjust electron barrel
+    (tree: Tree, context: SchematicContext) =>
+      !options.projects && targetPlatforms.electron
+        ? adjustBarrel(type, options, "xplat/electron")(tree, context)
+        : noop()(tree, context),
+    // add index barrel if needed
+    (tree: Tree, context: SchematicContext) =>
+      options.needsIndex
+        ? addToFeature(type, options, "xplat/electron", tree, "_index")(
+            tree,
+            context
+          )
+        : noop()(tree, context),
+    // adjust feature module metadata if needed
+    (tree: Tree, context: SchematicContext) =>
+      !options.projects && targetPlatforms.electron
+        ? adjustModule(type, options, "xplat/electron")(tree, context)
+        : noop()(tree, context),
+
+    // project handling
+    ...projectChains,
+    // dependency updates
+    (tree: Tree, context: SchematicContext) =>
+      !options.projects && type === "state"
+        ? // ensure ngrx dependencies are added to root package
+          updatePackageForNgrx(tree)
+        : noop()(tree, context),
+    options.skipFormat ? noop() : formatFiles(options)
+  ]);
 }
 
 export function getFeatureName(options: IGenerateOptions) {
@@ -280,10 +320,10 @@ export function getFeatureName(options: IGenerateOptions) {
   if (!featureName) {
     if (options.projects) {
       // default to shared barrel
-      featureName = 'shared';
+      featureName = "shared";
     } else {
       // default to ui barrel
-      featureName = 'ui';
+      featureName = "ui";
     }
   }
   return featureName;
@@ -294,7 +334,7 @@ export function addToFeature(
   options: IGenerateOptions,
   prefixPath: string,
   tree: Tree,
-  extra: string = '',
+  extra: string = "",
   forSubFolder?: boolean
 ) {
   let featureName: string = getFeatureName(options);
@@ -305,7 +345,7 @@ export function addToFeature(
   if (shouldTargetCoreBarrel(type, featureName)) {
     // services and/or state should never be generated in shared or ui features
     // therefore place in core (since they are service level)
-    featureName = 'core';
+    featureName = "core";
     featurePath = `${prefixPath}/${featureName}`;
   } else {
     featurePath = `${prefixPath}/features/${featureName}`;
@@ -313,16 +353,16 @@ export function addToFeature(
 
   const featureModulePath = `${featurePath}/${featureName}.module.ts`;
   let moveTo: string;
-  if (extra === '_base' || extra === '_base_index') {
+  if (extra === "_base" || extra === "_base_index") {
     // always in libs
     moveTo = `libs/features/${featureName}/base`;
   } else {
-    moveTo = `${featurePath}/${type}${type === 'state' ? '' : 's'}`;
+    moveTo = `${featurePath}/${type}${type === "state" ? "" : "s"}`;
     if (!tree.exists(featureModulePath)) {
       let optionName: string;
-      if (prefixPath !== 'libs') {
+      if (prefixPath !== "libs") {
         // parse platform from prefix
-        const parts = prefixPath.split('/');
+        const parts = prefixPath.split("/");
         if (parts.length > 1) {
           optionName = parts[1];
         }
@@ -339,7 +379,7 @@ export function addToFeature(
 
   const indexPath = `${moveTo}/index.ts`;
   if (
-    (extra === '_index' || extra === '_base_index') &&
+    (extra === "_index" || extra === "_base_index") &&
     tree.exists(indexPath)
   ) {
     // already has an index barrel
@@ -354,7 +394,7 @@ export function addToFeature(
             forSubFolder,
             npmScope: getNpmScope(),
             prefix: getPrefix(),
-            dot: '.',
+            dot: ".",
             utils: stringUtils
           }),
           move(moveTo)
@@ -367,34 +407,44 @@ export function addToFeature(
 export function isFeatureInGeneralBarrel(featureName: string) {
   // 'shared' barrel is for app specific shared components, pipes, directives (not service level features)
   // 'ui' barrel is for entire workspace ui related sharing of components, pipes, directives (not service level features)
-  return featureName === 'shared' || featureName === 'ui';
+  return featureName === "shared" || featureName === "ui";
 }
 
-export function shouldTargetCoreBarrel(type: IGenerateType, featureName: string) {
+export function shouldTargetCoreBarrel(
+  type: IGenerateType,
+  featureName: string
+) {
   // when service or state is being generated with no options, it falls back to shared/ui
   // services and state should never be generated in shared or ui features
   // therefore target core barrel
-  return (type === 'service' || type === 'state') && isFeatureInGeneralBarrel(featureName);
+  return (
+    (type === "service" || type === "state") &&
+    isFeatureInGeneralBarrel(featureName)
+  );
 }
 
-export function adjustBarrel(type: IGenerateType, options: IGenerateOptions, prefix: string) {
+export function adjustBarrel(
+  type: IGenerateType,
+  options: IGenerateOptions,
+  prefix: string
+) {
   let featureName: string = getFeatureName(options);
   let barrelIndexPath: string;
   if (shouldTargetCoreBarrel(type, featureName)) {
-    if (type === 'state') {
+    if (type === "state") {
       barrelIndexPath = `${prefix}/core/index.ts`;
     } else {
       barrelIndexPath = `${prefix}/core/${type}s/index.ts`;
     }
   } else {
-    if (type === 'state') {
+    if (type === "state") {
       barrelIndexPath = `${prefix}/features/${featureName}/index.ts`;
     } else {
       barrelIndexPath = `${prefix}/features/${featureName}/${type}s/index.ts`;
     }
   }
 
-  if (type === 'state') {
+  if (type === "state") {
     return adjustBarrelIndexForType(type, options, barrelIndexPath);
   } else {
     return adjustBarrelIndex(type, options, barrelIndexPath);
@@ -413,7 +463,7 @@ export function adjustBarrelIndex(
     // console.log('adjustBarrelIndex:', indexFilePath);
     // console.log('host.exists(indexFilePath):', host.exists(indexFilePath));
     if (host.exists(indexFilePath)) {
-      const indexSource = host.read(indexFilePath)!.toString('utf-8');
+      const indexSource = host.read(indexFilePath)!.toString("utf-8");
       const indexSourceFile = ts.createSourceFile(
         indexFilePath,
         indexSource,
@@ -428,7 +478,9 @@ export function adjustBarrelIndex(
         // add to barrel collection
         if (importIfSubFolder && options.subFolder) {
           // import collection from subfolder
-          const symbolName = `${stringUtils.sanitize(options.subFolder).toUpperCase()}_${type.toUpperCase()}S`;
+          const symbolName = `${stringUtils
+            .sanitize(options.subFolder)
+            .toUpperCase()}_${type.toUpperCase()}S`;
           changes.push(
             ...addGlobal(
               indexSourceFile,
@@ -439,28 +491,27 @@ export function adjustBarrelIndex(
               indexSourceFile,
               indexFilePath,
               `...${symbolName}`,
-              '  '
+              "  "
             )
           );
         } else {
-          const symbolName = `${stringUtils.classify(name)}${stringUtils.capitalize(type)}`;
+          const symbolName = `${stringUtils.classify(
+            name
+          )}${stringUtils.capitalize(type)}`;
           changes.push(
             ...addGlobal(
               indexSourceFile,
               indexFilePath,
-              `import { ${symbolName} } from './${inSubFolder ? `${name}/` : ''}${name}.${type}';`
+              `import { ${symbolName} } from './${
+                inSubFolder ? `${name}/` : ""
+              }${name}.${type}';`
             ),
-            ...addToCollection(
-              indexSourceFile,
-              indexFilePath,
-              symbolName,
-              '  '
-            )
+            ...addToCollection(indexSourceFile, indexFilePath, symbolName, "  ")
           );
         }
       }
 
-      if (type === 'component' || type === 'service') {
+      if (type === "component" || type === "service") {
         // export symbol from barrel
         if ((isBase || importIfSubFolder) && options.subFolder) {
           changes.push(
@@ -472,13 +523,13 @@ export function adjustBarrelIndex(
             )
           );
         } else {
-          const subFolder = inSubFolder ? `${name}/` : '';
+          const subFolder = inSubFolder ? `${name}/` : "";
           changes.push(
             ...addGlobal(
               indexSourceFile,
               indexFilePath,
               `export * from './${subFolder}${name}.${
-                isBase ? 'base-' : ''
+                isBase ? "base-" : ""
               }${type}';`,
               true
             )
@@ -497,11 +548,11 @@ export function adjustBarrelIndex(
 export function adjustBarrelIndexForType(
   type: IGenerateType,
   options: IGenerateOptions,
-  indexFilePath: string,
+  indexFilePath: string
 ): Rule {
   return (host: Tree) => {
     if (host.exists(indexFilePath)) {
-      const indexSource = host.read(indexFilePath)!.toString('utf-8');
+      const indexSource = host.read(indexFilePath)!.toString("utf-8");
       const indexSourceFile = ts.createSourceFile(
         indexFilePath,
         indexSource,
@@ -535,14 +586,14 @@ export function adjustModule(
   let featureName: string = getFeatureName(options);
   let featurePath: string;
   if (shouldTargetCoreBarrel(type, featureName)) {
-    featureName = 'core';
+    featureName = "core";
     featurePath = `${prefixPath}/${featureName}`;
   } else {
     featurePath = `${prefixPath}/features/${featureName}`;
   }
 
   const featureModulePath = `${featurePath}/${featureName}.module.ts`;
-  if (type === 'state') {
+  if (type === "state") {
     return adjustFeatureModuleForState(options, featureModulePath);
   } else {
     return adjustFeatureModule(type, options, featureModulePath);
@@ -557,7 +608,7 @@ export function adjustFeatureModule(
   return (host: Tree) => {
     // console.log('adjustFeatureModule:', modulePath);
     if (host.exists(modulePath)) {
-      const moduleSource = host.read(modulePath)!.toString('utf-8');
+      const moduleSource = host.read(modulePath)!.toString("utf-8");
       const moduleSourceFile = ts.createSourceFile(
         modulePath,
         moduleSource,
@@ -571,32 +622,31 @@ export function adjustFeatureModule(
         featureName = stringUtils.sanitize(options.feature).toUpperCase();
       } else {
         // default collections
-        if (type === 'service') {
-          featureName = 'CORE';
+        if (type === "service") {
+          featureName = "CORE";
         } else {
-          if (modulePath.indexOf('apps') > -1) {
-            // app specific shared 
-            featureName = 'SHARED';
+          if (modulePath.indexOf("apps") > -1) {
+            // app specific shared
+            featureName = "SHARED";
           } else {
             // workspace cross platform ui libraries
-            featureName = 'UI';
+            featureName = "UI";
           }
         }
-        
       }
       let collectionName: string;
 
       switch (type) {
-        case 'component':
+        case "component":
           collectionName = `${featureName}_COMPONENTS`;
           break;
-        case 'directive':
+        case "directive":
           collectionName = `${featureName}_DIRECTIVES`;
           break;
-        case 'pipe':
+        case "pipe":
           collectionName = `${featureName}_PIPES`;
           break;
-        case 'service':
+        case "service":
           collectionName = `${featureName}_PROVIDERS`;
           break;
       }
@@ -616,7 +666,7 @@ export function adjustFeatureModule(
           )
         );
 
-        if (type === 'service') {
+        if (type === "service") {
           changes.push(
             ...addProviderToModule(
               moduleSourceFile,
@@ -634,7 +684,7 @@ export function adjustFeatureModule(
             ..._addSymbolToNgModuleMetadata(
               moduleSourceFile,
               modulePath,
-              'exports',
+              "exports",
               `...${collectionName}`
             )
           );
@@ -654,7 +704,7 @@ export function adjustFeatureModuleForState(
   return (host: Tree) => {
     // console.log('adjustFeatureModuleForState:', modulePath);
     if (host.exists(modulePath)) {
-      const moduleSource = host.read(modulePath)!.toString('utf-8');
+      const moduleSource = host.read(modulePath)!.toString("utf-8");
       const moduleSourceFile = ts.createSourceFile(
         modulePath,
         moduleSource,
@@ -663,10 +713,10 @@ export function adjustFeatureModuleForState(
       );
       // console.log('moduleSource:', moduleSource);
 
-      const isInLibs = modulePath.indexOf('libs') === 0;
+      const isInLibs = modulePath.indexOf("libs") === 0;
       const name = options.name.toLowerCase();
       const changes = [];
-      if (moduleSource.indexOf('StoreModule') === -1) {
+      if (moduleSource.indexOf("StoreModule") === -1) {
         changes.push(
           ...addGlobal(
             moduleSourceFile,
@@ -675,7 +725,7 @@ export function adjustFeatureModuleForState(
           )
         );
       }
-      if (moduleSource.indexOf('EffectsModule') === -1) {
+      if (moduleSource.indexOf("EffectsModule") === -1) {
         changes.push(
           ...addGlobal(
             moduleSourceFile,
@@ -684,7 +734,7 @@ export function adjustFeatureModuleForState(
           )
         );
       }
-      if (moduleSource.indexOf('ngrx-store-freeze') === -1) {
+      if (moduleSource.indexOf("ngrx-store-freeze") === -1) {
         changes.push(
           ...addGlobal(
             moduleSourceFile,
@@ -698,7 +748,9 @@ export function adjustFeatureModuleForState(
         ...addGlobal(
           moduleSourceFile,
           modulePath,
-          `import { ${stringUtils.classify(name)}Effects } from './state/${name}.effects';`
+          `import { ${stringUtils.classify(
+            name
+          )}Effects } from './state/${name}.effects';`
         ),
         ...addGlobal(
           moduleSourceFile,
@@ -708,14 +760,17 @@ export function adjustFeatureModuleForState(
         ...addGlobal(
           moduleSourceFile,
           modulePath,
-          `import { ${stringUtils.classify(name)}State } from './state/${name}.state';`
+          `import { ${stringUtils.classify(
+            name
+          )}State } from './state/${name}.state';`
         )
       );
 
-      
       if (options.root) {
-        if (moduleSource.indexOf('environments/environment') === -1) {
-          const envFrom = isInLibs ? './environments/environment' : `@${getNpmScope()}/core`;
+        if (moduleSource.indexOf("environments/environment") === -1) {
+          const envFrom = isInLibs
+            ? "./environments/environment"
+            : `@${getNpmScope()}/core`;
           changes.push(
             ...addGlobal(
               moduleSourceFile,
@@ -724,7 +779,7 @@ export function adjustFeatureModuleForState(
             )
           );
         }
-        
+
         changes.push(
           ...addImportToModule(
             moduleSourceFile,
@@ -732,7 +787,9 @@ export function adjustFeatureModuleForState(
             `StoreModule.forRoot(
       { ${name}: ${name}Reducer },
       {
-        initialState: { ${name}: ${stringUtils.classify(name)}State.initialState },
+        initialState: { ${name}: ${stringUtils.classify(
+              name
+            )}State.initialState },
         metaReducers: !environment.production ? [storeFreeze] : []
       }
     )`
@@ -754,7 +811,9 @@ export function adjustFeatureModuleForState(
           ...addImportToModule(
             moduleSourceFile,
             modulePath,
-            `StoreModule.forFeature('${name}', ${name}Reducer, { initialState: ${stringUtils.classify(name)}State.initialState })`
+            `StoreModule.forFeature('${name}', ${name}Reducer, { initialState: ${stringUtils.classify(
+              name
+            )}State.initialState })`
           ),
           ...addImportToModule(
             moduleSourceFile,

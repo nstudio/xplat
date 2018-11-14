@@ -40,10 +40,6 @@ import { Schema as xPlatOptions } from "./schema";
 
 let platformArg: string;
 export default function(options: xPlatOptions) {
-  if (!options.prefix) {
-    throw new SchematicsException(errorMissingPrefix);
-  }
-
   const targetPlatforms: ITargetPlatforms = {};
   platformArg = options.platforms || defaultPlatforms;
   if (platformArg === 'all') {
