@@ -175,14 +175,14 @@ export function addRootDeps(
 
     let dep: NodeDependency = {
       name: "@ngx-translate/core",
-      version: "~10.0.1",
+      version: "~11.0.0",
       type: "dependency"
     };
     deps.push(dep);
 
     dep = {
       name: "@ngx-translate/http-loader",
-      version: "~3.0.1",
+      version: "~4.0.0",
       type: "dependency"
     };
     deps.push(dep);
@@ -205,7 +205,7 @@ export function addRootDeps(
     if (targetPlatforms.nativescript) {
       dep = {
         name: "nativescript-angular",
-        version: "~6.1.0",
+        version: "~7.0.0",
         type: "dependency"
       };
       deps.push(dep);
@@ -228,21 +228,21 @@ export function addRootDeps(
       // remove in future
       dep = {
         name: "rxjs-compat",
-        version: "^6.2.2",
+        version: "~6.3.3",
         type: "dependency"
       };
       deps.push(dep);
 
       dep = {
         name: "tns-core-modules",
-        version: "~4.2.0",
+        version: "~5.0.0",
         type: "dependency"
       };
       deps.push(dep);
 
       dep = {
         name: "tns-platform-declarations",
-        version: "~4.2.0",
+        version: "~5.0.0",
         type: "devDependency"
       };
       deps.push(dep);
@@ -459,7 +459,7 @@ export function updatePackageForNgrx(
         if (!packageJson.dependencies["@nrwl/nx"]) {
           dep = {
             name: "@nrwl/nx",
-            version: "~6.1.0",
+            version: "~7.0.0",
             type: "dependency"
           };
           deps.push(dep);
