@@ -42,7 +42,11 @@ module.exports = env => {
         uglify, // --env.uglify
         report, // --env.report
         sourceMap, // --env.sourceMap
+        hmr, // --env.hmr,
     } = env;
+    const externals = (env.externals || []).map((e) => { // --env.externals
+        return new RegExp(e + ".*");
+    });
 
     const appFullPath = resolve(projectRoot, appPath);
     const appResourcesFullPath = resolve(projectRoot, appResourcesPath);
@@ -62,6 +66,7 @@ module.exports = env => {
     const config = {
         mode: uglify ? "production" : "development",
         context: appFullPath,
+        externals,
         watchOptions: {
             ignored: [
                 appResourcesFullPath,
@@ -124,9 +129,9 @@ module.exports = env => {
             minimize: !!uglify,
             minimizer: [
                 new UglifyJsPlugin({
+                    parallel: true,
+                    cache: true,
                     uglifyOptions: {
-                        parallel: true,
-                        cache: true,
                         output: {
                             comments: false,
                         },
@@ -146,11 +151,14 @@ module.exports = env => {
                                 'this._log.error',
                                 'this._log.info',
                                 'this._log.warn',
-                            ]
+                            ],
+                            global_defs: {
+                              __UGLIFIED__: true,
+                            }
                         },
                         // custom
                         ecma: 6,
-                        safari10: platform !== 'android',
+                        safari10: platform !== 'android'
                     }
                 })
             ],
@@ -198,7 +206,6 @@ module.exports = env => {
                 { test: /\.css$/, exclude: /[\/|\\]app\.css$/, use: "raw-loader" },
                 { test: /\.scss$/, exclude: /[\/|\\]app\.scss$/, use: ["raw-loader", "resolve-url-loader", "sass-loader"] },
 
-                // Compile TypeScript files with ahead-of-time compiler.
                 {
                     test: /(?:\.ngfactory\.js|\.ngstyle\.js|\.ts)$/,
                     use: [
@@ -219,10 +226,6 @@ module.exports = env => {
             // Define useful constants like TNS_WEBPACK
             new webpack.DefinePlugin({
                 "global.TNS_WEBPACK": "true",
-                "global.UGLIFIED": uglify,
-                "__IS_NATIVESCRIPT__": "true",
-                "__IS_IOS__": JSON.stringify(platform === "ios"),
-                "__IS_ANDROID__": JSON.stringify(platform === "android"),
                 "process": undefined,
             }),
             // Remove all files from the out dir.
@@ -237,10 +240,8 @@ module.exports = env => {
             ]),
             // Copy assets to out dir. Add your own globs as needed.
             new CopyWebpackPlugin([
-                { from: 'assets/**' },
-                { from: "fonts/**" },
-                { from: "**/*.jpg" },
-                { from: "**/*.png" },
+                { from: "assets/**" },
+                { from: "fonts/**" }
             ], { ignore: [`${relative(appPath, appResourcesFullPath)}/**`] }),
             // Generate a bundle starter script and activate it in package.json
             new nsWebpack.GenerateBundleStarterPlugin([
@@ -284,6 +285,10 @@ module.exports = env => {
             projectRoot,
             webpackConfig: config,
         }));
+    }
+
+    if (hmr) {
+        config.plugins.push(new webpack.HotModuleReplacementPlugin());
     }
 
     return config;

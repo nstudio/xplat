@@ -39,8 +39,8 @@ export default function (options: ApplicationOptions) {
     (tree: Tree) => {
       const scripts = {};
       scripts[`clean`] = `npx rimraf -- hooks node_modules package-lock.json && npm i`;
-      scripts[`start.nativescript.${options.name}.ios`] = `cd apps/nativescript-${options.name} && tns run ios --emulator --bundle --env.aot`;
-      scripts[`start.nativescript.${options.name}.android`] = `cd apps/nativescript-${options.name} && tns run android --emulator --bundle --env.aot`;
+      scripts[`start.nativescript.${options.name}.ios`] = `cd apps/nativescript-${options.name} && tns run ios --emulator --bundle --hmr`;
+      scripts[`start.nativescript.${options.name}.android`] = `cd apps/nativescript-${options.name} && tns run android --emulator --bundle --hmr`;
       scripts[`clean.nativescript.${options.name}`] = `cd apps/nativescript-${options.name} && npx rimraf -- hooks node_modules platforms package-lock.json && npm i && npx rimraf -- package-lock.json`;
       return updatePackageScripts(tree, scripts);
     },

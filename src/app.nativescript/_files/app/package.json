@@ -2,5 +2,6 @@
   "android": {
     "v8Flags": "--expose_gc"
   },
+  "discardUncaughtJsExceptions": true,
   "main": "main.js"
 }
