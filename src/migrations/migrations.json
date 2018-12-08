@@ -39,6 +39,11 @@
         "version": "7.0.0",
         "description": "Update {N} 5.0",
         "factory": "./update-7-0-0/update-7-0-0"
+      },
+      "update-to-7.0.1": {
+        "version": "7.0.1",
+        "description": "Add {N} HMR livesync navigation hook",
+        "factory": "./update-7-0-1/update-7-0-1"
       }
     }
   }

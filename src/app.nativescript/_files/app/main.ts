@@ -1,5 +1,5 @@
 // https://github.com/NativeScript/nativescript-dev-webpack/issues/660#issuecomment-422711983
-import 'reflect-metadata'; 
+import 'reflect-metadata';
 import { platformNativeScriptDynamic } from 'nativescript-angular/platform';
 import { AppOptions } from 'nativescript-angular/platform-common';
 import { enableProdMode } from '@angular/core';
@@ -13,19 +13,21 @@ if (typeof __UGLIFIED__ !== 'undefined' && __UGLIFIED__) {
 
 let options: AppOptions = {};
 if (module['hot']) {
-    const hmrUpdate = require('nativescript-dev-webpack/hmr').hmrUpdate;
+  // attach to livesync hooks and perform navigation
+  require('@<%= npmScope %>/nativescript').attachLivesyncNavigation();
+  const hmrUpdate = require('nativescript-dev-webpack/hmr').hmrUpdate;
 
-    options.hmrOptions = {
-        moduleTypeFactory: () => AppModule,
-        livesyncCallback: (platformReboot) => {
-            console.log("HMR: Sync...")
-            hmrUpdate();
-            setTimeout(platformReboot, 0);
-        },
+  options.hmrOptions = {
+    moduleTypeFactory: () => AppModule,
+    livesyncCallback: platformReboot => {
+      console.log('HMR: Sync...');
+      hmrUpdate();
+      setTimeout(platformReboot, 0);
     }
-    hmrUpdate();
+  };
+  hmrUpdate();
 
-    module['hot'].accept(['./app.module']);
+  module['hot'].accept(['./app.module']);
 }
 
 platformNativeScriptDynamic(options).bootstrapModule(AppModule);
