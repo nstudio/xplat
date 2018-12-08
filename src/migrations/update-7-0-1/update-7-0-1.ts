@@ -25,9 +25,6 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
   const hmrNavigationPath = join(cwd, 'node_modules/@nstudio/schematics/src/xplat/_nativescript_files/utils/livesync-navigation.ts');
   let hmrNavigation = fs.readFileSync(hmrNavigationPath, 'UTF-8');
 
-  const utilsIndexPath = join(cwd, 'node_modules/@nstudio/schematics/src/xplat/_nativescript_files/utils/index.ts');
-  let utilsIndex = fs.readFileSync(utilsIndexPath, 'UTF-8');
-
   // update {N} apps and configs
   for (const dir of appFolders) {
     // console.log(dir);
@@ -50,11 +47,18 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
       hmrNavigation
     );
 
-    createOrUpdate(
-      tree,
-      `xplat/nativescript/utils/index.ts`,
-      utilsIndex
-    );
+    const utilsTreePath = 'xplat/nativescript/utils/index.ts';
+    const utilsFullPath = join(cwd, utilsTreePath);
+    let utilsIndex;
+    if (fs.existsSync(utilsFullPath)) {
+      utilsIndex = fs.readFileSync(utilsFullPath, 'UTF-8');
+      utilsIndex += `\nexport * from './livesync-navigation';`;
+      createOrUpdate(
+        tree,
+        utilsTreePath,
+        utilsIndex
+      );
+    }
   }
   return tree;
 }
