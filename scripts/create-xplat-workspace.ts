@@ -33,7 +33,7 @@ if (showHelp) {
       --yarn                use yarn instead of npm (default to false)
       --bazel               use bazel instead of webpack (default to false)
       --prefix=PREFIX       xplat prefix (required)
-      --platforms=          Platform support: nativescript,web (default) or specify specific platforms to supports (web,nativescript,ionic)
+      --platforms=          Platform support: specify specific platforms to supports (web,nativescript,ionic,electron)
       [ng new options]      any 'ng new' options
                             run 'ng new --help' for more information
   `);
@@ -61,7 +61,7 @@ let setupXplat = `${path.join(
   'node_modules',
   '.bin',
   'ng'
-)} g xplat --prefix=${prefix} --platforms=${targets || 'nativescript,web'}`;
+)} g xplat --prefix=${prefix} --platforms=${targets}`;
 console.log(setupXplat);
 child_process.execSync(setupXplat, { cwd: directory, stdio: [0, 1, 2] });
 

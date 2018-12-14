@@ -27,7 +27,8 @@ describe("ngrx schematic", () => {
     let tree = schematicRunner.runSchematic(
       "xplat",
       {
-        prefix: "tt"
+        prefix: "tt",
+        platforms: "nativescript,web"
       },
       appTree
     );
@@ -101,7 +102,8 @@ describe("ngrx schematic", () => {
     let tree = schematicRunner.runSchematic(
       "xplat",
       {
-        prefix: "tt"
+        prefix: "tt",
+        platforms: "nativescript,web,ionic"
       },
       appTree
     );

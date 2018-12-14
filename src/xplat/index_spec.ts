@@ -26,6 +26,7 @@ describe('xplat schematic', () => {
 
   it('should create default xplat support for web,nativescript + libs + testing support', () => {
     const options: XPlatOptions = { ...defaultOptions };
+    options.platforms = 'web,nativescript';
 
     const tree = schematicRunner.runSchematic('xplat', options, appTree);
     const files = tree.files;
@@ -48,6 +49,7 @@ describe('xplat schematic', () => {
   it('should create default xplat support (without sample feature) for web,nativescript', () => {
     const options: XPlatOptions = { ...defaultOptions };
     options.sample = false;
+    options.platforms = 'web,nativescript';
 
     const tree = schematicRunner.runSchematic('xplat', options, appTree);
     const files = tree.files;
@@ -172,6 +174,15 @@ describe('xplat schematic', () => {
     expect(files.indexOf('/xplat/ionic/index.ts')).toBeGreaterThanOrEqual(0);
     expect(files.indexOf('/xplat/nativescript/index.ts')).toBeGreaterThanOrEqual(0);
     expect(files.indexOf('/xplat/ssr/index.ts')).toBeGreaterThanOrEqual(-1);
+  });
+
+  it('should NOT create xplat unless platforms are specified', () => {
+    const options: XPlatOptions = { ...defaultOptions };
+
+    let tree: UnitTestTree | null = null;
+    expect(() => tree = schematicRunner
+      .runSchematic('xplat', options, appTree))
+      .toThrowError(`You must specify which platforms you wish to generate support for. For example: ng g xplat --prefix=foo --platforms=${supportedPlatforms.join(',')}`);
   });
 
   it('should NOT create unsupported xplat option and throw', () => {

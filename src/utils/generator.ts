@@ -33,7 +33,8 @@ import {
   getNpmScope,
   getPrefix,
   stringUtils,
-  updatePackageForNgrx
+  updatePackageForNgrx,
+  sanitizeCommaDelimitedArg
 } from "./general";
 import * as ts from "typescript";
 import { formatFiles } from "./format-files";
@@ -65,19 +66,25 @@ export function generate(type: IGenerateType, options) {
 
   if (options.projects) {
     // building in projects
-    for (const name of options.projects.split(",")) {
-      const platPrefix = name.split("-")[0];
+    const projects = sanitizeCommaDelimitedArg(options.projects);
+    for (const name of projects) {
+      const nameParts = name.split("-");
+      const platPrefix = nameParts[0];
+      const platSuffix = nameParts[nameParts.length-1];
       if (
         supportedPlatforms.includes(platPrefix) &&
         !platforms.includes(platPrefix)
       ) {
         // if project name is prefixed with supported platform and not already added
         platforms.push(platPrefix);
+      } else if (supportedPlatforms.includes(platSuffix) && !platforms.includes(platSuffix)) {
+        // if project name is suffixed with supported platform and not already added
+        platforms.push(platSuffix);
       }
     }
   } else if (options.platforms) {
     // building in shared code only
-    platforms = options.platforms.split(",");
+    platforms = sanitizeCommaDelimitedArg(options.platforms);
   }
   const targetPlatforms: ITargetPlatforms = {};
   for (const t of platforms) {

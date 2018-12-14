@@ -25,7 +25,8 @@ describe('directive schematic', () => {
   it('should create directive in libs by default for use across any platform and apps', () => {
     // console.log('appTree:', appTree);
     let tree = schematicRunner.runSchematic('xplat', {
-      prefix: 'tt'
+      prefix: 'tt',
+      platforms: 'nativescript,web'
     }, appTree);
     tree = schematicRunner.runSchematic('app.nativescript', {
       name: 'viewer',
@@ -59,7 +60,8 @@ describe('directive schematic', () => {
   it('should create directive for specified projects only', () => {
     // console.log('appTree:', appTree);
     let tree = schematicRunner.runSchematic('xplat', {
-      prefix: 'tt'
+      prefix: 'tt',
+      platforms: 'nativescript,web'
     }, appTree);
     tree = schematicRunner.runSchematic('app.nativescript', {
       name: 'viewer',

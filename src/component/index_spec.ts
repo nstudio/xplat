@@ -27,7 +27,8 @@ describe('component schematic', () => {
   it('should create component for specified platforms', () => {
     // console.log('appTree:', appTree);
     let tree = schematicRunner.runSchematic('xplat', {
-      prefix: 'tt'
+      prefix: 'tt',
+      platforms: 'nativescript,web'
     }, appTree);
     tree = schematicRunner.runSchematic('app.nativescript', {
       name: 'viewer',
@@ -77,7 +78,8 @@ describe('component schematic', () => {
   it('should create component for specified platforms with subFolder option', () => {
     // console.log('appTree:', appTree);
     let tree = schematicRunner.runSchematic('xplat', {
-      prefix: 'tt'
+      prefix: 'tt',
+      platforms: 'nativescript,web'
     }, appTree);
     tree = schematicRunner.runSchematic('app.nativescript', {
       name: 'viewer',
@@ -147,7 +149,8 @@ describe('component schematic', () => {
   it('should create component for specified projects only', () => {
     // console.log('appTree:', appTree);
     let tree = schematicRunner.runSchematic('xplat', {
-      prefix: 'tt'
+      prefix: 'tt',
+      platforms: 'nativescript,web'
     }, appTree);
     tree = schematicRunner.runSchematic('app.nativescript', {
       name: 'viewer',
@@ -206,7 +209,8 @@ describe('component schematic', () => {
   it('should THROW if feature module does not exist in projects', () => {
     // console.log('appTree:', appTree);
     let tree = schematicRunner.runSchematic('xplat', {
-      prefix: 'tt'
+      prefix: 'tt',
+      platforms: 'nativescript,web'
     }, appTree);
     const options: GenerateOptions = { 
       name: 'signup',
