@@ -17,9 +17,9 @@ With the strength of [TypeScript](https://www.typescriptlang.org/) paired with t
 
 ## Currently supported platforms 
 
-* [NativeScript](https://www.nativescript.org/)
-* [Ionic](https://ionicframework.com/)
 * [Electron](https://electronjs.org/)
+* [Ionic](https://ionicframework.com/)
+* [NativeScript](https://www.nativescript.org/)
 
 ## Documentation
 

@@ -27,7 +27,8 @@ describe('feature schematic', () => {
     const options: FeatureOptions = { ...defaultOptions };
     // console.log('appTree:', appTree);
     let tree = schematicRunner.runSchematic('xplat', {
-      prefix: 'tt'
+      prefix: 'tt',
+      platforms: 'nativescript,web'
     }, appTree);
     tree = schematicRunner.runSchematic('app.nativescript', {
       name: 'viewer',
@@ -86,7 +87,8 @@ describe('feature schematic', () => {
   it('should create feature module WITHOUT a single starting component when using onlyModule', () => {
     // console.log('appTree:', appTree);
     let tree = schematicRunner.runSchematic('xplat', {
-      prefix: 'tt'
+      prefix: 'tt',
+      platforms: 'nativescript,web'
     }, appTree);
     tree = schematicRunner.runSchematic('app.nativescript', {
       name: 'viewer',
@@ -139,7 +141,8 @@ describe('feature schematic', () => {
   it('should create feature module WITH a single starting component BUT IGNORE creating matching base component when using ignoreBase', () => {
     // console.log('appTree:', appTree);
     let tree = schematicRunner.runSchematic('xplat', {
-      prefix: 'tt'
+      prefix: 'tt',
+      platforms: 'nativescript,web'
     }, appTree);
     tree = schematicRunner.runSchematic('app.nativescript', {
       name: 'viewer',
@@ -194,7 +197,8 @@ describe('feature schematic', () => {
     const options: FeatureOptions = { ...defaultOptions };
     // console.log('appTree:', appTree);
     let tree = schematicRunner.runSchematic('xplat', {
-      prefix: 'tt'
+      prefix: 'tt',
+      platforms: 'nativescript,web'
     }, appTree);
     tree = schematicRunner.runSchematic('app.nativescript', {
       name: 'viewer',
@@ -253,7 +257,8 @@ describe('feature schematic', () => {
     const options: FeatureOptions = { ...defaultOptions };
     // console.log('appTree:', appTree);
     let tree = schematicRunner.runSchematic('xplat', {
-      prefix: 'tt'
+      prefix: 'tt',
+      platforms: 'nativescript'
     }, appTree);
     tree = schematicRunner.runSchematic('app.nativescript', {
       name: 'viewer',
@@ -270,7 +275,8 @@ describe('feature schematic', () => {
     // console.log('appTree:', appTree);
     let tree = schematicRunner.runSchematic('xplat', {
       prefix: 'tt',
-      sample: true
+      sample: true,
+      platforms: 'nativescript,web'
     }, appTree);
     tree = schematicRunner.runSchematic('app.nativescript', {
       name: 'viewer',

@@ -28,7 +28,6 @@ export interface ITargetPlatforms {
   electron?: boolean;
   ssr?: boolean;
 }
-export const defaultPlatforms = "web,nativescript";
 
 export type IDevMode = "web" | "nativescript" | "ionic" | "electron" | "fullstack";
 
@@ -159,6 +158,13 @@ export function prerun(prefixArg?: string, init?: boolean) {
     }
     return tree;
   };
+}
+
+export function sanitizeCommaDelimitedArg(input: string): Array<string> {
+  if (input) {
+    return input.split(",").filter(i => !!i).map(i => i.trim().toLowerCase());
+  }
+  return [];
 }
 
 export function addRootDeps(
@@ -674,7 +680,7 @@ export function updateIDESettings(
         userUpdates[`**/xplat/${p}`] = false;
       }
     } else if (platformArg) {
-      const platforms = platformArg.split(",");
+      const platforms = sanitizeCommaDelimitedArg(platformArg);
       // switch on/off platforms
       for (const p of supportedPlatforms) {
         const excluded = platforms.includes(p) ? false : true;

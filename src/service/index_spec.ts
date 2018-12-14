@@ -25,7 +25,8 @@ describe('service schematic', () => {
   it('should create service in libs by default for use across any platform and apps', () => {
     // console.log('appTree:', appTree);
     let tree = schematicRunner.runSchematic('xplat', {
-      prefix: 'tt'
+      prefix: 'tt',
+      platforms: 'nativescript,web'
     }, appTree);
     tree = schematicRunner.runSchematic('app.nativescript', {
       name: 'viewer',
@@ -62,7 +63,8 @@ describe('service schematic', () => {
   it('should create service for specified projects only', () => {
     // console.log('appTree:', appTree);
     let tree = schematicRunner.runSchematic('xplat', {
-      prefix: 'tt'
+      prefix: 'tt',
+      platforms: 'nativescript,web'
     }, appTree);
     tree = schematicRunner.runSchematic('app.nativescript', {
       name: 'viewer',
@@ -115,7 +117,8 @@ describe('service schematic', () => {
   it('should create service for specified platform with targeted feature only', () => {
     // console.log('appTree:', appTree);
     let tree = schematicRunner.runSchematic('xplat', {
-      prefix: 'tt'
+      prefix: 'tt',
+      platforms: 'nativescript'
     }, appTree);
     tree = schematicRunner.runSchematic('feature', {
       name: 'foo',
@@ -154,7 +157,8 @@ describe('service schematic', () => {
   it('should create service for specified platform only and by default add to core for that platform', () => {
     // console.log('appTree:', appTree);
     let tree = schematicRunner.runSchematic('xplat', {
-      prefix: 'tt'
+      prefix: 'tt',
+      platforms: 'nativescript,web'
     }, appTree);
     const options: GenerateOptions = { 
       name: 'auth',

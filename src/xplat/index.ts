@@ -22,7 +22,6 @@ import {
   prerun,
   getPrefix,
   getNpmScope,
-  defaultPlatforms,
   updateGitIgnore,
   addReferences,
   updatePackageForXplat,
@@ -34,14 +33,16 @@ import {
   updateJsonInTree,
   unsupportedPlatformError,
   formatFiles,
-  addTestingFiles
+  addTestingFiles,
+  noPlatformError,
+  sanitizeCommaDelimitedArg
 } from "../utils";
 import { Schema as xPlatOptions } from "./schema";
 
 let platformArg: string;
 export default function(options: xPlatOptions) {
   const targetPlatforms: ITargetPlatforms = {};
-  platformArg = options.platforms || defaultPlatforms;
+  platformArg = options.platforms || '';
   if (platformArg === 'all') {
     // conveniently add support for all supported platforms
     for (const platform of supportedPlatforms) {
@@ -49,13 +50,16 @@ export default function(options: xPlatOptions) {
     }
     platformArg = supportedPlatforms.join(",");
   } else {
-    const platforms = platformArg.split(",");
-    
-    for (const platform of platforms) {
-      if (supportedPlatforms.includes(platform)) {
-        targetPlatforms[platform] = true;
-      } else {
-        throw new Error(unsupportedPlatformError(platform));
+    const platforms = sanitizeCommaDelimitedArg(platformArg);
+    if (platforms.length === 0) {
+      throw new Error(noPlatformError());
+    } else {
+      for (const platform of platforms) {
+        if (supportedPlatforms.includes(platform)) {
+          targetPlatforms[platform] = true;
+        } else {
+          throw new Error(unsupportedPlatformError(platform));
+        }
       }
     }
   }

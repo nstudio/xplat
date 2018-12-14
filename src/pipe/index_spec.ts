@@ -27,7 +27,8 @@ describe("pipe schematic", () => {
     let tree = schematicRunner.runSchematic(
       "xplat",
       {
-        prefix: "tt"
+        prefix: "tt",
+        platforms: "nativescript,web"
       },
       appTree
     );
@@ -72,7 +73,8 @@ describe("pipe schematic", () => {
     let tree = schematicRunner.runSchematic(
       "xplat",
       {
-        prefix: "tt"
+        prefix: "tt",
+        platforms: "nativescript,web"
       },
       appTree
     );
@@ -120,7 +122,8 @@ describe("pipe schematic", () => {
     let tree = schematicRunner.runSchematic(
       "xplat",
       {
-        prefix: "tt"
+        prefix: "tt",
+        platforms: "web"
       },
       appTree
     );
@@ -138,7 +141,8 @@ describe("pipe schematic", () => {
     let tree = schematicRunner.runSchematic(
       "xplat",
       {
-        prefix: "tt"
+        prefix: "tt",
+        platforms: "nativescript,web"
       },
       appTree
     );
@@ -222,7 +226,8 @@ describe("pipe schematic", () => {
     let tree = schematicRunner.runSchematic(
       "xplat",
       {
-        prefix: "tt"
+        prefix: "tt",
+        platforms: "nativescript,web"
       },
       appTree
     );
@@ -244,7 +249,8 @@ describe("pipe schematic", () => {
     let tree = schematicRunner.runSchematic(
       "xplat",
       {
-        prefix: "tt"
+        prefix: "tt",
+        platforms: 'nativescript,web'
       },
       appTree
     );

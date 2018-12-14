@@ -10,8 +10,8 @@ import { Schema as ConfigOptions } from './schema';
 import {
   getNxWorkspaceConfig,
   supportedPlatforms,
-  defaultPlatforms,
   updateTsConfig,
+  sanitizeCommaDelimitedArg,
 } from '../utils';
 
 export default function ( options: ConfigOptions ): Rule {
@@ -25,9 +25,9 @@ function updatePaths(options: ConfigOptions) {
   return ( tree: Tree ) => {
     const nxJson = getNxWorkspaceConfig( tree );
     const npmScope = nxJson.npmScope;
-    const platformArg = options.platforms || defaultPlatforms;
+    const platformArg = options.platforms;
     // sort for consistency
-    const platforms = platformArg.split( ',' ).sort( function ( a, b ) {
+    const platforms = sanitizeCommaDelimitedArg(platformArg).sort( function ( a, b ) {
       if ( a < b ) return -1;
       if ( a > b ) return 1;
       return 0;
