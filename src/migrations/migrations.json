@@ -44,6 +44,11 @@
         "version": "7.0.1",
         "description": "Add {N} HMR livesync navigation hook",
         "factory": "./update-7-0-1/update-7-0-1"
+      },
+      "update-to-7.1.0": {
+        "version": "7.1.0",
+        "description": "Update NativeScript 5.1.0 and support for Angular 7.1.0",
+        "factory": "./update-7-1-0/update-7-1-0"
       }
     }
   }
