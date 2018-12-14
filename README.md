@@ -1,5 +1,5 @@
 <h1 align="center">Cross-platform (xplat) tools for Nx workspaces</h1>
-<img src="https://raw.githubusercontent.com/nstudio/xplat/master/admin/assets/images/xplat.png" align="center" width="400">
+<img src="https://raw.githubusercontent.com/nstudio/xplat/master/xplat.png" align="center" width="400">
 <p align="center">
 
 [![Build Status](https://travis-ci.org/nstudio/xplat.svg?branch=master)](https://travis-ci.org/nstudio/xplat)
