@@ -211,7 +211,7 @@ export function addRootDeps(
     if (targetPlatforms.nativescript) {
       dep = {
         name: "nativescript-angular",
-        version: "~7.0.0",
+        version: "~7.1.0",
         type: "dependency"
       };
       deps.push(dep);
@@ -241,14 +241,14 @@ export function addRootDeps(
 
       dep = {
         name: "tns-core-modules",
-        version: "~5.0.0",
+        version: "~5.1.0",
         type: "dependency"
       };
       deps.push(dep);
 
       dep = {
         name: "tns-platform-declarations",
-        version: "~5.0.0",
+        version: "~5.1.0",
         type: "devDependency"
       };
       deps.push(dep);

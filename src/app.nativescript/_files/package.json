@@ -43,9 +43,9 @@
     "zone.js": "file:../../node_modules/zone.js"
   },
   "devDependencies": {
-    "@angular/compiler-cli": "~7.0.0",
+    "@angular/compiler-cli": "~7.1.0",
     "@angular/language-service": "file:../../node_modules/@angular/language-service",
-    "@ngtools/webpack": "~7.0.0",
+    "@ngtools/webpack": "~7.1.0",
     "codelyzer": "file:../../node_modules/codelyzer",
     "nativescript-dev-webpack": "~0.18.0",
     "tns-platform-declarations": "file:../../node_modules/tns-platform-declarations",
