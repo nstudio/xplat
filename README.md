@@ -1,10 +1,12 @@
 <h1 align="center">Cross-platform (xplat) tools for Nx workspaces</h1>
 <p align="center"><img src="https://raw.githubusercontent.com/nstudio/xplat/master/xplat-logo.png" align="center" width="400"></p>
 <div align="center">
+
 [![Build Status](https://travis-ci.org/nstudio/xplat.svg?branch=master)](https://travis-ci.org/nstudio/xplat)
 [![License](https://img.shields.io/npm/l/@nstudio/schematics.svg?style=flat-square)]()
 [![NPM Version](https://badge.fury.io/js/%40nstudio%2Fschematics.svg)](https://www.npmjs.com/@nstudio/schematics)
 [![NPM Downloads](https://img.shields.io/npm/dt/@nstudio/schematics.svg?style=flat-square)](https://www.npmjs.com/@nstudio/schematics)
+
 </div>
 <hr>
 
