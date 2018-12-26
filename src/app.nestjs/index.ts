@@ -14,6 +14,7 @@ import {
   Rule,
   noop
 } from "@angular-devkit/schematics";
+import { NodePackageInstallTask } from "@angular-devkit/schematics/tasks";
 import {
   stringUtils,
   getNpmScope,
@@ -46,7 +47,7 @@ export default function(options: ApplicationOptions) {
       const packageConfig = getJsonFromFile(tree, "package.json");
       const scripts = packageConfig.scripts || {};
 
-      scripts[`serve.nest.${options.name}`] = `ts-node -P  apps/nestjs-${
+      scripts[`serve.nest.${options.name}`] = `ts-node -P apps/nestjs-${
         options.name
       }/tsconfig.json apps/nestjs-${options.name}/src/main.ts`;
       scripts[`start.nest.${options.name}`] = `npm-run-all -p serve.nest.${
@@ -63,9 +64,15 @@ export default function(options: ApplicationOptions) {
       };
       return updateNxProjects(tree, projects);
     },
+    addInstall,
     addPostinstallers(),
     options.skipFormat ? noop() : formatFiles(options)
   ]);
+}
+
+function addInstall(host: Tree, context: SchematicContext) {
+  context.addTask(new NodePackageInstallTask());
+  return host;
 }
 
 function addAppFiles(

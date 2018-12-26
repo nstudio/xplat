@@ -215,12 +215,13 @@ export function addRootDeps(
     };
     deps.push(dep);
 
-    dep = {
+    //TODO: fail when call script install. Temporary disable for nestjs install
+    /*dep = {
       name: `@${getNpmScope()}/scss`,
       version: "file:libs/scss",
       type: "dependency"
     };
-    deps.push(dep);
+    deps.push(dep);*/
 
     dep = {
       name: "reflect-metadata",
