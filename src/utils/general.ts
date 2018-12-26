@@ -216,12 +216,14 @@ export function addRootDeps(
     deps.push(dep);
 
     //TODO: fail when call script install. Temporary disable for nestjs install
-    dep = {
-      name: `@${getNpmScope()}/scss`,
-      version: "file:libs/scss",
-      type: "dependency"
-    };
-    deps.push(dep);
+    if (!targetPlatforms.nestjs) {
+      dep = {
+        name: `@${getNpmScope()}/scss`,
+        version: "file:libs/scss",
+        type: "dependency"
+      };
+      deps.push(dep);
+    }
 
     dep = {
       name: "reflect-metadata",
@@ -419,8 +421,71 @@ export function addRootDeps(
       deps.push(dep);
 
       dep = {
-        name: "reflect-metadata",
-        version: "^0.1.12",
+        name: "@nestjs/typeorm",
+        version: "^5.2.2",
+        type: "dependency"
+      };
+      deps.push(dep);
+
+      dep = {
+        name: "@nestjs/websockets",
+        version: "^5.5.0",
+        type: "dependency"
+      };
+      deps.push(dep);
+
+      dep = {
+        name: "@nestjs/microservices",
+        version: "^5.5.0",
+        type: "dependency"
+      };
+      deps.push(dep);
+
+      dep = {
+        name: "typeorm",
+        version: "^0.2.9",
+        type: "dependency"
+      };
+      deps.push(dep);
+
+      dep = {
+        name: "cache-manager",
+        version: "^2.9.0",
+        type: "dependency"
+      };
+      deps.push(dep);
+
+      dep = {
+        name: "helmet",
+        version: "^3.15.0",
+        type: "dependency"
+      };
+      deps.push(dep);
+
+      dep = {
+        name: "csurf",
+        version: "^1.9.0",
+        type: "dependency"
+      };
+      deps.push(dep);
+
+      dep = {
+        name: "express-rate-limit",
+        version: "^3.3.2",
+        type: "dependency"
+      };
+      deps.push(dep);
+
+      dep = {
+        name: "dotenv",
+        version: "^6.2.0",
+        type: "dependency"
+      };
+      deps.push(dep);
+
+      dep = {
+        name: "compression",
+        version: "^1.7.3",
         type: "dependency"
       };
       deps.push(dep);
