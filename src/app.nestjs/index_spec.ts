@@ -3,7 +3,7 @@ import { Schema as ApplicationOptions } from "./schema";
 import { SchematicTestRunner } from "@angular-devkit/schematics/testing";
 
 import * as path from "path";
-import { createEmptyWorkspace } from "../utils";
+import { createEmptyWorkspace, getFileContent } from "../utils";
 
 describe("app.nestjs schematic", () => {
   const schematicRunner = new SchematicTestRunner(
@@ -27,7 +27,39 @@ describe("app.nestjs schematic", () => {
     const tree = schematicRunner.runSchematic("app.nestjs", options, appTree);
     const files = tree.files;
 
-    let checkPath = "/apps/nestjs-foo/src/main.ts";
+    expect(
+      files.indexOf("/apps/nestjs-foo/src/main.ts")
+    ).toBeGreaterThanOrEqual(0);
+    expect(
+      files.indexOf("/apps/nestjs-foo/src/app.service.ts")
+    ).toBeGreaterThanOrEqual(0);
+    expect(
+      files.indexOf("/apps/nestjs-foo/src/app.module.ts")
+    ).toBeGreaterThanOrEqual(0);
+    expect(
+      files.indexOf("/apps/nestjs-foo/src/app.controller.ts")
+    ).toBeGreaterThanOrEqual(0);
+
+    let checkPath = "/apps/nestjs-foo/package.json";
     expect(files.indexOf(checkPath)).toBeGreaterThanOrEqual(0);
+
+    let checkFile = getFileContent(tree, checkPath);
+    expect(checkFile.indexOf(`"name": "nest-foo"`)).toBeGreaterThanOrEqual(0);
+
+    expect(
+      files.indexOf("/tools/electron/postinstall.js")
+    ).toBeGreaterThanOrEqual(0);
+    expect(files.indexOf("/tools/web/postinstall.js")).toBeGreaterThanOrEqual(
+      0
+    );
+
+    checkPath = "/package.json";
+    expect(files.indexOf(checkPath)).toBeGreaterThanOrEqual(0);
+
+    checkFile = getFileContent(tree, checkPath);
+
+    const packageData: any = JSON.parse(checkFile);
+    expect(packageData.scripts["serve.nest.foo"]).toBeDefined();
+    expect(packageData.scripts["start.nest.foo"]).toBeDefined();
   });
 });
