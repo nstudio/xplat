@@ -308,16 +308,15 @@ export function generate(type: IGenerateType, options) {
       !options.projects && targetPlatforms.electron
         ? adjustModule(type, options, "xplat/electron")(tree, context)
         : noop()(tree, context),
-
     /**
      * NESTJS
      **/
-    // add for electron
+    // add for nestjs
     (tree: Tree, context: SchematicContext) =>
       !options.projects && targetPlatforms.nestjs
         ? addToFeature(type, options, "xplat/nestjs", tree)(tree, context)
         : noop()(tree, context),
-    // adjust electron barrel
+    // adjust nestjs barrel
     (tree: Tree, context: SchematicContext) =>
       !options.projects && targetPlatforms.nestjs
         ? adjustBarrel(type, options, "xplat/nestjs")(tree, context)
@@ -332,7 +331,7 @@ export function generate(type: IGenerateType, options) {
         : noop()(tree, context),
     // adjust feature module metadata if needed
     (tree: Tree, context: SchematicContext) =>
-      !options.projects && targetPlatforms.electron
+      !options.projects && targetPlatforms.nestjs
         ? adjustModule(type, options, "xplat/nestjs")(tree, context)
         : noop()(tree, context),
 
