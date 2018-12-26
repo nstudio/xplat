@@ -21,16 +21,29 @@ import * as ts from "typescript";
 const util = require('util');
 const xml2js = require('xml2js');
 
-export const supportedPlatforms = ["web", "nativescript", "ionic", "electron"];
+export const supportedPlatforms = [
+  "web",
+  "nativescript",
+  "ionic",
+  "electron",
+  "nestjs"
+];
 export interface ITargetPlatforms {
   web?: boolean;
   nativescript?: boolean;
   ionic?: boolean;
   electron?: boolean;
   ssr?: boolean;
+  nestjs?: boolean;
 }
 
-export type IDevMode = "web" | "nativescript" | "ionic" | "electron" | "fullstack";
+export type IDevMode =
+  | "web"
+  | "nativescript"
+  | "ionic"
+  | "electron"
+  | "nestjs"
+  | "fullstack";
 
 export interface NodeDependency {
   name: string;
@@ -168,7 +181,10 @@ export function prerun(prefixArg?: string, init?: boolean) {
 
 export function sanitizeCommaDelimitedArg(input: string): Array<string> {
   if (input) {
-    return input.split(",").filter(i => !!i).map(i => i.trim().toLowerCase());
+    return input
+      .split(",")
+      .filter(i => !!i)
+      .map(i => i.trim().toLowerCase());
   }
   return [];
 }
@@ -268,35 +284,35 @@ export function addRootDeps(
         type: "dependency"
       };
       deps.push(dep);
-  
+
       dep = {
         name: "@ionic-native/splash-screen",
         version: "^5.0.0-beta.14",
         type: "dependency"
       };
       deps.push(dep);
-  
+
       dep = {
         name: "@ionic-native/status-bar",
         version: "^5.0.0-beta.14",
         type: "dependency"
       };
       deps.push(dep);
-  
+
       dep = {
         name: "@ionic/angular",
         version: "^4.0.0-beta.3",
         type: "dependency"
       };
       deps.push(dep);
-  
+
       dep = {
         name: "@ionic/ng-toolkit",
         version: "~1.0.0",
         type: "dependency"
       };
       deps.push(dep);
-  
+
       dep = {
         name: "@ionic/schematics-angular",
         version: "~1.0.0",
@@ -308,72 +324,131 @@ export function addRootDeps(
     /** ELECTRON */
     if (targetPlatforms.electron) {
       dep = {
-        name: 'electron',
-        version: '2.0.8',
-        type: 'devDependency'
+        name: "electron",
+        version: "2.0.8",
+        type: "devDependency"
       };
       deps.push(dep);
 
       dep = {
-        name: 'electron-builder',
-        version: '20.28.4',
-        type: 'devDependency'
+        name: "electron-builder",
+        version: "20.28.4",
+        type: "devDependency"
       };
       deps.push(dep);
 
       dep = {
-        name: 'electron-installer-dmg',
-        version: '1.0.0',
-        type: 'devDependency'
+        name: "electron-installer-dmg",
+        version: "1.0.0",
+        type: "devDependency"
       };
       deps.push(dep);
 
       dep = {
-        name: 'electron-packager',
-        version: '12.1.0',
-        type: 'devDependency'
+        name: "electron-packager",
+        version: "12.1.0",
+        type: "devDependency"
       };
       deps.push(dep);
 
       dep = {
-        name: 'electron-reload',
-        version: '1.2.5',
-        type: 'devDependency'
+        name: "electron-reload",
+        version: "1.2.5",
+        type: "devDependency"
       };
       deps.push(dep);
 
       dep = {
-        name: 'electron-store',
-        version: '2.0.0',
-        type: 'devDependency'
+        name: "electron-store",
+        version: "2.0.0",
+        type: "devDependency"
       };
       deps.push(dep);
 
       dep = {
-        name: 'electron-updater',
-        version: '3.1.2',
-        type: 'devDependency'
+        name: "electron-updater",
+        version: "3.1.2",
+        type: "devDependency"
       };
       deps.push(dep);
 
       dep = {
-        name: 'npm-run-all',
-        version: '4.1.3',
-        type: 'devDependency'
+        name: "npm-run-all",
+        version: "4.1.3",
+        type: "devDependency"
       };
       deps.push(dep);
 
       dep = {
-        name: 'npx',
-        version: '10.2.0',
-        type: 'devDependency'
+        name: "npx",
+        version: "10.2.0",
+        type: "devDependency"
       };
       deps.push(dep);
 
       dep = {
-        name: 'wait-on',
-        version: '2.1.0',
-        type: 'devDependency'
+        name: "wait-on",
+        version: "2.1.0",
+        type: "devDependency"
+      };
+      deps.push(dep);
+    }
+
+    /** NESTJS */
+    if (targetPlatforms.nestjs) {
+      dep = {
+        name: "@nestjs/common",
+        version: "^5.3.0",
+        type: "dependency"
+      };
+      deps.push(dep);
+
+      dep = {
+        name: "@nestjs/core",
+        version: "^5.3.0",
+        type: "dependency"
+      };
+      deps.push(dep);
+
+      dep = {
+        name: "@nestjs/testing",
+        version: "^5.3.0",
+        type: "dependency"
+      };
+      deps.push(dep);
+
+      dep = {
+        name: "reflect-metadata",
+        version: "^0.1.12",
+        type: "dependency"
+      };
+      deps.push(dep);
+
+      dep = {
+        name: "@types/node",
+        version: "^9.3.0",
+        type: "devDependency"
+      };
+      deps.push(dep);
+
+      dep = {
+        name: "ts-loader",
+        version: "^4.0.0",
+        type: "devDependency"
+      };
+      deps.push(dep);
+
+      dep = {
+        name: "ts-node",
+        version: "^7.0.0",
+        type: "devDependency"
+      };
+      deps.push(dep);
+
+      dep = {
+        name: "npm-run-all",
+        version: "^4.1.5",
+        type: "devDependency"
       };
       deps.push(dep);
     }
@@ -604,7 +679,8 @@ fs.readFile(f_angular, 'utf8', function (err, data) {
   fs.writeFile(f_angular, result, 'utf8', function (err) {
     if (err) return console.log(err);
   });
-});`);
+});`
+      );
     }
     const postinstallElectron = "/tools/electron/postinstall.js";
     if (!tree.exists(postinstallElectron)) {
@@ -626,7 +702,8 @@ fs.readFile(f_angular, 'utf8', function (err, data) {
   fs.writeFile(f_angular, result, 'utf8', function (err) {
     if (err) return console.log(err);
   });
-});`);
+});`
+      );
     }
     return tree;
   };
