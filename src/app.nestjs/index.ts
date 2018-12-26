@@ -22,7 +22,8 @@ import {
   getJsonFromFile,
   updatePackageScripts,
   addPostinstallers,
-  formatFiles
+  formatFiles,
+  updateNxProjects
 } from "../utils";
 
 export default function(options: ApplicationOptions) {
@@ -53,6 +54,14 @@ export default function(options: ApplicationOptions) {
       }`;
 
       return updatePackageScripts(tree, scripts);
+    },
+    // nx.json
+    (tree: Tree) => {
+      const projects = {};
+      projects[`nestjs-${options.name}`] = {
+        tags: []
+      };
+      return updateNxProjects(tree, projects);
     },
     addPostinstallers(),
     options.skipFormat ? noop() : formatFiles(options)
