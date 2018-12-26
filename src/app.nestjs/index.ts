@@ -30,7 +30,7 @@ import {
 export default function(options: ApplicationOptions) {
   if (!options.name) {
     throw new SchematicsException(
-      `Missing name argument. Provide a name for your Electron app. Example: ng g app.electron sample`
+      `Missing name argument. Provide a name for your nestjs app. Example: ng g app.nestjs sample`
     );
   }
 
