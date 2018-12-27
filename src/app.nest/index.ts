@@ -30,26 +30,26 @@ import {
 export default function(options: ApplicationOptions) {
   if (!options.name) {
     throw new SchematicsException(
-      `Missing name argument. Provide a name for your nestjs app. Example: ng g app.nestjs sample`
+      `Missing name argument. Provide a name for your Nest app. Example: ng g app.nest sample`
     );
   }
 
-  const appPath = `nestjs-${options.name}`;
+  const appPath = `nest-${options.name}`;
 
   return chain([
     // create app files
     (tree: Tree, context: SchematicContext) =>
       addAppFiles(options, appPath)(tree, context),
     // add root package dependencies
-    (tree: Tree) => addRootDeps(tree, { nestjs: true }),
+    (tree: Tree) => addRootDeps(tree, { nest: true }),
     // add npm scripts
     (tree: Tree) => {
       const packageConfig = getJsonFromFile(tree, "package.json");
       const scripts = packageConfig.scripts || {};
 
-      scripts[`serve.nest.${options.name}`] = `ts-node -P apps/nestjs-${
+      scripts[`serve.nest.${options.name}`] = `ts-node -P apps/nest-${
         options.name
-      }/tsconfig.json apps/nestjs-${options.name}/src/main.ts`;
+      }/tsconfig.json apps/nest-${options.name}/src/main.ts`;
       scripts[`start.nest.${options.name}`] = `npm-run-all -p serve.nest.${
         options.name
       }`;
@@ -59,7 +59,7 @@ export default function(options: ApplicationOptions) {
     // nx.json
     (tree: Tree) => {
       const projects = {};
-      projects[`nestjs-${options.name}`] = {
+      projects[`nest-${options.name}`] = {
         tags: []
       };
       return updateNxProjects(tree, projects);

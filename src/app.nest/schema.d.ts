@@ -8,10 +8,6 @@ export interface Schema {
    */
   npmScope?: string;
   /**
-   * The prefix to apply to generated selectors.
-   */
-  prefix?: string;
-  /**
    * Skip installing dependencies
    */
   skipInstall?: boolean;

@@ -309,30 +309,30 @@ export function generate(type: IGenerateType, options) {
         ? adjustModule(type, options, "xplat/electron")(tree, context)
         : noop()(tree, context),
     /**
-     * NESTJS
+     * NEST
      **/
-    // add for nestjs
+    // add for nest
     (tree: Tree, context: SchematicContext) =>
-      !options.projects && targetPlatforms.nestjs
-        ? addToFeature(type, options, "xplat/nestjs", tree)(tree, context)
+      !options.projects && targetPlatforms.nest
+        ? addToFeature(type, options, "xplat/nest", tree)(tree, context)
         : noop()(tree, context),
-    // adjust nestjs barrel
+    // adjust nest barrel
     (tree: Tree, context: SchematicContext) =>
-      !options.projects && targetPlatforms.nestjs
-        ? adjustBarrel(type, options, "xplat/nestjs")(tree, context)
+      !options.projects && targetPlatforms.nest
+        ? adjustBarrel(type, options, "xplat/nest")(tree, context)
         : noop()(tree, context),
     // add index barrel if needed
     (tree: Tree, context: SchematicContext) =>
       options.needsIndex
-        ? addToFeature(type, options, "xplat/nestjs", tree, "_index")(
+        ? addToFeature(type, options, "xplat/nest", tree, "_index")(
             tree,
             context
           )
         : noop()(tree, context),
     // adjust feature module metadata if needed
     (tree: Tree, context: SchematicContext) =>
-      !options.projects && targetPlatforms.nestjs
-        ? adjustModule(type, options, "xplat/nestjs")(tree, context)
+      !options.projects && targetPlatforms.nest
+        ? adjustModule(type, options, "xplat/nest")(tree, context)
         : noop()(tree, context),
 
     // project handling

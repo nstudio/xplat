@@ -10,7 +10,7 @@
     "target": "es6",
     "sourceMap": true,
     "allowJs": true,
-    "outDir": "./dist",
+    "outDir": "../dist/apps/nest-<%= utils.sanitize(name) %>",
     "typeRoots": ["../../node_modules/@types"]
   },
   "include": ["src/**/*"],

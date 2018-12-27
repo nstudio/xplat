@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "id": "app.nestjs",
-  "title": "Nestjs App Options Schema",
+  "id": "app.nest",
+  "title": "Nest App Options Schema",
   "type": "object",
   "properties": {
     "name": {

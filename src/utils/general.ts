@@ -26,7 +26,7 @@ export const supportedPlatforms = [
   "nativescript",
   "ionic",
   "electron",
-  "nestjs"
+  "nest"
 ];
 export interface ITargetPlatforms {
   web?: boolean;
@@ -34,7 +34,7 @@ export interface ITargetPlatforms {
   ionic?: boolean;
   electron?: boolean;
   ssr?: boolean;
-  nestjs?: boolean;
+  nest?: boolean;
 }
 
 export type IDevMode =
@@ -42,7 +42,7 @@ export type IDevMode =
   | "nativescript"
   | "ionic"
   | "electron"
-  | "nestjs"
+  | "nest"
   | "fullstack";
 
 export interface NodeDependency {
@@ -216,7 +216,7 @@ export function addRootDeps(
     deps.push(dep);
 
     //TODO: fail when call script install. Temporary disable for nestjs install
-    if (!targetPlatforms.nestjs) {
+    if (!targetPlatforms.nest) {
       dep = {
         name: `@${getNpmScope()}/scss`,
         version: "file:libs/scss",
@@ -398,7 +398,7 @@ export function addRootDeps(
     }
 
     /** NESTJS */
-    if (targetPlatforms.nestjs) {
+    if (targetPlatforms.nest) {
       dep = {
         name: "@nestjs/common",
         version: "^5.3.0",
