@@ -517,6 +517,34 @@ export function addRootDeps(
         type: "devDependency"
       };
       deps.push(dep);
+
+      dep = {
+        name: "@types/jest",
+        version: "^20.0.8",
+        type: "devDependency"
+      };
+      deps.push(dep);
+
+      dep = {
+        name: "jest",
+        version: "^20.0.4",
+        type: "devDependency"
+      };
+      deps.push(dep);
+
+      dep = {
+        name: "ts-jest",
+        version: "^20.0.14",
+        type: "devDependency"
+      };
+      deps.push(dep);
+
+      dep = {
+        name: "supertest",
+        version: "^3.0.0",
+        type: "devDependency"
+      };
+      deps.push(dep);
     }
 
     if (targetPlatforms.ionic || targetPlatforms.electron) {

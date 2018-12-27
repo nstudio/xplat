@@ -53,6 +53,26 @@ export default function(options: ApplicationOptions) {
       scripts[`start.nest.${options.name}`] = `npm-run-all -p serve.nest.${
         options.name
       }`;
+      scripts[`build.nest.${options.name}`] = `tsc -p apps/nest-${
+        options.name
+      }`;
+      scripts[`test.nest.${options.name}`] = `jest --config=apps/nest-${
+        options.name
+      }/jest.json`;
+      scripts[
+        `test.nest.${options.name}.coverage`
+      ] = `jest --config=apps/nest-${
+        options.name
+      }/jest.json --coverage --coverageDirectory=coverage`;
+      scripts[`test.nest.${options.name}.watch`] = `jest --config=apps/nest-${
+        options.name
+      }/jest.json --watch`;
+      scripts[`test.nest.${options.name}.e2e`] = `jest --config=apps/nest-${
+        options.name
+      }/e2e/jest-e2e.json --forceExit`;
+      scripts[
+        `test.nest.${options.name}.e2e.watch`
+      ] = `jest --config=apps/nest-${options.name}/e2e/jest-e2e.json --watch`;
 
       return updatePackageScripts(tree, scripts);
     },
