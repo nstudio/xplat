@@ -1,7 +1,7 @@
 {
   "moduleFileExtensions": ["ts", "tsx", "js", "json"],
   "transform": {
-    "^.+\\.tsx?$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    "^.+\\.tsx?$": "../../node_modules/ts-jest/preprocessor.js"
   },
   "testRegex": "/src/.*\\.(test|spec).(ts|tsx|js)$",
   "collectCoverageFrom": [
