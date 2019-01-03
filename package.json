@@ -71,16 +71,20 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@angular-devkit/core": "~0.7.2",
-    "@angular-devkit/schematics": "~0.7.2",
-    "@nrwl/schematics": "^6.2.0",
-    "@schematics/angular": "~0.7.2",
-    "@types/jasmine": "^2.8.7",
-    "@types/node": "^10.3.0",
+    "@angular-devkit/core": "~7.1.0",
+    "@angular-devkit/schematics": "~7.1.0",
+    "@nrwl/schematics": "^7.2.0",
+    "@schematics/angular": "~7.1.0",
+    "@types/jasmine": "~2.8.6",
+    "@types/node": "~10.3.0",
     "cz-conventional-changelog": "^2.1.0",
-    "jasmine": "^3.1.0",
-    "rxjs": "^6.2.2",
+    "jasmine": "~3.3.1",
+    "jasmine-core": "~3.3.0",
+    "rxjs": "^6.3.3",
     "strip-json-comments": "~2.0.1",
-    "typescript": "~2.9.2"
+    "typescript": "~3.1.3"
+  },
+  "dependencies": {
+    "xml2js": "^0.4.19"
   }
 }

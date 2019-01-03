@@ -5,7 +5,6 @@ import {
   move,
   template,
   mergeWith,
-  TemplateOptions,
   Tree,
   SchematicContext,
   SchematicsException,
@@ -159,7 +158,7 @@ const addPlatformFiles = (
   return branchAndMerge(
     mergeWith(
       apply(url(`./_${platform}_${sample}files`), [
-        template(<TemplateOptions>{
+        template({
           ...(options as any),
           npmScope: getNpmScope(),
           prefix: getPrefix(),
@@ -191,7 +190,7 @@ const addLibFiles = (
   return branchAndMerge(
     mergeWith(
       apply(url(`./_lib_${sample}files`), [
-        template(<TemplateOptions>{
+        template({
           ...(options as any),
           npmScope: getNpmScope(),
           prefix: getPrefix(),

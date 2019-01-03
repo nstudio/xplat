@@ -4,7 +4,8 @@ import { getFileContent } from '@schematics/angular/utility/test';
 import * as path from 'path';
 
 import { Schema as XPlatOptions } from './schema';
-import { createEmptyWorkspace, supportedPlatforms } from '../utils';
+import { createEmptyWorkspace, supportedPlatforms, setTest } from '../utils';
+setTest();
 
 describe('xplat schematic', () => {
   const schematicRunner = new SchematicTestRunner(

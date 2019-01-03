@@ -5,7 +5,6 @@ import {
   move,
   template,
   mergeWith,
-  TemplateOptions,
   Tree,
   SchematicContext,
   // SchematicsException,

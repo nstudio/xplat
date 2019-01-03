@@ -6,7 +6,6 @@ import {
   move,
   template,
   mergeWith,
-  TemplateOptions,
   branchAndMerge,
   noop,
   SchematicsException,
@@ -19,6 +18,8 @@ import { errorXplat, errorMissingPrefix } from "./errors";
 // import * as os from 'os';
 import * as fs from "fs";
 import * as ts from "typescript";
+const util = require('util');
+const xml2js = require('xml2js');
 
 export const supportedPlatforms = ["web", "nativescript", "ionic", "electron"];
 export interface ITargetPlatforms {
@@ -39,6 +40,7 @@ export interface NodeDependency {
 
 let npmScope: string;
 let prefix: string;
+let isTest = false;
 
 export function getNpmScope() {
   return npmScope;
@@ -54,6 +56,10 @@ export function getFileContent(tree: Tree, path: string) {
     throw new SchematicsException(`${path} could not be read.`);
   }
   return file.toString("utf-8");
+}
+
+export function setTest() {
+  isTest = true;
 }
 
 export function serializeJson(json: any): string {
@@ -650,7 +656,7 @@ export const addTestingFiles = (
   return branchAndMerge(
     mergeWith(
       apply(url(`${relativePath}_testing_files`), [
-        template(<TemplateOptions>{
+        template({
           ...(options as any),
           npmScope: getNpmScope(),
           prefix: getPrefix(),
@@ -668,10 +674,16 @@ export function updateIDESettings(
   platformArg: string,
   devMode?: IDevMode
 ) {
+  if (isTest) {
+    // ignore node file modifications when just testing
+    return tree;
+  }
+
   try {
     const cwd = process.cwd();
     // console.log('workspace dir:', process.cwd());
     // const dirName = cwd.split('/').slice(-1);
+    let isExcluding = false;
     const userUpdates: any = {};
     if (!devMode || devMode === "fullstack") {
       // show all
@@ -686,26 +698,34 @@ export function updateIDESettings(
         const excluded = platforms.includes(p) ? false : true;
         userUpdates[`**/apps/${p}-*`] = excluded;
         userUpdates[`**/xplat/${p}`] = excluded;
+        if (excluded) {
+          // if excluding any platform at all, set the flag
+          // this is used for WebStorm support below
+          isExcluding = true;
+        }
       }
     }
+
+    const isMac = process.platform == "darwin";
 
     // VS Code support
     // const homedir = os.homedir();
     // console.log('os.homedir():',homedir);
-    let userSettingsPath =
-      process.platform == "darwin"
+    let userSettingsVSCodePath =
+      isMac
         ? process.env.HOME +
           `/Library/Application Support/Code/User/settings.json`
-        : "/var/local/Cole/User/settings.json";
+        : "/var/local/Code/User/settings.json";
     const windowsHome = process.env.APPDATA;
     if (windowsHome) {
-      userSettingsPath = join(windowsHome, "Code/User/settings.json");
+      userSettingsVSCodePath = join(windowsHome, "Code/User/settings.json");
     }
-    // console.log('userSettingsPath:',userSettingsPath);
-    const isVsCode = fs.existsSync(userSettingsPath);
+    // console.log('userSettingsVSCodePath:',userSettingsVSCodePath);
+    const isVsCode = fs.existsSync(userSettingsVSCodePath);
+
     // console.log('isVsCode:',isVsCode);
     if (isVsCode) {
-      const userSettings = fs.readFileSync(userSettingsPath, "UTF-8");
+      const userSettings = fs.readFileSync(userSettingsVSCodePath, "UTF-8");
       if (userSettings) {
         const userSettingsJson = JSON.parse(userSettings);
         let exclude = userSettingsJson["files.exclude"];
@@ -724,8 +744,90 @@ export function updateIDESettings(
         );
 
         fs.writeFileSync(
-          userSettingsPath,
+          userSettingsVSCodePath,
           JSON.stringify(userSettingsJson, null, 2)
+        );
+      }
+    }
+
+    // WebStorm support
+    let isWebStorm = false;
+    // list preferences to get correct webstorm prefs file
+    let preferencesFolder = isMac
+      ? process.env.HOME +
+        `/Library/Preferences`
+      : __dirname;
+    if (windowsHome) {
+      preferencesFolder = windowsHome;
+    } 
+    const prefs = fs.readdirSync(preferencesFolder).filter(f => fs.statSync(join(preferencesFolder, f)).isDirectory());
+    // find first one
+    // TODO: user may have multiple version installed (or at least older versions) so may need to handle if multiples
+    let webStormPrefFolderName = prefs.find(f => f.indexOf('WebStorm20') > -1);
+    if (webStormPrefFolderName) {
+      isWebStorm = true;
+      webStormPrefFolderName = webStormPrefFolderName.split('/').slice(-1)[0];
+      // console.log('webStormPrefFolderName:',webStormPrefFolderName);
+  
+      // ensure folders are excluded from project view
+      let projectViewWebStormPath =
+        isMac
+          ? process.env.HOME +
+            `/Library/Preferences/${webStormPrefFolderName}/options/projectView.xml`
+          : join(__dirname, webStormPrefFolderName, 'config');
+      if (windowsHome) {
+        projectViewWebStormPath = join(windowsHome, webStormPrefFolderName, 'config');
+      }
+
+      let projectView = fs.readFileSync(projectViewWebStormPath, "UTF-8");
+      if (projectView) {
+        // console.log('projectView:', projectView);
+        xml2js.parseString(projectView, (err, settings) => {
+          // console.log(util.inspect(settings, false, null));
+          if (settings && settings.application && settings.application.component && settings.application.component.length) {
+            const builder = new xml2js.Builder({ headless: true });
+
+            const sharedSettingsIndex = (<Array<any>>settings.application.component).findIndex(c => c.$.name === 'ProjectViewSharedSettings');
+            if (sharedSettingsIndex > -1) {
+              const sharedSettings = settings.application.component[sharedSettingsIndex];
+              if (sharedSettings.option && sharedSettings.option.length) {
+                const showExcludedFilesIndex = sharedSettings.option.findIndex(o => o.$.name === 'showExcludedFiles');
+                if (showExcludedFilesIndex > -1) {
+                  settings.application.component[sharedSettingsIndex].option[showExcludedFilesIndex].$.value = `${!isExcluding}`;
+                } else {
+                  settings.application.component[sharedSettingsIndex].option.push(webStormExcludedViewNode(isExcluding));
+                }
+              } else {
+                settings.application.component[sharedSettingsIndex].option = [
+                  webStormExcludedViewNode(isExcluding)
+                ];
+              }
+              settings = builder.buildObject(settings);
+            } else {
+              (<Array<any>>settings.application.component).push({
+                $: 'ProjectViewSharedSettings',
+                option: [
+                  webStormExcludedViewNode(isExcluding)
+                ]
+              });
+              settings = builder.buildObject(settings);
+            }
+          } else {
+            // create projectView.xml
+            settings = createWebStormProjectView(isExcluding);
+          }
+          // modify projectView
+          // console.log('settings:', settings);
+          fs.writeFileSync(
+            projectViewWebStormPath,
+            settings
+          );
+        });
+      } else {
+        // create projectView.xml
+        fs.writeFileSync(
+          projectViewWebStormPath,
+          createWebStormProjectView(isExcluding)
         );
       }
     }
@@ -761,34 +863,70 @@ export function updateIDESettings(
           when: "$(basename).ts"
         }
       };
-      const workspaceSettingsPath = join(cwd, ".vscode/settings.json");
-      // console.log('workspaceSettingsPath:',workspaceSettingsPath);
-      let workspaceSettingsJson: any = {};
-      if (fs.existsSync(workspaceSettingsPath)) {
-        const workspaceSettings = fs.readFileSync(
+
+      if (isVsCode) {
+        const workspaceSettingsPath = join(cwd, ".vscode/settings.json");
+        // console.log('workspaceSettingsPath:',workspaceSettingsPath);
+        let workspaceSettingsJson: any = {};
+        if (fs.existsSync(workspaceSettingsPath)) {
+          const workspaceSettings = fs.readFileSync(
+            workspaceSettingsPath,
+            "UTF-8"
+          );
+          workspaceSettingsJson = JSON.parse(workspaceSettings);
+          const exclude = workspaceSettingsJson["files.exclude"];
+          workspaceSettingsJson["files.exclude"] = Object.assign(
+            exclude,
+            workspaceUpdates
+          );
+        } else {
+          // console.log('creating workspace settings...');
+          fs.mkdirSync(".vscode");
+          workspaceSettingsJson["files.exclude"] = workspaceUpdates;
+        }
+        fs.writeFileSync(
           workspaceSettingsPath,
-          "UTF-8"
+          JSON.stringify(workspaceSettingsJson, null, 2)
         );
-        workspaceSettingsJson = JSON.parse(workspaceSettings);
-        const exclude = workspaceSettingsJson["files.exclude"];
-        workspaceSettingsJson["files.exclude"] = Object.assign(
-          exclude,
-          workspaceUpdates
-        );
-      } else {
-        // console.log('creating workspace settings...');
-        fs.mkdirSync(".vscode");
-        workspaceSettingsJson["files.exclude"] = workspaceUpdates;
+      } 
+
+      if (isWebStorm) {
+
       }
-      fs.writeFileSync(
-        workspaceSettingsPath,
-        JSON.stringify(workspaceSettingsJson, null, 2)
-      );
+
     }
   } catch (err) {
     // console.warn('IDE Settings could not be updated at this time:', err);
   }
   return tree;
+}
+
+export function createWebStormProjectView(isExcluding: boolean) {
+  const projectViewObject = { 
+    application: { 
+      component: [ 
+        { 
+          '$': { 
+            name: 'ProjectViewSharedSettings' 
+          },
+          option: [ 
+            webStormExcludedViewNode(isExcluding) 
+          ] 
+        } 
+      ] 
+    } 
+  };
+  const builder = new xml2js.Builder({ headless: true });
+  return builder.buildObject(projectViewObject);
+}
+
+export function webStormExcludedViewNode(isExcluding: boolean) {
+  return {
+    $: {
+      name: 'showExcludedFiles',
+      value: `${!isExcluding}`
+    }
+  };
 }
 
 /**

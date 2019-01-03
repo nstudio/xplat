@@ -5,7 +5,6 @@ import {
   move,
   template,
   mergeWith,
-  TemplateOptions,
   Tree,
   SchematicContext,
   // SchematicsException,
@@ -237,7 +236,7 @@ function adjustBarrelIndex(indexFilePath: string): Rule {
 }
 
 function getTemplateOptions(options: featureOptions) {
-  return <TemplateOptions>{
+  return {
     ...(options as any),
     name: featureName,
     npmScope: getNpmScope(),
