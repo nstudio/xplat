@@ -24,6 +24,11 @@
       "schema": "./app.electron/schema.json",
       "description": "Create an Electron app."
     },
+    "app.nest": {
+      "factory": "./app.nest",
+      "schema": "./app.nest/schema.json",
+      "description": "Create an Nest node app."
+    },
     "mode": {
       "factory": "./mode",
       "schema": "./mode/schema.json",

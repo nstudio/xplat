@@ -1,0 +1,15 @@
+{
+  "name": "nest-<%= utils.sanitize(name) %>",
+  "version": "1.0.0",
+  "description": "<%= utils.classify(name) %> description.",
+  "license": "MIT",
+  "main": "src/main.ts",
+  "author": {
+    "name": "Your name",
+    "email": "name@company.com"
+  },
+  "homepage": "https://nstudio.io/xplat",
+  "repository": {
+    "url": "https://github.com/nstudio/xplat"
+  }
+}
