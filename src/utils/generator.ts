@@ -4,7 +4,6 @@ import {
   move,
   template,
   mergeWith,
-  TemplateOptions,
   branchAndMerge,
   chain,
   noop,
@@ -395,7 +394,7 @@ export function addToFeature(
     return branchAndMerge(
       mergeWith(
         apply(url(`./${extra}_files`), [
-          template(<TemplateOptions>{
+          template({
             ...(options as any),
             name: options.name.toLowerCase(),
             forSubFolder,

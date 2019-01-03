@@ -8,7 +8,6 @@ import {
   template,
   mergeWith,
   branchAndMerge,
-  TemplateOptions,
   SchematicContext,
   SchematicsException,
   externalSchematic,
@@ -78,7 +77,7 @@ function addAppFiles(options: ApplicationOptions, extra: string = ""): Rule {
   return branchAndMerge(
     mergeWith(
       apply(url(`./_${extra}files`), [
-        template(<TemplateOptions>{
+        template({
           ...(options as any),
           npmScope: getNpmScope(),
           prefix: getPrefix(),
