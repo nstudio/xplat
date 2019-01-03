@@ -215,8 +215,8 @@ export function addRootDeps(
     };
     deps.push(dep);
 
-    //TODO: fail when call script install. Temporary disable for nestjs install
     if (!targetPlatforms.nest) {
+      // if just setting up workspace with nest, we don't need frontend scss
       dep = {
         name: `@${getNpmScope()}/scss`,
         version: "file:libs/scss",
@@ -377,7 +377,7 @@ export function addRootDeps(
 
       dep = {
         name: "npm-run-all",
-        version: "4.1.3",
+        version: "^4.1.5",
         type: "devDependency"
       };
       deps.push(dep);
