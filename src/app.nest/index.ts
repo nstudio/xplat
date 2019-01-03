@@ -9,7 +9,6 @@ import {
   apply,
   url,
   template,
-  TemplateOptions,
   move,
   Rule,
   noop
@@ -104,7 +103,7 @@ function addAppFiles(
   return branchAndMerge(
     mergeWith(
       apply(url(`./_${sample}files`), [
-        template(<TemplateOptions>{
+        template({
           ...(options as any),
           utils: stringUtils,
           npmScope: getNpmScope(),
