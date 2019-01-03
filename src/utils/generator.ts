@@ -69,14 +69,17 @@ export function generate(type: IGenerateType, options) {
     for (const name of projects) {
       const nameParts = name.split("-");
       const platPrefix = nameParts[0];
-      const platSuffix = nameParts[nameParts.length-1];
+      const platSuffix = nameParts[nameParts.length - 1];
       if (
         supportedPlatforms.includes(platPrefix) &&
         !platforms.includes(platPrefix)
       ) {
         // if project name is prefixed with supported platform and not already added
         platforms.push(platPrefix);
-      } else if (supportedPlatforms.includes(platSuffix) && !platforms.includes(platSuffix)) {
+      } else if (
+        supportedPlatforms.includes(platSuffix) &&
+        !platforms.includes(platSuffix)
+      ) {
         // if project name is suffixed with supported platform and not already added
         platforms.push(platSuffix);
       }
@@ -304,6 +307,32 @@ export function generate(type: IGenerateType, options) {
     (tree: Tree, context: SchematicContext) =>
       !options.projects && targetPlatforms.electron
         ? adjustModule(type, options, "xplat/electron")(tree, context)
+        : noop()(tree, context),
+    /**
+     * NEST
+     **/
+    // add for nest
+    (tree: Tree, context: SchematicContext) =>
+      !options.projects && targetPlatforms.nest
+        ? addToFeature(type, options, "xplat/nest", tree)(tree, context)
+        : noop()(tree, context),
+    // adjust nest barrel
+    (tree: Tree, context: SchematicContext) =>
+      !options.projects && targetPlatforms.nest
+        ? adjustBarrel(type, options, "xplat/nest")(tree, context)
+        : noop()(tree, context),
+    // add index barrel if needed
+    (tree: Tree, context: SchematicContext) =>
+      options.needsIndex
+        ? addToFeature(type, options, "xplat/nest", tree, "_index")(
+            tree,
+            context
+          )
+        : noop()(tree, context),
+    // adjust feature module metadata if needed
+    (tree: Tree, context: SchematicContext) =>
+      !options.projects && targetPlatforms.nest
+        ? adjustModule(type, options, "xplat/nest")(tree, context)
         : noop()(tree, context),
 
     // project handling

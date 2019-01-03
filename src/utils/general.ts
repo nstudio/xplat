@@ -21,16 +21,29 @@ import * as ts from "typescript";
 const util = require('util');
 const xml2js = require('xml2js');
 
-export const supportedPlatforms = ["web", "nativescript", "ionic", "electron"];
+export const supportedPlatforms = [
+  "web",
+  "nativescript",
+  "ionic",
+  "electron",
+  "nest"
+];
 export interface ITargetPlatforms {
   web?: boolean;
   nativescript?: boolean;
   ionic?: boolean;
   electron?: boolean;
   ssr?: boolean;
+  nest?: boolean;
 }
 
-export type IDevMode = "web" | "nativescript" | "ionic" | "electron" | "fullstack";
+export type IDevMode =
+  | "web"
+  | "nativescript"
+  | "ionic"
+  | "electron"
+  | "nest"
+  | "fullstack";
 
 export interface NodeDependency {
   name: string;
@@ -168,7 +181,10 @@ export function prerun(prefixArg?: string, init?: boolean) {
 
 export function sanitizeCommaDelimitedArg(input: string): Array<string> {
   if (input) {
-    return input.split(",").filter(i => !!i).map(i => i.trim().toLowerCase());
+    return input
+      .split(",")
+      .filter(i => !!i)
+      .map(i => i.trim().toLowerCase());
   }
   return [];
 }
@@ -199,12 +215,15 @@ export function addRootDeps(
     };
     deps.push(dep);
 
-    dep = {
-      name: `@${getNpmScope()}/scss`,
-      version: "file:libs/scss",
-      type: "dependency"
-    };
-    deps.push(dep);
+    if (!targetPlatforms.nest) {
+      // if just setting up workspace with nest, we don't need frontend scss
+      dep = {
+        name: `@${getNpmScope()}/scss`,
+        version: "file:libs/scss",
+        type: "dependency"
+      };
+      deps.push(dep);
+    }
 
     dep = {
       name: "reflect-metadata",
@@ -268,35 +287,35 @@ export function addRootDeps(
         type: "dependency"
       };
       deps.push(dep);
-  
+
       dep = {
         name: "@ionic-native/splash-screen",
         version: "^5.0.0-beta.14",
         type: "dependency"
       };
       deps.push(dep);
-  
+
       dep = {
         name: "@ionic-native/status-bar",
         version: "^5.0.0-beta.14",
         type: "dependency"
       };
       deps.push(dep);
-  
+
       dep = {
         name: "@ionic/angular",
         version: "^4.0.0-beta.3",
         type: "dependency"
       };
       deps.push(dep);
-  
+
       dep = {
         name: "@ionic/ng-toolkit",
         version: "~1.0.0",
         type: "dependency"
       };
       deps.push(dep);
-  
+
       dep = {
         name: "@ionic/schematics-angular",
         version: "~1.0.0",
@@ -308,72 +327,222 @@ export function addRootDeps(
     /** ELECTRON */
     if (targetPlatforms.electron) {
       dep = {
-        name: 'electron',
-        version: '2.0.8',
-        type: 'devDependency'
+        name: "electron",
+        version: "2.0.8",
+        type: "devDependency"
       };
       deps.push(dep);
 
       dep = {
-        name: 'electron-builder',
-        version: '20.28.4',
-        type: 'devDependency'
+        name: "electron-builder",
+        version: "20.28.4",
+        type: "devDependency"
       };
       deps.push(dep);
 
       dep = {
-        name: 'electron-installer-dmg',
-        version: '1.0.0',
-        type: 'devDependency'
+        name: "electron-installer-dmg",
+        version: "1.0.0",
+        type: "devDependency"
       };
       deps.push(dep);
 
       dep = {
-        name: 'electron-packager',
-        version: '12.1.0',
-        type: 'devDependency'
+        name: "electron-packager",
+        version: "12.1.0",
+        type: "devDependency"
       };
       deps.push(dep);
 
       dep = {
-        name: 'electron-reload',
-        version: '1.2.5',
-        type: 'devDependency'
+        name: "electron-reload",
+        version: "1.2.5",
+        type: "devDependency"
       };
       deps.push(dep);
 
       dep = {
-        name: 'electron-store',
-        version: '2.0.0',
-        type: 'devDependency'
+        name: "electron-store",
+        version: "2.0.0",
+        type: "devDependency"
       };
       deps.push(dep);
 
       dep = {
-        name: 'electron-updater',
-        version: '3.1.2',
-        type: 'devDependency'
+        name: "electron-updater",
+        version: "3.1.2",
+        type: "devDependency"
       };
       deps.push(dep);
 
       dep = {
-        name: 'npm-run-all',
-        version: '4.1.3',
-        type: 'devDependency'
+        name: "npm-run-all",
+        version: "^4.1.5",
+        type: "devDependency"
       };
       deps.push(dep);
 
       dep = {
-        name: 'npx',
-        version: '10.2.0',
-        type: 'devDependency'
+        name: "npx",
+        version: "10.2.0",
+        type: "devDependency"
       };
       deps.push(dep);
 
       dep = {
-        name: 'wait-on',
-        version: '2.1.0',
-        type: 'devDependency'
+        name: "wait-on",
+        version: "2.1.0",
+        type: "devDependency"
+      };
+      deps.push(dep);
+    }
+
+    /** NESTJS */
+    if (targetPlatforms.nest) {
+      dep = {
+        name: "@nestjs/common",
+        version: "^5.3.0",
+        type: "dependency"
+      };
+      deps.push(dep);
+
+      dep = {
+        name: "@nestjs/core",
+        version: "^5.3.0",
+        type: "dependency"
+      };
+      deps.push(dep);
+
+      dep = {
+        name: "@nestjs/testing",
+        version: "^5.3.0",
+        type: "dependency"
+      };
+      deps.push(dep);
+
+      dep = {
+        name: "@nestjs/typeorm",
+        version: "^5.2.2",
+        type: "dependency"
+      };
+      deps.push(dep);
+
+      dep = {
+        name: "@nestjs/websockets",
+        version: "^5.5.0",
+        type: "dependency"
+      };
+      deps.push(dep);
+
+      dep = {
+        name: "@nestjs/microservices",
+        version: "^5.5.0",
+        type: "dependency"
+      };
+      deps.push(dep);
+
+      dep = {
+        name: "typeorm",
+        version: "^0.2.9",
+        type: "dependency"
+      };
+      deps.push(dep);
+
+      dep = {
+        name: "cache-manager",
+        version: "^2.9.0",
+        type: "dependency"
+      };
+      deps.push(dep);
+
+      dep = {
+        name: "helmet",
+        version: "^3.15.0",
+        type: "dependency"
+      };
+      deps.push(dep);
+
+      dep = {
+        name: "csurf",
+        version: "^1.9.0",
+        type: "dependency"
+      };
+      deps.push(dep);
+
+      dep = {
+        name: "express-rate-limit",
+        version: "^3.3.2",
+        type: "dependency"
+      };
+      deps.push(dep);
+
+      dep = {
+        name: "dotenv",
+        version: "^6.2.0",
+        type: "dependency"
+      };
+      deps.push(dep);
+
+      dep = {
+        name: "compression",
+        version: "^1.7.3",
+        type: "dependency"
+      };
+      deps.push(dep);
+
+      dep = {
+        name: "@types/node",
+        version: "^9.3.0",
+        type: "devDependency"
+      };
+      deps.push(dep);
+
+      dep = {
+        name: "ts-loader",
+        version: "^4.0.0",
+        type: "devDependency"
+      };
+      deps.push(dep);
+
+      dep = {
+        name: "ts-node",
+        version: "^7.0.0",
+        type: "devDependency"
+      };
+      deps.push(dep);
+
+      dep = {
+        name: "npm-run-all",
+        version: "^4.1.5",
+        type: "devDependency"
+      };
+      deps.push(dep);
+
+      dep = {
+        name: "@types/jest",
+        version: "^20.0.8",
+        type: "devDependency"
+      };
+      deps.push(dep);
+
+      dep = {
+        name: "jest",
+        version: "^20.0.4",
+        type: "devDependency"
+      };
+      deps.push(dep);
+
+      dep = {
+        name: "ts-jest",
+        version: "^20.0.14",
+        type: "devDependency"
+      };
+      deps.push(dep);
+
+      dep = {
+        name: "supertest",
+        version: "^3.0.0",
+        type: "devDependency"
       };
       deps.push(dep);
     }
@@ -604,7 +773,8 @@ fs.readFile(f_angular, 'utf8', function (err, data) {
   fs.writeFile(f_angular, result, 'utf8', function (err) {
     if (err) return console.log(err);
   });
-});`);
+});`
+      );
     }
     const postinstallElectron = "/tools/electron/postinstall.js";
     if (!tree.exists(postinstallElectron)) {
@@ -626,7 +796,8 @@ fs.readFile(f_angular, 'utf8', function (err, data) {
   fs.writeFile(f_angular, result, 'utf8', function (err) {
     if (err) return console.log(err);
   });
-});`);
+});`
+      );
     }
     return tree;
   };
