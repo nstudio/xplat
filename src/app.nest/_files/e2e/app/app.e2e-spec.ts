@@ -1,16 +1,16 @@
-import * as request from 'supertest';
+import { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
+import * as request from 'supertest';
 import { ApplicationModule } from '../../src/app.module';
 import { AppService } from '../../src/app.service';
-import { INestApplication } from '@nestjs/common';
 
 describe('Application', () => {
   let app: INestApplication;
-  let appService = { get: () => 'Hello world' };
+  let appService = { getHello: () => 'Hello world' };
 
   beforeAll(async () => {
     const module = await Test.createTestingModule({
-      imports: [ApplicationModule]
+      imports: [ApplicationModule],
     })
       .overrideProvider(AppService)
       .useValue(appService)
@@ -24,7 +24,7 @@ describe('Application', () => {
     return request(app.getHttpServer())
       .get('/')
       .expect(200)
-      .expect(appService.get());
+      .expect(appService.getHello());
   });
 
   afterAll(async () => {
