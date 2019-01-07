@@ -50,7 +50,7 @@ describe("pipe schematic", () => {
     );
     let options: GenerateOptions = { ...defaultOptions };
     tree = schematicRunner.runSchematic("pipe", options, tree);
-    const files = tree.files;
+    let files = tree.files;
     // console.log(files.slice(91,files.length));
 
     // component
@@ -66,6 +66,39 @@ describe("pipe schematic", () => {
     // console.log(content);
     expect(content.indexOf(`@Pipe({`)).toBeGreaterThanOrEqual(0);
     expect(content.indexOf(`name: 'truncate'`)).toBeGreaterThanOrEqual(0);
+
+    let modulePath = '/libs/features/ui/ui.module.ts';
+    let moduleContent = getFileContent(tree, modulePath);
+
+    // console.log(modulePath + ':');
+    // console.log(moduleContent);
+    expect(moduleContent.indexOf(`...PIPES`)).toBeGreaterThanOrEqual(0);
+
+    options = { ...defaultOptions, feature: 'foo' };
+    tree = schematicRunner.runSchematic("pipe", options, tree);
+    files = tree.files;
+    // console.log(files.slice(91,files.length));
+
+    // component
+    expect(
+      files.indexOf("/libs/features/foo/pipes/truncate.pipe.ts")
+    ).toBeGreaterThanOrEqual(0);
+
+    // file content
+    content = getFileContent(
+      tree,
+      "/libs/features/foo/pipes/truncate.pipe.ts"
+    );
+    // console.log(content);
+    expect(content.indexOf(`@Pipe({`)).toBeGreaterThanOrEqual(0);
+    expect(content.indexOf(`name: 'truncate'`)).toBeGreaterThanOrEqual(0);
+
+    modulePath = '/libs/features/foo/foo.module.ts';
+    moduleContent = getFileContent(tree, modulePath);
+
+    // console.log(modulePath + ':');
+    // console.log(moduleContent);
+    expect(moduleContent.indexOf(`...FOO_PIPES`)).toBeGreaterThanOrEqual(0);
   });
 
   it("should create pipe in libs and handle camel case properly", () => {
@@ -94,7 +127,7 @@ describe("pipe schematic", () => {
       },
       tree
     );
-    let options: GenerateOptions = { 
+    let options: GenerateOptions = {
       ...defaultOptions,
       name: 'test-with-dashes'
     };

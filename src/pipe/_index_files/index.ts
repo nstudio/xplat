@@ -1,3 +1,11 @@
 import { <%= utils.classify(name) %>Pipe } from './<%= name %>.pipe';
 
-export const <%= utils.sanitize(name).toUpperCase() %>_PIPES = [<%= utils.classify(name) %>Pipe];
+<% if (feature) { %>
+export const <%= utils.sanitize(feature).toUpperCase() %>_PIPES = [
+<% } else { %>
+export const PIPES = [
+<% } %>
+   <%= utils.classify(name) %>Pipe
+];
+
+export * from  './<%= name %>.pipe';
