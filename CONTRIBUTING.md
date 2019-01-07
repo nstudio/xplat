@@ -94,6 +94,10 @@ The scope must be one of the following:
 * generators
 * admin
 * scripts
+* electron
+* ionic
+* nativescript
+* nest
 
 #### Subject
 
