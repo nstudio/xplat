@@ -1,11 +1,23 @@
+<a name="7.2.0"></a>
+# [7.2.0](https://github.com/nstudio/xplat/compare/7.1.0...7.2.0) (2019-01-07)
+
+
+### Features
+
+* **nest:** code style updates, remove redundant libs ([#70](https://github.com/nstudio/xplat/issues/70)) ([72f0ddf](https://github.com/nstudio/xplat/commit/72f0ddf))
+* **nest:** init support for nestjs framework ([#65](https://github.com/nstudio/xplat/issues/65)) ([d49c859](https://github.com/nstudio/xplat/commit/d49c859))
+
+
+
 <a name="7.1.0"></a>
-# 7.1.0 (2018-12-14)
+# [7.1.0](https://github.com/nstudio/xplat/compare/67b9879...7.1.0) (2018-12-14)
 
 ### Features
 
 * **generators:** updates for NativeScript 5.1.0 and support for Angular 7.1.0 ([#62](https://github.com/nstudio/xplat/issues/62)) ([7ff77f8](https://github.com/nstudio/xplat/commit/7ff77f8))
 
-# 7.0.x and below release changes
+<a name="7.0.0"></a>
+# [7.0.0](https://github.com/nstudio/xplat)
 
 ### Bug Fixes
 

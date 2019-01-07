@@ -19,8 +19,13 @@ With the strength of [TypeScript](https://www.typescriptlang.org/) paired with t
 ## Currently supported platforms 
 
 * [Electron](https://electronjs.org/)
+  > Build cross platform desktop apps with JavaScript, HTML, and CSS.
 * [Ionic](https://ionicframework.com/)
+  > Build amazing apps in one codebase, for any platform, with the web.
 * [NativeScript](https://www.nativescript.org/)
+  > Open source framework for building truly native mobile apps with Angular, Vue.js, TypeScript, or JavaScript.
+* [Nest](https://nestjs.com/)
+  > A progressive Node.js framework for building efficient, reliable and scalable server-side applications.
 
 ## Documentation
 
