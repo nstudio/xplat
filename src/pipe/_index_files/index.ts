@@ -1,7 +1,11 @@
 import { <%= utils.classify(name) %>Pipe } from './<%= name %>.pipe';
 
+<% if (feature) { %>
 export const <%= utils.sanitize(feature).toUpperCase() %>_PIPES = [
-  <%= utils.classify(name) %>Pipe
+<% } else { %>
+export const PIPES = [
+<% } %>
+   <%= utils.classify(name) %>Pipe
 ];
 
 export * from  './<%= name %>.pipe';
