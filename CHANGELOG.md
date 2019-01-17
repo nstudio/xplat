@@ -1,11 +1,27 @@
-<a name="7.1.0"></a>
-# 7.1.0 (2018-12-14)
+<a name="7.2.1"></a>
+## [7.2.1](https://github.com/nstudio/xplat/compare/7.2.0...7.2.1) (2019-01-08)
+
+
+### Bug Fixes
+
+* **generators:** Inconsistent named feature arrays. ([#69](https://github.com/nstudio/xplat/issues/69)) ([e664ce6](https://github.com/nstudio/xplat/commit/e664ce6))
+
+
+
+<a name="7.2.0"></a>
+# [7.2.0](https://github.com/nstudio/xplat/compare/7.1.0...7.2.0) (2019-01-07)
+
 
 ### Features
 
-* **generators:** updates for NativeScript 5.1.0 and support for Angular 7.1.0 ([#62](https://github.com/nstudio/xplat/issues/62)) ([7ff77f8](https://github.com/nstudio/xplat/commit/7ff77f8))
+* **nest:** code style updates, remove redundant libs ([#70](https://github.com/nstudio/xplat/issues/70)) ([72f0ddf](https://github.com/nstudio/xplat/commit/72f0ddf))
+* **nest:** init support for nestjs framework ([#65](https://github.com/nstudio/xplat/issues/65)) ([d49c859](https://github.com/nstudio/xplat/commit/d49c859))
 
-# 7.0.x and below release changes
+
+
+<a name="7.1.0"></a>
+# [7.1.0](https://github.com/nstudio/xplat/compare/67b9879...7.1.0) (2018-12-14)
+
 
 ### Bug Fixes
 
@@ -32,6 +48,8 @@
 * **generators:** NativeScript 5.0 with HMR ([#50](https://github.com/nstudio/xplat/issues/50)) ([d072e19](https://github.com/nstudio/xplat/commit/d072e19))
 * **generators:** ng add support and cleanup ([#13](https://github.com/nstudio/xplat/issues/13)) ([5d5e8df](https://github.com/nstudio/xplat/commit/5d5e8df))
 * **generators:** subfolder option ([#27](https://github.com/nstudio/xplat/issues/27)) ([5559bb9](https://github.com/nstudio/xplat/commit/5559bb9))
+* **generators:** updates for NativeScript 5.1.0 and support for Angular 7.1.0 ([#62](https://github.com/nstudio/xplat/issues/62)) ([7ff77f8](https://github.com/nstudio/xplat/commit/7ff77f8))
 * **Ionic:** update typescript depedency and isCapacitorNative fix ([#31](https://github.com/nstudio/xplat/issues/31)) ([6049c92](https://github.com/nstudio/xplat/commit/6049c92))
+
 
 

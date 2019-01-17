@@ -36,9 +36,11 @@ describe('directive schematic', () => {
       name: 'foo',
       platforms: 'nativescript,web'
     }, tree);
-    const options: GenerateOptions = { ...defaultOptions };
+    let options: GenerateOptions = { ...defaultOptions };
+
+    // Directives without the feature option are added to the ui-feature
     tree = schematicRunner.runSchematic('directive', options, tree);
-    const files = tree.files;
+    let files = tree.files;
     // console.log(files.slice(91,files.length));
 
     // component
@@ -52,9 +54,32 @@ describe('directive schematic', () => {
 
     let modulePath = '/libs/features/ui/ui.module.ts';
     let moduleContent = getFileContent(tree, modulePath);
+
     // console.log(modulePath + ':');
     // console.log(moduleContent);
     expect(moduleContent.indexOf(`...UI_DIRECTIVES`)).toBeGreaterThanOrEqual(0);
+
+    // Directives added to the foo-feature
+    options = { ...defaultOptions, feature: 'foo' };
+    tree = schematicRunner.runSchematic('directive', options, tree);
+    files = tree.files;
+    // console.log(files.slice(91,files.length));
+
+    // component
+    expect(files.indexOf('/libs/features/foo/directives/active-link.directive.ts')).toBeGreaterThanOrEqual(0);
+
+    // file content
+    content = getFileContent(tree, '/libs/features/foo/directives/active-link.directive.ts');
+    // console.log(content);
+    expect(content.indexOf(`@Directive({`)).toBeGreaterThanOrEqual(0);
+    expect(content.indexOf(`selector: '[active-link]'`)).toBeGreaterThanOrEqual(0);
+
+    modulePath = '/libs/features/foo/foo.module.ts';
+    moduleContent = getFileContent(tree, modulePath);
+
+    // console.log(modulePath + ':');
+    // console.log(moduleContent);
+    expect(moduleContent.indexOf(`...FOO_DIRECTIVES`)).toBeGreaterThanOrEqual(0);
   });
 
   it('should create directive for specified projects only', () => {
@@ -72,7 +97,7 @@ describe('directive schematic', () => {
       projects: 'nativescript-viewer,web-viewer,ionic-viewer',
       onlyProject: true
     }, tree);
-    const options: GenerateOptions = { 
+    const options: GenerateOptions = {
       name: 'active-link',
       feature: 'foo',
       projects: 'nativescript-viewer,web-viewer,ionic-viewer'
@@ -111,4 +136,4 @@ describe('directive schematic', () => {
     // console.log(barrelIndex);
     expect(index.indexOf(`ActiveLinkDirective`)).toBeGreaterThanOrEqual(0);
   });
-}); 
+});

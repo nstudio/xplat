@@ -546,7 +546,7 @@ export function adjustBarrelIndex(
         }
       }
 
-      if (type === "component" || type === "service") {
+      if (type === "component" || type === "service" || type === 'pipe') {
         // export symbol from barrel
         if ((isBase || importIfSubFolder) && options.subFolder) {
           changes.push(
