@@ -50,6 +50,24 @@ npm publish --registry http://localhost:4873
 // then repeat Step #4 to install latest 
 ```
 
+If you get this error:
+
+```
+npm ERR! code EPUBLISHCONFLICT
+npm ERR! publish fail Cannot publish over existing version.
+npm ERR! publish fail Update the 'version' field in package.json and try again.
+npm ERR! publish fail 
+npm ERR! publish fail To automatically increment version numbers, see:
+npm ERR! publish fail     npm help version
+```
+
+You can simply unpublish and publish like this:
+
+```
+npm unpublish --registry http://localhost:4873 --force
+npm publish --registry http://localhost:4873
+```
+
 ### Unit Tests
 
 ```

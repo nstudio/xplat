@@ -13,8 +13,10 @@ if (typeof __UGLIFIED__ !== 'undefined' && __UGLIFIED__) {
 
 let options: AppOptions = {};
 if (module['hot']) {
+  <% if (routing || sample) { %>
   // attach to livesync hooks and perform navigation
   require('@<%= npmScope %>/nativescript').attachLivesyncNavigation();
+  <% } %>
   const hmrUpdate = require('nativescript-dev-webpack/hmr').hmrUpdate;
 
   options.hmrOptions = {
