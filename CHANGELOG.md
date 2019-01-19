@@ -1,3 +1,13 @@
+<a name="7.2.2"></a>
+## [7.2.2](https://github.com/nstudio/xplat/compare/7.2.1...7.2.2) (2019-01-19)
+
+
+### Bug Fixes
+
+* **scripts:** better handling of the nx formatter - add prettierignore ([#72](https://github.com/nstudio/xplat/issues/72)) ([c8c32da](https://github.com/nstudio/xplat/commit/c8c32da))
+
+
+
 <a name="7.2.1"></a>
 ## [7.2.1](https://github.com/nstudio/xplat/compare/7.2.0...7.2.1) (2019-01-08)
 
