@@ -1,3 +1,13 @@
+<a name="7.2.3"></a>
+## [7.2.3](https://github.com/nstudio/xplat/compare/7.2.2...7.2.3) (2019-01-20)
+
+
+### Bug Fixes
+
+* **ionic:** package correction and link fixes ([7b54500](https://github.com/nstudio/xplat/commit/7b54500))
+
+
+
 <a name="7.2.2"></a>
 ## [7.2.2](https://github.com/nstudio/xplat/compare/7.2.1...7.2.2) (2019-01-19)
 
