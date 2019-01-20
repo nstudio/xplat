@@ -8,13 +8,13 @@ import { TNSFontIconModule } from 'nativescript-ngx-fonticon';
 
 // libs
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { CoreModule, PlatformLanguageToken, WindowPlatformService } from '@<%= npmScope %>/core';<% if (sample) { %>
+import { CoreModule, PlatformLanguageToken, PlatformWindowToken } from '@<%= npmScope %>/core';<% if (sample) { %>
 import { ITEM_PROVIDERS } from '@<%= npmScope %>/features';<% } %>
 import { throwIfAlreadyLoaded } from '@<%= npmScope %>/utils';
 
 // app
 import { PROVIDERS } from './services';
-import { TNSWindowPlatformService } from './services/tns-window.service';
+import { TNSWindowService } from './services/tns-window.service';
 import { TNSTranslateLoader } from './services/tns-translate.loader';
 
 // factories
@@ -39,8 +39,8 @@ export function createTranslateLoader() {
         useFactory: platformLangFactory
       },
       {
-        provide: WindowPlatformService,
-        useClass: TNSWindowPlatformService
+        provide: PlatformWindowToken,
+        useClass: TNSWindowService
       }
     ]),
     TranslateModule.forRoot({

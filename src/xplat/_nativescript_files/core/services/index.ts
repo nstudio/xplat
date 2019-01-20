@@ -1,9 +1,9 @@
 import { AppService } from './app.service';
-import { TNSWindowPlatformService } from './tns-window.service';
+import { TNSWindowService } from './tns-window.service';
 
 export const PROVIDERS: any[] = [
   AppService,
-  TNSWindowPlatformService
+  TNSWindowService
 ];
 
 export * from './app.service';

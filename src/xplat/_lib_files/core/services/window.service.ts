@@ -1,34 +1,17 @@
 // angular
-import { Injectable, ViewContainerRef } from '@angular/core';
+import { Injectable, Inject, ViewContainerRef } from '@angular/core';
 
 // app
 import { isObject, isNativeScript } from '@<%= npmScope %>/utils';
-
-@Injectable()
-export class WindowPlatformService {
-  public navigator: any = {};
-  public location: any = {};
-  public localStorage: any;
-  public process: any;
-  public require: any;
-  public alert(msg: any) {}
-  public confirm(msg: any) {}
-  public setTimeout(handler: (...args: any[]) => void, timeout?: number) {
-    return 0;
-  }
-  public clearTimeout(timeoutId: number) {}
-  public setInterval(handler: (...args: any[]) => void, ms?: number, ...args: any[]) {
-    return 0;
-  }
-  public clearInterval(intervalId: number) {}
-
-  // ...You can expand support for more window methods as you need them here...
-}
+import { XPlatWindow } from '../models';
+import { PlatformWindowToken } from './tokens';
 
 @Injectable()
 export class WindowService {
 
-  constructor(private _platformWindow: WindowPlatformService) {}
+  constructor(
+    @Inject(PlatformWindowToken) private _platformWindow: XPlatWindow,
+  ) {}
 
   public get navigator() {
     return this._platformWindow.navigator;

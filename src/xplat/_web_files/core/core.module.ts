@@ -6,7 +6,7 @@ import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { throwIfAlreadyLoaded } from '@<%= npmScope %>/utils';
-import { CoreModule, PlatformLanguageToken, WindowPlatformService } from '@<%= npmScope %>/core';<% if (sample) { %>
+import { CoreModule, PlatformLanguageToken, PlatformWindowToken } from '@<%= npmScope %>/core';<% if (sample) { %>
 import { ITEM_PROVIDERS } from '@<%= npmScope %>/features';<% } %>
 
 // bring in custom web services here...
@@ -36,7 +36,7 @@ export function createTranslateLoader(http: HttpClient) {
         useFactory: platformLangFactory
       },
       {
-        provide: WindowPlatformService,
+        provide: PlatformWindowToken,
         useFactory: winFactory
       }
     ]),

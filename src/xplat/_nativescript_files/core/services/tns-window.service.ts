@@ -9,7 +9,7 @@ import * as timer from 'tns-core-modules/timer';
 import { isString } from '@<%= npmScope %>/utils';
 
 @Injectable()
-export class TNSWindowPlatformService {
+export class TNSWindowService {
   private _dialogOpened = false;
 
   public get navigator(): any {
