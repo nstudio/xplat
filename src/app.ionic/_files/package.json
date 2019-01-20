@@ -50,7 +50,6 @@
     "@ngx-translate/http-loader": "file:../../node_modules/@ngx-translate/http-loader",
     "@nrwl/nx": "file:../../node_modules/@nrwl/nx",
     "rxjs": "file:../../node_modules/rxjs",
-    "rxjs-compat": "file:../../node_modules/rxjs-compat",
     "zone.js": "file:../../node_modules/zone.js"
   },
   "devDependencies": {
