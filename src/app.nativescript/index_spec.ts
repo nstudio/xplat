@@ -103,4 +103,26 @@ describe('app.nativescript schematic', () => {
 
     expect(appModule).toMatch(`import { routeBase } from \'@${options.npmScope}/features\'`);
   });
+
+  it('should create all files of an app using groupByName', () => {
+    const options: ApplicationOptions = { ...defaultOptions };
+    options.groupByName = true;
+    // console.log('appTree:', appTree);
+    const tree = schematicRunner.runSchematic('app.nativescript', options, appTree);
+    const files = tree.files;
+    // console.log(files);
+    expect(files.indexOf('/apps/foo-nativescript/.gitignore')).toBeGreaterThanOrEqual(0);
+    expect(files.indexOf('/apps/foo-nativescript/package.json')).toBeGreaterThanOrEqual(0);
+    expect(files.indexOf('/apps/foo-nativescript/references.d.ts')).toBeGreaterThanOrEqual(0);
+    expect(files.indexOf('/apps/foo-nativescript/tsconfig.tns.json')).toBeGreaterThanOrEqual(0);
+    expect(files.indexOf('/apps/foo-nativescript/tsconfig.json')).toBeGreaterThanOrEqual(0);
+    expect(files.indexOf('/apps/foo-nativescript/webpack.config.js')).toBeGreaterThanOrEqual(0);
+
+    // tools
+    expect(files.indexOf('/apps/foo-nativescript/tools/xplat-postinstall.js')).toBeGreaterThanOrEqual(0);
+
+    const packageFile = getFileContent(tree, 'package.json');
+    // console.log(packageFile)
+    expect(packageFile.indexOf('start.foo.nativescript.ios')).toBeGreaterThanOrEqual(0);
+  });
 }); 

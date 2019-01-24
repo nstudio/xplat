@@ -4,6 +4,7 @@ export function createEmptyWorkspace(tree: Tree): Tree {
     tree.create('/angular.json', JSON.stringify({
         $schema: "./node_modules/@angular/cli/lib/config/schema.json",
         projects: {},
+        newProjectRoot: '',
         cli: {
             defaultCollection: "@nrwl/schematics"
         }
@@ -13,13 +14,26 @@ export function createEmptyWorkspace(tree: Tree): Tree {
         projects: {}
     }));
     tree.create('/.gitignore', '');
-    tree.create('/package.json', JSON.stringify({xplat: {prefix: 'tt'}}));
-    tree.create('/tsconfig.json', JSON.stringify({compilerOptions: {}}, null, 2));
+    tree.create('/package.json', JSON.stringify({ 
+      name: 'testing',
+      dependencies: {}, 
+      devDependencies: {}, 
+      xplat: {
+        prefix: 'tt'
+      }
+    }));
+    tree.create('/tsconfig.json', JSON.stringify({compilerOptions: { paths: {}}}));
     tree.create('/tslint.json', JSON.stringify({
-      "rulesDirectory": [
-        "node_modules/codelyzer",
-        "node_modules/@nrwl/schematics/src/tslint"
-      ]
+      rules: {
+        'nx-enforce-module-boundaries': [
+          true,
+          {
+            npmScope: '<%= npmScope %>',
+            lazyLoad: [],
+            allow: []
+          }
+        ]
+      }
     }));
     return tree;
 }

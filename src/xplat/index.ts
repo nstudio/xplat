@@ -66,7 +66,7 @@ export default function(options: xPlatOptions) {
   const sample = options.sample;
 
   return chain([
-    prerun(options.prefix, true),
+    prerun(options, true),
     // update gitignore to support xplat
     updateGitIgnore(),
     // add references to support xplat

@@ -1,8 +1,8 @@
-import { IDevMode } from '../utils';
+import { PlatformTypes } from '../utils';
 
 export interface Schema {
   /**
    * Development mode name
    */
-  name?: IDevMode;
+  name?: PlatformTypes;
 }

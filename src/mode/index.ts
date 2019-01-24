@@ -3,10 +3,10 @@ import {
   Tree,
 } from '@angular-devkit/schematics';
 
-import { IDevMode, updateIDESettings, supportedPlatforms, updateTsConfig } from '../utils';
+import { PlatformTypes, updateIDESettings, supportedPlatforms, updateTsConfig, prerun } from '../utils';
 import { Schema as xPlatOptions } from './schema';
 
-let name: IDevMode;
+let name: PlatformTypes;
 export default function (options: xPlatOptions) {
   if (!options.name) {
     name = 'fullstack';
@@ -16,6 +16,8 @@ export default function (options: xPlatOptions) {
   }
 
   return chain([
+    // init xplat settings
+    prerun(),
     // update tsconfig based on mode
     (tree: Tree) => updateExcludes(name)(tree),
     // update IDE settings
@@ -23,7 +25,7 @@ export default function (options: xPlatOptions) {
   ]);
 }
 
-function updateExcludes(devMode: IDevMode) {
+function updateExcludes(devMode: PlatformTypes) {
   return ( tree: Tree ) => {
     return updateTsConfig(tree, (tsConfig: any) => {
       if (tsConfig) {

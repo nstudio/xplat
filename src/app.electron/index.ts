@@ -13,7 +13,7 @@ import {
   noop
 } from '@angular-devkit/schematics';
 import { Schema as ApplicationOptions } from './schema';
-import { prerun, getPrefix, getNpmScope, stringUtils, addRootDeps, updateAngularProjects, updateNxProjects, formatFiles, getJsonFromFile, updatePackageScripts, addPostinstallers } from '../utils';
+import { prerun, getPrefix, getNpmScope, stringUtils, addRootDeps, updateAngularProjects, updateNxProjects, formatFiles, getJsonFromFile, updatePackageScripts, addPostinstallers, applyAppNamingConvention, getGroupByName, getAppName } from '../utils';
 
 export default function (options: ApplicationOptions) {
   if (!options.name) {
@@ -22,22 +22,21 @@ export default function (options: ApplicationOptions) {
   if (!options.target) {
     throw new SchematicsException(`Missing target argument. Provide the name of the web app in your workspace to use inside the electron app. ie, web-myapp`);
   }
-  const appPath = `electron-${options.name}`;
 
   return chain([
-    prerun(options.prefix),
+    prerun(options),
+    // adjust naming convention
+    applyAppNamingConvention(options, 'electron'),
     // create app files
-    (tree: Tree, context: SchematicContext) => addAppFiles(options, appPath)(tree, context),
+    (tree: Tree, context: SchematicContext) => addAppFiles(options, options.name)(tree, context),
     // add root package dependencies
     (tree: Tree) => addRootDeps(tree, {electron: true}),
     // add npm scripts
     (tree: Tree) => {
+      const platformApp = options.name.replace('-', '.');
       let fullTargetAppName = options.target;
-      let targetAppName = fullTargetAppName;
-      if (targetAppName.indexOf('web-') === 0) {
-        // normalize just the target app name
-        targetAppName = targetAppName.replace('web-', '');
-      }
+      let targetAppScript = fullTargetAppName.replace('-', '.');
+      
       const packageConfig = getJsonFromFile(tree, "package.json");
       const scripts = packageConfig.scripts || {};
       const postinstall = 'ELECTRON_BUILDER_ALLOW_UNRESOLVED_DEPENDENCIES=true npx electron-builder install-app-deps';
@@ -49,26 +48,26 @@ export default function (options: ApplicationOptions) {
       }
       scripts['postinstall.electron'] = 'node tools/electron/postinstall';
       scripts['postinstall.web'] = 'node tools/web/postinstall';
-      scripts[`build.electron.${options.name}`] = `npm run prepare.electron.${options.name} && ng build electron-${options.name} --prod --base-href ./`;
-      scripts[`build.electron.${options.name}.local`] = `npm run build.electron.${options.name} && electron dist/apps/electron-${options.name}`;
-      scripts[`build.electron.${options.name}.linux`] = `npm run build.electron.${options.name} && cd dist/apps/electron-${options.name} && npx electron-builder build --linux`;
-      scripts[`build.electron.${options.name}.windows`] = `npm run build.electron.${options.name} && cd dist/apps/electron-${options.name} && npx electron-builder build --windows`;
-      scripts[`build.electron.${options.name}.mac`] = `npm run build.electron.${options.name} && cd dist/apps/electron-${options.name} && npx electron-builder build --mac`;
-      scripts[`prepare.electron.${options.name}`] = `npm run postinstall.electron && tsc -p apps/electron-${options.name}/tsconfig.json`;
-      scripts[`serve.electron.${options.name}.target`] = `ng serve electron-${options.name}`;
-      scripts[`serve.electron.${options.name}`] = `wait-on http-get://localhost:4200/ && electron apps/electron-${options.name}/src --serve`;
-      scripts[`start.electron.${options.name}`] = `npm run prepare.electron.${options.name} && npm-run-all -p serve.electron.${options.name}.target serve.electron.${options.name}`;
+      scripts[`build.${platformApp}`] = `npm run prepare.${platformApp} && ng build ${options.name} --prod --base-href ./`;
+      scripts[`build.${platformApp}.local`] = `npm run build.${platformApp} && electron dist/apps/${options.name}`;
+      scripts[`build.${platformApp}.linux`] = `npm run build.${platformApp} && cd dist/apps/${options.name} && npx electron-builder build --linux`;
+      scripts[`build.${platformApp}.windows`] = `npm run build.${platformApp} && cd dist/apps/${options.name} && npx electron-builder build --windows`;
+      scripts[`build.${platformApp}.mac`] = `npm run build.${platformApp} && cd dist/apps/${options.name} && npx electron-builder build --mac`;
+      scripts[`prepare.${platformApp}`] = `npm run postinstall.electron && tsc -p apps/${options.name}/tsconfig.json`;
+      scripts[`serve.${platformApp}.target`] = `ng serve ${options.name}`;
+      scripts[`serve.${platformApp}`] = `wait-on http-get://localhost:4200/ && electron apps/${options.name}/src --serve`;
+      scripts[`start.${platformApp}`] = `npm run prepare.${platformApp} && npm-run-all -p serve.${platformApp}.target serve.${platformApp}`;
 
       // adjust web related scripts to account for postinstall hooks
-      const startWeb = scripts[`start.web.${targetAppName}`];
+      const startWeb = scripts[`start.${targetAppScript}`];
       const postinstallWeb = 'npm run postinstall.web';
 
       if (startWeb) {
         // prefix it
-        scripts[`start.web.${targetAppName}`] = `${postinstallWeb} && ${startWeb}`;
+        scripts[`start.${targetAppScript}`] = `${postinstallWeb} && ${startWeb}`;
       } else {
         // create to be consistent
-        scripts[`start.web.${targetAppName}`] = `${postinstallWeb} && ng serve ${fullTargetAppName}`;
+        scripts[`start.${targetAppScript}`] = `${postinstallWeb} && ng serve ${fullTargetAppName}`;
       }
       let startDefault = scripts[`start`];
       if (startDefault) {
@@ -124,7 +123,7 @@ export default function (options: ApplicationOptions) {
       }
  
       const projects = {};
-      const electronAppName = `electron-${options.name}`;
+      const electronAppName = options.name;
       projects[electronAppName] = targetConfig;
       // update to use electron module
       projects[electronAppName].architect.build.options.outputPath = `dist/apps/${electronAppName}`;
@@ -148,7 +147,7 @@ export default function (options: ApplicationOptions) {
     // nx.json
     (tree: Tree) => {
       const projects = {};
-      projects[`electron-${options.name}`] = {
+      projects[`${options.name}`] = {
         tags: []
       };
       return updateNxProjects(tree, projects);
@@ -166,10 +165,12 @@ export default function (options: ApplicationOptions) {
 
 function addAppFiles(options: ApplicationOptions, appPath: string, sample: string = ''): Rule {
   sample = '';
+  const appname = getAppName(options, 'electron');
   return branchAndMerge(
     mergeWith(apply(url(`./_${sample}files`), [
       template({
         ...options as any,
+        appname,
         utils: stringUtils,
         npmScope: getNpmScope(),
         prefix: getPrefix(),

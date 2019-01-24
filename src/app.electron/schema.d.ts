@@ -16,6 +16,10 @@ export interface Schema {
    */
   prefix?: string;
   /**
+   * Group by app name (appname-platform) instead of the default (platform-appname)
+   */
+  groupByName?: boolean;
+  /**
    * Skip installing dependencies
    */
   skipInstall?: boolean;

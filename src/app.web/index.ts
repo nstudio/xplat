@@ -21,6 +21,7 @@ import {
   getNpmScope,
   getPrefix,
   getJsonFromFile,
+  applyAppNamingConvention,
   updateJsonFile,
   formatFiles
 } from "../utils";
@@ -34,35 +35,33 @@ export default function(options: ApplicationOptions) {
     );
   }
   appName = options.name;
-  options.name = `web-${options.name}`;
 
   // ensure sass is used
   options.style = "scss";
 
-  // use src dir
-  options.sourceDir = "src";
-  // sample
-  const sample = options.sample;
-  const routing = options.routing;
-
   return chain([
-    prerun(options.prefix),
-    externalSchematic("@nrwl/schematics", "app", options),
+    prerun(options),
+    // adjust naming convention
+    applyAppNamingConvention(options, 'web'),
+    (tree: Tree, context: SchematicContext) => externalSchematic("@nrwl/schematics", "app", {
+      ...options,
+      skipInstall: true
+    })(tree, context),
+    (tree: Tree) => addAppFiles(options),
     (tree: Tree, context: SchematicContext) =>
-      addAppFiles(options)(tree, context),
-    (tree: Tree, context: SchematicContext) =>
-      sample || routing
-      ? addAppFiles(options, sample ? "sample" : "routing")(tree, context)
+      options.sample || options.routing
+      ? addAppFiles(options, options.sample ? "sample" : "routing")(tree, context)
       : noop()(tree, context),
     // adjust app files
     (tree: Tree) => adjustAppFiles(options, tree),
     // add start/clean scripts
     (tree: Tree) => {
+      const platformApp = options.name.replace('-', '.');
       const scripts = {};
       scripts[
         `clean`
       ] = `npx rimraf hooks node_modules package-lock.json && npm i`;
-      scripts[`start.web.${appName}`] = `ng serve ${options.name}`;
+      scripts[`start.${platformApp}`] = `ng serve ${options.name}`;
       return updatePackageScripts(tree, scripts);
     },
     options.skipFormat 
@@ -73,7 +72,6 @@ export default function(options: ApplicationOptions) {
 
 function addAppFiles(options: ApplicationOptions, extra: string = ""): Rule {
   extra = extra ? `${extra}_` : "";
-
   return branchAndMerge(
     mergeWith(
       apply(url(`./_${extra}files`), [

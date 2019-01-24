@@ -12,7 +12,7 @@ export default function(options: ApplicationOptions) {
   }
 
   return chain([
-    prerun(options.prefix, true),
+    prerun(options, true),
     externalSchematic("@nstudio/schematics", "xplat", options),
   ]);
 }

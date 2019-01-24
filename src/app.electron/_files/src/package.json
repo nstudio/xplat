@@ -1,7 +1,7 @@
 {
-  "name": "electron-<%= utils.sanitize(name) %>",
+  "name": "<%= utils.sanitize(appname) %>",
   "version": "1.0.0",
-  "description": "<%= utils.classify(name) %> description.",
+  "description": "<%= utils.classify(appname) %> description.",
   "main": "index.js",
   "author": {
     "name": "Your name",
@@ -13,14 +13,14 @@
   },
   "license": "MIT",
   "build": {
-    "appId": "com.company.<%= utils.classify(name) %>",
-    "productName": "<%= utils.classify(name) %>",
+    "appId": "com.company.<%= utils.sanitize(appname) %>",
+    "productName": "<%= utils.classify(appname) %>",
     "copyright": "Copyright © 2018-2019 <%= npmScope %>",
     "asar": false,
     "npmRebuild": false,
     "directories": {
       "buildResources": "icons",
-      "output": "../electron-<%= utils.sanitize(name) %>-packages"
+      "output": "../<%= utils.sanitize(name) %>-packages"
     },
     "mac": {
       "category": "public.app-category.developer-tools",
@@ -37,13 +37,13 @@
         "deb",
         "tar.gz"
       ],
-      "synopsis": "<%= utils.classify(name) %>",
+      "synopsis": "<%= utils.classify(appname) %>",
       "category": "Development"
     },
     "nsis": {
       "createDesktopShortcut": "always",
       "installerIcon": "icon.ico",
-      "artifactName": "<%= utils.classify(name) %>-Setup-${version}.${ext}"
+      "artifactName": "<%= utils.classify(appname) %>-Setup-${version}.${ext}"
     }
   }
 }

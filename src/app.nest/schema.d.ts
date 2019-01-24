@@ -4,6 +4,10 @@ export interface Schema {
    */
   name: string;
   /**
+   * Group by app name (appname-platform) instead of the default (platform-appname)
+   */
+  groupByName?: boolean;
+  /**
    * npm scope - auto detected from nx.json but can specify your own name
    */
   npmScope?: string;

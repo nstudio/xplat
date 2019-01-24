@@ -12,6 +12,10 @@ export interface Schema {
      */
     prefix?: string;
     /**
+     * Group by app name (appname-platform) instead of the default (platform-appname)
+     */
+    groupByName?: boolean;
+    /**
      * Use root routing file
      */
     routing?: boolean;

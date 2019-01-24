@@ -13,43 +13,45 @@ import {
   schematic,
   noop,
 } from '@angular-devkit/schematics';
-import { stringUtils, prerun, getNpmScope, getPrefix, addRootDeps, updatePackageScripts, updateAngularProjects, updateNxProjects, formatFiles } from '../utils';
+import { stringUtils, prerun, getNpmScope, getPrefix, addRootDeps, updatePackageScripts, updateAngularProjects, updateNxProjects, formatFiles, applyAppNamingConvention, getAppName } from '../utils';
 import { Schema as ApplicationOptions } from './schema';
 
 export default function (options: ApplicationOptions) {
   if (!options.name) {
     throw new SchematicsException(`Missing name argument. Provide a name for your Ionic app. Example: ng g app.ionic sample`);
   }
-  const appPath = `ionic-${options.name}`;
 
   return chain([
-    prerun(options.prefix),
+    prerun(options),
+    // adjust naming convention
+    applyAppNamingConvention(options, 'ionic'),
     // create app files
-    (tree: Tree, context: SchematicContext) => addAppFiles(options, appPath)(tree, context),
+    (tree: Tree, context: SchematicContext) => addAppFiles(options, options.name)(tree, context),
     // add root package dependencies
     (tree: Tree) => addRootDeps(tree, {ionic: true}),
     // add start/clean scripts
     (tree: Tree) => {
       const scripts = {};
+      const platformApp = options.name.replace('-', '.');
       // ensure convenient clean script is added for workspace
       scripts[`clean`] = `npx rimraf -- hooks node_modules package-lock.json && npm i`;
       // add convenient ionic scripts
-      scripts[`build.ionic.${options.name}`] = `cd apps/ionic-${options.name} && npm run build:web`;
-      scripts[`prepare.ionic.${options.name}`] = `npm run clean && npm run clean.ionic.${options.name} && npm run build.ionic.${options.name}`;
-      scripts[`prepare.ionic.${options.name}.ios`] = `npm run prepare.ionic.${options.name} && cd apps/ionic-${options.name} && npm run cap.add.ios`;
-      scripts[`prepare.ionic.${options.name}.android`] = `npm run prepare.ionic.${options.name} && cd apps/ionic-${options.name} && npm run cap.add.android`;
-      scripts[`open.ionic.${options.name}.ios`] = `cd apps/ionic-${options.name} && npm run cap.ios`;
-      scripts[`open.ionic.${options.name}.android`] = `cd apps/ionic-${options.name} && npm run cap.android`;
-      scripts[`sync.ionic.${options.name}`] = `cd apps/ionic-${options.name} && npm run cap.copy`;
-      scripts[`start.ionic.${options.name}`] = `cd apps/ionic-${options.name} && npm start`;
-      scripts[`clean.ionic.${options.name}`] = `cd apps/ionic-${options.name} && npx rimraf -- hooks node_modules platforms www plugins ios android package-lock.json && npm i && rimraf -- package-lock.json`;
+      scripts[`build.${platformApp}`] = `cd apps/${options.name} && npm run build:web`;
+      scripts[`prepare.${platformApp}`] = `npm run clean && npm run clean.${platformApp} && npm run build.${platformApp}`;
+      scripts[`prepare.${platformApp}.ios`] = `npm run prepare.${platformApp} && cd apps/${options.name} && npm run cap.add.ios`;
+      scripts[`prepare.${platformApp}.android`] = `npm run prepare.${platformApp} && cd apps/${options.name} && npm run cap.add.android`;
+      scripts[`open.${platformApp}.ios`] = `cd apps/${options.name} && npm run cap.ios`;
+      scripts[`open.${platformApp}.android`] = `cd apps/${options.name} && npm run cap.android`;
+      scripts[`sync.${platformApp}`] = `cd apps/${options.name} && npm run cap.copy`;
+      scripts[`start.${platformApp}`] = `cd apps/${options.name} && npm start`;
+      scripts[`clean.${platformApp}`] = `cd apps/${options.name} && npx rimraf -- hooks node_modules platforms www plugins ios android package-lock.json && npm i && rimraf -- package-lock.json`;
       return updatePackageScripts(tree, scripts);
     },
     (tree: Tree) => {
       const projects = {};
-      projects[`ionic-${options.name}`] = {
-        "root": `apps/ionic-${options.name}/`,
-        "sourceRoot": `apps/ionic-${options.name}/src`,
+      projects[`${options.name}`] = {
+        "root": `apps/${options.name}/`,
+        "sourceRoot": `apps/${options.name}/src`,
         "projectType": "application",
         "prefix": getPrefix(),
         "schematics": {
@@ -62,7 +64,7 @@ export default function (options: ApplicationOptions) {
     },
     (tree: Tree) => {
       const projects = {};
-      projects[`ionic-${options.name}`] = {
+      projects[`${options.name}`] = {
         tags: []
       };
       return updateNxProjects(tree, projects);
@@ -75,10 +77,12 @@ export default function (options: ApplicationOptions) {
 
 function addAppFiles(options: ApplicationOptions, appPath: string, sample: string = ''): Rule {
   sample = '';
+  const appname = getAppName(options, 'ionic');
   return branchAndMerge(
     mergeWith(apply(url(`./_${sample}files`), [
       template({
         ...options as any,
+        appname,
         utils: stringUtils,
         npmScope: getNpmScope(),
         prefix: getPrefix(),

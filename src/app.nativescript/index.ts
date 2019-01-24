@@ -13,41 +13,45 @@ import {
   schematic,
   noop,
 } from '@angular-devkit/schematics';
-import { stringUtils, prerun, getNpmScope, getPrefix, addRootDeps, updatePackageScripts, updateAngularProjects, updateNxProjects } from '../utils';
+import { stringUtils, prerun, getNpmScope, getPrefix, addRootDeps, updatePackageScripts, updateAngularProjects, updateNxProjects, applyAppNamingConvention, getGroupByName, getAppName } from '../utils';
 import { Schema as ApplicationOptions } from './schema';
 
 export default function (options: ApplicationOptions) {
   if (!options.name) {
     throw new SchematicsException(`Missing name argument. Provide a name for your NativeScript app. Example: ng g app.nativescript sample`);
   }
-  const appPath = `nativescript-${options.name}`;
 
   return chain([
-    prerun(options.prefix),
+    prerun(options),
+    // adjust naming convention
+    applyAppNamingConvention(options, 'nativescript'),
     // create app files
-    (tree: Tree, context: SchematicContext) => addAppFiles(options, appPath)(tree, context),
+    (tree: Tree, context: SchematicContext) => addAppFiles(options, options.name)(tree, context),
     // add sample feature
-    (tree: Tree, context: SchematicContext) => options.sample || options.routing ? addAppFiles(options, appPath, options.sample ? 'sample' : 'routing')(tree, context) : noop()(tree, context),
+    (tree: Tree, context: SchematicContext) => options.sample || options.routing ? addAppFiles(options, options.name, options.sample ? 'sample' : 'routing')(tree, context) : noop()(tree, context),
     // add app resources
-    schematic('app-resources', {
-      path: `apps/${appPath}/app`,
-    }),
+    (tree: Tree, context: SchematicContext) => 
+      // inside closure to ensure it uses the modifed options.name from applyAppNamingConvention
+      schematic('app-resources', {
+        path: `apps/${options.name}/app`,
+      })(tree, context),
     // add root package dependencies
     (tree: Tree) => addRootDeps(tree, {nativescript: true}),
     // add start/clean scripts
     (tree: Tree) => {
       const scripts = {};
+      const platformApp = options.name.replace('-', '.');
       scripts[`clean`] = `npx rimraf -- hooks node_modules package-lock.json && npm i`;
-      scripts[`start.nativescript.${options.name}.ios`] = `cd apps/nativescript-${options.name} && tns run ios --emulator --bundle`;
-      scripts[`start.nativescript.${options.name}.android`] = `cd apps/nativescript-${options.name} && tns run android --emulator --bundle`;
-      scripts[`clean.nativescript.${options.name}`] = `cd apps/nativescript-${options.name} && npx rimraf -- hooks node_modules platforms package-lock.json && npm i && npx rimraf -- package-lock.json`;
+      scripts[`start.${platformApp}.ios`] = `cd apps/${options.name} && tns run ios --emulator --bundle`;
+      scripts[`start.${platformApp}.android`] = `cd apps/${options.name} && tns run android --emulator --bundle`;
+      scripts[`clean.${platformApp}`] = `cd apps/${options.name} && npx rimraf -- hooks node_modules platforms package-lock.json && npm i && npx rimraf -- package-lock.json`;
       return updatePackageScripts(tree, scripts);
     },
     (tree: Tree) => {
       const projects = {};
-      projects[`nativescript-${options.name}`] = {
-        "root": `apps/nativescript-${options.name}/`,
-        "sourceRoot": `apps/nativescript-${options.name}/app`,
+      projects[`${options.name}`] = {
+        "root": `apps/${options.name}/`,
+        "sourceRoot": `apps/${options.name}/app`,
         "projectType": "application",
         "prefix": getPrefix(),
         "schematics": {
@@ -60,7 +64,7 @@ export default function (options: ApplicationOptions) {
     },
     (tree: Tree) => {
       const projects = {};
-      projects[`nativescript-${options.name}`] = {
+      projects[`${options.name}`] = {
         tags: []
       };
       return updateNxProjects(tree, projects);
@@ -70,10 +74,12 @@ export default function (options: ApplicationOptions) {
 
 function addAppFiles(options: ApplicationOptions, appPath: string, extra: string = ''): Rule {
   extra = extra ? `${extra}_` : '';
+  const appname = getAppName(options, 'nativescript');
   return branchAndMerge(
     mergeWith(apply(url(`./_${extra}files`), [
       template({
         ...options as any,
+        appname,
         utils: stringUtils,
         npmScope: getNpmScope(),
         prefix: getPrefix(),
