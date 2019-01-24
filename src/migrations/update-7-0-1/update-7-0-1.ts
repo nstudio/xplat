@@ -20,7 +20,7 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
   const mainPath = join(cwd, 'node_modules/@nstudio/schematics/src/app.nativescript/_files/app/main.ts');
   // console.log('webpackConfigPath:', webpackConfigPath);
   let mainFile = fs.readFileSync(mainPath, 'UTF-8');
-  mainFile = mainFile.replace('<%= npmScope %>', npmScope);
+  mainFile = mainFile.replace('<% if (routing || sample) { %>', '').replace('<%= npmScope %>', npmScope).replace('<% } %>', '');
 
   const hmrNavigationPath = join(cwd, 'node_modules/@nstudio/schematics/src/xplat/_nativescript_files/utils/livesync-navigation.ts');
   let hmrNavigation = fs.readFileSync(hmrNavigationPath, 'UTF-8');
