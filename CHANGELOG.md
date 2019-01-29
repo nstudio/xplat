@@ -1,3 +1,18 @@
+<a name="7.2.4"></a>
+## [7.2.4](https://github.com/nstudio/xplat/compare/7.2.3...7.2.4) (2019-01-29)
+
+
+### Bug Fixes
+
+* **scripts:** adjust migration ([a4fb0b6](https://github.com/nstudio/xplat/commit/a4fb0b6))
+
+
+### Features
+
+* **generators:** groupByName option to allow appname-platform ([#75](https://github.com/nstudio/xplat/issues/75)) ([50c4707](https://github.com/nstudio/xplat/commit/50c4707))
+
+
+
 <a name="7.2.3"></a>
 ## [7.2.3](https://github.com/nstudio/xplat/compare/7.2.2...7.2.3) (2019-01-20)
 
