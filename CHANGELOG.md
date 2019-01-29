@@ -1,3 +1,13 @@
+<a name="7.2.7"></a>
+## [7.2.7](https://github.com/nstudio/xplat/compare/7.2.6...7.2.7) (2019-01-29)
+
+
+### Bug Fixes
+
+* **ionic:** route module naming ([a753e08](https://github.com/nstudio/xplat/commit/a753e08))
+
+
+
 <a name="7.2.6"></a>
 ## [7.2.6](https://github.com/nstudio/xplat/compare/7.2.5...7.2.6) (2019-01-29)
 
