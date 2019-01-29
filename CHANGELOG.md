@@ -1,5 +1,5 @@
-<a name="7.2.4"></a>
-## [7.2.4](https://github.com/nstudio/xplat/compare/7.2.3...7.2.4) (2019-01-29)
+<a name="7.2.5"></a>
+## [7.2.5](https://github.com/nstudio/xplat/compare/7.2.3...7.2.5) (2019-01-29)
 
 
 ### Bug Fixes
