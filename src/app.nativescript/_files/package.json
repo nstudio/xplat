@@ -1,9 +1,9 @@
 {
-  "name": "<%= utils.sanitize(name) %>",
+  "name": "<%= utils.sanitize(appname) %>",
   "license": "SEE LICENSE IN <your-license-filename>",
   "version": "0.0.0",
   "nativescript": {
-    "id": "org.nativescript.<%= utils.sanitize(name) %>"
+    "id": "org.nativescript.<%= utils.sanitize(appname) %>"
   },
   "scripts": {
     "reset": "npx rimraf -- hooks node_modules platforms && npm run js.clean",

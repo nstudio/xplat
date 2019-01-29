@@ -1,7 +1,7 @@
 {
-  "name": "nest-<%= utils.sanitize(name) %>",
+  "name": "<%= utils.sanitize(appname) %>",
   "version": "1.0.0",
-  "description": "<%= utils.classify(name) %> description.",
+  "description": "<%= utils.classify(appname) %> description.",
   "license": "MIT",
   "main": "src/main.ts",
   "author": {

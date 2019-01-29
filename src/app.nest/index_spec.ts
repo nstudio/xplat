@@ -44,7 +44,7 @@ describe("app.nest schematic", () => {
     expect(files.indexOf(checkPath)).toBeGreaterThanOrEqual(0);
 
     let checkFile = getFileContent(tree, checkPath);
-    expect(checkFile.indexOf(`"name": "nest-foo"`)).toBeGreaterThanOrEqual(0);
+    expect(checkFile.indexOf(`"name": "foo"`)).toBeGreaterThanOrEqual(0);
 
     expect(
       files.indexOf("/tools/electron/postinstall.js")

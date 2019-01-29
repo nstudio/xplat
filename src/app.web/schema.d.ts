@@ -1,17 +1,22 @@
 export interface Schema {
     name: string;
-    npmScope?: string;
-    sample?: boolean;
-    directory?: string;
-    sourceDir?: string;
+    skipFormat?: boolean;
     inlineStyle?: boolean;
     inlineTemplate?: boolean;
     viewEncapsulation?: 'Emulated' | 'Native' | 'None';
-    changeDetection?: 'Default' | 'OnPush';
     routing?: boolean;
-    skipTests?: boolean;
     prefix?: string;
     style?: string;
+    skipTests?: boolean;
+    directory?: string;
     tags?: string;
-    skipFormat?: boolean;
+    unitTestRunner?: any;
+    e2eTestRunner?: any;
+
+    // xplat additional options
+    sample?: boolean;
+    /**
+     * Group by app name (appname-platform) instead of the default (platform-appname)
+     */
+    groupByName?: boolean;
   }

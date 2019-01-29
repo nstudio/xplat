@@ -23,7 +23,10 @@ import {
   updatePackageScripts,
   addPostinstallers,
   formatFiles,
-  updateNxProjects
+  updateNxProjects,
+  prerun,
+  applyAppNamingConvention,
+  getAppName
 } from "../utils";
 
 export default function(options: ApplicationOptions) {
@@ -36,6 +39,9 @@ export default function(options: ApplicationOptions) {
   const appPath = `nest-${options.name}`;
 
   return chain([
+    prerun(options),
+    // adjust naming convention
+    applyAppNamingConvention(options, 'nest'),
     // create app files
     (tree: Tree, context: SchematicContext) =>
       addAppFiles(options, appPath)(tree, context),
@@ -43,42 +49,43 @@ export default function(options: ApplicationOptions) {
     (tree: Tree) => addRootDeps(tree, { nest: true }),
     // add npm scripts
     (tree: Tree) => {
+      const platformApp = options.name.replace('-', '.');
       const packageConfig = getJsonFromFile(tree, "package.json");
       const scripts = packageConfig.scripts || {};
 
-      scripts[`serve.nest.${options.name}`] = `ts-node -P apps/nest-${
+      scripts[`serve.${platformApp}`] = `ts-node -P apps/${
         options.name
-      }/tsconfig.json apps/nest-${options.name}/src/main.ts`;
-      scripts[`start.nest.${options.name}`] = `npm-run-all -p serve.nest.${
+      }/tsconfig.json apps/${options.name}/src/main.ts`;
+      scripts[`start.${platformApp}`] = `npm-run-all -p serve.${
+        platformApp
+      }`;
+      scripts[`build.${platformApp}`] = `tsc -p apps/${
         options.name
       }`;
-      scripts[`build.nest.${options.name}`] = `tsc -p apps/nest-${
-        options.name
-      }`;
-      scripts[`test.nest.${options.name}`] = `jest --config=apps/nest-${
+      scripts[`test.${platformApp}`] = `jest --config=apps/${
         options.name
       }/jest.json`;
       scripts[
-        `test.nest.${options.name}.coverage`
-      ] = `jest --config=apps/nest-${
+        `test.${platformApp}.coverage`
+      ] = `jest --config=apps/${
         options.name
       }/jest.json --coverage --coverageDirectory=coverage`;
-      scripts[`test.nest.${options.name}.watch`] = `jest --config=apps/nest-${
+      scripts[`test.${platformApp}.watch`] = `jest --config=apps/${
         options.name
       }/jest.json --watch`;
-      scripts[`test.nest.${options.name}.e2e`] = `jest --config=apps/nest-${
+      scripts[`test.${platformApp}.e2e`] = `jest --config=apps/${
         options.name
       }/e2e/jest-e2e.json --forceExit`;
       scripts[
-        `test.nest.${options.name}.e2e.watch`
-      ] = `jest --config=apps/nest-${options.name}/e2e/jest-e2e.json --watch`;
+        `test.${platformApp}.e2e.watch`
+      ] = `jest --config=apps/${options.name}/e2e/jest-e2e.json --watch`;
 
       return updatePackageScripts(tree, scripts);
     },
     // nx.json
     (tree: Tree) => {
       const projects = {};
-      projects[`nest-${options.name}`] = {
+      projects[`${options.name}`] = {
         tags: []
       };
       return updateNxProjects(tree, projects);
@@ -100,11 +107,13 @@ function addAppFiles(
   sample: string = ""
 ): Rule {
   sample = "";
+  const appname = getAppName(options, 'nest');
   return branchAndMerge(
     mergeWith(
       apply(url(`./_${sample}files`), [
         template({
           ...(options as any),
+          appname,
           utils: stringUtils,
           npmScope: getNpmScope(),
           prefix: getPrefix(),

@@ -43,7 +43,8 @@ describe('app.electron schematic', () => {
     expect(files.indexOf(checkPath)).toBeGreaterThanOrEqual(0);
 
     checkFile = getFileContent(tree, checkPath);
-    expect(checkFile.indexOf(`"name": "electron-foo"`)).toBeGreaterThanOrEqual(0);
+    // console.log(checkFile);
+    expect(checkFile.indexOf(`"name": "foo"`)).toBeGreaterThanOrEqual(0);
 
     expect(files.indexOf('/tools/electron/postinstall.js')).toBeGreaterThanOrEqual(0);
     expect(files.indexOf('/tools/web/postinstall.js')).toBeGreaterThanOrEqual(0);
