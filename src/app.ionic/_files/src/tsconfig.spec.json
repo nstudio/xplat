@@ -27,10 +27,10 @@
     }
   },
   "files": [
-    "test.ts"
+    "test.ts",
+    "polyfills.ts"
   ],
   "include": [
-    "polyfills.ts",
     "**/*.spec.ts",
     "**/*.d.ts"
   ]
