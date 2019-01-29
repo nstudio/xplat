@@ -1,3 +1,13 @@
+<a name="7.2.6"></a>
+## [7.2.6](https://github.com/nstudio/xplat/compare/7.2.5...7.2.6) (2019-01-29)
+
+
+### Features
+
+* **ionic:** update to official release ([#77](https://github.com/nstudio/xplat/issues/77)) ([d5d6eb0](https://github.com/nstudio/xplat/commit/d5d6eb0))
+
+
+
 <a name="7.2.5"></a>
 ## [7.2.5](https://github.com/nstudio/xplat/compare/7.2.3...7.2.5) (2019-01-29)
 
