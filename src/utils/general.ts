@@ -19,6 +19,7 @@ import { errorXplat, errorMissingPrefix } from "./errors";
 // import * as os from 'os';
 import * as fs from "fs";
 import * as ts from "typescript";
+import { toFileName } from "./name-utils";
 const util = require('util');
 const xml2js = require('xml2js');
 
@@ -147,7 +148,8 @@ export function getNxWorkspaceConfig(tree: Tree): any {
 
 export function applyAppNamingConvention(options: any, platform: PlatformTypes) {
   return (tree: Tree, context: SchematicContext) => {
-    options.name = groupByName ? `${options.name}-${platform}` : `${platform}-${options.name}`;
+    const nameSanitized = toFileName(options.name);
+    options.name = groupByName ? `${nameSanitized}-${platform}` : `${platform}-${nameSanitized}`;
     // if command line argument, make sure it's persisted to xplat settings
     if (options.groupByName) {
       return updatePackageForXplat(tree, null, {
