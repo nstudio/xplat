@@ -1,3 +1,13 @@
+<a name="7.2.8"></a>
+## [7.2.8](https://github.com/nstudio/xplat/compare/7.2.7...7.2.8) (2019-01-31)
+
+
+### Bug Fixes
+
+* **generators:** handle capitalization on app name arguments ([f689d1e](https://github.com/nstudio/xplat/commit/f689d1e))
+
+
+
 <a name="7.2.7"></a>
 ## [7.2.7](https://github.com/nstudio/xplat/compare/7.2.6...7.2.7) (2019-01-29)
 
