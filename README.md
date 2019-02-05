@@ -34,7 +34,7 @@ With the strength of [TypeScript](https://www.typescriptlang.org/) paired with t
 * [Design Doc](https://t.co/z2lRxOBFAg)
 * [Wiki](https://github.com/nstudio/xplat/wiki/FAQ)
 
-### Talks
+## Talks
 
 * [Super Powered, Server Rendered Progressive Native Apps](https://www.youtube.com/watch?v=EqqNexmu3Ug) by [Nathan Walker](http://github.com/NathanWalker) and [Jeff Whelpley](https://github.com/jeffwhelpley)
 * [ngAir 172 - xplat (cross-platform) tools for Nx workspaces with Nathan Walker](https://www.youtube.com/watch?v=0I8D25nab5c)
@@ -42,6 +42,10 @@ With the strength of [TypeScript](https://www.typescriptlang.org/) paired with t
 ## Recommended extra tooling
 
 * [Angular Console](https://angularconsole.com/)
+
+## Why?
+
+* [Why it's Hard to Decide on Technologies](https://medium.com/@adamklein_66511/why-its-hard-to-decide-on-technologies-9d67b6adf157) by [Adam Klein](https://github.com/adamkleingit)
 
 ## Contributing
 
