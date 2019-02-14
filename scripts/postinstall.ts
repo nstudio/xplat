@@ -8,7 +8,7 @@ const fsReadFile = promisify(fs.readFile);
 
 export async function updateConfig() {
   const cwd = process.cwd();
-  if (cwd.indexOf('node_modules/@nstudio/schematics') === -1) {
+  if (cwd.indexOf('node_modules/@nstudio/schematics') === -1 && cwd.indexOf('node_modules\\@nstudio\\schematics') === -1) {
     // ignore: local development
     return;
   }
