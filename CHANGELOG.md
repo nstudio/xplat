@@ -1,3 +1,13 @@
+<a name="7.2.9"></a>
+## [7.2.9](https://github.com/nstudio/xplat/compare/7.2.8...7.2.9) (2019-02-14)
+
+
+### Bug Fixes
+
+* **scripts:** Fix [#73](https://github.com/nstudio/xplat/issues/73) postinstall windows friendly ([#82](https://github.com/nstudio/xplat/issues/82)) ([115b12a](https://github.com/nstudio/xplat/commit/115b12a))
+
+
+
 <a name="7.2.8"></a>
 ## [7.2.8](https://github.com/nstudio/xplat/compare/7.2.7...7.2.8) (2019-01-31)
 
