@@ -53,6 +53,10 @@ export interface NodeDependency {
   type: "dependency" | "devDependency";
 }
 
+// list of all supported helpers
+// TODO: add more convenient helpers (like firebase or Travis ci support files)
+export const supportedHelpers = ['imports'];
+
 let npmScope: string;
 // selector prefix to use when generating various boilerplate for xplat support
 let prefix: string;
@@ -718,9 +722,10 @@ export function updatePackageForNgrx(
 export function updateTsConfig(
   tree: Tree,
   callback: (data: any) => void,
-  targetSuffix: string = ""
+  targetSuffix: string = '',
+  prefixPath: string = ''
 ) {
-  const tsConfigPath = `tsconfig${targetSuffix ? "." + targetSuffix : ""}.json`;
+  const tsConfigPath = `${prefixPath}tsconfig${targetSuffix ? "." + targetSuffix : ""}.json`;
   const tsConfig = getJsonFromFile(tree, tsConfigPath);
   callback(tsConfig);
   return updateJsonFile(tree, tsConfigPath, tsConfig);
