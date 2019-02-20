@@ -1,4 +1,4 @@
-import { supportedPlatforms } from './general';
+import { supportedPlatforms, supportedHelpers } from './general';
 
 export const errorMissingPrefix = `Missing --prefix flag. It's a good practice to specify a 2-3 character prefix for use with your project's component selectors and certain shared class/module names. Example: ng g xplat --prefix=foo`;
 
@@ -6,6 +6,10 @@ export const errorXplat = `You have the xplat tools installed but have yet to ge
 
 export function unsupportedPlatformError(platform: string) {
   return `${platform} is not a supported platform. Currently supported: ${supportedPlatforms}`
+}
+
+export function unsupportedHelperError(helper: string) {
+  return `${helper} is not a supported helper. Currently supported: ${supportedHelpers}`
 }
 
 export function noPlatformError() {

@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "id": "xplat-helper",
+  "title": "xplat helpers",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Comma-delimited list of helpers to generate.",
+      "alias": "n",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      }
+    },
+    "platforms": {
+      "type": "string",
+      "description": "Target platforms to generate helpers for."
+    },
+    "skipRefactor": {
+      "type": "boolean",
+      "description": "Skip refactoring code to support the helper where supported.",
+      "default": false
+    }
+  },
+  "required": []
+}

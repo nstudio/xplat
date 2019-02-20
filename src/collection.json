@@ -39,6 +39,11 @@
       "schema": "./xplat/schema.json",
       "description": "Add xplat development setup for optimal code reuse."
     },
+    "xplat-helper": {
+      "factory": "./xplat-helper",
+      "schema": "./xplat-helper/schema.json",
+      "description": "xplat helpers for various tooling extras."
+    },
     "app": {
       "factory": "./app.web",
       "schema": "./app.web/schema.json",
