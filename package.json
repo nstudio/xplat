@@ -11,7 +11,8 @@
     "postinstall": "node scripts/postinstall.js",
     "debug": "node --debug-brk ./node_modules/@angular/cli/bin/ng g command",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
-    "reset.changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0"
+    "reset.changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
+    "contributors": "githubcontrib --owner nstudio --repo $(basename $(pwd)) --cols 6 --showlogin true --filter gitter-badger --sortOrder desc | pbcopy"
   },
   "bin": {
     "create-xplat-workspace": "./scripts/create-xplat-workspace.js"
@@ -87,6 +88,7 @@
     "@types/jasmine": "~2.8.6",
     "@types/node": "~10.3.0",
     "cz-conventional-changelog": "^2.1.0",
+    "github-contributors-list": "^1.2.3",
     "jasmine": "~3.3.1",
     "jasmine-core": "~3.3.0",
     "prettier": "1.15.3",
