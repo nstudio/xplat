@@ -1,3 +1,13 @@
+<a name="7.3.1"></a>
+## [7.3.1](https://github.com/nstudio/xplat/compare/7.3.0...7.3.1) (2019-02-24)
+
+
+### Bug Fixes
+
+* **electron:** update to v4 and fix scripts + also add migration ([#86](https://github.com/nstudio/xplat/issues/86)) ([885af21](https://github.com/nstudio/xplat/commit/885af21))
+
+
+
 <a name="7.3.0"></a>
 # [7.3.0](https://github.com/nstudio/xplat/compare/7.2.8...7.3.0) (2019-02-20)
 
