@@ -369,49 +369,56 @@ export function addRootDeps(
     if (targetPlatforms.electron) {
       dep = {
         name: "electron",
-        version: "2.0.8",
+        version: "^4.0.5",
         type: "devDependency"
       };
       deps.push(dep);
 
       dep = {
         name: "electron-builder",
-        version: "20.28.4",
+        version: "^20.38.4",
+        type: "devDependency"
+      };
+      deps.push(dep);
+
+      dep = {
+        name: "electron-rebuild",
+        version: "~1.8.4",
         type: "devDependency"
       };
       deps.push(dep);
 
       dep = {
         name: "electron-installer-dmg",
-        version: "1.0.0",
+        version: "~2.0.0",
         type: "devDependency"
       };
       deps.push(dep);
 
       dep = {
         name: "electron-packager",
-        version: "12.1.0",
+        version: "~13.1.0",
         type: "devDependency"
       };
       deps.push(dep);
 
       dep = {
         name: "electron-reload",
-        version: "1.2.5",
+        version: "~1.4.0",
         type: "devDependency"
       };
       deps.push(dep);
 
       dep = {
         name: "electron-store",
-        version: "2.0.0",
+        version: "~2.0.0",
         type: "devDependency"
       };
       deps.push(dep);
 
       dep = {
         name: "electron-updater",
-        version: "3.1.2",
+        version: "~4.0.6",
         type: "devDependency"
       };
       deps.push(dep);
@@ -432,7 +439,7 @@ export function addRootDeps(
 
       dep = {
         name: "wait-on",
-        version: "2.1.0",
+        version: "~3.2.0",
         type: "devDependency"
       };
       deps.push(dep);

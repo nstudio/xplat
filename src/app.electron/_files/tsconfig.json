@@ -7,6 +7,9 @@
     "experimentalDecorators": true,
     "esModuleInterop": true,
     "target": "es5",
+    "types": [
+      "jasmine"
+    ],
     "typeRoots": [
       "../../node_modules/@types"
     ],
