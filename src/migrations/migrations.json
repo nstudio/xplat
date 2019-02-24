@@ -49,6 +49,11 @@
         "version": "7.1.0",
         "description": "Update NativeScript 5.1.0 and support for Angular 7.1.0",
         "factory": "./update-7-1-0/update-7-1-0"
+      },
+      "update-to-7.3.1": {
+        "version": "7.3.1",
+        "description": "Update Electron to v4 and fix scripts",
+        "factory": "./update-7-3-1/update-7-3-1"
       }
     }
   }
