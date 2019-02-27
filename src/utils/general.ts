@@ -284,7 +284,7 @@ export function addRootDeps(
     if (targetPlatforms.nativescript) {
       dep = {
         name: "nativescript-angular",
-        version: "~7.1.0",
+        version: "~7.2.0",
         type: "dependency"
       };
       deps.push(dep);
@@ -303,25 +303,22 @@ export function addRootDeps(
       };
       deps.push(dep);
 
-      // convenience for now since some {N} plugins may not support rxjs 6.x fully yet
-      // remove in future
       dep = {
-        name: "rxjs-compat",
-        version: "~6.3.3",
+        name: "tns-core-modules",
+        version: "~5.2.0",
         type: "dependency"
       };
       deps.push(dep);
 
       dep = {
-        name: "tns-core-modules",
-        version: "~5.1.0",
-        type: "dependency"
+        name: "terser-webpack-plugin",
+        version: "~1.2.0",
+        type: "devDependency"
       };
-      deps.push(dep);
 
       dep = {
         name: "tns-platform-declarations",
-        version: "~5.1.0",
+        version: "~5.2.0",
         type: "devDependency"
       };
       deps.push(dep);
