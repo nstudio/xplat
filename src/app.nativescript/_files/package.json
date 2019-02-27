@@ -38,16 +38,16 @@
     "nativescript-theme-core": "file:../../node_modules/nativescript-theme-core",
     "reflect-metadata": "file:../../node_modules/reflect-metadata",
     "rxjs": "file:../../node_modules/rxjs",
-    "rxjs-compat": "file:../../node_modules/rxjs-compat",
     "tns-core-modules": "file:../../node_modules/tns-core-modules",
     "zone.js": "file:../../node_modules/zone.js"
   },
   "devDependencies": {
-    "@angular/compiler-cli": "~7.1.0",
+    "@angular/compiler-cli": "~7.2.0",
     "@angular/language-service": "file:../../node_modules/@angular/language-service",
-    "@ngtools/webpack": "~7.1.0",
+    "@ngtools/webpack": "~7.2.0",
     "codelyzer": "file:../../node_modules/codelyzer",
-    "nativescript-dev-webpack": "~0.18.0",
+    "nativescript-dev-webpack": "~0.20.0",
+    "terser-webpack-plugin": "file:../../node_modules/terser-webpack-plugin",
     "tns-platform-declarations": "file:../../node_modules/tns-platform-declarations",
     "typescript": "file:../../node_modules/typescript"
   }
