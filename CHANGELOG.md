@@ -1,3 +1,13 @@
+<a name="7.3.2"></a>
+## [7.3.2](https://github.com/nstudio/xplat/compare/7.3.1...7.3.2) (2019-02-27)
+
+
+### Features
+
+* **nativescript:** 5.2 updates ([#87](https://github.com/nstudio/xplat/issues/87)) ([802f8c5](https://github.com/nstudio/xplat/commit/802f8c5))
+
+
+
 <a name="7.3.1"></a>
 ## [7.3.1](https://github.com/nstudio/xplat/compare/7.3.0...7.3.1) (2019-02-24)
 
