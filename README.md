@@ -43,7 +43,20 @@ With the strength of [TypeScript](https://www.typescriptlang.org/) paired with t
 
 * [Angular Console](https://angularconsole.com/)
 
-## Why?
+## Example repos for different scenarios
+
+* Ionic + Web: https://github.com/nstudio/xplat-sample-ionic-web
+* Electron + Web with routing: https://github.com/nstudio/xplat-sample-electron-routing
+
+## Real world apps built with xplat
+
+### Portable North Pole
+
+* Web: https://www.portablenorthpole.com/en/home
+* iOS: https://itunes.apple.com/us/app/id902026228?mt=8
+* Android: https://play.google.com/store/apps/details?id=com.ugroupmedia.pnp14&hl=en
+
+## Context
 
 * [Why it's Hard to Decide on Technologies](https://medium.com/@adamklein_66511/why-its-hard-to-decide-on-technologies-9d67b6adf157) by [Adam Klein](https://github.com/adamkleingit)
 
