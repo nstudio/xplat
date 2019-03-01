@@ -247,6 +247,8 @@ export function addRootDeps(
     packageJson = getJsonFromFile(tree, packagePath);
   }
   if (packageJson) {
+    const angularVersion = packageJson.dependencies['@angular/core'];
+
     const deps: NodeDependency[] = [];
 
     let dep: NodeDependency = {
@@ -364,6 +366,15 @@ export function addRootDeps(
 
     /** ELECTRON */
     if (targetPlatforms.electron) {
+
+      // electron complains if this is missing
+      dep = {
+        name: "@angular/http",
+        version: angularVersion,
+        type: "dependency"
+      };
+      deps.push(dep);
+
       dep = {
         name: "electron",
         version: "^4.0.5",
