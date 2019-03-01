@@ -1,3 +1,13 @@
+<a name="7.3.3"></a>
+## [7.3.3](https://github.com/nstudio/xplat/compare/7.3.2...7.3.3) (2019-03-01)
+
+
+### Bug Fixes
+
+* **electron:** scripts and deps ([#89](https://github.com/nstudio/xplat/issues/89)) ([9316e14](https://github.com/nstudio/xplat/commit/9316e14))
+
+
+
 <a name="7.3.2"></a>
 ## [7.3.2](https://github.com/nstudio/xplat/compare/7.3.1...7.3.2) (2019-02-27)
 
