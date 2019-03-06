@@ -38,6 +38,13 @@ export function supportApplitools_Web(
     cypressConfig.supportFile = `${outputPath}support/index.js`;
     // console.log('cypressConfig.supportFile:', cypressConfig.supportFile);
     helperChains.push(updateJsonFile(tree, cypressConfigPath, cypressConfig));
+    
+    // Add applitools modules
+    const packageJson = getJsonFromFile(tree, "package.json");
+    packageJson.devDependencies = packageJson.devDependencies || {};
+    packageJson.devDependencies["@applitools/eyes-cypress"] = "^3.5.2"
+    helperChains.push(updateJsonFile(tree, "package.json", packageJson));
+
     // update sample test
     helperChains.push(
       createOrUpdate(
