@@ -26,13 +26,14 @@ import {
   updateNxProjects,
   prerun,
   applyAppNamingConvention,
-  getAppName
+  getAppName,
+  missingNameArgument
 } from "../utils";
 
 export default function(options: ApplicationOptions) {
   if (!options.name) {
     throw new SchematicsException(
-      `Missing name argument. Provide a name for your Nest app. Example: ng g app.nest sample`
+      missingNameArgument('Provide a name for your Nest app.', 'ng g app.nest sample')
     );
   }
 

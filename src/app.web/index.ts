@@ -23,7 +23,8 @@ import {
   getJsonFromFile,
   applyAppNamingConvention,
   updateJsonFile,
-  formatFiles
+  formatFiles,
+  missingNameArgument
 } from "../utils";
 import { Schema as ApplicationOptions } from "./schema";
 
@@ -31,7 +32,7 @@ let appName: string;
 export default function(options: ApplicationOptions) {
   if (!options.name) {
     throw new SchematicsException(
-      `Missing name argument. Provide a name for your web app. Example: ng g app my-app`
+      missingNameArgument('Provide a name for your Web app.', 'ng g app my-app')
     );
   }
   appName = options.name;
@@ -169,27 +170,30 @@ platformBrowserDynamic()
 function appCmpHtml() {
   return `<div class="p-x-20">
     <div style="text-align:center">
-      <h2>
-        Welcome to an Angular CLI app built with Nrwl Nx and xplat!
-      </h2>
+      <h1>
+        Welcome to ${appName}!
+      </h1>
+      <h3>
+        An Angular CLI app built with Nrwl Nx and xplat.
+      </h3>
       <img width="100" src="assets/nx-logo.png">
       <span style="position: relative;top: -28px;margin: 10px;">+</span>
       <img width="120" src="assets/xplat.png">
     </div>
   
-    <h2>Nx</h2>
+    <h3>Nx</h3>
   
     An open source toolkit for enterprise Angular applications. Nx is designed to help you create and build enterprise grade
     Angular applications. It provides an opinionated approach to application project structure and patterns.
   
     <h3>Quick Start & Documentation</h3>
   
-    <a href="https://nrwl.io/nx">Watch a 5-minute video on how to get started with Nx.</a>
+    <a href="https://nrwl.io/nx" target="_blank">Watch a 5-minute video on how to get started with Nx.</a>
   
-    <h1>{{'hello' | translate}}</h1>
+    <h2>{{'hello' | translate}}</h2>
     <h3>Try things out</h3>
   
-    <a href="https://nstudio.io/xplat">Learn more about xplat.</a>
+    <a href="https://nstudio.io/xplat/generators/" target="_blank">Learn more about xplat generators.</a>
   </div>`;
 }
 
@@ -258,7 +262,7 @@ describe('AppComponent', () => {
     })
     );
     it(
-    'should render title in a h1 tag',
+    'should render xplat hello in a h2 tag',
     async(() => {
         spyOn(translate, 'getBrowserLang').and.returnValue('en');
         translate.use('en');
@@ -274,7 +278,7 @@ describe('AppComponent', () => {
         http.verify();
         fixture.detectChanges();
 
-        expect(compiled.querySelector('h1').textContent).toContain(
+        expect(compiled.querySelector('h2').textContent).toContain(
         'Hello xplat'
         );
     })

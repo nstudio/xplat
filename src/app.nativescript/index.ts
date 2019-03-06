@@ -13,12 +13,14 @@ import {
   schematic,
   noop,
 } from '@angular-devkit/schematics';
-import { stringUtils, prerun, getNpmScope, getPrefix, addRootDeps, updatePackageScripts, updateAngularProjects, updateNxProjects, applyAppNamingConvention, getGroupByName, getAppName } from '../utils';
+import { stringUtils, prerun, getNpmScope, getPrefix, addRootDeps, updatePackageScripts, updateAngularProjects, updateNxProjects, applyAppNamingConvention, getGroupByName, getAppName, missingNameArgument } from '../utils';
 import { Schema as ApplicationOptions } from './schema';
 
 export default function (options: ApplicationOptions) {
   if (!options.name) {
-    throw new SchematicsException(`Missing name argument. Provide a name for your NativeScript app. Example: ng g app.nativescript sample`);
+    throw new SchematicsException(
+      missingNameArgument('Provide a name for your NativeScript app.', 'ng g app.nativescript sample')
+    );
   }
 
   return chain([
