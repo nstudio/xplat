@@ -1,3 +1,13 @@
+<a name="7.3.4"></a>
+## [7.3.4](https://github.com/nstudio/xplat/compare/7.3.3...7.3.4) (2019-03-06)
+
+
+### Features
+
+* **helpers:** applitools support for web ([#92](https://github.com/nstudio/xplat/issues/92)) ([24580a6](https://github.com/nstudio/xplat/commit/24580a6))
+
+
+
 <a name="7.3.3"></a>
 ## [7.3.3](https://github.com/nstudio/xplat/compare/7.3.2...7.3.3) (2019-03-01)
 
