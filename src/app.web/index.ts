@@ -102,6 +102,13 @@ function adjustAppFiles(options: ApplicationOptions, tree: Tree) {
       ? `<router-outlet></router-outlet>`
       : appCmpHtml()
   );
+  if (options.sample || options.routing) {
+    // update home route to reflect with root cmp would have been
+    tree.overwrite(
+      `/apps/${options.name}/src/app/features/home/components/home.component.html`,
+      appCmpHtml()
+    );
+  }
   tree.overwrite(
     `/apps/${options.name}/src/app/app.component.ts`,
     appCmpContent()
