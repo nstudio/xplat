@@ -23,7 +23,8 @@ import {
   getJsonFromFile,
   applyAppNamingConvention,
   updateJsonFile,
-  formatFiles
+  formatFiles,
+  missingNameArgument
 } from "../utils";
 import { Schema as ApplicationOptions } from "./schema";
 
@@ -31,7 +32,7 @@ let appName: string;
 export default function(options: ApplicationOptions) {
   if (!options.name) {
     throw new SchematicsException(
-      `Missing name argument. Provide a name for your web app. Example: ng g app my-app`
+      missingNameArgument('Provide a name for your Web app.', 'ng g app my-app')
     );
   }
   appName = options.name;

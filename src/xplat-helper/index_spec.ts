@@ -89,7 +89,6 @@ describe('xplat-helper schematic', () => {
 
     const options: HelperOptions = { 
       name: 'applitools',
-      platforms: 'web',
       target: 'web-foo'
      };
     // console.log('appTree:', appTree);
@@ -122,6 +121,41 @@ describe('xplat-helper schematic', () => {
     // console.log(fileContent);
 
     expect(fileContent.indexOf(`eyesOpen`)).toBeGreaterThanOrEqual(0);
+  });
+
+  it('applitools: should throw if target is missing', async () => {
+    const optionsXplat: XPlatOptions = { 
+      npmScope: 'testing',
+      prefix: 'tt',
+      platforms: 'web,nativescript'
+    };
+
+    appTree = schematicRunner.runSchematic('xplat', optionsXplat, appTree);
+    const appOptions: AppWebOptions = {
+      name: 'foo',
+      prefix: 'tt',
+      e2eTestRunner: 'cypress'
+    };
+    // console.log('appTree:', appTree);
+    appTree = await schematicRunner.runSchematicAsync('app', appOptions, appTree).toPromise();
+    
+    const cypressJsonPath = '/apps/web-foo-e2e/cypress.json';
+    let fileContent = getFileContent(appTree, cypressJsonPath);
+    let cypressJson = JSON.parse(fileContent);
+    expect(cypressJson.supportFile).toBe(false);
+
+    const options: HelperOptions = { 
+      name: 'applitools',
+      platforms: 'web'
+     };
+    // console.log('appTree:', appTree);
+    let tree;
+
+    expect(
+      () => (tree = schematicRunner.runSchematic('xplat-helper', options, appTree))
+    ).toThrowError(
+      `The xplat-helper "applitools" requires the --target flag.`
+    );
   });
 
   it('generating helper for a platform where the helper is not supported should not do anything', () => {

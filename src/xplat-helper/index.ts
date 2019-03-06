@@ -29,10 +29,12 @@ import {
   PlatformTypes,
   supportedPlatforms,
   unsupportedPlatformError,
+  helperMissingPlatforms,
   supportedHelpers,
   unsupportedHelperError,
   updateTsConfig,
-  helperTargetError
+  helperTargetError,
+  missingNameArgument
 } from "../utils";
 import { Schema as HelperOptions } from "./schema";
 // Helpers
@@ -92,7 +94,7 @@ let platforms: Array<PlatformTypes> = [];
 export default function(options: HelperOptions) {
   if (!options.name) {
     throw new SchematicsException(
-      `Missing name argument. Provide a comma delimited list of helpers to generate. Example: ng g xplat-helper imports`
+      missingNameArgument('Provide a comma delimited list of helpers to generate.', 'ng g xplat-helper imports')
     );
   }
   helpers = options.name.split(",");
@@ -100,54 +102,74 @@ export default function(options: HelperOptions) {
     (options.platforms ? options.platforms.split(",") : [])
   );
 
-  if (platforms.length === 0) {
-    throw new SchematicsException(
-      `Missing platforms argument. Example: ng g xplat-helper imports --platforms=nativescript`
-    );
-  }
-
   const helperChains = [];
 
-  for (const platform of platforms) {
-    if (supportedPlatforms.includes(platform)) {
-      for (const helper of helpers) {
-        if (supportedHelpers.includes(helper)) {
-          // get helper support config
-          const supportConfig: ISupportConfig = helperSupportConfig[helper];
-          if (supportConfig.platforms.includes(platform)) {
-            if (supportConfig.moveTo) {
-              if (supportConfig.requiresTarget && !options.target) {
-                throw new SchematicsException(helperTargetError(helper));
+  const processHelpers = (platform?: PlatformTypes) => {
+    for (const helper of helpers) {
+      if (supportedHelpers.includes(helper)) {
+        // get helper support config
+        const supportConfig: ISupportConfig = helperSupportConfig[helper];
+        if (!platform) {
+          // when using targeting the platforms argument can be ommitted
+          // however when doing so it relies on platform being in the target name
+          if (supportConfig.requiresTarget && options.target) {
+            for (const p of supportedPlatforms) {
+              const match = options.target.match(p);
+              if (match) {
+                platform = <PlatformTypes>match[0];
+                break;
               }
-
-              // add files for the helper
-              const moveTo = supportConfig.moveTo(platform, options.target);
-              helperChains.push((tree: Tree, context: SchematicContext) => {
-                return addHelperFiles(options, platform, helper, moveTo)(
-                  tree,
-                  context
-                );
-              });
-            }
-
-            if (supportConfig.additionalSupport) {
-              // process additional support modifications
-              helperChains.push((tree: Tree, context: SchematicContext) => {
-                return supportConfig.additionalSupport(
-                  platform,
-                  helperChains,
-                  options
-                )(tree, context);
-              });
             }
           }
-        } else {
-          throw new SchematicsException(unsupportedHelperError(helper));
         }
+        // if platform is still falsey, error out
+        if (!platform) {
+          throw new SchematicsException(helperMissingPlatforms());
+        }
+        // throw is target required and it's missing
+        if (supportConfig.requiresTarget && !options.target) {
+          throw new SchematicsException(helperTargetError(helper));
+        }
+
+        if (supportConfig.platforms.includes(platform)) {
+          if (supportConfig.moveTo) {
+            // add files for the helper
+            const moveTo = supportConfig.moveTo(platform, options.target);
+            helperChains.push((tree: Tree, context: SchematicContext) => {
+              return addHelperFiles(options, platform, helper, moveTo)(
+                tree,
+                context
+              );
+            });
+          }
+
+          if (supportConfig.additionalSupport) {
+            // process additional support modifications
+            helperChains.push((tree: Tree, context: SchematicContext) => {
+              return supportConfig.additionalSupport(
+                platform,
+                helperChains,
+                options
+              )(tree, context);
+            });
+          }
+        }
+      } else {
+        throw new SchematicsException(unsupportedHelperError(helper));
       }
-    } else {
-      throw new SchematicsException(unsupportedPlatformError(platform));
     }
+  };
+
+  if (platforms.length) {
+    for (const platform of platforms) {
+      if (supportedPlatforms.includes(platform)) {
+        processHelpers(platform);
+      } else {
+        throw new SchematicsException(unsupportedPlatformError(platform));
+      }
+    }
+  } else {
+    processHelpers();
   }
 
   return chain([
