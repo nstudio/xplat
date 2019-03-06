@@ -1,3 +1,13 @@
+<a name="7.3.6"></a>
+## [7.3.6](https://github.com/nstudio/xplat/compare/7.3.5...7.3.6) (2019-03-06)
+
+
+### Bug Fixes
+
+* **generators:** web adjustment for routing ([8775a79](https://github.com/nstudio/xplat/commit/8775a79))
+
+
+
 <a name="7.3.5"></a>
 ## [7.3.5](https://github.com/nstudio/xplat/compare/7.3.3...7.3.5) (2019-03-06)
 
