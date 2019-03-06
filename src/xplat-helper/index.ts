@@ -31,26 +31,80 @@ import {
   unsupportedPlatformError,
   supportedHelpers,
   unsupportedHelperError,
-  updateTsConfig
+  updateTsConfig,
+  helperTargetError
 } from "../utils";
 import { Schema as HelperOptions } from "./schema";
+// Helpers
+import { supportApplitools_Web, applitools_logNote } from "./applitools";
+import { supportImports_NativeScript } from "./imports";
 
+// Configuration options for each helper
+interface ISupportConfig {
+  platforms: Array<string>;
+  requiresTarget?: boolean;
+  moveTo?: (platform: PlatformTypes, target?: string) => string;
+  additionalSupport?: (
+    platform: PlatformTypes,
+    helperChains: Array<any>,
+    options: HelperOptions
+  ) => (tree: Tree, context: SchematicContext) => void;
+}
+interface IHelperSupportConfig {
+  imports: ISupportConfig;
+  applitools: ISupportConfig;
+}
+// Mapping config of what each helper supports
+const helperSupportConfig: IHelperSupportConfig = {
+  imports: {
+    platforms: ["nativescript"],
+    moveTo: function(platform: PlatformTypes, target?: string) {
+      return `xplat/${platform}/utils`;
+    },
+    additionalSupport: function(
+      platform: PlatformTypes,
+      helperChains: Array<any>,
+      options: HelperOptions
+    ) {
+      switch (platform) {
+        case "nativescript":
+          return supportImports_NativeScript(helperChains, options);
+      }
+    }
+  },
+  applitools: {
+    platforms: ["web"],
+    requiresTarget: true,
+    additionalSupport: function(
+      platform: PlatformTypes,
+      helperChains: Array<any>,
+      options: HelperOptions
+    ) {
+      switch (platform) {
+        case "web":
+          return supportApplitools_Web(helperChains, options);
+      }
+    }
+  }
+};
 let helpers: Array<string> = [];
-let platforms: Array<string> = [];
+let platforms: Array<PlatformTypes> = [];
 export default function(options: HelperOptions) {
   if (!options.name) {
     throw new SchematicsException(
       `Missing name argument. Provide a comma delimited list of helpers to generate. Example: ng g xplat-helper imports`
     );
   }
-  if (!options.platforms) {
+  helpers = options.name.split(",");
+  platforms = <Array<PlatformTypes>>(
+    (options.platforms ? options.platforms.split(",") : [])
+  );
+
+  if (platforms.length === 0) {
     throw new SchematicsException(
       `Missing platforms argument. Example: ng g xplat-helper imports --platforms=nativescript`
     );
   }
-
-  helpers = options.name.split(",");
-  platforms = options.platforms.split(",");
 
   const helperChains = [];
 
@@ -58,24 +112,35 @@ export default function(options: HelperOptions) {
     if (supportedPlatforms.includes(platform)) {
       for (const helper of helpers) {
         if (supportedHelpers.includes(helper)) {
-          const moveTo = getMoveTo(<PlatformTypes>platform, helper);
-          helperChains.push((tree: Tree, context: SchematicContext) => {
-            return addHelperFiles(
-              options,
-              <PlatformTypes>platform,
-              helper,
-              moveTo
-            )(tree, context);
-          });
-          // aside from adding files above, process any additional modifications
-          helperChains.push((tree: Tree, context: SchematicContext) => {
-            return processSupportingFiles(
-              helperChains,
-              options,
-              <PlatformTypes>platform,
-              helper
-            );
-          });
+          // get helper support config
+          const supportConfig: ISupportConfig = helperSupportConfig[helper];
+          if (supportConfig.platforms.includes(platform)) {
+            if (supportConfig.moveTo) {
+              if (supportConfig.requiresTarget && !options.target) {
+                throw new SchematicsException(helperTargetError(helper));
+              }
+
+              // add files for the helper
+              const moveTo = supportConfig.moveTo(platform, options.target);
+              helperChains.push((tree: Tree, context: SchematicContext) => {
+                return addHelperFiles(options, platform, helper, moveTo)(
+                  tree,
+                  context
+                );
+              });
+            }
+
+            if (supportConfig.additionalSupport) {
+              // process additional support modifications
+              helperChains.push((tree: Tree, context: SchematicContext) => {
+                return supportConfig.additionalSupport(
+                  platform,
+                  helperChains,
+                  options
+                )(tree, context);
+              });
+            }
+          }
         } else {
           throw new SchematicsException(unsupportedHelperError(helper));
         }
@@ -88,8 +153,12 @@ export default function(options: HelperOptions) {
   return chain([
     prerun(options),
     // add helper chains
-    ...helperChains
-    // TODO: add refactor code to update per the helper where applicable
+    ...helperChains,
+    // log additional notes
+    (tree: Tree) => {
+      logNotes(options, helpers);
+      return noop();
+    }
   ]);
 }
 
@@ -101,7 +170,7 @@ function addHelperFiles(
 ): Rule {
   return branchAndMerge(
     mergeWith(
-      apply(url(`./${platform}/${helper}/_files`), [
+      apply(url(`./${helper}/${platform}/_files`), [
         template({
           ...(options as any),
           utils: stringUtils,
@@ -115,77 +184,12 @@ function addHelperFiles(
   );
 }
 
-function getMoveTo(platform: PlatformTypes, helper: string) {
-  let moveTo = `xplat/${platform}/utils`; // default
-  // TODO: define custom moveTo locations for various helpers
-  // switch (helper) {
-  //   case "imports":
-  //     break;
-  // }
-  return moveTo;
-}
-
-function processSupportingFiles(
-  helperChains: Array<any>,
-  options: HelperOptions,
-  platform: PlatformTypes,
-  helper: string
-) {
-  return (tree: Tree) => {
+function logNotes(options: HelperOptions, helpers: string[]) {
+  for (const helper of helpers) {
     switch (helper) {
-      case "imports":
-        switch (platform) {
-          case "nativescript":
-            let pathRef = `xplat/nativescript/utils/@nativescript/*`;
-            // update root tsconfig
-            helperChains.push(updateTsConfig(tree, (tsConfig: any) => {
-              const updates: any = {};
-              updates[`@nativescript/*`] = [
-                pathRef
-              ];
-              if (tsConfig) {
-                if (!tsConfig.compilerOptions) {
-                  tsConfig.compilerOptions = {};
-                }
-                tsConfig.compilerOptions.paths = {
-                  ...(tsConfig.compilerOptions.paths || {}),
-                  ...updates
-                };
-              }
-            }));
-
-            // update all {N} app tsconfig's
-            const appsDir = tree.getDir("apps");
-            const appFolders = appsDir.subdirs;
-            pathRef = `../../${pathRef}`;
-
-            // update {N} apps and configs
-            for (const dir of appFolders) {
-              // console.log(dir);
-              if (dir.indexOf('nativescript-') === 0 || dir.indexOf('-nativescript') === 0) {
-                const appDir = `${appsDir.path}/${dir}`;
-                // console.log('appDir:', appDir); 
-
-                helperChains.push(updateTsConfig(tree, (tsConfig: any) => {
-                  const updates: any = {};
-                  updates[`@nativescript/*`] = [
-                    pathRef
-                  ];
-                  if (tsConfig) {
-                    if (!tsConfig.compilerOptions) {
-                      tsConfig.compilerOptions = {};
-                    }
-                    tsConfig.compilerOptions.paths = {
-                      ...(tsConfig.compilerOptions.paths || {}),
-                      ...updates
-                    };
-                  }
-                }, null, `${appDir}/`));
-              }
-            }
-            break;
-        }
+      case "applitools":
+        applitools_logNote(options);
         break;
     }
-  };
+  }
 }

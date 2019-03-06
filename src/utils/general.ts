@@ -55,7 +55,7 @@ export interface NodeDependency {
 
 // list of all supported helpers
 // TODO: add more convenient helpers (like firebase or Travis ci support files)
-export const supportedHelpers = ['imports'];
+export const supportedHelpers = ['imports', 'applitools'];
 
 let npmScope: string;
 // selector prefix to use when generating various boilerplate for xplat support
@@ -90,6 +90,10 @@ export function getFileContent(tree: Tree, path: string) {
 
 export function setTest() {
   isTest = true;
+}
+
+export function isTesting() {
+  return isTest;
 }
 
 export function serializeJson(json: any): string {

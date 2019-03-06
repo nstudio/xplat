@@ -12,6 +12,10 @@ export function unsupportedHelperError(helper: string) {
   return `${helper} is not a supported helper. Currently supported: ${supportedHelpers}`
 }
 
+export function helperTargetError(helper: string) {
+  return `The xplat-helper "${helper}" requires the --target flag.`
+}
+
 export function noPlatformError() {
   return `You must specify which platforms you wish to generate support for. For example: ng g xplat --prefix=foo --platforms=${supportedPlatforms.join(',')}`
 }
