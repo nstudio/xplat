@@ -1,3 +1,13 @@
+<a name="7.3.7"></a>
+## [7.3.7](https://github.com/nstudio/xplat/compare/7.3.6...7.3.7) (2019-03-08)
+
+
+### Features
+
+* **nativescript:** adjustSandbox flag for feature module generator ([#93](https://github.com/nstudio/xplat/issues/93)) ([3054df2](https://github.com/nstudio/xplat/commit/3054df2))
+
+
+
 <a name="7.3.6"></a>
 ## [7.3.6](https://github.com/nstudio/xplat/compare/7.3.5...7.3.6) (2019-03-06)
 
