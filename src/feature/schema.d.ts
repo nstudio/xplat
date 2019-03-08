@@ -25,6 +25,10 @@ export interface Schema {
    */
   routing?: boolean;
   /**
+   * Add link to route for sandbox
+   */
+  adjustSandbox?: boolean;
+  /**
    * Skip formatting
    */
   skipFormat?: boolean;

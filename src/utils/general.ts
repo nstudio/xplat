@@ -56,6 +56,8 @@ export interface NodeDependency {
 // list of all supported helpers
 // TODO: add more convenient helpers (like firebase or Travis ci support files)
 export const supportedHelpers = ['imports', 'applitools'];
+// list of platforms that support adjustSandbox flag
+export const supportedSandboxPlatforms: Array<PlatformTypes> = ['nativescript'];
 
 let npmScope: string;
 // selector prefix to use when generating various boilerplate for xplat support
