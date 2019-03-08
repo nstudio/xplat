@@ -39,6 +39,11 @@
       "type": "boolean",
       "default": false
     },
+    "adjustSandbox": {
+      "type": "boolean",
+      "description": "Automatically add a button to link to the feature route. Supported on NativeScript only right now. Requires flags: --onlyProject --routing",
+      "default": false
+    },
     "skipFormat": {
       "description": "Skip formatting files",
       "type": "boolean",
