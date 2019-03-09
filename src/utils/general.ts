@@ -955,7 +955,7 @@ export function updateIDESettings(
           userUpdates[app] = true;
         }
         for (const project of projectNames) {
-          userUpdates[`apps/${project}`] = false;
+          userUpdates[`**/apps/${project}`] = false;
         }
       }
       // switch on/off platforms
