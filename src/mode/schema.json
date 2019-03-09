@@ -6,12 +6,16 @@
   "properties": {
     "name": {
       "type": "string",
-      "description": "The development mode: 'web' or 'nativescript'",
+      "description": "The platform development mode to focus on.",
       "alias": "n",
       "$default": {
         "$source": "argv",
         "index": 0
       }
+    },
+    "projects": {
+      "type": "string",
+      "description": "Project names to focus on."
     }
   }
 }

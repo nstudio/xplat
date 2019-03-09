@@ -919,7 +919,9 @@ export const addTestingFiles = (
 export function updateIDESettings(
   tree: Tree,
   platformArg: string,
-  devMode?: PlatformTypes
+  devMode?: PlatformTypes,
+  projectNames?: string[],
+  apps?: string[]
 ) {
   if (isTest) {
     // ignore node file modifications when just testing
@@ -939,14 +941,36 @@ export function updateIDESettings(
         userUpdates[`**/apps/${appFilter}`] = false;
         userUpdates[`**/xplat/${p}`] = false;
       }
+      if (apps.length) {
+        // clear all specific app filters
+        for (const app of apps) {
+          delete userUpdates[app];
+        }
+      }
     } else if (platformArg) {
       const platforms = sanitizeCommaDelimitedArg(platformArg);
+      if (projectNames.length && apps.length) {
+        // if focusing on projects, clear all specific app filters first if they exist
+        for (const app of apps) {
+          userUpdates[app] = true;
+        }
+        for (const project of projectNames) {
+          userUpdates[`apps/${project}`] = false;
+        }
+      }
       // switch on/off platforms
       for (const p of supportedPlatforms) {
         const excluded = platforms.includes(p) ? false : true;
         const appFilter = groupByName ? `*-${p}` : `${p}-*`;
-        userUpdates[`**/apps/${appFilter}`] = excluded;
+        if (projectNames.length) {
+          // clear app wildcard
+          delete userUpdates[`**/apps/${appFilter}`];
+        } else {
+          // use wildcards for apps only if no project names were specified
+          userUpdates[`**/apps/${appFilter}`] = excluded;
+        }
         userUpdates[`**/xplat/${p}`] = excluded;
+
         if (excluded) {
           // if excluding any platform at all, set the flag
           // this is used for WebStorm support below
