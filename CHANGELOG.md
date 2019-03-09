@@ -1,3 +1,13 @@
+<a name="7.3.8"></a>
+## [7.3.8](https://github.com/nstudio/xplat/compare/7.3.7...7.3.8) (2019-03-09)
+
+
+### Features
+
+* **generators:** sandbox flags ([7ef125c](https://github.com/nstudio/xplat/commit/7ef125c))
+
+
+
 <a name="7.3.7"></a>
 ## [7.3.7](https://github.com/nstudio/xplat/compare/7.3.6...7.3.7) (2019-03-08)
 
