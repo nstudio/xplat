@@ -50,7 +50,7 @@ export default function(options: xPlatOptions) {
       const appFolders = appsDir.subdirs;
       const apps = [];
       for (const dir of appFolders) {
-        apps.push(`**/${appsDir.path}/${dir}`);
+        apps.push(`**${appsDir.path}/${dir}`);
       }
       // targets and mode should be the same
       return updateIDESettings(tree, name, name, projectNames, apps);
