@@ -1,3 +1,13 @@
+<a name="7.3.11"></a>
+## [7.3.11](https://github.com/nstudio/xplat/compare/7.3.10...7.3.11) (2019-03-09)
+
+
+### Features
+
+* **mode:** project focus flag ([219647b](https://github.com/nstudio/xplat/commit/219647b))
+
+
+
 <a name="7.3.10"></a>
 ## [7.3.10](https://github.com/nstudio/xplat/compare/7.3.9...7.3.10) (2019-03-09)
 
