@@ -1,3 +1,13 @@
+<a name="7.3.9"></a>
+## [7.3.9](https://github.com/nstudio/xplat/compare/7.3.8...7.3.9) (2019-03-09)
+
+
+### Features
+
+* **mode:** --projects flag to focus on specific projects as well ([f9fa336](https://github.com/nstudio/xplat/commit/f9fa336))
+
+
+
 <a name="7.3.8"></a>
 ## [7.3.8](https://github.com/nstudio/xplat/compare/7.3.7...7.3.8) (2019-03-09)
 
