@@ -56,7 +56,7 @@ export interface NodeDependency {
 // list of all supported helpers
 // TODO: add more convenient helpers (like firebase or Travis ci support files)
 export const supportedHelpers = ['imports', 'applitools'];
-// list of platforms that support adjustSandbox flag
+// list of platforms that support various sandbox flags
 export const supportedSandboxPlatforms: Array<PlatformTypes> = ['nativescript'];
 
 let npmScope: string;

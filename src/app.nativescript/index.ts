@@ -22,6 +22,10 @@ export default function (options: ApplicationOptions) {
       missingNameArgument('Provide a name for your NativeScript app.', 'ng g app.nativescript sample')
     );
   }
+  if (options.setupSandbox) {
+    // always setup routing with sandbox
+    options.routing = true;
+  }
 
   return chain([
     prerun(options),

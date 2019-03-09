@@ -38,6 +38,11 @@
       "description": "Use sample feature setup.",
       "default": false
     },
+    "setupSandbox": {
+      "type": "boolean",
+      "description": "Setup app as a sandbox for the workspace.",
+      "default": false
+    },
     "skipInstall": {
       "type": "boolean",
       "description": "Skip installing dependencies.",

@@ -24,6 +24,10 @@ export interface Schema {
      */
     sample?: boolean;
     /**
+     * Set this app up as a sandbox for the workspace
+     */
+    setupSandbox?: boolean;
+    /**
      * Skip installing dependencies
      */
     skipInstall?: boolean;

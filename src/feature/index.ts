@@ -45,14 +45,43 @@ export default function(options: featureOptions) {
       `You did not specify the name of the feature you'd like to generate. For example: ng g feature my-feature`
     );
   }
+  featureName = options.name.toLowerCase();
+  let projects = options.projects;
+  let platforms = [];
+
+  if (options.adjustSandbox) {
+    // when adjusting sandbox for the feature, turn dependent options on
+    // for convenience also setup some default fallbacks to avoid requiring so many options
+    // sandbox flags are meant to be quick and convenient
+    options.onlyProject = true;
+    options.routing = true;
+    if (!projects) {
+      if (!options.platforms) {
+        // default to {N} sandbox 
+        projects = 'nativescript-sandbox';
+      } else {
+        platforms = options.platforms.split(",");
+        const projectSandboxNames = [];
+        // default to project with sandbox name
+        for (const p of platforms) {
+          if (supportedSandboxPlatforms.includes(p)) {
+            projectSandboxNames.push(`${p}-sandbox`);
+          } else {
+            throw new SchematicsException(
+              `The --adjustSandbox flag supports the following at the moment: ${supportedSandboxPlatforms}`
+            );
+          }
+        }
+        projects = projectSandboxNames.join(',');
+      }
+    }
+  }
   if (options.routing && !options.onlyProject) {
     throw new SchematicsException(
       `When generating a feature with the --routing option, please also specify --onlyProject. Support for shared code routing is under development and will be available in the future.`
     );
   }
-  featureName = options.name.toLowerCase();
-  const projects = options.projects;
-  let platforms = [];
+  
   if (projects) {
     // building feature in shared code and in projects
     projectNames = projects.split(",");
@@ -245,9 +274,15 @@ function adjustBarrelIndex(indexFilePath: string): Rule {
 }
 
 function getTemplateOptions(options: featureOptions) {
+  const nameParts = options.name.split('-');
+  let endingDashName = nameParts[0];
+  if (nameParts.length > 1) {
+    endingDashName = capitalize(nameParts[nameParts.length - 1]);
+  }
   return {
     ...(options as any),
     name: featureName,
+    endingDashName,
     npmScope: getNpmScope(),
     prefix: getPrefix(),
     dot: ".",
@@ -320,19 +355,43 @@ function adjustSandbox(platform: PlatformTypes, appDirectory: string): Rule {
       let homeTemplate = getFileContent(tree, homeCmpPath);
       switch (platform) {
         case "nativescript":
-          let buttonEndIndex = homeTemplate.indexOf("</Button>");
+          let buttonTag = 'Button';
+          let buttonEndIndex = homeTemplate.lastIndexOf(`</${buttonTag}>`);
           if (buttonEndIndex === -1) {
             // check for lowercase
-            buttonEndIndex = homeTemplate.indexOf("</button>");
+            buttonEndIndex = homeTemplate.lastIndexOf(`</${buttonTag.toLowerCase()}>`);
+            if (buttonEndIndex > -1) {
+              buttonTag = buttonTag.toLowerCase();
+            }
           }
+
+          let customBtnClass = '';
+
+          if (buttonEndIndex === -1) {
+            // if no buttons were found this is a fresh sandbox app setup
+            // it should have a label as placeholder
+            buttonEndIndex = homeTemplate.lastIndexOf('</Label>');
+            if (buttonEndIndex === -1) {
+              buttonEndIndex = homeTemplate.lastIndexOf(`</label>`);
+            }
+          } else {
+            const buttonClassStartIndex = homeTemplate.lastIndexOf('class="btn ');
+            if (buttonClassStartIndex > -1) {
+              // using custom button class
+              customBtnClass = ' ' + homeTemplate.substring(buttonClassStartIndex+11, homeTemplate.lastIndexOf(`"></${buttonTag}>`))
+            }
+          }
+          
           const featureNameParts = featureName.split("-");
           let routeName = featureName;
           if (featureNameParts.length > 1) {
-            routeName = capitalize(featureNameParts[featureNameParts.length - 1]);
+            routeName = capitalize(
+              featureNameParts[featureNameParts.length - 1]
+            );
           }
           homeTemplate =
             homeTemplate.slice(0, buttonEndIndex + 9) +
-            `<Button text="${routeName}" (tap)="goTo('/${featureName}')" class="btn"></Button>` +
+            `<${buttonTag} text="${routeName}" (tap)="goTo('/${featureName}')" class="btn${customBtnClass}"></${buttonTag}>` +
             homeTemplate.slice(buttonEndIndex + 9);
           break;
       }
