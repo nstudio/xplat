@@ -1,3 +1,13 @@
+<a name="7.3.13"></a>
+## [7.3.13](https://github.com/nstudio/xplat/compare/7.3.12...7.3.13) (2019-03-10)
+
+
+### Bug Fixes
+
+* **scripts:** postinstall prettierignore to skip platforms ([26121ad](https://github.com/nstudio/xplat/commit/26121ad))
+
+
+
 <a name="7.3.12"></a>
 ## [7.3.12](https://github.com/nstudio/xplat/compare/7.3.11...7.3.12) (2019-03-10)
 
