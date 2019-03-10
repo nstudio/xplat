@@ -76,10 +76,14 @@ export async function fixFormatter() {
 export async function makePrettierIgnore() {
   const prettierIgnorePath = path.join(process.cwd(), '/../..', '.prettierignore');
 
-  const prettierIgnore = `**/*.d.ts
-apps/**/platforms/{android,ios}/**/*
+  const prettierIgnore = `.DS_Store
+**/*.d.ts
+**/apps/**/platforms/**/*
 **/App_Resources/**/*
-apps/nativescript-*/tools/**/*
+**/apps/nativescript-*/hooks/**/*
+**/apps/nativescript-*/tools/**/*
+**/apps/nativescript-*/app/assets/*.min.css
+**/xplat/nativescript/plugins/**/*
 **/webpack.config.js
 **/package.json
 **/package-lock.json
