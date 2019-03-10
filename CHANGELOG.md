@@ -1,3 +1,13 @@
+<a name="7.3.12"></a>
+## [7.3.12](https://github.com/nstudio/xplat/compare/7.3.11...7.3.12) (2019-03-10)
+
+
+### Bug Fixes
+
+* **mode:** app focus mode ([ebe01cd](https://github.com/nstudio/xplat/commit/ebe01cd))
+
+
+
 <a name="7.3.11"></a>
 ## [7.3.11](https://github.com/nstudio/xplat/compare/7.3.10...7.3.11) (2019-03-09)
 
