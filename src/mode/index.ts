@@ -5,7 +5,8 @@ import {
   updateIDESettings,
   supportedPlatforms,
   updateTsConfig,
-  prerun
+  prerun,
+  getGroupByName
 } from "../utils";
 import { Schema as xPlatOptions } from "./schema";
 
@@ -19,25 +20,6 @@ export default function(options: xPlatOptions) {
   } else {
     name = options.name;
   }
-  let projectNames: string[] = [];
-  if (name !== "fullstack" && options.projects) {
-    projectNames = options.projects.split(",");
-    for (let i = 0; i < projectNames.length; i++) {
-      const projectName = projectNames[i];
-      const nameParts = projectName.split("-");
-      let containsPlatform = false;
-      for (const n of nameParts) {
-        if (supportedPlatforms.includes(n)) {
-          containsPlatform = true;
-        }
-      }
-      if (!containsPlatform) {
-        // allows for shorthand project/app names omitting platform
-        // just add platform to the name
-        projectNames[i] = `${name}-${nameParts.join("-")}`;
-      }
-    }
-  }
 
   return chain([
     // init xplat settings
@@ -48,12 +30,34 @@ export default function(options: xPlatOptions) {
     (tree: Tree) => {
       const appsDir = tree.getDir("apps");
       const appFolders = appsDir.subdirs;
-      const apps = [];
+      const allApps = [];
       for (const dir of appFolders) {
-        apps.push(`**${appsDir.path}/${dir}`);
+        allApps.push(`**${appsDir.path}/${dir}`);
+      }
+
+      // project handling
+      let focusOnApps: string[] = [];
+      if (name !== "fullstack" && options.projects) {
+        focusOnApps = options.projects.split(",");
+        for (let i = 0; i < focusOnApps.length; i++) {
+          const projectName = focusOnApps[i];
+          const nameParts = projectName.split("-");
+          let containsPlatform = false;
+          for (const n of nameParts) {
+            if (supportedPlatforms.includes(n)) {
+              containsPlatform = true;
+            }
+          }
+          if (!containsPlatform) {
+            // allows for shorthand project/app names omitting platform
+            // just add platform to the name
+            const appName = getGroupByName() ? `${nameParts.join("-")}-${name}` : `${name}-${nameParts.join("-")}`;
+            focusOnApps[i] = `**/apps/${appName}`;
+          }
+        }
       }
       // targets and mode should be the same
-      return updateIDESettings(tree, name, name, projectNames, apps);
+      return updateIDESettings(tree, name, name, allApps, focusOnApps);
     }
   ]);
 }

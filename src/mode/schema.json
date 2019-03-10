@@ -15,7 +15,8 @@
     },
     "projects": {
       "type": "string",
-      "description": "Project names to focus on."
+      "description": "Project/app names to focus on.",
+      "alias": "apps"
     }
   }
 }

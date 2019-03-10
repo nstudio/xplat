@@ -920,8 +920,8 @@ export function updateIDESettings(
   tree: Tree,
   platformArg: string,
   devMode?: PlatformTypes,
-  projectNames?: string[],
-  apps?: string[]
+  allApps?: string[],
+  focusOnApps?: string[],
 ) {
   if (isTest) {
     // ignore node file modifications when just testing
@@ -932,39 +932,28 @@ export function updateIDESettings(
     const cwd = process.cwd();
     // console.log('workspace dir:', process.cwd());
     // const dirName = cwd.split('/').slice(-1);
+    let isFullstack = false;
     let isExcluding = false;
+    let appWildcards = [];
     const userUpdates: any = {};
     if (!devMode || devMode === "fullstack") {
       // show all
+      isFullstack = true;
       for (const p of supportedPlatforms) {
         const appFilter = groupByName ? `*-${p}` : `${p}-*`;
         userUpdates[`**/apps/${appFilter}`] = false;
         userUpdates[`**/xplat/${p}`] = false;
       }
-      if (apps.length) {
-        // clear all specific app filters
-        for (const app of apps) {
-          delete userUpdates[app];
-        }
-      }
     } else if (platformArg) {
       const platforms = sanitizeCommaDelimitedArg(platformArg);
-      if (projectNames.length && apps.length) {
-        // if focusing on projects, clear all specific app filters first if they exist
-        for (const app of apps) {
-          userUpdates[app] = true;
-        }
-        for (const project of projectNames) {
-          userUpdates[`**/apps/${project}`] = false;
-        }
-      }
       // switch on/off platforms
       for (const p of supportedPlatforms) {
         const excluded = platforms.includes(p) ? false : true;
         const appFilter = groupByName ? `*-${p}` : `${p}-*`;
-        if (projectNames.length) {
-          // clear app wildcard
-          delete userUpdates[`**/apps/${appFilter}`];
+        if (focusOnApps.length) {
+          // focusing on apps
+          // fill up wildcards to use below (we will clear all app wildcards when focusing on apps)
+          appWildcards.push(`**/apps/${appFilter}`);
         } else {
           // use wildcards for apps only if no project names were specified
           userUpdates[`**/apps/${appFilter}`] = excluded;
@@ -1005,16 +994,42 @@ export function updateIDESettings(
         if (!exclude) {
           exclude = {};
         }
-        userSettingsJson["files.exclude"] = Object.assign(exclude, userUpdates);
-
         let searchExclude = userSettingsJson["search.exclude"];
         if (!searchExclude) {
           searchExclude = {};
         }
+
+        userSettingsJson["files.exclude"] = Object.assign(exclude, userUpdates);
         userSettingsJson["search.exclude"] = Object.assign(
           searchExclude,
           userUpdates
         );
+
+        if (allApps.length) {
+          // always reset specific app filters
+          for (const app of allApps) {
+            delete userSettingsJson["files.exclude"][app];
+            delete userSettingsJson["search.exclude"][app];
+          }
+        }
+        if (!isFullstack && focusOnApps.length && allApps.length) {
+          // when focusing on projects, clear all specific app wildcards first if they exist
+          for (const wildcard of appWildcards) {
+            delete userSettingsJson["files.exclude"][wildcard];
+            delete userSettingsJson["search.exclude"][wildcard];
+          }
+          for (const focusApp of focusOnApps) {
+            userSettingsJson["files.exclude"][focusApp] = false;
+            userSettingsJson["search.exclude"][focusApp] = false;
+          }
+          // ensure all other apps are excluded (except for the one that's being focused on)
+          for (const app of allApps) {
+            if (!focusOnApps.includes(app)) {
+              userSettingsJson["files.exclude"][app] = true;
+              userSettingsJson["search.exclude"][app] = true;
+            }
+          }
+        }
 
         fs.writeFileSync(
           userSettingsVSCodePath,
