@@ -1,3 +1,13 @@
+<a name="7.3.14"></a>
+## [7.3.14](https://github.com/nstudio/xplat/compare/7.3.13...7.3.14) (2019-03-12)
+
+
+### Bug Fixes
+
+* **generators:** sandbox setup and mode for windows ([77246e8](https://github.com/nstudio/xplat/commit/77246e8))
+
+
+
 <a name="7.3.13"></a>
 ## [7.3.13](https://github.com/nstudio/xplat/compare/7.3.12...7.3.13) (2019-03-10)
 
