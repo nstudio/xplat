@@ -980,11 +980,11 @@ export function updateIDESettings(
         : "/var/local/Code/User/settings.json";
     const windowsHome = process.env.APPDATA;
     if (windowsHome) {
-      userSettingsVSCodePath = join(windowsHome, "Code/User/settings.json");
+      userSettingsVSCodePath = join(windowsHome, "Code", "User", "settings.json");
     }
     // console.log('userSettingsVSCodePath:',userSettingsVSCodePath);
     const isVsCode = fs.existsSync(userSettingsVSCodePath);
-
+    let vscodeCreateSettingsNote = `It's possible you don't have a user settings.json yet. If so, open VS Code User settings and save any kind of setting to have it created.`;
     // console.log('isVsCode:',isVsCode);
     if (isVsCode) {
       const userSettings = fs.readFileSync(userSettingsVSCodePath, "UTF-8");
@@ -1035,90 +1035,94 @@ export function updateIDESettings(
           userSettingsVSCodePath,
           JSON.stringify(userSettingsJson, null, 2)
         );
+      } else {
+        console.warn(`Warning: xplat could not read your VS Code settings.json file therefore development mode has not been set. ${vscodeCreateSettingsNote}`);
       }
+    } else {
+      console.log(`Note to VS Code users: no development mode set. xplat could not find any VS Code settings in the standard location: ${userSettingsVSCodePath} ${vscodeCreateSettingsNote}`)
     }
 
     // WebStorm support
     let isWebStorm = false;
     // list preferences to get correct webstorm prefs file
-    let preferencesFolder = isMac
-      ? process.env.HOME +
-        `/Library/Preferences`
-      : __dirname;
-    if (windowsHome) {
-      preferencesFolder = windowsHome;
-    } 
-    const prefs = fs.readdirSync(preferencesFolder).filter(f => fs.statSync(join(preferencesFolder, f)).isDirectory());
+    // let preferencesFolder = isMac
+    //   ? process.env.HOME +
+    //     `/Library/Preferences`
+    //   : __dirname;
+    // if (windowsHome) {
+    //   preferencesFolder = windowsHome;
+    // } 
+    // const prefs = fs.readdirSync(preferencesFolder).filter(f => fs.statSync(join(preferencesFolder, f)).isDirectory());
     // find first one
     // TODO: user may have multiple version installed (or at least older versions) so may need to handle if multiples
-    let webStormPrefFolderName = prefs.find(f => f.indexOf('WebStorm20') > -1);
-    if (webStormPrefFolderName) {
-      isWebStorm = true;
-      webStormPrefFolderName = webStormPrefFolderName.split('/').slice(-1)[0];
-      // console.log('webStormPrefFolderName:',webStormPrefFolderName);
+    // let webStormPrefFolderName = prefs.find(f => f.indexOf('WebStorm20') > -1);
+    // if (webStormPrefFolderName) {
+    //   isWebStorm = true;
+    //   webStormPrefFolderName = webStormPrefFolderName.split('/').slice(-1)[0];
+    //   // console.log('webStormPrefFolderName:',webStormPrefFolderName);
   
-      // ensure folders are excluded from project view
-      let projectViewWebStormPath =
-        isMac
-          ? process.env.HOME +
-            `/Library/Preferences/${webStormPrefFolderName}/options/projectView.xml`
-          : join(__dirname, webStormPrefFolderName, 'config');
-      if (windowsHome) {
-        projectViewWebStormPath = join(windowsHome, webStormPrefFolderName, 'config');
-      }
+    //   // ensure folders are excluded from project view
+    //   let projectViewWebStormPath =
+    //     isMac
+    //       ? process.env.HOME +
+    //         `/Library/Preferences/${webStormPrefFolderName}/options/projectView.xml`
+    //       : join(__dirname, webStormPrefFolderName, 'config');
+    //   if (windowsHome) {
+    //     projectViewWebStormPath = join(windowsHome, webStormPrefFolderName, 'config');
+    //   }
 
-      let projectView = fs.readFileSync(projectViewWebStormPath, "UTF-8");
-      if (projectView) {
-        // console.log('projectView:', projectView);
-        xml2js.parseString(projectView, (err, settings) => {
-          // console.log(util.inspect(settings, false, null));
-          if (settings && settings.application && settings.application.component && settings.application.component.length) {
-            const builder = new xml2js.Builder({ headless: true });
+    //   let projectView = fs.readFileSync(projectViewWebStormPath, "UTF-8");
+    //   if (projectView) {
+    //     // console.log('projectView:', projectView);
+    //     xml2js.parseString(projectView, (err, settings) => {
+    //       // console.log(util.inspect(settings, false, null));
+    //       if (settings && settings.application && settings.application.component && settings.application.component.length) {
+    //         const builder = new xml2js.Builder({ headless: true });
 
-            const sharedSettingsIndex = (<Array<any>>settings.application.component).findIndex(c => c.$.name === 'ProjectViewSharedSettings');
-            if (sharedSettingsIndex > -1) {
-              const sharedSettings = settings.application.component[sharedSettingsIndex];
-              if (sharedSettings.option && sharedSettings.option.length) {
-                const showExcludedFilesIndex = sharedSettings.option.findIndex(o => o.$.name === 'showExcludedFiles');
-                if (showExcludedFilesIndex > -1) {
-                  settings.application.component[sharedSettingsIndex].option[showExcludedFilesIndex].$.value = `${!isExcluding}`;
-                } else {
-                  settings.application.component[sharedSettingsIndex].option.push(webStormExcludedViewNode(isExcluding));
-                }
-              } else {
-                settings.application.component[sharedSettingsIndex].option = [
-                  webStormExcludedViewNode(isExcluding)
-                ];
-              }
-              settings = builder.buildObject(settings);
-            } else {
-              (<Array<any>>settings.application.component).push({
-                $: 'ProjectViewSharedSettings',
-                option: [
-                  webStormExcludedViewNode(isExcluding)
-                ]
-              });
-              settings = builder.buildObject(settings);
-            }
-          } else {
-            // create projectView.xml
-            settings = createWebStormProjectView(isExcluding);
-          }
-          // modify projectView
-          // console.log('settings:', settings);
-          fs.writeFileSync(
-            projectViewWebStormPath,
-            settings
-          );
-        });
-      } else {
-        // create projectView.xml
-        fs.writeFileSync(
-          projectViewWebStormPath,
-          createWebStormProjectView(isExcluding)
-        );
-      }
-    }
+    //         const sharedSettingsIndex = (<Array<any>>settings.application.component).findIndex(c => c.$.name === 'ProjectViewSharedSettings');
+    //         if (sharedSettingsIndex > -1) {
+    //           const sharedSettings = settings.application.component[sharedSettingsIndex];
+    //           if (sharedSettings.option && sharedSettings.option.length) {
+    //             const showExcludedFilesIndex = sharedSettings.option.findIndex(o => o.$.name === 'showExcludedFiles');
+    //             if (showExcludedFilesIndex > -1) {
+    //               settings.application.component[sharedSettingsIndex].option[showExcludedFilesIndex].$.value = `${!isExcluding}`;
+    //             } else {
+    //               settings.application.component[sharedSettingsIndex].option.push(webStormExcludedViewNode(isExcluding));
+    //             }
+    //           } else {
+    //             settings.application.component[sharedSettingsIndex].option = [
+    //               webStormExcludedViewNode(isExcluding)
+    //             ];
+    //           }
+    //           settings = builder.buildObject(settings);
+    //         } else {
+    //           (<Array<any>>settings.application.component).push({
+    //             $: 'ProjectViewSharedSettings',
+    //             option: [
+    //               webStormExcludedViewNode(isExcluding)
+    //             ]
+    //           });
+    //           settings = builder.buildObject(settings);
+    //         }
+    //       } else {
+    //         // create projectView.xml
+    //         settings = createWebStormProjectView(isExcluding);
+    //       }
+    //       // modify projectView
+    //       // console.log('settings:', settings);
+    //       fs.writeFileSync(
+    //         projectViewWebStormPath,
+    //         settings
+    //       );
+    //     });
+    //   } else {
+    //     // create projectView.xml
+    //     fs.writeFileSync(
+    //       projectViewWebStormPath,
+    //       createWebStormProjectView(isExcluding)
+    //     );
+    //   }
+    // }
 
     if (!devMode) {
       // only when not specifying a dev mode
@@ -1168,7 +1172,7 @@ export function updateIDESettings(
       };
 
       if (isVsCode) {
-        const workspaceSettingsPath = join(cwd, ".vscode/settings.json");
+        const workspaceSettingsPath = join(cwd, ".vscode", "settings.json");
         // console.log('workspaceSettingsPath:',workspaceSettingsPath);
         let workspaceSettingsJson: any = {};
         if (fs.existsSync(workspaceSettingsPath)) {
