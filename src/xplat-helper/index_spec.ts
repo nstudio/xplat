@@ -7,7 +7,7 @@ import { Schema as AppWebOptions } from '../app.web/schema';
 import { Schema as AppNativeScriptOptions } from '../app.nativescript/schema';
 import { Schema as XPlatOptions } from '../xplat/schema';
 import { Schema as HelperOptions } from './schema';
-import { stringUtils, isInModuleMetadata, createEmptyWorkspace, setTest } from '../utils';
+import { stringUtils, isInModuleMetadata, createEmptyWorkspace, setTest, jsonParse } from '../utils';
 setTest();
 
 describe('xplat-helper schematic', () => {
@@ -56,12 +56,12 @@ describe('xplat-helper schematic', () => {
 
     // should update tsconfig files
     let filePath = '/tsconfig.json';
-    let fileContent = JSON.parse(getFileContent(tree, filePath));
+    let fileContent = jsonParse(getFileContent(tree, filePath));
     // console.log(fileContent);
     expect(fileContent.compilerOptions.paths['@nativescript/*'][0]).toBe('xplat/nativescript/utils/@nativescript/*');
 
     filePath = '/apps/nativescript-foo/tsconfig.json';
-    fileContent = JSON.parse(getFileContent(tree, filePath));
+    fileContent = jsonParse(getFileContent(tree, filePath));
     // console.log(fileContent);
     expect(fileContent.compilerOptions.paths['@nativescript/*'][0]).toBe('../../xplat/nativescript/utils/@nativescript/*');
   });
@@ -84,7 +84,7 @@ describe('xplat-helper schematic', () => {
     
     const cypressJsonPath = '/apps/web-foo-e2e/cypress.json';
     let fileContent = getFileContent(appTree, cypressJsonPath);
-    let cypressJson = JSON.parse(fileContent);
+    let cypressJson = jsonParse(fileContent);
     expect(cypressJson.supportFile).toBe(false);
 
     const options: HelperOptions = { 
@@ -113,7 +113,7 @@ describe('xplat-helper schematic', () => {
 
     fileContent = getFileContent(tree, cypressJsonPath);
     // console.log(fileContent);
-    cypressJson = JSON.parse(fileContent);
+    cypressJson = jsonParse(fileContent);
     expect(cypressJson.supportFile).toBe(`../../dist/out-tsc/apps/web-foo-e2e/src/support/index.js`);
 
     filePath = '/apps/web-foo-e2e/src/integration/app.spec.ts';
@@ -141,7 +141,7 @@ describe('xplat-helper schematic', () => {
     
     const cypressJsonPath = '/apps/web-foo-e2e/cypress.json';
     let fileContent = getFileContent(appTree, cypressJsonPath);
-    let cypressJson = JSON.parse(fileContent);
+    let cypressJson = jsonParse(fileContent);
     expect(cypressJson.supportFile).toBe(false);
 
     const options: HelperOptions = { 

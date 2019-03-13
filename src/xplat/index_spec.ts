@@ -4,7 +4,7 @@ import { getFileContent } from '@schematics/angular/utility/test';
 import * as path from 'path';
 
 import { Schema as XPlatOptions } from './schema';
-import { createEmptyWorkspace, supportedPlatforms, setTest } from '../utils';
+import { createEmptyWorkspace, supportedPlatforms, setTest, jsonParse } from '../utils';
 setTest();
 
 describe('xplat schematic', () => {
@@ -69,7 +69,7 @@ describe('xplat schematic', () => {
     expect(files.indexOf('/xplat/web/index.ts')).toBeGreaterThanOrEqual(0);
     expect(files.indexOf('/xplat/nativescript/index.ts')).toBeGreaterThanOrEqual(-1);
     const packagePath = '/package.json';
-    const packageFile = JSON.parse(getFileContent(tree, packagePath));
+    const packageFile = jsonParse(getFileContent(tree, packagePath));
     const hasScss = packageFile.dependencies[`@testing/scss`];
     expect(hasScss).not.toBeUndefined();
     // should not include these root packages
@@ -86,7 +86,7 @@ describe('xplat schematic', () => {
     expect(files.indexOf('/xplat/web/index.ts')).toBeGreaterThanOrEqual(-1);
     expect(files.indexOf('/xplat/nativescript/index.ts')).toBeGreaterThanOrEqual(0);
     const packagePath = '/package.json';
-    const packageFile = JSON.parse(getFileContent(tree, packagePath));
+    const packageFile = jsonParse(getFileContent(tree, packagePath));
     const hasNativeScript = packageFile.dependencies[`nativescript-angular`];
     expect(hasNativeScript).not.toBeUndefined();
   });
@@ -123,7 +123,7 @@ describe('xplat schematic', () => {
     expect(files.indexOf('/xplat/ionic/index.ts')).toBeGreaterThanOrEqual(0);
     expect(files.indexOf('/xplat/nativescript/index.ts')).toBeGreaterThanOrEqual(-1);
     const packagePath = '/package.json';
-    const packageFile = JSON.parse(getFileContent(tree, packagePath));
+    const packageFile = jsonParse(getFileContent(tree, packagePath));
     const hasScss = packageFile.dependencies[`@testing/scss`];
     expect(hasScss).not.toBeUndefined();
     const hasWebScss = packageFile.dependencies[`@testing/web`];
@@ -143,7 +143,7 @@ describe('xplat schematic', () => {
     expect(files.indexOf('/xplat/electron/index.ts')).toBeGreaterThanOrEqual(0);
     expect(files.indexOf('/xplat/nativescript/index.ts')).toBeGreaterThanOrEqual(-1);
     const packagePath = '/package.json';
-    const packageFile = JSON.parse(getFileContent(tree, packagePath));
+    const packageFile = jsonParse(getFileContent(tree, packagePath));
     const hasScss = packageFile.dependencies[`@testing/scss`];
     expect(hasScss).not.toBeUndefined();
     const hasWebScss = packageFile.dependencies[`@testing/web`];

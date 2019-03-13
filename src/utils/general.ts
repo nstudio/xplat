@@ -22,6 +22,7 @@ import * as ts from "typescript";
 import { toFileName } from "./name-utils";
 const util = require('util');
 const xml2js = require('xml2js');
+import * as stripJsonComments from 'strip-json-comments';
 
 export const supportedPlatforms = [
   "web",
@@ -98,12 +99,20 @@ export function isTesting() {
   return isTest;
 }
 
+export function jsonParse(content: string) {
+  if (content) {
+    // ensure comments are stripped when parsing (otherwise will fail)
+    return JSON.parse(stripJsonComments(content));
+  }
+  return {};
+}
+
 export function serializeJson(json: any): string {
   return `${JSON.stringify(json, null, 2)}\n`;
 }
 
 export function getJsonFromFile(tree: Tree, path: string) {
-  return JSON.parse(getFileContent(tree, path));
+  return jsonParse(getFileContent(tree, path));
 }
 
 export function updateJsonFile(tree: Tree, path: string, jsonData: any) {
@@ -989,7 +998,7 @@ export function updateIDESettings(
     if (isVsCode) {
       const userSettings = fs.readFileSync(userSettingsVSCodePath, "UTF-8");
       if (userSettings) {
-        const userSettingsJson = JSON.parse(userSettings);
+        const userSettingsJson = jsonParse(userSettings);
         let exclude = userSettingsJson["files.exclude"];
         if (!exclude) {
           exclude = {};
@@ -1180,7 +1189,7 @@ export function updateIDESettings(
             workspaceSettingsPath,
             "UTF-8"
           );
-          workspaceSettingsJson = JSON.parse(workspaceSettings);
+          workspaceSettingsJson = jsonParse(workspaceSettings);
           const exclude = workspaceSettingsJson["files.exclude"];
           workspaceSettingsJson["files.exclude"] = Object.assign(
             exclude,

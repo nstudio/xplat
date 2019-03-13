@@ -3,7 +3,7 @@ import { Schema as ApplicationOptions } from "./schema";
 import { SchematicTestRunner } from "@angular-devkit/schematics/testing";
 
 import * as path from "path";
-import { createEmptyWorkspace, getFileContent } from "../utils";
+import { createEmptyWorkspace, getFileContent, jsonParse } from "../utils";
 
 describe("app.nest schematic", () => {
   const schematicRunner = new SchematicTestRunner(
@@ -58,7 +58,7 @@ describe("app.nest schematic", () => {
 
     checkFile = getFileContent(tree, checkPath);
 
-    const packageData: any = JSON.parse(checkFile);
+    const packageData: any = jsonParse(checkFile);
     expect(packageData.scripts["serve.nest.foo"]).toBeDefined();
     expect(packageData.scripts["start.nest.foo"]).toBeDefined();
   });
