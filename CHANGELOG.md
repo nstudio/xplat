@@ -1,3 +1,13 @@
+<a name="7.3.15"></a>
+## [7.3.15](https://github.com/nstudio/xplat/compare/7.3.14...7.3.15) (2019-03-13)
+
+
+### Bug Fixes
+
+* **generators:** development mode handles json comments now ([10a2948](https://github.com/nstudio/xplat/commit/10a2948))
+
+
+
 <a name="7.3.14"></a>
 ## [7.3.14](https://github.com/nstudio/xplat/compare/7.3.13...7.3.14) (2019-03-12)
 
