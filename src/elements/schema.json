@@ -1,0 +1,43 @@
+{
+    "$schema": "http://json-schema.org/schema",
+    "id": "elements",
+    "title": "Create custom elements for the web.",
+    "type": "object",
+    "properties": {
+      "name": {
+        "description": "The name of the custom element module.",
+        "type": "string",
+        "$default": {
+          "$source": "argv",
+          "index": 0
+        },
+        "x-prompt": "What name would you like to use for the custom element module which will provide your elements?"
+      },
+      "barrel": {
+        "description": "The barrel in your workspace that contains the components you'd like to create as custom elements.",
+        "type": "string",
+        "x-prompt": "What's the barrel name in your workspace which contains the components to create as custom elements?"
+      },
+      "components": {
+        "description": "Comma delimited list of components from your barrel to create as custom elements.",
+        "type": "string",
+        "x-prompt": "Provide a comma delimited list of components from your barrel to create as custom elements."
+      },
+      "skipPreviewApp": {
+        "type": "boolean",
+        "description": "Skip creating the app files to preview your built custom elements.",
+        "default": false,
+        "x-prompt": "Would you like to skip creation of the preview app files?"
+      },
+      "prefix": {
+        "type": "string",
+        "description": "A unique prefix to add to each custom element. Defaults to provided component selectors 'as is'."
+      },
+      "skipFormat": {
+        "description": "Skip formatting files",
+        "type": "boolean",
+        "default": false
+      }
+    },
+    "required": []
+  }

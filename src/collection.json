@@ -49,6 +49,11 @@
       "schema": "./app.web/schema.json",
       "description": "Nx web app with xplat support."
     },
+    "elements": {
+      "factory": "./elements",
+      "schema": "./elements/schema.json",
+      "description": "Create custom elements for the web."
+    },
     "feature": {
       "factory": "./feature",
       "schema": "./feature/schema.json",
