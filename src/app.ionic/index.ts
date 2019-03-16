@@ -13,13 +13,13 @@ import {
   schematic,
   noop,
 } from '@angular-devkit/schematics';
-import { stringUtils, prerun, getNpmScope, getPrefix, addRootDeps, updatePackageScripts, updateAngularProjects, updateNxProjects, formatFiles, applyAppNamingConvention, getAppName, missingNameArgument } from '../utils';
+import { stringUtils, prerun, getNpmScope, getPrefix, addRootDeps, updatePackageScripts, updateAngularProjects, updateNxProjects, formatFiles, applyAppNamingConvention, getAppName, missingArgument } from '../utils';
 import { Schema as ApplicationOptions } from './schema';
 
 export default function (options: ApplicationOptions) {
   if (!options.name) {
     throw new SchematicsException(
-      missingNameArgument('Provide a name for your Ionic app.', 'ng g app.ionic sample')
+      missingArgument('name', 'Provide a name for your Ionic app.', 'ng g app.ionic sample')
     );
   }
 

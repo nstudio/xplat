@@ -15,7 +15,7 @@ describe('elements schematic', () => {
   const defaultOptions: ElementsOptions = {
     name: 'ui',
     barrel: '@mycompany/web',
-    components: 'MenuComponent,FooterComponent'
+    components: 'menu,footer'
   };
 
   let appTree: Tree;
@@ -40,12 +40,21 @@ describe('elements schematic', () => {
     tree = schematicRunner.runSchematic('component', componentOptions, tree);
     componentOptions.name = 'footer';
     tree = schematicRunner.runSchematic('component', componentOptions, tree);
-    const files = tree.files;
+    let files = tree.files;
     // console.log(files.slice(85,files.length));
     expect(files.indexOf('/xplat/web/features/ui/components/menu/menu.component.html')).toBeGreaterThanOrEqual(0);
     expect(files.indexOf('/xplat/web/features/ui/components/menu/menu.component.ts')).toBeGreaterThanOrEqual(0);
     expect(files.indexOf('/xplat/web/features/ui/components/footer/footer.component.html')).toBeGreaterThanOrEqual(0);
     expect(files.indexOf('/xplat/web/features/ui/components/footer/footer.component.ts')).toBeGreaterThanOrEqual(0);
+
+    tree = schematicRunner.runSchematic('elements', options, tree);
+    files = tree.files;
+
+    const elementModulePath = '/xplat/web/elements/ui.module.ts';
+    expect(files.indexOf(elementModulePath)).toBeGreaterThanOrEqual(0);
+    const elementModule = getFileContent(tree, elementModulePath);
+    console.log(elementModule);
+    // expect(elementModule.indexOf(`SignupComponent\n];`)).toBeGreaterThanOrEqual(0);
   });
 
 });

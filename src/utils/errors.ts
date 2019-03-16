@@ -20,8 +20,8 @@ export function helperMissingPlatforms() {
   return `Missing platforms argument. Example: ng g xplat-helper imports --platforms=nativescript`;
 }
 
-export function missingNameArgument(description: string = '', example: string = '') {
-  return `Missing name argument. ${description} ${example ? 'Example: ' + example : ''}`;
+export function missingArgument(argName: string, description: string = '', example: string = '') {
+  return `Missing ${argName} argument. ${description} ${example ? 'Example: ' + example : ''}`;
 }
 
 export function noPlatformError() {

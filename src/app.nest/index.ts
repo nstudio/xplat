@@ -28,14 +28,14 @@ import {
   prerun,
   applyAppNamingConvention,
   getAppName,
-  missingNameArgument,
-  updateJsonInTree
+  updateJsonInTree,
+  missingArgument
 } from "../utils";
 
 export default function (options: ApplicationOptions) {
   if (!options.name) {
     throw new SchematicsException(
-      missingNameArgument('Provide a name for your Nest app.', 'ng g app.nest sample')
+      missingArgument('name', 'Provide a name for your Nest app.', 'ng g app.nest sample')
     );
   }
 

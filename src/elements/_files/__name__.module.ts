@@ -1,24 +1,19 @@
 import { NgModule, Injector } from '@angular/core';
 import { createCustomElement } from '@angular/elements';
-import { SharedComponent, SharedComponentModule } from '@code-sharing/shared-component';
+import { <%= componentSymbolList %> } from '<%= barrel %>';
 
 @NgModule({
-  imports: [
-    SharedComponentModule
-  ],
-  exports: [
-    BrowserAnimationsModule
-  ],
+  imports: [],
+  exports: [],
   declarations: [],
   entryComponents: [
-    SharedComponent
+    <%= componentSymbolList %>
   ],
   providers: []
 })
-export class <%= utils.classify(prefix) %>Module {
+export class <%= utils.classify(name) %>Module {
   constructor(injector: Injector) {
-    const component = createCustomElement(SharedComponent, { injector });
-    customElements.define('shared-component', component);
+    <%= customElementList %>
   }
 
   ngDoBootstrap() {}

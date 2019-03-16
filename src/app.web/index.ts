@@ -24,14 +24,14 @@ import {
   applyAppNamingConvention,
   updateJsonFile,
   formatFiles,
-  missingNameArgument
+  missingArgument
 } from "../utils";
 import { Schema as ApplicationOptions } from "./schema";
 
 export default function(options: ApplicationOptions) {
   if (!options.name) {
     throw new SchematicsException(
-      missingNameArgument('Provide a name for your Web app.', 'ng g app my-app')
+      missingArgument('name', 'Provide a name for your Web app.', 'ng g app my-app')
     );
   }
   // ensure sass is used
