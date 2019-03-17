@@ -165,10 +165,21 @@ export function getNxWorkspaceConfig(tree: Tree): any {
   );
 }
 
+/**
+ * Returns a name with the platform.
+ * 
+ * @example (app, nest) => web-app or app-web
+ * @param name 
+ * @param platform 
+ */
+export function getPlatformName(name: string, platform: PlatformTypes) {
+  const nameSanitized = toFileName(name);
+  return groupByName ? `${nameSanitized}-${platform}` : `${platform}-${nameSanitized}`;
+}
+
 export function applyAppNamingConvention(options: any, platform: PlatformTypes) {
   return (tree: Tree, context: SchematicContext) => {
-    const nameSanitized = toFileName(options.name);
-    options.name = groupByName ? `${nameSanitized}-${platform}` : `${platform}-${nameSanitized}`;
+    options.name = getPlatformName(options.name, platform);
     // if command line argument, make sure it's persisted to xplat settings
     if (options.groupByName) {
       return updatePackageForXplat(tree, null, {
