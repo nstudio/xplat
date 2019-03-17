@@ -28,15 +28,12 @@ import {
 } from "../utils";
 import { Schema as ApplicationOptions } from "./schema";
 
-let appName: string;
 export default function(options: ApplicationOptions) {
   if (!options.name) {
     throw new SchematicsException(
       missingNameArgument('Provide a name for your Web app.', 'ng g app my-app')
     );
   }
-  appName = options.name;
-
   // ensure sass is used
   options.style = "scss";
 
@@ -90,7 +87,7 @@ function addAppFiles(options: ApplicationOptions, extra: string = ""): Rule {
 }
 
 function adjustAppFiles(options: ApplicationOptions, tree: Tree) {
-  tree.overwrite(`/apps/${options.name}/src/index.html`, indexContent());
+  tree.overwrite(`/apps/${options.name}/src/index.html`, indexContent(options.name));
   tree.overwrite(`/apps/${options.name}/src/main.ts`, mainContent());
   tree.overwrite(
     `/apps/${options.name}/src/styles.scss`,
@@ -100,13 +97,13 @@ function adjustAppFiles(options: ApplicationOptions, tree: Tree) {
     `/apps/${options.name}/src/app/app.component.html`,
     options.sample || options.routing
       ? `<router-outlet></router-outlet>`
-      : appCmpHtml()
+      : appCmpHtml(options.name)
   );
   if (options.sample || options.routing) {
     // update home route to reflect with root cmp would have been
     tree.overwrite(
       `/apps/${options.name}/src/app/features/home/components/home.component.html`,
-      appCmpHtml()
+      appCmpHtml(options.name)
     );
   }
   tree.overwrite(
@@ -137,12 +134,12 @@ function adjustAppFiles(options: ApplicationOptions, tree: Tree) {
   return updateJsonFile(tree, "angular.json", ngConfig);
 }
 
-function indexContent() {
+function indexContent(name: string) {
   return `<!doctype html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>${getNpmScope()} ${appName}</title>
+    <title>${getNpmScope()} ${name}</title>
     <base href="/">
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -174,11 +171,11 @@ platformBrowserDynamic()
 `;
 }
 
-function appCmpHtml() {
+function appCmpHtml(name: string) {
   return `<div class="p-x-20">
     <div style="text-align:center">
       <h1>
-        Welcome to ${appName}!
+        Welcome to ${name}!
       </h1>
       <h3>
         An Angular CLI app built with Nrwl Nx and xplat.
