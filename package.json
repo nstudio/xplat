@@ -1,6 +1,6 @@
 {
   "name": "@nstudio/schematics",
-  "version": "7.3.15",
+  "version": "7.4.0",
   "description": "Cross-platform (xplat) tools for Nx workspaces.",
   "readmeFilename": "README.md",
   "scripts": {

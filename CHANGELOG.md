@@ -1,3 +1,19 @@
+<a name="7.4.0"></a>
+# [7.4.0](https://github.com/nstudio/xplat/compare/7.3.15...7.4.0) (2019-03-17)
+
+
+### Bug Fixes
+
+* **generators:** web adjustment to make e2e pass when generated ([#97](https://github.com/nstudio/xplat/issues/97)) ([9a20f22](https://github.com/nstudio/xplat/commit/9a20f22))
+
+
+### Features
+
+* **elements:** web custom element generator ([#96](https://github.com/nstudio/xplat/issues/96)) ([d3c1661](https://github.com/nstudio/xplat/commit/d3c1661))
+* **generators:** add angularJson option to app.nest ([#98](https://github.com/nstudio/xplat/issues/98)) ([adec8fb](https://github.com/nstudio/xplat/commit/adec8fb)), closes [#94](https://github.com/nstudio/xplat/issues/94)
+
+
+
 <a name="7.3.15"></a>
 ## [7.3.15](https://github.com/nstudio/xplat/compare/7.3.14...7.3.15) (2019-03-13)
 
