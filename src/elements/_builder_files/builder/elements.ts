@@ -1,5 +1,5 @@
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { <%= utils.classify(name) %>Module } from '../<%= utils.classify(name) %>.module';
+import { <%= utils.classify(name) %>Module } from '../<%= name %>.module';
 
 platformBrowserDynamic()
   .bootstrapModule(<%= utils.classify(name) %>Module)

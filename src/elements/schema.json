@@ -10,24 +10,19 @@
         "$default": {
           "$source": "argv",
           "index": 0
-        },
-        "x-prompt": "What name would you like to use for the custom element module which will provide your elements?"
+        }
       },
       "barrel": {
         "description": "The barrel in your workspace that contains the components you'd like to create as custom elements.",
-        "type": "string",
-        "x-prompt": "What's the barrel name in your workspace which contains the components to create as custom elements?"
+        "type": "string"
       },
       "components": {
         "description": "Comma delimited list of components from your barrel to create as custom elements.",
-        "type": "string",
-        "x-prompt": "Provide a comma delimited list of components from your barrel to create as custom elements."
+        "type": "string"
       },
-      "skipPreviewApp": {
-        "type": "boolean",
-        "description": "Skip creating the app files to preview your built custom elements.",
-        "default": false,
-        "x-prompt": "Would you like to skip creation of the preview app files?"
+      "builderModule": {
+        "type": "string",
+        "description": "Update builder files to use a different Angular Element module. Used in isolation with no other options."
       },
       "prefix": {
         "type": "string",

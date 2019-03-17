@@ -33,9 +33,9 @@
       "type": "string",
       "description": "Target platforms"
     },
-    "ignoreBase": {
+    "createBase": {
       "type": "boolean",
-      "description": "Ignore base component generation.",
+      "description": "Create a base component for maximum cross platform sharing.",
       "default": false
     },
     "skipFormat": {

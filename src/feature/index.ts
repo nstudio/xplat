@@ -164,7 +164,7 @@ export default function(options: featureOptions) {
         : addFiles(options)(tree, context),
     // libs
     (tree: Tree, context: SchematicContext) =>
-      options.onlyProject || options.ignoreBase || options.onlyModule
+      options.onlyProject || !options.createBase || options.onlyModule
         ? noop()(tree, context)
         : addFiles(options, null, null, "_component")(tree, context),
     // update libs index

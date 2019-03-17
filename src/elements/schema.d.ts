@@ -1,17 +1,17 @@
 export interface Schema {
-  name: string;
+  name?: string;
   /**
    * The barrel in your workspace that contains the components you'd like to create as custom elements.
    */
-  barrel: string;
+  barrel?: string;
   /**
    * Comma delimited list of components from your barrel to create as custom elements.
    */
-  components: string;
+  components?: string;
   /**
-   * Skip creating the app files to preview your built custom elements.
+   * Update builder files to use a different Angular Element module
    */
-  skipPreviewApp?: boolean;
+  builderModule?: string;
   /**
    * A unique prefix to add to each custom element. Defaults to workspace selector setting.
    */

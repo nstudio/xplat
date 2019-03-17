@@ -212,7 +212,7 @@ export default function(options: featureOptions) {
     prerun(),
     // add component for base libs feature
     (tree: Tree, context: SchematicContext) =>
-      !options.onlyProject && !options.ignoreBase
+      !options.onlyProject && options.createBase
         ? addToFeature("component", options, "libs", tree, "_base", true)(
             tree,
             context
@@ -220,7 +220,7 @@ export default function(options: featureOptions) {
         : noop()(tree, context),
     // adjust libs barrel for subFolder
     (tree: Tree, context: SchematicContext) =>
-      options.subFolder && !options.onlyProject && !options.ignoreBase
+      options.subFolder && !options.onlyProject && options.createBase
         ? adjustBarrelIndex(
             "component",
             options,
@@ -239,7 +239,7 @@ export default function(options: featureOptions) {
         : noop()(tree, context),
     // adjust libs barrel
     (tree: Tree, context: SchematicContext) =>
-      !options.onlyProject && !options.ignoreBase
+      !options.onlyProject && options.createBase
         ? adjustBarrelIndex(
             "component",
             options,

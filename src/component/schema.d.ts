@@ -21,9 +21,9 @@ export interface Schema {
    */
   platforms?: string;
   /**
-   * Ignore base component generation
+   * Create a base component for maximum cross platform sharing
    */
-  ignoreBase?: boolean;
+  createBase?: boolean;
   /**
    * Schematic processing helpers
    */
