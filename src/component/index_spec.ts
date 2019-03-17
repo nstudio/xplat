@@ -14,7 +14,8 @@ describe('component schematic', () => {
   const defaultOptions: GenerateOptions = {
     name: 'signup',
     feature: 'foo',
-    platforms: 'nativescript,web'
+    platforms: 'nativescript,web',
+    createBase: true
   };
 
   let appTree: Tree;

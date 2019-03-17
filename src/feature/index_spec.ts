@@ -13,7 +13,8 @@ describe('feature schematic', () => {
   );
   const defaultOptions: FeatureOptions = {
     name: 'foo',
-    projects: 'nativescript-viewer,web-viewer'
+    projects: 'nativescript-viewer,web-viewer',
+    createBase: true
   };
 
   let appTree: Tree;
@@ -138,7 +139,7 @@ describe('feature schematic', () => {
     expect(featureModule).toMatch(`import { UIModule } from \'../ui/ui.module\'`);
   });
 
-  it('should create feature module WITH a single starting component BUT IGNORE creating matching base component when using ignoreBase', () => {
+  it('should create feature module WITH a single starting component BUT IGNORE creating matching base component', () => {
     // console.log('appTree:', appTree);
     let tree = schematicRunner.runSchematic('xplat', {
       prefix: 'tt',
@@ -150,8 +151,7 @@ describe('feature schematic', () => {
     }, tree);
     const options: FeatureOptions = {
       name: 'foo',
-      platforms: 'web',
-      ignoreBase: true
+      platforms: 'web'
      };
     tree = schematicRunner.runSchematic('feature', options, tree);
     const files = tree.files;

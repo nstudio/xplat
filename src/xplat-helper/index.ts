@@ -34,7 +34,7 @@ import {
   unsupportedHelperError,
   updateTsConfig,
   helperTargetError,
-  missingNameArgument
+  missingArgument,
 } from "../utils";
 import { Schema as HelperOptions } from "./schema";
 // Helpers
@@ -94,7 +94,7 @@ let platforms: Array<PlatformTypes> = [];
 export default function(options: HelperOptions) {
   if (!options.name) {
     throw new SchematicsException(
-      missingNameArgument('Provide a comma delimited list of helpers to generate.', 'ng g xplat-helper imports')
+      missingArgument('name', 'Provide a comma delimited list of helpers to generate.', 'ng g xplat-helper imports')
     );
   }
   helpers = options.name.split(",");

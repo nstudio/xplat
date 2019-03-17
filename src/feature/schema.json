@@ -30,9 +30,9 @@
       "description": "Generate just the module and ignore the default component.",
       "default": false
     },
-    "ignoreBase": {
+    "createBase": {
       "type": "boolean",
-      "description": "Ignore base component generation.",
+      "description": "Create base component for maximum code sharing.",
       "default": false
     },
     "routing": {

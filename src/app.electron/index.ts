@@ -13,12 +13,12 @@ import {
   noop
 } from '@angular-devkit/schematics';
 import { Schema as ApplicationOptions } from './schema';
-import { prerun, getPrefix, getNpmScope, stringUtils, addRootDeps, updateAngularProjects, updateNxProjects, formatFiles, getJsonFromFile, updatePackageScripts, addPostinstallers, applyAppNamingConvention, getGroupByName, getAppName, missingNameArgument } from '../utils';
+import { prerun, getPrefix, getNpmScope, stringUtils, addRootDeps, updateAngularProjects, updateNxProjects, formatFiles, getJsonFromFile, updatePackageScripts, addPostinstallers, applyAppNamingConvention, getGroupByName, getAppName, missingArgument } from '../utils';
 
 export default function (options: ApplicationOptions) {
   if (!options.name) {
     throw new SchematicsException(
-      missingNameArgument('Provide a name for your Electron app.', 'ng g app.electron sample')
+      missingArgument('name', 'Provide a name for your Electron app.', 'ng g app.electron sample')
     );
   }
   if (!options.target) {
