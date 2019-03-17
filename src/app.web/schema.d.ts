@@ -19,4 +19,8 @@ export interface Schema {
      * Group by app name (appname-platform) instead of the default (platform-appname)
      */
     groupByName?: boolean;
+    /**
+     * Add headless e2e configuration suitable for CI
+     */
+    addHeadlessE2e?: boolean;
   }

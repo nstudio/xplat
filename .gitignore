@@ -3,6 +3,8 @@
 jsconfig.json
 
 # Outputs
+e2e/**/*.js
+e2e/**/*.js.map
 scripts/**/*.js
 scripts/**/*.js.map
 !scripts/tools/**/*.js
@@ -11,6 +13,7 @@ src/**/*.js.map
 !src/app.nativescript/_files/tools/*.js
 !src/app.nativescript/_files/webpack.config.js
 !src/xplat/_testing_files/karma.conf.js
+tmp
 
 *.tgz
 src/**/*.ngfactory.d.ts

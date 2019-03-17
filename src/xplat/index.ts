@@ -34,7 +34,8 @@ import {
   formatFiles,
   addTestingFiles,
   noPlatformError,
-  sanitizeCommaDelimitedArg
+  sanitizeCommaDelimitedArg,
+  hasWebPlatform
 } from "../utils";
 import { Schema as xPlatOptions } from "./schema";
 
@@ -95,7 +96,7 @@ export default function(options: xPlatOptions) {
     // web
     (tree: Tree, context: SchematicContext) =>
       // always generate web if ionic or electron is specified since they depend on it
-      targetPlatforms.web || targetPlatforms.ionic || targetPlatforms.electron
+      hasWebPlatform(targetPlatforms)
         ? addPlatformFiles(tree, options, "web")(tree, context)
         : noop()(tree, context),
     // web w/sample feature
