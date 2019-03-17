@@ -19,4 +19,8 @@ export interface Schema {
    * Skip formatting files
    */
   skipFormat?: boolean;
+  /**
+   * Add project to angular.json
+   */
+  angularJson?: boolean;
 }
