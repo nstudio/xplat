@@ -26,6 +26,7 @@ import {
   formatFiles,
   updateJsonInTree,
   missingArgument,
+  updateAngularProjects,
 } from "../utils";
 import { Schema as ElementsOptions } from "./schema";
 
@@ -33,6 +34,7 @@ let moduleName: string;
 let customElementList: string;
 let componentSymbols: Array<{ symbol: string; selector: string; }> = [];
 let componentSymbolList: string;
+let htmlElements: string;
 export default function(options: ElementsOptions) {
   const example = `ng g elements menu --barrel=@mycompany/ui --components=menu,footer`;
   if (!options.name) {
@@ -51,49 +53,97 @@ export default function(options: ElementsOptions) {
     );
   }
   moduleName = options.name;
-  const workspacePrefix = getPrefix() || '';
-  // parse component names to standard convention
-  const componentNames = options.components.split(',');
-  for (let component of componentNames) {
-    // using short name ("menu" for a component named "MenuComponent")
-    // convert to fully best practice name
-    const isShortName = component.toLowerCase().indexOf('component') === -1;
-    let selector = `${workspacePrefix ? `${workspacePrefix}-` : ''}`;
-    if (isShortName) {
-      selector += component.toLowerCase();
-    } else {
-      const parts = component.toLowerCase().split('component');
-      selector += parts[0];
-    }
-    componentSymbols.push({
-      selector,
-      symbol: `${stringUtils.classify(component)}${isShortName ? 'Component' : ''}`
-    });
-  }
-  componentSymbolList = componentSymbols.map(c => c.symbol).join(', ');
-
-  customElementList = createCustomElementList(componentSymbols);
 
   return chain([
     prerun(options),
+    (tree: Tree) => {
+      const workspacePrefix = options.prefix || getPrefix() || '';
+      const htmlElementList = [];
+      // parse component names to standard convention
+      const componentNames = options.components.split(',');
+      for (let component of componentNames) {
+        // using short name ("menu" for a component named "MenuComponent")
+        // convert to fully best practice name
+        const isShortName = component.toLowerCase().indexOf('component') === -1;
+        let selector = `${workspacePrefix ? `${workspacePrefix}-` : ''}`;
+        if (isShortName) {
+          selector += component.toLowerCase();
+        } else {
+          const parts = component.toLowerCase().split('component');
+          selector += parts[0];
+        }
+        componentSymbols.push({
+          selector,
+          symbol: `${stringUtils.classify(component)}${isShortName ? 'Component' : ''}`
+        });
+        htmlElementList.push(`<${selector}></${selector}>`);
+      }
+      componentSymbolList = componentSymbols.map(c => c.symbol).join(', ');
+      htmlElements = htmlElementList.join('\n');
+
+      customElementList = createCustomElementList(componentSymbols);
+      return tree;
+    },
     // add custom element module
     (tree: Tree) => addFiles(options),
-    // (tree: Tree, context: SchematicContext) =>
-    //   options.sample || options.routing
-    //   ? addAppFiles(options, options.sample ? "sample" : "routing")(tree, context)
-    //   : noop()(tree, context),
     // adjust app files
     // (tree: Tree) => adjustAppFiles(options, tree),
     // add build scripts
-    // (tree: Tree) => {
-    //   const platformApp = options.name.replace('-', '.');
-    //   const scripts = {};
-    //   scripts[
-    //     `clean`
-    //   ] = `npx rimraf hooks node_modules package-lock.json && npm i`;
-    //   scripts[`start.${platformApp}`] = `ng serve ${options.name}`;
-    //   return updatePackageScripts(tree, scripts);
-    // },
+    (tree: Tree) => {
+      const platformApp = options.name.replace('-', '.');
+      const scripts = {};
+      scripts[
+        `build.web.elements`
+      ] = `ng build web-elements --prod --output-hashing=none --single-bundle=true --keep-polyfills=true`;
+      return updatePackageScripts(tree, scripts);
+    },
+    (tree: Tree) => {
+      const projects = {};
+      projects[`web-elements`] = {
+        "root": "",
+        "sourceRoot": "xplat/web/elements/builder",
+        "projectType": "application",
+        "prefix": "web-elements",
+        "schematics": {},
+        "architect": {
+          "build": {
+            "builder": "ngx-build-plus:build",
+            "options": {
+              "outputPath": "dist/ngelements",
+              "index": "xplat/web/elements/builder/index.html",
+              "main": "xplat/web/elements/builder/elements.ts",
+              "polyfills": "xplat/web/elements/builder/polyfills.ts",
+              "tsConfig": "xplat/web/elements/builder/tsconfig.elements.json"
+            },
+            "configurations": {
+              "production": {
+                "optimization": true,
+                "outputHashing": "all",
+                "sourceMap": false,
+                "extractCss": true,
+                "namedChunks": false,
+                "aot": true,
+                "extractLicenses": true,
+                "vendorChunk": false,
+                "buildOptimizer": true
+              }
+            }
+          },
+          "serve": {
+            "builder": "ngx-build-plus:dev-server",
+            "options": {
+              "browserTarget": "web-elements:build"
+            },
+            "configurations": {
+              "production": {
+                "browserTarget": "web-elements:build:production"
+              }
+            }
+          }
+        }
+      };
+      return updateAngularProjects(tree, projects);
+    },
     // update dependencies
     (tree: Tree, context: SchematicContext) => {
       return updateWorkspaceSupport(options, tree, context);
@@ -116,6 +166,7 @@ function addFiles(options: ElementsOptions, extra: string = ""): Rule {
           customElementList,
           componentSymbolList,
           componentSymbols,
+          htmlElements,
           npmScope: getNpmScope(),
           prefix: getPrefix(),
           dot: ".",
@@ -135,14 +186,14 @@ function updateWorkspaceSupport(options: ElementsOptions, tree: Tree, context: S
     json.dependencies = {
       ...json.dependencies,
       "@angular/elements": angularVersion,
-      "@webcomponents/webcomponentsjs": "^2.2.7",
+      "@webcomponents/webcomponentsjs": "^2.2.7"
+    }
+    json.devDependencies = json.devDependencies || {};
+    json.devDependencies = {
+      ...json.devDependencies,
       "http-server": "^0.11.1",
       "ngx-build-plus": "^7.7.5"
     }
-    // json.devDependencies = json.devDependencies || {};
-    // json.devDependencies = {
-    //   ...json.devDependencies,
-    // }
 
     return json;
   })(tree, context);
@@ -151,7 +202,7 @@ function updateWorkspaceSupport(options: ElementsOptions, tree: Tree, context: S
 function createCustomElementList(componentSymbols) {
   const customElements = ['let component;'];
   for (const comp of componentSymbols) {
-    customElements.push(`component = createCustomElement(${comp.symbol}, { injector });
+    customElements.push(`component = createCustomElement(${comp.symbol}, { injector: this.injector });
     customElements.define('${comp.selector}', component);`);
   }
   return customElements.join('\n');

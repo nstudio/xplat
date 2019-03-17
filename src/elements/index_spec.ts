@@ -53,8 +53,12 @@ describe('elements schematic', () => {
     const elementModulePath = '/xplat/web/elements/ui.module.ts';
     expect(files.indexOf(elementModulePath)).toBeGreaterThanOrEqual(0);
     const elementModule = getFileContent(tree, elementModulePath);
-    console.log(elementModule);
-    // expect(elementModule.indexOf(`SignupComponent\n];`)).toBeGreaterThanOrEqual(0);
+    // console.log(elementModule);
+    expect(elementModule.indexOf(`import { MenuComponent, FooterComponent } from '@mycompany/web';`)).toBeGreaterThanOrEqual(0);
+    expect(elementModule.indexOf(`createCustomElement(MenuComponent`)).toBeGreaterThanOrEqual(0);
+    expect(elementModule.indexOf(`define('tt-menu'`)).toBeGreaterThanOrEqual(0);
+    expect(elementModule.indexOf(`createCustomElement(FooterComponent`)).toBeGreaterThanOrEqual(0);
+    expect(elementModule.indexOf(`define('tt-footer'`)).toBeGreaterThanOrEqual(0);
   });
 
 });

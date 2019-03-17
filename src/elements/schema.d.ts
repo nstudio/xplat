@@ -13,7 +13,7 @@ export interface Schema {
    */
   skipPreviewApp?: boolean;
   /**
-   * A unique prefix to add to each custom element. Defaults to provided component selectors 'as is'.
+   * A unique prefix to add to each custom element. Defaults to workspace selector setting.
    */
   prefix?: string;
   /**

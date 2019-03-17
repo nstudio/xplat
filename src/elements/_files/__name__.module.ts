@@ -1,20 +1,20 @@
 import { NgModule, Injector } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
 import { createCustomElement } from '@angular/elements';
 import { <%= componentSymbolList %> } from '<%= barrel %>';
 
 @NgModule({
-  imports: [],
-  exports: [],
-  declarations: [],
+  imports: [BrowserModule],
   entryComponents: [
     <%= componentSymbolList %>
-  ],
-  providers: []
+  ]
 })
 export class <%= utils.classify(name) %>Module {
-  constructor(injector: Injector) {
-    <%= customElementList %>
+  constructor(private injector: Injector) {
+    
   }
 
-  ngDoBootstrap() {}
+  ngDoBootstrap() {
+    <%= customElementList %>
+  }
 }
