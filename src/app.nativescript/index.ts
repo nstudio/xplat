@@ -13,7 +13,7 @@ import {
   schematic,
   noop,
 } from '@angular-devkit/schematics';
-import { stringUtils, prerun, getNpmScope, getPrefix, addRootDeps, updatePackageScripts, updateAngularProjects, updateNxProjects, applyAppNamingConvention, getGroupByName, getAppName, missingArgument } from '../utils';
+import { stringUtils, prerun, getNpmScope, getPrefix, addRootDeps, updatePackageScripts, updateAngularProjects, updateNxProjects, applyAppNamingConvention, getGroupByName, getAppName, missingArgument, getJsonFromFile, setDependency, updateJsonFile } from '../utils';
 import { Schema as ApplicationOptions } from './schema';
 
 export default function (options: ApplicationOptions) {
@@ -43,6 +43,7 @@ export default function (options: ApplicationOptions) {
       })(tree, context),
     // add root package dependencies
     (tree: Tree) => addRootDeps(tree, {nativescript: true}),
+    addNsCli(options.addCliDependency),
     // add start/clean scripts
     (tree: Tree) => {
       const scripts = {};
@@ -98,4 +99,33 @@ function addAppFiles(options: ApplicationOptions, appPath: string, extra: string
       move(`apps/${appPath}`)
     ]))
   );
+}
+
+/**
+ * Add {N} CLI to devDependencies
+ */
+function addNsCli(add: boolean): Rule {
+  if (!add) {
+    return noop();
+  }
+  
+  return (tree: Tree) => {
+    const packagePath = "package.json";
+    const packageJson: { devDependencies: { [packageName: string]: string } } = getJsonFromFile(tree, packagePath);
+
+    if (!packageJson) {
+      return tree;
+    }
+
+    packageJson.devDependencies = setDependency(
+      packageJson.devDependencies,
+      {
+        name: 'nativescript',
+        version: "^5.0.0",
+        type: "devDependency"
+      }
+    );
+
+    return updateJsonFile(tree, packagePath, packageJson);
+  }
 }
