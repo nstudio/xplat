@@ -61,6 +61,7 @@ export default function (options: ApplicationOptions) {
       return updatePackageScripts(tree, scripts);
     },
     (tree: Tree) => {
+      const platformApp = options.name.replace('-', '.');
       const projects = {};
       projects[`${options.name}`] = {
         "root": `apps/${options.name}/`,
@@ -70,6 +71,34 @@ export default function (options: ApplicationOptions) {
         "schematics": {
           "@schematics/angular:component": {
             "styleext": "scss"
+          }
+        },
+        "architect": {
+          "serve": {
+            "builder": "@nrwl/builders:run-commands",
+            "options": {
+              "commands": [
+                {
+                  "command": `yarn start.${platformApp}.preview`
+                }
+              ]
+            },
+            "configurations": {
+              "ios": {
+                "commands": [
+                  {
+                    "command": `yarn start.${platformApp}.ios`
+                  }
+                ]
+              },
+              "android": {
+                "commands": [
+                  {
+                    "command": `yarn start.${platformApp}.android`
+                  }
+                ]
+              }
+            }
           }
         }
       };
