@@ -1,3 +1,19 @@
+<a name="7.4.1"></a>
+## [7.4.1](https://github.com/nstudio/xplat/compare/7.4.0...7.4.1) (2019-03-18)
+
+
+### Bug Fixes
+
+* **generators:** install dependencies for app.nativescript ([#107](https://github.com/nstudio/xplat/issues/107)) ([d59d94a](https://github.com/nstudio/xplat/commit/d59d94a)), closes [#106](https://github.com/nstudio/xplat/issues/106)
+
+
+### Features
+
+* **generators:** add addCliDependency to app.nativescript ([#104](https://github.com/nstudio/xplat/issues/104)) ([1dbe95a](https://github.com/nstudio/xplat/commit/1dbe95a)), closes [#101](https://github.com/nstudio/xplat/issues/101)
+* **generators:** add preview script to app.nativescript ([#105](https://github.com/nstudio/xplat/issues/105)) ([1b0618f](https://github.com/nstudio/xplat/commit/1b0618f)), closes [#102](https://github.com/nstudio/xplat/issues/102)
+
+
+
 <a name="7.4.0"></a>
 # [7.4.0](https://github.com/nstudio/xplat/compare/7.3.15...7.4.0) (2019-03-17)
 
