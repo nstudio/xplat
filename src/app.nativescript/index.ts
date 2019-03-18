@@ -13,7 +13,7 @@ import {
   schematic,
   noop,
 } from '@angular-devkit/schematics';
-import { stringUtils, prerun, getNpmScope, getPrefix, addRootDeps, updatePackageScripts, updateAngularProjects, updateNxProjects, applyAppNamingConvention, getGroupByName, getAppName, missingArgument, addInstall } from '../utils';
+import { stringUtils, prerun, getNpmScope, getPrefix, addRootDeps, updatePackageScripts, updateAngularProjects, updateNxProjects, applyAppNamingConvention, getGroupByName, getAppName, missingArgument, addInstall, getJsonFromFile, setDependency, updateJsonFile } from '../utils';
 import { Schema as ApplicationOptions } from './schema';
 
 export default function (options: ApplicationOptions) {
@@ -44,6 +44,7 @@ export default function (options: ApplicationOptions) {
     // add root package dependencies
     (tree: Tree) => addRootDeps(tree, {nativescript: true}),
     addInstall,
+    addNsCli(options.addCliDependency),
     // add start/clean scripts
     (tree: Tree) => {
       const scripts = {};
@@ -55,6 +56,7 @@ export default function (options: ApplicationOptions) {
       scripts[`clean`] = `npx rimraf -- hooks node_modules package-lock.json && npm i`;
       scripts[`start.${platformApp}.ios`] = `cd apps/${options.name} && tns run ios --emulator --bundle${hmr}`;
       scripts[`start.${platformApp}.android`] = `cd apps/${options.name} && tns run android --emulator --bundle${hmr}`;
+      scripts[`start.${platformApp}.preview`] = `cd apps/${options.name} && tns preview --bundle${hmr}`;
       scripts[`clean.${platformApp}`] = `cd apps/${options.name} && npx rimraf -- hooks node_modules platforms package-lock.json && npm i && npx rimraf -- package-lock.json`;
       return updatePackageScripts(tree, scripts);
     },
@@ -99,4 +101,33 @@ function addAppFiles(options: ApplicationOptions, appPath: string, extra: string
       move(`apps/${appPath}`)
     ]))
   );
+}
+
+/**
+ * Add {N} CLI to devDependencies
+ */
+function addNsCli(add: boolean): Rule {
+  if (!add) {
+    return noop();
+  }
+  
+  return (tree: Tree) => {
+    const packagePath = "package.json";
+    const packageJson: { devDependencies: { [packageName: string]: string } } = getJsonFromFile(tree, packagePath);
+
+    if (!packageJson) {
+      return tree;
+    }
+
+    packageJson.devDependencies = setDependency(
+      packageJson.devDependencies,
+      {
+        name: 'nativescript',
+        version: "^5.0.0",
+        type: "devDependency"
+      }
+    );
+
+    return updateJsonFile(tree, packagePath, packageJson);
+  }
 }
