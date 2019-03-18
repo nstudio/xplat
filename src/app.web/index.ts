@@ -45,7 +45,8 @@ export default function(options: ApplicationOptions) {
       ...options,
       skipInstall: true
     })(tree, context),
-    (tree: Tree) => addAppFiles(options),
+    addHeadlessE2e(options),
+    (tree: Tree, context: SchematicContext) => addAppFiles(options)(tree, context),
     (tree: Tree, context: SchematicContext) =>
       options.sample || options.routing
       ? addAppFiles(options, options.sample ? "sample" : "routing")(tree, context)
@@ -66,6 +67,55 @@ export default function(options: ApplicationOptions) {
       ? noop()
       : formatFiles(options)
   ]);
+}
+
+/**
+ * Add a Protractor config with headless Chrome and create a
+ * target configuration to use the config created.
+ * 
+ * @param options 
+ */
+function addProtractorCiConfig(options: ApplicationOptions) {
+  return (tree: Tree) => {
+    const config = `
+const defaultConfig = require('./protractor.conf').config;
+defaultConfig.capabilities.chromeOptions = {
+  args: ['--headless']
+};
+
+exports.config = defaultConfig;
+    `;
+    const e2eProjectName = `${options.name}-e2e`;
+    const confFile = "protractor.headless.js";
+    tree.create(`/apps/${e2eProjectName}/${confFile}`, config);
+
+    const angularJson = getJsonFromFile(tree, "angular.json");
+    if (angularJson && angularJson.projects) {
+      if (angularJson.projects[e2eProjectName]) {
+        if (angularJson.projects[e2eProjectName].architect) {
+          angularJson.projects[e2eProjectName].architect.e2e.configurations.ci = {
+            protractorConfig: `apps/${e2eProjectName}/${confFile}`
+          };
+        }
+      }
+    }
+    return updateJsonFile(tree, "angular.json", angularJson);
+  }
+}
+
+/**
+ * Add headless options to e2e tests
+ * @param options 
+ */
+function addHeadlessE2e(options: ApplicationOptions) {
+  const framework: "protractor" | "cypress" | "none" = options.e2eTestRunner;
+  switch (framework) {
+    case "protractor":
+      return addProtractorCiConfig(options);
+  
+    default:
+      return noop();
+  }
 }
 
 function addAppFiles(options: ApplicationOptions, extra: string = ""): Rule {
@@ -184,7 +234,7 @@ function appCmpHtml(name: string) {
 
   <a href="https://nrwl.io/nx">Watch a 5-minute video on how to get started with Nx.</a>
 
-  <h1>{{'hello' | translate}}</h1>
+  <h1>{{'welcome' | translate}}!</h1>
   <h3>Try things out</h3>
 
   <a href="https://nstudio.io/xplat">Learn more about xplat.</a>
@@ -210,6 +260,9 @@ export class AppComponent extends AppBaseComponent {
 `;
 }
 
+/**
+ * @todo Pass this initial tests
+ */
 function appCmpSpec() {
   return `import { TestBed, async } from '@angular/core/testing';
 import { HttpClient } from '@angular/common/http';

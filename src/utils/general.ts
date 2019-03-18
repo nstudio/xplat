@@ -264,6 +264,19 @@ export function sanitizeCommaDelimitedArg(input: string): Array<string> {
   return [];
 }
 
+/**
+ * Check if the platform will need a web app to be generated.
+ * 
+ * Useful for deciding which dependencies or files should be added .
+ * 
+ * @param targetPlatforms 
+ */
+export function hasWebPlatform(targetPlatforms: ITargetPlatforms) {
+  return (
+    targetPlatforms.web || targetPlatforms.ionic || targetPlatforms.electron
+  );
+}
+
 export function addRootDeps(
   tree: Tree,
   targetPlatforms: ITargetPlatforms,
@@ -274,7 +287,7 @@ export function addRootDeps(
     packageJson = getJsonFromFile(tree, packagePath);
   }
   if (packageJson) {
-    const angularVersion = packageJson.dependencies['@angular/core'];
+    const angularVersion = packageJson.dependencies['@angular/core'] || "^7.0.0";
 
     const deps: NodeDependency[] = [];
 
@@ -292,7 +305,30 @@ export function addRootDeps(
     };
     deps.push(dep);
 
-    if (!targetPlatforms.nest) {
+    deps.push(...<Array<NodeDependency>>[
+      {
+        name: "@nrwl/nx",
+        version: "^7.0.0",
+        type: "dependency"
+      },
+      {
+        name: "@ngrx/effects",
+        version: angularVersion,
+        type: "dependency"
+      },
+      {
+        name: "@ngrx/router-store",
+        version: angularVersion,
+        type: "dependency"
+      },
+      {
+        name: "@ngrx/store",
+        version: angularVersion,
+        type: "dependency"
+      }
+    ]);
+    
+    if (hasWebPlatform(targetPlatforms)) {
       // if just setting up workspace with nest, we don't need frontend scss
       dep = {
         name: `@${getNpmScope()}/scss`,
