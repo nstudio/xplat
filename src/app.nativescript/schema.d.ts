@@ -31,4 +31,8 @@ export interface Schema {
      * Skip installing dependencies
      */
     skipInstall?: boolean;
+    /**
+     * Add {N} CLI to devDependencies
+     */
+    addCliDependency?: boolean;
 }

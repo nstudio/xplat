@@ -47,6 +47,11 @@
       "type": "boolean",
       "description": "Skip installing dependencies.",
       "default": false
+    },
+    "addCliDependency": {
+      "type": "boolean",
+      "description": "Add {N} CLI to devDependencies",
+      "default": false
     }
   },
   "required": []

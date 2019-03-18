@@ -201,7 +201,7 @@ export const copy = (tree: Tree, from: string, to: string) => {
   tree.create(to, file.content);
 };
 
-const setDependency = (
+export const setDependency = (
   dependenciesMap: { [key: string]: string },
   { name, version }: NodeDependency
 ) => Object.assign(dependenciesMap, { [name]: version });
