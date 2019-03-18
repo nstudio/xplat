@@ -55,6 +55,7 @@ export default function (options: ApplicationOptions) {
       scripts[`clean`] = `npx rimraf -- hooks node_modules package-lock.json && npm i`;
       scripts[`start.${platformApp}.ios`] = `cd apps/${options.name} && tns run ios --emulator --bundle${hmr}`;
       scripts[`start.${platformApp}.android`] = `cd apps/${options.name} && tns run android --emulator --bundle${hmr}`;
+      scripts[`start.${platformApp}.preview`] = `cd apps/${options.name} && tns preview --bundle${hmr}`;
       scripts[`clean.${platformApp}`] = `cd apps/${options.name} && npx rimraf -- hooks node_modules platforms package-lock.json && npm i && npx rimraf -- package-lock.json`;
       return updatePackageScripts(tree, scripts);
     },
