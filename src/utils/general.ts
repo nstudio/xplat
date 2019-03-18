@@ -23,6 +23,7 @@ import { toFileName } from "./name-utils";
 const util = require('util');
 const xml2js = require('xml2js');
 import * as stripJsonComments from 'strip-json-comments';
+import { NodePackageInstallTask } from "@angular-devkit/schematics/tasks";
 
 export const supportedPlatforms = [
   "web",
@@ -1315,3 +1316,8 @@ export const toComponentClassName = (name: string) =>
   `${classify(name)}Component`;
 
 export const toNgModuleClassName = (name: string) => `${classify(name)}Module`;
+
+export function addInstall(host: Tree, context: SchematicContext) {
+  context.addTask(new NodePackageInstallTask());
+  return host;
+}

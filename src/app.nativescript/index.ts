@@ -13,7 +13,7 @@ import {
   schematic,
   noop,
 } from '@angular-devkit/schematics';
-import { stringUtils, prerun, getNpmScope, getPrefix, addRootDeps, updatePackageScripts, updateAngularProjects, updateNxProjects, applyAppNamingConvention, getGroupByName, getAppName, missingArgument, getJsonFromFile, setDependency, updateJsonFile } from '../utils';
+import { stringUtils, prerun, getNpmScope, getPrefix, addRootDeps, updatePackageScripts, updateAngularProjects, updateNxProjects, applyAppNamingConvention, getGroupByName, getAppName, missingArgument, addInstall, getJsonFromFile, setDependency, updateJsonFile } from '../utils';
 import { Schema as ApplicationOptions } from './schema';
 
 export default function (options: ApplicationOptions) {
@@ -43,6 +43,7 @@ export default function (options: ApplicationOptions) {
       })(tree, context),
     // add root package dependencies
     (tree: Tree) => addRootDeps(tree, {nativescript: true}),
+    addInstall,
     addNsCli(options.addCliDependency),
     // add start/clean scripts
     (tree: Tree) => {

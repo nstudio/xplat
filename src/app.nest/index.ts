@@ -14,7 +14,6 @@ import {
   noop,
   externalSchematic
 } from "@angular-devkit/schematics";
-import { NodePackageInstallTask } from "@angular-devkit/schematics/tasks";
 import {
   stringUtils,
   getNpmScope,
@@ -29,7 +28,8 @@ import {
   applyAppNamingConvention,
   getAppName,
   updateJsonInTree,
-  missingArgument
+  missingArgument,
+  addInstall
 } from "../utils";
 
 export default function (options: ApplicationOptions) {
@@ -99,11 +99,6 @@ export default function (options: ApplicationOptions) {
     addPostinstallers(),
     options.skipFormat ? noop() : formatFiles(options)
   ]);
-}
-
-function addInstall(host: Tree, context: SchematicContext) {
-  context.addTask(new NodePackageInstallTask());
-  return host;
 }
 
 function addAppFiles(
