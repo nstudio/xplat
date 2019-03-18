@@ -64,10 +64,13 @@ With the strength of [TypeScript](https://www.typescriptlang.org/) paired with t
 
 Please see our [guidelines for contributing](https://github.com/nstudio/xplat/blob/master/CONTRIBUTING.md).
 
-[<img alt="NathanWalker" src="https://avatars2.githubusercontent.com/u/457187?v=4&s=117" width="117">](https://github.com/NathanWalker) |[<img alt="m-abs" src="https://avatars3.githubusercontent.com/u/1348705?v=4&s=117" width="117">](https://github.com/m-abs) |[<img alt="sr3dna" src="https://avatars2.githubusercontent.com/u/15936818?v=4&s=117" width="117">](https://github.com/sr3dna) |[<img alt="mbaljeetsingh" src="https://avatars0.githubusercontent.com/u/872762?v=4&s=117" width="117">](https://github.com/mbaljeetsingh) |[<img alt="dungahk" src="https://avatars3.githubusercontent.com/u/10074819?v=4&s=117" width="117">](https://github.com/dungahk) |[<img alt="kamilmysliwiec" src="https://avatars0.githubusercontent.com/u/23244943?v=4&s=117" width="117">](https://github.com/kamilmysliwiec) |
+[<img alt="NathanWalker" src="https://avatars2.githubusercontent.com/u/457187?v=4&s=117" width="117">](https://github.com/NathanWalker) |[<img alt="m-abs" src="https://avatars3.githubusercontent.com/u/1348705?v=4&s=117" width="117">](https://github.com/m-abs) |[<img alt="dungahk" src="https://avatars3.githubusercontent.com/u/10074819?v=4&s=117" width="117">](https://github.com/dungahk) |[<img alt="sr3dna" src="https://avatars2.githubusercontent.com/u/15936818?v=4&s=117" width="117">](https://github.com/sr3dna) |[<img alt="mbaljeetsingh" src="https://avatars0.githubusercontent.com/u/872762?v=4&s=117" width="117">](https://github.com/mbaljeetsingh) |[<img alt="kamilmysliwiec" src="https://avatars0.githubusercontent.com/u/23244943?v=4&s=117" width="117">](https://github.com/kamilmysliwiec) |
 :---: |:---: |:---: |:---: |:---: |:---: |
-[NathanWalker](https://github.com/NathanWalker) |[m-abs](https://github.com/m-abs) |[sr3dna](https://github.com/sr3dna) |[mbaljeetsingh](https://github.com/mbaljeetsingh) |[dungahk](https://github.com/dungahk) |[kamilmysliwiec](https://github.com/kamilmysliwiec) |
+[NathanWalker](https://github.com/NathanWalker) |[m-abs](https://github.com/m-abs) |[dungahk](https://github.com/dungahk) |[sr3dna](https://github.com/sr3dna) |[mbaljeetsingh](https://github.com/mbaljeetsingh) |[kamilmysliwiec](https://github.com/kamilmysliwiec) |
 
 [<img alt="madmath03" src="https://avatars3.githubusercontent.com/u/6967675?v=4&s=117" width="117">](https://github.com/madmath03) |[<img alt="miguelramos" src="https://avatars3.githubusercontent.com/u/495720?v=4&s=117" width="117">](https://github.com/miguelramos) |
 :---: |:---: |
 [madmath03](https://github.com/madmath03) |[miguelramos](https://github.com/miguelramos) |
+
+
+
