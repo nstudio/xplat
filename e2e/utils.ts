@@ -143,7 +143,7 @@ function getPlatformId(platform: EPlatform) {
   }
 }
 
-export function generateApp(platform: EPlatform, appName: string, args?: string) {
+export function generateApp(platform: EPlatform, appName: string, args = "") {
   const plat = getPlatformId(platform);
   const cmd = `generate app${plat ? "." + plat : ""} ${appName} ${args}`;
   return runCLI(cmd);
@@ -154,8 +154,8 @@ function getPlatformName(appName: string, platform: EPlatform, e2e = false) {
   return `${plat || "web"}-${appName}${e2e ? "-e2e" : ""}`;
 }
 
-export function runE2e(appName: string, configuration = "default") {
-  const cmd = `e2e ${getPlatformName(appName, EPlatform.Web, true)} --configuration=${configuration}`;
+export function runE2e(appName: string, args = "") {
+  const cmd = `e2e ${getPlatformName(appName, EPlatform.Web, true)} ${args}`;
   return runCLI(cmd);
 }
 

@@ -8,12 +8,22 @@ import {
 } from "../utils";
 
 describe("web e2e", () => {
-  it("should pass protractor tests", () => {
+  beforeEach(() => {
     ensureProject();
+    generateXplatArchitecture(EPlatform.Web);
+  });
+
+  it("should pass protractor tests", () => {
     const webapp = uniq("web");
 
-    expect(generateXplatArchitecture(EPlatform.Web)).toBeTruthy();
     expect(generateApp(EPlatform.Web, webapp, "--addHeadlessE2e")).toBeTruthy();
-    expect(runE2e(webapp, "ci")).toBeTruthy();
+    expect(runE2e(webapp, "--configuration=ci")).toBeTruthy();
+  });
+
+  it("should pass cypress tests", () => {
+    const webapp = uniq("web");
+
+    expect(generateApp(EPlatform.Web, webapp, "--addHeadlessE2e --e2eTestRunner cypress")).toBeTruthy();
+    expect(runE2e(webapp, "--headless")).toBeTruthy();
   });
 });
