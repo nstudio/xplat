@@ -1,3 +1,13 @@
+<a name="7.4.2"></a>
+## [7.4.2](https://github.com/nstudio/xplat/compare/7.4.1...7.4.2) (2019-03-19)
+
+
+### Features
+
+* **nativescript:** add architect serve target for {N} ([#108](https://github.com/nstudio/xplat/issues/108)) ([f3b8edf](https://github.com/nstudio/xplat/commit/f3b8edf)), closes [#103](https://github.com/nstudio/xplat/issues/103)
+
+
+
 <a name="7.4.1"></a>
 ## [7.4.1](https://github.com/nstudio/xplat/compare/7.4.0...7.4.1) (2019-03-18)
 
