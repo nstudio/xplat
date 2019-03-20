@@ -1,3 +1,13 @@
+<a name="7.4.3"></a>
+## [7.4.3](https://github.com/nstudio/xplat/compare/7.4.2...7.4.3) (2019-03-20)
+
+
+### Bug Fixes
+
+* **generators:** feature schema ([be76644](https://github.com/nstudio/xplat/commit/be76644))
+
+
+
 <a name="7.4.2"></a>
 ## [7.4.2](https://github.com/nstudio/xplat/compare/7.4.1...7.4.2) (2019-03-19)
 
