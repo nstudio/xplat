@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
-import { PIPES } from './pipes';
+import { UI_PIPES } from './pipes';
 
 const MODULES = [
   TranslateModule
@@ -11,11 +11,11 @@ const MODULES = [
     ...MODULES
   ],
   declarations: [
-    ...PIPES
+    ...UI_PIPES
   ],
   exports: [
     ...MODULES,
-    ...PIPES
+    ...UI_PIPES
   ]
 })
 export class UISharedModule {}
