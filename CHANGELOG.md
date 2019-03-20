@@ -1,3 +1,13 @@
+<a name="7.4.4"></a>
+## [7.4.4](https://github.com/nstudio/xplat/compare/7.4.3...7.4.4) (2019-03-20)
+
+
+### Bug Fixes
+
+* **generators:** pipe naming for collection ([54d743e](https://github.com/nstudio/xplat/commit/54d743e))
+
+
+
 <a name="7.4.3"></a>
 ## [7.4.3](https://github.com/nstudio/xplat/compare/7.4.2...7.4.3) (2019-03-20)
 

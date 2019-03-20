@@ -72,7 +72,7 @@ describe("pipe schematic", () => {
 
     // console.log(modulePath + ':');
     // console.log(moduleContent);
-    expect(moduleContent.indexOf(`...PIPES`)).toBeGreaterThanOrEqual(0);
+    expect(moduleContent.indexOf(`...UI_PIPES`)).toBeGreaterThanOrEqual(0);
 
     options = { ...defaultOptions, feature: 'foo' };
     tree = schematicRunner.runSchematic("pipe", options, tree);
