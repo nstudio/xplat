@@ -37,6 +37,7 @@
     },
     "routing": {
       "type": "boolean",
+      "description": "Whether to generate routing support or not (Only when used with --onlyProject).",
       "default": false
     },
     "adjustSandbox": {
