@@ -1,3 +1,13 @@
+<a name="7.4.5"></a>
+## [7.4.5](https://github.com/nstudio/xplat/compare/7.4.4...7.4.5) (2019-03-23)
+
+
+### Bug Fixes
+
+* **generators:** ensure angular deps are in root package ([503f537](https://github.com/nstudio/xplat/commit/503f537))
+
+
+
 <a name="7.4.4"></a>
 ## [7.4.4](https://github.com/nstudio/xplat/compare/7.4.3...7.4.4) (2019-03-20)
 
