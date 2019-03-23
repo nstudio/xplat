@@ -288,6 +288,8 @@ export function addRootDeps(
   }
   if (packageJson) {
     const angularVersion = packageJson.dependencies['@angular/core'] || "^7.0.0";
+    const rxjsVersion = packageJson.dependencies['rxjs'] || '~6.4.0';
+    const angularDevkitVersion = packageJson.devDependencies['@angular-devkit/build-angular'] || '~0.13.0';
 
     const deps: NodeDependency[] = [];
 
@@ -674,6 +676,117 @@ export function addRootDeps(
         type: "dependency"
       };
       deps.push(dep);
+    }
+
+    if (!targetPlatforms.nest) {
+      // for everyting except nest, ensure Angular deps are added
+      const hasAngularDeps = packageJson.dependencies['@angular/core'];
+      if (!hasAngularDeps) {
+        dep = {
+          name: `@angular/animations`,
+          version: angularVersion,
+          type: "dependency"
+        };
+        deps.push(dep);
+
+        dep = {
+          name: `@angular/common`,
+          version: angularVersion,
+          type: "dependency"
+        };
+        deps.push(dep);
+
+        dep = {
+          name: `@angular/compiler`,
+          version: angularVersion,
+          type: "dependency"
+        };
+        deps.push(dep);
+
+        dep = {
+          name: `@angular/core`,
+          version: angularVersion,
+          type: "dependency"
+        };
+        deps.push(dep);
+
+        dep = {
+          name: `@angular/forms`,
+          version: angularVersion,
+          type: "dependency"
+        };
+        deps.push(dep);
+
+        dep = {
+          name: `@angular/platform-browser`,
+          version: angularVersion,
+          type: "dependency"
+        };
+        deps.push(dep);
+
+        dep = {
+          name: `@angular/platform-browser-dynamic`,
+          version: angularVersion,
+          type: "dependency"
+        };
+        deps.push(dep);
+
+        dep = {
+          name: `@angular/router`,
+          version: angularVersion,
+          type: "dependency"
+        };
+        deps.push(dep);
+
+        dep = {
+          name: `core-js`,
+          version: '^2.5.4',
+          type: "dependency"
+        };
+        deps.push(dep);
+
+        dep = {
+          name: `rxjs`,
+          version: rxjsVersion,
+          type: "dependency"
+        };
+        deps.push(dep);
+
+        dep = {
+          name: `zone.js`,
+          version: '^0.8.26',
+          type: "dependency"
+        };
+        deps.push(dep);
+
+        dep = {
+          name: `@angular/compiler-cli`,
+          version: angularVersion,
+          type: "devDependency"
+        };
+        deps.push(dep);
+
+        dep = {
+          name: `@angular/language-service`,
+          version: angularVersion,
+          type: "devDependency"
+        };
+        deps.push(dep);
+
+        dep = {
+          name: `@angular-devkit/build-angular`,
+          version: angularDevkitVersion,
+          type: "devDependency"
+        };
+        deps.push(dep);
+
+        dep = {
+          name: `codelyzer`,
+          version: '~4.5.0',
+          type: "devDependency"
+        };
+        deps.push(dep);
+      }
     }
 
     const dependenciesMap = Object.assign({}, packageJson.dependencies);
