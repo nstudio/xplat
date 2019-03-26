@@ -13,12 +13,18 @@ import {
   schematic,
   noop,
 } from '@angular-devkit/schematics';
-import { stringUtils, prerun, getNpmScope, getPrefix, addRootDeps, updatePackageScripts, updateAngularProjects, updateNxProjects, applyAppNamingConvention, getGroupByName, getAppName } from '../utils';
+import { stringUtils, prerun, getNpmScope, getPrefix, addRootDeps, updatePackageScripts, updateAngularProjects, updateNxProjects, applyAppNamingConvention, getGroupByName, getAppName, missingArgument, addInstall, getJsonFromFile, setDependency, updateJsonFile } from '../utils';
 import { Schema as ApplicationOptions } from './schema';
 
 export default function (options: ApplicationOptions) {
   if (!options.name) {
-    throw new SchematicsException(`Missing name argument. Provide a name for your NativeScript app. Example: ng g app.nativescript sample`);
+    throw new SchematicsException(
+      missingArgument('name', 'Provide a name for your NativeScript app.', 'ng g app.nativescript sample')
+    );
+  }
+  if (options.setupSandbox) {
+    // always setup routing with sandbox
+    options.routing = true;
   }
 
   return chain([
@@ -37,17 +43,25 @@ export default function (options: ApplicationOptions) {
       })(tree, context),
     // add root package dependencies
     (tree: Tree) => addRootDeps(tree, {nativescript: true}),
+    addInstall,
+    addNsCli(options.addCliDependency),
     // add start/clean scripts
     (tree: Tree) => {
       const scripts = {};
       const platformApp = options.name.replace('-', '.');
+      // standard apps don't have hmr on by default since results can vary
+      // more reliable to leave off by default for now
+      // however, sandbox setup due to its simplicity uses hmr by default
+      let hmr = options.setupSandbox ? ' --hmr' : '';
       scripts[`clean`] = `npx rimraf -- hooks node_modules package-lock.json && npm i`;
-      scripts[`start.${platformApp}.ios`] = `cd apps/${options.name} && tns run ios --emulator --bundle`;
-      scripts[`start.${platformApp}.android`] = `cd apps/${options.name} && tns run android --emulator --bundle`;
+      scripts[`start.${platformApp}.ios`] = `cd apps/${options.name} && tns run ios --emulator --bundle${hmr}`;
+      scripts[`start.${platformApp}.android`] = `cd apps/${options.name} && tns run android --emulator --bundle${hmr}`;
+      scripts[`start.${platformApp}.preview`] = `cd apps/${options.name} && tns preview --bundle${hmr}`;
       scripts[`clean.${platformApp}`] = `cd apps/${options.name} && npx rimraf -- hooks node_modules platforms package-lock.json && npm i && npx rimraf -- package-lock.json`;
       return updatePackageScripts(tree, scripts);
     },
     (tree: Tree) => {
+      const platformApp = options.name.replace('-', '.');
       const projects = {};
       projects[`${options.name}`] = {
         "root": `apps/${options.name}/`,
@@ -57,6 +71,34 @@ export default function (options: ApplicationOptions) {
         "schematics": {
           "@schematics/angular:component": {
             "styleext": "scss"
+          }
+        },
+        "architect": {
+          "serve": {
+            "builder": "@nrwl/builders:run-commands",
+            "options": {
+              "commands": [
+                {
+                  "command": `yarn start.${platformApp}.preview`
+                }
+              ]
+            },
+            "configurations": {
+              "ios": {
+                "commands": [
+                  {
+                    "command": `yarn start.${platformApp}.ios`
+                  }
+                ]
+              },
+              "android": {
+                "commands": [
+                  {
+                    "command": `yarn start.${platformApp}.android`
+                  }
+                ]
+              }
+            }
           }
         }
       };
@@ -88,4 +130,33 @@ function addAppFiles(options: ApplicationOptions, appPath: string, extra: string
       move(`apps/${appPath}`)
     ]))
   );
+}
+
+/**
+ * Add {N} CLI to devDependencies
+ */
+function addNsCli(add: boolean): Rule {
+  if (!add) {
+    return noop();
+  }
+  
+  return (tree: Tree) => {
+    const packagePath = "package.json";
+    const packageJson: { devDependencies: { [packageName: string]: string } } = getJsonFromFile(tree, packagePath);
+
+    if (!packageJson) {
+      return tree;
+    }
+
+    packageJson.devDependencies = setDependency(
+      packageJson.devDependencies,
+      {
+        name: 'nativescript',
+        version: "^5.0.0",
+        type: "devDependency"
+      }
+    );
+
+    return updateJsonFile(tree, packagePath, packageJson);
+  }
 }

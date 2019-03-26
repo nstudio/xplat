@@ -4,7 +4,7 @@ import { getFileContent } from '@schematics/angular/utility/test';
 import * as path from 'path';
 
 import { Schema as FeatureOptions } from './schema';
-import { createXplatWithApps, isInModuleMetadata } from '../utils';
+import { createXplatWithApps, isInModuleMetadata, createOrUpdate } from '../utils';
 
 describe('feature schematic', () => {
   const schematicRunner = new SchematicTestRunner(
@@ -13,7 +13,8 @@ describe('feature schematic', () => {
   );
   const defaultOptions: FeatureOptions = {
     name: 'foo',
-    projects: 'nativescript-viewer,web-viewer'
+    projects: 'nativescript-viewer,web-viewer',
+    createBase: true
   };
 
   let appTree: Tree;
@@ -138,7 +139,7 @@ describe('feature schematic', () => {
     expect(featureModule).toMatch(`import { UIModule } from \'../ui/ui.module\'`);
   });
 
-  it('should create feature module WITH a single starting component BUT IGNORE creating matching base component when using ignoreBase', () => {
+  it('should create feature module WITH a single starting component BUT IGNORE creating matching base component', () => {
     // console.log('appTree:', appTree);
     let tree = schematicRunner.runSchematic('xplat', {
       prefix: 'tt',
@@ -150,8 +151,7 @@ describe('feature schematic', () => {
     }, tree);
     const options: FeatureOptions = {
       name: 'foo',
-      platforms: 'web',
-      ignoreBase: true
+      platforms: 'web'
      };
     tree = schematicRunner.runSchematic('feature', options, tree);
     const files = tree.files;
@@ -348,4 +348,48 @@ describe('feature schematic', () => {
     expect(featureModule).toMatch(`export const FOOWITHDASH_COMPONENTS`);
 
   });
+
+  it('should create feature module for specified project WITH Routing and adjustSandbox', () => {
+    const options: FeatureOptions = { 
+      ...defaultOptions,
+      projects: 'nativescript-viewer'
+    };
+    let tree = schematicRunner.runSchematic('xplat', {
+      prefix: 'tt',
+      sample: true,
+      platforms: 'nativescript'
+    }, appTree);
+    tree = schematicRunner.runSchematic('app.nativescript', {
+      name: 'viewer',
+      prefix: 'tt',
+      routing: true
+    }, tree);
+
+    // manually update home.component to prep for sandobx
+    const homeCmpPath = `/apps/nativescript-viewer/app/features/home/components/home.component.html`;
+    createOrUpdate(tree, homeCmpPath, sandboxHomeSetup());
+    // console.log('homecmp:', getFileContent(tree, homeCmpPath));
+
+    options.onlyProject = true;
+    options.adjustSandbox = true;
+    options.routing = true;
+    options.name = 'foo-with-dash';
+    tree = schematicRunner.runSchematic('feature', options, tree);
+    // console.log('---------')
+    // console.log('homecmp:', getFileContent(tree, homeCmpPath));
+
+  });
 }); 
+
+export function sandboxHomeSetup() {
+  return `<ActionBar title="Sandbox" class="action-bar">
+</ActionBar>
+<StackLayout>
+  <ScrollView>
+    <StackLayout class="p-20">
+      <Button text="Buttons" (tap)="goTo('/page-buttons')" class="btn"></Button>
+    </StackLayout>
+  </ScrollView>
+</StackLayout>  
+`;
+}

@@ -27,7 +27,7 @@ import {
 import * as ts from 'typescript';
 import * as path from 'path';
 import { toFileName } from './name-utils';
-import { serializeJson } from './general';
+import { serializeJson, jsonParse } from './general';
 import * as stripJsonComments from 'strip-json-comments';
 
 // This should be moved to @schematics/angular once it allows to pass custom expressions as providers
@@ -611,7 +611,7 @@ export function readJsonInTree<T = any>(host: Tree, path: string): T {
     throw new Error(`Cannot find ${path}`);
   }
 
-  return JSON.parse(stripJsonComments(host.read(path)!.toString('utf-8')));
+  return jsonParse(host.read(path)!.toString('utf-8'));
 }
 
 /**

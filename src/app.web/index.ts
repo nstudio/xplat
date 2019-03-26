@@ -23,19 +23,17 @@ import {
   getJsonFromFile,
   applyAppNamingConvention,
   updateJsonFile,
-  formatFiles
+  formatFiles,
+  missingArgument
 } from "../utils";
 import { Schema as ApplicationOptions } from "./schema";
 
-let appName: string;
 export default function(options: ApplicationOptions) {
   if (!options.name) {
     throw new SchematicsException(
-      `Missing name argument. Provide a name for your web app. Example: ng g app my-app`
+      missingArgument('name', 'Provide a name for your Web app.', 'ng g app my-app')
     );
   }
-  appName = options.name;
-
   // ensure sass is used
   options.style = "scss";
 
@@ -47,7 +45,8 @@ export default function(options: ApplicationOptions) {
       ...options,
       skipInstall: true
     })(tree, context),
-    (tree: Tree) => addAppFiles(options),
+    addHeadlessE2e(options),
+    (tree: Tree, context: SchematicContext) => addAppFiles(options)(tree, context),
     (tree: Tree, context: SchematicContext) =>
       options.sample || options.routing
       ? addAppFiles(options, options.sample ? "sample" : "routing")(tree, context)
@@ -70,6 +69,55 @@ export default function(options: ApplicationOptions) {
   ]);
 }
 
+/**
+ * Add a Protractor config with headless Chrome and create a
+ * target configuration to use the config created.
+ * 
+ * @param options 
+ */
+function addProtractorCiConfig(options: ApplicationOptions) {
+  return (tree: Tree) => {
+    const config = `
+const defaultConfig = require('./protractor.conf').config;
+defaultConfig.capabilities.chromeOptions = {
+  args: ['--headless']
+};
+
+exports.config = defaultConfig;
+    `;
+    const e2eProjectName = `${options.name}-e2e`;
+    const confFile = "protractor.headless.js";
+    tree.create(`/apps/${e2eProjectName}/${confFile}`, config);
+
+    const angularJson = getJsonFromFile(tree, "angular.json");
+    if (angularJson && angularJson.projects) {
+      if (angularJson.projects[e2eProjectName]) {
+        if (angularJson.projects[e2eProjectName].architect) {
+          angularJson.projects[e2eProjectName].architect.e2e.configurations.ci = {
+            protractorConfig: `apps/${e2eProjectName}/${confFile}`
+          };
+        }
+      }
+    }
+    return updateJsonFile(tree, "angular.json", angularJson);
+  }
+}
+
+/**
+ * Add headless options to e2e tests
+ * @param options 
+ */
+function addHeadlessE2e(options: ApplicationOptions) {
+  const framework: "protractor" | "cypress" | "none" = options.e2eTestRunner;
+  switch (framework) {
+    case "protractor":
+      return addProtractorCiConfig(options);
+  
+    default:
+      return noop();
+  }
+}
+
 function addAppFiles(options: ApplicationOptions, extra: string = ""): Rule {
   extra = extra ? `${extra}_` : "";
   return branchAndMerge(
@@ -89,7 +137,7 @@ function addAppFiles(options: ApplicationOptions, extra: string = ""): Rule {
 }
 
 function adjustAppFiles(options: ApplicationOptions, tree: Tree) {
-  tree.overwrite(`/apps/${options.name}/src/index.html`, indexContent());
+  tree.overwrite(`/apps/${options.name}/src/index.html`, indexContent(options.name));
   tree.overwrite(`/apps/${options.name}/src/main.ts`, mainContent());
   tree.overwrite(
     `/apps/${options.name}/src/styles.scss`,
@@ -99,8 +147,15 @@ function adjustAppFiles(options: ApplicationOptions, tree: Tree) {
     `/apps/${options.name}/src/app/app.component.html`,
     options.sample || options.routing
       ? `<router-outlet></router-outlet>`
-      : appCmpHtml()
+      : appCmpHtml(options.name)
   );
+  if (options.sample || options.routing) {
+    // update home route to reflect with root cmp would have been
+    tree.overwrite(
+      `/apps/${options.name}/src/app/features/home/components/home.component.html`,
+      appCmpHtml(options.name)
+    );
+  }
   tree.overwrite(
     `/apps/${options.name}/src/app/app.component.ts`,
     appCmpContent()
@@ -129,12 +184,12 @@ function adjustAppFiles(options: ApplicationOptions, tree: Tree) {
   return updateJsonFile(tree, "angular.json", ngConfig);
 }
 
-function indexContent() {
+function indexContent(name: string) {
   return `<!doctype html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>${getNpmScope()} ${appName}</title>
+    <title>${getNpmScope()} ${name}</title>
     <base href="/">
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -166,31 +221,24 @@ platformBrowserDynamic()
 `;
 }
 
-function appCmpHtml() {
+function appCmpHtml(name: string) {
   return `<div class="p-x-20">
-    <div style="text-align:center">
-      <h2>
-        Welcome to an Angular CLI app built with Nrwl Nx and xplat!
-      </h2>
-      <img width="100" src="assets/nx-logo.png">
-      <span style="position: relative;top: -28px;margin: 10px;">+</span>
-      <img width="120" src="assets/xplat.png">
-    </div>
-  
-    <h2>Nx</h2>
-  
-    An open source toolkit for enterprise Angular applications. Nx is designed to help you create and build enterprise grade
-    Angular applications. It provides an opinionated approach to application project structure and patterns.
-  
-    <h3>Quick Start & Documentation</h3>
-  
-    <a href="https://nrwl.io/nx">Watch a 5-minute video on how to get started with Nx.</a>
-  
-    <h1>{{'hello' | translate}}</h1>
-    <h3>Try things out</h3>
-  
-    <a href="https://nstudio.io/xplat">Learn more about xplat.</a>
-  </div>`;
+  <${getPrefix()}-header title="${name}"></${getPrefix()}-header>
+
+  <h2>Nx</h2>
+
+  An open source toolkit for enterprise Angular applications. Nx is designed to help you create and build enterprise grade
+  Angular applications. It provides an opinionated approach to application project structure and patterns.
+
+  <h3>Quick Start & Documentation</h3>
+
+  <a href="https://nrwl.io/nx">Watch a 5-minute video on how to get started with Nx.</a>
+
+  <h1>{{'welcome' | translate}}!</h1>
+  <h3>Try things out</h3>
+
+  <a href="https://nstudio.io/xplat">Learn more about xplat.</a>
+</div>`;
 }
 
 function appCmpContent() {
@@ -212,6 +260,9 @@ export class AppComponent extends AppBaseComponent {
 `;
 }
 
+/**
+ * @todo Pass this initial tests
+ */
 function appCmpSpec() {
   return `import { TestBed, async } from '@angular/core/testing';
 import { HttpClient } from '@angular/common/http';
@@ -258,7 +309,7 @@ describe('AppComponent', () => {
     })
     );
     it(
-    'should render title in a h1 tag',
+    'should render xplat hello in a h2 tag',
     async(() => {
         spyOn(translate, 'getBrowserLang').and.returnValue('en');
         translate.use('en');
@@ -274,7 +325,7 @@ describe('AppComponent', () => {
         http.verify();
         fixture.detectChanges();
 
-        expect(compiled.querySelector('h1').textContent).toContain(
+        expect(compiled.querySelector('h2').textContent).toContain(
         'Hello xplat'
         );
     })

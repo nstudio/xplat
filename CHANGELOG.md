@@ -1,3 +1,190 @@
+<a name="7.4.5"></a>
+## [7.4.5](https://github.com/nstudio/xplat/compare/7.4.4...7.4.5) (2019-03-23)
+
+
+### Bug Fixes
+
+* **generators:** ensure angular deps are in root package ([503f537](https://github.com/nstudio/xplat/commit/503f537))
+
+
+
+<a name="7.4.4"></a>
+## [7.4.4](https://github.com/nstudio/xplat/compare/7.4.3...7.4.4) (2019-03-20)
+
+
+### Bug Fixes
+
+* **generators:** pipe naming for collection ([54d743e](https://github.com/nstudio/xplat/commit/54d743e))
+
+
+
+<a name="7.4.3"></a>
+## [7.4.3](https://github.com/nstudio/xplat/compare/7.4.2...7.4.3) (2019-03-20)
+
+
+### Bug Fixes
+
+* **generators:** feature schema ([be76644](https://github.com/nstudio/xplat/commit/be76644))
+
+
+
+<a name="7.4.2"></a>
+## [7.4.2](https://github.com/nstudio/xplat/compare/7.4.1...7.4.2) (2019-03-19)
+
+
+### Features
+
+* **nativescript:** add architect serve target for {N} ([#108](https://github.com/nstudio/xplat/issues/108)) ([f3b8edf](https://github.com/nstudio/xplat/commit/f3b8edf)), closes [#103](https://github.com/nstudio/xplat/issues/103)
+
+
+
+<a name="7.4.1"></a>
+## [7.4.1](https://github.com/nstudio/xplat/compare/7.4.0...7.4.1) (2019-03-18)
+
+
+### Bug Fixes
+
+* **generators:** install dependencies for app.nativescript ([#107](https://github.com/nstudio/xplat/issues/107)) ([d59d94a](https://github.com/nstudio/xplat/commit/d59d94a)), closes [#106](https://github.com/nstudio/xplat/issues/106)
+
+
+### Features
+
+* **generators:** add addCliDependency to app.nativescript ([#104](https://github.com/nstudio/xplat/issues/104)) ([1dbe95a](https://github.com/nstudio/xplat/commit/1dbe95a)), closes [#101](https://github.com/nstudio/xplat/issues/101)
+* **generators:** add preview script to app.nativescript ([#105](https://github.com/nstudio/xplat/issues/105)) ([1b0618f](https://github.com/nstudio/xplat/commit/1b0618f)), closes [#102](https://github.com/nstudio/xplat/issues/102)
+
+
+
+<a name="7.4.0"></a>
+# [7.4.0](https://github.com/nstudio/xplat/compare/7.3.15...7.4.0) (2019-03-17)
+
+
+### Bug Fixes
+
+* **generators:** web adjustment to make e2e pass when generated ([#97](https://github.com/nstudio/xplat/issues/97)) ([9a20f22](https://github.com/nstudio/xplat/commit/9a20f22))
+
+
+### Features
+
+* **elements:** web custom element generator ([#96](https://github.com/nstudio/xplat/issues/96)) ([d3c1661](https://github.com/nstudio/xplat/commit/d3c1661))
+* **generators:** add angularJson option to app.nest ([#98](https://github.com/nstudio/xplat/issues/98)) ([adec8fb](https://github.com/nstudio/xplat/commit/adec8fb)), closes [#94](https://github.com/nstudio/xplat/issues/94)
+
+
+
+<a name="7.3.15"></a>
+## [7.3.15](https://github.com/nstudio/xplat/compare/7.3.14...7.3.15) (2019-03-13)
+
+
+### Bug Fixes
+
+* **generators:** development mode handles json comments now ([10a2948](https://github.com/nstudio/xplat/commit/10a2948))
+
+
+
+<a name="7.3.14"></a>
+## [7.3.14](https://github.com/nstudio/xplat/compare/7.3.13...7.3.14) (2019-03-12)
+
+
+### Bug Fixes
+
+* **generators:** sandbox setup and mode for windows ([77246e8](https://github.com/nstudio/xplat/commit/77246e8))
+
+
+
+<a name="7.3.13"></a>
+## [7.3.13](https://github.com/nstudio/xplat/compare/7.3.12...7.3.13) (2019-03-10)
+
+
+### Bug Fixes
+
+* **scripts:** postinstall prettierignore to skip platforms ([26121ad](https://github.com/nstudio/xplat/commit/26121ad))
+
+
+
+<a name="7.3.12"></a>
+## [7.3.12](https://github.com/nstudio/xplat/compare/7.3.11...7.3.12) (2019-03-10)
+
+
+### Bug Fixes
+
+* **mode:** app focus mode ([ebe01cd](https://github.com/nstudio/xplat/commit/ebe01cd))
+
+
+
+<a name="7.3.11"></a>
+## [7.3.11](https://github.com/nstudio/xplat/compare/7.3.10...7.3.11) (2019-03-09)
+
+
+### Features
+
+* **mode:** project focus flag ([219647b](https://github.com/nstudio/xplat/commit/219647b))
+
+
+
+<a name="7.3.10"></a>
+## [7.3.10](https://github.com/nstudio/xplat/compare/7.3.9...7.3.10) (2019-03-09)
+
+
+### Features
+
+* **mode:** project focus flag ([ddd9499](https://github.com/nstudio/xplat/commit/ddd9499))
+
+
+
+<a name="7.3.9"></a>
+## [7.3.9](https://github.com/nstudio/xplat/compare/7.3.8...7.3.9) (2019-03-09)
+
+
+### Features
+
+* **mode:** --projects flag to focus on specific projects as well ([f9fa336](https://github.com/nstudio/xplat/commit/f9fa336))
+
+
+
+<a name="7.3.8"></a>
+## [7.3.8](https://github.com/nstudio/xplat/compare/7.3.7...7.3.8) (2019-03-09)
+
+
+### Features
+
+* **generators:** sandbox flags ([7ef125c](https://github.com/nstudio/xplat/commit/7ef125c))
+
+
+
+<a name="7.3.7"></a>
+## [7.3.7](https://github.com/nstudio/xplat/compare/7.3.6...7.3.7) (2019-03-08)
+
+
+### Features
+
+* **nativescript:** adjustSandbox flag for feature module generator ([#93](https://github.com/nstudio/xplat/issues/93)) ([3054df2](https://github.com/nstudio/xplat/commit/3054df2))
+
+
+
+<a name="7.3.6"></a>
+## [7.3.6](https://github.com/nstudio/xplat/compare/7.3.5...7.3.6) (2019-03-06)
+
+
+### Bug Fixes
+
+* **generators:** web adjustment for routing ([8775a79](https://github.com/nstudio/xplat/commit/8775a79))
+
+
+
+<a name="7.3.5"></a>
+## [7.3.5](https://github.com/nstudio/xplat/compare/7.3.3...7.3.5) (2019-03-06)
+
+
+### Bug Fixes
+
+* **helpers:** applitools dep ([a6d2bde](https://github.com/nstudio/xplat/commit/a6d2bde))
+
+
+### Features
+
+* **helpers:** applitools support for web ([#92](https://github.com/nstudio/xplat/issues/92)) ([24580a6](https://github.com/nstudio/xplat/commit/24580a6))
+
+
+
 <a name="7.3.3"></a>
 ## [7.3.3](https://github.com/nstudio/xplat/compare/7.3.2...7.3.3) (2019-03-01)
 

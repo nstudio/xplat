@@ -17,10 +17,9 @@
       "type": "string",
       "description": "Target platforms to generate helpers for."
     },
-    "skipRefactor": {
-      "type": "boolean",
-      "description": "Skip refactoring code to support the helper where supported.",
-      "default": false
+    "target": {
+      "type": "string",
+      "description": "Some helpers support targeting to generate the helper for a specific target. ie: ng g xplat-helper applitools --target=web-myapp"
     }
   },
   "required": []

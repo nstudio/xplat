@@ -1,12 +1,14 @@
 {
   "name": "@nstudio/schematics",
-  "version": "7.3.3",
+  "version": "7.4.5",
   "description": "Cross-platform (xplat) tools for Nx workspaces.",
   "readmeFilename": "README.md",
   "scripts": {
     "build": "tsc -p tsconfig.json",
+    "build:e2e": "tsc -p tsconfig.e2e.json",
     "watch": "tsc -w -p tsconfig.json",
     "test": "npm run build && jasmine src/**/*_spec.js",
+    "e2e": "npm run build && npm run build:e2e && (mkdir tmp || echo 'tmp folder already exists') && jasmine e2e/**/*e2e-spec.js",
     "prepare": "npm run build",
     "postinstall": "node scripts/postinstall.js",
     "debug": "node --debug-brk ./node_modules/@angular/cli/bin/ng g command",
@@ -77,17 +79,24 @@
     {
       "name": "Mathieu Brunot",
       "url": "https://github.com/madmath03"
+    },
+    {
+      "name": "Emerson Jair",
+      "url": "https://github.com/dungahk"
     }
   ],
   "license": "MIT",
   "devDependencies": {
     "@angular-devkit/core": "~7.2.0",
     "@angular-devkit/schematics": "~7.2.0",
+    "@angular/cli": "7.3.6",
     "@nrwl/schematics": "^7.5.0",
     "@schematics/angular": "~7.2.0",
+    "@types/fs-extra": "5.0.5",
     "@types/jasmine": "~2.8.6",
     "@types/node": "~10.3.0",
     "cz-conventional-changelog": "^2.1.0",
+    "fx": "13.0.0",
     "github-contributors-list": "^1.2.3",
     "jasmine": "~3.3.1",
     "jasmine-core": "~3.3.0",
@@ -97,6 +106,7 @@
     "typescript": "~3.2.0"
   },
   "dependencies": {
+    "strip-json-comments": "2.0.1",
     "xml2js": "^0.4.19"
   }
 }

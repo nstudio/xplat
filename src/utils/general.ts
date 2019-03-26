@@ -22,6 +22,8 @@ import * as ts from "typescript";
 import { toFileName } from "./name-utils";
 const util = require('util');
 const xml2js = require('xml2js');
+import * as stripJsonComments from 'strip-json-comments';
+import { NodePackageInstallTask } from "@angular-devkit/schematics/tasks";
 
 export const supportedPlatforms = [
   "web",
@@ -55,7 +57,9 @@ export interface NodeDependency {
 
 // list of all supported helpers
 // TODO: add more convenient helpers (like firebase or Travis ci support files)
-export const supportedHelpers = ['imports'];
+export const supportedHelpers = ['imports', 'applitools'];
+// list of platforms that support various sandbox flags
+export const supportedSandboxPlatforms: Array<PlatformTypes> = ['nativescript'];
 
 let npmScope: string;
 // selector prefix to use when generating various boilerplate for xplat support
@@ -92,12 +96,24 @@ export function setTest() {
   isTest = true;
 }
 
+export function isTesting() {
+  return isTest;
+}
+
+export function jsonParse(content: string) {
+  if (content) {
+    // ensure comments are stripped when parsing (otherwise will fail)
+    return JSON.parse(stripJsonComments(content));
+  }
+  return {};
+}
+
 export function serializeJson(json: any): string {
   return `${JSON.stringify(json, null, 2)}\n`;
 }
 
 export function getJsonFromFile(tree: Tree, path: string) {
-  return JSON.parse(getFileContent(tree, path));
+  return jsonParse(getFileContent(tree, path));
 }
 
 export function updateJsonFile(tree: Tree, path: string, jsonData: any) {
@@ -150,10 +166,21 @@ export function getNxWorkspaceConfig(tree: Tree): any {
   );
 }
 
+/**
+ * Returns a name with the platform.
+ * 
+ * @example (app, nest) => web-app or app-web
+ * @param name 
+ * @param platform 
+ */
+export function getPlatformName(name: string, platform: PlatformTypes) {
+  const nameSanitized = toFileName(name);
+  return groupByName ? `${nameSanitized}-${platform}` : `${platform}-${nameSanitized}`;
+}
+
 export function applyAppNamingConvention(options: any, platform: PlatformTypes) {
   return (tree: Tree, context: SchematicContext) => {
-    const nameSanitized = toFileName(options.name);
-    options.name = groupByName ? `${nameSanitized}-${platform}` : `${platform}-${nameSanitized}`;
+    options.name = getPlatformName(options.name, platform);
     // if command line argument, make sure it's persisted to xplat settings
     if (options.groupByName) {
       return updatePackageForXplat(tree, null, {
@@ -175,7 +202,7 @@ export const copy = (tree: Tree, from: string, to: string) => {
   tree.create(to, file.content);
 };
 
-const setDependency = (
+export const setDependency = (
   dependenciesMap: { [key: string]: string },
   { name, version }: NodeDependency
 ) => Object.assign(dependenciesMap, { [name]: version });
@@ -237,6 +264,19 @@ export function sanitizeCommaDelimitedArg(input: string): Array<string> {
   return [];
 }
 
+/**
+ * Check if the platform will need a web app to be generated.
+ * 
+ * Useful for deciding which dependencies or files should be added .
+ * 
+ * @param targetPlatforms 
+ */
+export function hasWebPlatform(targetPlatforms: ITargetPlatforms) {
+  return (
+    targetPlatforms.web || targetPlatforms.ionic || targetPlatforms.electron
+  );
+}
+
 export function addRootDeps(
   tree: Tree,
   targetPlatforms: ITargetPlatforms,
@@ -247,7 +287,9 @@ export function addRootDeps(
     packageJson = getJsonFromFile(tree, packagePath);
   }
   if (packageJson) {
-    const angularVersion = packageJson.dependencies['@angular/core'];
+    const angularVersion = packageJson.dependencies['@angular/core'] || "^7.0.0";
+    const rxjsVersion = packageJson.dependencies['rxjs'] || '~6.4.0';
+    const angularDevkitVersion = packageJson.devDependencies['@angular-devkit/build-angular'] || '~0.13.0';
 
     const deps: NodeDependency[] = [];
 
@@ -265,7 +307,30 @@ export function addRootDeps(
     };
     deps.push(dep);
 
-    if (!targetPlatforms.nest) {
+    deps.push(...<Array<NodeDependency>>[
+      {
+        name: "@nrwl/nx",
+        version: "^7.0.0",
+        type: "dependency"
+      },
+      {
+        name: "@ngrx/effects",
+        version: angularVersion,
+        type: "dependency"
+      },
+      {
+        name: "@ngrx/router-store",
+        version: angularVersion,
+        type: "dependency"
+      },
+      {
+        name: "@ngrx/store",
+        version: angularVersion,
+        type: "dependency"
+      }
+    ]);
+    
+    if (hasWebPlatform(targetPlatforms)) {
       // if just setting up workspace with nest, we don't need frontend scss
       dep = {
         name: `@${getNpmScope()}/scss`,
@@ -613,6 +678,117 @@ export function addRootDeps(
       deps.push(dep);
     }
 
+    if (!targetPlatforms.nest) {
+      // for everyting except nest, ensure Angular deps are added
+      const hasAngularDeps = packageJson.dependencies['@angular/core'];
+      if (!hasAngularDeps) {
+        dep = {
+          name: `@angular/animations`,
+          version: angularVersion,
+          type: "dependency"
+        };
+        deps.push(dep);
+
+        dep = {
+          name: `@angular/common`,
+          version: angularVersion,
+          type: "dependency"
+        };
+        deps.push(dep);
+
+        dep = {
+          name: `@angular/compiler`,
+          version: angularVersion,
+          type: "dependency"
+        };
+        deps.push(dep);
+
+        dep = {
+          name: `@angular/core`,
+          version: angularVersion,
+          type: "dependency"
+        };
+        deps.push(dep);
+
+        dep = {
+          name: `@angular/forms`,
+          version: angularVersion,
+          type: "dependency"
+        };
+        deps.push(dep);
+
+        dep = {
+          name: `@angular/platform-browser`,
+          version: angularVersion,
+          type: "dependency"
+        };
+        deps.push(dep);
+
+        dep = {
+          name: `@angular/platform-browser-dynamic`,
+          version: angularVersion,
+          type: "dependency"
+        };
+        deps.push(dep);
+
+        dep = {
+          name: `@angular/router`,
+          version: angularVersion,
+          type: "dependency"
+        };
+        deps.push(dep);
+
+        dep = {
+          name: `core-js`,
+          version: '^2.5.4',
+          type: "dependency"
+        };
+        deps.push(dep);
+
+        dep = {
+          name: `rxjs`,
+          version: rxjsVersion,
+          type: "dependency"
+        };
+        deps.push(dep);
+
+        dep = {
+          name: `zone.js`,
+          version: '^0.8.26',
+          type: "dependency"
+        };
+        deps.push(dep);
+
+        dep = {
+          name: `@angular/compiler-cli`,
+          version: angularVersion,
+          type: "devDependency"
+        };
+        deps.push(dep);
+
+        dep = {
+          name: `@angular/language-service`,
+          version: angularVersion,
+          type: "devDependency"
+        };
+        deps.push(dep);
+
+        dep = {
+          name: `@angular-devkit/build-angular`,
+          version: angularDevkitVersion,
+          type: "devDependency"
+        };
+        deps.push(dep);
+
+        dep = {
+          name: `codelyzer`,
+          version: '~4.5.0',
+          type: "devDependency"
+        };
+        deps.push(dep);
+      }
+    }
+
     const dependenciesMap = Object.assign({}, packageJson.dependencies);
     const devDependenciesMap = Object.assign({}, packageJson.devDependencies);
     for (const dependency of deps) {
@@ -913,7 +1089,9 @@ export const addTestingFiles = (
 export function updateIDESettings(
   tree: Tree,
   platformArg: string,
-  devMode?: PlatformTypes
+  devMode?: PlatformTypes,
+  allApps?: string[],
+  focusOnApps?: string[],
 ) {
   if (isTest) {
     // ignore node file modifications when just testing
@@ -924,10 +1102,13 @@ export function updateIDESettings(
     const cwd = process.cwd();
     // console.log('workspace dir:', process.cwd());
     // const dirName = cwd.split('/').slice(-1);
+    let isFullstack = false;
     let isExcluding = false;
+    let appWildcards = [];
     const userUpdates: any = {};
     if (!devMode || devMode === "fullstack") {
       // show all
+      isFullstack = true;
       for (const p of supportedPlatforms) {
         const appFilter = groupByName ? `*-${p}` : `${p}-*`;
         userUpdates[`**/apps/${appFilter}`] = false;
@@ -939,8 +1120,16 @@ export function updateIDESettings(
       for (const p of supportedPlatforms) {
         const excluded = platforms.includes(p) ? false : true;
         const appFilter = groupByName ? `*-${p}` : `${p}-*`;
-        userUpdates[`**/apps/${appFilter}`] = excluded;
+        if (focusOnApps.length) {
+          // focusing on apps
+          // fill up wildcards to use below (we will clear all app wildcards when focusing on apps)
+          appWildcards.push(`**/apps/${appFilter}`);
+        } else {
+          // use wildcards for apps only if no project names were specified
+          userUpdates[`**/apps/${appFilter}`] = excluded;
+        }
         userUpdates[`**/xplat/${p}`] = excluded;
+
         if (excluded) {
           // if excluding any platform at all, set the flag
           // this is used for WebStorm support below
@@ -961,119 +1150,149 @@ export function updateIDESettings(
         : "/var/local/Code/User/settings.json";
     const windowsHome = process.env.APPDATA;
     if (windowsHome) {
-      userSettingsVSCodePath = join(windowsHome, "Code/User/settings.json");
+      userSettingsVSCodePath = join(windowsHome, "Code", "User", "settings.json");
     }
     // console.log('userSettingsVSCodePath:',userSettingsVSCodePath);
     const isVsCode = fs.existsSync(userSettingsVSCodePath);
-
+    let vscodeCreateSettingsNote = `It's possible you don't have a user settings.json yet. If so, open VS Code User settings and save any kind of setting to have it created.`;
     // console.log('isVsCode:',isVsCode);
     if (isVsCode) {
       const userSettings = fs.readFileSync(userSettingsVSCodePath, "UTF-8");
       if (userSettings) {
-        const userSettingsJson = JSON.parse(userSettings);
+        const userSettingsJson = jsonParse(userSettings);
         let exclude = userSettingsJson["files.exclude"];
         if (!exclude) {
           exclude = {};
         }
-        userSettingsJson["files.exclude"] = Object.assign(exclude, userUpdates);
-
         let searchExclude = userSettingsJson["search.exclude"];
         if (!searchExclude) {
           searchExclude = {};
         }
+
+        userSettingsJson["files.exclude"] = Object.assign(exclude, userUpdates);
         userSettingsJson["search.exclude"] = Object.assign(
           searchExclude,
           userUpdates
         );
 
+        if (allApps.length) {
+          // always reset specific app filters
+          for (const app of allApps) {
+            delete userSettingsJson["files.exclude"][app];
+            delete userSettingsJson["search.exclude"][app];
+          }
+        }
+        if (!isFullstack && focusOnApps.length && allApps.length) {
+          // when focusing on projects, clear all specific app wildcards first if they exist
+          for (const wildcard of appWildcards) {
+            delete userSettingsJson["files.exclude"][wildcard];
+            delete userSettingsJson["search.exclude"][wildcard];
+          }
+          for (const focusApp of focusOnApps) {
+            userSettingsJson["files.exclude"][focusApp] = false;
+            userSettingsJson["search.exclude"][focusApp] = false;
+          }
+          // ensure all other apps are excluded (except for the one that's being focused on)
+          for (const app of allApps) {
+            if (!focusOnApps.includes(app)) {
+              userSettingsJson["files.exclude"][app] = true;
+              userSettingsJson["search.exclude"][app] = true;
+            }
+          }
+        }
+
         fs.writeFileSync(
           userSettingsVSCodePath,
           JSON.stringify(userSettingsJson, null, 2)
         );
+      } else {
+        console.warn(`Warning: xplat could not read your VS Code settings.json file therefore development mode has not been set. ${vscodeCreateSettingsNote}`);
       }
+    } else {
+      console.log(`Note to VS Code users: no development mode set. xplat could not find any VS Code settings in the standard location: ${userSettingsVSCodePath} ${vscodeCreateSettingsNote}`)
     }
 
     // WebStorm support
     let isWebStorm = false;
     // list preferences to get correct webstorm prefs file
-    let preferencesFolder = isMac
-      ? process.env.HOME +
-        `/Library/Preferences`
-      : __dirname;
-    if (windowsHome) {
-      preferencesFolder = windowsHome;
-    } 
-    const prefs = fs.readdirSync(preferencesFolder).filter(f => fs.statSync(join(preferencesFolder, f)).isDirectory());
+    // let preferencesFolder = isMac
+    //   ? process.env.HOME +
+    //     `/Library/Preferences`
+    //   : __dirname;
+    // if (windowsHome) {
+    //   preferencesFolder = windowsHome;
+    // } 
+    // const prefs = fs.readdirSync(preferencesFolder).filter(f => fs.statSync(join(preferencesFolder, f)).isDirectory());
     // find first one
     // TODO: user may have multiple version installed (or at least older versions) so may need to handle if multiples
-    let webStormPrefFolderName = prefs.find(f => f.indexOf('WebStorm20') > -1);
-    if (webStormPrefFolderName) {
-      isWebStorm = true;
-      webStormPrefFolderName = webStormPrefFolderName.split('/').slice(-1)[0];
-      // console.log('webStormPrefFolderName:',webStormPrefFolderName);
+    // let webStormPrefFolderName = prefs.find(f => f.indexOf('WebStorm20') > -1);
+    // if (webStormPrefFolderName) {
+    //   isWebStorm = true;
+    //   webStormPrefFolderName = webStormPrefFolderName.split('/').slice(-1)[0];
+    //   // console.log('webStormPrefFolderName:',webStormPrefFolderName);
   
-      // ensure folders are excluded from project view
-      let projectViewWebStormPath =
-        isMac
-          ? process.env.HOME +
-            `/Library/Preferences/${webStormPrefFolderName}/options/projectView.xml`
-          : join(__dirname, webStormPrefFolderName, 'config');
-      if (windowsHome) {
-        projectViewWebStormPath = join(windowsHome, webStormPrefFolderName, 'config');
-      }
+    //   // ensure folders are excluded from project view
+    //   let projectViewWebStormPath =
+    //     isMac
+    //       ? process.env.HOME +
+    //         `/Library/Preferences/${webStormPrefFolderName}/options/projectView.xml`
+    //       : join(__dirname, webStormPrefFolderName, 'config');
+    //   if (windowsHome) {
+    //     projectViewWebStormPath = join(windowsHome, webStormPrefFolderName, 'config');
+    //   }
 
-      let projectView = fs.readFileSync(projectViewWebStormPath, "UTF-8");
-      if (projectView) {
-        // console.log('projectView:', projectView);
-        xml2js.parseString(projectView, (err, settings) => {
-          // console.log(util.inspect(settings, false, null));
-          if (settings && settings.application && settings.application.component && settings.application.component.length) {
-            const builder = new xml2js.Builder({ headless: true });
+    //   let projectView = fs.readFileSync(projectViewWebStormPath, "UTF-8");
+    //   if (projectView) {
+    //     // console.log('projectView:', projectView);
+    //     xml2js.parseString(projectView, (err, settings) => {
+    //       // console.log(util.inspect(settings, false, null));
+    //       if (settings && settings.application && settings.application.component && settings.application.component.length) {
+    //         const builder = new xml2js.Builder({ headless: true });
 
-            const sharedSettingsIndex = (<Array<any>>settings.application.component).findIndex(c => c.$.name === 'ProjectViewSharedSettings');
-            if (sharedSettingsIndex > -1) {
-              const sharedSettings = settings.application.component[sharedSettingsIndex];
-              if (sharedSettings.option && sharedSettings.option.length) {
-                const showExcludedFilesIndex = sharedSettings.option.findIndex(o => o.$.name === 'showExcludedFiles');
-                if (showExcludedFilesIndex > -1) {
-                  settings.application.component[sharedSettingsIndex].option[showExcludedFilesIndex].$.value = `${!isExcluding}`;
-                } else {
-                  settings.application.component[sharedSettingsIndex].option.push(webStormExcludedViewNode(isExcluding));
-                }
-              } else {
-                settings.application.component[sharedSettingsIndex].option = [
-                  webStormExcludedViewNode(isExcluding)
-                ];
-              }
-              settings = builder.buildObject(settings);
-            } else {
-              (<Array<any>>settings.application.component).push({
-                $: 'ProjectViewSharedSettings',
-                option: [
-                  webStormExcludedViewNode(isExcluding)
-                ]
-              });
-              settings = builder.buildObject(settings);
-            }
-          } else {
-            // create projectView.xml
-            settings = createWebStormProjectView(isExcluding);
-          }
-          // modify projectView
-          // console.log('settings:', settings);
-          fs.writeFileSync(
-            projectViewWebStormPath,
-            settings
-          );
-        });
-      } else {
-        // create projectView.xml
-        fs.writeFileSync(
-          projectViewWebStormPath,
-          createWebStormProjectView(isExcluding)
-        );
-      }
-    }
+    //         const sharedSettingsIndex = (<Array<any>>settings.application.component).findIndex(c => c.$.name === 'ProjectViewSharedSettings');
+    //         if (sharedSettingsIndex > -1) {
+    //           const sharedSettings = settings.application.component[sharedSettingsIndex];
+    //           if (sharedSettings.option && sharedSettings.option.length) {
+    //             const showExcludedFilesIndex = sharedSettings.option.findIndex(o => o.$.name === 'showExcludedFiles');
+    //             if (showExcludedFilesIndex > -1) {
+    //               settings.application.component[sharedSettingsIndex].option[showExcludedFilesIndex].$.value = `${!isExcluding}`;
+    //             } else {
+    //               settings.application.component[sharedSettingsIndex].option.push(webStormExcludedViewNode(isExcluding));
+    //             }
+    //           } else {
+    //             settings.application.component[sharedSettingsIndex].option = [
+    //               webStormExcludedViewNode(isExcluding)
+    //             ];
+    //           }
+    //           settings = builder.buildObject(settings);
+    //         } else {
+    //           (<Array<any>>settings.application.component).push({
+    //             $: 'ProjectViewSharedSettings',
+    //             option: [
+    //               webStormExcludedViewNode(isExcluding)
+    //             ]
+    //           });
+    //           settings = builder.buildObject(settings);
+    //         }
+    //       } else {
+    //         // create projectView.xml
+    //         settings = createWebStormProjectView(isExcluding);
+    //       }
+    //       // modify projectView
+    //       // console.log('settings:', settings);
+    //       fs.writeFileSync(
+    //         projectViewWebStormPath,
+    //         settings
+    //       );
+    //     });
+    //   } else {
+    //     // create projectView.xml
+    //     fs.writeFileSync(
+    //       projectViewWebStormPath,
+    //       createWebStormProjectView(isExcluding)
+    //     );
+    //   }
+    // }
 
     if (!devMode) {
       // only when not specifying a dev mode
@@ -1136,7 +1355,7 @@ export function updateIDESettings(
       };
 
       if (isVsCode) {
-        const workspaceSettingsPath = join(cwd, ".vscode/settings.json");
+        const workspaceSettingsPath = join(cwd, ".vscode", "settings.json");
         // console.log('workspaceSettingsPath:',workspaceSettingsPath);
         let workspaceSettingsJson: any = {};
         if (fs.existsSync(workspaceSettingsPath)) {
@@ -1144,7 +1363,7 @@ export function updateIDESettings(
             workspaceSettingsPath,
             "UTF-8"
           );
-          workspaceSettingsJson = JSON.parse(workspaceSettings);
+          workspaceSettingsJson = jsonParse(workspaceSettings);
           const exclude = workspaceSettingsJson["files.exclude"];
           workspaceSettingsJson["files.exclude"] = Object.assign(
             exclude,
@@ -1259,3 +1478,8 @@ export const toComponentClassName = (name: string) =>
   `${classify(name)}Component`;
 
 export const toNgModuleClassName = (name: string) => `${classify(name)}Module`;
+
+export function addInstall(host: Tree, context: SchematicContext) {
+  context.addTask(new NodePackageInstallTask());
+  return host;
+}

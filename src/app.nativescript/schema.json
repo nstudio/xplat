@@ -38,9 +38,19 @@
       "description": "Use sample feature setup.",
       "default": false
     },
+    "setupSandbox": {
+      "type": "boolean",
+      "description": "Setup app as a sandbox for the workspace.",
+      "default": false
+    },
     "skipInstall": {
       "type": "boolean",
       "description": "Skip installing dependencies.",
+      "default": false
+    },
+    "addCliDependency": {
+      "type": "boolean",
+      "description": "Add {N} CLI to devDependencies",
       "default": false
     }
   },

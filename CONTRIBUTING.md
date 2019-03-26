@@ -116,6 +116,8 @@ The scope must be one of the following:
 * ionic
 * nativescript
 * nest
+* elements
+* helpers
 
 #### Subject
 

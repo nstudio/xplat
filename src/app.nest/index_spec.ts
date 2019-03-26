@@ -3,7 +3,7 @@ import { Schema as ApplicationOptions } from "./schema";
 import { SchematicTestRunner } from "@angular-devkit/schematics/testing";
 
 import * as path from "path";
-import { createEmptyWorkspace, getFileContent } from "../utils";
+import { createEmptyWorkspace, getFileContent, jsonParse, getPlatformName } from "../utils";
 
 describe("app.nest schematic", () => {
   const schematicRunner = new SchematicTestRunner(
@@ -58,8 +58,61 @@ describe("app.nest schematic", () => {
 
     checkFile = getFileContent(tree, checkPath);
 
-    const packageData: any = JSON.parse(checkFile);
+    const packageData: any = jsonParse(checkFile);
     expect(packageData.scripts["serve.nest.foo"]).toBeDefined();
     expect(packageData.scripts["start.nest.foo"]).toBeDefined();
   });
+
+  it("should update angular.json file if angularJson is true", () => {
+    const options: ApplicationOptions = { ...defaultOptions, angularJson: true };
+    const tree = schematicRunner.runSchematic("app.nest", options, appTree);
+    const files = tree.files;
+    const projectName = getPlatformName(options.name, "nest");
+
+    expect(
+      files.indexOf(`/apps/${projectName}/src/main.ts`)
+    ).toBeGreaterThanOrEqual(0);
+    expect(
+      files.indexOf(`/apps/${projectName}/src/app.service.ts`)
+    ).toBeGreaterThanOrEqual(0);
+    expect(
+      files.indexOf(`/apps/${projectName}/src/app.module.ts`)
+    ).toBeGreaterThanOrEqual(0);
+    expect(
+      files.indexOf(`/apps/${projectName}/src/app.controller.ts`)
+    ).toBeGreaterThanOrEqual(0);
+
+    let checkPath = `/apps/${projectName}/package.json`;
+    expect(files.indexOf(checkPath)).toBeGreaterThanOrEqual(0);
+
+    let checkFile = getFileContent(tree, checkPath);
+    expect(checkFile.indexOf(`"name": "foo"`)).toBeGreaterThanOrEqual(0);
+
+    expect(
+      files.indexOf("/tools/electron/postinstall.js")
+    ).toBeGreaterThanOrEqual(0);
+    expect(files.indexOf("/tools/web/postinstall.js")).toBeGreaterThanOrEqual(
+      0
+    );
+
+    checkPath = "/package.json";
+    expect(files.indexOf(checkPath)).toBeGreaterThanOrEqual(0);
+
+    checkFile = getFileContent(tree, checkPath);
+
+    const packageData: any = jsonParse(checkFile);
+    expect(packageData.scripts["serve.nest.foo"]).toBeDefined();
+    expect(packageData.scripts["start.nest.foo"]).toBeDefined();
+
+    expect(
+      files.indexOf(`/apps/${projectName}/tsconfig.app.json`)
+    ).toBeGreaterThanOrEqual(0);
+
+    checkPath = "/angular.json";
+    expect(files.indexOf(checkPath)).toBeGreaterThanOrEqual(0);
+
+    checkFile = getFileContent(tree, checkPath);
+    const angularData: { projects: {} } = jsonParse(checkFile);
+    expect(angularData.projects[projectName]).toBeDefined();
+  })
 });

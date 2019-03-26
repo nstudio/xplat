@@ -4,7 +4,7 @@ import { getFileContent } from '@schematics/angular/utility/test';
 import * as path from 'path';
 
 import { Schema as ApplicationOptions } from './schema';
-import { createEmptyWorkspace, createXplatWithApps, createXplatWithAppsForElectron } from '../utils';
+import { createEmptyWorkspace, createXplatWithApps, createXplatWithAppsForElectron, jsonParse } from '../utils';
 
 describe('app.electron schematic', () => {
   const schematicRunner = new SchematicTestRunner(
@@ -54,7 +54,7 @@ describe('app.electron schematic', () => {
 
     checkFile = getFileContent(tree, checkPath);
     // console.log(checkFile);
-    const packageData: any = JSON.parse(checkFile);
+    const packageData: any = jsonParse(checkFile);
     expect(packageData.scripts['postinstall']).toBeDefined();
     expect(packageData.scripts['postinstall.electron']).toBeDefined();
     expect(packageData.scripts['postinstall.web']).toBeDefined();

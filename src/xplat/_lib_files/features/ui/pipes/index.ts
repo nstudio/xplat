@@ -1,5 +1,5 @@
 import { DateOrderPipe } from './date-order.pipe';
 
-export const PIPES = [
+export const UI_PIPES = [
   DateOrderPipe
 ];

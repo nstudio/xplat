@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 
 // libs
 import { UISharedModule } from '@<%= npmScope %>/features';
+import { UI_COMPONENTS } from './components';
 
 const MODULES = [
   CommonModule,
@@ -18,8 +19,12 @@ const MODULES = [
   imports: [
     ...MODULES
   ],
+  declarations: [
+    ...UI_COMPONENTS
+  ],
   exports: [
-    ...MODULES
+    ...MODULES,
+    ...UI_COMPONENTS
   ]
 })
 export class UIModule { }

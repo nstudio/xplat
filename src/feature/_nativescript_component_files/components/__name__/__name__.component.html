@@ -1,3 +1,12 @@
+<% if (adjustSandbox) { %>
+<ActionBar title="<%= endingDashName %>" class="action-bar">
+  <NavigationButton text="Back"></NavigationButton>
+</ActionBar>
+<StackLayout class="p-20 w-full h-full">
+  <Label text="<%= utils.classify(name) %>" class="text-center"></Label>
+</StackLayout>
+<% } else { %>
 <StackLayout class="p-20">
     <Label <% if (onlyProject) { %>text="<%= utils.classify(name) %>"<% } else { %>[text]="text"<% } %> class="text-center"></Label>
 </StackLayout>
+<% } %>

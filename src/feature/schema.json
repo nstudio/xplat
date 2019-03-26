@@ -30,13 +30,19 @@
       "description": "Generate just the module and ignore the default component.",
       "default": false
     },
-    "ignoreBase": {
+    "createBase": {
       "type": "boolean",
-      "description": "Ignore base component generation.",
+      "description": "Create base component for maximum code sharing.",
       "default": false
     },
     "routing": {
       "type": "boolean",
+      "description": "Whether to generate routing support or not (Only when used with --onlyProject).",
+      "default": false
+    },
+    "adjustSandbox": {
+      "type": "boolean",
+      "description": "Automatically add a button to link to the feature route. Supported on NativeScript only right now. Requires flags: --onlyProject --routing",
       "default": false
     },
     "skipFormat": {

@@ -3,6 +3,7 @@ import { SchematicTestRunner } from '@angular-devkit/schematics/testing';
 import { getFileContent } from '@schematics/angular/utility/test';
 import * as path from 'path';
 
+import { Schema as FeatureOptions } from '../feature/schema';
 import { Schema as ApplicationOptions } from './schema';
 import { stringUtils, isInModuleMetadata, createEmptyWorkspace } from '../utils';
 
@@ -93,6 +94,30 @@ describe('app.nativescript schematic', () => {
     const appModule = getFileContent(tree, '/apps/nativescript-foo/app/app.routing.ts');
 
     expect(appModule).toMatch(`loadChildren: '~/features/home/home.module#HomeModule'`);
+  });
+
+  it('should create a sandbox app with --setupSandbox and feature should work as expected', () => {
+    const options = { ...defaultOptions };
+    // options.name = 'sandbox';
+    options.sample = false;
+    options.setupSandbox = true;
+    let tree = schematicRunner.runSchematic('app.nativescript', options, appTree);
+    let fileContent = getFileContent(tree, '/apps/nativescript-foo/app/app.routing.ts');
+
+    expect(fileContent).toMatch(`loadChildren: '~/features/home/home.module#HomeModule'`);
+    fileContent = getFileContent(tree, '/apps/nativescript-foo/app/features/home/components/home.component.html');
+    // console.log(fileContent);
+    expect(fileContent.indexOf('Use feature generator to add pages')).toBeGreaterThanOrEqual(0);
+
+    const featureOptions: FeatureOptions = {
+      name: 'foo-with-dash',
+      adjustSandbox: true,
+      projects: 'nativescript-foo'
+    }
+    tree = schematicRunner.runSchematic('feature', featureOptions, tree);
+    fileContent = getFileContent(tree, '/apps/nativescript-foo/app/features/home/components/home.component.html');
+    // console.log(fileContent);
+    expect(fileContent.indexOf(`<Button text="Dash" (tap)="goTo('/foo-with-dash')" class="btn"></Button>`)).toBeGreaterThanOrEqual(0);
   });
 
   it('should create a root routing module with shared import when using --sample', () => {

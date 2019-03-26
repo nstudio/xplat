@@ -17,13 +17,17 @@ export interface Schema {
    */
   onlyModule?: boolean;
   /**
-   * Ignore base component generation
+   * Create base component for maximum code sharing
    */
-  ignoreBase?: boolean;
+  createBase?: boolean;
   /**
    * Configure routing
    */
   routing?: boolean;
+  /**
+   * Add link to route for sandbox
+   */
+  adjustSandbox?: boolean;
   /**
    * Skip formatting
    */

@@ -130,6 +130,11 @@
         "description": "Group by app name (appname-platform) instead of the default (platform-appname)",
         "type": "boolean",
         "default": false
+      },
+      "addHeadlessE2e": {
+        "type": "boolean",
+        "description": "Add headless e2e configuration suitable for CI",
+        "default": false
       }
     },
     "required": []

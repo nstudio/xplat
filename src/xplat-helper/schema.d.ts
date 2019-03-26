@@ -8,7 +8,17 @@ export interface Schema {
      */
     platforms?: string;
     /**
-     * Skip refactoring code to support the helper where supported.
+     * Optional target when adding helpers
      */
-    skipRefactor?: boolean;
+    target?: string;
+    /**
+     * Skip refactoring code to support the helper where supported.
+     * TODO
+     *     "skipRefactor": {
+      "type": "boolean",
+      "description": "Skip refactoring code to support the helper where supported.",
+      "default": false
+    }
+     */
+    // skipRefactor?: boolean;
 }

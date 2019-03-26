@@ -7,7 +7,7 @@ import {
   mergeWith,
   Tree,
   SchematicContext,
-  // SchematicsException,
+  SchematicsException,
   branchAndMerge,
   // schematic,
   Rule,
@@ -27,27 +27,61 @@ import {
   generatorError,
   optionsMissingError,
   unsupportedPlatformError,
-  formatFiles
+  formatFiles,
+  supportedSandboxPlatforms,
+  PlatformTypes,
+  createOrUpdate
 } from "../utils";
 import { Schema as featureOptions } from "./schema";
 import * as ts from "typescript";
+import { getFileContent } from "@schematics/angular/utility/test";
+import { capitalize } from "@angular-devkit/core/src/utils/strings";
 
 let featureName: string;
 let projectNames: Array<string>;
 export default function(options: featureOptions) {
   if (!options.name) {
-    throw new Error(
+    throw new SchematicsException(
       `You did not specify the name of the feature you'd like to generate. For example: ng g feature my-feature`
     );
   }
+  featureName = options.name.toLowerCase();
+  let projects = options.projects;
+  let platforms = [];
+
+  if (options.adjustSandbox) {
+    // when adjusting sandbox for the feature, turn dependent options on
+    // for convenience also setup some default fallbacks to avoid requiring so many options
+    // sandbox flags are meant to be quick and convenient
+    options.onlyProject = true;
+    options.routing = true;
+    if (!projects) {
+      if (!options.platforms) {
+        // default to {N} sandbox 
+        projects = 'nativescript-sandbox';
+      } else {
+        platforms = options.platforms.split(",");
+        const projectSandboxNames = [];
+        // default to project with sandbox name
+        for (const p of platforms) {
+          if (supportedSandboxPlatforms.includes(p)) {
+            projectSandboxNames.push(`${p}-sandbox`);
+          } else {
+            throw new SchematicsException(
+              `The --adjustSandbox flag supports the following at the moment: ${supportedSandboxPlatforms}`
+            );
+          }
+        }
+        projects = projectSandboxNames.join(',');
+      }
+    }
+  }
   if (options.routing && !options.onlyProject) {
-    throw new Error(
+    throw new SchematicsException(
       `When generating a feature with the --routing option, please also specify --onlyProject. Support for shared code routing is under development and will be available in the future.`
     );
   }
-  featureName = options.name.toLowerCase();
-  const projects = options.projects;
-  let platforms = [];
+  
   if (projects) {
     // building feature in shared code and in projects
     projectNames = projects.split(",");
@@ -66,17 +100,15 @@ export default function(options: featureOptions) {
     platforms = options.platforms.split(",");
   }
   if (platforms.length === 0) {
-    let error = projects
-      ? platformAppPrefixError()
-      : generatorError('feature');
-    throw new Error(optionsMissingError(error));
+    let error = projects ? platformAppPrefixError() : generatorError("feature");
+    throw new SchematicsException(optionsMissingError(error));
   }
   const targetPlatforms: ITargetPlatforms = {};
   for (const t of platforms) {
     if (supportedPlatforms.includes(t)) {
       targetPlatforms[t] = true;
     } else {
-      throw new Error(unsupportedPlatformError(t));
+      throw new SchematicsException(unsupportedPlatformError(t));
     }
   }
 
@@ -87,11 +119,9 @@ export default function(options: featureOptions) {
       let srcDir = platPrefix !== "nativescript" ? "src/" : "";
       // check for 2 different naming conventions on routing modules
       const routingModulePathOptions = [];
-      const routingModulePath = `apps/${projectName}/${srcDir}app/`;
-      routingModulePathOptions.push(`${routingModulePath}app.routing.ts`);
-      routingModulePathOptions.push(
-        `${routingModulePath}app-routing.module.ts`
-      );
+      const appDirectory = `apps/${projectName}/${srcDir}app/`;
+      routingModulePathOptions.push(`${appDirectory}app.routing.ts`);
+      routingModulePathOptions.push(`${appDirectory}app-routing.module.ts`);
 
       projectChains.push((tree: Tree, context: SchematicContext) => {
         return addFiles(options, platPrefix, projectName)(tree, context);
@@ -103,6 +133,14 @@ export default function(options: featureOptions) {
             context
           );
         });
+        if (options.adjustSandbox) {
+          projectChains.push((tree: Tree, context: SchematicContext) => {
+            return adjustSandbox(<PlatformTypes>platPrefix, appDirectory)(
+              tree,
+              context
+            );
+          });
+        }
       }
       if (!options.onlyModule) {
         projectChains.push((tree: Tree, context: SchematicContext) => {
@@ -126,7 +164,7 @@ export default function(options: featureOptions) {
         : addFiles(options)(tree, context),
     // libs
     (tree: Tree, context: SchematicContext) =>
-      options.onlyProject || options.ignoreBase || options.onlyModule
+      options.onlyProject || !options.createBase || options.onlyModule
         ? noop()(tree, context)
         : addFiles(options, null, null, "_component")(tree, context),
     // update libs index
@@ -164,7 +202,9 @@ export default function(options: featureOptions) {
         : noop()(tree, context),
     // add starting component unless onlyModule
     (tree: Tree, context: SchematicContext) =>
-      !options.onlyProject && !options.onlyModule && targetPlatforms.nativescript
+      !options.onlyProject &&
+      !options.onlyModule &&
+      targetPlatforms.nativescript
         ? addFiles(options, "nativescript", null, "_component")(tree, context)
         : noop()(tree, context),
     // ionic
@@ -184,9 +224,7 @@ export default function(options: featureOptions) {
         : noop()(tree, context),
     // project handling
     ...projectChains,
-    options.skipFormat
-      ? noop()
-      : formatFiles(options)
+    options.skipFormat ? noop() : formatFiles(options)
   ]);
 }
 
@@ -236,9 +274,15 @@ function adjustBarrelIndex(indexFilePath: string): Rule {
 }
 
 function getTemplateOptions(options: featureOptions) {
+  const nameParts = options.name.split('-');
+  let endingDashName = nameParts[0];
+  if (nameParts.length > 1) {
+    endingDashName = capitalize(nameParts[nameParts.length - 1]);
+  }
   return {
     ...(options as any),
     name: featureName,
+    endingDashName,
     npmScope: getNpmScope(),
     prefix: getPrefix(),
     dot: ".",
@@ -301,5 +345,62 @@ function adjustRouting(
       insert(host, routingModulePath, changes);
     }
     return host;
+  };
+}
+
+function adjustSandbox(platform: PlatformTypes, appDirectory: string): Rule {
+  return (tree: Tree) => {
+    if (supportedSandboxPlatforms.includes(platform)) {
+      const homeCmpPath = `${appDirectory}/features/home/components/home.component.html`;
+      let homeTemplate = getFileContent(tree, homeCmpPath);
+      switch (platform) {
+        case "nativescript":
+          let buttonTag = 'Button';
+          let buttonEndIndex = homeTemplate.lastIndexOf(`</${buttonTag}>`);
+          if (buttonEndIndex === -1) {
+            // check for lowercase
+            buttonEndIndex = homeTemplate.lastIndexOf(`</${buttonTag.toLowerCase()}>`);
+            if (buttonEndIndex > -1) {
+              buttonTag = buttonTag.toLowerCase();
+            }
+          }
+
+          let customBtnClass = '';
+
+          if (buttonEndIndex === -1) {
+            // if no buttons were found this is a fresh sandbox app setup
+            // it should have a label as placeholder
+            buttonEndIndex = homeTemplate.lastIndexOf('</Label>');
+            if (buttonEndIndex === -1) {
+              buttonEndIndex = homeTemplate.lastIndexOf(`</label>`);
+            }
+          } else {
+            const buttonClassStartIndex = homeTemplate.lastIndexOf('class="btn ');
+            if (buttonClassStartIndex > -1) {
+              // using custom button class
+              customBtnClass = ' ' + homeTemplate.substring(buttonClassStartIndex+11, homeTemplate.lastIndexOf(`"></${buttonTag}>`))
+            }
+          }
+          
+          const featureNameParts = featureName.split("-");
+          let routeName = featureName;
+          if (featureNameParts.length > 1) {
+            routeName = capitalize(
+              featureNameParts[featureNameParts.length - 1]
+            );
+          }
+          homeTemplate =
+            homeTemplate.slice(0, buttonEndIndex + 9) +
+            `<${buttonTag} text="${routeName}" (tap)="goTo('/${featureName}')" class="btn${customBtnClass}"></${buttonTag}>` +
+            homeTemplate.slice(buttonEndIndex + 9);
+          break;
+      }
+      createOrUpdate(tree, homeCmpPath, homeTemplate);
+    } else {
+      throw new SchematicsException(
+        `The --adjustSandbox option is only supported on the following at the moment: ${supportedSandboxPlatforms}`
+      );
+    }
+    return tree;
   };
 }
