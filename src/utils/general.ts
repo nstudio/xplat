@@ -25,6 +25,17 @@ const xml2js = require('xml2js');
 import * as stripJsonComments from 'strip-json-comments';
 import { NodePackageInstallTask } from "@angular-devkit/schematics/tasks";
 
+export const enum Framework {
+  Angular = 'angular',
+  React = 'react',
+  WebComponents = 'web-components',
+  Electron = 'electron',
+  Ionic = 'ionic',
+  NativeScript = 'nativescript',
+  Nest = 'nest',
+  None = 'none'
+}
+
 export const supportedPlatforms = [
   "web",
   "nativescript",

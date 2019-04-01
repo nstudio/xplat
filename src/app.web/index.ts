@@ -24,7 +24,8 @@ import {
   applyAppNamingConvention,
   updateJsonFile,
   formatFiles,
-  missingArgument
+  missingArgument,
+  supportedPlatforms
 } from "../utils";
 import { Schema as ApplicationOptions } from "./schema";
 
@@ -37,36 +38,54 @@ export default function(options: ApplicationOptions) {
   // ensure sass is used
   options.style = "scss";
 
-  return chain([
-    prerun(options),
-    // adjust naming convention
-    applyAppNamingConvention(options, 'web'),
-    (tree: Tree, context: SchematicContext) => externalSchematic("@nrwl/schematics", "app", {
-      ...options,
-      skipInstall: true
-    })(tree, context),
-    addHeadlessE2e(options),
-    (tree: Tree, context: SchematicContext) => addAppFiles(options)(tree, context),
-    (tree: Tree, context: SchematicContext) =>
-      options.sample || options.routing
-      ? addAppFiles(options, options.sample ? "sample" : "routing")(tree, context)
-      : noop()(tree, context),
-    // adjust app files
-    (tree: Tree) => adjustAppFiles(options, tree),
-    // add start/clean scripts
-    (tree: Tree) => {
-      const platformApp = options.name.replace('-', '.');
-      const scripts = {};
-      scripts[
-        `clean`
-      ] = `npx rimraf hooks node_modules package-lock.json && npm i`;
-      scripts[`start.${platformApp}`] = `ng serve ${options.name}`;
-      return updatePackageScripts(tree, scripts);
-    },
-    options.skipFormat 
-      ? noop()
-      : formatFiles(options)
-  ]);
+  const chains = [];
+
+  const useDefaultChain = function() {
+    chains.push(...[
+      prerun(options),
+      // adjust naming convention
+      applyAppNamingConvention(options, 'web'),
+      (tree: Tree, context: SchematicContext) => externalSchematic("@nrwl/schematics", "app", {
+        ...options,
+        skipInstall: true
+      })(tree, context),
+      addHeadlessE2e(options),
+      (tree: Tree, context: SchematicContext) => addAppFiles(options)(tree, context),
+      (tree: Tree, context: SchematicContext) =>
+        options.sample || options.routing
+        ? addAppFiles(options, options.sample ? "sample" : "routing")(tree, context)
+        : noop()(tree, context),
+      // adjust app files
+      (tree: Tree) => adjustAppFiles(options, tree),
+      // add start/clean scripts
+      (tree: Tree) => {
+        const platformApp = options.name.replace('-', '.');
+        const scripts = {};
+        scripts[
+          `clean`
+        ] = `npx rimraf hooks node_modules package-lock.json && npm i`;
+        scripts[`start.${platformApp}`] = `ng serve ${options.name}`;
+        return updatePackageScripts(tree, scripts);
+      },
+      options.skipFormat 
+        ? noop()
+        : formatFiles(options)
+    ]);
+  };
+
+  if (options.framework) {
+    // use Nx style framework flag
+    if (supportedPlatforms.includes(options.framework)) {
+      // divert to separate xplat app generators
+      chains.push((tree: Tree, context: SchematicContext) => externalSchematic("@nstudio/schematics", `app.${options.framework}`, options)(tree, context));
+    } else {
+      useDefaultChain();
+    }
+  } else {
+    useDefaultChain();
+  }
+
+  return chain(chains);
 }
 
 /**

@@ -4,6 +4,46 @@
     "title": "Create a web application",
     "type": "object",
     "properties": {
+      "framework": {
+        "description": "The Framework for the application.",
+        "type": "string",
+        "enum": ["angular", "react", "web-components", "electron", "ionic", "nativescript", "nest"],
+        "default": "angular",
+        "x-prompt": {
+          "message": "What framework would you like to use for the application?",
+          "type": "list",
+          "items": [
+            {
+              "value": "angular",
+              "label": "Angular         [ https://angular.io   ]"
+            },
+            {
+              "value": "react",
+              "label": "React           [ https://reactjs.org/ ]"
+            },
+            {
+              "value": "web-components",
+              "label": "Web Components"
+            },
+            {
+              "value": "electron",
+              "label": "Electron           [ https://electronjs.org/ ]"
+            },
+            {
+              "value": "ionic",
+              "label": "Ionic           [ https://ionicframework.com/ ]"
+            },
+            {
+              "value": "nativescript",
+              "label": "NativeScript           [ https://www.nativescript.org/ ]"
+            },
+            {
+              "value": "nest",
+              "label": "Nest           [ https://nestjs.com/ ]"
+            }
+          ]
+        }
+      },
       "name": {
         "description": "The name of the application.",
         "type": "string",

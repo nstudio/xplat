@@ -1,9 +1,9 @@
 import { Tree, VirtualTree } from "@angular-devkit/schematics";
 import { Schema as ApplicationOptions } from "./schema";
-import { SchematicTestRunner } from "@angular-devkit/schematics/testing";
+import { SchematicTestRunner, UnitTestTree } from "@angular-devkit/schematics/testing";
 
 import * as path from "path";
-import { createEmptyWorkspace, getFileContent, jsonParse } from "../utils";
+import { createEmptyWorkspace, getFileContent, jsonParse, Framework } from "../utils";
 
 describe("app.web schematic", () => {
   const schematicRunner = new SchematicTestRunner(
@@ -117,5 +117,65 @@ describe("app.web schematic", () => {
     // console.log(checkFile);
     const angularJson: any = jsonParse(checkFile);
     expect(angularJson.projects[`${appName}-e2e`].architect.e2e.configurations.ci).toBeDefined();
+  });
+
+  it("should create app with --framework flag Ionic", async () => {
+    const options: ApplicationOptions = { ...defaultOptions };
+    options.framework = Framework.Ionic;
+    const tree = await schematicRunner.runSchematicAsync("app", options, appTree).toPromise();
+    const files = tree.files;
+    // console.log(files);
+
+    expect(
+      files.indexOf("/apps/ionic-foo/package.json")
+    ).toBeGreaterThanOrEqual(0);
+
+    const checkPath = "/package.json";
+    expect(files.indexOf(checkPath)).toBeGreaterThanOrEqual(0);
+
+    let checkFile = getFileContent(tree, checkPath);
+    // console.log(checkFile);
+    const packageData: any = jsonParse(checkFile);
+    expect(packageData.scripts["start.ionic.foo"]).toBeDefined();
+  });
+
+  it("should create app with --framework flag for NativeScript", async () => {
+    const options: ApplicationOptions = { ...defaultOptions };
+    options.framework = Framework.NativeScript;
+    const tree = await schematicRunner.runSchematicAsync("app", options, appTree).toPromise();
+    const files = tree.files;
+    // console.log(files);
+
+    expect(
+      files.indexOf("/apps/nativescript-foo/package.json")
+    ).toBeGreaterThanOrEqual(0);
+
+    const checkPath = "/package.json";
+    expect(files.indexOf(checkPath)).toBeGreaterThanOrEqual(0);
+
+    let checkFile = getFileContent(tree, checkPath);
+    // console.log(checkFile);
+    const packageData: any = jsonParse(checkFile);
+    expect(packageData.scripts["start.nativescript.foo.ios"]).toBeDefined();
+  });
+
+  it("should create app with --framework flag Nest", async () => {
+    const options: ApplicationOptions = { ...defaultOptions };
+    options.framework = Framework.Nest;
+    const tree = await schematicRunner.runSchematicAsync("app", options, appTree).toPromise();
+    const files = tree.files;
+    // console.log(files);
+
+    expect(
+      files.indexOf("/apps/nest-foo/package.json")
+    ).toBeGreaterThanOrEqual(0);
+
+    const checkPath = "/package.json";
+    expect(files.indexOf(checkPath)).toBeGreaterThanOrEqual(0);
+
+    let checkFile = getFileContent(tree, checkPath);
+    // console.log(checkFile);
+    const packageData: any = jsonParse(checkFile);
+    expect(packageData.scripts["start.nest.foo"]).toBeDefined();
   });
 });
