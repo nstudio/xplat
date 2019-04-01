@@ -89,7 +89,7 @@ export default function(options: ApplicationOptions) {
       // divert to separate xplat app generators
       chains.push((tree: Tree, context: SchematicContext) => externalSchematic("@nstudio/schematics", `app.${options.framework}`, options)(tree, context));
     } else {
-      options.framework = Framework.Angular; // default
+      // framework handling will fallback to Nx
       useDefaultChain();
     }
   } else {
