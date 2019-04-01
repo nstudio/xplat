@@ -1,3 +1,13 @@
+<a name="7.4.8"></a>
+## [7.4.8](https://github.com/nstudio/xplat/compare/7.4.7...7.4.8) (2019-04-01)
+
+
+### Bug Fixes
+
+* **generators:** --framework compliance ([bc1b2d0](https://github.com/nstudio/xplat/commit/bc1b2d0))
+
+
+
 <a name="7.4.7"></a>
 ## [7.4.7](https://github.com/nstudio/xplat/compare/7.4.6...7.4.7) (2019-04-01)
 
