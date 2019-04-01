@@ -4,7 +4,8 @@ import {
   generateXplatArchitecture,
   EPlatform,
   generateApp,
-  runE2e
+  runE2e,
+  npmInstall
 } from "../utils";
 
 describe("web e2e", () => {
@@ -17,6 +18,7 @@ describe("web e2e", () => {
     const webapp = uniq("web");
 
     expect(generateApp(EPlatform.Web, webapp, "--addHeadlessE2e")).toBeTruthy();
+    expect(npmInstall()).toBeTruthy();
     expect(runE2e(webapp, "--configuration=ci")).toBeTruthy();
   });
 
@@ -24,6 +26,7 @@ describe("web e2e", () => {
     const webapp = uniq("web");
 
     expect(generateApp(EPlatform.Web, webapp, "--addHeadlessE2e --e2eTestRunner cypress")).toBeTruthy();
+    expect(npmInstall()).toBeTruthy();
     expect(runE2e(webapp, "--headless")).toBeTruthy();
   });
 });

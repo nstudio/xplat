@@ -93,8 +93,8 @@ function installXplatPackage() {
   );
 }
 
-function npmInstall() {
-  execSync("npm i", {
+export function npmInstall() {
+  return execSync("npm i", {
     cwd: `./tmp/${projectName}`
   });
 }
