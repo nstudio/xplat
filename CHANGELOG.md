@@ -1,3 +1,13 @@
+<a name="7.4.6"></a>
+## [7.4.6](https://github.com/nstudio/xplat/compare/7.4.5...7.4.6) (2019-04-01)
+
+
+### Features
+
+* **generators:** allow --framework for Nx consistency ([bb79c28](https://github.com/nstudio/xplat/commit/bb79c28))
+
+
+
 <a name="7.4.5"></a>
 ## [7.4.5](https://github.com/nstudio/xplat/compare/7.4.4...7.4.5) (2019-03-23)
 
