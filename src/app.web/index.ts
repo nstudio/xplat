@@ -25,14 +25,15 @@ import {
   updateJsonFile,
   formatFiles,
   missingArgument,
-  supportedPlatforms
+  supportedPlatforms,
+  Framework
 } from "../utils";
 import { Schema as ApplicationOptions } from "./schema";
 
 export default function(options: ApplicationOptions) {
   if (!options.name) {
     throw new SchematicsException(
-      missingArgument('name', 'Provide a name for your Web app.', 'ng g app my-app')
+      missingArgument('name', 'Provide a name for your app.', 'ng g app my-app')
     );
   }
   // ensure sass is used
@@ -49,14 +50,23 @@ export default function(options: ApplicationOptions) {
         ...options,
         skipInstall: true
       })(tree, context),
-      addHeadlessE2e(options),
-      (tree: Tree, context: SchematicContext) => addAppFiles(options)(tree, context),
+      (tree: Tree, context: SchematicContext) => 
+        options.framework === Framework.Angular 
+        ? addHeadlessE2e(options)(tree, context)
+        : noop()(tree, context),
+      (tree: Tree, context: SchematicContext) => 
+        options.framework === Framework.Angular 
+        ? addAppFiles(options)(tree, context)
+        : noop()(tree, context),
       (tree: Tree, context: SchematicContext) =>
-        options.sample || options.routing
+        options.framework === Framework.Angular && (options.sample || options.routing)
         ? addAppFiles(options, options.sample ? "sample" : "routing")(tree, context)
         : noop()(tree, context),
       // adjust app files
-      (tree: Tree) => adjustAppFiles(options, tree),
+      (tree: Tree, context: SchematicContext) => 
+        options.framework === Framework.Angular 
+        ? adjustAppFiles(options, tree)
+        : noop()(tree, context),
       // add start/clean scripts
       (tree: Tree) => {
         const platformApp = options.name.replace('-', '.');
@@ -79,9 +89,11 @@ export default function(options: ApplicationOptions) {
       // divert to separate xplat app generators
       chains.push((tree: Tree, context: SchematicContext) => externalSchematic("@nstudio/schematics", `app.${options.framework}`, options)(tree, context));
     } else {
+      options.framework = Framework.Angular; // default
       useDefaultChain();
     }
   } else {
+    options.framework = Framework.Angular; // default
     useDefaultChain();
   }
 

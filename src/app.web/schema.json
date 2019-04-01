@@ -78,8 +78,7 @@
       "routing": {
         "type": "boolean",
         "description": "Generates a routing module.",
-        "default": false,
-        "x-prompt": "Would you like to add Angular routing?"
+        "default": false
       },
       "prefix": {
         "type": "string",
@@ -123,16 +122,16 @@
         "type": "string",
         "enum": ["karma", "jest", "none"],
         "description": "Test runner to use for unit tests",
-        "default": "karma",
+        "default": "jest",
         "x-prompt": {
           "message": "Which Unit Test Runner would you like to use for the application?",
           "type": "list",
           "items": [
+            { "value": "jest", "label": "Jest   [ https://jestjs.io ]" },
             {
               "value": "karma",
               "label": "Karma [ https://karma-runner.github.io ]"
-            },
-            { "value": "jest", "label": "Jest   [ https://jestjs.io ]" }
+            }
           ]
         }
       },
@@ -140,7 +139,7 @@
         "type": "string",
         "enum": ["protractor", "cypress", "none"],
         "description": "Test runner to use for end to end (e2e) tests",
-        "default": "protractor",
+        "default": "cypress",
         "x-prompt": {
           "message": "Which E2E Test Runner would you like to use for the application?",
           "type": "list",

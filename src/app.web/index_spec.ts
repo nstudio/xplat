@@ -81,6 +81,7 @@ describe("app.web schematic", () => {
 
   it("should create all files for web app using addHeadlessE2e", async () => {
     const options: ApplicationOptions = { ...defaultOptions, addHeadlessE2e: true };
+    options.e2eTestRunner = 'protractor';
     const tree = await schematicRunner.runSchematicAsync("app", options, appTree).toPromise();
     const files = tree.files;
     const appName = "web-foo";
