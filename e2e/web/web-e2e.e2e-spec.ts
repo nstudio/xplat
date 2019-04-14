@@ -17,7 +17,7 @@ describe("web e2e", () => {
   it("should pass protractor tests", () => {
     const webapp = uniq("web");
 
-    expect(generateApp(EPlatform.Web, webapp, "--addHeadlessE2e")).toBeTruthy();
+    expect(generateApp(EPlatform.Web, webapp, "--addHeadlessE2e --framework=angular --style=scss --unit-test-runner karma --e2eTestRunner protractor")).toBeTruthy();
     expect(npmInstall()).toBeTruthy();
     expect(runE2e(webapp, "--configuration=ci")).toBeTruthy();
   });
