@@ -13,7 +13,7 @@ import {
 
 describe('app.electron schematic', () => {
   const schematicRunner = new SchematicTestRunner(
-    '@nstudio/schematics',
+    '@nstudio/electron',
     path.join(__dirname, '../collection.json')
   );
   const defaultOptions: ApplicationOptions = {
@@ -33,7 +33,7 @@ describe('app.electron schematic', () => {
   it('should create all files of an app', () => {
     const options: ApplicationOptions = { ...defaultOptions };
     // console.log('appTree:', appTree);
-    const tree = schematicRunner.runSchematic('app.electron', options, appTree);
+    const tree = schematicRunner.runSchematic('app', options, appTree);
     const files = tree.files;
     // console.log(files);
     let checkPath = '/apps/electron-foo/src/index.ts';

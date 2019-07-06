@@ -16,10 +16,8 @@
     "schematics",
     "nstudio"
   ],
-  "main": "bundles/nstudio-angular.umd.js",
-  "types": "nstudio-angular.d.ts",
-  "module": "esm5/nstudio-angular.js",
-  "es2015": "esm2015/nstudio-angular.js",
+  "main": "index.js",
+  "types": "index.d.ts",
   "author": "Nathan Walker",
   "license": "MIT",
   "bugs": {
@@ -31,6 +29,7 @@
     "migrations": "./migrations.json"
   },
   "peerDependencies": {
+    "@nrwl/angular": "^8.0.0",
     "@nstudio/workspace": "*"
   }
 }

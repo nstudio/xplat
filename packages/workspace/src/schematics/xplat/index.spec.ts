@@ -13,7 +13,7 @@ setTest();
 
 describe('xplat schematic', () => {
   const schematicRunner = new SchematicTestRunner(
-    '@nstudio/schematics',
+    '@nstudio/workspace',
     path.join(__dirname, '../collection.json')
   );
   const defaultOptions: XPlatOptions = {

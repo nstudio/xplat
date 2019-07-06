@@ -1,0 +1,34 @@
+{
+  "name": "@nstudio/nativescript",
+  "version": "0.0.1",
+  "description": "NativeScript Plugin for xplat",
+  "homepage": "https://nstudio.io/xplat",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nstudio/xplat.git"
+  },
+  "keywords": [
+    "xplat",
+    "cross-platform",
+    "multi-platform",
+    "nx",
+    "nativescript",
+    "schematics",
+    "nstudio"
+  ],
+  "main": "index.js",
+  "types": "index.d.ts",
+  "author": "Nathan Walker",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nstudio/xplat/issues"
+  },
+  "schematics": "./collection.json",
+  "ng-update": {
+    "requirements": {},
+    "migrations": "./migrations.json"
+  },
+  "peerDependencies": {
+    "@nstudio/workspace": "*"
+  }
+}

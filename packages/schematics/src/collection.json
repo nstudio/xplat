@@ -1,0 +1,13 @@
+{
+  "name": "xplat",
+  "version": "0.1",
+  "extends": "@nstudio/angular",
+  "schematics": {
+    "ng-add": {
+      "factory": "./schematics/ng-add/ng-add",
+      "schema": "./schematics/ng-add/schema.json",
+      "description": "Convert an existing CLI project into a xplat workspace",
+      "hidden": true
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "xplat/ionic",
+  "version": "0.1",
+  "extends": ["@nstudio/workspace"],
+  "schematics": {
+    "application": {
+      "factory": "./src/schematics/application",
+      "schema": "./src/schematics/application/schema.json",
+      "aliases": ["app"],
+      "description": "Create an Ionic app."
+    }
+  }
+}

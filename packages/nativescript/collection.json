@@ -1,0 +1,24 @@
+{
+  "name": "xplat/nativescript",
+  "version": "0.1",
+  "extends": ["@nstudio/workspace"],
+  "schematics": {
+    "application": {
+      "factory": "./src/schematics/application",
+      "schema": "./src/schematics/application/schema.json",
+      "aliases": ["app"],
+      "description": "Create a NativeScript app."
+    },
+    "app-resources": {
+      "factory": "./src/schematics/app-resources",
+      "schema": "./src/schematics/app-resources/schema.json",
+      "description": "Create app resources for NativeScript app.",
+      "hidden": true
+    },
+    "helpers": {
+      "factory": "./src/schematics/helpers",
+      "schema": "./src/schematics/helpers/schema.json",
+      "description": "Helpers for NativeScript."
+    }
+  }
+}

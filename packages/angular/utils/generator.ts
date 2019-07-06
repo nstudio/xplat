@@ -14,11 +14,6 @@ import {
 import {
   addGlobal,
   insert,
-  addToCollection,
-  addImportToModule,
-  addProviderToModule,
-  addDeclarationToModule,
-  _addSymbolToNgModuleMetadata,
   generateOptionError,
   unsupportedPlatformError,
   needFeatureModuleError,
@@ -33,6 +28,13 @@ import {
   formatFiles,
   getDefaultTemplateOptions
 } from '@nstudio/workspace';
+import {
+  addImportToModule,
+  addProviderToModule,
+  addToCollection,
+  addDeclarationToModule,
+  addSymbolToNgModuleMetadata
+} from './ast';
 import * as ts from 'typescript';
 
 export type IGenerateType =
@@ -684,7 +686,7 @@ export function adjustFeatureModule(
               modulePath,
               `...${collectionName}`
             ),
-            ..._addSymbolToNgModuleMetadata(
+            ...addSymbolToNgModuleMetadata(
               moduleSourceFile,
               modulePath,
               'exports',

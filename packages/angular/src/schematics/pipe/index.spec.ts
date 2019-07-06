@@ -8,7 +8,7 @@ import { createXplatWithApps } from '@nstudio/workspace/testing';
 
 describe('pipe schematic', () => {
   const schematicRunner = new SchematicTestRunner(
-    '@nstudio/schematics',
+    '@nstudio/angular',
     path.join(__dirname, '../collection.json')
   );
   const defaultOptions: GenerateOptions = {

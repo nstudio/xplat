@@ -11,7 +11,7 @@ import { createEmptyWorkspace } from '@nstudio/workspace/testing';
 
 describe('app.web schematic', () => {
   const schematicRunner = new SchematicTestRunner(
-    '@nstudio/schematics',
+    '@nstudio/angular',
     path.join(__dirname, '../collection.json')
   );
   const defaultOptions: ApplicationOptions = {

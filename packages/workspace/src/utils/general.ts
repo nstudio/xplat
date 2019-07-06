@@ -149,20 +149,17 @@ export function createOrUpdate(host: Tree, path: string, content: string) {
 }
 
 export function getNxWorkspaceConfig(tree: Tree): any {
-  const nxConfig = getJsonFromFile(tree, 'nx.json'); //, 'Project must be an angular cli generated project, missing angular.json');
+  const nxConfig = getJsonFromFile(tree, 'nx.json');
   const hasWorkspaceDirs = tree.exists('apps') && tree.exists('libs');
 
   // determine if Nx workspace
   if (nxConfig) {
-    // if (ngConfig.$schema.indexOf('@nrwl/schematics') > -1 || ngConfig.$schema.indexOf('@nstudio/schematics') > -1 || hasWorkspaceDirs) {
-    //   return ngConfig;
-    // }
     if (nxConfig.npmScope || hasWorkspaceDirs) {
       return nxConfig;
     }
   }
   throw new SchematicsException(
-    '@nstudio/schematics must be used inside an Nx workspace. Create a workspace first. https://nrwl.io/nx/guide-nx-workspace'
+    '@nstudio/workspace must be used inside an Nx workspace. Create a workspace first. https://nx.dev'
   );
 }
 

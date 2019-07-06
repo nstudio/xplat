@@ -8,7 +8,7 @@ import { Schema as ConfigOptions } from './schema';
 
 describe('ts-config schematic', () => {
   const schematicRunner = new SchematicTestRunner(
-    '@nstudio/schematics',
+    '@nstudio/workspace',
     path.join(__dirname, '../collection.json')
   );
   const defaultOptions: ConfigOptions = {};

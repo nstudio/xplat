@@ -1,28 +1,13 @@
 {
   "name": "xplat/workspace",
   "version": "0.1",
-  "extends": "nx/workspace",
+  "extends": ["@nrwl/workspace"],
   "schematics": {
     "ng-add": {
       "factory": "./src/schematics/ng-add",
       "schema": "./src/schematics/ng-add/schema.json",
       "description": "Add xplat to an existing Nx Workspace",
       "hidden": true
-    },
-    "app.nativescript": {
-      "factory": "./src/schematics/app.nativescript",
-      "schema": "./src/schematics/app.nativescript/schema.json",
-      "description": "Create a NativeScript app."
-    },
-    "app.ionic": {
-      "factory": "./src/schematics/app.ionic",
-      "schema": "./src/schematics/app.ionic/schema.json",
-      "description": "Create an Ionic app."
-    },
-    "app.electron": {
-      "factory": "./src/schematics/app.electron",
-      "schema": "./src/schematics/app.electron/schema.json",
-      "description": "Create an Electron app."
     },
     "mode": {
       "factory": "./src/schematics/mode",
@@ -34,60 +19,10 @@
       "schema": "./src/schematics/xplat/schema.json",
       "description": "Add xplat development setup for optimal code reuse."
     },
-    "xplat-helper": {
-      "factory": "./src/schematics/xplat-helper",
-      "schema": "./src/schematics/xplat-helper/schema.json",
-      "description": "xplat helpers for various tooling extras."
-    },
-    "app": {
-      "factory": "./src/schematics/app.web",
-      "schema": "./src/schematics/app.web/schema.json",
-      "description": "Nx web app with xplat support."
-    },
-    "elements": {
-      "factory": "./src/schematics/elements",
-      "schema": "./src/schematics/elements/schema.json",
-      "description": "Create custom elements for the web."
-    },
-    "feature": {
-      "factory": "./src/schematics/feature",
-      "schema": "./src/schematics/feature/schema.json",
-      "description": "Create a feature module configured for xplat projects and shared code."
-    },
-    "component": {
-      "factory": "./src/schematics/component",
-      "schema": "./src/schematics/component/schema.json",
-      "description": "Create a component configured for xplat projects and shared code.",
-      "aliases": ["c"]
-    },
-    "directive": {
-      "factory": "./src/schematics/directive",
-      "schema": "./src/schematics/directive/schema.json",
-      "description": "Create a directive configured for xplat projects and shared code.",
-      "aliases": ["d"]
-    },
-    "pipe": {
-      "factory": "./src/schematics/pipe",
-      "schema": "./src/schematics/pipe/schema.json",
-      "description": "Create a pipe configured for xplat projects and shared code.",
-      "aliases": ["p"]
-    },
-    "service": {
-      "factory": "./src/schematics/service",
-      "schema": "./src/schematics/service/schema.json",
-      "description": "Create a service configured for xplat projects and shared code.",
-      "aliases": ["s"]
-    },
-    "ngrx": {
-      "factory": "./src/schematics/ngrx",
-      "schema": "./src/schematics/ngrx/schema.json",
-      "description": "Create a ngrx store."
-    },
-    "app-resources": {
-      "factory": "./src/schematics/app-resources",
-      "schema": "./src/schematics/app-resources/schema.json",
-      "description": "Create app resources for NativeScript app.",
-      "hidden": true
+    "helpers": {
+      "factory": "./src/schematics/helpers",
+      "schema": "./src/schematics/helpers/schema.json",
+      "description": "xplat helpers for various toolchains."
     },
     "ts-config": {
       "factory": "./src/schematics/ts-config",

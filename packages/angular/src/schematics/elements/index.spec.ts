@@ -14,7 +14,7 @@ import {
 
 describe('elements schematic', () => {
   const schematicRunner = new SchematicTestRunner(
-    '@nstudio/schematics',
+    '@nstudio/angular',
     path.join(__dirname, '../collection.json')
   );
   const defaultOptions: ElementsOptions = {

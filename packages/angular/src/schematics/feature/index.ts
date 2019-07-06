@@ -16,7 +16,6 @@ import {
 import {
   addGlobal,
   insert,
-  addToCollection,
   stringUtils,
   supportedPlatforms,
   ITargetPlatforms,
@@ -33,6 +32,9 @@ import {
   createOrUpdate,
   getDefaultTemplateOptions
 } from '@nstudio/workspace';
+import {
+  addToCollection
+} from '../../../utils/ast';
 import { Schema as featureOptions } from './schema';
 import * as ts from 'typescript';
 import { getFileContent } from '@schematics/angular/utility/test';

@@ -48,7 +48,7 @@ export default function(options: ApplicationOptions) {
         // adjust naming convention
         applyAppNamingConvention(options, 'web'),
         (tree: Tree, context: SchematicContext) =>
-          externalSchematic('@nrwl/schematics', 'app', {
+          externalSchematic('@nrwl/angular', 'app', {
             ...options,
             skipInstall: true
           })(tree, context),
@@ -93,11 +93,10 @@ export default function(options: ApplicationOptions) {
     if (supportedPlatforms.includes(options.framework)) {
       // divert to separate xplat app generators
       chains.push((tree: Tree, context: SchematicContext) =>
-        externalSchematic(
-          '@nstudio/schematics',
-          `app.${options.framework}`,
-          options
-        )(tree, context)
+        externalSchematic('@nstudio/angular', `application`, options)(
+          tree,
+          context
+        )
       );
     } else {
       // framework handling will fallback to Nx

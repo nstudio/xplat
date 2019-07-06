@@ -7,7 +7,7 @@ import { createEmptyWorkspace } from '@nstudio/workspace/testing';
 
 describe('app.ionic schematic', () => {
   const schematicRunner = new SchematicTestRunner(
-    '@nstudio/schematics',
+    '@nstudio/ionic',
     path.join(__dirname, '../collection.json')
   );
   const defaultOptions: ApplicationOptions = {
@@ -26,7 +26,7 @@ describe('app.ionic schematic', () => {
   it('should create all files of an app', () => {
     const options: ApplicationOptions = { ...defaultOptions };
     // console.log('appTree:', appTree);
-    const tree = schematicRunner.runSchematic('app.ionic', options, appTree);
+    const tree = schematicRunner.runSchematic('app', options, appTree);
     const files = tree.files;
     // console.log(files);
     expect(files.indexOf('/apps/ionic-foo/.gitignore')).toBeGreaterThanOrEqual(

@@ -13,7 +13,7 @@ import {
 
 describe('app.nativescript schematic', () => {
   const schematicRunner = new SchematicTestRunner(
-    '@nstudio/schematics',
+    '@nstudio/nativescript',
     path.join(__dirname, '../collection.json')
   );
   const defaultOptions: ApplicationOptions = {
@@ -33,11 +33,7 @@ describe('app.nativescript schematic', () => {
   it('should create all files of an app', () => {
     const options: ApplicationOptions = { ...defaultOptions };
     // console.log('appTree:', appTree);
-    const tree = schematicRunner.runSchematic(
-      'app.nativescript',
-      options,
-      appTree
-    );
+    const tree = schematicRunner.runSchematic('app', options, appTree);
     const files = tree.files;
     // console.log(files);
     expect(
@@ -149,11 +145,7 @@ describe('app.nativescript schematic', () => {
 
   it('should create root NgModule with bootstrap information', () => {
     const options = { ...defaultOptions };
-    const tree = schematicRunner.runSchematic(
-      'app.nativescript',
-      options,
-      appTree
-    );
+    const tree = schematicRunner.runSchematic('app', options, appTree);
     const appModule = getFileContent(
       tree,
       '/apps/nativescript-foo/app/app.module.ts'
@@ -181,11 +173,7 @@ describe('app.nativescript schematic', () => {
     const options = { ...defaultOptions };
     options.sample = false;
     options.routing = true;
-    const tree = schematicRunner.runSchematic(
-      'app.nativescript',
-      options,
-      appTree
-    );
+    const tree = schematicRunner.runSchematic('app', options, appTree);
     const appModule = getFileContent(
       tree,
       '/apps/nativescript-foo/app/app.routing.ts'
@@ -201,11 +189,7 @@ describe('app.nativescript schematic', () => {
     // options.name = 'sandbox';
     options.sample = false;
     options.setupSandbox = true;
-    let tree = schematicRunner.runSchematic(
-      'app.nativescript',
-      options,
-      appTree
-    );
+    let tree = schematicRunner.runSchematic('app', options, appTree);
     let fileContent = getFileContent(
       tree,
       '/apps/nativescript-foo/app/app.routing.ts'
@@ -244,11 +228,7 @@ describe('app.nativescript schematic', () => {
   it('should create a root routing module with shared import when using --sample', () => {
     const options = { ...defaultOptions };
     options.sample = true;
-    const tree = schematicRunner.runSchematic(
-      'app.nativescript',
-      options,
-      appTree
-    );
+    const tree = schematicRunner.runSchematic('app', options, appTree);
     const appModule = getFileContent(
       tree,
       '/apps/nativescript-foo/app/app.routing.ts'
@@ -263,11 +243,7 @@ describe('app.nativescript schematic', () => {
     const options: ApplicationOptions = { ...defaultOptions };
     options.groupByName = true;
     // console.log('appTree:', appTree);
-    const tree = schematicRunner.runSchematic(
-      'app.nativescript',
-      options,
-      appTree
-    );
+    const tree = schematicRunner.runSchematic('app', options, appTree);
     const files = tree.files;
     // console.log(files);
     expect(

@@ -1,0 +1,64 @@
+{
+  "schematics": {
+    "update-to-6.1.0": {
+      "version": "6.1.0",
+      "description": "Update {N} and add livesync improvements",
+      "factory": "./update-6-1-0/update-6-1-0"
+    },
+    "update-to-6.1.1": {
+      "version": "6.1.1",
+      "description": "Fix livesync",
+      "factory": "./update-6-1-1/update-6-1-1"
+    },
+    "update-to-6.1.4": {
+      "version": "6.1.4",
+      "description": "Fix {N} start scripts",
+      "factory": "./update-6-1-4/update-6-1-4"
+    },
+    "update-to-6.1.5": {
+      "version": "6.1.5",
+      "description": "Update {N} webpack",
+      "factory": "./update-6-1-5/update-6-1-5"
+    },
+    "update-to-6.1.6": {
+      "version": "6.1.6",
+      "description": "Update {N} webpack with 14.1",
+      "factory": "./update-6-1-6/update-6-1-6"
+    },
+    "update-to-6.1.12": {
+      "version": "6.1.12",
+      "description": "Update {N} @ngtools/webpack",
+      "factory": "./update-6-1-12/update-6-1-12"
+    },
+    "update-to-6.2.0": {
+      "version": "6.2.0",
+      "description": "Update {N} webpack",
+      "factory": "./update-6-2-0/update-6-2-0"
+    },
+    "update-to-7.0.0": {
+      "version": "7.0.0",
+      "description": "Update {N} 5.0",
+      "factory": "./update-7-0-0/update-7-0-0"
+    },
+    "update-to-7.0.1": {
+      "version": "7.0.1",
+      "description": "Add {N} HMR livesync navigation hook",
+      "factory": "./update-7-0-1/update-7-0-1"
+    },
+    "update-to-7.1.0": {
+      "version": "7.1.0",
+      "description": "Update NativeScript 5.1.0 and support for Angular 7.1.0",
+      "factory": "./update-7-1-0/update-7-1-0"
+    },
+    "update-to-7.3.1": {
+      "version": "7.3.1",
+      "description": "Update Electron to v4 and fix scripts",
+      "factory": "./update-7-3-1/update-7-3-1"
+    },
+    "update-to-7.3.2": {
+      "version": "7.3.2",
+      "description": "Update NativeScript to 5.2",
+      "factory": "./update-7-3-2/update-7-3-2"
+    }
+  }
+}
