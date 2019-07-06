@@ -1,9 +1,10 @@
 // ALL CREDIT TO: Maxime GRIS https://github.com/maximegris
 // Allow angular using electron module (native node modules)
 const fs = require('fs');
-const f_angular = 'node_modules/@angular-devkit/build-angular/src/angular-cli-files/models/webpack-configs/browser.js';
+const f_angular =
+  'node_modules/@angular-devkit/build-angular/src/angular-cli-files/models/webpack-configs/browser.js';
 
-fs.readFile(f_angular, 'utf8', function (err, data) {
+fs.readFile(f_angular, 'utf8', function(err, data) {
   if (err) {
     return console.log(err);
   }
@@ -11,7 +12,7 @@ fs.readFile(f_angular, 'utf8', function (err, data) {
   var result = result.replace(/target: "web",/g, '');
   var result = result.replace(/return \{/g, 'return {target: "web",');
 
-  fs.writeFile(f_angular, result, 'utf8', function (err) {
+  fs.writeFile(f_angular, result, 'utf8', function(err) {
     if (err) return console.log(err);
   });
 });

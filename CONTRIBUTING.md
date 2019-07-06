@@ -4,7 +4,7 @@ We greatly appreciate your help! You will be attributed to the contributor list 
 
 ## Building and testing locally
 
-After cloning the project: 
+After cloning the project:
 
 ```
 npm i --ignore-scripts
@@ -47,7 +47,7 @@ Anytime you make further changes to the schematic just rebuild/republish:
 ```
 npm run build
 npm publish --registry http://localhost:4873
-// then repeat Step #4 to install latest 
+// then repeat Step #4 to install latest
 ```
 
 If you get this error:
@@ -56,7 +56,7 @@ If you get this error:
 npm ERR! code EPUBLISHCONFLICT
 npm ERR! publish fail Cannot publish over existing version.
 npm ERR! publish fail Update the 'version' field in package.json and try again.
-npm ERR! publish fail 
+npm ERR! publish fail
 npm ERR! publish fail To automatically increment version numbers, see:
 npm ERR! publish fail     npm help version
 ```
@@ -80,8 +80,8 @@ All tests must pass. Please add tests for any new functionality.
 
 Please follow the following guidelines:
 
-* Make sure unit tests pass
-* Update your commit message to follow the guidelines below
+- Make sure unit tests pass
+- Update your commit message to follow the guidelines below
 
 ### Commit Message Guidelines
 
@@ -97,27 +97,27 @@ body
 
 The type must be one of the following:
 
-* build
-* feat
-* fix
-* refactor
-* style
-* docs
-* test
+- build
+- feat
+- fix
+- refactor
+- style
+- docs
+- test
 
 #### Scope
 
 The scope must be one of the following:
 
-* generators
-* admin
-* scripts
-* electron
-* ionic
-* nativescript
-* nest
-* elements
-* helpers
+- generators
+- admin
+- scripts
+- electron
+- ionic
+- nativescript
+- nest
+- elements
+- helpers
 
 #### Subject
 
@@ -126,7 +126,7 @@ The subject must contain a description of the change.
 #### Example
 
 ```
-feat(generators): add electron app 
+feat(generators): add electron app
 
 `ng generate app.electron myapp` adds an electron app
 ```

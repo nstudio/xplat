@@ -1,34 +1,40 @@
 {
   "compilerOptions": {
-    "baseUrl": "tsconfig",
-    "lib": [
-      "es2017",
-      "dom"
-    ],
+    "target": "es5",
     "module": "commonjs",
     "moduleResolution": "node",
-    "noEmitOnError": true,
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitAny": false,
-    "noImplicitThis": true,
-    "noUnusedParameters": false,
-    "noUnusedLocals": false,
-    "rootDir": "src/",
-    "skipDefaultLibCheck": true,
+    "outDir": "build",
+    "typeRoots": ["node_modules/@types"],
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "skipLibCheck": true,
-    "sourceMap": true,
-    "strictNullChecks": false,
-    "target": "es6",
-    "types": [
-      "jasmine",
-      "node"
-    ]
+    "types": ["node", "jest"],
+    "lib": ["es2017"],
+    "declaration": true,
+    "baseUrl": ".",
+    "paths": {
+      "@nstudio/angular": ["./packages/angular"],
+      "@nstudio/angular/*": ["./packages/angular/*"],
+      "@nstudio/workspace": ["./packages/workspace"],
+      "@nstudio/workspace/*": ["./packages/workspace/*"],
+      "@nstudio/workspace/testing": ["./packages/workspace/testing"]
+    }
   },
-  "include": [
-    "scripts/*",
-    "src/**/*"
-  ],
   "exclude": [
-    "src/**/_*files/**/*"
-  ]
+    "tmp",
+    "build",
+    "packages/angular/src/*/files/**/*",
+    "packages/electron/src/*/files/**/*",
+    "packages/ionic/src/*/files/**/*",
+    "packages/nativescript/src/*/files/**/*",
+    "packages/schematics/src/*/files/**/*",
+    "packages/web/src/*/files/**/*",
+    "packages/workspace/src/*/files/**/*",
+    "scripts"
+  ],
+  "angularCompilerOptions": {
+    "strictMetadataEmit": true,
+    "skipTemplateCodegen": true,
+    "annotationsAs": "decorators"
+  }
 }

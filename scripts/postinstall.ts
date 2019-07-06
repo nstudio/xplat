@@ -8,7 +8,10 @@ const fsReadFile = promisify(fs.readFile);
 
 export async function updateConfig() {
   const cwd = process.cwd();
-  if (cwd.indexOf('node_modules/@nstudio/schematics') === -1 && cwd.indexOf('node_modules\\@nstudio\\schematics') === -1) {
+  if (
+    cwd.indexOf('node_modules/@nstudio/workspace') === -1 &&
+    cwd.indexOf('node_modules\\@nstudio\\workspace') === -1
+  ) {
     // ignore: local development
     return;
   }
@@ -20,24 +23,32 @@ export async function updateConfig() {
     if (config) {
       const ngCli = JSON.parse(config);
       // update default
-      ngCli.cli.defaultCollection = "@nstudio/schematics";
+      ngCli.cli.defaultCollection = '@nstudio/workspace';
       fs.writeFileSync(ngCliConfigPath, JSON.stringify(ngCli, null, 2));
     }
   } catch (err) {
-    console.warn('An issue was detected during installation: angular.json does not exist.');
+    console.warn(
+      'An issue was detected during installation: angular.json does not exist.'
+    );
   }
 
   try {
     // Prevent Nrwl formatter from walking into {N} platforms folder
     await fixFormatter();
   } catch (err) {
-    console.error('An issue were detected during patching the nx-formatter', err);
+    console.error(
+      'An issue were detected during patching the nx-formatter',
+      err
+    );
   }
 
   try {
-    await makePrettierIgnore()
+    await makePrettierIgnore();
   } catch (err) {
-    console.error('An issue were detected during patching the nx-formatter', err);
+    console.error(
+      'An issue were detected during patching the nx-formatter',
+      err
+    );
   }
 }
 
@@ -46,10 +57,14 @@ export async function updateConfig() {
  * This function patches their formatter cli to include the xplat-folder
  */
 export async function fixFormatter() {
-  const formatPath = path.join(process.cwd(), '/../..', '@nrwl/schematics/src/command-line/format.js');
+  const formatPath = path.join(
+    process.cwd(),
+    '/../..',
+    '@nrwl/workspace/src/command-line/format.js'
+  );
   let formatContent = await fsReadFile(formatPath, 'UTF-8');
 
-  const patchLine = `    // PATCHED by @nstudio/schematics\n    patterns.push('"xplat/**/*"');`;
+  const patchLine = `    // PATCHED by @nstudio/workspace\n    patterns.push('"xplat/**/*"');`;
   if (formatContent.indexOf(patchLine) !== -1) {
     console.log(`Patch for nx format have already been applied`);
     return;
@@ -60,7 +75,10 @@ export async function fixFormatter() {
     throw new Error(`Apply couldn't patch for nx format`);
   }
 
-  const newFormatContent = formatContent.replace(patchRegExp, `${patchLine}\n$1`);
+  const newFormatContent = formatContent.replace(
+    patchRegExp,
+    `${patchLine}\n$1`
+  );
   if (formatContent !== newFormatContent) {
     await fsWriteFile(formatPath, newFormatContent);
     console.log('Patch for nx format have been applied');
@@ -74,7 +92,11 @@ export async function fixFormatter() {
  * Create a .prettierignore file at the root of the project.
  */
 export async function makePrettierIgnore() {
-  const prettierIgnorePath = path.join(process.cwd(), '/../..', '.prettierignore');
+  const prettierIgnorePath = path.join(
+    process.cwd(),
+    '/../..',
+    '.prettierignore'
+  );
 
   const prettierIgnore = `.DS_Store
 **/*.d.ts
@@ -93,7 +115,7 @@ export async function makePrettierIgnore() {
 **/*.conf.js
 `;
 
-  if (!await fsExists(prettierIgnorePath)) {
+  if (!(await fsExists(prettierIgnorePath))) {
     console.log(`"${prettierIgnorePath}" already exists`);
     return;
   }

@@ -10,12 +10,12 @@
     "xplat",
     "cross-platform",
     "multi-platform",
+    "nx",
     "angular",
     "schematics",
     "nativescript",
     "ionic",
-    "electron",
-    "nx"
+    "electron"
   ],
   "bin": {
     "create-nx-workspace": "./bin/create-xplat-workspace.js"

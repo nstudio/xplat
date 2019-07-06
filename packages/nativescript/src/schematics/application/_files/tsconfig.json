@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es2015",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "noEmitHelpers": true,
+    "noEmitOnError": true,
+    "removeComments": true,
+    "skipLibCheck": true,
+    "lib": ["es2017", "dom", "es6"],
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["app/*"],
+      "@<%= npmScope %>/*": ["../../libs/*"],
+      "@<%= npmScope %>/nativescript": ["../../xplat/nativescript/index.ts"],
+      "@<%= npmScope %>/nativescript/*": ["../../xplat/nativescript/*"],
+      "*": ["./node_modules/tns-core-modules/*", "./node_modules/*"]
+    }
+  },
+  "include": ["references.d.ts", "app/main.ts", "app/**/*.module.ts"]
+}

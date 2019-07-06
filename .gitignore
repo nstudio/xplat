@@ -1,32 +1,14 @@
-# IDEs
-.idea/
-jsconfig.json
-
-# Outputs
-e2e/**/*.js
-e2e/**/*.js.map
-scripts/**/*.js
-scripts/**/*.js.map
-!scripts/tools/**/*.js
-src/**/*.js
-src/**/*.js.map
-!src/app.nativescript/_files/tools/*.js
-!src/app.nativescript/_files/webpack.config.js
-!src/xplat/_testing_files/karma.conf.js
-tmp
-
-*.tgz
-src/**/*.ngfactory.d.ts
-!src/app.nativescript/_files/app/app.module.ngfactory.d.ts
-.angulardoc.json
-
-# Mac OSX Finder files.
-**/.DS_Store
+node_modules
+.idea
+/.vscode
+dist
+/build
+/coverage
+test
 .DS_Store
-
-# Misc
-node_modules/
-npm-debug.log*
-yarn-error.log*
+tmp
+*.log
+.ng_pkg_build
+jest.debug.config.js
 
 package-lock.json
