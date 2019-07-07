@@ -2,7 +2,7 @@ import { Tree } from '@angular-devkit/schematics';
 import { getFileContent } from '@schematics/angular/utility/test';
 import { Schema as GenerateOptions } from './schema';
 import { createXplatWithApps } from '@nstudio/workspace/testing';
-import { runSchematic } from '../../utils/testing';
+import { runSchematic, runSchematicSync } from '../../utils/testing';
 
 describe('component schematic', () => {
   let appTree: Tree;
@@ -350,7 +350,7 @@ describe('component schematic', () => {
     };
 
     expect(
-      async () => (tree = await runSchematic('component', options, tree))
+      () => (tree = runSchematicSync('component', options, tree))
     ).toThrowError(
       `apps/nativescript-viewer/app/features/foo/foo.module.ts does not exist. Create the feature module first. For example: ng g feature foo --projects=nativescript-viewer --onlyModule`
     );

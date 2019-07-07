@@ -16,14 +16,6 @@ export interface Schema {
    */
   groupByName?: boolean;
   /**
-   * Use root routing file
-   */
-  routing?: boolean;
-  /**
-   * Use sample feature setup
-   */
-  sample?: boolean;
-  /**
    * Set this app up as a sandbox for the workspace
    */
   setupSandbox?: boolean;

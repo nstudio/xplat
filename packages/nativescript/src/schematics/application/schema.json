@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "id": "app.nativescript",
-  "title": "Nx NativeScript App Options Schema",
+  "id": "NativeScriptApp",
+  "title": "Create a NativeScript app",
   "type": "object",
   "properties": {
     "name": {
@@ -27,16 +27,6 @@
       "type": "string",
       "description": "The npm scope to use.",
       "alias": "wn"
-    },
-    "routing": {
-      "type": "boolean",
-      "description": "Use root routing module.",
-      "default": false
-    },
-    "sample": {
-      "type": "boolean",
-      "description": "Use sample feature setup.",
-      "default": false
     },
     "setupSandbox": {
       "type": "boolean",

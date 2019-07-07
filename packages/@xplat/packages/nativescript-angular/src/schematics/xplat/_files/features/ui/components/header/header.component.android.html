@@ -1,0 +1,8 @@
+<ActionBar padding="0" margin="0">
+    <GridLayout rows="auto" columns="50,*,50" class="action-bar">
+      <StackLayout orientation="horizontal" horizontalAlignment="center" verticalAlignment="center" padding="2" row="0" col="1">
+        <Label [text]="title || ''" class="action-bar-title text-center" *ngIf="title"></Label>
+      </StackLayout>
+      <Button *ngIf="rightButton" [text]="rightButton" (tap)="tappedRight.next(true)" class="action-item" row="0" col="2"></Button>
+    </GridLayout>
+  </ActionBar>

@@ -28,7 +28,7 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
   // console.log('webpackConfigPath:', webpackConfigPath);
   let mainFile = fs.readFileSync(mainPath, 'UTF-8');
   mainFile = mainFile
-    .replace('<% if (routing || sample) { %>', '')
+    .replace('<% if (routing) { %>', '')
     .replace('<%= npmScope %>', npmScope)
     .replace('<% } %>', '');
 

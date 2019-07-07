@@ -14,11 +14,6 @@
       "description": "The npm scope to use.",
       "alias": "wn"
     },
-    "sample": {
-      "type": "boolean",
-      "description": "Use sample feature setup.",
-      "default": false
-    },
     "onlyIfNone": {
       "type": "boolean",
       "description": "Only create if not present yet.",

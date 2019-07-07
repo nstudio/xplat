@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "id": "xplat-ionic",
-  "title": "xplat ionic schema",
+  "id": "xplat-ionic-angular",
+  "title": "xplat ionic angular schema",
   "type": "object",
   "properties": {
     "prefix": {
@@ -13,11 +13,6 @@
       "type": "string",
       "description": "The npm scope to use.",
       "alias": "wn"
-    },
-    "sample": {
-      "type": "boolean",
-      "description": "Use sample feature setup.",
-      "default": false
     },
     "onlyIfNone": {
       "type": "boolean",

@@ -62,8 +62,8 @@ export default function(options: ApplicationOptions) {
             : noop()(tree, context),
         (tree: Tree, context: SchematicContext) =>
           options.framework === Framework.Angular &&
-          (options.sample || options.routing)
-            ? addAppFiles(options, options.sample ? 'sample' : 'routing')(
+          (options.routing)
+            ? addAppFiles(options, 'routing')(
                 tree,
                 context
               )
@@ -188,11 +188,11 @@ function adjustAppFiles(options: ApplicationOptions, tree: Tree) {
   );
   tree.overwrite(
     `/apps/${options.name}/src/app/app.component.html`,
-    options.sample || options.routing
+    options.routing
       ? `<router-outlet></router-outlet>`
       : appCmpHtml(options.name)
   );
-  if (options.sample || options.routing) {
+  if (options.routing) {
     // update home route to reflect with root cmp would have been
     tree.overwrite(
       `/apps/${
@@ -389,7 +389,7 @@ import { environment } from '@${getNpmScope()}/core';
 import { CoreModule } from './core/core.module';
 import { SharedModule } from './features/shared/shared.module';
 ${
-  options.sample || options.routing
+  options.routing
     ? `import { AppRoutingModule } from './app.routing';`
     : ''
 }
@@ -399,7 +399,7 @@ import { AppComponent } from './app.component';
     imports: [
         CoreModule,
         SharedModule${
-          options.sample || options.routing
+          options.routing
             ? `,
         AppRoutingModule`
             : ''

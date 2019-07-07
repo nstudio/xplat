@@ -1,7 +1,7 @@
 {
   "name": "xplat/ionic-angular",
   "version": "0.1",
-  "extends": ["@nstudio/ionic"],
+  "extends": ["@nstudio/ionic", "@nstudio/angular"],
   "schematics": {
     "xplat": {
       "factory": "./src/schematics/xplat",

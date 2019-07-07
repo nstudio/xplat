@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "id": "xplatNativeScriptAngularApp",
+  "title": "Create a NativeScript Angular app",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "The name of the app.",
+      "alias": "n",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      }
+    },
+    "prefix": {
+      "type": "string",
+      "description": "The prefix to apply to generated selectors.",
+      "alias": "p"
+    },
+    "groupByName": {
+      "description": "Group by app name (appname-platform) instead of the default (platform-appname)",
+      "type": "boolean",
+      "default": false
+    },
+    "npmScope": {
+      "type": "string",
+      "description": "The npm scope to use.",
+      "alias": "wn"
+    },
+    "routing": {
+      "type": "boolean",
+      "description": "Use root routing module.",
+      "default": false
+    },
+    "setupSandbox": {
+      "type": "boolean",
+      "description": "Setup app as a sandbox for the workspace.",
+      "default": false
+    },
+    "skipInstall": {
+      "type": "boolean",
+      "description": "Skip installing dependencies.",
+      "default": false
+    },
+    "addCliDependency": {
+      "type": "boolean",
+      "description": "Add {N} CLI to devDependencies",
+      "default": false
+    }
+  },
+  "required": []
+}

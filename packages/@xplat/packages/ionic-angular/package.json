@@ -1,7 +1,7 @@
 {
-  "name": "@xplat/web-angular",
+  "name": "@xplat/ionic-angular",
   "version": "0.0.1",
-  "description": "Web Angular Plugin for xplat",
+  "description": "Ionic Angular Plugin for xplat",
   "homepage": "https://nstudio.io/xplat",
   "repository": {
     "type": "git",
@@ -13,6 +13,7 @@
     "multi-platform",
     "nx",
     "angular",
+    "ionic",
     "schematics",
     "nstudio"
   ],
@@ -29,7 +30,7 @@
     "migrations": "./migrations.json"
   },
   "peerDependencies": {
-    "@nrwl/angular": "^8.0.0",
-    "@nstudio/workspace": "*"
+    "@nstudio/angular": "*",
+    "@nstudio/ionic": "*"
   }
 }

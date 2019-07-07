@@ -52,6 +52,11 @@
       "factory": "./src/schematics/helpers",
       "schema": "./src/schematics/helpers/schema.json",
       "description": "Helpers for Angular."
+    },
+    "xplat": {
+      "factory": "./src/schematics/xplat",
+      "schema": "./src/schematics/xplat/schema.json",
+      "description": "Add xplat for angular."
     }
   }
 }

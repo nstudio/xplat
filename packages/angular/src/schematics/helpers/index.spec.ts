@@ -12,7 +12,7 @@ import {
   createEmptyWorkspace,
   createXplatWithApps
 } from '@nstudio/workspace/testing';
-import { runSchematic } from '../../utils/testing';
+import { runSchematic, runSchematicSync } from '../../utils/testing';
 setTest();
 
 describe('helpers schematic', () => {
@@ -118,7 +118,7 @@ describe('helpers schematic', () => {
     let tree;
 
     expect(
-      async () => (tree = await runSchematic('helpers', options, appTree))
+      () => (tree = runSchematicSync('helpers', options, appTree))
     ).toThrowError(`The xplat-helper "applitools" requires the --target flag.`);
   });
 });

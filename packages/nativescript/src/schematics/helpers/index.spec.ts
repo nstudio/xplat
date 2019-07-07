@@ -26,7 +26,6 @@ describe('helpers schematic', () => {
     const appOptions: AppNativeScriptOptions = {
       name: 'foo',
       npmScope: 'testing',
-      sample: true,
       prefix: 'tt' // foo test
     };
     // console.log('appTree:', appTree);

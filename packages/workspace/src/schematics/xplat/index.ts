@@ -69,60 +69,11 @@ export default function(options: Schema) {
       }
     }
   }
-  // console.log(`Generating xplat support for: ${platforms.toString()}`);
 
   return chain([
     prerun(options, true),
-    // update gitignore to support xplat
-    updateGitIgnore(),
-    // add references to support xplat
-    addReferences(),
-    // libs
-    (tree: Tree, context: SchematicContext) =>
-      addLibFiles(tree, options)(tree, context),
-    // nativescript
-    (tree: Tree, context: SchematicContext) =>
-      targetPlatforms.nativescript
-        ? addPlatformFiles(tree, options, 'nativescript')(tree, context)
-        : noop()(tree, context),
-    // web
-    (tree: Tree, context: SchematicContext) =>
-      // always generate web if ionic or electron is specified since they depend on it
-      hasWebPlatform(targetPlatforms)
-        ? addPlatformFiles(tree, options, 'web')(tree, context)
-        : noop()(tree, context),
-    // ionic
-    (tree: Tree, context: SchematicContext) =>
-      targetPlatforms.ionic
-        ? addPlatformFiles(tree, options, 'ionic')(tree, context)
-        : noop()(tree, context),
-    // electron
-    (tree: Tree, context: SchematicContext) =>
-      targetPlatforms.electron
-        ? addPlatformFiles(tree, options, 'electron')(tree, context)
-        : noop()(tree, context),
-    // testing
     (tree: Tree, context: SchematicContext) =>
       addTestingFiles(tree, options)(tree, context),
     updateTestingConfig,
-    updateLint,
-    // update tsconfig files to support xplat
-    (tree: Tree, context: SchematicContext) =>
-      schematic('ts-config', {
-        platforms: platformArg
-      })(tree, context),
-    formatFiles(options),
-    // update root package for xplat configuration
-    (tree: Tree) => updatePackageForXplat(tree, targetPlatforms),
-    // clean shared code script ({N} build artifacts that may need to be cleaned up at times)
-    (tree: Tree) => {
-      const scripts = {};
-      scripts[
-        `clean.shared`
-      ] = `cd libs/ && git clean -dfX && cd ../xplat/ && git clean -dfX`;
-      return updatePackageScripts(tree, scripts);
-    },
-    // update IDE settings
-    (tree: Tree) => updateIDESettings(tree, platformArg)
   ]);
 }

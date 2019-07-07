@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "id": "xplat",
+  "id": "xplatWorkspace",
   "title": "xplat schema",
   "type": "object",
   "properties": {

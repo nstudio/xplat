@@ -2,7 +2,6 @@ node_modules
 *.ts
 !*.d.ts
 !**/*_files/**/*.ts
-!**/*_sample_files/**/*.ts
 *_spec.*
 *.tgz
 package-lock.json

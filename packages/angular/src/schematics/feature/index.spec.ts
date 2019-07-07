@@ -6,7 +6,7 @@ import {
   createXplatWithApps,
   isInModuleMetadata
 } from '@nstudio/workspace/testing';
-import { runSchematic } from '../../utils/testing';
+import { runSchematic, runSchematicSync } from '../../utils/testing';
 
 describe('feature schematic', () => {
   let appTree: Tree;
@@ -494,7 +494,7 @@ describe('feature schematic', () => {
     );
     options.routing = true;
     expect(
-      async () => (tree = await runSchematic('feature', options, tree))
+      () => (tree = runSchematicSync('feature', options, tree))
     ).toThrowError(
       'When generating a feature with the --routing option, please also specify --onlyProject. Support for shared code routing is under development and will be available in the future.'
     );
@@ -507,7 +507,7 @@ describe('feature schematic', () => {
       'xplat',
       {
         prefix: 'tt',
-        sample: true,
+        routing: true,
         platforms: 'nativescript,web'
       },
       appTree
@@ -646,7 +646,7 @@ describe('feature schematic', () => {
       'xplat',
       {
         prefix: 'tt',
-        sample: true,
+        routing: true,
         platforms: 'nativescript'
       },
       appTree

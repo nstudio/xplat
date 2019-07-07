@@ -2,7 +2,7 @@ import { Tree } from '@angular-devkit/schematics';
 import { getFileContent } from '@schematics/angular/utility/test';
 import { Schema as GenerateOptions } from './schema';
 import { createXplatWithApps } from '@nstudio/workspace/testing';
-import { runSchematic } from '../../utils/testing';
+import { runSchematic, runSchematicSync } from '../../utils/testing';
 
 describe('pipe schematic', () => {
   let appTree: Tree;
@@ -153,7 +153,7 @@ describe('pipe schematic', () => {
     const options: GenerateOptions = { ...defaultOptions };
     options.feature = 'register';
     expect(
-      async () => (tree = await runSchematic('pipe', options, tree))
+      () => (tree = runSchematicSync('pipe', options, tree))
     ).toThrowError(
       `libs/features/register/register.module.ts does not exist. Create the feature module first. For example: ng g feature register`
     );
@@ -261,7 +261,7 @@ describe('pipe schematic', () => {
     };
 
     expect(
-      async () => (tree = await runSchematic('pipe', options, tree))
+      () => (tree = runSchematicSync('pipe', options, tree))
     ).toThrowError(
       `xplat/nativescript/features/register/register.module.ts does not exist. Create the feature module first. For example: ng g feature register --platforms=nativescript --onlyModule`
     );
@@ -284,7 +284,7 @@ describe('pipe schematic', () => {
     };
 
     expect(
-      async () => (tree = await runSchematic('pipe', options, tree))
+      () => (tree = runSchematicSync('pipe', options, tree))
     ).toThrowError(
       `apps/nativescript-viewer/app/features/register/register.module.ts does not exist. Create the feature module first. For example: ng g feature register --projects=nativescript-viewer --onlyModule`
     );

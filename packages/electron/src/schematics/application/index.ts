@@ -38,7 +38,7 @@ export default function(options: ApplicationOptions) {
       missingArgument(
         'name',
         'Provide a name for your Electron app.',
-        'ng g @nstudio/electron:app sample'
+        'ng g @nstudio/electron:app name'
       )
     );
   }
@@ -229,14 +229,12 @@ export default function(options: ApplicationOptions) {
 
 function addAppFiles(
   options: ApplicationOptions,
-  appPath: string,
-  sample: string = ''
+  appPath: string
 ): Rule {
-  sample = '';
   const appname = getAppName(options, 'electron');
   return branchAndMerge(
     mergeWith(
-      apply(url(`./_${sample}files`), [
+      apply(url(`./_files`), [
         template({
           ...(options as any),
           ...getDefaultTemplateOptions(),

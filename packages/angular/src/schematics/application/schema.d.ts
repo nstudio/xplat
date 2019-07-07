@@ -17,7 +17,6 @@ export interface Schema {
   e2eTestRunner?: any;
 
   // xplat additional options
-  sample?: boolean;
   /**
    * Group by app name (appname-platform) instead of the default (platform-appname)
    */

@@ -1,11 +1,5 @@
 import { Tree } from '@angular-devkit/schematics';
-import {
-  SchematicTestRunner,
-  UnitTestTree
-} from '@angular-devkit/schematics/testing';
 import { getFileContent } from '@schematics/angular/utility/test';
-import * as path from 'path';
-
 import {
   supportedPlatforms,
   setTest,
@@ -13,29 +7,25 @@ import {
   IXplatSchema
 } from '@nstudio/workspace';
 import { createEmptyWorkspace } from '@nstudio/workspace/testing';
+import { runSchematic } from '../../utils/testing';
 setTest();
 
-describe('xplat schematic', () => {
-  const schematicRunner = new SchematicTestRunner(
-    '@nstudio/ionic',
-    path.join(__dirname, '../../../collection.json')
-  );
+describe('xplat ionic angular', () => {
+  let appTree: Tree;
   const defaultOptions: IXplatSchema = {
     npmScope: 'testing',
     prefix: 'ft' // foo test
   };
-
-  let appTree: Tree;
 
   beforeEach(() => {
     appTree = Tree.empty();
     appTree = createEmptyWorkspace(appTree);
   });
 
-  it('should create default xplat support for ionic which should always include web as well', () => {
+  it('should create default xplat support for ionic which should always include web as well', async () => {
     const options: IXplatSchema = { ...defaultOptions };
 
-    const tree = schematicRunner.runSchematic('xplat', options, appTree);
+    const tree = await runSchematic('xplat', options, appTree);
     const files = tree.files;
     expect(files.indexOf('/xplat/web/index.ts')).toBeGreaterThanOrEqual(0);
     expect(files.indexOf('/xplat/ionic/index.ts')).toBeGreaterThanOrEqual(0);

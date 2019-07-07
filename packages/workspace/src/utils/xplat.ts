@@ -39,17 +39,15 @@ export interface IXplatSchema {
 export function addPlatformFiles(
   tree: Tree,
   options: IXplatSchema,
-  platform: string,
-  sample: string = ''
+  platform: string
 ) {
-  if (!sample && tree.exists(`xplat/${platform}/core/index.ts`)) {
+  if (tree.exists(`xplat/${platform}/core/index.ts`)) {
     return noop();
   }
 
-  sample = sample ? `${sample}_` : '';
   return branchAndMerge(
     mergeWith(
-      apply(url(`./_${sample}files`), [
+      apply(url(`./_files`), [
         template({
           ...(options as any),
           ...getDefaultTemplateOptions()
@@ -62,23 +60,19 @@ export function addPlatformFiles(
 
 export function addLibFiles(
   tree: Tree,
-  options: IXplatSchema,
-  sample: string = ''
+  options: IXplatSchema
 ) {
-  sample = sample ? `${sample}_` : '';
 
-  if (!sample) {
-    if (
-      tree.exists(`libs/core/base/base-component.ts`) ||
-      tree.exists(`libs/features/index.ts`)
-    ) {
-      return noop();
-    }
+  if (
+    tree.exists(`libs/core/base/base-component.ts`) ||
+    tree.exists(`libs/features/index.ts`)
+  ) {
+    return noop();
   }
 
   return branchAndMerge(
     mergeWith(
-      apply(url(`./_lib_${sample}files`), [
+      apply(url(`./_lib_files`), [
         template({
           ...(options as any),
           ...getDefaultTemplateOptions()

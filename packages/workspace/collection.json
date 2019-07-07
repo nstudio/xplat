@@ -17,7 +17,8 @@
     "xplat": {
       "factory": "./src/schematics/xplat",
       "schema": "./src/schematics/xplat/schema.json",
-      "description": "Add xplat development setup for optimal code reuse."
+      "description": "Add xplat testing support.",
+      "hidden": true
     },
     "helpers": {
       "factory": "./src/schematics/helpers",

@@ -168,11 +168,6 @@
       "description": "Add tags to the application (used for linting)",
       "x-prompt": "Which tags would you like to add to the application? (used for linting)"
     },
-    "sample": {
-      "type": "boolean",
-      "description": "Use sample feature setup.",
-      "default": false
-    },
     "groupByName": {
       "description": "Group by app name (appname-platform) instead of the default (platform-appname)",
       "type": "boolean",
