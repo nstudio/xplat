@@ -1,32 +1,25 @@
 import { Tree } from '@angular-devkit/schematics';
-import { SchematicTestRunner } from '@angular-devkit/schematics/testing';
-import * as path from 'path';
-
 import { Schema as ApplicationOptions } from './schema';
 import { createEmptyWorkspace } from '@nstudio/workspace/testing';
+import { runSchematic } from '../../utils/testing';
 
 describe('app.ionic schematic', () => {
-  const schematicRunner = new SchematicTestRunner(
-    '@nstudio/ionic',
-    path.join(__dirname, '../collection.json')
-  );
+  let appTree: Tree;
   const defaultOptions: ApplicationOptions = {
     name: 'foo',
     npmScope: 'testing',
     prefix: 'tt'
   };
 
-  let appTree: Tree;
-
   beforeEach(() => {
     appTree = Tree.empty();
     appTree = createEmptyWorkspace(appTree);
   });
 
-  it('should create all files of an app', () => {
+  it('should create all files of an app', async () => {
     const options: ApplicationOptions = { ...defaultOptions };
     // console.log('appTree:', appTree);
-    const tree = schematicRunner.runSchematic('app', options, appTree);
+    const tree = await runSchematic('app', options, appTree);
     const files = tree.files;
     // console.log(files);
     expect(files.indexOf('/apps/ionic-foo/.gitignore')).toBeGreaterThanOrEqual(

@@ -1,38 +1,29 @@
 import { Tree } from '@angular-devkit/schematics';
-import {
-  SchematicTestRunner,
-  UnitTestTree
-} from '@angular-devkit/schematics/testing';
 import { getFileContent } from '@schematics/angular/utility/test';
-import * as path from 'path';
 
 import { Schema } from './schema';
 import { supportedPlatforms, setTest, jsonParse } from '@nstudio/workspace';
 import { createEmptyWorkspace } from '@nstudio/workspace/testing';
+import { runSchematic } from '../../utils/testing';
 setTest();
 
 describe('xplat schematic', () => {
-  const schematicRunner = new SchematicTestRunner(
-    '@nstudio/workspace',
-    path.join(__dirname, '../../../collection.json')
-  );
+  let appTree: Tree;
   const defaultOptions: Schema = {
     npmScope: 'testing',
     prefix: 'ft' // foo test
   };
-
-  let appTree: Tree;
 
   beforeEach(() => {
     appTree = Tree.empty();
     appTree = createEmptyWorkspace(appTree);
   });
 
-  it('should create default xplat support for web,nativescript + libs + testing support', () => {
+  it('should create default xplat support for web,nativescript + libs + testing support', async () => {
     const options: Schema = { ...defaultOptions };
     options.platforms = 'web,nativescript';
 
-    const tree = schematicRunner.runSchematic('xplat', options, appTree);
+    const tree = await runSchematic('xplat', options, appTree);
     const files = tree.files;
     expect(files.indexOf('/libs/core/index.ts')).toBeGreaterThanOrEqual(0);
     expect(files.indexOf('/libs/features/index.ts')).toBeGreaterThanOrEqual(0);
@@ -60,11 +51,11 @@ describe('xplat schematic', () => {
     ).toBeGreaterThanOrEqual(0);
   });
 
-  it('should create default xplat support for web,nativescript', () => {
+  it('should create default xplat support for web,nativescript', async () => {
     const options: Schema = { ...defaultOptions };
     options.platforms = 'web,nativescript';
 
-    const tree = schematicRunner.runSchematic('xplat', options, appTree);
+    const tree = await runSchematic('xplat', options, appTree);
     const files = tree.files;
     expect(files.indexOf('/xplat/web/features/items/items.module.ts')).toBe(-1);
     expect(files.indexOf('/xplat/web/index.ts')).toBeGreaterThanOrEqual(0);
@@ -76,11 +67,11 @@ describe('xplat schematic', () => {
     ).toBe(-1);
   });
 
-  it('should create default xplat support for ionic which should always include web as well', () => {
+  it('should create default xplat support for ionic which should always include web as well', async () => {
     const options: Schema = { ...defaultOptions };
     options.platforms = 'ionic';
 
-    const tree = schematicRunner.runSchematic('xplat', options, appTree);
+    const tree = await runSchematic('xplat', options, appTree);
     const files = tree.files;
     expect(files.indexOf('/xplat/web/index.ts')).toBeGreaterThanOrEqual(0);
     expect(files.indexOf('/xplat/ionic/index.ts')).toBeGreaterThanOrEqual(0);
@@ -98,11 +89,11 @@ describe('xplat schematic', () => {
     expect(hasNativeScript).toBeUndefined();
   });
 
-  it('should create default xplat support for electron which should always include web as well', () => {
+  it('should create default xplat support for electron which should always include web as well', async () => {
     const options: Schema = { ...defaultOptions };
     options.platforms = 'electron';
 
-    const tree = schematicRunner.runSchematic('xplat', options, appTree);
+    const tree = await runSchematic('xplat', options, appTree);
     const files = tree.files;
     expect(files.indexOf('/xplat/web/index.ts')).toBeGreaterThanOrEqual(0);
     expect(files.indexOf('/xplat/electron/index.ts')).toBeGreaterThanOrEqual(0);
@@ -122,11 +113,11 @@ describe('xplat schematic', () => {
     expect(hasElectron).toBeDefined();
   });
 
-  it('should create additional xplat support when generated with different platforms', () => {
+  it('should create additional xplat support when generated with different platforms', async () => {
     const options: Schema = { ...defaultOptions };
     options.platforms = 'web,ionic';
 
-    let tree = schematicRunner.runSchematic('xplat', options, appTree);
+    let tree = await runSchematic('xplat', options, appTree);
     let files = tree.files;
     expect(files.indexOf('/xplat/web/index.ts')).toBeGreaterThanOrEqual(0);
     expect(files.indexOf('/xplat/ionic/index.ts')).toBeGreaterThanOrEqual(0);
@@ -136,7 +127,7 @@ describe('xplat schematic', () => {
 
     options.onlyIfNone = true;
     options.platforms = 'nativescript';
-    tree = schematicRunner.runSchematic('xplat', options, tree);
+    tree = await runSchematic('xplat', options, tree);
     files = tree.files;
     // should be unchanged
     expect(files.indexOf('/xplat/web/index.ts')).toBeGreaterThanOrEqual(0);
@@ -146,12 +137,12 @@ describe('xplat schematic', () => {
     ).toBeGreaterThanOrEqual(0);
   });
 
-  it('should NOT create xplat unless platforms are specified', () => {
+  it('should NOT create xplat unless platforms are specified', async () => {
     const options: Schema = { ...defaultOptions };
 
-    let tree: UnitTestTree | null = null;
+    let tree;
     expect(
-      () => (tree = schematicRunner.runSchematic('xplat', options, appTree))
+      async () => (tree = await runSchematic('xplat', options, appTree))
     ).toThrowError(
       `You must specify which platforms you wish to generate support for. For example: ng g xplat --prefix=foo --platforms=${supportedPlatforms.join(
         ','
@@ -159,13 +150,13 @@ describe('xplat schematic', () => {
     );
   });
 
-  it('should NOT create unsupported xplat option and throw', () => {
+  it('should NOT create unsupported xplat option and throw', async () => {
     const options: Schema = { ...defaultOptions };
     options.platforms = 'desktop';
 
-    let tree: UnitTestTree | null = null;
+    let tree;
     expect(
-      () => (tree = schematicRunner.runSchematic('xplat', options, appTree))
+      async () => (tree = await runSchematic('xplat', options, appTree))
     ).toThrowError(
       `desktop is not a supported platform. Currently supported: ${supportedPlatforms}`
     );

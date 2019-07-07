@@ -1,30 +1,23 @@
 import { Tree } from '@angular-devkit/schematics';
-import { SchematicTestRunner } from '@angular-devkit/schematics/testing';
 import { getFileContent } from '@schematics/angular/utility/test';
-import * as path from 'path';
-
 import { Schema as GenerateOptions } from './schema';
 import { createXplatWithApps } from '@nstudio/workspace/testing';
+import { runSchematic } from '../../utils/testing';
 
 describe('ngrx schematic', () => {
-  const schematicRunner = new SchematicTestRunner(
-    '@nstudio/angular',
-    path.join(__dirname, '../collection.json')
-  );
+  let appTree: Tree;
   const defaultOptions: GenerateOptions = {
     name: 'auth'
   };
-
-  let appTree: Tree;
 
   beforeEach(() => {
     appTree = Tree.empty();
     appTree = createXplatWithApps(appTree);
   });
 
-  it('should create root state in libs for use across any platform and apps', () => {
+  it('should create root state in libs for use across any platform and apps', async () => {
     // console.log('appTree:', appTree);
-    let tree = schematicRunner.runSchematic(
+    let tree = await runSchematic(
       'xplat',
       {
         prefix: 'tt',
@@ -32,7 +25,7 @@ describe('ngrx schematic', () => {
       },
       appTree
     );
-    tree = schematicRunner.runSchematic(
+    tree = await runSchematic(
       'app.nativescript',
       {
         name: 'viewer',
@@ -40,7 +33,7 @@ describe('ngrx schematic', () => {
       },
       tree
     );
-    tree = schematicRunner.runSchematic(
+    tree = await runSchematic(
       'feature',
       {
         name: 'foo',
@@ -50,7 +43,7 @@ describe('ngrx schematic', () => {
     );
     const options: GenerateOptions = { ...defaultOptions };
     options.root = true;
-    tree = schematicRunner.runSchematic('ngrx', options, tree);
+    tree = await runSchematic('ngrx', options, tree);
     const files = tree.files;
     // console.log(files.slice(91,files.length));
 
@@ -97,9 +90,9 @@ describe('ngrx schematic', () => {
     );
   });
 
-  it('should create ngrx state for specified projects only', () => {
+  it('should create ngrx state for specified projects only', async () => {
     // console.log('appTree:', appTree);
-    let tree = schematicRunner.runSchematic(
+    let tree = await runSchematic(
       'xplat',
       {
         prefix: 'tt',
@@ -107,7 +100,7 @@ describe('ngrx schematic', () => {
       },
       appTree
     );
-    tree = schematicRunner.runSchematic(
+    tree = await runSchematic(
       'app.nativescript',
       {
         name: 'viewer',
@@ -115,7 +108,7 @@ describe('ngrx schematic', () => {
       },
       tree
     );
-    tree = schematicRunner.runSchematic(
+    tree = await runSchematic(
       'feature',
       {
         name: 'foo',
@@ -129,7 +122,7 @@ describe('ngrx schematic', () => {
       feature: 'foo',
       projects: 'nativescript-viewer,web-viewer,ionic-viewer'
     };
-    tree = schematicRunner.runSchematic('ngrx', options, tree);
+    tree = await runSchematic('ngrx', options, tree);
     const files = tree.files;
     // console.log(files. slice(91,files.length));
 

@@ -1,25 +1,15 @@
 import { Tree } from '@angular-devkit/schematics';
 import { Schema as ApplicationOptions } from './schema';
-import {
-  SchematicTestRunner,
-  UnitTestTree
-} from '@angular-devkit/schematics/testing';
-
-import * as path from 'path';
 import { Framework, jsonParse, getFileContent } from '@nstudio/workspace';
 import { createEmptyWorkspace } from '@nstudio/workspace/testing';
+import { runSchematic } from '../../utils/testing';
 
-describe('app.web schematic', () => {
-  const schematicRunner = new SchematicTestRunner(
-    '@nstudio/angular',
-    path.join(__dirname, '../collection.json')
-  );
+describe('app', () => {
+  let appTree: Tree;
   const defaultOptions: ApplicationOptions = {
     name: 'foo',
     skipFormat: true
   };
-
-  let appTree: Tree;
 
   beforeEach(() => {
     appTree = Tree.empty();
@@ -28,9 +18,7 @@ describe('app.web schematic', () => {
 
   it('should create all files for web app', async () => {
     const options: ApplicationOptions = { ...defaultOptions };
-    const tree = await schematicRunner
-      .runSchematicAsync('app', options, appTree)
-      .toPromise();
+    const tree = await runSchematic('app', options, appTree);
     const files = tree.files;
     // console.log(files);
 
@@ -59,9 +47,7 @@ describe('app.web schematic', () => {
   it('should create all files for web app using groupByName', async () => {
     const options: ApplicationOptions = { ...defaultOptions };
     options.groupByName = true;
-    const tree = await schematicRunner
-      .runSchematicAsync('app', options, appTree)
-      .toPromise();
+    const tree = await runSchematic('app', options, appTree);
     const files = tree.files;
     // console.log(files);
 
@@ -93,9 +79,7 @@ describe('app.web schematic', () => {
       addHeadlessE2e: true
     };
     options.e2eTestRunner = 'protractor';
-    const tree = await schematicRunner
-      .runSchematicAsync('app', options, appTree)
-      .toPromise();
+    const tree = await runSchematic('app', options, appTree);
     const files = tree.files;
     const appName = 'web-foo';
     // console.log(files);
@@ -138,9 +122,7 @@ describe('app.web schematic', () => {
   it('should create app with --framework flag Ionic', async () => {
     const options: ApplicationOptions = { ...defaultOptions };
     options.framework = Framework.Ionic;
-    const tree = await schematicRunner
-      .runSchematicAsync('app', options, appTree)
-      .toPromise();
+    const tree = await runSchematic('app', options, appTree);
     const files = tree.files;
     // console.log(files);
 
@@ -160,9 +142,7 @@ describe('app.web schematic', () => {
   it('should create app with --framework flag for NativeScript', async () => {
     const options: ApplicationOptions = { ...defaultOptions };
     options.framework = Framework.NativeScript;
-    const tree = await schematicRunner
-      .runSchematicAsync('app', options, appTree)
-      .toPromise();
+    const tree = await runSchematic('app', options, appTree);
     const files = tree.files;
     // console.log(files);
 

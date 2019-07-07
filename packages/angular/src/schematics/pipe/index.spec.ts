@@ -1,30 +1,23 @@
 import { Tree } from '@angular-devkit/schematics';
-import { SchematicTestRunner } from '@angular-devkit/schematics/testing';
 import { getFileContent } from '@schematics/angular/utility/test';
-import * as path from 'path';
-
 import { Schema as GenerateOptions } from './schema';
 import { createXplatWithApps } from '@nstudio/workspace/testing';
+import { runSchematic } from '../../utils/testing';
 
 describe('pipe schematic', () => {
-  const schematicRunner = new SchematicTestRunner(
-    '@nstudio/angular',
-    path.join(__dirname, '../collection.json')
-  );
+  let appTree: Tree;
   const defaultOptions: GenerateOptions = {
     name: 'truncate'
   };
-
-  let appTree: Tree;
 
   beforeEach(() => {
     appTree = Tree.empty();
     appTree = createXplatWithApps(appTree);
   });
 
-  it('should create pipe in libs by default for use across any platform and apps', () => {
+  it('should create pipe in libs by default for use across any platform and apps', async () => {
     // console.log('appTree:', appTree);
-    let tree = schematicRunner.runSchematic(
+    let tree = await runSchematic(
       'xplat',
       {
         prefix: 'tt',
@@ -32,7 +25,7 @@ describe('pipe schematic', () => {
       },
       appTree
     );
-    tree = schematicRunner.runSchematic(
+    tree = await runSchematic(
       'app.nativescript',
       {
         name: 'viewer',
@@ -40,7 +33,7 @@ describe('pipe schematic', () => {
       },
       tree
     );
-    tree = schematicRunner.runSchematic(
+    tree = await runSchematic(
       'feature',
       {
         name: 'foo',
@@ -49,7 +42,7 @@ describe('pipe schematic', () => {
       tree
     );
     let options: GenerateOptions = { ...defaultOptions };
-    tree = schematicRunner.runSchematic('pipe', options, tree);
+    tree = await runSchematic('pipe', options, tree);
     let files = tree.files;
     // console.log(files.slice(91,files.length));
 
@@ -75,7 +68,7 @@ describe('pipe schematic', () => {
     expect(moduleContent.indexOf(`...UI_PIPES`)).toBeGreaterThanOrEqual(0);
 
     options = { ...defaultOptions, feature: 'foo' };
-    tree = schematicRunner.runSchematic('pipe', options, tree);
+    tree = await runSchematic('pipe', options, tree);
     files = tree.files;
     // console.log(files.slice(91,files.length));
 
@@ -98,9 +91,9 @@ describe('pipe schematic', () => {
     expect(moduleContent.indexOf(`...FOO_PIPES`)).toBeGreaterThanOrEqual(0);
   });
 
-  it('should create pipe in libs and handle camel case properly', () => {
+  it('should create pipe in libs and handle camel case properly', async () => {
     // console.log('appTree:', appTree);
-    let tree = schematicRunner.runSchematic(
+    let tree = await runSchematic(
       'xplat',
       {
         prefix: 'tt',
@@ -108,7 +101,7 @@ describe('pipe schematic', () => {
       },
       appTree
     );
-    tree = schematicRunner.runSchematic(
+    tree = await runSchematic(
       'app.nativescript',
       {
         name: 'viewer',
@@ -116,7 +109,7 @@ describe('pipe schematic', () => {
       },
       tree
     );
-    tree = schematicRunner.runSchematic(
+    tree = await runSchematic(
       'feature',
       {
         name: 'foo',
@@ -128,7 +121,7 @@ describe('pipe schematic', () => {
       ...defaultOptions,
       name: 'test-with-dashes'
     };
-    tree = schematicRunner.runSchematic('pipe', options, tree);
+    tree = await runSchematic('pipe', options, tree);
     const files = tree.files;
     // console.log(files.slice(91,files.length));
 
@@ -147,9 +140,9 @@ describe('pipe schematic', () => {
     expect(content.indexOf(`name: 'testWithDashes'`)).toBeGreaterThanOrEqual(0);
   });
 
-  it('should THROW if feature module does not exist in libs', () => {
+  it('should THROW if feature module does not exist in libs', async () => {
     // console.log('appTree:', appTree);
-    let tree = schematicRunner.runSchematic(
+    let tree = await runSchematic(
       'xplat',
       {
         prefix: 'tt',
@@ -160,15 +153,15 @@ describe('pipe schematic', () => {
     const options: GenerateOptions = { ...defaultOptions };
     options.feature = 'register';
     expect(
-      () => (tree = schematicRunner.runSchematic('pipe', options, tree))
+      async () => (tree = await runSchematic('pipe', options, tree))
     ).toThrowError(
       `libs/features/register/register.module.ts does not exist. Create the feature module first. For example: ng g feature register`
     );
   });
 
-  it('should create pipe for specified projects only', () => {
+  it('should create pipe for specified projects only', async () => {
     // console.log('appTree:', appTree);
-    let tree = schematicRunner.runSchematic(
+    let tree = await runSchematic(
       'xplat',
       {
         prefix: 'tt',
@@ -176,7 +169,7 @@ describe('pipe schematic', () => {
       },
       appTree
     );
-    tree = schematicRunner.runSchematic(
+    tree = await runSchematic(
       'app.nativescript',
       {
         name: 'viewer',
@@ -184,7 +177,7 @@ describe('pipe schematic', () => {
       },
       tree
     );
-    tree = schematicRunner.runSchematic(
+    tree = await runSchematic(
       'feature',
       {
         name: 'foo',
@@ -198,7 +191,7 @@ describe('pipe schematic', () => {
       feature: 'foo',
       projects: 'nativescript-viewer,web-viewer'
     };
-    tree = schematicRunner.runSchematic('pipe', options, tree);
+    tree = await runSchematic('pipe', options, tree);
     const files = tree.files;
     // console.log(files. slice(91,files.length));
 
@@ -251,9 +244,9 @@ describe('pipe schematic', () => {
     expect(moduleContent.indexOf(`...FOO_PIPES`)).toBeGreaterThanOrEqual(0);
   });
 
-  it('should THROW if feature module does not exist in shared code', () => {
+  it('should THROW if feature module does not exist in shared code', async () => {
     // console.log('appTree:', appTree);
-    let tree = schematicRunner.runSchematic(
+    let tree = await runSchematic(
       'xplat',
       {
         prefix: 'tt',
@@ -268,15 +261,15 @@ describe('pipe schematic', () => {
     };
 
     expect(
-      () => (tree = schematicRunner.runSchematic('pipe', options, tree))
+      async () => (tree = await runSchematic('pipe', options, tree))
     ).toThrowError(
       `xplat/nativescript/features/register/register.module.ts does not exist. Create the feature module first. For example: ng g feature register --platforms=nativescript --onlyModule`
     );
   });
 
-  it('should THROW if feature module does not exist in projects', () => {
+  it('should THROW if feature module does not exist in projects', async () => {
     // console.log('appTree:', appTree);
-    let tree = schematicRunner.runSchematic(
+    let tree = await runSchematic(
       'xplat',
       {
         prefix: 'tt',
@@ -291,7 +284,7 @@ describe('pipe schematic', () => {
     };
 
     expect(
-      () => (tree = schematicRunner.runSchematic('pipe', options, tree))
+      async () => (tree = await runSchematic('pipe', options, tree))
     ).toThrowError(
       `apps/nativescript-viewer/app/features/register/register.module.ts does not exist. Create the feature module first. For example: ng g feature register --projects=nativescript-viewer --onlyModule`
     );

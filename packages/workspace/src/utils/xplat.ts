@@ -1,6 +1,21 @@
-import { Tree, noop, branchAndMerge, mergeWith, apply, url, template, move, SchematicContext } from "@angular-devkit/schematics";
-import { getDefaultTemplateOptions, getPrefix, updateJsonFile, getJsonFromFile } from "./general";
-import { updateJsonInTree } from "@nrwl/workspace";
+import {
+  Tree,
+  noop,
+  branchAndMerge,
+  mergeWith,
+  apply,
+  url,
+  template,
+  move,
+  SchematicContext
+} from '@angular-devkit/schematics';
+import {
+  getDefaultTemplateOptions,
+  getPrefix,
+  updateJsonFile,
+  getJsonFromFile
+} from './general';
+import { updateJsonInTree } from '@nrwl/workspace';
 
 export interface IXplatSchema {
   /**
@@ -43,7 +58,7 @@ export function addPlatformFiles(
       ])
     )
   );
-};
+}
 
 export function addLibFiles(
   tree: Tree,
@@ -72,7 +87,7 @@ export function addLibFiles(
       ])
     )
   );
-};
+}
 
 export function updateTestingConfig(tree: Tree, context: SchematicContext) {
   const angularConfigPath = `angular.json`;
@@ -168,4 +183,3 @@ export function updateLint(host: Tree, context: SchematicContext) {
     return json;
   })(host, context);
 }
-

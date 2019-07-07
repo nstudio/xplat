@@ -32,13 +32,10 @@ import {
   createOrUpdate,
   getDefaultTemplateOptions
 } from '@nstudio/workspace';
-import {
-  addToCollection
-} from '../../../utils/ast';
+import { addToCollection } from '../../utils/ast';
 import { Schema as featureOptions } from './schema';
 import * as ts from 'typescript';
 import { getFileContent } from '@schematics/angular/utility/test';
-import { capitalize } from '@angular-devkit/core/src/utils/strings';
 
 let featureName: string;
 let projectNames: Array<string>;
@@ -280,7 +277,7 @@ function getTemplateOptions(options: featureOptions) {
   const nameParts = options.name.split('-');
   let endingDashName = nameParts[0];
   if (nameParts.length > 1) {
-    endingDashName = capitalize(nameParts[nameParts.length - 1]);
+    endingDashName = stringUtils.capitalize(nameParts[nameParts.length - 1]);
   }
   return {
     ...(options as any),
@@ -394,7 +391,7 @@ function adjustSandbox(platform: PlatformTypes, appDirectory: string): Rule {
           const featureNameParts = featureName.split('-');
           let routeName = featureName;
           if (featureNameParts.length > 1) {
-            routeName = capitalize(
+            routeName = stringUtils.capitalize(
               featureNameParts[featureNameParts.length - 1]
             );
           }

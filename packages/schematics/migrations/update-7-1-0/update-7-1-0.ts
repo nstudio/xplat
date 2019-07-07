@@ -10,7 +10,7 @@ import { updateJsonInTree } from '@nrwl/workspace';
 import {
   getJsonFromFile,
   updateJsonFile,
-  createOrUpdate,
+  createOrUpdate
 } from '@nstudio/workspace';
 
 export default function(): Rule {

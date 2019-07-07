@@ -37,7 +37,13 @@ import {
   hasWebPlatform
 } from '@nstudio/workspace';
 import { Schema } from './schema';
-import { getDefaultTemplateOptions, addLibFiles, addPlatformFiles, updateTestingConfig, updateLint } from '../../utils';
+import {
+  getDefaultTemplateOptions,
+  addLibFiles,
+  addPlatformFiles,
+  updateTestingConfig,
+  updateLint
+} from '../../utils';
 
 let platformArg: string;
 export default function(options: Schema) {

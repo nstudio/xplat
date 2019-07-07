@@ -1,27 +1,20 @@
 import { Tree } from '@angular-devkit/schematics';
-import {
-  SchematicTestRunner,
-  UnitTestTree
-} from '@angular-devkit/schematics/testing';
 import { getFileContent } from '@schematics/angular/utility/test';
-import * as path from 'path';
-
 import { Schema as AppNativeScriptOptions } from '../application/schema';
 // import { Schema as XPlatOptions } from '../xplat/schema';
-import { stringUtils, setTest, jsonParse, IHelperSchema } from '@nstudio/workspace';
 import {
-  isInModuleMetadata,
-  createEmptyWorkspace,
+  stringUtils,
+  setTest,
+  jsonParse,
+  IHelperSchema
+} from '@nstudio/workspace';
+import {
   createXplatWithApps
 } from '@nstudio/workspace/testing';
+import { runSchematic } from '../../utils/testing';
 setTest();
 
 describe('helpers schematic', () => {
-  const schematicRunner = new SchematicTestRunner(
-    '@nstudio/workspace',
-    path.join(__dirname, '../collection.json')
-  );
-
   let appTree: Tree;
 
   beforeEach(() => {
@@ -29,7 +22,7 @@ describe('helpers schematic', () => {
     appTree = createXplatWithApps(appTree);
   });
 
-  it('imports: should create all files', () => {
+  it('imports: should create all files', async () => {
     const appOptions: AppNativeScriptOptions = {
       name: 'foo',
       npmScope: 'testing',
@@ -37,17 +30,13 @@ describe('helpers schematic', () => {
       prefix: 'tt' // foo test
     };
     // console.log('appTree:', appTree);
-    appTree = schematicRunner.runSchematic(
-      'app',
-      appOptions,
-      appTree
-    );
+    appTree = await runSchematic('app', appOptions, appTree);
 
     const options: IHelperSchema = {
       name: 'imports'
     };
     // console.log('appTree:', appTree);
-    const tree = schematicRunner.runSchematic('helpers', options, appTree);
+    const tree = await runSchematic('helpers', options, appTree);
     const files = tree.files;
     // console.log(files);
 
@@ -77,5 +66,4 @@ describe('helpers schematic', () => {
       '../../xplat/nativescript/utils/@nativescript/*'
     );
   });
-
 });

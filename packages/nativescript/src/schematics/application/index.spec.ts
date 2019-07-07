@@ -1,8 +1,5 @@
 import { Tree } from '@angular-devkit/schematics';
-import { SchematicTestRunner } from '@angular-devkit/schematics/testing';
 import { getFileContent } from '@schematics/angular/utility/test';
-import * as path from 'path';
-
 import { Schema as FeatureOptions } from '@nstudio/angular/src/schematics/feature/schema';
 import { Schema as ApplicationOptions } from './schema';
 import { stringUtils } from '@nstudio/workspace';
@@ -10,12 +7,10 @@ import {
   isInModuleMetadata,
   createEmptyWorkspace
 } from '@nstudio/workspace/testing';
+import { runSchematic } from '../../utils/testing';
 
 describe('app.nativescript schematic', () => {
-  const schematicRunner = new SchematicTestRunner(
-    '@nstudio/nativescript',
-    path.join(__dirname, '../collection.json')
-  );
+  let appTree: Tree;
   const defaultOptions: ApplicationOptions = {
     name: 'foo',
     npmScope: 'testing',
@@ -23,17 +18,15 @@ describe('app.nativescript schematic', () => {
     prefix: 'tt' // foo test
   };
 
-  let appTree: Tree;
-
   beforeEach(() => {
     appTree = Tree.empty();
     appTree = createEmptyWorkspace(appTree);
   });
 
-  it('should create all files of an app', () => {
+  it('should create all files of an app', async () => {
     const options: ApplicationOptions = { ...defaultOptions };
     // console.log('appTree:', appTree);
-    const tree = schematicRunner.runSchematic('app', options, appTree);
+    const tree = await runSchematic('app', options, appTree);
     const files = tree.files;
     // console.log(files);
     expect(
@@ -116,9 +109,9 @@ describe('app.nativescript schematic', () => {
     expect(files.indexOf('/xplat/web/index.ts')).toBe(-1);
   });
 
-  it('should create CoreModule with import from shared code', () => {
+  it('should create CoreModule with import from shared code', async () => {
     const options = { ...defaultOptions };
-    const tree = schematicRunner.runSchematic(
+    const tree = await runSchematic(
       'app.nativescript',
       options,
       appTree
@@ -143,9 +136,9 @@ describe('app.nativescript schematic', () => {
     );
   });
 
-  it('should create root NgModule with bootstrap information', () => {
+  it('should create root NgModule with bootstrap information', async () => {
     const options = { ...defaultOptions };
-    const tree = schematicRunner.runSchematic('app', options, appTree);
+    const tree = await runSchematic('app', options, appTree);
     const appModule = getFileContent(
       tree,
       '/apps/nativescript-foo/app/app.module.ts'
@@ -169,11 +162,11 @@ describe('app.nativescript schematic', () => {
     expect(appModule).toMatch("import { AppComponent } from './app.component'");
   });
 
-  it('should create a root routing module with --routing', () => {
+  it('should create a root routing module with --routing', async () => {
     const options = { ...defaultOptions };
     options.sample = false;
     options.routing = true;
-    const tree = schematicRunner.runSchematic('app', options, appTree);
+    const tree = await runSchematic('app', options, appTree);
     const appModule = getFileContent(
       tree,
       '/apps/nativescript-foo/app/app.routing.ts'
@@ -184,12 +177,12 @@ describe('app.nativescript schematic', () => {
     );
   });
 
-  it('should create a sandbox app with --setupSandbox and feature should work as expected', () => {
+  it('should create a sandbox app with --setupSandbox and feature should work as expected', async () => {
     const options = { ...defaultOptions };
     // options.name = 'sandbox';
     options.sample = false;
     options.setupSandbox = true;
-    let tree = schematicRunner.runSchematic('app', options, appTree);
+    let tree = await runSchematic('app', options, appTree);
     let fileContent = getFileContent(
       tree,
       '/apps/nativescript-foo/app/app.routing.ts'
@@ -212,7 +205,7 @@ describe('app.nativescript schematic', () => {
       adjustSandbox: true,
       projects: 'nativescript-foo'
     };
-    tree = schematicRunner.runSchematic('feature', featureOptions, tree);
+    tree = await runSchematic('feature', featureOptions, tree);
     fileContent = getFileContent(
       tree,
       '/apps/nativescript-foo/app/features/home/components/home.component.html'
@@ -225,10 +218,10 @@ describe('app.nativescript schematic', () => {
     ).toBeGreaterThanOrEqual(0);
   });
 
-  it('should create a root routing module with shared import when using --sample', () => {
+  it('should create a root routing module with shared import when using --sample', async () => {
     const options = { ...defaultOptions };
     options.sample = true;
-    const tree = schematicRunner.runSchematic('app', options, appTree);
+    const tree = await runSchematic('app', options, appTree);
     const appModule = getFileContent(
       tree,
       '/apps/nativescript-foo/app/app.routing.ts'
@@ -239,11 +232,11 @@ describe('app.nativescript schematic', () => {
     );
   });
 
-  it('should create all files of an app using groupByName', () => {
+  it('should create all files of an app using groupByName', async () => {
     const options: ApplicationOptions = { ...defaultOptions };
     options.groupByName = true;
     // console.log('appTree:', appTree);
-    const tree = schematicRunner.runSchematic('app', options, appTree);
+    const tree = await runSchematic('app', options, appTree);
     const files = tree.files;
     // console.log(files);
     expect(

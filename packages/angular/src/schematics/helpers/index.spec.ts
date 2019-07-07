@@ -1,28 +1,21 @@
 import { Tree } from '@angular-devkit/schematics';
-import {
-  SchematicTestRunner,
-  UnitTestTree
-} from '@angular-devkit/schematics/testing';
 import { getFileContent } from '@schematics/angular/utility/test';
-import * as path from 'path';
-
 import { Schema as AppWebOptions } from '../application/schema';
-// import { Schema as AppNativeScriptOptions } from '../app.nativescript/schema';
-// import { Schema as XPlatOptions } from '../xplat/schema';
-import { stringUtils, setTest, jsonParse, IHelperSchema } from '@nstudio/workspace';
+import {
+  stringUtils,
+  setTest,
+  jsonParse,
+  IHelperSchema
+} from '@nstudio/workspace';
 import {
   isInModuleMetadata,
   createEmptyWorkspace,
   createXplatWithApps
 } from '@nstudio/workspace/testing';
+import { runSchematic } from '../../utils/testing';
 setTest();
 
 describe('helpers schematic', () => {
-  const schematicRunner = new SchematicTestRunner(
-    '@nstudio/workspace',
-    path.join(__dirname, '../collection.json')
-  );
-
   let appTree: Tree;
 
   beforeEach(() => {
@@ -44,9 +37,7 @@ describe('helpers schematic', () => {
       e2eTestRunner: 'cypress'
     };
     // console.log('appTree:', appTree);
-    appTree = await schematicRunner
-      .runSchematicAsync('app', appOptions, appTree)
-      .toPromise();
+    appTree = await runSchematic('app', appOptions, appTree);
 
     const cypressJsonPath = '/apps/web-foo-e2e/cypress.json';
     let fileContent = getFileContent(appTree, cypressJsonPath);
@@ -58,7 +49,7 @@ describe('helpers schematic', () => {
       target: 'web-foo'
     };
     // console.log('appTree:', appTree);
-    const tree = schematicRunner.runSchematic('helpers', options, appTree);
+    const tree = await runSchematic('helpers', options, appTree);
     const files = tree.files;
     // console.log(files);
 
@@ -113,9 +104,7 @@ describe('helpers schematic', () => {
       e2eTestRunner: 'cypress'
     };
     // console.log('appTree:', appTree);
-    appTree = await schematicRunner
-      .runSchematicAsync('app', appOptions, appTree)
-      .toPromise();
+    appTree = await runSchematic('app', appOptions, appTree);
 
     const cypressJsonPath = '/apps/web-foo-e2e/cypress.json';
     let fileContent = getFileContent(appTree, cypressJsonPath);
@@ -129,9 +118,7 @@ describe('helpers schematic', () => {
     let tree;
 
     expect(
-      () =>
-        (tree = schematicRunner.runSchematic('helpers', options, appTree))
+      async () => (tree = await runSchematic('helpers', options, appTree))
     ).toThrowError(`The xplat-helper "applitools" requires the --target flag.`);
   });
-
 });

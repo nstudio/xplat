@@ -1,37 +1,30 @@
 import { Tree } from '@angular-devkit/schematics';
-import { SchematicTestRunner } from '@angular-devkit/schematics/testing';
 import { getFileContent } from '@schematics/angular/utility/test';
-import * as path from 'path';
-
 import { Schema as FeatureOptions } from './schema';
 import { createOrUpdate } from '@nstudio/workspace';
 import {
   createXplatWithApps,
   isInModuleMetadata
 } from '@nstudio/workspace/testing';
+import { runSchematic } from '../../utils/testing';
 
 describe('feature schematic', () => {
-  const schematicRunner = new SchematicTestRunner(
-    '@nstudio/angular',
-    path.join(__dirname, '../collection.json')
-  );
+  let appTree: Tree;
   const defaultOptions: FeatureOptions = {
     name: 'foo',
     projects: 'nativescript-viewer,web-viewer',
     createBase: true
   };
 
-  let appTree: Tree;
-
   beforeEach(() => {
     appTree = Tree.empty();
     appTree = createXplatWithApps(appTree);
   });
 
-  it('should create feature module with a single starting component', () => {
+  it('should create feature module with a single starting component', async () => {
     const options: FeatureOptions = { ...defaultOptions };
     // console.log('appTree:', appTree);
-    let tree = schematicRunner.runSchematic(
+    let tree = await runSchematic(
       'xplat',
       {
         prefix: 'tt',
@@ -39,7 +32,7 @@ describe('feature schematic', () => {
       },
       appTree
     );
-    tree = schematicRunner.runSchematic(
+    tree = await runSchematic(
       'app.nativescript',
       {
         name: 'viewer',
@@ -47,7 +40,7 @@ describe('feature schematic', () => {
       },
       tree
     );
-    tree = schematicRunner.runSchematic('feature', options, tree);
+    tree = await runSchematic('feature', options, tree);
     const files = tree.files;
     // console.log(files.slice(85,files.length));
     expect(
@@ -161,9 +154,9 @@ describe('feature schematic', () => {
     );
   });
 
-  it('should create feature module WITHOUT a single starting component when using onlyModule', () => {
+  it('should create feature module WITHOUT a single starting component when using onlyModule', async () => {
     // console.log('appTree:', appTree);
-    let tree = schematicRunner.runSchematic(
+    let tree = await runSchematic(
       'xplat',
       {
         prefix: 'tt',
@@ -171,7 +164,7 @@ describe('feature schematic', () => {
       },
       appTree
     );
-    tree = schematicRunner.runSchematic(
+    tree = await runSchematic(
       'app.nativescript',
       {
         name: 'viewer',
@@ -181,7 +174,7 @@ describe('feature schematic', () => {
     );
     const options: FeatureOptions = { ...defaultOptions };
     options.onlyModule = true;
-    tree = schematicRunner.runSchematic('feature', options, tree);
+    tree = await runSchematic('feature', options, tree);
     const files = tree.files;
     // console.log(files.slice(85,files.length));
     expect(
@@ -263,9 +256,9 @@ describe('feature schematic', () => {
     );
   });
 
-  it('should create feature module WITH a single starting component BUT IGNORE creating matching base component', () => {
+  it('should create feature module WITH a single starting component BUT IGNORE creating matching base component', async () => {
     // console.log('appTree:', appTree);
-    let tree = schematicRunner.runSchematic(
+    let tree = await runSchematic(
       'xplat',
       {
         prefix: 'tt',
@@ -273,7 +266,7 @@ describe('feature schematic', () => {
       },
       appTree
     );
-    tree = schematicRunner.runSchematic(
+    tree = await runSchematic(
       'app.nativescript',
       {
         name: 'viewer',
@@ -285,7 +278,7 @@ describe('feature schematic', () => {
       name: 'foo',
       platforms: 'web'
     };
-    tree = schematicRunner.runSchematic('feature', options, tree);
+    tree = await runSchematic('feature', options, tree);
     const files = tree.files;
     // console.log(files.slice(85,files.length));
 
@@ -358,10 +351,10 @@ describe('feature schematic', () => {
     );
   });
 
-  it('should create feature module for specified projects only', () => {
+  it('should create feature module for specified projects only', async () => {
     const options: FeatureOptions = { ...defaultOptions };
     // console.log('appTree:', appTree);
-    let tree = schematicRunner.runSchematic(
+    let tree = await runSchematic(
       'xplat',
       {
         prefix: 'tt',
@@ -369,7 +362,7 @@ describe('feature schematic', () => {
       },
       appTree
     );
-    tree = schematicRunner.runSchematic(
+    tree = await runSchematic(
       'app.nativescript',
       {
         name: 'viewer',
@@ -378,7 +371,7 @@ describe('feature schematic', () => {
       tree
     );
     options.onlyProject = true;
-    tree = schematicRunner.runSchematic('feature', options, tree);
+    tree = await runSchematic('feature', options, tree);
     const files = tree.files;
     // console.log(files.slice(85,files.length));
 
@@ -480,10 +473,10 @@ describe('feature schematic', () => {
     );
   });
 
-  it('Temporary: should error if routing is used without onlyProject', () => {
+  it('Temporary: should error if routing is used without onlyProject', async () => {
     const options: FeatureOptions = { ...defaultOptions };
     // console.log('appTree:', appTree);
-    let tree = schematicRunner.runSchematic(
+    let tree = await runSchematic(
       'xplat',
       {
         prefix: 'tt',
@@ -491,7 +484,7 @@ describe('feature schematic', () => {
       },
       appTree
     );
-    tree = schematicRunner.runSchematic(
+    tree = await runSchematic(
       'app.nativescript',
       {
         name: 'viewer',
@@ -501,16 +494,16 @@ describe('feature schematic', () => {
     );
     options.routing = true;
     expect(
-      () => (tree = schematicRunner.runSchematic('feature', options, tree))
+      async () => (tree = await runSchematic('feature', options, tree))
     ).toThrowError(
       'When generating a feature with the --routing option, please also specify --onlyProject. Support for shared code routing is under development and will be available in the future.'
     );
   });
 
-  it('should create feature module (with dashes in name) for specified projects WITH Routing', () => {
+  it('should create feature module (with dashes in name) for specified projects WITH Routing', async () => {
     const options: FeatureOptions = { ...defaultOptions };
     // console.log('appTree:', appTree);
-    let tree = schematicRunner.runSchematic(
+    let tree = await runSchematic(
       'xplat',
       {
         prefix: 'tt',
@@ -519,7 +512,7 @@ describe('feature schematic', () => {
       },
       appTree
     );
-    tree = schematicRunner.runSchematic(
+    tree = await runSchematic(
       'app.nativescript',
       {
         name: 'viewer',
@@ -531,7 +524,7 @@ describe('feature schematic', () => {
     options.onlyProject = true;
     options.routing = true;
     options.name = 'foo-with-dash';
-    tree = schematicRunner.runSchematic('feature', options, tree);
+    tree = await runSchematic('feature', options, tree);
     const files = tree.files;
     // console.log(files.slice(85,files.length));
 
@@ -644,12 +637,12 @@ describe('feature schematic', () => {
     expect(featureModule).toMatch(`export const FOOWITHDASH_COMPONENTS`);
   });
 
-  it('should create feature module for specified project WITH Routing and adjustSandbox', () => {
+  it('should create feature module for specified project WITH Routing and adjustSandbox', async () => {
     const options: FeatureOptions = {
       ...defaultOptions,
       projects: 'nativescript-viewer'
     };
-    let tree = schematicRunner.runSchematic(
+    let tree = await runSchematic(
       'xplat',
       {
         prefix: 'tt',
@@ -658,7 +651,7 @@ describe('feature schematic', () => {
       },
       appTree
     );
-    tree = schematicRunner.runSchematic(
+    tree = await runSchematic(
       'app.nativescript',
       {
         name: 'viewer',
@@ -677,7 +670,7 @@ describe('feature schematic', () => {
     options.adjustSandbox = true;
     options.routing = true;
     options.name = 'foo-with-dash';
-    tree = schematicRunner.runSchematic('feature', options, tree);
+    tree = await runSchematic('feature', options, tree);
     // console.log('---------')
     // console.log('homecmp:', getFileContent(tree, homeCmpPath));
   });

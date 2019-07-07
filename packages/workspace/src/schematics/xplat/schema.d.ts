@@ -1,4 +1,4 @@
-import { IXplatSchema } from "../../utils/xplat";
+import { IXplatSchema } from '../../utils/xplat';
 
 export interface Schema extends IXplatSchema {
   /**

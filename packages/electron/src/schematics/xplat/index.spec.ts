@@ -6,14 +6,19 @@ import {
 import { getFileContent } from '@schematics/angular/utility/test';
 import * as path from 'path';
 
-import { supportedPlatforms, setTest, jsonParse, IXplatSchema } from '@nstudio/workspace';
+import {
+  supportedPlatforms,
+  setTest,
+  jsonParse,
+  IXplatSchema
+} from '@nstudio/workspace';
 import { createEmptyWorkspace } from '@nstudio/workspace/testing';
 setTest();
 
 describe('xplat schematic', () => {
   const schematicRunner = new SchematicTestRunner(
     '@nstudio/electron',
-    path.join(__dirname, '../collection.json')
+    path.join(__dirname, '../../../collection.json')
   );
   const defaultOptions: IXplatSchema = {
     npmScope: 'testing',

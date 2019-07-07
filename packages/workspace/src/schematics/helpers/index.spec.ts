@@ -1,11 +1,5 @@
 import { Tree } from '@angular-devkit/schematics';
-import {
-  SchematicTestRunner,
-  UnitTestTree
-} from '@angular-devkit/schematics/testing';
 import { getFileContent } from '@schematics/angular/utility/test';
-import * as path from 'path';
-
 import { Schema as XPlatOptions } from '../xplat/schema';
 import { Schema as HelperOptions } from './schema';
 import { stringUtils, setTest, jsonParse } from '@nstudio/workspace';
@@ -13,14 +7,10 @@ import {
   isInModuleMetadata,
   createEmptyWorkspace
 } from '@nstudio/workspace/testing';
+import { runSchematic } from '../../utils/testing';
 setTest();
 
 describe('xplat-helper schematic', () => {
-  const schematicRunner = new SchematicTestRunner(
-    '@nstudio/workspace',
-    path.join(__dirname, '../collection.json')
-  );
-
   let appTree: Tree;
 
   beforeEach(() => {
@@ -28,20 +18,20 @@ describe('xplat-helper schematic', () => {
     appTree = createEmptyWorkspace(appTree);
   });
 
-  it('generating helper for a platform where the helper is not supported should not do anything', () => {
+  it('generating helper for a platform where the helper is not supported should not do anything', async () => {
     const optionsXplat: XPlatOptions = {
       npmScope: 'testing',
       prefix: 'tt',
       platforms: 'web,nativescript'
     };
 
-    appTree = schematicRunner.runSchematic('xplat', optionsXplat, appTree);
+    appTree = await runSchematic('xplat', optionsXplat, appTree);
     const options: HelperOptions = {
       name: 'imports',
       platforms: 'web'
     };
     // console.log('appTree:', appTree);
-    const tree = schematicRunner.runSchematic('helpers', options, appTree);
+    const tree = await runSchematic('helpers', options, appTree);
     const files = tree.files;
     // console.log(files);
 

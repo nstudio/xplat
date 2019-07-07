@@ -1,30 +1,24 @@
 import { Tree } from '@angular-devkit/schematics';
-import { SchematicTestRunner } from '@angular-devkit/schematics/testing';
 import { getFileContent } from '@schematics/angular/utility/test';
-import * as path from 'path';
-
 import { Schema as GenerateOptions } from './schema';
 import { createXplatWithApps } from '@nstudio/workspace/testing';
+import { runSchematic } from '../../utils/testing';
 
 describe('directive schematic', () => {
-  const schematicRunner = new SchematicTestRunner(
-    '@nstudio/angular',
-    path.join(__dirname, '../collection.json')
-  );
+  let appTree: Tree;
   const defaultOptions: GenerateOptions = {
     name: 'active-link'
   };
 
-  let appTree: Tree;
 
   beforeEach(() => {
     appTree = Tree.empty();
     appTree = createXplatWithApps(appTree);
   });
 
-  it('should create directive in libs by default for use across any platform and apps', () => {
+  it('should create directive in libs by default for use across any platform and apps', async () => {
     // console.log('appTree:', appTree);
-    let tree = schematicRunner.runSchematic(
+    let tree = await runSchematic(
       'xplat',
       {
         prefix: 'tt',
@@ -32,7 +26,7 @@ describe('directive schematic', () => {
       },
       appTree
     );
-    tree = schematicRunner.runSchematic(
+    tree = await runSchematic(
       'app.nativescript',
       {
         name: 'viewer',
@@ -40,7 +34,7 @@ describe('directive schematic', () => {
       },
       tree
     );
-    tree = schematicRunner.runSchematic(
+    tree = await runSchematic(
       'feature',
       {
         name: 'foo',
@@ -51,7 +45,7 @@ describe('directive schematic', () => {
     let options: GenerateOptions = { ...defaultOptions };
 
     // Directives without the feature option are added to the ui-feature
-    tree = schematicRunner.runSchematic('directive', options, tree);
+    tree = await runSchematic('directive', options, tree);
     let files = tree.files;
     // console.log(files.slice(91,files.length));
 
@@ -80,7 +74,7 @@ describe('directive schematic', () => {
 
     // Directives added to the foo-feature
     options = { ...defaultOptions, feature: 'foo' };
-    tree = schematicRunner.runSchematic('directive', options, tree);
+    tree = await runSchematic('directive', options, tree);
     files = tree.files;
     // console.log(files.slice(91,files.length));
 
@@ -110,9 +104,9 @@ describe('directive schematic', () => {
     );
   });
 
-  it('should create directive for specified projects only', () => {
+  it('should create directive for specified projects only', async () => {
     // console.log('appTree:', appTree);
-    let tree = schematicRunner.runSchematic(
+    let tree = await runSchematic(
       'xplat',
       {
         prefix: 'tt',
@@ -120,7 +114,7 @@ describe('directive schematic', () => {
       },
       appTree
     );
-    tree = schematicRunner.runSchematic(
+    tree = await runSchematic(
       'app.nativescript',
       {
         name: 'viewer',
@@ -128,7 +122,7 @@ describe('directive schematic', () => {
       },
       tree
     );
-    tree = schematicRunner.runSchematic(
+    tree = await runSchematic(
       'feature',
       {
         name: 'foo',
@@ -142,7 +136,7 @@ describe('directive schematic', () => {
       feature: 'foo',
       projects: 'nativescript-viewer,web-viewer,ionic-viewer'
     };
-    tree = schematicRunner.runSchematic('directive', options, tree);
+    tree = await runSchematic('directive', options, tree);
     const files = tree.files;
     // console.log(files. slice(91,files.length));
 

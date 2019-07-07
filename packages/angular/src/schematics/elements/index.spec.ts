@@ -1,36 +1,27 @@
 import { Tree } from '@angular-devkit/schematics';
-import { SchematicTestRunner } from '@angular-devkit/schematics/testing';
 import { getFileContent } from '@schematics/angular/utility/test';
-import * as path from 'path';
-
 import { Schema as ElementsOptions } from './schema';
 import { Schema as ComponentOptions } from '../component/schema';
-import {
-  createEmptyWorkspace
-} from '@nstudio/workspace/testing';
+import { createEmptyWorkspace } from '@nstudio/workspace/testing';
+import { runSchematic } from '../../utils/testing';
 
 describe('elements schematic', () => {
-  const schematicRunner = new SchematicTestRunner(
-    '@nstudio/angular',
-    path.join(__dirname, '../collection.json')
-  );
+  let appTree: Tree;
   const defaultOptions: ElementsOptions = {
     name: 'ui-kit',
     barrel: '@mycompany/web',
     components: 'menu,footer'
   };
 
-  let appTree: Tree;
-
   beforeEach(() => {
     appTree = Tree.empty();
     appTree = createEmptyWorkspace(appTree);
   });
 
-  it('should create an elements module that provides the specified components', () => {
+  it('should create an elements module that provides the specified components', async () => {
     const options: ElementsOptions = { ...defaultOptions };
     // console.log('appTree:', appTree);
-    let tree = schematicRunner.runSchematic(
+    let tree = await runSchematic(
       'xplat',
       {
         prefix: 'tt',
@@ -42,9 +33,9 @@ describe('elements schematic', () => {
       name: 'menu',
       platforms: 'web'
     };
-    tree = schematicRunner.runSchematic('component', componentOptions, tree);
+    tree = await runSchematic('component', componentOptions, tree);
     componentOptions.name = 'footer';
-    tree = schematicRunner.runSchematic('component', componentOptions, tree);
+    tree = await runSchematic('component', componentOptions, tree);
     let files = tree.files;
     // console.log(files.slice(85,files.length));
     expect(
@@ -66,7 +57,7 @@ describe('elements schematic', () => {
       )
     ).toBeGreaterThanOrEqual(0);
 
-    tree = schematicRunner.runSchematic('elements', options, tree);
+    tree = await runSchematic('elements', options, tree);
     files = tree.files;
 
     const elementModulePath = '/xplat/web/elements/ui-kit.module.ts';
@@ -97,10 +88,10 @@ describe('elements schematic', () => {
     );
   });
 
-  it('--builderModule argument', () => {
+  it('--builderModule argument', async () => {
     const options: ElementsOptions = { ...defaultOptions };
     // console.log('appTree:', appTree);
-    let tree = schematicRunner.runSchematic(
+    let tree = await runSchematic(
       'xplat',
       {
         prefix: 'tt',
@@ -112,9 +103,9 @@ describe('elements schematic', () => {
       name: 'menu',
       platforms: 'web'
     };
-    tree = schematicRunner.runSchematic('component', componentOptions, tree);
+    tree = await runSchematic('component', componentOptions, tree);
     componentOptions.name = 'footer';
-    tree = schematicRunner.runSchematic('component', componentOptions, tree);
+    tree = await runSchematic('component', componentOptions, tree);
     let files = tree.files;
     // console.log(files.slice(85,files.length));
     expect(
@@ -136,7 +127,7 @@ describe('elements schematic', () => {
       )
     ).toBeGreaterThanOrEqual(0);
 
-    tree = schematicRunner.runSchematic('elements', options, tree);
+    tree = await runSchematic('elements', options, tree);
     files = tree.files;
 
     let elementModulePath = '/xplat/web/elements/ui-kit.module.ts';
@@ -169,9 +160,9 @@ describe('elements schematic', () => {
       name: 'dropdown',
       platforms: 'web'
     };
-    tree = schematicRunner.runSchematic('component', component2Options, tree);
+    tree = await runSchematic('component', component2Options, tree);
     component2Options.name = 'link';
-    tree = schematicRunner.runSchematic('component', component2Options, tree);
+    tree = await runSchematic('component', component2Options, tree);
     files = tree.files;
     // console.log(files.slice(85,files.length));
     expect(
@@ -198,7 +189,7 @@ describe('elements schematic', () => {
       barrel: '@mycompany/web',
       components: 'dropdown,link'
     };
-    tree = schematicRunner.runSchematic('elements', newElementOptions, tree);
+    tree = await runSchematic('elements', newElementOptions, tree);
     files = tree.files;
 
     elementModulePath = '/xplat/web/elements/widgets.module.ts';
@@ -228,7 +219,7 @@ describe('elements schematic', () => {
     const builderOption: ElementsOptions = {
       builderModule: 'ui-kit'
     };
-    tree = schematicRunner.runSchematic('elements', builderOption, tree);
+    tree = await runSchematic('elements', builderOption, tree);
     files = tree.files;
     builderModule = getFileContent(tree, builderPath);
     // console.log(builderModule);

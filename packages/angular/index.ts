@@ -1,1 +1,1 @@
-export * from './utils/generator';
+export * from './src/utils/generator';

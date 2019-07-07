@@ -1,21 +1,14 @@
 import { Tree } from '@angular-devkit/schematics';
-import { SchematicTestRunner } from '@angular-devkit/schematics/testing';
 import { getFileContent } from '@schematics/angular/utility/test';
-import * as path from 'path';
-
 import { Schema as ApplicationOptions } from './schema';
 import { jsonParse } from '@nstudio/workspace';
 import {
-  createEmptyWorkspace,
-  createXplatWithApps,
   createXplatWithAppsForElectron
 } from '@nstudio/workspace/testing';
+import { runSchematic } from '../../utils/testing';
 
-describe('app.electron schematic', () => {
-  const schematicRunner = new SchematicTestRunner(
-    '@nstudio/electron',
-    path.join(__dirname, '../collection.json')
-  );
+describe('app', () => {
+  let appTree: Tree;
   const defaultOptions: ApplicationOptions = {
     name: 'foo',
     target: 'web-viewer',
@@ -23,17 +16,15 @@ describe('app.electron schematic', () => {
     prefix: 'tt'
   };
 
-  let appTree: Tree;
-
   beforeEach(() => {
     appTree = Tree.empty();
     appTree = createXplatWithAppsForElectron(appTree);
   });
 
-  it('should create all files of an app', () => {
+  it('should create all files of an app', async () => {
     const options: ApplicationOptions = { ...defaultOptions };
     // console.log('appTree:', appTree);
-    const tree = schematicRunner.runSchematic('app', options, appTree);
+    const tree = await runSchematic('app', options, appTree);
     const files = tree.files;
     // console.log(files);
     let checkPath = '/apps/electron-foo/src/index.ts';

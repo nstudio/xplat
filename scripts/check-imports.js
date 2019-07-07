@@ -28,24 +28,17 @@ function check() {
   const exceptions = [
     'packages/create-xplat-workspace/bin/create-xplat-workspace.ts',
     'packages/workspace/bin/create-xplat-workspace.ts',
-    // 'packages/web/src/builders/build/build.impl.ts',
-    // 'packages/web/src/builders/build/build.impl.spec.ts',
-    // 'packages/web/src/utils/web.config.ts',
-    // 'packages/web/src/utils/web.config.spec.ts',
-    'packages/workspace/src/utils/testing-utils.ts',
+    'packages/workspace/src/utils/testing-utils.ts'
     // 'packages/workspace/src/schematics/preset/preset.ts',
     // 'packages/workspace/src/schematics/ng-add/ng-add.ts'
   ];
 
   const files = [
     ...allFilesInDir('packages/create-xplat-workspace'),
-    // ...allFilesInDir('packages/cypress'),
-    // ...allFilesInDir('packages/express'),
-    // ...allFilesInDir('packages/jest'),
-    // ...allFilesInDir('packages/nest'),
-    // ...allFilesInDir('packages/node'),
-    // ...allFilesInDir('packages/react'),
-    // ...allFilesInDir('packages/web'),
+    ...allFilesInDir('packages/electron'),
+    ...allFilesInDir('packages/ionic'),
+    ...allFilesInDir('packages/nativescript'),
+    ...allFilesInDir('packages/web'),
     ...allFilesInDir('packages/workspace')
   ];
 

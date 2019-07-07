@@ -10,7 +10,7 @@ import {
 } from '@nrwl/workspace/src/utils/ast-utils';
 import { Tree } from '@angular-devkit/schematics';
 import * as path from 'path';
-import { toFileName } from '@nrwl/workspace/src/utils/name-utils';
+import { toFileName } from '@nrwl/workspace';
 
 export function addToCollection(
   source: ts.SourceFile,
@@ -344,12 +344,7 @@ export function addImportToModule(
   modulePath: string,
   symbolName: string
 ): Change[] {
-  return addSymbolToNgModuleMetadata(
-    source,
-    modulePath,
-    'imports',
-    symbolName
-  );
+  return addSymbolToNgModuleMetadata(source, modulePath, 'imports', symbolName);
 }
 
 export function addImportToTestBed(

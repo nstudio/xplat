@@ -20,7 +20,11 @@ import {
 } from '@angular-devkit/schematics';
 import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 // import { configPath, CliConfig } from '@schematics/angular/utility/config';
-import { toFileName, stringUtils as nxStringUtils, serializeJson } from '@nrwl/workspace';
+import {
+  toFileName,
+  stringUtils as nxStringUtils,
+  serializeJson
+} from '@nrwl/workspace';
 
 import { errorXplat, errorMissingPrefix } from './errors';
 
@@ -316,7 +320,8 @@ export function addRootDeps(
       packageJson.dependencies['@angular/core'] || '^8.0.0';
     const rxjsVersion = packageJson.dependencies['rxjs'] || '~6.4.0';
     const angularDevkitVersion =
-      packageJson.devDependencies['@angular-devkit/build-angular'] || '~0.800.1';
+      packageJson.devDependencies['@angular-devkit/build-angular'] ||
+      '~0.800.1';
 
     const deps: NodeDependency[] = [];
 

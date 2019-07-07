@@ -1,16 +1,11 @@
 import { Tree } from '@angular-devkit/schematics';
-import { SchematicTestRunner } from '@angular-devkit/schematics/testing';
 import { getFileContent } from '@schematics/angular/utility/test';
-import * as path from 'path';
-
 import { Schema as GenerateOptions } from './schema';
 import { createXplatWithApps } from '@nstudio/workspace/testing';
+import { runSchematic } from '../../utils/testing';
 
 describe('component schematic', () => {
-  const schematicRunner = new SchematicTestRunner(
-    '@nstudio/angular',
-    path.join(__dirname, '../collection.json')
-  );
+  let appTree: Tree;
   const defaultOptions: GenerateOptions = {
     name: 'signup',
     feature: 'foo',
@@ -18,24 +13,20 @@ describe('component schematic', () => {
     createBase: true
   };
 
-  let appTree: Tree;
-
   beforeEach(() => {
     appTree = Tree.empty();
     appTree = createXplatWithApps(appTree);
   });
 
-  it('should create component for specified platforms', () => {
+  it('should create component for specified platforms', async () => {
     // console.log('appTree:', appTree);
-    let tree = schematicRunner.runSchematic(
-      'xplat',
-      {
-        prefix: 'tt',
-        platforms: 'nativescript,web'
-      },
-      appTree
-    );
-    tree = schematicRunner.runSchematic(
+    let tree = await runSchematic('xplat',
+    {
+      prefix: 'tt',
+      platforms: 'nativescript,web'
+    },
+    appTree);
+    tree = await runSchematic(
       'app.nativescript',
       {
         name: 'viewer',
@@ -43,7 +34,7 @@ describe('component schematic', () => {
       },
       tree
     );
-    tree = schematicRunner.runSchematic(
+    tree = await runSchematic(
       'feature',
       {
         name: 'foo',
@@ -52,7 +43,7 @@ describe('component schematic', () => {
       tree
     );
     const options: GenerateOptions = { ...defaultOptions };
-    tree = schematicRunner.runSchematic('component', options, tree);
+    tree = await runSchematic('component', options, tree);
     const files = tree.files;
     // console.log(files.slice(91,files.length));
 
@@ -113,9 +104,9 @@ describe('component schematic', () => {
     );
   });
 
-  it('should create component for specified platforms with subFolder option', () => {
+  it('should create component for specified platforms with subFolder option', async () => {
     // console.log('appTree:', appTree);
-    let tree = schematicRunner.runSchematic(
+    let tree = await runSchematic(
       'xplat',
       {
         prefix: 'tt',
@@ -123,7 +114,7 @@ describe('component schematic', () => {
       },
       appTree
     );
-    tree = schematicRunner.runSchematic(
+    tree = await runSchematic(
       'app.nativescript',
       {
         name: 'viewer',
@@ -131,7 +122,7 @@ describe('component schematic', () => {
       },
       tree
     );
-    tree = schematicRunner.runSchematic(
+    tree = await runSchematic(
       'feature',
       {
         name: 'foo',
@@ -141,7 +132,7 @@ describe('component schematic', () => {
     );
     const options: GenerateOptions = { ...defaultOptions };
     options.subFolder = 'registration';
-    tree = schematicRunner.runSchematic('component', options, tree);
+    tree = await runSchematic('component', options, tree);
     const files = tree.files;
     // console.log(files.slice(91,files.length));
 
@@ -229,9 +220,9 @@ describe('component schematic', () => {
     ).toBeGreaterThanOrEqual(0);
   });
 
-  it('should create component for specified projects only', () => {
+  it('should create component for specified projects only', async () => {
     // console.log('appTree:', appTree);
-    let tree = schematicRunner.runSchematic(
+    let tree = await runSchematic(
       'xplat',
       {
         prefix: 'tt',
@@ -239,7 +230,7 @@ describe('component schematic', () => {
       },
       appTree
     );
-    tree = schematicRunner.runSchematic(
+    tree = await runSchematic(
       'app.nativescript',
       {
         name: 'viewer',
@@ -247,7 +238,7 @@ describe('component schematic', () => {
       },
       tree
     );
-    tree = schematicRunner.runSchematic(
+    tree = await runSchematic(
       'feature',
       {
         name: 'foo',
@@ -261,7 +252,7 @@ describe('component schematic', () => {
       feature: 'foo',
       projects: 'nativescript-viewer,web-viewer'
     };
-    tree = schematicRunner.runSchematic('component', options, tree);
+    tree = await runSchematic('component', options, tree);
     const files = tree.files;
     // console.log(files. slice(91,files.length));
 
@@ -342,9 +333,9 @@ describe('component schematic', () => {
     );
   });
 
-  it('should THROW if feature module does not exist in projects', () => {
+  it('should THROW if feature module does not exist in projects', async () => {
     // console.log('appTree:', appTree);
-    let tree = schematicRunner.runSchematic(
+    let tree = await runSchematic(
       'xplat',
       {
         prefix: 'tt',
@@ -359,7 +350,7 @@ describe('component schematic', () => {
     };
 
     expect(
-      () => (tree = schematicRunner.runSchematic('component', options, tree))
+      async () => (tree = await runSchematic('component', options, tree))
     ).toThrowError(
       `apps/nativescript-viewer/app/features/foo/foo.module.ts does not exist. Create the feature module first. For example: ng g feature foo --projects=nativescript-viewer --onlyModule`
     );

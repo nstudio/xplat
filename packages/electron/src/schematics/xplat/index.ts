@@ -43,14 +43,13 @@ import {
 import { getDefaultTemplateOptions, IXplatSchema } from '@nstudio/workspace';
 
 export default function(options: IXplatSchema) {
-
   return chain([
     prerun(options, true),
     // update gitignore to support xplat
     updateGitIgnore(),
     // add references to support xplat
     addReferences(),
-    
+
     (tree: Tree, context: SchematicContext) =>
       addPlatformFiles(tree, options, 'electron')(tree, context),
     // testing
