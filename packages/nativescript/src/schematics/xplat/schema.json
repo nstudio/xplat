@@ -1,13 +1,9 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "id": "xplat",
-  "title": "xplat schema",
+  "id": "xplat-nativescript",
+  "title": "xplat nativescript schema",
   "type": "object",
   "properties": {
-    "platforms": {
-      "type": "string",
-      "description": "Target platforms to support."
-    },
     "prefix": {
       "type": "string",
       "description": "The prefix to apply to generated selectors.",
@@ -17,6 +13,11 @@
       "type": "string",
       "description": "The npm scope to use.",
       "alias": "wn"
+    },
+    "sample": {
+      "type": "boolean",
+      "description": "Use sample feature setup.",
+      "default": false
     },
     "onlyIfNone": {
       "type": "boolean",

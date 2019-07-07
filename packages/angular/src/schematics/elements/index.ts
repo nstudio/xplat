@@ -13,6 +13,7 @@ import {
   externalSchematic,
   noop
 } from '@angular-devkit/schematics';
+import { updateJsonInTree } from '@nrwl/workspace';
 import {
   stringUtils,
   prerun,
@@ -23,7 +24,6 @@ import {
   applyAppNamingConvention,
   updateJsonFile,
   formatFiles,
-  updateJsonInTree,
   missingArgument,
   updateAngularProjects,
   getDefaultTemplateOptions

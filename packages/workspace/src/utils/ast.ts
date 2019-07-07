@@ -8,7 +8,7 @@
 import { Rule, Tree, SchematicContext } from '@angular-devkit/schematics';
 import * as ts from 'typescript';
 import * as stripJsonComments from 'strip-json-comments';
-import { serializeJson } from './fileutils';
+import { serializeJson, updateJsonInTree } from '@nrwl/workspace';
 import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 
 function nodesByPosition(first: ts.Node, second: ts.Node): number {
@@ -316,16 +316,29 @@ export function getImport(
 export function addGlobal(
   source: ts.SourceFile,
   modulePath: string,
-  statement: string
+  statement: string,
+  isExport?: boolean
 ): Change[] {
-  const allImports = findNodes(source, ts.SyntaxKind.ImportDeclaration);
-  if (allImports.length > 0) {
-    const lastImport = allImports[allImports.length - 1];
-    return [
-      new InsertChange(modulePath, lastImport.end + 1, `\n${statement}\n`)
-    ];
+  if (isExport) {
+    const allExports = findNodes(source, ts.SyntaxKind.ExportDeclaration);
+    // console.log('allExports:', allExports.length);
+    if (allExports.length > 0) {
+      const lastExport = allExports[allExports.length - 1];
+      // console.log('lastExport.end:', lastExport.end);
+      return [new InsertChange(modulePath, lastExport.end, `\n${statement}\n`)];
+    } else {
+      return [new InsertChange(modulePath, 0, `${statement}\n`)];
+    }
   } else {
-    return [new InsertChange(modulePath, 0, `${statement}\n`)];
+    const allImports = findNodes(source, ts.SyntaxKind.ImportDeclaration);
+    if (allImports.length > 0) {
+      const lastImport = allImports[allImports.length - 1];
+      return [
+        new InsertChange(modulePath, lastImport.end + 1, `\n${statement}\n`)
+      ];
+    } else {
+      return [new InsertChange(modulePath, 0, `${statement}\n`)];
+    }
   }
 }
 
@@ -370,29 +383,6 @@ export function readJsonInTree<T = any>(host: Tree, path: string): T {
   }
 }
 
-/**
- * This method is specifically for updating JSON in a Tree
- * @param path Path of JSON file in the Tree
- * @param callback Manipulation of the JSON data
- * @returns A rule which updates a JSON file file in a Tree
- */
-export function updateJsonInTree<T = any, O = T>(
-  path: string,
-  callback: (json: T, context: SchematicContext) => O
-): Rule {
-  return (host: Tree, context: SchematicContext): Tree => {
-    if (!host.exists(path)) {
-      host.create(path, serializeJson(callback({} as T, context)));
-      return host;
-    }
-    host.overwrite(
-      path,
-      serializeJson(callback(readJsonInTree(host, path), context))
-    );
-    return host;
-  };
-}
-
 let installAdded = false;
 
 export function addDepsToPackageJson(
@@ -424,14 +414,6 @@ export function getProjectConfig(host: Tree, name: string): any {
     throw new Error(`Cannot find project '${name}'`);
   } else {
     return projectConfig;
-  }
-}
-
-export function createOrUpdate(host: Tree, path: string, content: string) {
-  if (host.exists(path)) {
-    host.overwrite(path, content);
-  } else {
-    host.create(path, content);
   }
 }
 

@@ -5,12 +5,11 @@ import {
   Tree,
   noop
 } from '@angular-devkit/schematics';
-
+import { updateJsonInTree } from '@nrwl/workspace';
 import {
   getJsonFromFile,
   updateJsonFile,
   createOrUpdate,
-  updateJsonInTree,
   readJsonInTree,
   addTestingFiles
 } from '@nstudio/workspace';

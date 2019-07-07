@@ -6,7 +6,7 @@ import {
 import { getFileContent } from '@schematics/angular/utility/test';
 import * as path from 'path';
 
-import { Schema as XPlatOptions } from './schema';
+import { Schema } from './schema';
 import { supportedPlatforms, setTest, jsonParse } from '@nstudio/workspace';
 import { createEmptyWorkspace } from '@nstudio/workspace/testing';
 setTest();
@@ -14,11 +14,10 @@ setTest();
 describe('xplat schematic', () => {
   const schematicRunner = new SchematicTestRunner(
     '@nstudio/workspace',
-    path.join(__dirname, '../collection.json')
+    path.join(__dirname, '../../../collection.json')
   );
-  const defaultOptions: XPlatOptions = {
+  const defaultOptions: Schema = {
     npmScope: 'testing',
-    sample: true,
     prefix: 'ft' // foo test
   };
 
@@ -30,7 +29,7 @@ describe('xplat schematic', () => {
   });
 
   it('should create default xplat support for web,nativescript + libs + testing support', () => {
-    const options: XPlatOptions = { ...defaultOptions };
+    const options: Schema = { ...defaultOptions };
     options.platforms = 'web,nativescript';
 
     const tree = schematicRunner.runSchematic('xplat', options, appTree);
@@ -61,9 +60,8 @@ describe('xplat schematic', () => {
     ).toBeGreaterThanOrEqual(0);
   });
 
-  it('should create default xplat support (without sample feature) for web,nativescript', () => {
-    const options: XPlatOptions = { ...defaultOptions };
-    options.sample = false;
+  it('should create default xplat support for web,nativescript', () => {
+    const options: Schema = { ...defaultOptions };
     options.platforms = 'web,nativescript';
 
     const tree = schematicRunner.runSchematic('xplat', options, appTree);
@@ -78,43 +76,8 @@ describe('xplat schematic', () => {
     ).toBe(-1);
   });
 
-  it('should create default xplat support for web only', () => {
-    const options: XPlatOptions = { ...defaultOptions };
-    options.platforms = 'web';
-
-    const tree = schematicRunner.runSchematic('xplat', options, appTree);
-    const files = tree.files;
-    expect(files.indexOf('/xplat/web/index.ts')).toBeGreaterThanOrEqual(0);
-    expect(
-      files.indexOf('/xplat/nativescript/index.ts')
-    ).toBeGreaterThanOrEqual(-1);
-    const packagePath = '/package.json';
-    const packageFile = jsonParse(getFileContent(tree, packagePath));
-    const hasScss = packageFile.dependencies[`@testing/scss`];
-    expect(hasScss).not.toBeUndefined();
-    // should not include these root packages
-    const hasNativeScript = packageFile.dependencies[`nativescript-angular`];
-    expect(hasNativeScript).toBeUndefined();
-  });
-
-  it('should create default xplat support for nativescript only', () => {
-    const options: XPlatOptions = { ...defaultOptions };
-    options.platforms = 'nativescript';
-
-    const tree = schematicRunner.runSchematic('xplat', options, appTree);
-    const files = tree.files;
-    expect(files.indexOf('/xplat/web/index.ts')).toBeGreaterThanOrEqual(-1);
-    expect(
-      files.indexOf('/xplat/nativescript/index.ts')
-    ).toBeGreaterThanOrEqual(0);
-    const packagePath = '/package.json';
-    const packageFile = jsonParse(getFileContent(tree, packagePath));
-    const hasNativeScript = packageFile.dependencies[`nativescript-angular`];
-    expect(hasNativeScript).not.toBeUndefined();
-  });
-
   it('should create default xplat support for ionic which should always include web as well', () => {
-    const options: XPlatOptions = { ...defaultOptions };
+    const options: Schema = { ...defaultOptions };
     options.platforms = 'ionic';
 
     const tree = schematicRunner.runSchematic('xplat', options, appTree);
@@ -136,7 +99,7 @@ describe('xplat schematic', () => {
   });
 
   it('should create default xplat support for electron which should always include web as well', () => {
-    const options: XPlatOptions = { ...defaultOptions };
+    const options: Schema = { ...defaultOptions };
     options.platforms = 'electron';
 
     const tree = schematicRunner.runSchematic('xplat', options, appTree);
@@ -160,7 +123,7 @@ describe('xplat schematic', () => {
   });
 
   it('should create additional xplat support when generated with different platforms', () => {
-    const options: XPlatOptions = { ...defaultOptions };
+    const options: Schema = { ...defaultOptions };
     options.platforms = 'web,ionic';
 
     let tree = schematicRunner.runSchematic('xplat', options, appTree);
@@ -184,7 +147,7 @@ describe('xplat schematic', () => {
   });
 
   it('should NOT create xplat unless platforms are specified', () => {
-    const options: XPlatOptions = { ...defaultOptions };
+    const options: Schema = { ...defaultOptions };
 
     let tree: UnitTestTree | null = null;
     expect(
@@ -197,7 +160,7 @@ describe('xplat schematic', () => {
   });
 
   it('should NOT create unsupported xplat option and throw', () => {
-    const options: XPlatOptions = { ...defaultOptions };
+    const options: Schema = { ...defaultOptions };
     options.platforms = 'desktop';
 
     let tree: UnitTestTree | null = null;

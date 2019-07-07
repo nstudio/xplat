@@ -4,8 +4,7 @@ import {
   SchematicContext,
   Tree
 } from '@angular-devkit/schematics';
-
-import { updateJsonInTree } from '@nstudio/workspace';
+import { updateJsonInTree } from '@nrwl/workspace';
 
 function updateRootPackage(tree: Tree, context: SchematicContext) {
   return updateJsonInTree('package.json', json => {

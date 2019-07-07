@@ -20,7 +20,7 @@ import {
 } from '@angular-devkit/schematics';
 import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 // import { configPath, CliConfig } from '@schematics/angular/utility/config';
-import { toFileName, stringUtils as nxStringUtils } from '@nrwl/workspace';
+import { toFileName, stringUtils as nxStringUtils, serializeJson } from '@nrwl/workspace';
 
 import { errorXplat, errorMissingPrefix } from './errors';
 
@@ -100,16 +100,21 @@ export function isTesting() {
   return isTest;
 }
 
+export function addInstallTask(options: any) {
+  return (host: Tree, context: SchematicContext) => {
+    if (!options.skipInstall) {
+      context.addTask(new NodePackageInstallTask());
+    }
+    return host;
+  };
+}
+
 export function jsonParse(content: string) {
   if (content) {
     // ensure comments are stripped when parsing (otherwise will fail)
     return JSON.parse(stripJsonComments(content));
   }
   return {};
-}
-
-export function serializeJson(json: any): string {
-  return `${JSON.stringify(json, null, 2)}\n`;
 }
 
 export function getJsonFromFile(tree: Tree, path: string) {
@@ -119,7 +124,7 @@ export function getJsonFromFile(tree: Tree, path: string) {
 export function updateJsonFile(tree: Tree, path: string, jsonData: any) {
   try {
     // if (tree.exists(path)) {
-    tree.overwrite(path, JSON.stringify(jsonData, null, 2));
+    tree.overwrite(path, serializeJson(jsonData));
     // }
     return tree;
   } catch (err) {
@@ -308,10 +313,10 @@ export function addRootDeps(
   }
   if (packageJson) {
     const angularVersion =
-      packageJson.dependencies['@angular/core'] || '^7.0.0';
+      packageJson.dependencies['@angular/core'] || '^8.0.0';
     const rxjsVersion = packageJson.dependencies['rxjs'] || '~6.4.0';
     const angularDevkitVersion =
-      packageJson.devDependencies['@angular-devkit/build-angular'] || '~0.13.0';
+      packageJson.devDependencies['@angular-devkit/build-angular'] || '~0.800.1';
 
     const deps: NodeDependency[] = [];
 
@@ -704,7 +709,7 @@ export function updatePackageForXplat(
     } else {
       packageJson.xplat = { prefix };
       // update root dependencies for the generated xplat support
-      // console.log('updatePackageForXplat:', JSON.stringify(packageJson));
+      // console.log('updatePackageForXplat:', serializeJson(packageJson));
       return addRootDeps(tree, targetPlatforms, packageJson);
     }
   }
@@ -1077,7 +1082,7 @@ export function updateIDESettings(
 
         fs.writeFileSync(
           userSettingsVSCodePath,
-          JSON.stringify(userSettingsJson, null, 2)
+          serializeJson(userSettingsJson)
         );
       } else {
         console.warn(
@@ -1241,7 +1246,7 @@ export function updateIDESettings(
         }
         fs.writeFileSync(
           workspaceSettingsPath,
-          JSON.stringify(workspaceSettingsJson, null, 2)
+          serializeJson(workspaceSettingsJson)
         );
       }
 
@@ -1318,8 +1323,3 @@ export const toComponentClassName = (name: string) =>
 
 export const toNgModuleClassName = (name: string) =>
   `${stringUtils.classify(name)}Module`;
-
-export function addInstall(host: Tree, context: SchematicContext) {
-  context.addTask(new NodePackageInstallTask());
-  return host;
-}

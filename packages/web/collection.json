@@ -1,0 +1,12 @@
+{
+  "name": "xplat/web",
+  "version": "0.1",
+  "extends": ["@nstudio/workspace"],
+  "schematics": {
+    "xplat": {
+      "factory": "./src/schematics/xplat",
+      "schema": "./src/schematics/xplat/schema.json",
+      "description": "Add xplat for web."
+    }
+  }
+}

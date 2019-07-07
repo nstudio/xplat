@@ -38,7 +38,7 @@ export default function(options: ApplicationOptions) {
       missingArgument(
         'name',
         'Provide a name for your Electron app.',
-        'ng g app.electron sample'
+        'ng g @nstudio/electron:app sample'
       )
     );
   }

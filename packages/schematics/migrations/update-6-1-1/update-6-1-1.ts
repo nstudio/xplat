@@ -4,11 +4,10 @@ import {
   SchematicContext,
   Tree
 } from '@angular-devkit/schematics';
-
+import { updateJsonInTree } from '@nrwl/workspace';
 import {
   getJsonFromFile,
   createOrUpdate,
-  updateJsonInTree
 } from '@nstudio/workspace';
 
 function updateNativeScriptApps(tree: Tree, context: SchematicContext) {

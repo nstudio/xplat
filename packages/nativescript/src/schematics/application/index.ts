@@ -26,11 +26,11 @@ import {
   getGroupByName,
   getAppName,
   missingArgument,
-  addInstall,
   getJsonFromFile,
   setDependency,
   updateJsonFile,
-  getDefaultTemplateOptions
+  getDefaultTemplateOptions,
+  addInstallTask
 } from '@nstudio/workspace';
 import { Schema as ApplicationOptions } from './schema';
 
@@ -73,7 +73,7 @@ export default function(options: ApplicationOptions) {
       })(tree, context),
     // add root package dependencies
     (tree: Tree) => addRootDeps(tree, { nativescript: true }),
-    addInstall,
+    addInstallTask(options),
     addNsCli(options.addCliDependency),
     // add start/clean scripts
     (tree: Tree) => {

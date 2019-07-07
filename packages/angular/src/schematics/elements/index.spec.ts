@@ -6,11 +6,8 @@ import * as path from 'path';
 import { Schema as ElementsOptions } from './schema';
 import { Schema as ComponentOptions } from '../component/schema';
 import {
-  createXplatWithApps,
-  isInModuleMetadata,
-  createOrUpdate,
   createEmptyWorkspace
-} from '../../utils';
+} from '@nstudio/workspace/testing';
 
 describe('elements schematic', () => {
   const schematicRunner = new SchematicTestRunner(

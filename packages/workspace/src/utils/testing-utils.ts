@@ -4,11 +4,12 @@ import {
   externalSchematic,
   SchematicsException
 } from '@angular-devkit/schematics';
+import { serializeJson } from '@nrwl/workspace';
 
 export function createEmptyWorkspace(tree: Tree): Tree {
   tree.create(
     '/angular.json',
-    JSON.stringify({
+    serializeJson({
       $schema: './node_modules/@angular/cli/lib/config/schema.json',
       projects: {},
       newProjectRoot: '',
@@ -19,7 +20,7 @@ export function createEmptyWorkspace(tree: Tree): Tree {
   );
   tree.create(
     '/nx.json',
-    JSON.stringify({
+    serializeJson({
       npmScope: 'testing',
       projects: {}
     })
@@ -27,7 +28,7 @@ export function createEmptyWorkspace(tree: Tree): Tree {
   tree.create('/.gitignore', '');
   tree.create(
     '/package.json',
-    JSON.stringify({
+    serializeJson({
       name: 'testing',
       dependencies: {},
       devDependencies: {},
@@ -38,11 +39,11 @@ export function createEmptyWorkspace(tree: Tree): Tree {
   );
   tree.create(
     '/tsconfig.json',
-    JSON.stringify({ compilerOptions: { paths: {} } })
+    serializeJson({ compilerOptions: { paths: {} } })
   );
   tree.create(
     '/tslint.json',
-    JSON.stringify({
+    serializeJson({
       rules: {
         'nx-enforce-module-boundaries': [
           true,
@@ -62,7 +63,7 @@ export function createXplatWithAppsForElectron(tree: Tree): Tree {
   tree = createXplatWithApps(tree);
   tree.overwrite(
     'angular.json',
-    JSON.stringify({
+    serializeJson({
       $schema: './node_modules/@angular/cli/lib/config/schema.json',
       projects: {
         'web-viewer': {
@@ -85,7 +86,7 @@ export function createXplatWithAppsForElectron(tree: Tree): Tree {
   );
   tree.overwrite(
     '/nx.json',
-    JSON.stringify({
+    serializeJson({
       npmScope: 'testing',
       projects: {
         'web-viewer': {
@@ -96,7 +97,7 @@ export function createXplatWithAppsForElectron(tree: Tree): Tree {
   );
   tree.create(
     '/tools/tsconfig.tools.json',
-    JSON.stringify({
+    serializeJson({
       extends: '../tsconfig.json'
     })
   );

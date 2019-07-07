@@ -6,11 +6,10 @@ import {
 } from '@angular-devkit/schematics';
 import { join } from 'path';
 import * as fs from 'fs';
-
+import { updateJsonInTree } from '@nrwl/workspace';
 import {
   getJsonFromFile,
   updateJsonFile,
-  updateJsonInTree,
   createOrUpdate
 } from '@nstudio/workspace';
 
