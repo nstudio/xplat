@@ -3,12 +3,6 @@
   "version": "0.1",
   "extends": ["@nstudio/web", "@nstudio/angular"],
   "schematics": {
-    "application": {
-      "factory": "./src/schematics/application",
-      "schema": "./src/schematics/application/schema.json",
-      "aliases": ["app"],
-      "description": "Create an Angular web app."
-    },
     "xplat": {
       "factory": "./src/schematics/xplat",
       "schema": "./src/schematics/xplat/schema.json",

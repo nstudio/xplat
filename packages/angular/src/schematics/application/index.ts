@@ -28,86 +28,50 @@ import {
   Framework,
   getDefaultTemplateOptions
 } from '@nstudio/workspace';
-import { Schema as ApplicationOptions } from './schema';
+import { Schema } from './schema';
 
-export default function(options: ApplicationOptions) {
+export default function(options: Schema) {
   if (!options.name) {
     throw new SchematicsException(
-      missingArgument('name', 'Provide a name for your app.', 'ng g app my-app')
+      missingArgument(
+        'name',
+        'Provide a name for your app.',
+        'ng g @nstudio/angular:app my-app'
+      )
     );
   }
-  // ensure sass is used
+  // xplat is configured for sass only (at moment)
   options.style = 'scss';
 
-  const chains = [];
-
-  const useDefaultChain = function() {
-    chains.push(
-      ...[
-        prerun(options),
-        // adjust naming convention
-        applyAppNamingConvention(options, 'web'),
-        (tree: Tree, context: SchematicContext) =>
-          externalSchematic('@nrwl/angular', 'app', {
-            ...options,
-            skipInstall: true
-          })(tree, context),
-        (tree: Tree, context: SchematicContext) =>
-          options.framework === Framework.Angular
-            ? addHeadlessE2e(options)(tree, context)
-            : noop()(tree, context),
-        (tree: Tree, context: SchematicContext) =>
-          options.framework === Framework.Angular
-            ? addAppFiles(options)(tree, context)
-            : noop()(tree, context),
-        (tree: Tree, context: SchematicContext) =>
-          options.framework === Framework.Angular &&
-          (options.routing)
-            ? addAppFiles(options, 'routing')(
-                tree,
-                context
-              )
-            : noop()(tree, context),
-        // adjust app files
-        (tree: Tree, context: SchematicContext) =>
-          options.framework === Framework.Angular
-            ? adjustAppFiles(options, tree)
-            : noop()(tree, context),
-        // add start/clean scripts
-        (tree: Tree) => {
-          const platformApp = options.name.replace('-', '.');
-          const scripts = {};
-          scripts[
-            `clean`
-          ] = `npx rimraf hooks node_modules package-lock.json && npm i`;
-          scripts[`start.${platformApp}`] = `ng serve ${options.name}`;
-          return updatePackageScripts(tree, scripts);
-        },
-        options.skipFormat ? noop() : formatFiles(options)
-      ]
-    );
-  };
-
-  if (options.framework) {
-    // use Nx style framework flag
-    if (supportedPlatforms.includes(options.framework)) {
-      // divert to separate xplat app generators
-      chains.push((tree: Tree, context: SchematicContext) =>
-        externalSchematic('@nstudio/angular', `application`, options)(
-          tree,
-          context
-        )
-      );
-    } else {
-      // framework handling will fallback to Nx
-      useDefaultChain();
-    }
-  } else {
-    options.framework = Framework.Angular; // default
-    useDefaultChain();
-  }
-
-  return chain(chains);
+  return chain([
+    prerun(options),
+    // adjust naming convention
+    applyAppNamingConvention(options, 'web'),
+    (tree: Tree, context: SchematicContext) =>
+      externalSchematic('@nrwl/angular', 'app', {
+        ...options,
+        skipInstall: true
+      })(tree, context),
+    (tree: Tree, context: SchematicContext) =>
+      addHeadlessE2e(options)(tree, context),
+    (tree: Tree, context: SchematicContext) =>
+      addAppFiles(options)(tree, context),
+    (tree: Tree, context: SchematicContext) =>
+      addAppFiles(options, 'routing')(tree, context),
+    // adjust app files
+    (tree: Tree, context: SchematicContext) => adjustAppFiles(options, tree),
+    // add start/clean scripts
+    (tree: Tree) => {
+      const platformApp = options.name.replace('-', '.');
+      const scripts = {};
+      scripts[
+        `clean`
+      ] = `npx rimraf hooks node_modules package-lock.json && npm i`;
+      scripts[`start.${platformApp}`] = `ng serve ${options.name}`;
+      return updatePackageScripts(tree, scripts);
+    },
+    options.skipFormat ? noop() : formatFiles(options)
+  ]);
 }
 
 /**
@@ -116,7 +80,7 @@ export default function(options: ApplicationOptions) {
  *
  * @param options
  */
-function addProtractorCiConfig(options: ApplicationOptions) {
+function addProtractorCiConfig(options: Schema) {
   return (tree: Tree) => {
     const config = `
 const defaultConfig = require('./protractor.conf').config;
@@ -150,7 +114,7 @@ exports.config = defaultConfig;
  * Add headless options to e2e tests
  * @param options
  */
-function addHeadlessE2e(options: ApplicationOptions) {
+function addHeadlessE2e(options: Schema) {
   const framework: 'protractor' | 'cypress' | 'none' = options.e2eTestRunner;
   switch (framework) {
     case 'protractor':
@@ -161,7 +125,7 @@ function addHeadlessE2e(options: ApplicationOptions) {
   }
 }
 
-function addAppFiles(options: ApplicationOptions, extra: string = ''): Rule {
+function addAppFiles(options: Schema, extra: string = ''): Rule {
   extra = extra ? `${extra}_` : '';
   return branchAndMerge(
     mergeWith(
@@ -176,7 +140,7 @@ function addAppFiles(options: ApplicationOptions, extra: string = ''): Rule {
   );
 }
 
-function adjustAppFiles(options: ApplicationOptions, tree: Tree) {
+function adjustAppFiles(options: Schema, tree: Tree) {
   tree.overwrite(
     `/apps/${options.name}/src/index.html`,
     indexContent(options.name)
@@ -388,11 +352,7 @@ import { environment } from '@${getNpmScope()}/core';
 // app
 import { CoreModule } from './core/core.module';
 import { SharedModule } from './features/shared/shared.module';
-${
-  options.routing
-    ? `import { AppRoutingModule } from './app.routing';`
-    : ''
-}
+${options.routing ? `import { AppRoutingModule } from './app.routing';` : ''}
 import { AppComponent } from './app.component';
 
 @NgModule({

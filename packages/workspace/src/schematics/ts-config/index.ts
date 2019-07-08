@@ -4,7 +4,6 @@ import {
   chain
   // SchematicContext,
 } from '@angular-devkit/schematics';
-// import { InsertChange } from '@schematics/angular/utility/change';
 
 import { Schema as ConfigOptions } from './schema';
 import {

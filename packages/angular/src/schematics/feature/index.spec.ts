@@ -1,10 +1,10 @@
 import { Tree } from '@angular-devkit/schematics';
-import { getFileContent } from '@schematics/angular/utility/test';
 import { Schema as FeatureOptions } from './schema';
 import { createOrUpdate } from '@nstudio/workspace';
 import {
   createXplatWithApps,
-  isInModuleMetadata
+  isInModuleMetadata,
+  getFileContent
 } from '@nstudio/workspace/testing';
 import { runSchematic, runSchematicSync } from '../../utils/testing';
 

@@ -30,7 +30,6 @@ import {
 } from '@nstudio/workspace';
 
 import { Schema as ElementsOptions } from './schema';
-import { getFileContent } from '@schematics/angular/utility/test';
 
 let customElementList: string;
 let componentSymbols: Array<{ symbol: string; selector: string }>;
@@ -266,7 +265,7 @@ function updateBuilder(tree: Tree, options: ElementsOptions) {
       options.builderModule
     }.module.ts`;
     if (tree.exists(moduleFilePath)) {
-      const moduleFile = getFileContent(tree, moduleFilePath);
+      const moduleFile = tree.get(moduleFilePath).content.toString();
       const selectorParts = moduleFile.split('.define(');
       selectorParts.splice(0, 1); // remove starting data
       const customElements = [];

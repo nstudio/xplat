@@ -19,7 +19,6 @@ import {
   SchematicContext
 } from '@angular-devkit/schematics';
 import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
-// import { configPath, CliConfig } from '@schematics/angular/utility/config';
 import {
   toFileName,
   stringUtils as nxStringUtils,
@@ -88,14 +87,6 @@ export function getAppName(options: any, platform: PlatformTypes) {
     : options.name.replace(`${platform}-`, '');
 }
 
-export function getFileContent(tree: Tree, path: string) {
-  const file = tree.read(path) || '';
-  if (!file) {
-    throw new SchematicsException(`${path} could not be read.`);
-  }
-  return file.toString('utf-8');
-}
-
 export function setTest() {
   isTest = true;
 }
@@ -122,7 +113,7 @@ export function jsonParse(content: string) {
 }
 
 export function getJsonFromFile(tree: Tree, path: string) {
-  return jsonParse(getFileContent(tree, path));
+  return jsonParse(tree.get(path).content.toString());
 }
 
 export function updateJsonFile(tree: Tree, path: string, jsonData: any) {
@@ -253,15 +244,15 @@ export function prerun(options?: any, init?: boolean) {
         }
       }
       // console.log('prefix:', prefix);
-      if (!prefix) {
-        if (init) {
-          // if no prefix was found and we're initializing, user need to specify a prefix
-          throw new SchematicsException(errorMissingPrefix);
-        } else {
-          // if no prefix was found and we're not initializing, user needs to generate xplat first
-          throw new SchematicsException(errorXplat);
-        }
-      }
+      // if (!prefix) {
+      //   if (init) {
+      //     // if no prefix was found and we're initializing, user need to specify a prefix
+      //     throw new SchematicsException(errorMissingPrefix);
+      //   } else {
+      //     // if no prefix was found and we're not initializing, user needs to generate xplat first
+      //     throw new SchematicsException(errorXplat);
+      //   }
+      // }
     }
     return tree;
   };
@@ -832,7 +823,7 @@ export function updateNxProjects(tree: Tree, projects: any) {
 export function updateGitIgnore() {
   return (tree: Tree) => {
     const gitIgnorePath = '.gitignore';
-    let gitIgnore = getFileContent(tree, gitIgnorePath);
+    let gitIgnore = tree.get(gitIgnorePath).content.toString();
     if (gitIgnore) {
       if (gitIgnore.indexOf('libs/**/*.js') === -1) {
         gitIgnore += `

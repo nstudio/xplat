@@ -1,11 +1,11 @@
 import { Tree } from '@angular-devkit/schematics';
-import { getFileContent } from '@schematics/angular/utility/test';
 import { Schema as FeatureOptions } from '@nstudio/angular/src/schematics/feature/schema';
 import { Schema as ApplicationOptions } from './schema';
 import { stringUtils } from '@nstudio/workspace';
 import {
   isInModuleMetadata,
-  createEmptyWorkspace
+  createEmptyWorkspace,
+  getFileContent
 } from '@nstudio/workspace/testing';
 import { runSchematic } from '../../utils/testing';
 

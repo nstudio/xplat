@@ -4,32 +4,19 @@ import {
   externalSchematic,
   SchematicsException
 } from '@angular-devkit/schematics';
-import { serializeJson } from '@nrwl/workspace';
+import { NxJson } from '@nrwl/workspace';
+
+export { getFileContent } from '@nrwl/workspace/testing';
 
 export function createEmptyWorkspace(tree: Tree): Tree {
-  tree.create(
-    '/angular.json',
-    serializeJson({
-      $schema: './node_modules/@angular/cli/lib/config/schema.json',
-      projects: {},
-      newProjectRoot: '',
-      cli: {
-        defaultCollection: '@nrwl/schematics'
-      }
-    })
-  );
-  tree.create(
-    '/nx.json',
-    serializeJson({
-      npmScope: 'testing',
-      projects: {}
-    })
-  );
   tree.create('/.gitignore', '');
   tree.create(
+    '/angular.json',
+    JSON.stringify({ version: 1, projects: {}, newProjectRoot: '' })
+  );
+  tree.create(
     '/package.json',
-    serializeJson({
-      name: 'testing',
+    JSON.stringify({
       dependencies: {},
       devDependencies: {},
       xplat: {
@@ -38,12 +25,16 @@ export function createEmptyWorkspace(tree: Tree): Tree {
     })
   );
   tree.create(
+    '/nx.json',
+    JSON.stringify(<NxJson>{ npmScope: 'testing', projects: {} })
+  );
+  tree.create(
     '/tsconfig.json',
-    serializeJson({ compilerOptions: { paths: {} } })
+    JSON.stringify({ compilerOptions: { paths: {} } })
   );
   tree.create(
     '/tslint.json',
-    serializeJson({
+    JSON.stringify({
       rules: {
         'nx-enforce-module-boundaries': [
           true,
@@ -63,8 +54,8 @@ export function createXplatWithAppsForElectron(tree: Tree): Tree {
   tree = createXplatWithApps(tree);
   tree.overwrite(
     'angular.json',
-    serializeJson({
-      $schema: './node_modules/@angular/cli/lib/config/schema.json',
+    JSON.stringify({
+      version: 1,
       projects: {
         'web-viewer': {
           architect: {
@@ -86,7 +77,7 @@ export function createXplatWithAppsForElectron(tree: Tree): Tree {
   );
   tree.overwrite(
     '/nx.json',
-    serializeJson({
+    JSON.stringify({
       npmScope: 'testing',
       projects: {
         'web-viewer': {
@@ -97,7 +88,7 @@ export function createXplatWithAppsForElectron(tree: Tree): Tree {
   );
   tree.create(
     '/tools/tsconfig.tools.json',
-    serializeJson({
+    JSON.stringify({
       extends: '../tsconfig.json'
     })
   );
@@ -106,11 +97,11 @@ export function createXplatWithAppsForElectron(tree: Tree): Tree {
 
 export function createXplatWithApps(tree: Tree): Tree {
   tree = createEmptyWorkspace(tree);
-  createStandardWebFiles(tree);
+  createWebAngularApp(tree);
   return tree;
 }
 
-export function createStandardWebFiles(tree: Tree) {
+export function createWebAngularApp(tree: Tree) {
   tree.create('/apps/web-viewer/src/index.html', '');
   tree.create('/apps/web-viewer/src/app/features/core/core.module.ts', '');
   tree.create('/apps/web-viewer/src/app/app.module.ts', '');

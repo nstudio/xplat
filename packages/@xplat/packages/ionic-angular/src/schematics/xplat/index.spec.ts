@@ -1,12 +1,11 @@
 import { Tree } from '@angular-devkit/schematics';
-import { getFileContent } from '@schematics/angular/utility/test';
 import {
   supportedPlatforms,
   setTest,
   jsonParse,
   IXplatSchema
 } from '@nstudio/workspace';
-import { createEmptyWorkspace } from '@nstudio/workspace/testing';
+import { createEmptyWorkspace, getFileContent } from '@nstudio/workspace/testing';
 import { runSchematic } from '../../utils/testing';
 setTest();
 

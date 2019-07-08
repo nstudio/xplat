@@ -1,57 +1,9 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "id": "application",
-  "title": "Create a web application",
+  "id": "nStudioAngularApplication",
+  "title": "nStudio Angular Application Options Schema",
   "type": "object",
   "properties": {
-    "framework": {
-      "description": "The Framework for the application.",
-      "type": "string",
-      "enum": [
-        "angular",
-        "react",
-        "web-components",
-        "electron",
-        "ionic",
-        "nativescript",
-        "nest"
-      ],
-      "default": "angular",
-      "x-prompt": {
-        "message": "What framework would you like to use for the application?",
-        "type": "list",
-        "items": [
-          {
-            "value": "angular",
-            "label": "Angular         [ https://angular.io   ]"
-          },
-          {
-            "value": "react",
-            "label": "React           [ https://reactjs.org/ ]"
-          },
-          {
-            "value": "web-components",
-            "label": "Web Components"
-          },
-          {
-            "value": "electron",
-            "label": "Electron           [ https://electronjs.org/ ]"
-          },
-          {
-            "value": "ionic",
-            "label": "Ionic           [ https://ionicframework.com/ ]"
-          },
-          {
-            "value": "nativescript",
-            "label": "NativeScript           [ https://www.nativescript.org/ ]"
-          },
-          {
-            "value": "nest",
-            "label": "Nest           [ https://nestjs.com/ ]"
-          }
-        ]
-      }
-    },
     "name": {
       "description": "The name of the application.",
       "type": "string",
@@ -65,6 +17,39 @@
       "description": "The directory of the new application.",
       "type": "string",
       "x-prompt": "In which directory should the application be generated?"
+    },
+    "style": {
+      "description": "The file extension to be used for style files.",
+      "type": "string",
+      "default": "css",
+      "x-prompt": {
+        "message": "Which stylesheet format would you like to use?",
+        "type": "list",
+        "items": [
+          {
+            "value": "css",
+            "label": "CSS"
+          },
+          {
+            "value": "scss",
+            "label": "SASS(.scss)  [ http://sass-lang.com   ]"
+          },
+          {
+            "value": "styl",
+            "label": "Stylus(.styl)[ http://stylus-lang.com ]"
+          },
+          {
+            "value": "less",
+            "label": "LESS         [ http://lesscss.org     ]"
+          }
+        ]
+      }
+    },
+    "routing": {
+      "type": "boolean",
+      "description": "Generates a routing module.",
+      "default": false,
+      "x-prompt": "Would you like to configure routing for this application?"
     },
     "inlineStyle": {
       "description": "Specifies if the style will be in the ts file.",
@@ -83,9 +68,9 @@
       "enum": ["Emulated", "Native", "None"],
       "type": "string"
     },
-    "routing": {
+    "enableIvy": {
+      "description": "**EXPERIMENTAL** True to create a new app that uses the Ivy rendering engine.",
       "type": "boolean",
-      "description": "Generates a routing module.",
       "default": false
     },
     "prefix": {
@@ -93,22 +78,6 @@
       "format": "html-selector",
       "description": "The prefix to apply to generated selectors.",
       "alias": "p"
-    },
-    "style": {
-      "description": "The file extension to be used for style files.",
-      "type": "string",
-      "default": "scss",
-      "x-prompt": {
-        "message": "Which stylesheet format would you like to use?",
-        "type": "list",
-        "items": [
-          { "value": "css", "label": "CSS" },
-          { "value": "scss", "label": "SCSS   [ http://sass-lang.com   ]" },
-          { "value": "sass", "label": "SASS   [ http://sass-lang.com   ]" },
-          { "value": "less", "label": "LESS   [ http://lesscss.org     ]" },
-          { "value": "styl", "label": "Stylus [ http://stylus-lang.com ]" }
-        ]
-      }
     },
     "skipTests": {
       "description": "Skip creating spec files.",
@@ -130,52 +99,21 @@
       "type": "string",
       "enum": ["karma", "jest", "none"],
       "description": "Test runner to use for unit tests",
-      "default": "jest",
-      "x-prompt": {
-        "message": "Which Unit Test Runner would you like to use for the application?",
-        "type": "list",
-        "items": [
-          { "value": "jest", "label": "Jest   [ https://jestjs.io ]" },
-          {
-            "value": "karma",
-            "label": "Karma [ https://karma-runner.github.io ]"
-          }
-        ]
-      }
+      "default": "jest"
     },
     "e2eTestRunner": {
       "type": "string",
       "enum": ["protractor", "cypress", "none"],
       "description": "Test runner to use for end to end (e2e) tests",
-      "default": "cypress",
-      "x-prompt": {
-        "message": "Which E2E Test Runner would you like to use for the application?",
-        "type": "list",
-        "items": [
-          {
-            "value": "cypress",
-            "label": "Cypress       [ https://www.cypress.io ]"
-          },
-          {
-            "value": "protractor",
-            "label": "Protractor [ https://www.protractortest.org ]"
-          }
-        ]
-      }
+      "default": "cypress"
     },
     "tags": {
       "type": "string",
-      "description": "Add tags to the application (used for linting)",
-      "x-prompt": "Which tags would you like to add to the application? (used for linting)"
+      "description": "Add tags to the application (used for linting)"
     },
     "groupByName": {
-      "description": "Group by app name (appname-platform) instead of the default (platform-appname)",
       "type": "boolean",
-      "default": false
-    },
-    "addHeadlessE2e": {
-      "type": "boolean",
-      "description": "Add headless e2e configuration suitable for CI",
+      "description": "Group by app name (appname-platform) instead of the default (platform-appname).",
       "default": false
     }
   },

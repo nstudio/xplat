@@ -1,11 +1,11 @@
 import { Tree } from '@angular-devkit/schematics';
-import { getFileContent } from '@schematics/angular/utility/test';
 import { Schema as XPlatOptions } from '../xplat/schema';
 import { Schema as HelperOptions } from './schema';
 import { stringUtils, setTest, jsonParse } from '@nstudio/workspace';
 import {
   isInModuleMetadata,
-  createEmptyWorkspace
+  createEmptyWorkspace,
+  getFileContent
 } from '@nstudio/workspace/testing';
 import { runSchematic } from '../../utils/testing';
 setTest();

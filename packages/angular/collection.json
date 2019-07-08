@@ -3,6 +3,12 @@
   "version": "0.1",
   "extends": ["@nrwl/angular", "@nstudio/workspace"],
   "schematics": {
+    "ng-add": {
+      "factory": "./src/schematics/ng-add/ng-add",
+      "schema": "./src/schematics/ng-add/schema.json",
+      "description": "Add @nstudio/angular to a project",
+      "hidden": true
+    },
     "application": {
       "factory": "./src/schematics/application",
       "schema": "./src/schematics/application/schema.json",

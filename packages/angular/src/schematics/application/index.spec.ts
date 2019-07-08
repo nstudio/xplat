@@ -1,7 +1,7 @@
 import { Tree } from '@angular-devkit/schematics';
 import { Schema as ApplicationOptions } from './schema';
-import { Framework, jsonParse, getFileContent } from '@nstudio/workspace';
-import { createEmptyWorkspace } from '@nstudio/workspace/testing';
+import { Framework, jsonParse } from '@nstudio/workspace';
+import { createEmptyWorkspace, getFileContent } from '@nstudio/workspace/testing';
 import { runSchematic } from '../../utils/testing';
 
 describe('app', () => {
@@ -119,43 +119,42 @@ describe('app', () => {
     ).toBeDefined();
   });
 
-  it('should create app with --framework flag Ionic', async () => {
-    const options: ApplicationOptions = { ...defaultOptions };
-    options.framework = Framework.Ionic;
-    const tree = await runSchematic('app', options, appTree);
-    const files = tree.files;
-    // console.log(files);
+  // it('should create app with --framework flag Ionic', async () => {
+  //   const options: ApplicationOptions = { ...defaultOptions };
+  //   const tree = await runSchematic('app', options, appTree);
+  //   const files = tree.files;
+  //   // console.log(files);
 
-    expect(
-      files.indexOf('/apps/ionic-foo/package.json')
-    ).toBeGreaterThanOrEqual(0);
+  //   expect(
+  //     files.indexOf('/apps/ionic-foo/package.json')
+  //   ).toBeGreaterThanOrEqual(0);
 
-    const checkPath = '/package.json';
-    expect(files.indexOf(checkPath)).toBeGreaterThanOrEqual(0);
+  //   const checkPath = '/package.json';
+  //   expect(files.indexOf(checkPath)).toBeGreaterThanOrEqual(0);
 
-    let checkFile = getFileContent(tree, checkPath);
-    // console.log(checkFile);
-    const packageData: any = jsonParse(checkFile);
-    expect(packageData.scripts['start.ionic.foo']).toBeDefined();
-  });
+  //   let checkFile = getFileContent(tree, checkPath);
+  //   // console.log(checkFile);
+  //   const packageData: any = jsonParse(checkFile);
+  //   expect(packageData.scripts['start.ionic.foo']).toBeDefined();
+  // });
 
-  it('should create app with --framework flag for NativeScript', async () => {
-    const options: ApplicationOptions = { ...defaultOptions };
-    options.framework = Framework.NativeScript;
-    const tree = await runSchematic('app', options, appTree);
-    const files = tree.files;
-    // console.log(files);
+  // it('should create app with --framework flag for NativeScript', async () => {
+  //   const options: ApplicationOptions = { ...defaultOptions };
+  //   options.framework = Framework.NativeScript;
+  //   const tree = await runSchematic('app', options, appTree);
+  //   const files = tree.files;
+  //   // console.log(files);
 
-    expect(
-      files.indexOf('/apps/nativescript-foo/package.json')
-    ).toBeGreaterThanOrEqual(0);
+  //   expect(
+  //     files.indexOf('/apps/nativescript-foo/package.json')
+  //   ).toBeGreaterThanOrEqual(0);
 
-    const checkPath = '/package.json';
-    expect(files.indexOf(checkPath)).toBeGreaterThanOrEqual(0);
+  //   const checkPath = '/package.json';
+  //   expect(files.indexOf(checkPath)).toBeGreaterThanOrEqual(0);
 
-    let checkFile = getFileContent(tree, checkPath);
-    // console.log(checkFile);
-    const packageData: any = jsonParse(checkFile);
-    expect(packageData.scripts['start.nativescript.foo.ios']).toBeDefined();
-  });
+  //   let checkFile = getFileContent(tree, checkPath);
+  //   // console.log(checkFile);
+  //   const packageData: any = jsonParse(checkFile);
+  //   expect(packageData.scripts['start.nativescript.foo.ios']).toBeDefined();
+  // });
 });

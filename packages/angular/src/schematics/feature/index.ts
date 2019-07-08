@@ -35,7 +35,6 @@ import {
 import { addToCollection } from '../../utils/ast';
 import { Schema as featureOptions } from './schema';
 import * as ts from 'typescript';
-import { getFileContent } from '@schematics/angular/utility/test';
 
 let featureName: string;
 let projectNames: Array<string>;
@@ -349,7 +348,7 @@ function adjustSandbox(platform: PlatformTypes, appDirectory: string): Rule {
   return (tree: Tree) => {
     if (supportedSandboxPlatforms.includes(platform)) {
       const homeCmpPath = `${appDirectory}/features/home/components/home.component.html`;
-      let homeTemplate = getFileContent(tree, homeCmpPath);
+      let homeTemplate = tree.get(homeCmpPath).content.toString();
       switch (platform) {
         case 'nativescript':
           let buttonTag = 'Button';

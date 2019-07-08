@@ -1,8 +1,7 @@
 import { Tree } from '@angular-devkit/schematics';
-import { getFileContent } from '@schematics/angular/utility/test';
 import { Schema as ElementsOptions } from './schema';
 import { Schema as ComponentOptions } from '../component/schema';
-import { createEmptyWorkspace } from '@nstudio/workspace/testing';
+import { createEmptyWorkspace, getFileContent } from '@nstudio/workspace/testing';
 import { runSchematic } from '../../utils/testing';
 
 describe('elements schematic', () => {

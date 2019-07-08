@@ -1,9 +1,9 @@
 import { Tree } from '@angular-devkit/schematics';
-import { getFileContent } from '@schematics/angular/utility/test';
 import { Schema as ApplicationOptions } from './schema';
 import { jsonParse } from '@nstudio/workspace';
 import {
-  createXplatWithAppsForElectron
+  createXplatWithAppsForElectron,
+  getFileContent
 } from '@nstudio/workspace/testing';
 import { runSchematic } from '../../utils/testing';
 

@@ -1,7 +1,5 @@
 import { Tree } from '@angular-devkit/schematics';
-import { getFileContent } from '@schematics/angular/utility/test';
-import { Schema as AppNativeScriptOptions } from '../application/schema';
-// import { Schema as XPlatOptions } from '../xplat/schema';
+import { Schema } from '../application/schema';
 import {
   stringUtils,
   setTest,
@@ -9,7 +7,8 @@ import {
   IHelperSchema
 } from '@nstudio/workspace';
 import {
-  createXplatWithApps
+  createXplatWithApps,
+  getFileContent
 } from '@nstudio/workspace/testing';
 import { runSchematic } from '../../utils/testing';
 setTest();
@@ -23,7 +22,7 @@ describe('helpers schematic', () => {
   });
 
   it('imports: should create all files', async () => {
-    const appOptions: AppNativeScriptOptions = {
+    const appOptions: Schema = {
       name: 'foo',
       npmScope: 'testing',
       prefix: 'tt' // foo test

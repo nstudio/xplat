@@ -1,7 +1,6 @@
 import { Tree } from '@angular-devkit/schematics';
-import { getFileContent } from '@schematics/angular/utility/test';
 import { Schema as GenerateOptions } from './schema';
-import { createXplatWithApps } from '@nstudio/workspace/testing';
+import { createXplatWithApps, getFileContent } from '@nstudio/workspace/testing';
 import { runSchematic } from '../../utils/testing';
 
 describe('ngrx schematic', () => {

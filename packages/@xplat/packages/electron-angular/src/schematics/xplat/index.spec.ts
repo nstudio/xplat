@@ -3,7 +3,6 @@ import {
   SchematicTestRunner,
   UnitTestTree
 } from '@angular-devkit/schematics/testing';
-import { getFileContent } from '@schematics/angular/utility/test';
 import * as path from 'path';
 
 import {
@@ -12,7 +11,7 @@ import {
   jsonParse,
   IXplatSchema
 } from '@nstudio/workspace';
-import { createEmptyWorkspace } from '@nstudio/workspace/testing';
+import { createEmptyWorkspace, getFileContent } from '@nstudio/workspace/testing';
 setTest();
 
 describe('xplat schematic', () => {
