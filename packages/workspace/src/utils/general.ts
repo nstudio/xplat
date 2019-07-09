@@ -721,7 +721,7 @@ export function updatePackageForNgrx(
 
     if (packageJson) {
       // sync version with what user has store set at
-      let rootNgrxVersion = packageJson.dependencies['@ngrx/store'];
+      let rootNgrxVersion = packageJson.dependencies ? packageJson.dependencies['@ngrx/store'] : null;
 
       const deps: NodeDependency[] = [];
 

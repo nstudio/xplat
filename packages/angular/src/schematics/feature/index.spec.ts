@@ -1,16 +1,16 @@
 import { Tree } from '@angular-devkit/schematics';
-import { Schema as FeatureOptions } from './schema';
-import { createOrUpdate } from '@nstudio/workspace';
+import { createOrUpdate, FeatureHelpers } from '@nstudio/workspace';
 import {
   createXplatWithApps,
   isInModuleMetadata,
-  getFileContent
+  getFileContent,
+  createXplatWithNativeScriptWeb
 } from '@nstudio/workspace/testing';
 import { runSchematic, runSchematicSync } from '../../utils/testing';
 
 describe('feature schematic', () => {
   let appTree: Tree;
-  const defaultOptions: FeatureOptions = {
+  const defaultOptions: FeatureHelpers.Schema = {
     name: 'foo',
     projects: 'nativescript-viewer,web-viewer',
     createBase: true
@@ -18,31 +18,15 @@ describe('feature schematic', () => {
 
   beforeEach(() => {
     appTree = Tree.empty();
-    appTree = createXplatWithApps(appTree);
+    appTree = createXplatWithNativeScriptWeb(appTree);
   });
 
   it('should create feature module with a single starting component', async () => {
-    const options: FeatureOptions = { ...defaultOptions };
+    const options: FeatureHelpers.Schema = { ...defaultOptions };
     // console.log('appTree:', appTree);
-    let tree = await runSchematic(
-      'xplat',
-      {
-        prefix: 'tt',
-        platforms: 'nativescript,web'
-      },
-      appTree
-    );
-    tree = await runSchematic(
-      'app.nativescript',
-      {
-        name: 'viewer',
-        prefix: 'tt'
-      },
-      tree
-    );
-    tree = await runSchematic('feature', options, tree);
+    let tree = await runSchematic('feature', options, appTree);
     const files = tree.files;
-    // console.log(files.slice(85,files.length));
+    console.log(files.slice(85,files.length));
     expect(
       files.indexOf('/apps/nativescript-viewer/package.json')
     ).toBeGreaterThanOrEqual(0);
@@ -98,19 +82,19 @@ describe('feature schematic', () => {
 
     // feature should NOT be in projects
     expect(
-      files.indexOf('/apps/nativescript-viewer/app/features/foo/index.ts')
+      files.indexOf('/apps/nativescript-viewer/src/features/foo/index.ts')
     ).toBeGreaterThanOrEqual(-1);
     expect(
-      files.indexOf('/apps/nativescript-viewer/app/features/foo/foo.module.ts')
+      files.indexOf('/apps/nativescript-viewer/src/features/foo/foo.module.ts')
     ).toBeGreaterThanOrEqual(-1);
     expect(
       files.indexOf(
-        '/apps/nativescript-viewer/app/features/foo/components/foo/foo.component.html'
+        '/apps/nativescript-viewer/src/features/foo/components/foo/foo.component.html'
       )
     ).toBeGreaterThanOrEqual(-1);
     expect(
       files.indexOf(
-        '/apps/nativescript-viewer/app/features/foo/components/foo/foo.component.ts'
+        '/apps/nativescript-viewer/src/features/foo/components/foo/foo.component.ts'
       )
     ).toBeGreaterThanOrEqual(-1);
     expect(
@@ -156,25 +140,9 @@ describe('feature schematic', () => {
 
   it('should create feature module WITHOUT a single starting component when using onlyModule', async () => {
     // console.log('appTree:', appTree);
-    let tree = await runSchematic(
-      'xplat',
-      {
-        prefix: 'tt',
-        platforms: 'nativescript,web'
-      },
-      appTree
-    );
-    tree = await runSchematic(
-      'app.nativescript',
-      {
-        name: 'viewer',
-        prefix: 'tt'
-      },
-      tree
-    );
-    const options: FeatureOptions = { ...defaultOptions };
+    const options: FeatureHelpers.Schema = { ...defaultOptions };
     options.onlyModule = true;
-    tree = await runSchematic('feature', options, tree);
+    let tree = await runSchematic('feature', options, appTree);
     const files = tree.files;
     // console.log(files.slice(85,files.length));
     expect(
@@ -258,27 +226,11 @@ describe('feature schematic', () => {
 
   it('should create feature module WITH a single starting component BUT IGNORE creating matching base component', async () => {
     // console.log('appTree:', appTree);
-    let tree = await runSchematic(
-      'xplat',
-      {
-        prefix: 'tt',
-        platforms: 'nativescript,web'
-      },
-      appTree
-    );
-    tree = await runSchematic(
-      'app.nativescript',
-      {
-        name: 'viewer',
-        prefix: 'tt'
-      },
-      tree
-    );
-    const options: FeatureOptions = {
+    const options: FeatureHelpers.Schema = {
       name: 'foo',
       platforms: 'web'
     };
-    tree = await runSchematic('feature', options, tree);
+    let tree = await runSchematic('feature', options, appTree);
     const files = tree.files;
     // console.log(files.slice(85,files.length));
 
@@ -352,26 +304,10 @@ describe('feature schematic', () => {
   });
 
   it('should create feature module for specified projects only', async () => {
-    const options: FeatureOptions = { ...defaultOptions };
+    const options: FeatureHelpers.Schema = { ...defaultOptions };
     // console.log('appTree:', appTree);
-    let tree = await runSchematic(
-      'xplat',
-      {
-        prefix: 'tt',
-        platforms: 'nativescript,web'
-      },
-      appTree
-    );
-    tree = await runSchematic(
-      'app.nativescript',
-      {
-        name: 'viewer',
-        prefix: 'tt'
-      },
-      tree
-    );
     options.onlyProject = true;
-    tree = await runSchematic('feature', options, tree);
+    let tree = await runSchematic('feature', options, appTree);
     const files = tree.files;
     // console.log(files.slice(85,files.length));
 
@@ -383,19 +319,19 @@ describe('feature schematic', () => {
 
     // feature should be in projects only
     expect(
-      files.indexOf('/apps/nativescript-viewer/app/features/foo/index.ts')
+      files.indexOf('/apps/nativescript-viewer/src/features/foo/index.ts')
     ).toBeGreaterThanOrEqual(0);
     expect(
-      files.indexOf('/apps/nativescript-viewer/app/features/foo/foo.module.ts')
+      files.indexOf('/apps/nativescript-viewer/src/features/foo/foo.module.ts')
     ).toBeGreaterThanOrEqual(0);
     expect(
       files.indexOf(
-        '/apps/nativescript-viewer/app/features/foo/components/foo/foo.component.html'
+        '/apps/nativescript-viewer/src/features/foo/components/foo/foo.component.html'
       )
     ).toBeGreaterThanOrEqual(0);
     expect(
       files.indexOf(
-        '/apps/nativescript-viewer/app/features/foo/components/foo/foo.component.ts'
+        '/apps/nativescript-viewer/src/features/foo/components/foo/foo.component.ts'
       )
     ).toBeGreaterThanOrEqual(0);
     expect(
@@ -450,7 +386,7 @@ describe('feature schematic', () => {
     ).toBeGreaterThanOrEqual(-1);
 
     // file content
-    let modulePath = '/apps/nativescript-viewer/app/features/foo/foo.module.ts';
+    let modulePath = '/apps/nativescript-viewer/src/features/foo/foo.module.ts';
     let featureModule = getFileContent(tree, modulePath);
     // console.log(modulePath + ':');
     // console.log(featureModule);
@@ -474,57 +410,25 @@ describe('feature schematic', () => {
   });
 
   it('Temporary: should error if routing is used without onlyProject', async () => {
-    const options: FeatureOptions = { ...defaultOptions };
+    const options: FeatureHelpers.Schema = { ...defaultOptions };
     // console.log('appTree:', appTree);
-    let tree = await runSchematic(
-      'xplat',
-      {
-        prefix: 'tt',
-        platforms: 'nativescript'
-      },
-      appTree
-    );
-    tree = await runSchematic(
-      'app.nativescript',
-      {
-        name: 'viewer',
-        prefix: 'tt'
-      },
-      tree
-    );
     options.routing = true;
     expect(
-      () => (tree = runSchematicSync('feature', options, tree))
+      () => runSchematicSync('feature', options, appTree)
     ).toThrowError(
-      'When generating a feature with the --routing option, please also specify --onlyProject. Support for shared code routing is under development and will be available in the future.'
+      'When generating a feature with the --routing option, please also specify --onlyProject. Support for shared code routing is under development.'
     );
   });
 
   it('should create feature module (with dashes in name) for specified projects WITH Routing', async () => {
-    const options: FeatureOptions = { ...defaultOptions };
+    appTree = Tree.empty();
+    appTree = createXplatWithNativeScriptWeb(appTree, true);
+    const options: FeatureHelpers.Schema = { ...defaultOptions };
     // console.log('appTree:', appTree);
-    let tree = await runSchematic(
-      'xplat',
-      {
-        prefix: 'tt',
-        routing: true,
-        platforms: 'nativescript,web'
-      },
-      appTree
-    );
-    tree = await runSchematic(
-      'app.nativescript',
-      {
-        name: 'viewer',
-        prefix: 'tt',
-        routing: true
-      },
-      tree
-    );
     options.onlyProject = true;
     options.routing = true;
     options.name = 'foo-with-dash';
-    tree = await runSchematic('feature', options, tree);
+    let tree = await runSchematic('feature', options, appTree);
     const files = tree.files;
     // console.log(files.slice(85,files.length));
 
@@ -540,22 +444,22 @@ describe('feature schematic', () => {
     // feature should be in projects only
     expect(
       files.indexOf(
-        '/apps/nativescript-viewer/app/features/foo-with-dash/index.ts'
+        '/apps/nativescript-viewer/src/features/foo-with-dash/index.ts'
       )
     ).toBeGreaterThanOrEqual(0);
     expect(
       files.indexOf(
-        '/apps/nativescript-viewer/app/features/foo-with-dash/foo-with-dash.module.ts'
+        '/apps/nativescript-viewer/src/features/foo-with-dash/foo-with-dash.module.ts'
       )
     ).toBeGreaterThanOrEqual(0);
     expect(
       files.indexOf(
-        '/apps/nativescript-viewer/app/features/foo-with-dash/components/foo-with-dash/foo-with-dash.component.html'
+        '/apps/nativescript-viewer/src/features/foo-with-dash/components/foo-with-dash/foo-with-dash.component.html'
       )
     ).toBeGreaterThanOrEqual(0);
     expect(
       files.indexOf(
-        '/apps/nativescript-viewer/app/features/foo-with-dash/components/foo-with-dash/foo-with-dash.component.ts'
+        '/apps/nativescript-viewer/src/features/foo-with-dash/components/foo-with-dash/foo-with-dash.component.ts'
       )
     ).toBeGreaterThanOrEqual(0);
     expect(
@@ -579,7 +483,7 @@ describe('feature schematic', () => {
 
     // file content
     let modulePath =
-      '/apps/nativescript-viewer/app/features/foo-with-dash/foo-with-dash.module.ts';
+      '/apps/nativescript-viewer/src/features/foo-with-dash/foo-with-dash.module.ts';
     let featureModule = getFileContent(tree, modulePath);
     // console.log(modulePath + ':');
     // console.log(featureModule);
@@ -617,7 +521,7 @@ describe('feature schematic', () => {
       `loadChildren: './features/foo-with-dash/foo-with-dash.module#FooWithDashModule'`
     );
 
-    modulePath = '/apps/nativescript-viewer/app/app.routing.ts';
+    modulePath = '/apps/nativescript-viewer/src/app.routing.ts';
     featureModule = getFileContent(tree, modulePath);
     // console.log(modulePath + ':');
     // console.log(featureModule);
@@ -638,39 +542,23 @@ describe('feature schematic', () => {
   });
 
   it('should create feature module for specified project WITH Routing and adjustSandbox', async () => {
-    const options: FeatureOptions = {
+    const options: FeatureHelpers.Schema = {
       ...defaultOptions,
       projects: 'nativescript-viewer'
     };
-    let tree = await runSchematic(
-      'xplat',
-      {
-        prefix: 'tt',
-        routing: true,
-        platforms: 'nativescript'
-      },
-      appTree
-    );
-    tree = await runSchematic(
-      'app.nativescript',
-      {
-        name: 'viewer',
-        prefix: 'tt',
-        routing: true
-      },
-      tree
-    );
+    appTree = Tree.empty();
+    appTree = createXplatWithNativeScriptWeb(appTree, true);
 
     // manually update home.component to prep for sandobx
-    const homeCmpPath = `/apps/nativescript-viewer/app/features/home/components/home.component.html`;
-    createOrUpdate(tree, homeCmpPath, sandboxHomeSetup());
+    const homeCmpPath = `/apps/nativescript-viewer/src/features/home/components/home.component.html`;
+    createOrUpdate(appTree, homeCmpPath, sandboxHomeSetup());
     // console.log('homecmp:', getFileContent(tree, homeCmpPath));
 
     options.onlyProject = true;
     options.adjustSandbox = true;
     options.routing = true;
     options.name = 'foo-with-dash';
-    tree = await runSchematic('feature', options, tree);
+    let tree = await runSchematic('feature', options, appTree);
     // console.log('---------')
     // console.log('homecmp:', getFileContent(tree, homeCmpPath));
   });

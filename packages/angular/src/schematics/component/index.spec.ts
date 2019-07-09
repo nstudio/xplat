@@ -1,11 +1,11 @@
 import { Tree } from '@angular-devkit/schematics';
-import { Schema as GenerateOptions } from './schema';
-import { createXplatWithApps, getFileContent } from '@nstudio/workspace/testing';
+import { createXplatWithApps, getFileContent, createXplatWithNativeScriptWeb } from '@nstudio/workspace/testing';
 import { runSchematic, runSchematicSync } from '../../utils/testing';
+import { ComponentHelpers } from '../../utils/xplat';
 
 describe('component schematic', () => {
   let appTree: Tree;
-  const defaultOptions: GenerateOptions = {
+  const defaultOptions: ComponentHelpers.Schema = {
     name: 'signup',
     feature: 'foo',
     platforms: 'nativescript,web',
@@ -14,34 +14,20 @@ describe('component schematic', () => {
 
   beforeEach(() => {
     appTree = Tree.empty();
-    appTree = createXplatWithApps(appTree);
+    appTree = createXplatWithNativeScriptWeb(appTree);
   });
 
   it('should create component for specified platforms', async () => {
     // console.log('appTree:', appTree);
-    let tree = await runSchematic('xplat',
-    {
-      prefix: 'tt',
-      platforms: 'nativescript,web'
-    },
-    appTree);
-    tree = await runSchematic(
-      'app.nativescript',
-      {
-        name: 'viewer',
-        prefix: 'tt'
-      },
-      tree
-    );
-    tree = await runSchematic(
+    let tree = await runSchematic(
       'feature',
       {
         name: 'foo',
         platforms: 'nativescript,web'
       },
-      tree
+      appTree
     );
-    const options: GenerateOptions = { ...defaultOptions };
+    const options: ComponentHelpers.Schema = { ...defaultOptions };
     tree = await runSchematic('component', options, tree);
     const files = tree.files;
     // console.log(files.slice(91,files.length));
@@ -106,30 +92,14 @@ describe('component schematic', () => {
   it('should create component for specified platforms with subFolder option', async () => {
     // console.log('appTree:', appTree);
     let tree = await runSchematic(
-      'xplat',
-      {
-        prefix: 'tt',
-        platforms: 'nativescript,web'
-      },
-      appTree
-    );
-    tree = await runSchematic(
-      'app.nativescript',
-      {
-        name: 'viewer',
-        prefix: 'tt'
-      },
-      tree
-    );
-    tree = await runSchematic(
       'feature',
       {
         name: 'foo',
         platforms: 'nativescript,web'
       },
-      tree
+      appTree
     );
-    const options: GenerateOptions = { ...defaultOptions };
+    const options: ComponentHelpers.Schema = { ...defaultOptions };
     options.subFolder = 'registration';
     tree = await runSchematic('component', options, tree);
     const files = tree.files;
@@ -222,31 +192,15 @@ describe('component schematic', () => {
   it('should create component for specified projects only', async () => {
     // console.log('appTree:', appTree);
     let tree = await runSchematic(
-      'xplat',
-      {
-        prefix: 'tt',
-        platforms: 'nativescript,web'
-      },
-      appTree
-    );
-    tree = await runSchematic(
-      'app.nativescript',
-      {
-        name: 'viewer',
-        prefix: 'tt'
-      },
-      tree
-    );
-    tree = await runSchematic(
       'feature',
       {
         name: 'foo',
         projects: 'nativescript-viewer,web-viewer',
         onlyProject: true
       },
-      tree
+      appTree
     );
-    const options: GenerateOptions = {
+    const options: ComponentHelpers.Schema = {
       name: 'signup',
       feature: 'foo',
       projects: 'nativescript-viewer,web-viewer'
@@ -283,12 +237,12 @@ describe('component schematic', () => {
     // component should be project specific
     expect(
       files.indexOf(
-        '/apps/nativescript-viewer/app/features/foo/components/signup/signup.component.html'
+        '/apps/nativescript-viewer/src/features/foo/components/signup/signup.component.html'
       )
     ).toBeGreaterThanOrEqual(0);
     expect(
       files.indexOf(
-        '/apps/nativescript-viewer/app/features/foo/components/signup/signup.component.ts'
+        '/apps/nativescript-viewer/src/features/foo/components/signup/signup.component.ts'
       )
     ).toBeGreaterThanOrEqual(0);
     expect(
@@ -304,7 +258,7 @@ describe('component schematic', () => {
 
     // file content
     let barrelPath =
-      '/apps/nativescript-viewer/app/features/foo/components/index.ts';
+      '/apps/nativescript-viewer/src/features/foo/components/index.ts';
     let barrelIndex = getFileContent(tree, barrelPath);
     // console.log(barrelPath + ':');
     // console.log(barrelIndex);
@@ -316,7 +270,7 @@ describe('component schematic', () => {
       barrelIndex.indexOf(`./signup/signup.component`)
     ).toBeGreaterThanOrEqual(0);
 
-    // let modulePath = '/apps/nativescript-viewer/app/features/foo/foo.module.ts';
+    // let modulePath = '/apps/nativescript-viewer/src/features/foo/foo.module.ts';
     // let content = getFileContent(tree, modulePath);
     // console.log(modulePath + ':');
     // console.log(content);
@@ -342,7 +296,7 @@ describe('component schematic', () => {
       },
       appTree
     );
-    const options: GenerateOptions = {
+    const options: ComponentHelpers.Schema = {
       name: 'signup',
       feature: 'foo',
       projects: 'nativescript-viewer,web-viewer'
@@ -351,7 +305,7 @@ describe('component schematic', () => {
     expect(
       () => (tree = runSchematicSync('component', options, tree))
     ).toThrowError(
-      `apps/nativescript-viewer/app/features/foo/foo.module.ts does not exist. Create the feature module first. For example: ng g feature foo --projects=nativescript-viewer --onlyModule`
+      `apps/nativescript-viewer/src/features/foo/foo.module.ts does not exist. Create the feature module first. For example: ng g feature foo --projects=nativescript-viewer --onlyModule`
     );
   });
 });

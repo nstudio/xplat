@@ -1,6 +1,6 @@
 import { Tree } from '@angular-devkit/schematics';
 import { Schema as GenerateOptions } from './schema';
-import { createXplatWithApps, getFileContent } from '@nstudio/workspace/testing';
+import { createXplatWithApps, getFileContent, createXplatWithNativeScriptWeb } from '@nstudio/workspace/testing';
 import { runSchematic } from '../../utils/testing';
 
 describe('ngrx schematic', () => {
@@ -11,34 +11,19 @@ describe('ngrx schematic', () => {
 
   beforeEach(() => {
     appTree = Tree.empty();
-    appTree = createXplatWithApps(appTree);
+    appTree = createXplatWithNativeScriptWeb(appTree);
   });
 
   it('should create root state in libs for use across any platform and apps', async () => {
     // console.log('appTree:', appTree);
+    
     let tree = await runSchematic(
-      'xplat',
-      {
-        prefix: 'tt',
-        platforms: 'nativescript,web'
-      },
-      appTree
-    );
-    tree = await runSchematic(
-      'app.nativescript',
-      {
-        name: 'viewer',
-        prefix: 'tt'
-      },
-      tree
-    );
-    tree = await runSchematic(
       'feature',
       {
         name: 'foo',
         platforms: 'nativescript,web'
       },
-      tree
+      appTree
     );
     const options: GenerateOptions = { ...defaultOptions };
     options.root = true;
@@ -92,34 +77,18 @@ describe('ngrx schematic', () => {
   it('should create ngrx state for specified projects only', async () => {
     // console.log('appTree:', appTree);
     let tree = await runSchematic(
-      'xplat',
-      {
-        prefix: 'tt',
-        platforms: 'nativescript,web,ionic'
-      },
-      appTree
-    );
-    tree = await runSchematic(
-      'app.nativescript',
-      {
-        name: 'viewer',
-        prefix: 'tt'
-      },
-      tree
-    );
-    tree = await runSchematic(
       'feature',
       {
         name: 'foo',
-        projects: 'nativescript-viewer,web-viewer,ionic-viewer',
+        projects: 'nativescript-viewer,web-viewer',
         onlyProject: true
       },
-      tree
+      appTree
     );
     const options: GenerateOptions = {
       name: 'auth',
       feature: 'foo',
-      projects: 'nativescript-viewer,web-viewer,ionic-viewer'
+      projects: 'nativescript-viewer,web-viewer'
     };
     tree = await runSchematic('ngrx', options, tree);
     const files = tree.files;
@@ -137,7 +106,7 @@ describe('ngrx schematic', () => {
     // state should be project specific
     expect(
       files.indexOf(
-        '/apps/nativescript-viewer/app/features/foo/state/auth.actions.ts'
+        '/apps/nativescript-viewer/src/features/foo/state/auth.actions.ts'
       )
     ).toBeGreaterThanOrEqual(0);
     expect(
@@ -145,22 +114,17 @@ describe('ngrx schematic', () => {
         '/apps/web-viewer/src/app/features/foo/state/auth.actions.ts'
       )
     ).toBeGreaterThanOrEqual(0);
-    expect(
-      files.indexOf(
-        '/apps/ionic-viewer/src/app/features/foo/state/auth.actions.ts'
-      )
-    ).toBeGreaterThanOrEqual(0);
 
     // file content
     let indexPath =
-      '/apps/nativescript-viewer/app/features/foo/state/auth.actions.ts';
+      '/apps/nativescript-viewer/src/features/foo/state/auth.actions.ts';
     let content = getFileContent(tree, indexPath);
     // console.log(barrelPath + ':');
     // console.log(barrelIndex);
     // symbol should be at end of collection
     expect(content.indexOf(`AuthActions`)).toBeGreaterThanOrEqual(0);
 
-    let modulePath = '/apps/nativescript-viewer/app/features/foo/foo.module.ts';
+    let modulePath = '/apps/nativescript-viewer/src/features/foo/foo.module.ts';
     content = getFileContent(tree, modulePath);
     // console.log(modulePath + ':');
     // console.log(content);
@@ -173,16 +137,6 @@ describe('ngrx schematic', () => {
     // console.log(barrelIndex);
     expect(content.indexOf(`AuthActions`)).toBeGreaterThanOrEqual(0);
     modulePath = '/apps/web-viewer/src/app/features/foo/foo.module.ts';
-    content = getFileContent(tree, modulePath);
-    expect(content.indexOf(`StoreModule.forFeature`)).toBeGreaterThanOrEqual(0);
-
-    indexPath = '/apps/ionic-viewer/src/app/features/foo/state/auth.actions.ts';
-    content = getFileContent(tree, indexPath);
-    // console.log(barrelPath + ':');
-    // console.log(barrelIndex);
-    expect(content.indexOf(`AuthActions`)).toBeGreaterThanOrEqual(0);
-    expect(content.indexOf(`AuthActions`)).toBeGreaterThanOrEqual(0);
-    modulePath = '/apps/ionic-viewer/src/app/features/foo/foo.module.ts';
     content = getFileContent(tree, modulePath);
     expect(content.indexOf(`StoreModule.forFeature`)).toBeGreaterThanOrEqual(0);
   });

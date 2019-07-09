@@ -1,7 +1,7 @@
 import { Tree } from '@angular-devkit/schematics';
 import { Schema as ElementsOptions } from './schema';
-import { Schema as ComponentOptions } from '../component/schema';
-import { createEmptyWorkspace, getFileContent } from '@nstudio/workspace/testing';
+import { ComponentHelpers } from '../../utils/xplat';
+import { createEmptyWorkspace, getFileContent, createXplatWithApps } from '@nstudio/workspace/testing';
 import { runSchematic } from '../../utils/testing';
 
 describe('elements schematic', () => {
@@ -14,25 +14,17 @@ describe('elements schematic', () => {
 
   beforeEach(() => {
     appTree = Tree.empty();
-    appTree = createEmptyWorkspace(appTree);
+    appTree = createXplatWithApps(appTree);
   });
 
   it('should create an elements module that provides the specified components', async () => {
     const options: ElementsOptions = { ...defaultOptions };
     // console.log('appTree:', appTree);
-    let tree = await runSchematic(
-      'xplat',
-      {
-        prefix: 'tt',
-        platforms: 'web'
-      },
-      appTree
-    );
-    const componentOptions: ComponentOptions = {
+    const componentOptions: ComponentHelpers.Schema = {
       name: 'menu',
       platforms: 'web'
     };
-    tree = await runSchematic('component', componentOptions, tree);
+    let tree = await runSchematic('component', componentOptions, appTree);
     componentOptions.name = 'footer';
     tree = await runSchematic('component', componentOptions, tree);
     let files = tree.files;
@@ -90,19 +82,11 @@ describe('elements schematic', () => {
   it('--builderModule argument', async () => {
     const options: ElementsOptions = { ...defaultOptions };
     // console.log('appTree:', appTree);
-    let tree = await runSchematic(
-      'xplat',
-      {
-        prefix: 'tt',
-        platforms: 'web'
-      },
-      appTree
-    );
-    const componentOptions: ComponentOptions = {
+    const componentOptions: ComponentHelpers.Schema = {
       name: 'menu',
       platforms: 'web'
     };
-    tree = await runSchematic('component', componentOptions, tree);
+    let tree = await runSchematic('component', componentOptions, appTree);
     componentOptions.name = 'footer';
     tree = await runSchematic('component', componentOptions, tree);
     let files = tree.files;
@@ -155,7 +139,7 @@ describe('elements schematic', () => {
       builderIndex.indexOf(`<tt-footer></tt-footer>`)
     ).toBeGreaterThanOrEqual(0);
 
-    const component2Options: ComponentOptions = {
+    const component2Options: ComponentHelpers.Schema = {
       name: 'dropdown',
       platforms: 'web'
     };

@@ -1,6 +1,6 @@
 import { Tree } from '@angular-devkit/schematics';
 import { Schema as GenerateOptions } from './schema';
-import { createXplatWithApps, getFileContent } from '@nstudio/workspace/testing';
+import { createXplatWithApps, getFileContent, createXplatWithNativeScriptWeb } from '@nstudio/workspace/testing';
 import { runSchematic } from '../../utils/testing';
 
 describe('directive schematic', () => {
@@ -12,34 +12,18 @@ describe('directive schematic', () => {
 
   beforeEach(() => {
     appTree = Tree.empty();
-    appTree = createXplatWithApps(appTree);
+    appTree = createXplatWithNativeScriptWeb(appTree);
   });
 
   it('should create directive in libs by default for use across any platform and apps', async () => {
     // console.log('appTree:', appTree);
     let tree = await runSchematic(
-      'xplat',
-      {
-        prefix: 'tt',
-        platforms: 'nativescript,web'
-      },
-      appTree
-    );
-    tree = await runSchematic(
-      'app.nativescript',
-      {
-        name: 'viewer',
-        prefix: 'tt'
-      },
-      tree
-    );
-    tree = await runSchematic(
       'feature',
       {
         name: 'foo',
         platforms: 'nativescript,web'
       },
-      tree
+      appTree
     );
     let options: GenerateOptions = { ...defaultOptions };
 
@@ -77,7 +61,6 @@ describe('directive schematic', () => {
     files = tree.files;
     // console.log(files.slice(91,files.length));
 
-    // component
     expect(
       files.indexOf('/libs/features/foo/directives/active-link.directive.ts')
     ).toBeGreaterThanOrEqual(0);
@@ -105,35 +88,20 @@ describe('directive schematic', () => {
 
   it('should create directive for specified projects only', async () => {
     // console.log('appTree:', appTree);
+    
     let tree = await runSchematic(
-      'xplat',
-      {
-        prefix: 'tt',
-        platforms: 'nativescript,web'
-      },
-      appTree
-    );
-    tree = await runSchematic(
-      'app.nativescript',
-      {
-        name: 'viewer',
-        prefix: 'tt'
-      },
-      tree
-    );
-    tree = await runSchematic(
       'feature',
       {
         name: 'foo',
-        projects: 'nativescript-viewer,web-viewer,ionic-viewer',
+        projects: 'nativescript-viewer,web-viewer',
         onlyProject: true
       },
-      tree
+      appTree
     );
     const options: GenerateOptions = {
       name: 'active-link',
       feature: 'foo',
-      projects: 'nativescript-viewer,web-viewer,ionic-viewer'
+      projects: 'nativescript-viewer,web-viewer'
     };
     tree = await runSchematic('directive', options, tree);
     const files = tree.files;
@@ -157,7 +125,7 @@ describe('directive schematic', () => {
     // directive should be project specific
     expect(
       files.indexOf(
-        '/apps/nativescript-viewer/app/features/foo/directives/active-link.directive.ts'
+        '/apps/nativescript-viewer/src/features/foo/directives/active-link.directive.ts'
       )
     ).toBeGreaterThanOrEqual(0);
     expect(
@@ -165,15 +133,10 @@ describe('directive schematic', () => {
         '/apps/web-viewer/src/app/features/foo/directives/active-link.directive.ts'
       )
     ).toBeGreaterThanOrEqual(0);
-    expect(
-      files.indexOf(
-        '/apps/ionic-viewer/src/app/features/foo/directives/active-link.directive.ts'
-      )
-    ).toBeGreaterThanOrEqual(0);
 
     // file content
     let indexPath =
-      '/apps/nativescript-viewer/app/features/foo/directives/index.ts';
+      '/apps/nativescript-viewer/src/features/foo/directives/index.ts';
     let index = getFileContent(tree, indexPath);
     // console.log(barrelPath + ':');
     // console.log(barrelIndex);
@@ -181,12 +144,6 @@ describe('directive schematic', () => {
     expect(index.indexOf(`ActiveLinkDirective`)).toBeGreaterThanOrEqual(0);
 
     indexPath = '/apps/web-viewer/src/app/features/foo/directives/index.ts';
-    index = getFileContent(tree, indexPath);
-    // console.log(barrelPath + ':');
-    // console.log(barrelIndex);
-    expect(index.indexOf(`ActiveLinkDirective`)).toBeGreaterThanOrEqual(0);
-
-    indexPath = '/apps/ionic-viewer/src/app/features/foo/directives/index.ts';
     index = getFileContent(tree, indexPath);
     // console.log(barrelPath + ':');
     // console.log(barrelIndex);

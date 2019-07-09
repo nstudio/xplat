@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "id": "feature",
-  "title": "Create an Angular feature in xplat.",
+  "id": "xplat-ionic-angular-feature",
+  "title": "Create an Ionic Angular feature in xplat.",
   "type": "object",
   "properties": {
     "name": {
@@ -15,10 +15,6 @@
     "projects": {
       "type": "string",
       "description": "Project names"
-    },
-    "platforms": {
-      "type": "string",
-      "description": "Target platforms to support."
     },
     "onlyProject": {
       "type": "boolean",

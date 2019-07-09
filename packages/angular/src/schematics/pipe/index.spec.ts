@@ -1,7 +1,8 @@
-import { Tree } from '@angular-devkit/schematics';
+import { Tree, externalSchematic } from '@angular-devkit/schematics';
 import { Schema as GenerateOptions } from './schema';
-import { createXplatWithApps, getFileContent } from '@nstudio/workspace/testing';
+import { createXplatWithApps, getFileContent, createXplatWithNativeScriptWeb } from '@nstudio/workspace/testing';
 import { runSchematic, runSchematicSync } from '../../utils/testing';
+import { UnitTestTree } from '@angular-devkit/schematics/testing';
 
 describe('pipe schematic', () => {
   let appTree: Tree;
@@ -11,44 +12,28 @@ describe('pipe schematic', () => {
 
   beforeEach(() => {
     appTree = Tree.empty();
-    appTree = createXplatWithApps(appTree);
+    appTree = createXplatWithNativeScriptWeb(appTree);
   });
 
   it('should create pipe in libs by default for use across any platform and apps', async () => {
     // console.log('appTree:', appTree);
     let tree = await runSchematic(
-      'xplat',
-      {
-        prefix: 'tt',
-        platforms: 'nativescript,web'
-      },
-      appTree
-    );
-    tree = await runSchematic(
-      'app.nativescript',
-      {
-        name: 'viewer',
-        prefix: 'tt'
-      },
-      tree
-    );
-    tree = await runSchematic(
       'feature',
       {
         name: 'foo',
         platforms: 'nativescript,web'
       },
-      tree
+      appTree
     );
     let options: GenerateOptions = { ...defaultOptions };
     tree = await runSchematic('pipe', options, tree);
-    let files = tree.files;
+    // let files = tree.files;
     // console.log(files.slice(91,files.length));
 
     // component
     expect(
-      files.indexOf('/libs/features/ui/pipes/truncate.pipe.ts')
-    ).toBeGreaterThanOrEqual(0);
+      tree.exists('/libs/features/ui/pipes/truncate.pipe.ts')
+    ).toBeTruthy();
 
     // file content
     let content = getFileContent(
@@ -68,13 +53,13 @@ describe('pipe schematic', () => {
 
     options = { ...defaultOptions, feature: 'foo' };
     tree = await runSchematic('pipe', options, tree);
-    files = tree.files;
+    // files = tree.files;
     // console.log(files.slice(91,files.length));
 
     // component
     expect(
-      files.indexOf('/libs/features/foo/pipes/truncate.pipe.ts')
-    ).toBeGreaterThanOrEqual(0);
+      tree.exists('/libs/features/foo/pipes/truncate.pipe.ts')
+    ).toBeTruthy();
 
     // file content
     content = getFileContent(tree, '/libs/features/foo/pipes/truncate.pipe.ts');
@@ -126,8 +111,8 @@ describe('pipe schematic', () => {
 
     // component
     expect(
-      files.indexOf('/libs/features/ui/pipes/test-with-dashes.pipe.ts')
-    ).toBeGreaterThanOrEqual(0);
+      tree.exists('/libs/features/ui/pipes/test-with-dashes.pipe.ts')
+    ).toBeTruthy();
 
     // file content
     let content = getFileContent(
@@ -195,36 +180,36 @@ describe('pipe schematic', () => {
     // console.log(files. slice(91,files.length));
 
     // pipe should not be setup to share
-    expect(files.indexOf('/libs/features/ui/pipes/truncate.pipe.ts')).toBe(-1);
+    expect(tree.exists('/libs/features/ui/pipes/truncate.pipe.ts')).toBeFalsy();
     expect(
-      files.indexOf('/xplat/nativescript/features/foo/pipes/truncate.pipe.ts')
-    ).toBe(-1);
+      tree.exists('/xplat/nativescript/features/foo/pipes/truncate.pipe.ts')
+    ).toBeFalsy();
     expect(
-      files.indexOf('/xplat/web/features/foo/pipes/truncate.pipe.ts')
-    ).toBe(-1);
+      tree.exists('/xplat/web/features/foo/pipes/truncate.pipe.ts')
+    ).toBeFalsy();
 
     // pipe should be project specific
     expect(
-      files.indexOf(
-        '/apps/nativescript-viewer/app/features/foo/pipes/truncate.pipe.ts'
+      tree.exists(
+        '/apps/nativescript-viewer/src/features/foo/pipes/truncate.pipe.ts'
       )
-    ).toBeGreaterThanOrEqual(0);
+    ).toBeTruthy();
     expect(
-      files.indexOf(
+      tree.exists(
         '/apps/web-viewer/src/app/features/foo/pipes/truncate.pipe.ts'
       )
-    ).toBeGreaterThanOrEqual(0);
+    ).toBeTruthy();
 
     // file content
     let pipeIndexPath =
-      '/apps/nativescript-viewer/app/features/foo/pipes/index.ts';
+      '/apps/nativescript-viewer/src/features/foo/pipes/index.ts';
     let pipeIndex = getFileContent(tree, pipeIndexPath);
     // console.log(barrelPath + ':');
     // console.log(barrelIndex);
     // component symbol should be at end of components collection
     expect(pipeIndex.indexOf(`TruncatePipe`)).toBeGreaterThanOrEqual(0);
 
-    let modulePath = '/apps/nativescript-viewer/app/features/foo/foo.module.ts';
+    let modulePath = '/apps/nativescript-viewer/src/features/foo/foo.module.ts';
     let moduleContent = getFileContent(tree, modulePath);
     // console.log(modulePath + ':');
     // console.log(moduleContent);
@@ -285,7 +270,7 @@ describe('pipe schematic', () => {
     expect(
       () => (tree = runSchematicSync('pipe', options, tree))
     ).toThrowError(
-      `apps/nativescript-viewer/app/features/register/register.module.ts does not exist. Create the feature module first. For example: ng g feature register --projects=nativescript-viewer --onlyModule`
+      `apps/nativescript-viewer/src/features/register/register.module.ts does not exist. Create the feature module first. For example: ng g feature register --projects=nativescript-viewer --onlyModule`
     );
   });
 });

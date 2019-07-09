@@ -9,7 +9,8 @@ import {
   noop,
   SchematicContext,
   Tree,
-  Rule
+  Rule,
+  SchematicsException
 } from '@angular-devkit/schematics';
 import {
   addGlobal,
@@ -26,7 +27,11 @@ import {
   updatePackageForNgrx,
   sanitizeCommaDelimitedArg,
   formatFiles,
-  getDefaultTemplateOptions
+  getDefaultTemplateOptions,
+  FeatureHelpers,
+  PlatformTypes,
+  supportedSandboxPlatforms,
+  createOrUpdate
 } from '@nstudio/workspace';
 import {
   addImportToModule,
@@ -100,8 +105,8 @@ export function generate(type: IGenerateType, options) {
   if (options.projects) {
     for (const projectName of options.projects.split(',')) {
       const platPrefix = projectName.split('-')[0];
-      let srcDir = platPrefix !== 'nativescript' ? 'src/' : '';
-      const prefixPath = `apps/${projectName}/${srcDir}app`;
+      let appDir = platPrefix === 'web' ? 'app/' : '';
+      const prefixPath = `apps/${projectName}/src/${appDir}`;
 
       let featurePath: string;
       if (shouldTargetCoreBarrel(type, featureName)) {
@@ -400,6 +405,7 @@ export function addToFeature(
             ...(options as any),
             ...getDefaultTemplateOptions(),
             name: options.name.toLowerCase(),
+            // feature: featureName,
             forSubFolder
           }),
           move(moveTo)
@@ -836,5 +842,122 @@ export function adjustFeatureModuleForState(
       insert(host, modulePath, changes);
     }
     return host;
+  };
+}
+
+export function adjustRouting(
+  options: FeatureHelpers.Schema,
+  routingModulePaths: Array<string>,
+  platform: string
+): Rule {
+  return (host: Tree) => {
+    const featureName = options.name.toLowerCase();
+    let routingModulePath: string;
+    // check which routing naming convention might be in use
+    // app.routing.ts or app-routing.module.ts
+    for (const modulePath of routingModulePaths) {
+      if (host.exists(modulePath)) {
+        routingModulePath = modulePath;
+        break;
+      }
+    }
+    // console.log('routingModulePath:',routingModulePath);
+    // console.log('host.exists(routingModulePath):',host.exists(routingModulePath));
+    if (routingModulePath) {
+      const routingSource = host.read(routingModulePath)!.toString('utf-8');
+      const routingSourceFile = ts.createSourceFile(
+        routingModulePath,
+        routingSource,
+        ts.ScriptTarget.Latest,
+        true
+      );
+
+      const changes = [];
+
+      const loadPrefix = platform === 'nativescript' ? '~' : '.';
+      // add component to route config
+      changes.push(
+        ...addToCollection(
+          routingSourceFile,
+          routingModulePath,
+          `{ 
+              path: '${featureName}',
+              loadChildren: '${loadPrefix}/features/${featureName}/${featureName}.module#${stringUtils.classify(
+            featureName
+          )}Module'
+          }`
+        )
+      );
+
+      insert(host, routingModulePath, changes);
+    }
+    return host;
+  };
+}
+
+export function adjustSandbox(options: FeatureHelpers.Schema, platform: PlatformTypes, appDirectory: string): Rule {
+  return (tree: Tree) => {
+    if (supportedSandboxPlatforms.includes(platform)) {
+      const homeCmpPath = `${appDirectory}/features/home/components/home.component.html`;
+      let homeTemplate = tree.get(homeCmpPath).content.toString();
+      switch (platform) {
+        case 'nativescript':
+          let buttonTag = 'Button';
+          let buttonEndIndex = homeTemplate.lastIndexOf(`</${buttonTag}>`);
+          if (buttonEndIndex === -1) {
+            // check for lowercase
+            buttonEndIndex = homeTemplate.lastIndexOf(
+              `</${buttonTag.toLowerCase()}>`
+            );
+            if (buttonEndIndex > -1) {
+              buttonTag = buttonTag.toLowerCase();
+            }
+          }
+
+          let customBtnClass = '';
+
+          if (buttonEndIndex === -1) {
+            // if no buttons were found this is a fresh sandbox app setup
+            // it should have a label as placeholder
+            buttonEndIndex = homeTemplate.lastIndexOf('</Label>');
+            if (buttonEndIndex === -1) {
+              buttonEndIndex = homeTemplate.lastIndexOf(`</label>`);
+            }
+          } else {
+            const buttonClassStartIndex = homeTemplate.lastIndexOf(
+              'class="btn '
+            );
+            if (buttonClassStartIndex > -1) {
+              // using custom button class
+              customBtnClass =
+                ' ' +
+                homeTemplate.substring(
+                  buttonClassStartIndex + 11,
+                  homeTemplate.lastIndexOf(`"></${buttonTag}>`)
+                );
+            }
+          }
+
+          const featureName = options.name.toLowerCase();
+          const featureNameParts = featureName.split('-');
+          let routeName = featureName;
+          if (featureNameParts.length > 1) {
+            routeName = stringUtils.capitalize(
+              featureNameParts[featureNameParts.length - 1]
+            );
+          }
+          homeTemplate =
+            homeTemplate.slice(0, buttonEndIndex + 9) +
+            `<${buttonTag} text="${routeName}" (tap)="goTo('/${featureName}')" class="btn${customBtnClass}"></${buttonTag}>` +
+            homeTemplate.slice(buttonEndIndex + 9);
+          break;
+      }
+      createOrUpdate(tree, homeCmpPath, homeTemplate);
+    } else {
+      throw new SchematicsException(
+        `The --adjustSandbox option is only supported on the following at the moment: ${supportedSandboxPlatforms}`
+      );
+    }
+    return tree;
   };
 }

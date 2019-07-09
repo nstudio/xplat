@@ -1,0 +1,31 @@
+{
+  "name": "xplat/nativescript-angular",
+  "version": "0.1",
+  "extends": ["@nstudio/nativescript", "@nstudio/angular"],
+  "schematics": {
+    "application": {
+      "factory": "./src/schematics/application",
+      "schema": "./src/schematics/application/schema.json",
+      "aliases": ["app"],
+      "description": "Create a NativeScript Angular app."
+    },
+    "feature": {
+      "factory": "./src/schematics/feature",
+      "schema": "./src/schematics/feature/schema.json",
+      "description": "Create a NativeScript Angular feature module configured for xplat projects and shared code.",
+      "hidden": true
+    },
+    "component": {
+      "factory": "./src/schematics/component",
+      "schema": "./src/schematics/component/schema.json",
+      "description": "Create a NativeScript Angular component configured for xplat projects and shared code.",
+      "aliases": ["c"],
+      "hidden": true
+    },
+    "xplat": {
+      "factory": "./src/schematics/xplat",
+      "schema": "./src/schematics/xplat/schema.json",
+      "description": "Add xplat for NativeScript Angular."
+    }
+  }
+}

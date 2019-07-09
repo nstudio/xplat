@@ -1,53 +1,36 @@
 import { Tree } from '@angular-devkit/schematics';
-import { Schema as GenerateOptions } from './schema';
-import { createXplatWithApps, getFileContent } from '@nstudio/workspace/testing';
+import { Schema } from './schema';
+import { createXplatWithApps, getFileContent, createXplatWithNativeScriptWeb } from '@nstudio/workspace/testing';
 import { runSchematic } from '../../utils/testing';
 
 describe('service schematic', () => {
   let appTree: Tree;
-  const defaultOptions: GenerateOptions = {
+  const defaultOptions: Schema = {
     name: 'auth'
   };
 
   beforeEach(() => {
     appTree = Tree.empty();
-    appTree = createXplatWithApps(appTree);
+    appTree = createXplatWithNativeScriptWeb(appTree);
   });
 
   it('should create service in libs by default for use across any platform and apps', async () => {
     // console.log('appTree:', appTree);
     let tree = await runSchematic(
-      'xplat',
-      {
-        prefix: 'tt',
-        platforms: 'nativescript,web'
-      },
-      appTree
-    );
-    tree = await runSchematic(
-      'app.nativescript',
-      {
-        name: 'viewer',
-        prefix: 'tt'
-      },
-      tree
-    );
-    tree = await runSchematic(
       'feature',
       {
         name: 'foo',
         platforms: 'nativescript,web'
       },
-      tree
+      appTree
     );
-    const options: GenerateOptions = { ...defaultOptions };
+    const options: Schema = { ...defaultOptions };
     tree = await runSchematic('service', options, tree);
-    const files = tree.files;
     // console.log(files.slice(91,files.length));
 
     expect(
-      files.indexOf('/libs/core/services/auth.service.ts')
-    ).toBeGreaterThanOrEqual(0);
+      tree.exists('/libs/core/services/auth.service.ts')
+    ).toBeTruthy();
 
     // file content
     let content = getFileContent(tree, '/libs/core/services/auth.service.ts');
@@ -71,31 +54,15 @@ describe('service schematic', () => {
   it('should create service for specified projects only', async () => {
     // console.log('appTree:', appTree);
     let tree = await runSchematic(
-      'xplat',
-      {
-        prefix: 'tt',
-        platforms: 'nativescript,web'
-      },
-      appTree
-    );
-    tree = await runSchematic(
-      'app.nativescript',
-      {
-        name: 'viewer',
-        prefix: 'tt'
-      },
-      tree
-    );
-    tree = await runSchematic(
       'feature',
       {
         name: 'foo',
         projects: 'nativescript-viewer,web-viewer',
         onlyProject: true
       },
-      tree
+      appTree
     );
-    const options: GenerateOptions = {
+    const options: Schema = {
       name: 'auth',
       feature: 'foo',
       projects: 'nativescript-viewer,web-viewer'
@@ -118,7 +85,7 @@ describe('service schematic', () => {
     // service should be project specific
     expect(
       files.indexOf(
-        '/apps/nativescript-viewer/app/features/foo/services/auth.service.ts'
+        '/apps/nativescript-viewer/src/features/foo/services/auth.service.ts'
       )
     ).toBeGreaterThanOrEqual(0);
     expect(
@@ -129,14 +96,14 @@ describe('service schematic', () => {
 
     // file content
     let indexPath =
-      '/apps/nativescript-viewer/app/features/foo/services/index.ts';
+      '/apps/nativescript-viewer/src/features/foo/services/index.ts';
     let index = getFileContent(tree, indexPath);
     // console.log(barrelPath + ':');
     // console.log(barrelIndex);
     // symbol should be at end of components collection
     expect(index.indexOf(`AuthService`)).toBeGreaterThanOrEqual(0);
 
-    let modulePath = '/apps/nativescript-viewer/app/features/foo/foo.module.ts';
+    let modulePath = '/apps/nativescript-viewer/src/features/foo/foo.module.ts';
     let moduleContent = getFileContent(tree, modulePath);
     // console.log(modulePath + ':');
     // console.log(moduleContent);
@@ -151,23 +118,16 @@ describe('service schematic', () => {
 
   it('should create service for specified platform with targeted feature only', async () => {
     // console.log('appTree:', appTree);
+    
     let tree = await runSchematic(
-      'xplat',
-      {
-        prefix: 'tt',
-        platforms: 'nativescript'
-      },
-      appTree
-    );
-    tree = await runSchematic(
       'feature',
       {
         name: 'foo',
         platforms: 'nativescript'
       },
-      tree
+      appTree
     );
-    const options: GenerateOptions = {
+    const options: Schema = {
       name: 'auth',
       feature: 'foo',
       platforms: 'nativescript'
@@ -209,19 +169,11 @@ describe('service schematic', () => {
 
   it('should create service for specified platform only and by default add to core for that platform', async () => {
     // console.log('appTree:', appTree);
-    let tree = await runSchematic(
-      'xplat',
-      {
-        prefix: 'tt',
-        platforms: 'nativescript,web'
-      },
-      appTree
-    );
-    const options: GenerateOptions = {
+    const options: Schema = {
       name: 'auth',
       platforms: 'nativescript'
     };
-    tree = await runSchematic('service', options, tree);
+    let tree = await runSchematic('service', options, appTree);
     const files = tree.files;
     // console.log(files.slice(91,files.length));
 
