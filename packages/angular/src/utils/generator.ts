@@ -105,8 +105,8 @@ export function generate(type: IGenerateType, options) {
   if (options.projects) {
     for (const projectName of options.projects.split(',')) {
       const platPrefix = projectName.split('-')[0];
-      let appDir = platPrefix === 'web' ? 'app/' : '';
-      const prefixPath = `apps/${projectName}/src/${appDir}`;
+      let appDir = platPrefix === 'web' ? '/app' : '';
+      const prefixPath = `apps/${projectName}/src${appDir}`;
 
       let featurePath: string;
       if (shouldTargetCoreBarrel(type, featureName)) {

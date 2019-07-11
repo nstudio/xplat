@@ -288,14 +288,6 @@ describe('component schematic', () => {
 
   it('should THROW if feature module does not exist in projects', async () => {
     // console.log('appTree:', appTree);
-    let tree = await runSchematic(
-      'xplat',
-      {
-        prefix: 'tt',
-        platforms: 'nativescript,web'
-      },
-      appTree
-    );
     const options: ComponentHelpers.Schema = {
       name: 'signup',
       feature: 'foo',
@@ -303,7 +295,7 @@ describe('component schematic', () => {
     };
 
     expect(
-      () => (tree = runSchematicSync('component', options, tree))
+      () => (runSchematicSync('component', options, appTree))
     ).toThrowError(
       `apps/nativescript-viewer/src/features/foo/foo.module.ts does not exist. Create the feature module first. For example: ng g feature foo --projects=nativescript-viewer --onlyModule`
     );

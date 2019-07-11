@@ -1,11 +1,14 @@
+import { Tree, SchematicContext, noop } from '@angular-devkit/schematics';
 import {
   generateOptionError,
   platformAppPrefixError,
   generatorError,
   optionsMissingError,
   supportedPlatforms,
-  PlatformTypes
+  PlatformTypes,
+  needFeatureModuleError
 } from '@nstudio/workspace';
+import { addToFeature, adjustBarrelIndex } from './generator';
 
 export namespace ComponentHelpers {
   export interface Schema {
@@ -105,5 +108,125 @@ export namespace ComponentHelpers {
       throw new Error(optionsMissingError(error));
     }
     return { featureName, projectNames, platforms };
+  }
+
+  export function platformGenerator(options: Schema, platform: PlatformTypes) {
+    const chains = [];
+    const componentSettings = prepare(options);
+
+    if (options.onlyProject) {
+      for (const projectName of componentSettings.projectNames) {
+        const projectParts = projectName.split('-');
+        const platPrefix = projectParts[0];
+        const platSuffix = projectParts.pop();
+        if (platPrefix === platform || platSuffix === platform) {
+          const appDir = platform === 'web' ? '/app' : '';
+          const prefixPath = `apps/${projectName}/src${appDir}`;
+          const featurePath = `${prefixPath}/features/${
+            componentSettings.featureName
+          }`;
+          const featureModulePath = `${featurePath}/${
+            componentSettings.featureName
+          }.module.ts`;
+          const barrelIndex = `${featurePath}/components/index.ts`;
+          // console.log('will adjustProject:', projectName);
+          chains.push((tree: Tree, context: SchematicContext) => {
+            if (!tree.exists(featureModulePath)) {
+              throw new Error(
+                needFeatureModuleError(
+                  featureModulePath,
+                  componentSettings.featureName,
+                  projectName,
+                  true
+                )
+              );
+            }
+            return addToFeature('component', options, prefixPath, tree)(
+              tree,
+              context
+            );
+          });
+          chains.push((tree: Tree, context: SchematicContext) => {
+            return adjustBarrelIndex('component', options, barrelIndex, true)(
+              tree,
+              context
+            );
+          });
+          chains.push((tree: Tree, context: SchematicContext) => {
+            return addToFeature(
+              'component',
+              options,
+              prefixPath,
+              tree,
+              '_index'
+            )(tree, context);
+          });
+        }
+      }
+    } else {
+      // add component
+      chains.push((tree: Tree, context: SchematicContext) => {
+        return addToFeature(
+          'component',
+          options,
+          `xplat/${platform}`,
+          tree,
+          ``,
+          true
+        )(tree, context);
+      });
+      if (options.subFolder) {
+        // adjust components barrel for subFolder
+        chains.push((tree: Tree, context: SchematicContext) => {
+          return adjustBarrelIndex(
+            'component',
+            options,
+            `xplat/${platform}/features/${
+              componentSettings.featureName
+            }/components/${options.subFolder}/index.ts`,
+            true
+          )(tree, context);
+        });
+        chains.push((tree: Tree, context: SchematicContext) => {
+          return options.needsIndex
+            ? addToFeature(
+                'component',
+                options,
+                `xplat/${platform}`,
+                tree,
+                '_index',
+                true
+              )(tree, context)
+            : noop()(tree, context);
+        });
+      }
+      // adjust overall components barrel
+      chains.push((tree: Tree, context: SchematicContext) => {
+        return adjustBarrelIndex(
+          'component',
+          options,
+          `xplat/${platform}/features/${
+            componentSettings.featureName
+          }/components/index.ts`,
+          true,
+          false,
+          true
+        )(tree, context);
+      });
+
+      chains.push((tree: Tree, context: SchematicContext) => {
+        return options.needsIndex
+          ? addToFeature(
+              'component',
+              options,
+              `xplat/${platform}`,
+              tree,
+              '_index'
+            )(tree, context)
+          : noop()(tree, context);
+      });
+    }
+
+    return chains;
   }
 }

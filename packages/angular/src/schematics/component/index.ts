@@ -27,7 +27,6 @@ import {
   generateOptionError,
   optionsMissingError,
   unsupportedPlatformError,
-  needFeatureModuleError,
   formatFiles
 } from '@nstudio/workspace';
 import { addToFeature, adjustBarrelIndex } from '@nstudio/angular';
@@ -51,10 +50,10 @@ export default function(options: ComponentHelpers.Schema) {
     }
   }
 
-  if (externalChains.length === 0) {
-    // none specified, insert noop
-    externalChains.push(noop());
-  }
+  // if (externalChains.length === 0) {
+  //   // none specified, insert noop
+  //   externalChains.push(noop());
+  // }
 
   return chain([
     prerun(),

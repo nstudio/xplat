@@ -40,7 +40,7 @@ export default function(options: ApplicationOptions) {
       missingArgument(
         'name',
         'Provide a name for your NativeScript app.',
-        'ng g @nstudio/nativescript:app name'
+        'ng g @nstudio/nativescript-angular:app name'
       )
     );
   }
@@ -69,7 +69,7 @@ export default function(options: ApplicationOptions) {
     (tree: Tree, context: SchematicContext) =>
       // inside closure to ensure it uses the modifed options.name from applyAppNamingConvention
       schematic('app-resources', {
-        path: `apps/${options.name}/app`
+        path: `apps/${options.name}`
       })(tree, context),
     // add root package dependencies
     (tree: Tree) => addRootDeps(tree, { nativescript: true }),
@@ -105,7 +105,7 @@ export default function(options: ApplicationOptions) {
       const projects = {};
       projects[`${options.name}`] = {
         root: `apps/${options.name}/`,
-        sourceRoot: `apps/${options.name}/app`,
+        sourceRoot: `apps/${options.name}/src`,
         projectType: 'application',
         prefix: getPrefix(),
         schematics: {

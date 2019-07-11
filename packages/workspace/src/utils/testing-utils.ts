@@ -9,7 +9,7 @@ import { NxJson } from '@nrwl/workspace';
 export { getFileContent } from '@nrwl/workspace/testing';
 
 export function createEmptyWorkspace(tree: Tree): Tree {
-  // tree.create('/.gitignore', '');
+  tree.create('/.gitignore', '');
   tree.create(
     '/angular.json',
     JSON.stringify({ version: 1, projects: {}, newProjectRoot: '' })

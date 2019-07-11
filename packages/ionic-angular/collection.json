@@ -3,6 +3,19 @@
   "version": "0.1",
   "extends": ["@nstudio/ionic", "@nstudio/angular"],
   "schematics": {
+    "application": {
+      "factory": "./src/schematics/application",
+      "schema": "./src/schematics/application/schema.json",
+      "aliases": ["app"],
+      "description": "Create an Ionic Angular app."
+    },
+    "component": {
+      "factory": "./src/schematics/component",
+      "schema": "./src/schematics/component/schema.json",
+      "description": "Create an Ionic Angular component configured for xplat projects and shared code.",
+      "aliases": ["c"],
+      "hidden": true
+    },
     "xplat": {
       "factory": "./src/schematics/xplat",
       "schema": "./src/schematics/xplat/schema.json",

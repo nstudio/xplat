@@ -1,5 +1,5 @@
 import { Tree } from '@angular-devkit/schematics';
-import { Schema as ApplicationOptions } from './schema';
+import { Schema } from './schema';
 import { stringUtils, FeatureHelpers } from '@nstudio/workspace';
 import {
   isInModuleMetadata,
@@ -10,7 +10,7 @@ import { runSchematic } from '../../utils/testing';
 
 describe('app', () => {
   let appTree: Tree;
-  const defaultOptions: ApplicationOptions = {
+  const defaultOptions: Schema = {
     name: 'foo',
     npmScope: 'testing',
     routing: true,
@@ -23,7 +23,7 @@ describe('app', () => {
   });
 
   it('should create all files of an app', async () => {
-    const options: ApplicationOptions = { ...defaultOptions };
+    const options: Schema = { ...defaultOptions };
     // console.log('appTree:', appTree);
     const tree = await runSchematic('app', options, appTree);
     const files = tree.files;
@@ -54,48 +54,48 @@ describe('app', () => {
 
     // source dir
     expect(
-      files.indexOf('/apps/nativescript-foo/app/assets/fontawesome.min.css')
+      files.indexOf('/apps/nativescript-foo/src/assets/fontawesome.min.css')
     ).toBeGreaterThanOrEqual(0);
     expect(
-      files.indexOf('/apps/nativescript-foo/app/core/core.module.ts')
+      files.indexOf('/apps/nativescript-foo/src/core/core.module.ts')
     ).toBeGreaterThanOrEqual(0);
     expect(
       files.indexOf(
-        '/apps/nativescript-foo/app/features/shared/shared.module.ts'
+        '/apps/nativescript-foo/src/features/shared/shared.module.ts'
       )
     ).toBeGreaterThanOrEqual(0);
     expect(
-      files.indexOf('/apps/nativescript-foo/app/fonts/fontawesome-webfont.ttf')
+      files.indexOf('/apps/nativescript-foo/src/fonts/fontawesome-webfont.ttf')
     ).toBeGreaterThanOrEqual(0);
     expect(
-      files.indexOf('/apps/nativescript-foo/app/scss/_index.scss')
+      files.indexOf('/apps/nativescript-foo/src/scss/_index.scss')
     ).toBeGreaterThanOrEqual(0);
     expect(
-      files.indexOf('/apps/nativescript-foo/app/scss/_variables.scss')
+      files.indexOf('/apps/nativescript-foo/src/scss/_variables.scss')
     ).toBeGreaterThanOrEqual(0);
     expect(
-      files.indexOf('/apps/nativescript-foo/app/app.android.scss')
+      files.indexOf('/apps/nativescript-foo/src/app.android.scss')
     ).toBeGreaterThanOrEqual(0);
     expect(
-      files.indexOf('/apps/nativescript-foo/app/app.component.ts')
+      files.indexOf('/apps/nativescript-foo/src/app.component.ts')
     ).toBeGreaterThanOrEqual(0);
     expect(
-      files.indexOf('/apps/nativescript-foo/app/app.ios.scss')
+      files.indexOf('/apps/nativescript-foo/src/app.ios.scss')
     ).toBeGreaterThanOrEqual(0);
     expect(
-      files.indexOf('/apps/nativescript-foo/app/app.module.ngfactory.d.ts')
+      files.indexOf('/apps/nativescript-foo/src/app.module.ngfactory.d.ts')
     ).toBeGreaterThanOrEqual(0);
     expect(
-      files.indexOf('/apps/nativescript-foo/app/app.module.ts')
+      files.indexOf('/apps/nativescript-foo/src/app.module.ts')
     ).toBeGreaterThanOrEqual(0);
     expect(
-      files.indexOf('/apps/nativescript-foo/app/app.routing.ts')
+      files.indexOf('/apps/nativescript-foo/src/app.routing.ts')
     ).toBeGreaterThanOrEqual(0);
     expect(
-      files.indexOf('/apps/nativescript-foo/app/main.ts')
+      files.indexOf('/apps/nativescript-foo/src/main.ts')
     ).toBeGreaterThanOrEqual(0);
     expect(
-      files.indexOf('/apps/nativescript-foo/app/package.json')
+      files.indexOf('/apps/nativescript-foo/src/package.json')
     ).toBeGreaterThanOrEqual(0);
 
     // xplat file defaults
@@ -112,7 +112,7 @@ describe('app', () => {
     );
     const appModule = getFileContent(
       tree,
-      '/apps/nativescript-foo/app/core/core.module.ts'
+      '/apps/nativescript-foo/src/core/core.module.ts'
     );
 
     expect(appModule).toMatch(
@@ -135,7 +135,7 @@ describe('app', () => {
     const tree = await runSchematic('app', options, appTree);
     const appModule = getFileContent(
       tree,
-      '/apps/nativescript-foo/app/app.module.ts'
+      '/apps/nativescript-foo/src/app.module.ts'
     );
 
     expect(appModule).toMatch(
@@ -162,7 +162,7 @@ describe('app', () => {
     const tree = await runSchematic('app', options, appTree);
     const appModule = getFileContent(
       tree,
-      '/apps/nativescript-foo/app/app.routing.ts'
+      '/apps/nativescript-foo/src/app.routing.ts'
     );
 
     expect(appModule).toMatch(
@@ -178,7 +178,7 @@ describe('app', () => {
     let tree = await runSchematic('app', options, appTree);
     let fileContent = getFileContent(
       tree,
-      '/apps/nativescript-foo/app/app.routing.ts'
+      '/apps/nativescript-foo/src/app.routing.ts'
     );
 
     expect(fileContent).toMatch(
@@ -186,7 +186,7 @@ describe('app', () => {
     );
     fileContent = getFileContent(
       tree,
-      '/apps/nativescript-foo/app/features/home/components/home.component.html'
+      '/apps/nativescript-foo/src/features/home/components/home.component.html'
     );
     // console.log(fileContent);
     expect(
@@ -201,7 +201,7 @@ describe('app', () => {
     tree = await runSchematic('feature', featureOptions, tree);
     fileContent = getFileContent(
       tree,
-      '/apps/nativescript-foo/app/features/home/components/home.component.html'
+      '/apps/nativescript-foo/src/features/home/components/home.component.html'
     );
     // console.log(fileContent);
     expect(
@@ -212,7 +212,7 @@ describe('app', () => {
   });
 
   it('should create all files of an app using groupByName', async () => {
-    const options: ApplicationOptions = { ...defaultOptions };
+    const options: Schema = { ...defaultOptions };
     options.groupByName = true;
     // console.log('appTree:', appTree);
     const tree = await runSchematic('app', options, appTree);
