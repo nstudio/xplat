@@ -1,6 +1,6 @@
 import { Tree, externalSchematic } from '@angular-devkit/schematics';
 import { Schema as GenerateOptions } from './schema';
-import { createXplatWithApps, getFileContent, createXplatWithNativeScriptWeb } from '@nstudio/workspace/testing';
+import { createXplatWithApps, getFileContent, createXplatWithNativeScriptWeb } from '@nstudio/xplat/testing';
 import { runSchematic, runSchematicSync } from '../../utils/testing';
 import { UnitTestTree } from '@angular-devkit/schematics/testing';
 

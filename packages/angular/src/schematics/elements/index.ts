@@ -27,7 +27,7 @@ import {
   missingArgument,
   updateAngularProjects,
   getDefaultTemplateOptions
-} from '@nstudio/workspace';
+} from '@nstudio/xplat';
 
 import { Schema as ElementsOptions } from './schema';
 

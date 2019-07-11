@@ -7,7 +7,7 @@ import {
   updateTsConfig,
   prerun,
   getGroupByName
-} from '@nstudio/workspace';
+} from '@nstudio/xplat';
 import { Schema as xPlatOptions } from './schema';
 
 let name: PlatformTypes;
@@ -41,7 +41,7 @@ export default function(options: xPlatOptions) {
         focusOnApps = options.projects.split(',');
         for (let i = 0; i < focusOnApps.length; i++) {
           const projectName = focusOnApps[i];
-          const nameParts = projectName.split('-');
+          const nameParts = <Array<PlatformTypes>>(<unknown>projectName.split('-'));
           let containsPlatform = false;
           for (const n of nameParts) {
             if (supportedPlatforms.includes(n)) {

@@ -32,7 +32,7 @@ import {
   PlatformTypes,
   supportedSandboxPlatforms,
   createOrUpdate
-} from '@nstudio/workspace';
+} from '@nstudio/xplat';
 import {
   addImportToModule,
   addProviderToModule,
@@ -65,15 +65,15 @@ export function generate(type: IGenerateType, options) {
   }
 
   let featureName: string = getFeatureName(options);
-  let platforms: Array<string> = [];
+  let platforms: Array<PlatformTypes> = [];
 
   if (options.projects) {
     // building in projects
     const projects = sanitizeCommaDelimitedArg(options.projects);
     for (const name of projects) {
       const nameParts = name.split('-');
-      const platPrefix = nameParts[0];
-      const platSuffix = nameParts[nameParts.length - 1];
+      const platPrefix = <PlatformTypes>nameParts[0];
+      const platSuffix = <PlatformTypes>nameParts[nameParts.length - 1];
       if (
         supportedPlatforms.includes(platPrefix) &&
         !platforms.includes(platPrefix)
@@ -90,7 +90,7 @@ export function generate(type: IGenerateType, options) {
     }
   } else if (options.platforms) {
     // building in shared code only
-    platforms = sanitizeCommaDelimitedArg(options.platforms);
+    platforms = <Array<PlatformTypes>>(<unknown>sanitizeCommaDelimitedArg(options.platforms));
   }
   const targetPlatforms: ITargetPlatforms = {};
   for (const t of platforms) {

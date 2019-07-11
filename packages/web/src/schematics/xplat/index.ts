@@ -39,8 +39,8 @@ import {
   addLibFiles,
   updateTestingConfig,
   updateLint
-} from '@nstudio/workspace';
-import { getDefaultTemplateOptions, IXplatSchema } from '@nstudio/workspace';
+} from '@nstudio/xplat';
+import { getDefaultTemplateOptions, IXplatSchema } from '@nstudio/xplat';
 
 export default function(options: IXplatSchema) {
   return chain([

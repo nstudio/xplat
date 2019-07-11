@@ -1,5 +1,5 @@
 {
-  "name": "@nstudio/workspace",
+  "name": "@nstudio/xplat",
   "version": "0.0.1",
   "description": "Cross-platform (xplat) tools for Nx workspaces.",
   "homepage": "https://nstudio.io/xplat",
@@ -31,9 +31,13 @@
     "packageGroup": [
       "@nstudio/angular",
       "@nstudio/electron",
+      "@nstudio/electron-angular",
       "@nstudio/ionic",
+      "@nstudio/ionic-angular",
       "@nstudio/nativescript",
-      "@nstudio/web"
+      "@nstudio/nativescript-angular",
+      "@nstudio/web",
+      "@nstudio/web-angular"
     ]
   },
   "scripts": {

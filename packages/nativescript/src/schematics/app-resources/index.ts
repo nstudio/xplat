@@ -7,7 +7,7 @@ import {
   url,
   mergeWith
 } from '@angular-devkit/schematics';
-import { getDefaultTemplateOptions } from '@nstudio/workspace';
+import { getDefaultTemplateOptions } from '@nstudio/xplat';
 
 import { Schema as AppResourcesSchema } from './schema';
 

@@ -1,12 +1,12 @@
 import { Tree } from '@angular-devkit/schematics';
-import { Schema as XPlatOptions } from '../xplat/schema';
-import { Schema as HelperOptions } from './schema';
-import { stringUtils, setTest, jsonParse } from '@nstudio/workspace';
+import { Schema as XPlatOptions } from '../init/schema';
+import { Schema } from './schema';
+import { stringUtils, setTest, jsonParse } from '@nstudio/xplat';
 import {
   isInModuleMetadata,
   createEmptyWorkspace,
   getFileContent
-} from '@nstudio/workspace/testing';
+} from '@nstudio/xplat/testing';
 import { runSchematic } from '../../utils/testing';
 setTest();
 
@@ -26,7 +26,7 @@ describe('xplat-helper schematic', () => {
     };
 
     appTree = await runSchematic('xplat', optionsXplat, appTree);
-    const options: HelperOptions = {
+    const options: Schema = {
       name: 'imports',
       platforms: 'web'
     };

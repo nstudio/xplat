@@ -1,11 +1,11 @@
 import { Tree } from '@angular-devkit/schematics';
-import { createOrUpdate, FeatureHelpers } from '@nstudio/workspace';
+import { createOrUpdate, FeatureHelpers } from '@nstudio/xplat';
 import {
   createXplatWithApps,
   isInModuleMetadata,
   getFileContent,
   createXplatWithNativeScriptWeb
-} from '@nstudio/workspace/testing';
+} from '@nstudio/xplat/testing';
 import { runSchematic, runSchematicSync } from '../../utils/testing';
 
 describe('feature schematic', () => {

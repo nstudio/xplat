@@ -11,7 +11,7 @@ import {
   getJsonFromFile,
   updateJsonFile,
   createOrUpdate
-} from '@nstudio/workspace';
+} from '@nstudio/xplat';
 
 function updateElectronApps(tree: Tree, context: SchematicContext) {
   const appsDir = tree.getDir('apps');

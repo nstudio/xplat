@@ -30,6 +30,6 @@
   },
   "peerDependencies": {
     "@nrwl/angular": "^8.0.0",
-    "@nstudio/workspace": "*"
+    "@nstudio/xplat": "*"
   }
 }

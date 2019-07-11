@@ -12,7 +12,7 @@ import {
   createOrUpdate,
   readJsonInTree,
   addTestingFiles
-} from '@nstudio/workspace';
+} from '@nstudio/xplat';
 
 function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
   const angularConfigPath = `angular.json`;

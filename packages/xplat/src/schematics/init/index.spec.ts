@@ -1,7 +1,7 @@
 import { Tree } from '@angular-devkit/schematics';
 import { Schema } from './schema';
-import { supportedPlatforms, setTest, jsonParse } from '@nstudio/workspace';
-import { createEmptyWorkspace } from '@nstudio/workspace/testing';
+import { supportedPlatforms, setTest, jsonParse } from '@nstudio/xplat';
+import { createEmptyWorkspace } from '@nstudio/xplat/testing';
 import { runSchematic, runSchematicSync } from '../../utils/testing';
 setTest();
 
@@ -17,11 +17,12 @@ describe('xplat schematic', () => {
     appTree = createEmptyWorkspace(appTree);
   });
 
-  it('should create default xplat testing support', async () => {
+  it('should init default xplat testing support', async () => {
     const options: Schema = { ...defaultOptions };
 
-    const tree = await runSchematic('xplat', options, appTree);
+    const tree = await runSchematic('init', options, appTree);
     const files = tree.files;
+    console.log('files:', files);
 
     expect(files.indexOf('/testing/karma.conf.js')).toBeGreaterThanOrEqual(0);
     expect(files.indexOf('/testing/test.libs.ts')).toBeGreaterThanOrEqual(0);
@@ -46,7 +47,7 @@ describe('xplat schematic', () => {
 
     let tree;
     expect(
-      () => (tree = runSchematicSync('xplat', options, appTree))
+      () => (tree = runSchematicSync('init', options, appTree))
     ).toThrowError(
       `desktop is not a supported platform. Currently supported: ${supportedPlatforms}`
     );

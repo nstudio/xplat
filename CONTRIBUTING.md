@@ -39,7 +39,7 @@ create-nx-workspace myworkspace
 4. You can now install your schematic changes with:
 
 ```
-npm i @nstudio/workspace -D --registry http://localhost:4873 --force
+npm i @nstudio/xplat -D --registry http://localhost:4873 --force
 ```
 
 Anytime you make further changes to the schematic just rebuild/republish:

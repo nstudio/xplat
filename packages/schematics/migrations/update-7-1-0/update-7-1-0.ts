@@ -11,7 +11,7 @@ import {
   getJsonFromFile,
   updateJsonFile,
   createOrUpdate
-} from '@nstudio/workspace';
+} from '@nstudio/xplat';
 
 export default function(): Rule {
   return chain([updateRootPackage]);

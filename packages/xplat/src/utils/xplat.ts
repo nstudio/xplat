@@ -271,7 +271,7 @@ export namespace FeatureHelpers {
       // building feature in shared code and in projects
       projectNames = projects.split(',');
       for (const name of projectNames) {
-        const platPrefix = name.split('-')[0];
+        const platPrefix = <PlatformTypes>name.split('-')[0];
         if (
           supportedPlatforms.includes(platPrefix) &&
           !platforms.includes(platPrefix)

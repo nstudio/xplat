@@ -12,7 +12,7 @@ packages/nativescript/src/schematics/**/hooks/**/*
 packages/nativescript/src/schematics/**/tools/**/*
 packages/nativescript/src/schematics/**/src/assets/*.min.css
 packages/web/src/schematics/**/_*/**/*.json
-packages/workspace/src/schematics/**/_*/**/*.json
+packages/xplat/src/schematics/**/_*/**/*.json
 /.vscode
 /.idea
 /.github

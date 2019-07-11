@@ -3,12 +3,12 @@ import { SchematicTestRunner } from '@angular-devkit/schematics/testing';
 import { Tree, Rule } from '@angular-devkit/schematics';
 
 const testRunner = new SchematicTestRunner(
-  '@nstudio/workspace',
+  '@nstudio/xplat',
   join(__dirname, '../../collection.json')
 );
 
 const migrationTestRunner = new SchematicTestRunner(
-  '@nstudio/workspace/migrations',
+  '@nstudio/xplat/migrations',
   join(__dirname, '../../migrations.json')
 );
 

@@ -1,5 +1,5 @@
 import { Tree } from '@angular-devkit/schematics';
-import { createEmptyWorkspace, getFileContent } from '@nstudio/workspace/testing';
+import { createEmptyWorkspace, getFileContent } from '@nstudio/xplat/testing';
 import { runSchematic } from '../../utils/testing';
 import { Schema as ConfigOptions } from './schema';
 

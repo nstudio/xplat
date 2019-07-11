@@ -35,7 +35,6 @@ export const enum Framework {
   None = 'none'
 }
 
-export const supportedPlatforms = ['web', 'nativescript', 'ionic', 'electron'];
 export interface ITargetPlatforms {
   web?: boolean;
   nativescript?: boolean;
@@ -44,11 +43,19 @@ export interface ITargetPlatforms {
 }
 
 export type PlatformTypes =
-  | 'web'
-  | 'nativescript'
-  | 'ionic'
-  | 'electron'
-  | 'fullstack';
+| 'web'
+| 'nativescript'
+| 'ionic'
+| 'electron'
+| 'fullstack';
+export const supportedPlatforms: Array<PlatformTypes> = ['web', 'nativescript', 'ionic', 'electron'];
+
+export type FrameworkTypes =
+| 'angular'
+// | 'react'
+// | 'vue'
+| 'all';
+export const supportedFrameworks: Array<FrameworkTypes> = ['angular'];//, 'react', 'vue'];
 
 export interface NodeDependency {
   name: string;
@@ -159,7 +166,7 @@ export function getNxWorkspaceConfig(tree: Tree): any {
     }
   }
   throw new SchematicsException(
-    '@nstudio/workspace must be used inside an Nx workspace. Create a workspace first. https://nx.dev'
+    '@nstudio/xplat must be used inside an Nx workspace. Create a workspace first. https://nx.dev'
   );
 }
 
@@ -946,7 +953,7 @@ export const addTestingFiles = (
 
   return branchAndMerge(
     mergeWith(
-      apply(url(`${relativePath}_testing_files`), [
+      apply(url(`${relativePath}_files`), [
         template({
           ...(options as any),
           ...getDefaultTemplateOptions()

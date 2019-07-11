@@ -47,7 +47,7 @@ const createNXWorkspaceCmd = `npx create-nx-workspace@latest ${workspaceArgs}`;
 console.log(createNXWorkspaceCmd);
 execSync(createNXWorkspaceCmd, { stdio: [0, 1, 2] });
 
-const installXplatCmd = `npm install -D @nstudio/workspace`;
+const installXplatCmd = `npm install -D @nstudio/xplat`;
 console.log(installXplatCmd);
 execSync(installXplatCmd, { cwd: directory, stdio: [0, 1, 2] });
 
@@ -84,6 +84,6 @@ const gitPathsToAdd = [
 
 const gitAdd = `git add ${gitPathsToAdd.join(
   ' '
-)} && git commit -m "Installed @nstudio/workspace"`;
+)} && git commit -m "Installed @nstudio/xplat"`;
 console.log(gitAdd);
 execSync(gitAdd, { cwd: directory, stdio: [0, 1, 2] });

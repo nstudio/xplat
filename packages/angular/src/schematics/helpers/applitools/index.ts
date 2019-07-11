@@ -9,7 +9,7 @@ import {
   isTesting,
   IHelperConfig,
   IHelperSchema
-} from '@nstudio/workspace';
+} from '@nstudio/xplat';
 
 export const config: IHelperConfig = {
   requiresTarget: true,

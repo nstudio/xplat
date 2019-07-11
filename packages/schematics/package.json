@@ -75,7 +75,7 @@
     "@nrwl/angular": "^8.0.0",
     "@nrwl/workspace": "^8.0.0",
     "@nstudio/angular": "*",
-    "@nstudio/workspace": "*",
+    "@nstudio/xplat": "*",
     "cosmiconfig": "4.0.0",
     "fs-extra": "6.0.0",
     "graphviz": "0.0.8",

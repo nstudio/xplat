@@ -1,5 +1,5 @@
 import { chain, Tree, SchematicContext } from '@angular-devkit/schematics';
-import { FeatureHelpers } from '@nstudio/workspace';
+import { FeatureHelpers } from '@nstudio/xplat';
 
 export default function(options: FeatureHelpers.Schema) {
   const xplatChains = [];

@@ -11,7 +11,7 @@ import {
   getJsonFromFile,
   updateJsonFile,
   createOrUpdate
-} from '@nstudio/workspace';
+} from '@nstudio/xplat';
 
 function updateRootPackage(tree: Tree, context: SchematicContext) {
   return updateJsonInTree('package.json', json => {

@@ -1,7 +1,7 @@
 {
   "name": "xplat/web",
   "version": "0.1",
-  "extends": ["@nstudio/workspace"],
+  "extends": ["@nstudio/xplat"],
   "schematics": {
     "xplat": {
       "factory": "./src/schematics/xplat",

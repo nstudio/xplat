@@ -1,10 +1,10 @@
 import { Tree } from '@angular-devkit/schematics';
 import { Schema as ApplicationOptions } from './schema';
-import { jsonParse } from '@nstudio/workspace';
+import { jsonParse } from '@nstudio/xplat';
 import {
   createXplatWithAppsForElectron,
   getFileContent
-} from '@nstudio/workspace/testing';
+} from '@nstudio/xplat/testing';
 import { runSchematic } from '../../utils/testing';
 
 describe('app', () => {

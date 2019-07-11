@@ -39,8 +39,9 @@ import {
   addLibFiles,
   addPlatformFiles,
   updateTestingConfig,
-  updateLint
-} from '@nstudio/workspace';
+  updateLint,
+  PlatformTypes
+} from '@nstudio/xplat';
 import { Schema } from './schema';
 
 let platformArg: string;
@@ -54,7 +55,7 @@ export default function(options: Schema) {
     }
     platformArg = supportedPlatforms.join(',');
   } else {
-    const platforms = sanitizeCommaDelimitedArg(platformArg);
+    const platforms = <Array<PlatformTypes>>(<unknown>sanitizeCommaDelimitedArg(platformArg));
     if (platforms.length === 0) {
       throw new Error(noPlatformError());
     } else {

@@ -5,7 +5,7 @@ import {
   Tree
 } from '@angular-devkit/schematics';
 
-import { getJsonFromFile, updateJsonFile } from '@nstudio/workspace';
+import { getJsonFromFile, updateJsonFile } from '@nstudio/xplat';
 
 function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
   const appsDir = tree.getDir('apps');

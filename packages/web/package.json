@@ -29,6 +29,6 @@
     "migrations": "./migrations.json"
   },
   "peerDependencies": {
-    "@nstudio/workspace": "*"
+    "@nstudio/xplat": "*"
   }
 }

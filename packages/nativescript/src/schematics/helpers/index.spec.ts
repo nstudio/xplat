@@ -5,11 +5,11 @@ import {
   setTest,
   jsonParse,
   IHelperSchema
-} from '@nstudio/workspace';
+} from '@nstudio/xplat';
 import {
   createXplatWithApps,
   getFileContent
-} from '@nstudio/workspace/testing';
+} from '@nstudio/xplat/testing';
 import { runSchematic } from '../../utils/testing';
 setTest();
 

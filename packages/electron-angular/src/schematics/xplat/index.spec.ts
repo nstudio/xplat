@@ -10,13 +10,13 @@ import {
   setTest,
   jsonParse,
   IXplatSchema
-} from '@nstudio/workspace';
-import { createEmptyWorkspace, getFileContent } from '@nstudio/workspace/testing';
+} from '@nstudio/xplat';
+import { createEmptyWorkspace, getFileContent } from '@nstudio/xplat/testing';
 setTest();
 
 describe('xplat schematic', () => {
   const schematicRunner = new SchematicTestRunner(
-    '@nstudio/electron',
+    '@nstudio/electron-angular',
     path.join(__dirname, '../../../collection.json')
   );
   const defaultOptions: IXplatSchema = {

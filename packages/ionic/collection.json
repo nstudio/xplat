@@ -1,7 +1,7 @@
 {
   "name": "xplat/ionic",
   "version": "0.1",
-  "extends": ["@nstudio/workspace"],
+  "extends": ["@nstudio/xplat"],
   "schematics": {
     "application": {
       "factory": "./src/schematics/application",

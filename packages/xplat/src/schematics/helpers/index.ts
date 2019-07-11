@@ -36,7 +36,7 @@ import {
   updateTsConfig,
   helperTargetError,
   missingArgument
-} from '@nstudio/workspace';
+} from '@nstudio/xplat';
 import { Schema } from './schema';
 
 const platformToPackage: { [platform: string]: string } = {
@@ -50,7 +50,7 @@ export default function(options: Schema) {
       missingArgument(
         'name',
         `Provide a comma delimited list of helpers to generate like this for 'applitools'.`,
-        'ng g @nstudio/workspace:helpers applitools --target=web-myapp'
+        'ng g @nstudio/xplat:helpers applitools --target=web-myapp'
       )
     );
   }

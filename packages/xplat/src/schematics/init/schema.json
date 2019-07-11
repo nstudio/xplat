@@ -1,12 +1,16 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "id": "xplatWorkspace",
+  "id": "initXplatWorkspace",
   "title": "xplat schema",
   "type": "object",
   "properties": {
     "platforms": {
       "type": "string",
       "description": "Target platforms to support."
+    },
+    "framework": {
+      "type": "string",
+      "description": "Target frameworks to support."
     },
     "prefix": {
       "type": "string",

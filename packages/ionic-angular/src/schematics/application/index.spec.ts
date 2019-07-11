@@ -1,6 +1,6 @@
 import { Tree } from '@angular-devkit/schematics';
 import { Schema as ApplicationOptions } from './schema';
-import { createEmptyWorkspace } from '@nstudio/workspace/testing';
+import { createEmptyWorkspace } from '@nstudio/xplat/testing';
 import { runSchematic } from '../../utils/testing';
 
 describe('app.ionic schematic', () => {

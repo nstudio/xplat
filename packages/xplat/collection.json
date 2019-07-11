@@ -14,10 +14,10 @@
       "schema": "./src/schematics/mode/schema.json",
       "description": "Multi-platform development modes for IDEs."
     },
-    "xplat": {
-      "factory": "./src/schematics/xplat",
-      "schema": "./src/schematics/xplat/schema.json",
-      "description": "Add xplat testing support.",
+    "init": {
+      "factory": "./src/schematics/init",
+      "schema": "./src/schematics/init/schema.json",
+      "description": "Init xplat testing support.",
       "hidden": true
     },
     "helpers": {

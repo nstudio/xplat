@@ -3,7 +3,7 @@ import {
   SchematicsException,
   externalSchematic
 } from '@angular-devkit/schematics';
-import { prerun, errorMissingPrefix } from '@nstudio/workspace';
+import { prerun, errorMissingPrefix } from '@nstudio/xplat';
 import { Schema as ApplicationOptions } from './schema';
 
 export default function(options: ApplicationOptions) {
@@ -13,6 +13,6 @@ export default function(options: ApplicationOptions) {
 
   return chain([
     prerun(options, true),
-    externalSchematic('@nstudio/workspace', 'xplat', options)
+    externalSchematic('@nstudio/xplat', 'xplat', options)
   ]);
 }

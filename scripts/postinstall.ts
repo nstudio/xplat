@@ -9,7 +9,7 @@ const fsReadFile = promisify(fs.readFile);
 export async function updateConfig() {
   const cwd = process.cwd();
   if (
-    cwd.indexOf('node_modules/@nstudio/workspace') === -1 &&
+    cwd.indexOf('node_modules/@nstudio/xplat') === -1 &&
     cwd.indexOf('node_modules\\@nstudio\\workspace') === -1
   ) {
     // ignore: local development
@@ -23,7 +23,7 @@ export async function updateConfig() {
     if (config) {
       const ngCli = JSON.parse(config);
       // update default
-      ngCli.cli.defaultCollection = '@nstudio/workspace';
+      ngCli.cli.defaultCollection = '@nstudio/xplat';
       fs.writeFileSync(ngCliConfigPath, JSON.stringify(ngCli, null, 2));
     }
   } catch (err) {
@@ -64,7 +64,7 @@ export async function fixFormatter() {
   );
   let formatContent = await fsReadFile(formatPath, 'UTF-8');
 
-  const patchLine = `    // PATCHED by @nstudio/workspace\n    patterns.push('"xplat/**/*"');`;
+  const patchLine = `    // PATCHED by @nstudio/xplat\n    patterns.push('"xplat/**/*"');`;
   if (formatContent.indexOf(patchLine) !== -1) {
     console.log(`Patch for nx format have already been applied`);
     return;

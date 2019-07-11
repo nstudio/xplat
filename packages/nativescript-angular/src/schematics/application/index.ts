@@ -31,7 +31,7 @@ import {
   updateJsonFile,
   getDefaultTemplateOptions,
   addInstallTask
-} from '@nstudio/workspace';
+} from '@nstudio/xplat';
 import { Schema as ApplicationOptions } from './schema';
 
 export default function(options: ApplicationOptions) {

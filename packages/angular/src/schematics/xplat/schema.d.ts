@@ -1,4 +1,4 @@
-import { IXplatSchema } from '@nstudio/workspace';
+import { IXplatSchema } from '@nstudio/xplat';
 
 export interface Schema extends IXplatSchema {
   /**

@@ -7,7 +7,7 @@ import {
   supportedPlatforms,
   PlatformTypes,
   needFeatureModuleError
-} from '@nstudio/workspace';
+} from '@nstudio/xplat';
 import { addToFeature, adjustBarrelIndex } from './generator';
 
 export namespace ComponentHelpers {

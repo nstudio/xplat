@@ -11,7 +11,8 @@ import {
   supportedPlatforms,
   updateTsConfig,
   sanitizeCommaDelimitedArg
-} from '@nstudio/workspace';
+} from '@nstudio/xplat';
+import { PlatformTypes } from '../../utils';
 
 export default function(options: ConfigOptions): Rule {
   return chain([
@@ -26,7 +27,7 @@ function updatePaths(options: ConfigOptions) {
     const npmScope = nxJson.npmScope;
     const platformArg = options.platforms;
     // sort for consistency
-    const platforms = sanitizeCommaDelimitedArg(platformArg).sort(function(
+    const platforms = (<Array<PlatformTypes>>(<unknown>sanitizeCommaDelimitedArg(platformArg))).sort(function(
       a,
       b
     ) {

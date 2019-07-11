@@ -27,7 +27,7 @@ import {
   supportedPlatforms,
   Framework,
   getDefaultTemplateOptions
-} from '@nstudio/workspace';
+} from '@nstudio/xplat';
 import { Schema } from './schema';
 
 export default function(options: Schema) {

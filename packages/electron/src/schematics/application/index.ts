@@ -30,7 +30,7 @@ import {
   getAppName,
   missingArgument,
   getDefaultTemplateOptions
-} from '@nstudio/workspace';
+} from '@nstudio/xplat';
 
 export default function(options: ApplicationOptions) {
   if (!options.name) {

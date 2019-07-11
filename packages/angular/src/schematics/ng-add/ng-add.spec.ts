@@ -55,11 +55,11 @@ describe('ng-add', () => {
       expect(angularJson.cli.defaultCollection).toEqual('@nstudio/angular');
     });
 
-    it('should be set if @nstudio/workspace was set before', async () => {
+    it('should be set if @nstudio/xplat was set before', async () => {
       appTree = await callRule(
         updateJsonInTree('angular.json', json => {
           json.cli = {
-            defaultCollection: '@nstudio/workspace'
+            defaultCollection: '@nstudio/xplat'
           };
 
           return json;

@@ -24,7 +24,7 @@ import {
   prerun,
   buildHelperChain,
   getDefaultTemplateOptions
-} from '@nstudio/workspace';
+} from '@nstudio/xplat';
 import { stringUtils } from '@nrwl/workspace';
 
 export const config: IHelperConfig = {

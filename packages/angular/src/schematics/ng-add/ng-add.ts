@@ -8,7 +8,7 @@ import {
   unsupportedHelperError,
   prerun,
   missingArgument
-} from '@nstudio/workspace';
+} from '@nstudio/xplat';
 import { Schema } from './schema';
 import { SchematicsException, chain, noop, externalSchematic, Rule } from '@angular-devkit/schematics';
 
@@ -40,7 +40,7 @@ export function setDefaults(options: Schema): Rule {
       workspace.extensions.cli &&
       ((workspace.extensions.cli as JsonObject).defaultCollection as string);
 
-    if (!defaultCollection || defaultCollection === '@nrwl/angular' || defaultCollection === '@nrwl/workspace' || defaultCollection === '@nstudio/workspace') {
+    if (!defaultCollection || defaultCollection === '@nrwl/angular' || defaultCollection === '@nrwl/workspace' || defaultCollection === '@nstudio/xplat') {
       (workspace.extensions.cli as JsonObject).defaultCollection =
         '@nstudio/angular';
     }

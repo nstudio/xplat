@@ -7,5 +7,5 @@ interface Schema {
 }
 
 export default function(schema: Schema) {
-  return externalSchematic('@nstudio/workspace', 'ng-add', schema);
+  return externalSchematic('@nstudio/xplat', 'ng-add', schema);
 }

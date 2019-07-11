@@ -27,7 +27,7 @@ import {
   getAppName,
   missingArgument,
   getDefaultTemplateOptions
-} from '@nstudio/workspace';
+} from '@nstudio/xplat';
 import { Schema as ApplicationOptions } from './schema';
 
 export default function(options: ApplicationOptions) {

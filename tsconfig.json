@@ -15,9 +15,9 @@
     "paths": {
       "@nstudio/angular": ["./packages/angular"],
       "@nstudio/angular/*": ["./packages/angular/*"],
-      "@nstudio/workspace": ["./packages/workspace"],
-      "@nstudio/workspace/*": ["./packages/workspace/*"],
-      "@nstudio/workspace/testing": ["./packages/workspace/testing"]
+      "@nstudio/xplat": ["./packages/xplat"],
+      "@nstudio/xplat/*": ["./packages/xplat/*"],
+      "@nstudio/xplat/testing": ["./packages/xplat/testing"]
     }
   },
   "exclude": [
@@ -29,7 +29,7 @@
     "packages/nativescript/src/*/files/**/*",
     "packages/schematics/src/*/files/**/*",
     "packages/web/src/*/files/**/*",
-    "packages/workspace/src/*/files/**/*",
+    "packages/xplat/src/*/files/**/*",
     "scripts"
   ],
   "angularCompilerOptions": {

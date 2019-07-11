@@ -4,7 +4,7 @@ import {
   unsupportedHelperError,
   prerun,
   missingArgument
-} from '@nstudio/workspace';
+} from '@nstudio/xplat';
 import { config as configApplitools } from './applitools';
 import { SchematicsException, chain, noop } from '@angular-devkit/schematics';
 

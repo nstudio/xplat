@@ -1,11 +1,11 @@
 import { Tree } from '@angular-devkit/schematics';
 import { Schema } from './schema';
-import { stringUtils, FeatureHelpers } from '@nstudio/workspace';
+import { stringUtils, FeatureHelpers } from '@nstudio/xplat';
 import {
   isInModuleMetadata,
   createEmptyWorkspace,
   getFileContent
-} from '@nstudio/workspace/testing';
+} from '@nstudio/xplat/testing';
 import { runSchematic } from '../../utils/testing';
 
 describe('app', () => {

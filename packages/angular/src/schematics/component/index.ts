@@ -28,7 +28,7 @@ import {
   optionsMissingError,
   unsupportedPlatformError,
   formatFiles
-} from '@nstudio/workspace';
+} from '@nstudio/xplat';
 import { addToFeature, adjustBarrelIndex } from '@nstudio/angular';
 import { ComponentHelpers } from '../../utils/xplat';
 

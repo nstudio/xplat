@@ -32,7 +32,7 @@ import {
   createOrUpdate,
   getDefaultTemplateOptions,
   FeatureHelpers
-} from '@nstudio/workspace';
+} from '@nstudio/xplat';
 import { addToCollection } from '../../utils/ast';
 import * as ts from 'typescript';
 

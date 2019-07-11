@@ -1,6 +1,6 @@
 import { adjustSandbox, adjustRouting } from '@nstudio/angular';
 import { chain, Tree, SchematicContext } from '@angular-devkit/schematics';
-import { FeatureHelpers, PlatformTypes } from '@nstudio/workspace';
+import { FeatureHelpers, PlatformTypes } from '@nstudio/xplat';
 
 export default function(options: FeatureHelpers.Schema) {
   const featureSettings = FeatureHelpers.prepare(options);

@@ -5,4 +5,8 @@ export interface Schema extends IXplatSchema {
    * Target platforms
    */
   platforms?: string;
+  /**
+   * Target frameworks
+   */
+  framework?: string;
 }

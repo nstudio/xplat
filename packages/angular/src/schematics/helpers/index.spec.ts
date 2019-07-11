@@ -5,13 +5,13 @@ import {
   setTest,
   jsonParse,
   IHelperSchema
-} from '@nstudio/workspace';
+} from '@nstudio/xplat';
 import {
   isInModuleMetadata,
   createEmptyWorkspace,
   createXplatWithApps,
   getFileContent
-} from '@nstudio/workspace/testing';
+} from '@nstudio/xplat/testing';
 import { runSchematic, runSchematicSync } from '../../utils/testing';
 setTest();
 
