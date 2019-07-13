@@ -5,6 +5,7 @@ import { XplatWebAngularHelpers } from '../../utils/xplat';
 export default function(options: XplatHelpers.Schema) {
   return chain([
     prerun(options),
+    externalSchematic('@nstudio/angular', 'xplat', options, { interactive: true}),
     options.skipDependentPlatformFiles
       ? noop()
       : XplatHelpers.addPlatformFiles(options, 'web-angular'),

@@ -29,7 +29,7 @@ describe('xplat schematic', () => {
     expect(tree.exists('/xplat/nativescript/index.ts')).toBeTruthy();
     const packagePath = '/package.json';
     const packageFile = jsonParse(getFileContent(tree, packagePath));
-    const hasNativeScript = packageFile.dependencies[`nativescript-angular`];
+    const hasNativeScript = packageFile.dependencies[`tns-core-modules`];
     expect(hasNativeScript).not.toBeUndefined();
   });
 });

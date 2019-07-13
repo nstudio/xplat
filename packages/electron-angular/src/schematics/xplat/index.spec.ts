@@ -32,10 +32,10 @@ describe('xplat schematic', () => {
 
     const tree = await runSchematic('xplat', options, appTree);
     const files = tree.files;
-    expect(files.indexOf('/xplat/web/index.ts')).toBeGreaterThanOrEqual(0);
-    expect(files.indexOf('/xplat/electron/index.ts')).toBeGreaterThanOrEqual(0);
+    expect(files.indexOf('/xplat/web-angular/index.ts')).toBeGreaterThanOrEqual(0);
+    expect(files.indexOf('/xplat/electron-angular/index.ts')).toBeGreaterThanOrEqual(0);
     expect(
-      files.indexOf('/xplat/nativescript/index.ts')
+      files.indexOf('/xplat/nativescript-angular/index.ts')
     ).toBeGreaterThanOrEqual(-1);
     const packagePath = '/package.json';
     const packageFile = jsonParse(getFileContent(tree, packagePath));

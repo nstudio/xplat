@@ -25,8 +25,8 @@ describe('xplat schematic', () => {
     const options: XplatHelpers.Schema = { ...defaultOptions };
 
     const tree = await runSchematic('xplat', options, appTree);
-    expect(tree.exists('/xplat/web/index.ts')).toBeTruthy();
-    expect(tree.exists('/xplat/nativescript/index.ts')).toBeFalsy();
+    expect(tree.exists('/xplat/web-angular/index.ts')).toBeTruthy();
+    expect(tree.exists('/xplat/nativescript-angular/index.ts')).toBeFalsy();
     const packagePath = '/package.json';
     const packageFile = jsonParse(getFileContent(tree, packagePath));
     const hasScss = packageFile.dependencies[`@testing/scss`];
