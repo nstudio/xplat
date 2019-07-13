@@ -20,13 +20,12 @@ import {
   getNpmScope,
   getPrefix,
   getJsonFromFile,
-  applyAppNamingConvention,
   updateJsonFile,
   formatFiles,
   missingArgument,
   supportedPlatforms,
-  Framework,
-  getDefaultTemplateOptions
+  getDefaultTemplateOptions,
+  XplatHelpers
 } from '@nstudio/xplat';
 import { Schema } from './schema';
 
@@ -46,7 +45,7 @@ export default function(options: Schema) {
   return chain([
     prerun(options),
     // adjust naming convention
-    applyAppNamingConvention(options, 'web'),
+    XplatHelpers.applyAppNamingConvention(options, 'web'),
     (tree: Tree, context: SchematicContext) =>
       externalSchematic('@nrwl/angular', 'app', {
         ...options,

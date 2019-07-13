@@ -34,5 +34,5 @@ export default function(options: IHelperSchema) {
     }
   }
 
-  return chain([prerun(options), ...helperChain]);
+  return chain([prerun(), ...helperChain]);
 }

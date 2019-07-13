@@ -1,8 +1,8 @@
 import { supportedPlatforms, supportedHelpers } from './general';
 
-export const errorMissingPrefix = `Missing --prefix flag. It's a good practice to specify a 2-3 character prefix for use with your project's component selectors and certain shared class/module names. Example: ng g xplat --prefix=foo`;
+export const errorMissingPrefix = `Missing --prefix flag. It's a good practice to specify a 2-3 character prefix for use with your project's component selectors and certain shared class/module names. Example: ng g @nstudio/xplat:init --prefix=foo`;
 
-export const errorXplat = `You have the xplat tools installed but have yet to generate it. Before generating apps you should generate xplat first. Example: ng g xplat --prefix=foo`;
+export const errorXplat = `You have the xplat tools installed but have yet to generate it. Before generating apps you should generate xplat first. Example: ng g @nstudio/xplat:init --prefix=foo`;
 
 export function unsupportedPlatformError(platform: string) {
   return `${platform} is not a supported platform. Currently supported: ${supportedPlatforms}`;
@@ -17,7 +17,7 @@ export function helperTargetError(helper: string) {
 }
 
 export function helperMissingPlatforms() {
-  return `Missing platforms argument. Example: ng g xplat-helper imports --platforms=nativescript`;
+  return `Missing platforms argument. Example: ng g @nstudio/xplat:helpers imports --platforms=nativescript`;
 }
 
 export function missingArgument(
@@ -31,7 +31,7 @@ export function missingArgument(
 }
 
 export function noPlatformError() {
-  return `You must specify which platforms you wish to generate support for. For example: ng g xplat --prefix=foo --platforms=${supportedPlatforms.join(
+  return `You must specify which platforms you wish to generate support for. For example: ng g @nstudio/xplat:init --prefix=foo --platforms=${supportedPlatforms.join(
     ','
   )}`;
 }

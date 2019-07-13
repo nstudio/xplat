@@ -14,7 +14,7 @@ import { SchematicsException, chain, noop, externalSchematic, Rule } from '@angu
 
 export default function(options: Schema) {
   return chain([
-    prerun(options),
+    prerun(<any>options),
     externalSchematic('@nrwl/angular', 'ng-add', options),
     setDefaults(options)
   ]);

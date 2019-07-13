@@ -8,7 +8,8 @@ import {
 } from '@nstudio/xplat';
 import {
   createXplatWithApps,
-  getFileContent
+  getFileContent,
+  createXplatWithNativeScriptWeb
 } from '@nstudio/xplat/testing';
 import { runSchematic } from '../../utils/testing';
 setTest();
@@ -18,30 +19,22 @@ describe('helpers schematic', () => {
 
   beforeEach(() => {
     appTree = Tree.empty();
-    appTree = createXplatWithApps(appTree);
+    appTree = createXplatWithNativeScriptWeb(appTree);
   });
 
   it('imports: should create all files', async () => {
-    const appOptions: Schema = {
-      name: 'foo',
-      npmScope: 'testing',
-      prefix: 'tt' // foo test
-    };
-    // console.log('appTree:', appTree);
-    appTree = await runSchematic('app', appOptions, appTree);
-
     const options: IHelperSchema = {
       name: 'imports'
     };
     // console.log('appTree:', appTree);
     const tree = await runSchematic('helpers', options, appTree);
     const files = tree.files;
-    // console.log(files);
+    console.log(files);
 
     // xplat helpers
     expect(
-      files.indexOf('/xplat/nativescript/utils/@nativescript/core.ts')
-    ).toBeGreaterThanOrEqual(0);
+      tree.exists('/xplat/nativescript/utils/@nativescript/core.ts')
+    ).toBeTruthy();
     expect(
       files.indexOf('/xplat/nativescript/utils/@nativescript/ui.ts')
     ).toBeGreaterThanOrEqual(0);

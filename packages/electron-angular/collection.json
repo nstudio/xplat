@@ -7,12 +7,13 @@
       "factory": "./src/schematics/application",
       "schema": "./src/schematics/application/schema.json",
       "aliases": ["app"],
-      "description": "Create an Electron app."
+      "description": "Create an Electron Angular app."
     },
     "xplat": {
       "factory": "./src/schematics/xplat",
       "schema": "./src/schematics/xplat/schema.json",
-      "description": "Add xplat for Electron."
+      "description": "Add xplat for Electron.",
+      "hidden": true
     }
   }
 }

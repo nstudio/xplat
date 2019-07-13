@@ -1,15 +1,4 @@
 export const xplatVersion = '*';
-export const ionicVersion = '^8.0.0';
-/**
- *
-
-    if (targetPlatforms.ionic || targetPlatforms.electron) {
-      // ability to import web scss and share it
-      dep = {
-        name: `@${getNpmScope()}/web`,
-        version: 'file:xplat/web',
-        type: 'dependency'
-      };
-      deps.push(dep);
-    }
- */
+export const ionicNativeCoreVersion = '^5.10.0';
+export const ionicNativeSplashScreenVersion = '^5.10.0';
+export const ionicNativeStatusbarVersion = '^5.10.0';

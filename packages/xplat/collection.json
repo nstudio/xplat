@@ -24,12 +24,6 @@
       "factory": "./src/schematics/helpers",
       "schema": "./src/schematics/helpers/schema.json",
       "description": "xplat helpers for various toolchains."
-    },
-    "ts-config": {
-      "factory": "./src/schematics/ts-config",
-      "schema": "./src/schematics/ts-config/schema.json",
-      "description": "Configure tsconfig for xplat.",
-      "hidden": true
     }
   }
 }

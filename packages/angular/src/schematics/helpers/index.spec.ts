@@ -1,14 +1,11 @@
 import { Tree } from '@angular-devkit/schematics';
 import { Schema as AppWebOptions } from '../application/schema';
 import {
-  stringUtils,
   setTest,
   jsonParse,
   IHelperSchema
 } from '@nstudio/xplat';
 import {
-  isInModuleMetadata,
-  createEmptyWorkspace,
   createXplatWithApps,
   getFileContent
 } from '@nstudio/xplat/testing';

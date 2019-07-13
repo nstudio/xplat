@@ -1,40 +1,20 @@
 import {
-  apply,
   chain,
-  url,
-  move,
-  template,
-  mergeWith,
   Tree,
   SchematicContext,
   SchematicsException,
-  branchAndMerge,
   // schematic,
   Rule,
   noop,
   externalSchematic
 } from '@angular-devkit/schematics';
 import {
-  addGlobal,
-  insert,
-  stringUtils,
   supportedPlatforms,
   prerun,
-  getPrefix,
-  getNpmScope,
-  platformAppPrefixError,
-  generatorError,
-  optionsMissingError,
   unsupportedPlatformError,
   formatFiles,
-  supportedSandboxPlatforms,
-  PlatformTypes,
-  createOrUpdate,
-  getDefaultTemplateOptions,
   FeatureHelpers
 } from '@nstudio/xplat';
-import { addToCollection } from '../../utils/ast';
-import * as ts from 'typescript';
 
 export default function(options: FeatureHelpers.Schema) {
   const featureSettings = FeatureHelpers.prepare(options);

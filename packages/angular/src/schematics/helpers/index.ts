@@ -1,7 +1,6 @@
 import {
   IHelperSchema,
   buildHelperChain,
-  unsupportedHelperError,
   prerun,
   missingArgument
 } from '@nstudio/xplat';
@@ -34,5 +33,5 @@ export default function(options: IHelperSchema) {
     }
   }
 
-  return chain([prerun(options), ...helperChain]);
+  return chain([prerun(<any>options), ...helperChain]);
 }

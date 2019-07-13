@@ -19,7 +19,8 @@
     "xplat": {
       "factory": "./src/schematics/xplat",
       "schema": "./src/schematics/xplat/schema.json",
-      "description": "Add xplat for web angular."
+      "description": "Add xplat for web angular.",
+      "hidden": true
     }
   }
 }

@@ -28,22 +28,24 @@ import {
 import { stringUtils } from '@nrwl/workspace';
 
 export const config: IHelperConfig = {
-  addHelperFiles: files,
+  addHelperFiles,
   additionalSupport: imports
 };
 
-function files(options: IHelperSchema): Rule {
-  return branchAndMerge(
-    mergeWith(
-      apply(url(`./_files`), [
-        template({
-          ...(options as any),
-          ...getDefaultTemplateOptions()
-        }),
-        move(`xplat/nativescript/utils`)
-      ])
-    )
-  );
+function addHelperFiles(options: IHelperSchema): Rule {
+  return (tree: Tree, context: SchematicContext) => {
+    return branchAndMerge(
+      mergeWith(
+        apply(url(`./_files`), [
+          template({
+            ...(options as any),
+            ...getDefaultTemplateOptions()
+          }),
+          move(`xplat/nativescript/utils`)
+        ])
+      )
+    );
+  };
 }
 
 function imports(helperChains: Array<any>, options: IHelperSchema) {
@@ -103,5 +105,6 @@ function imports(helperChains: Array<any>, options: IHelperSchema) {
         );
       }
     }
+    return tree;
   };
 }

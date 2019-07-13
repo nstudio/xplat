@@ -11,18 +11,17 @@ import {
   SchematicContext,
   SchematicsException,
   schematic,
-  noop
+  noop,
+  externalSchematic
 } from '@angular-devkit/schematics';
 import {
   stringUtils,
   prerun,
   getNpmScope,
   getPrefix,
-  addRootDeps,
   updatePackageScripts,
   updateAngularProjects,
   updateNxProjects,
-  applyAppNamingConvention,
   getGroupByName,
   getAppName,
   missingArgument,
@@ -30,11 +29,12 @@ import {
   setDependency,
   updateJsonFile,
   getDefaultTemplateOptions,
-  addInstallTask
+  XplatHelpers
 } from '@nstudio/xplat';
-import { Schema as ApplicationOptions } from './schema';
+import { Schema } from './schema';
+import { XplatNativeScriptAngularHelpers } from '../../utils';
 
-export default function(options: ApplicationOptions) {
+export default function(options: Schema) {
   if (!options.name) {
     throw new SchematicsException(
       missingArgument(
@@ -52,10 +52,10 @@ export default function(options: ApplicationOptions) {
   return chain([
     prerun(options),
     // adjust naming convention
-    applyAppNamingConvention(options, 'nativescript'),
+    XplatHelpers.applyAppNamingConvention(options, 'nativescript'),
     // create app files
     (tree: Tree, context: SchematicContext) =>
-      addAppFiles(options, options.name)(tree, context),
+      addAppFiles(options, options.name),
     // add features
     (tree: Tree, context: SchematicContext) =>
       options.routing
@@ -68,12 +68,12 @@ export default function(options: ApplicationOptions) {
     // add app resources
     (tree: Tree, context: SchematicContext) =>
       // inside closure to ensure it uses the modifed options.name from applyAppNamingConvention
-      schematic('app-resources', {
+      externalSchematic('@nstudio/nativescript', 'app-resources', {
         path: `apps/${options.name}`
-      })(tree, context),
+      }, {interactive: false})(tree, context),
     // add root package dependencies
-    (tree: Tree) => addRootDeps(tree, { nativescript: true }),
-    addInstallTask(options),
+    XplatNativeScriptAngularHelpers.updateRootDeps(options),
+    XplatHelpers.addPackageInstallTask(options),
     addNsCli(options.addCliDependency),
     // add start/clean scripts
     (tree: Tree) => {
@@ -155,7 +155,7 @@ export default function(options: ApplicationOptions) {
 }
 
 function addAppFiles(
-  options: ApplicationOptions,
+  options: Schema,
   appPath: string,
   extra: string = ''
 ): Rule {

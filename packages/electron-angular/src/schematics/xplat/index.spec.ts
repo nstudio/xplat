@@ -9,32 +9,28 @@ import {
   supportedPlatforms,
   setTest,
   jsonParse,
-  IXplatSchema
+  XplatHelpers,
 } from '@nstudio/xplat';
 import { createEmptyWorkspace, getFileContent } from '@nstudio/xplat/testing';
+import { runSchematic } from '../../utils/testing';
 setTest();
 
 describe('xplat schematic', () => {
-  const schematicRunner = new SchematicTestRunner(
-    '@nstudio/electron-angular',
-    path.join(__dirname, '../../../collection.json')
-  );
-  const defaultOptions: IXplatSchema = {
+  let appTree: Tree;
+  const defaultOptions: XplatHelpers.Schema = {
     npmScope: 'testing',
     prefix: 'ft' // foo test
   };
-
-  let appTree: Tree;
 
   beforeEach(() => {
     appTree = Tree.empty();
     appTree = createEmptyWorkspace(appTree);
   });
 
-  it('should create default xplat support for electron which should always include web as well', () => {
-    const options: IXplatSchema = { ...defaultOptions };
+  it('should create default xplat support for electron which should always include web as well', async () => {
+    const options: XplatHelpers.Schema = { ...defaultOptions };
 
-    const tree = schematicRunner.runSchematic('xplat', options, appTree);
+    const tree = await runSchematic('xplat', options, appTree);
     const files = tree.files;
     expect(files.indexOf('/xplat/web/index.ts')).toBeGreaterThanOrEqual(0);
     expect(files.indexOf('/xplat/electron/index.ts')).toBeGreaterThanOrEqual(0);

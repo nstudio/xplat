@@ -1,5 +1,5 @@
 import { Tree } from '@angular-devkit/schematics';
-import { createXplatWithApps, getFileContent, createXplatWithNativeScriptWeb } from '@nstudio/xplat/testing';
+import { getFileContent, createXplatWithNativeScriptWeb } from '@nstudio/xplat/testing';
 import { runSchematic, runSchematicSync } from '../../utils/testing';
 import { ComponentHelpers } from '../../utils/xplat';
 

@@ -1,7 +1,6 @@
 import { Tree } from '@angular-devkit/schematics';
-import { Schema as XPlatOptions } from '../init/schema';
 import { Schema } from './schema';
-import { stringUtils, setTest, jsonParse } from '@nstudio/xplat';
+import { stringUtils, setTest, XplatHelpers } from '@nstudio/xplat';
 import {
   isInModuleMetadata,
   createEmptyWorkspace,
@@ -19,13 +18,13 @@ describe('xplat-helper schematic', () => {
   });
 
   it('generating helper for a platform where the helper is not supported should not do anything', async () => {
-    const optionsXplat: XPlatOptions = {
+    const optionsXplat: XplatHelpers.Schema = {
       npmScope: 'testing',
       prefix: 'tt',
       platforms: 'web,nativescript'
     };
 
-    appTree = await runSchematic('xplat', optionsXplat, appTree);
+    appTree = await runSchematic('init', optionsXplat, appTree);
     const options: Schema = {
       name: 'imports',
       platforms: 'web'

@@ -18,19 +18,19 @@ import {
   getPrefix,
   getNpmScope,
   stringUtils,
-  addRootDeps,
   updateAngularProjects,
   updateNxProjects,
   formatFiles,
   getJsonFromFile,
   updatePackageScripts,
   addPostinstallers,
-  applyAppNamingConvention,
   getGroupByName,
   getAppName,
   missingArgument,
-  getDefaultTemplateOptions
+  getDefaultTemplateOptions,
+  XplatHelpers
 } from '@nstudio/xplat';
+import { XplatElectrontHelpers } from '../../utils';
 
 export default function(options: ApplicationOptions) {
   if (!options.name) {
@@ -51,12 +51,12 @@ export default function(options: ApplicationOptions) {
   return chain([
     prerun(options),
     // adjust naming convention
-    applyAppNamingConvention(options, 'electron'),
+    XplatHelpers.applyAppNamingConvention(options, 'electron'),
     // create app files
     (tree: Tree, context: SchematicContext) =>
       addAppFiles(options, options.name)(tree, context),
     // add root package dependencies
-    (tree: Tree) => addRootDeps(tree, { electron: true }),
+    XplatElectrontHelpers.updateRootDeps(options),
     // add npm scripts
     (tree: Tree) => {
       const platformApp = options.name.replace('-', '.');

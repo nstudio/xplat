@@ -1,2 +1,4 @@
 export const xplatVersion = '*';
-export const nativescriptVersion = '^6.0.0';
+export const tnsCoreVersion = '~6.0.0';
+export const nsThemeCoreVersion = '^1.0.4';
+export const terserWebpackVersion = '~1.2.0';

@@ -1,16 +1,17 @@
-import { chain, Tree } from '@angular-devkit/schematics';
+import { chain, Tree, SchematicContext } from '@angular-devkit/schematics';
 
 import {
   PlatformTypes,
-  updateIDESettings,
   supportedPlatforms,
   updateTsConfig,
   prerun,
-  getGroupByName
+  getGroupByName,
+  XplatHelpers
 } from '@nstudio/xplat';
 import { Schema as xPlatOptions } from './schema';
+import { PlatformModes } from '../../utils';
 
-let name: PlatformTypes;
+let name: PlatformModes;
 export default function(options: xPlatOptions) {
   if (!options.name) {
     name = 'fullstack';
@@ -27,7 +28,7 @@ export default function(options: xPlatOptions) {
     // update tsconfig based on mode
     (tree: Tree) => updateExcludes(name)(tree),
     // update IDE settings
-    (tree: Tree) => {
+    (tree: Tree, context: SchematicContext) => {
       const appsDir = tree.getDir('apps');
       const appFolders = appsDir.subdirs;
       const allApps = [];
@@ -59,12 +60,14 @@ export default function(options: xPlatOptions) {
         }
       }
       // targets and mode should be the same
-      return updateIDESettings(tree, name, name, allApps, focusOnApps);
+      return XplatHelpers.updateIDESettings({
+        platforms: name
+      }, name, allApps, focusOnApps)(tree, context);
     }
   ]);
 }
 
-function updateExcludes(devMode: PlatformTypes) {
+function updateExcludes(devMode: PlatformModes) {
   return (tree: Tree) => {
     return updateTsConfig(tree, (tsConfig: any) => {
       if (tsConfig) {

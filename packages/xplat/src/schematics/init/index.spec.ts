@@ -1,13 +1,13 @@
 import { Tree } from '@angular-devkit/schematics';
-import { Schema } from './schema';
 import { supportedPlatforms, setTest, jsonParse } from '@nstudio/xplat';
 import { createEmptyWorkspace } from '@nstudio/xplat/testing';
 import { runSchematic, runSchematicSync } from '../../utils/testing';
+import { XplatHelpers } from '../../utils';
 setTest();
 
 describe('xplat schematic', () => {
   let appTree: Tree;
-  const defaultOptions: Schema = {
+  const defaultOptions: XplatHelpers.Schema = {
     npmScope: 'testing',
     prefix: 'ft' // foo test
   };
@@ -18,11 +18,13 @@ describe('xplat schematic', () => {
   });
 
   it('should init default xplat testing support', async () => {
-    const options: Schema = { ...defaultOptions };
+    const options: XplatHelpers.Schema = { ...defaultOptions };
+    options.platforms = 'web';
+    options.framework = 'angular';
 
     const tree = await runSchematic('init', options, appTree);
     const files = tree.files;
-    console.log('files:', files);
+    // console.log('files:', files);
 
     expect(files.indexOf('/testing/karma.conf.js')).toBeGreaterThanOrEqual(0);
     expect(files.indexOf('/testing/test.libs.ts')).toBeGreaterThanOrEqual(0);
@@ -42,7 +44,7 @@ describe('xplat schematic', () => {
   });
 
   it('should NOT create unsupported xplat option and throw', () => {
-    const options: Schema = { ...defaultOptions };
+    const options: XplatHelpers.Schema = { ...defaultOptions };
     options.platforms = 'desktop';
 
     let tree;

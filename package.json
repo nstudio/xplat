@@ -112,6 +112,7 @@
     "tslint": "5.11.0",
     "typescript": "~3.4.5",
     "viz.js": "^1.8.1",
+    "weak": "^1.0.1",
     "webpack": "4.30.0",
     "webpack-dev-server": "3.1.14",
     "webpack-node-externals": "^1.7.2",

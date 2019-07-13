@@ -31,6 +31,11 @@
       "description": "Skip formatting files",
       "type": "boolean",
       "default": false
+    },
+    "skipInstall": {
+      "description": "Skip installing dependency packages.",
+      "type": "boolean",
+      "default": false
     }
   }
 }

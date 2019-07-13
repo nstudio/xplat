@@ -1,2 +1,2 @@
-export * from './src/utils/generator';
-export * from './src/utils/xplat';
+
+export * from './src/utils';

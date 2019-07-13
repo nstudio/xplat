@@ -25,7 +25,8 @@
     "xplat": {
       "factory": "./src/schematics/xplat",
       "schema": "./src/schematics/xplat/schema.json",
-      "description": "Add xplat for NativeScript Angular."
+      "description": "Add xplat for NativeScript Angular.",
+      "hidden": true
     }
   }
 }

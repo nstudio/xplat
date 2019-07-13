@@ -3,7 +3,7 @@ import {
   supportedPlatforms,
   setTest,
   jsonParse,
-  IXplatSchema
+  XplatHelpers
 } from '@nstudio/xplat';
 import { createEmptyWorkspace, getFileContent } from '@nstudio/xplat/testing';
 import { runSchematic } from '../../utils/testing';
@@ -11,7 +11,7 @@ setTest();
 
 describe('xplat ionic angular', () => {
   let appTree: Tree;
-  const defaultOptions: IXplatSchema = {
+  const defaultOptions: XplatHelpers.Schema = {
     npmScope: 'testing',
     prefix: 'ft' // foo test
   };
@@ -22,7 +22,7 @@ describe('xplat ionic angular', () => {
   });
 
   it('should create default xplat support for ionic which should always include web as well', async () => {
-    const options: IXplatSchema = { ...defaultOptions };
+    const options: XplatHelpers.Schema = { ...defaultOptions };
 
     const tree = await runSchematic('xplat', options, appTree);
     const files = tree.files;

@@ -1,6 +1,5 @@
 import { Tree, SchematicContext, noop } from '@angular-devkit/schematics';
 import {
-  updateTsConfig,
   createOrUpdate,
   updatePackageScripts,
   getJsonFromFile,

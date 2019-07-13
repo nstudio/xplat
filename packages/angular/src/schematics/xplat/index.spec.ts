@@ -1,13 +1,12 @@
 import { Tree } from '@angular-devkit/schematics';
-import { Schema } from './schema';
-import { supportedPlatforms, setTest, jsonParse } from '@nstudio/xplat';
+import { supportedPlatforms, setTest, jsonParse, XplatHelpers } from '@nstudio/xplat';
 import { createEmptyWorkspace, getFileContent } from '@nstudio/xplat/testing';
 import { runSchematic, runSchematicSync } from '../../utils/testing';
 setTest();
 
 describe('xplat schematic', () => {
   let appTree: Tree;
-  const defaultOptions: Schema = {
+  const defaultOptions: XplatHelpers.Schema = {
     npmScope: 'testing',
     prefix: 'ft' // foo test
   };
@@ -18,11 +17,12 @@ describe('xplat schematic', () => {
   });
 
   it('should create default xplat support for web,nativescript + libs + testing support', async () => {
-    const options: Schema = { ...defaultOptions };
+    const options: XplatHelpers.Schema = { ...defaultOptions };
     options.platforms = 'web,nativescript';
 
     const tree = await runSchematic('xplat', options, appTree);
     const files = tree.files;
+    // console.log(files);
     expect(files.indexOf('/libs/core/index.ts')).toBeGreaterThanOrEqual(0);
     expect(files.indexOf('/libs/features/index.ts')).toBeGreaterThanOrEqual(0);
     expect(files.indexOf('/libs/scss/package.json')).toBeGreaterThanOrEqual(0);
@@ -43,38 +43,38 @@ describe('xplat schematic', () => {
       files.indexOf('/testing/tsconfig.xplat.spec.json')
     ).toBeGreaterThanOrEqual(0);
 
-    expect(files.indexOf('/xplat/web/index.ts')).toBeGreaterThanOrEqual(0);
+    expect(files.indexOf('/xplat/web-angular/index.ts')).toBeGreaterThanOrEqual(0);
     expect(
-      files.indexOf('/xplat/nativescript/index.ts')
+      files.indexOf('/xplat/nativescript-angular/index.ts')
     ).toBeGreaterThanOrEqual(0);
   });
 
   it('should create default xplat support for web,nativescript', async () => {
-    const options: Schema = { ...defaultOptions };
+    const options: XplatHelpers.Schema = { ...defaultOptions };
     options.platforms = 'web,nativescript';
 
     const tree = await runSchematic('xplat', options, appTree);
     const files = tree.files;
-    expect(files.indexOf('/xplat/web/features/items/items.module.ts')).toBe(-1);
-    expect(files.indexOf('/xplat/web/index.ts')).toBeGreaterThanOrEqual(0);
+    expect(files.indexOf('/xplat/web-angular/features/items/items.module.ts')).toBe(-1);
+    expect(files.indexOf('/xplat/web-angular/index.ts')).toBeGreaterThanOrEqual(0);
     expect(
-      files.indexOf('/xplat/nativescript/index.ts')
+      files.indexOf('/xplat/nativescript-angular/index.ts')
     ).toBeGreaterThanOrEqual(0);
     expect(
-      files.indexOf('/xplat/nativescript/features/items/items.module.ts')
+      files.indexOf('/xplat/nativescript-angular/features/items/items.module.ts')
     ).toBe(-1);
   });
 
   it('should create default xplat support for ionic which should always include web as well', async () => {
-    const options: Schema = { ...defaultOptions };
+    const options: XplatHelpers.Schema = { ...defaultOptions };
     options.platforms = 'ionic';
 
     const tree = await runSchematic('xplat', options, appTree);
     const files = tree.files;
-    expect(files.indexOf('/xplat/web/index.ts')).toBeGreaterThanOrEqual(0);
-    expect(files.indexOf('/xplat/ionic/index.ts')).toBeGreaterThanOrEqual(0);
+    expect(files.indexOf('/xplat/web-angular/index.ts')).toBeGreaterThanOrEqual(0);
+    expect(files.indexOf('/xplat/ionic-angular/index.ts')).toBeGreaterThanOrEqual(0);
     expect(
-      files.indexOf('/xplat/nativescript/index.ts')
+      files.indexOf('/xplat/nativescript-angular/index.ts')
     ).toBeGreaterThanOrEqual(-1);
     const packagePath = '/package.json';
     const packageFile = jsonParse(getFileContent(tree, packagePath));
@@ -88,15 +88,15 @@ describe('xplat schematic', () => {
   });
 
   it('should create default xplat support for electron which should always include web as well', async () => {
-    const options: Schema = { ...defaultOptions };
+    const options: XplatHelpers.Schema = { ...defaultOptions };
     options.platforms = 'electron';
 
     const tree = await runSchematic('xplat', options, appTree);
     const files = tree.files;
-    expect(files.indexOf('/xplat/web/index.ts')).toBeGreaterThanOrEqual(0);
-    expect(files.indexOf('/xplat/electron/index.ts')).toBeGreaterThanOrEqual(0);
+    expect(files.indexOf('/xplat/web-angular/index.ts')).toBeGreaterThanOrEqual(0);
+    expect(files.indexOf('/xplat/electron-angular/index.ts')).toBeGreaterThanOrEqual(0);
     expect(
-      files.indexOf('/xplat/nativescript/index.ts')
+      files.indexOf('/xplat/nativescript-angular/index.ts')
     ).toBeGreaterThanOrEqual(-1);
     const packagePath = '/package.json';
     const packageFile = jsonParse(getFileContent(tree, packagePath));
@@ -112,15 +112,15 @@ describe('xplat schematic', () => {
   });
 
   it('should create additional xplat support when generated with different platforms', async () => {
-    const options: Schema = { ...defaultOptions };
+    const options: XplatHelpers.Schema = { ...defaultOptions };
     options.platforms = 'web,ionic';
 
     let tree = await runSchematic('xplat', options, appTree);
     let files = tree.files;
-    expect(files.indexOf('/xplat/web/index.ts')).toBeGreaterThanOrEqual(0);
-    expect(files.indexOf('/xplat/ionic/index.ts')).toBeGreaterThanOrEqual(0);
+    expect(files.indexOf('/xplat/web-angular/index.ts')).toBeGreaterThanOrEqual(0);
+    expect(files.indexOf('/xplat/ionic-angular/index.ts')).toBeGreaterThanOrEqual(0);
     expect(
-      files.indexOf('/xplat/nativescript/index.ts')
+      files.indexOf('/xplat/nativescript-angular/index.ts')
     ).toBeGreaterThanOrEqual(-1);
 
     options.onlyIfNone = true;
@@ -128,28 +128,28 @@ describe('xplat schematic', () => {
     tree = await runSchematic('xplat', options, tree);
     files = tree.files;
     // should be unchanged
-    expect(files.indexOf('/xplat/web/index.ts')).toBeGreaterThanOrEqual(0);
-    expect(files.indexOf('/xplat/ionic/index.ts')).toBeGreaterThanOrEqual(0);
+    expect(files.indexOf('/xplat/web-angular/index.ts')).toBeGreaterThanOrEqual(0);
+    expect(files.indexOf('/xplat/ionic-angular/index.ts')).toBeGreaterThanOrEqual(0);
     expect(
-      files.indexOf('/xplat/nativescript/index.ts')
+      files.indexOf('/xplat/nativescript-angular/index.ts')
     ).toBeGreaterThanOrEqual(0);
   });
 
   it('should NOT create xplat unless platforms are specified', () => {
-    const options: Schema = { ...defaultOptions };
+    const options: XplatHelpers.Schema = { ...defaultOptions };
 
     let tree;
     expect(
       () => (tree = runSchematicSync('xplat', options, appTree))
     ).toThrowError(
-      `You must specify which platforms you wish to generate support for. For example: ng g xplat --prefix=foo --platforms=${supportedPlatforms.join(
+      `You must specify which platforms you wish to generate support for. For example: ng g @nstudio/angular:xplat --prefix=foo --platforms=${supportedPlatforms.join(
         ','
       )}`
     );
   });
 
   it('should NOT create unsupported xplat option and throw', () => {
-    const options: Schema = { ...defaultOptions };
+    const options: XplatHelpers.Schema = { ...defaultOptions };
     options.platforms = 'desktop';
 
     let tree;

@@ -1,43 +1,18 @@
 import {
-  apply,
   chain,
-  Tree,
-  Rule,
-  url,
-  move,
-  template,
-  mergeWith,
-  branchAndMerge,
-  SchematicContext,
   SchematicsException,
-  schematic,
-  noop,
   externalSchematic
 } from '@angular-devkit/schematics';
 import {
-  stringUtils,
   prerun,
-  getNpmScope,
-  getPrefix,
-  addRootDeps,
-  updatePackageScripts,
-  updateAngularProjects,
-  updateNxProjects,
-  applyAppNamingConvention,
-  getGroupByName,
-  getAppName,
-  ITargetPlatforms,
   PlatformTypes,
   supportedPlatforms,
   unsupportedPlatformError,
   helperMissingPlatforms,
-  supportedHelpers,
-  unsupportedHelperError,
-  updateTsConfig,
-  helperTargetError,
   missingArgument
 } from '@nstudio/xplat';
 import { Schema } from './schema';
+import { sanitizeCommaDelimitedArg } from '../../utils';
 
 const platformToPackage: { [platform: string]: string } = {
   nativescript: '@nstudio/nativescript',
@@ -55,7 +30,7 @@ export default function(options: Schema) {
     );
   }
   const platforms = <Array<PlatformTypes>>(
-    (options.platforms ? options.platforms.split(',') : [])
+    sanitizeCommaDelimitedArg(options.platforms)
   );
 
   const helperChains = [];
@@ -101,7 +76,7 @@ export default function(options: Schema) {
   }
 
   return chain([
-    prerun(options),
+    prerun(),
     // add helper chains
     ...helperChains
   ]);

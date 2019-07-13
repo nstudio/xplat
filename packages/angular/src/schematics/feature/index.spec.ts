@@ -1,7 +1,6 @@
 import { Tree } from '@angular-devkit/schematics';
 import { createOrUpdate, FeatureHelpers } from '@nstudio/xplat';
 import {
-  createXplatWithApps,
   isInModuleMetadata,
   getFileContent,
   createXplatWithNativeScriptWeb

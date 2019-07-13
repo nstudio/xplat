@@ -21,7 +21,6 @@ import {
   getNpmScope,
   getPrefix,
   getJsonFromFile,
-  applyAppNamingConvention,
   updateJsonFile,
   formatFiles,
   missingArgument,
@@ -37,7 +36,7 @@ let componentSymbolList: string;
 let htmlElements: string;
 export default function(options: ElementsOptions) {
   if (!options.builderModule) {
-    const example = `ng g elements menu --barrel=@mycompany/ui --components=menu,footer`;
+    const example = `ng g @nstudio/angular:elements menu --barrel=@mycompany/ui --components=menu,footer`;
     if (!options.name) {
       throw new SchematicsException(
         missingArgument(

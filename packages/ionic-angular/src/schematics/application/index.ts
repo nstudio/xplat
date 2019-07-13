@@ -11,24 +11,25 @@ import {
   SchematicContext,
   SchematicsException,
   schematic,
-  noop
+  noop,
+  externalSchematic
 } from '@angular-devkit/schematics';
 import {
   stringUtils,
   prerun,
   getNpmScope,
   getPrefix,
-  addRootDeps,
   updatePackageScripts,
   updateAngularProjects,
   updateNxProjects,
   formatFiles,
-  applyAppNamingConvention,
   getAppName,
   missingArgument,
-  getDefaultTemplateOptions
+  getDefaultTemplateOptions,
+  XplatHelpers
 } from '@nstudio/xplat';
 import { Schema as ApplicationOptions } from './schema';
+import { XplatIonicAngularHelpers } from '../../utils';
 
 export default function(options: ApplicationOptions) {
   if (!options.name) {
@@ -44,12 +45,16 @@ export default function(options: ApplicationOptions) {
   return chain([
     prerun(options),
     // adjust naming convention
-    applyAppNamingConvention(options, 'ionic'),
+    XplatHelpers.applyAppNamingConvention(options, 'ionic'),
+    externalSchematic('@nstudio/ionic', 'xplat', {
+      ...options,
+      skipDependentPlatformFiles: true
+    }),
     // create app files
     (tree: Tree, context: SchematicContext) =>
       addAppFiles(options, options.name)(tree, context),
     // add root package dependencies
-    (tree: Tree) => addRootDeps(tree, { ionic: true }),
+    XplatIonicAngularHelpers.updateRootDeps(options),
     // add start/clean scripts
     (tree: Tree) => {
       const scripts = {};

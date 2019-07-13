@@ -11,7 +11,6 @@ import {
   updateJsonFile,
   createOrUpdate,
   readJsonInTree,
-  addTestingFiles
 } from '@nstudio/xplat';
 
 function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
@@ -266,14 +265,6 @@ function updateLint(host: Tree, context: SchematicContext) {
 export default function(): Rule {
   return chain([
     updateNativeScriptApps,
-    // add testing files if needed
-    (tree: Tree, context: SchematicContext) => {
-      if (!tree.exists('testing/karma.conf.js')) {
-        return addTestingFiles(tree, {}, '../../xplat/')(tree, context);
-      } else {
-        return noop()(tree, context);
-      }
-    },
     updateRootPackage,
     updateLint
   ]);

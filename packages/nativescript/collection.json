@@ -23,7 +23,8 @@
     "xplat": {
       "factory": "./src/schematics/xplat",
       "schema": "./src/schematics/xplat/schema.json",
-      "description": "Add xplat for NativeScript."
+      "description": "Add xplat for NativeScript.",
+      "hidden": true
     }
   }
 }

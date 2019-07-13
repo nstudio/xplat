@@ -20,344 +20,623 @@ import {
   stringUtils,
   PlatformTypes,
   supportedSandboxPlatforms,
-  supportedPlatforms
+  supportedPlatforms,
+  getGroupByName,
+  sanitizeCommaDelimitedArg,
+  updateFile,
+  updateTsConfig,
+  getNxWorkspaceConfig,
+  PlatformModes,
+  isTesting,
+  jsonParse,
+  FrameworkTypes,
+  getDefaultFramework
 } from './general';
-import { updateJsonInTree } from '@nrwl/workspace';
+import { updateJsonInTree, toFileName, serializeJson } from '@nrwl/workspace';
 import { insert, addGlobal } from './ast';
-import { platformAppPrefixError, generatorError, optionsMissingError } from './errors';
+import {
+  platformAppPrefixError,
+  generatorError,
+  optionsMissingError,
+  noPlatformError,
+  unsupportedPlatformError
+} from './errors';
+import { join } from 'path';
+import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
+import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 
-export interface IXplatSchema {
-  /**
-   * npm scope - auto detected from nx.json but can specify your own name
-   */
-  npmScope?: string;
-  /**
-   * The prefix to apply to generated selectors.
-   */
-  prefix?: string;
-  /**
-   * Only if not present yet
-   */
-  onlyIfNone?: boolean;
-  /**
-   * Skip formatting
-   */
-  skipFormat?: boolean;
-}
-
-export function addPlatformFiles(
-  tree: Tree,
-  options: IXplatSchema,
-  platform: string
-) {
-  if (tree.exists(`xplat/${platform}/core/index.ts`)) {
-    return noop();
-  }
-
-  return branchAndMerge(
-    mergeWith(
-      apply(url(`./_files`), [
-        template({
-          ...(options as any),
-          ...getDefaultTemplateOptions()
-        }),
-        move(`xplat/${platform}`)
-      ])
-    )
-  );
-}
-
-export function addLibFiles(
-  tree: Tree,
-  options: IXplatSchema
-) {
-
-  if (
-    tree.exists(`libs/core/base/base-component.ts`) ||
-    tree.exists(`libs/features/index.ts`)
-  ) {
-    return noop();
-  }
-
-  return branchAndMerge(
-    mergeWith(
-      apply(url(`./_lib_files`), [
-        template({
-          ...(options as any),
-          ...getDefaultTemplateOptions()
-        }),
-        move('libs')
-      ])
-    )
-  );
-}
-
-export function updateTestingConfig(tree: Tree, context: SchematicContext) {
-  const angularConfigPath = `angular.json`;
-  const nxConfigPath = `nx.json`;
-
-  const angularJson = getJsonFromFile(tree, angularConfigPath);
-  const nxJson = getJsonFromFile(tree, nxConfigPath);
-  const prefix = getPrefix();
-  // console.log('prefix:', prefix);
-
-  // update libs and xplat config
-  if (angularJson && angularJson.projects) {
-    angularJson.projects['libs'] = {
-      root: 'libs',
-      sourceRoot: 'libs',
-      projectType: 'library',
-      prefix: prefix,
-      architect: {
-        test: {
-          builder: '@angular-devkit/build-angular:karma',
-          options: {
-            main: 'testing/test.libs.ts',
-            tsConfig: 'testing/tsconfig.libs.spec.json',
-            karmaConfig: 'testing/karma.conf.js'
-          }
-        },
-        lint: {
-          builder: '@angular-devkit/build-angular:tslint',
-          options: {
-            tsConfig: [
-              'testing/tsconfig.libs.json',
-              'testing/tsconfig.libs.spec.json'
-            ],
-            exclude: ['**/node_modules/**']
-          }
-        }
-      }
-    };
-    angularJson.projects['xplat'] = {
-      root: 'xplat',
-      sourceRoot: 'xplat',
-      projectType: 'library',
-      prefix: prefix,
-      architect: {
-        test: {
-          builder: '@angular-devkit/build-angular:karma',
-          options: {
-            main: 'testing/test.xplat.ts',
-            tsConfig: 'testing/tsconfig.xplat.spec.json',
-            karmaConfig: 'testing/karma.conf.js'
-          }
-        },
-        lint: {
-          builder: '@angular-devkit/build-angular:tslint',
-          options: {
-            tsConfig: [
-              'testing/tsconfig.xplat.json',
-              'testing/tsconfig.xplat.spec.json'
-            ],
-            exclude: ['**/node_modules/**']
-          }
-        }
-      }
-    };
-  }
-
-  if (nxJson && nxJson.projects) {
-    nxJson.projects['libs'] = {
-      tags: []
-    };
-    nxJson.projects['xplat'] = {
-      tags: []
-    };
-  }
-
-  tree = updateJsonFile(tree, angularConfigPath, angularJson);
-  tree = updateJsonFile(tree, nxConfigPath, nxJson);
-  return tree;
-}
-
-export function updateLint(host: Tree, context: SchematicContext) {
-  const prefix = getPrefix();
-
-  return updateJsonInTree('tslint.json', json => {
-    json.rules = json.rules || {};
-    // remove forin rule as collides with LogService
-    delete json.rules['forin'];
-    // adjust console rules to work with LogService
-    json.rules['no-console'] = [true, 'debug', 'time', 'timeEnd', 'trace'];
-    json.rules['directive-selector'] = [true, 'attribute', prefix, 'camelCase'];
-    json.rules['component-selector'] = [true, 'element', prefix, 'kebab-case'];
-
-    return json;
-  })(host, context);
-}
-
-export namespace FeatureHelpers {
+export namespace XplatHelpers {
   export interface Schema {
-    name: string;
-    /**
-     * Target apps
-     */
-    projects?: string;
     /**
      * Target platforms
      */
     platforms?: string;
     /**
-     * Only generate for specified projects and ignore shared code
+     * Target frameworks
      */
-    onlyProject?: boolean;
+    framework?: string;
     /**
-     * Only generate the module and ignore default component creation
+     * npm scope - auto detected from nx.json but can specify your own name
      */
-    onlyModule?: boolean;
+    npmScope?: string;
     /**
-     * Configure routing
+     * The prefix to apply to generated selectors.
      */
-    routing?: boolean;
+    prefix?: string;
     /**
-     * Create base component for maximum code sharing
+     * Only if not present yet
      */
-    createBase?: boolean;
-    /**
-     * Add link to route for sandbox
-     */
-    adjustSandbox?: boolean;
+    onlyIfNone?: boolean;
     /**
      * Skip formatting
      */
     skipFormat?: boolean;
+    /**
+     * Skip dependent platform files
+     */
+    skipDependentPlatformFiles?: boolean;
+    /**
+     * Skip install
+     */
+    skipInstall?: boolean;
   }
 
-  export function prepare(options: Schema): { featureName: string; projectNames: Array<string>;  platforms: Array<PlatformTypes>} {
-    if (!options.name) {
-      throw new SchematicsException(
-        `You did not specify the name of the feature you'd like to generate. For example: ng g feature my-feature`
-      );
-    }
-    const featureName = options.name.toLowerCase();
-    let projects = options.projects;
-    let projectNames: Array<string>;
+  export function getPlatformsFromOption(
+    platformArgument: string = '',
+    required: boolean = true
+  ) {
     let platforms = [];
-    if (options.adjustSandbox) {
-      // when adjusting sandbox for the feature, turn dependent options on
-      // for convenience also setup some default fallbacks to avoid requiring so many options
-      // sandbox flags are meant to be quick and convenient
-      options.onlyProject = true;
-      options.routing = true;
-      if (!projects) {
-        if (!options.platforms) {
-          // default to {N} sandbox
-          projects = 'nativescript-sandbox';
-        } else {
-          platforms = options.platforms.split(',');
-          const projectSandboxNames = [];
-          // default to project with sandbox name
-          for (const p of platforms) {
-            if (supportedSandboxPlatforms.includes(p)) {
-              projectSandboxNames.push(`${p}-sandbox`);
-            } else {
-              throw new SchematicsException(
-                `The --adjustSandbox flag supports the following at the moment: ${supportedSandboxPlatforms}`
-              );
+    if (platformArgument === 'all') {
+      // conveniently add support for all supported platforms
+      for (const platform of supportedPlatforms) {
+        platforms.push(platform);
+      }
+    } else {
+      const platformArgList = <Array<PlatformTypes>>(
+        (<unknown>sanitizeCommaDelimitedArg(platformArgument))
+      );
+      if (platformArgList.length === 0) {
+        if (required) {
+          throw new Error(noPlatformError());
+        }
+      } else {
+        for (const platform of platformArgList) {
+          if (supportedPlatforms.includes(platform)) {
+            platforms.push(platform);
+          } else {
+            throw new Error(unsupportedPlatformError(platform));
+          }
+        }
+      }
+    }
+    return platforms;
+  }
+
+  /**
+   * Returns a name with the platform.
+   *
+   * @example (app, web) => web-app or app-web
+   * @param name
+   * @param platform
+   */
+  export function getPlatformName(name: string, platform: PlatformTypes) {
+    const nameSanitized = toFileName(name);
+    return getGroupByName()
+      ? `${nameSanitized}-${platform}`
+      : `${platform}-${nameSanitized}`;
+  }
+
+  export function applyAppNamingConvention(
+    options: any,
+    platform: PlatformTypes
+  ) {
+    return (tree: Tree, context: SchematicContext) => {
+      options.name = getPlatformName(options.name, platform);
+      // console.log('applyAppNamingConvention:', options);
+      // if command line argument, make sure it's persisted to xplat settings
+      if (options.groupByName) {
+        return updatePackageForXplat(options, null, {
+          groupByName: true
+        })(tree, context);
+      } else {
+        // adjusted name, nothing else to do
+        return noop()(tree, context);
+      }
+    };
+  }
+
+  export function addPlatformFiles(options: Schema, platform: string) {
+    return (tree: Tree, context: SchematicContext) => {
+      if (tree.exists(`xplat/${platform}/core/index.ts`)) {
+        // already added
+        return noop();
+      }
+
+      return branchAndMerge(
+        mergeWith(
+          apply(url(`./_files`), [
+            template({
+              ...(options as any),
+              ...getDefaultTemplateOptions()
+            }),
+            move(`xplat/${platform}`)
+          ])
+        )
+      );
+    };
+  }
+
+  export function updatePackageForXplat(
+    options: Schema,
+    updates: {
+      dependencies?: { [key: string]: string };
+      devDependencies?: { [key: string]: string };
+    },
+    // used to update various xplat workspace settings
+    // can be used in combination with other generators to adjust settings
+    updatedXplatSettings?: any
+  ) {
+    return (tree: Tree, context: SchematicContext) => {
+      const packagePath = 'package.json';
+      let packageJson = getJsonFromFile(tree, packagePath);
+
+      if (packageJson) {
+        // could introduce xplat.json but trying to avoid too much extra overhead so just store in package.json for now
+        // can migrate this later if decide enough settings for xplat.json
+        // prefix is important because shared code is setup with a prefix to begin with which should be known and used for all subsequent apps which are generated
+
+        if (!updates && updatedXplatSettings) {
+          // just updating xplat internal settings
+          packageJson.xplat = {
+            ...packageJson.xplat,
+            ...updatedXplatSettings
+          };
+          // just update xplat workspace settings
+          return updateJsonFile(tree, packagePath, packageJson);
+        } else if (updates) {
+          // update root dependencies for the generated xplat support
+          packageJson = {
+            ...packageJson,
+            dependencies: {
+              ...(packageJson.dependencies || {}),
+              ...(updates.dependencies || {})
+            },
+            devDependencies: {
+              ...(packageJson.devDependencies || {}),
+              ...(updates.devDependencies || {})
+            },
+            xplat: {
+              prefix: getPrefix()
+            },
+            ...(updatedXplatSettings || {})
+          };
+          // console.log('updatePackageForXplat:', serializeJson(packageJson));
+          return updateJsonFile(tree, packagePath, packageJson);
+        }
+      }
+      return tree;
+    };
+  }
+
+  export function updateGitIgnore() {
+    return (tree: Tree) => {
+      const gitIgnorePath = '.gitignore';
+      let gitIgnore = tree.get(gitIgnorePath).content.toString();
+      if (gitIgnore) {
+        if (gitIgnore.indexOf('libs/**/*.js') === -1) {
+          gitIgnore += `
+# libs
+libs/**/*.js
+libs/**/*.map
+libs/**/*.d.ts
+libs/**/*.metadata.json
+libs/**/*.ngfactory.ts
+libs/**/*.ngsummary.json
+      `;
+        }
+        if (gitIgnore.indexOf('xplat/**/*.js') === -1) {
+          gitIgnore += `
+# xplat
+xplat/**/*.js
+xplat/**/*.map
+xplat/**/*.d.ts
+xplat/**/*.metadata.json
+xplat/**/*.ngfactory.ts
+xplat/**/*.ngsummary.json
+      `;
+        }
+      }
+
+      return updateFile(tree, gitIgnorePath, gitIgnore);
+    };
+  }
+
+  export function updateTsConfigPaths(
+    options: Schema,
+    settings?: {
+      framework?: FrameworkTypes,
+      dependentPlatforms?: Array<PlatformTypes>
+    }
+  ) {
+    return (tree: Tree) => {
+      const nxJson = getNxWorkspaceConfig(tree);
+      const npmScope = nxJson.npmScope;
+      const platformArg = options.platforms;
+      // sort for consistency
+      const platforms = (<Array<PlatformTypes>>(
+        (<unknown>sanitizeCommaDelimitedArg(platformArg))
+      )).sort(function(a, b) {
+        if (a < b) return -1;
+        if (a > b) return 1;
+        return 0;
+      });
+      const defaultFramework = getDefaultFramework();
+      let frameworkSuffix: string = defaultFramework ? `-${defaultFramework}` : '';
+
+      if (settings) {
+        if (settings.framework) {
+          // always override default if explicitly set
+          frameworkSuffix = `-${settings.framework}`;
+        }
+        if (settings.dependentPlatforms) {
+          for (const dependentPlatform of settings.dependentPlatforms) {
+            if (!platforms.includes(dependentPlatform)) {
+              // ensure dependent platform is added since these platforms depend on it
+              platforms.push(dependentPlatform);
             }
           }
-          projects = projectSandboxNames.join(',');
         }
       }
-    }
-    if (options.routing && !options.onlyProject) {
-      throw new SchematicsException(
-        `When generating a feature with the --routing option, please also specify --onlyProject. Support for shared code routing is under development.`
-      );
-    }
-  
-    if (projects) {
-      // building feature in shared code and in projects
-      projectNames = projects.split(',');
-      for (const name of projectNames) {
-        const platPrefix = <PlatformTypes>name.split('-')[0];
-        if (
-          supportedPlatforms.includes(platPrefix) &&
-          !platforms.includes(platPrefix)
-        ) {
-          // if project name is prefixed with supported platform and not already added
-          platforms.push(platPrefix);
+
+      const updates: any = {};
+      // ensure default Nx libs path is in place
+      updates[`@${npmScope}/*`] = [`libs/*`];
+      for (const t of platforms) {
+        if (supportedPlatforms.includes(t)) {
+          updates[`@${npmScope}/${t}${frameworkSuffix}`] = [`xplat/${t}${frameworkSuffix}/index.ts`];
+          updates[`@${npmScope}/${t}${frameworkSuffix}/*`] = [`xplat/${t}${frameworkSuffix}/*`];
+        } else {
+          throw new Error(
+            `${t} is not a supported platform. Currently supported: ${supportedPlatforms}`
+          );
         }
       }
-    } else if (options.platforms) {
-      // building feature in shared code only
-      platforms = options.platforms.split(',');
-    }
-    if (platforms.length === 0) {
-      let error = projects ? platformAppPrefixError() : generatorError('feature');
-      throw new SchematicsException(optionsMissingError(error));
-    }
-    return { featureName, projectNames, platforms };
+
+      return updateTsConfig(tree, (tsConfig: any) => {
+        if (tsConfig) {
+          if (!tsConfig.compilerOptions) {
+            tsConfig.compilerOptions = {};
+          }
+          tsConfig.compilerOptions.paths = {
+            ...(tsConfig.compilerOptions.paths || {}),
+            ...updates
+          };
+        }
+      });
+    };
   }
 
-  export function addFiles(
+  export function updateIDESettings(
     options: Schema,
-    target: string = '',
-    projectName: string = '',
-    extra: string = ''
+    devMode?: PlatformModes,
+    allApps?: string[],
+    focusOnApps?: string[]
   ) {
-    let moveTo: string;
-    if (target) {
-      moveTo = getMoveTo(options, target, projectName);
-    } else {
-      target = 'lib';
-      moveTo = `libs/features/${options.name.toLowerCase()}`;
-    }
-    return branchAndMerge(
-      mergeWith(
-        apply(url(`./${extra}_files`), [
-          template(getTemplateOptions(options)),
-          move(moveTo)
-        ])
-      )
-    );
-  };
-  
-  export function adjustBarrelIndex(options: Schema, indexFilePath: string): Rule {
-    return (host: Tree) => {
-      const indexSource = host.read(indexFilePath)!.toString('utf-8');
-      const indexSourceFile = createSourceFile(
-        indexFilePath,
-        indexSource,
-        ScriptTarget.Latest,
-        true
-      );
-  
-      insert(host, indexFilePath, [
-        ...addGlobal(
-          indexSourceFile,
-          indexFilePath,
-          `export * from './${options.name.toLowerCase()}';`,
-          true
-        )
-      ]);
-      return host;
+    return (tree: Tree, context: SchematicContext) => {
+      if (isTesting()) {
+        // ignore node file modifications when just testing
+        return tree;
+      }
+
+      try {
+        const cwd = process.cwd();
+        // console.log('workspace dir:', process.cwd());
+        // const dirName = cwd.split('/').slice(-1);
+        const groupByName = getGroupByName();
+        const defaultFramework = getDefaultFramework();
+        let frameworkSuffix: string = defaultFramework ? `-${defaultFramework}` : '';
+
+        let isFullstack = false;
+        let isExcluding = false;
+        let appWildcards = [];
+        const userUpdates: any = {};
+        if (!devMode || devMode === 'fullstack') {
+          // show all
+          isFullstack = true;
+          for (const p of supportedPlatforms) {
+            const appFilter = groupByName ? `*-${p}` : `${p}-*`;
+            userUpdates[`**/apps/${appFilter}`] = false;
+            userUpdates[`**/xplat/${p}`] = false;
+            if (frameworkSuffix) {
+              userUpdates[`**/xplat/${p}${frameworkSuffix}`] = false;
+            }
+          }
+        } else if (options.platforms) {
+          const platforms = sanitizeCommaDelimitedArg(options.platforms);
+          // switch on/off platforms
+          for (const p of supportedPlatforms) {
+            const excluded = platforms.includes(p) ? false : true;
+            const appFilter = groupByName ? `*-${p}` : `${p}-*`;
+            if (focusOnApps.length) {
+              // focusing on apps
+              // fill up wildcards to use below (we will clear all app wildcards when focusing on apps)
+              appWildcards.push(`**/apps/${appFilter}`);
+            } else {
+              // use wildcards for apps only if no project names were specified
+              userUpdates[`**/apps/${appFilter}`] = excluded;
+            }
+            userUpdates[`**/xplat/${p}`] = excluded;
+            if (frameworkSuffix) {
+              userUpdates[`**/xplat/${p}${frameworkSuffix}`] = excluded;
+            }
+
+            if (excluded) {
+              // if excluding any platform at all, set the flag
+              // this is used for WebStorm support below
+              isExcluding = true;
+            }
+          }
+        }
+
+        const isMac = process.platform == 'darwin';
+
+        // VS Code support
+        // const homedir = os.homedir();
+        // console.log('os.homedir():',homedir);
+        let userSettingsVSCodePath = isMac
+          ? process.env.HOME +
+            `/Library/Application Support/Code/User/settings.json`
+          : '/var/local/Code/User/settings.json';
+        const windowsHome = process.env.APPDATA;
+        if (windowsHome) {
+          userSettingsVSCodePath = join(
+            windowsHome,
+            'Code',
+            'User',
+            'settings.json'
+          );
+        }
+        // console.log('userSettingsVSCodePath:',userSettingsVSCodePath);
+        const isVsCode = existsSync(userSettingsVSCodePath);
+        let vscodeCreateSettingsNote = `It's possible you don't have a user settings.json yet. If so, open VS Code User settings and save any kind of setting to have it created.`;
+        // console.log('isVsCode:',isVsCode);
+        if (isVsCode) {
+          const userSettings = readFileSync(userSettingsVSCodePath, 'UTF-8');
+          if (userSettings) {
+            const userSettingsJson = jsonParse(userSettings);
+            let exclude = userSettingsJson['files.exclude'];
+            if (!exclude) {
+              exclude = {};
+            }
+            let searchExclude = userSettingsJson['search.exclude'];
+            if (!searchExclude) {
+              searchExclude = {};
+            }
+
+            userSettingsJson['files.exclude'] = Object.assign(
+              exclude,
+              userUpdates
+            );
+            userSettingsJson['search.exclude'] = Object.assign(
+              searchExclude,
+              userUpdates
+            );
+
+            if (allApps.length) {
+              // always reset specific app filters
+              for (const app of allApps) {
+                delete userSettingsJson['files.exclude'][app];
+                delete userSettingsJson['search.exclude'][app];
+              }
+            }
+            if (!isFullstack && focusOnApps.length && allApps.length) {
+              // when focusing on projects, clear all specific app wildcards first if they exist
+              for (const wildcard of appWildcards) {
+                delete userSettingsJson['files.exclude'][wildcard];
+                delete userSettingsJson['search.exclude'][wildcard];
+              }
+              for (const focusApp of focusOnApps) {
+                userSettingsJson['files.exclude'][focusApp] = false;
+                userSettingsJson['search.exclude'][focusApp] = false;
+              }
+              // ensure all other apps are excluded (except for the one that's being focused on)
+              for (const app of allApps) {
+                if (!focusOnApps.includes(app)) {
+                  userSettingsJson['files.exclude'][app] = true;
+                  userSettingsJson['search.exclude'][app] = true;
+                }
+              }
+            }
+
+            writeFileSync(
+              userSettingsVSCodePath,
+              serializeJson(userSettingsJson)
+            );
+          } else {
+            console.warn(
+              `Warning: xplat could not read your VS Code settings.json file therefore development mode has not been set. ${vscodeCreateSettingsNote}`
+            );
+          }
+        } else {
+          console.log(
+            `Note to VS Code users: no development mode set. xplat could not find any VS Code settings in the standard location: ${userSettingsVSCodePath} ${vscodeCreateSettingsNote}`
+          );
+        }
+
+        // WebStorm support
+        let isWebStorm = false;
+        // list preferences to get correct webstorm prefs file
+        // let preferencesFolder = isMac
+        //   ? process.env.HOME +
+        //     `/Library/Preferences`
+        //   : __dirname;
+        // if (windowsHome) {
+        //   preferencesFolder = windowsHome;
+        // }
+        // const prefs = fs.readdirSync(preferencesFolder).filter(f => fs.statSync(join(preferencesFolder, f)).isDirectory());
+        // find first one
+        // TODO: user may have multiple version installed (or at least older versions) so may need to handle if multiples
+        // let webStormPrefFolderName = prefs.find(f => f.indexOf('WebStorm20') > -1);
+        // if (webStormPrefFolderName) {
+        //   isWebStorm = true;
+        //   webStormPrefFolderName = webStormPrefFolderName.split('/').slice(-1)[0];
+        //   // console.log('webStormPrefFolderName:',webStormPrefFolderName);
+
+        //   // ensure folders are excluded from project view
+        //   let projectViewWebStormPath =
+        //     isMac
+        //       ? process.env.HOME +
+        //         `/Library/Preferences/${webStormPrefFolderName}/options/projectView.xml`
+        //       : join(__dirname, webStormPrefFolderName, 'config');
+        //   if (windowsHome) {
+        //     projectViewWebStormPath = join(windowsHome, webStormPrefFolderName, 'config');
+        //   }
+
+        //   let projectView = fs.readFileSync(projectViewWebStormPath, "UTF-8");
+        //   if (projectView) {
+        //     // console.log('projectView:', projectView);
+        //     xml2js.parseString(projectView, (err, settings) => {
+        //       // console.log(util.inspect(settings, false, null));
+        //       if (settings && settings.application && settings.application.component && settings.application.component.length) {
+        //         const builder = new xml2js.Builder({ headless: true });
+
+        //         const sharedSettingsIndex = (<Array<any>>settings.application.component).findIndex(c => c.$.name === 'ProjectViewSharedSettings');
+        //         if (sharedSettingsIndex > -1) {
+        //           const sharedSettings = settings.application.component[sharedSettingsIndex];
+        //           if (sharedSettings.option && sharedSettings.option.length) {
+        //             const showExcludedFilesIndex = sharedSettings.option.findIndex(o => o.$.name === 'showExcludedFiles');
+        //             if (showExcludedFilesIndex > -1) {
+        //               settings.application.component[sharedSettingsIndex].option[showExcludedFilesIndex].$.value = `${!isExcluding}`;
+        //             } else {
+        //               settings.application.component[sharedSettingsIndex].option.push(webStormExcludedViewNode(isExcluding));
+        //             }
+        //           } else {
+        //             settings.application.component[sharedSettingsIndex].option = [
+        //               webStormExcludedViewNode(isExcluding)
+        //             ];
+        //           }
+        //           settings = builder.buildObject(settings);
+        //         } else {
+        //           (<Array<any>>settings.application.component).push({
+        //             $: 'ProjectViewSharedSettings',
+        //             option: [
+        //               webStormExcludedViewNode(isExcluding)
+        //             ]
+        //           });
+        //           settings = builder.buildObject(settings);
+        //         }
+        //       } else {
+        //         // create projectView.xml
+        //         settings = createWebStormProjectView(isExcluding);
+        //       }
+        //       // modify projectView
+        //       // console.log('settings:', settings);
+        //       fs.writeFileSync(
+        //         projectViewWebStormPath,
+        //         settings
+        //       );
+        //     });
+        //   } else {
+        //     // create projectView.xml
+        //     fs.writeFileSync(
+        //       projectViewWebStormPath,
+        //       createWebStormProjectView(isExcluding)
+        //     );
+        //   }
+        // }
+
+        if (!devMode) {
+          // only when not specifying a dev mode
+          const workspaceUpdates: any = {
+            '**/node_modules': true,
+            '**/hooks': true,
+            '**/apps/nativescript-*/app/package.json': false,
+            '**/apps/nativescript-*/hooks': true,
+            '**/apps/nativescript-*/platforms': true,
+            '**/apps/nativescript-*/report': true,
+            '**/apps/nativescript-*/app/**/*.js': {
+              when: '$(basename).ts'
+            },
+            '**/apps/nativescript-*/app/**/*.d.ts': {
+              when: '$(basename).ts'
+            },
+            '**/apps/nativescript-*/app/**/*.css': {
+              when: '$(basename).scss'
+            },
+            // also add groupByName support
+            '**/apps/*-nativescript/app/package.json': false,
+            '**/apps/*-nativescript/hooks': true,
+            '**/apps/*-nativescript/platforms': true,
+            '**/apps/*-nativescript/report': true,
+            '**/apps/*-nativescript/app/**/*.js': {
+              when: '$(basename).ts'
+            },
+            '**/apps/*-nativescript/app/**/*.d.ts': {
+              when: '$(basename).ts'
+            },
+            '**/apps/*-nativescript/app/**/*.css': {
+              when: '$(basename).scss'
+            },
+            // libs/xplat
+            '**/libs/**/*.js': {
+              when: '$(basename).ts'
+            },
+            '**/libs/**/*.d.ts': {
+              when: '$(basename).ts'
+            },
+            '**/xplat/**/*.js': {
+              when: '$(basename).ts'
+            },
+            '**/xplat/**/*.d.ts': {
+              when: '$(basename).ts'
+            }
+          };
+
+          if (isVsCode) {
+            const workspaceSettingsPath = join(cwd, '.vscode', 'settings.json');
+            // console.log('workspaceSettingsPath:',workspaceSettingsPath);
+            let workspaceSettingsJson: any = {};
+            if (existsSync(workspaceSettingsPath)) {
+              const workspaceSettings = readFileSync(
+                workspaceSettingsPath,
+                'UTF-8'
+              );
+              workspaceSettingsJson = jsonParse(workspaceSettings);
+              const exclude = workspaceSettingsJson['files.exclude'];
+              workspaceSettingsJson['files.exclude'] = Object.assign(
+                exclude,
+                workspaceUpdates
+              );
+            } else {
+              // console.log('creating workspace settings...');
+              mkdirSync('.vscode');
+              workspaceSettingsJson['files.exclude'] = workspaceUpdates;
+            }
+            writeFileSync(
+              workspaceSettingsPath,
+              serializeJson(workspaceSettingsJson)
+            );
+          }
+
+          if (isWebStorm) {
+          }
+        }
+      } catch (err) {
+        // console.warn('IDE Settings could not be updated at this time:', err);
+      }
+      return tree;
     };
   }
-  
-  export function getTemplateOptions(options: Schema) {
-    const nameParts = options.name.split('-');
-    let endingDashName = nameParts[0];
-    if (nameParts.length > 1) {
-      endingDashName = stringUtils.capitalize(nameParts[nameParts.length - 1]);
+
+  export function addPackageInstallTask(options: Schema) {
+    return (tree: Tree, context: SchematicContext) => {
+      // let packageTask;
+      if (!options.skipInstall) {
+        // packageTask = context.addTask(
+        //   new NodePackageInstallTask() //options.directory)
+        // );
+        context.addTask(new NodePackageInstallTask());
+      }
     }
-    return {
-      ...(options as any),
-      ...getDefaultTemplateOptions(),
-      name: options.name.toLowerCase(),
-      endingDashName
-    };
-  }
-  
-  export function getMoveTo(options: Schema, platform: string, projectName?: string) {
-    const featureName = options.name.toLowerCase();
-    let moveTo = `xplat/${platform}/features/${featureName}`;
-    if (projectName) {
-      let appDir = platform === 'web' ? '/app' : '';
-      moveTo = `apps/${projectName}/src${appDir}/features/${featureName}`;
-      // console.log('moveTo:', moveTo);
-    }
-    return moveTo;
   }
 }

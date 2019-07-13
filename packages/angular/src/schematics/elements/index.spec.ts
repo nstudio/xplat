@@ -1,7 +1,7 @@
 import { Tree } from '@angular-devkit/schematics';
 import { Schema as ElementsOptions } from './schema';
 import { ComponentHelpers } from '../../utils/xplat';
-import { createEmptyWorkspace, getFileContent, createXplatWithApps } from '@nstudio/xplat/testing';
+import { getFileContent, createXplatWithApps } from '@nstudio/xplat/testing';
 import { runSchematic } from '../../utils/testing';
 
 describe('elements schematic', () => {

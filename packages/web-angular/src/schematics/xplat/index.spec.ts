@@ -3,7 +3,7 @@ import {
   supportedPlatforms,
   setTest,
   jsonParse,
-  IXplatSchema
+  XplatHelpers
 } from '@nstudio/xplat';
 import { createEmptyWorkspace, getFileContent } from '@nstudio/xplat/testing';
 import { runSchematic } from '../../utils/testing';
@@ -11,7 +11,7 @@ setTest();
 
 describe('xplat schematic', () => {
   let appTree: Tree;
-  const defaultOptions: IXplatSchema = {
+  const defaultOptions: XplatHelpers.Schema = {
     npmScope: 'testing',
     prefix: 'ft' // foo test
   };
@@ -22,14 +22,11 @@ describe('xplat schematic', () => {
   });
 
   it('should create default xplat support for web only', async () => {
-    const options: IXplatSchema = { ...defaultOptions };
+    const options: XplatHelpers.Schema = { ...defaultOptions };
 
     const tree = await runSchematic('xplat', options, appTree);
-    const files = tree.files;
-    expect(files.indexOf('/xplat/web/index.ts')).toBeGreaterThanOrEqual(0);
-    expect(
-      files.indexOf('/xplat/nativescript/index.ts')
-    ).toBeGreaterThanOrEqual(-1);
+    expect(tree.exists('/xplat/web/index.ts')).toBeTruthy();
+    expect(tree.exists('/xplat/nativescript/index.ts')).toBeFalsy();
     const packagePath = '/package.json';
     const packageFile = jsonParse(getFileContent(tree, packagePath));
     const hasScss = packageFile.dependencies[`@testing/scss`];
