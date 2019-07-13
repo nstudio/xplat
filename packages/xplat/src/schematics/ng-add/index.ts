@@ -1,7 +1,9 @@
 import {
   chain,
   SchematicsException,
-  externalSchematic
+  externalSchematic,
+  Tree,
+  SchematicContext
 } from '@angular-devkit/schematics';
 import { prerun, errorMissingPrefix } from '@nstudio/xplat';
 import { Schema as ApplicationOptions } from './schema';
@@ -13,6 +15,7 @@ export default function(options: ApplicationOptions) {
 
   return chain([
     prerun(options, true),
-    externalSchematic('@nstudio/xplat', 'xplat', options)
+    (tree: Tree, context: SchematicContext) =>
+      externalSchematic('@nstudio/xplat', 'xplat', options)
   ]);
 }

@@ -2,7 +2,8 @@ import {
   chain,
   Tree,
   SchematicContext,
-  externalSchematic
+  externalSchematic,
+  SchematicsException
 } from '@angular-devkit/schematics';
 // import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 import {
@@ -16,7 +17,8 @@ import {
   PlatformTypes,
   FrameworkTypes,
   supportedFrameworks,
-  XplatHelpers
+  XplatHelpers,
+  unsupportedFrameworkError
 } from '../../utils';
 
 export default function(options: XplatHelpers.Schema) {
@@ -32,33 +34,30 @@ export default function(options: XplatHelpers.Schema) {
     ))
   );
 
-  const addChainForPlatform = function(
-    platform: PlatformTypes,
-    framework?: FrameworkTypes
-  ) {
-    externalChains.push(
-      externalSchematic(
-        `@nstudio/${platform}${framework ? `-${framework}` : ''}`,
-        'xplat',
-        options,
-        {
-          interactive: false
-        }
-      )
-    );
-  };
-
   if (platformArg === 'all') {
     // conveniently add support for all supported platforms
     if (frameworks.length) {
+      // when using a framework, each integration has it's own xplat handler to invoke the differnet platforms so always enter through the framework
       for (const framework of frameworks) {
-        for (const platform of supportedPlatforms) {
-          addChainForPlatform(platform, framework);
+        if (supportedFrameworks.includes(framework)) {
+          // console.log('addchainforplatform:', `@nstudio/${framework}`);
+          options.platforms = supportedPlatforms.join(',');
+          externalChains.push(
+            externalSchematic(`@nstudio/${framework}`, 'xplat', options, {
+              interactive: false
+            })
+          );
+        } else {
+          throw new SchematicsException(unsupportedFrameworkError(framework));
         }
       }
     } else {
       for (const platform of supportedPlatforms) {
-        addChainForPlatform(platform);
+        externalChains.push(
+          externalSchematic(`@nstudio/${platform}`, 'xplat', options, {
+            interactive: false
+          })
+        );
       }
     }
   } else {
@@ -66,23 +65,29 @@ export default function(options: XplatHelpers.Schema) {
       (<unknown>sanitizeCommaDelimitedArg(platformArg))
     );
     if (platforms.length === 0) {
-      throw new Error(noPlatformError());
+      throw new SchematicsException(noPlatformError());
     } else if (frameworks.length) {
       for (const framework of frameworks) {
-        for (const platform of platforms) {
-          if (supportedPlatforms.includes(platform)) {
-            addChainForPlatform(platform, framework);
-          } else {
-            throw new Error(unsupportedPlatformError(platform));
-          }
+        if (supportedFrameworks.includes(framework)) {
+          externalChains.push(
+            externalSchematic(`@nstudio/${framework}`, 'xplat', options, {
+              interactive: false
+            })
+          );
+        } else {
+          throw new SchematicsException(unsupportedFrameworkError(framework));
         }
       }
     } else {
       for (const platform of platforms) {
         if (supportedPlatforms.includes(platform)) {
-          addChainForPlatform(platform);
+          externalChains.push(
+            externalSchematic(`@nstudio/${platform}`, 'xplat', options, {
+              interactive: false
+            })
+          );
         } else {
-          throw new Error(unsupportedPlatformError(platform));
+          throw new SchematicsException(unsupportedPlatformError(platform));
         }
       }
     }

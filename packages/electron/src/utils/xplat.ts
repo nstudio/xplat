@@ -17,6 +17,7 @@ export namespace XplatElectrontHelpers {
   export function updateRootDeps(options: XplatHelpers.Schema) {
     return (tree: Tree, context: SchematicContext) => {
       const dependencies = {};
+      dependencies[`@${getNpmScope()}/scss`] = 'file:libs/scss';
       dependencies[`@${getNpmScope()}/web`] = 'file:xplat/web';
       return XplatHelpers.updatePackageForXplat(options, {
         dependencies,

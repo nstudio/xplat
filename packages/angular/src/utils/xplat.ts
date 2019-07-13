@@ -292,6 +292,13 @@ export namespace XplatAngularHelpers {
       }
 
       dependencies[`@${getNpmScope()}/scss`] = 'file:libs/scss';
+
+      let updatedXplatSettings;
+      if (options.setDefault && options.framework) {
+        updatedXplatSettings = {
+          framework: options.framework
+        };
+      }
       return XplatHelpers.updatePackageForXplat(options, {
         dependencies: {
           ...dependencies,
@@ -301,7 +308,7 @@ export namespace XplatAngularHelpers {
           'reflect-metadata': reflectMetadataVersion
         },
         devDependencies
-      })(tree, context);
+      }, updatedXplatSettings)(tree, context);
     };
   }
 

@@ -10,12 +10,13 @@ import {
   missingArgument
 } from '@nstudio/xplat';
 import { Schema } from './schema';
-import { SchematicsException, chain, noop, externalSchematic, Rule } from '@angular-devkit/schematics';
+import { SchematicsException, chain, noop, externalSchematic, Rule, Tree, SchematicContext } from '@angular-devkit/schematics';
 
 export default function(options: Schema) {
   return chain([
     prerun(<any>options),
-    externalSchematic('@nrwl/angular', 'ng-add', options),
+    (tree: Tree, context: SchematicContext) =>
+      externalSchematic('@nrwl/angular', 'ng-add', options),
     setDefaults(options)
   ]);
 }

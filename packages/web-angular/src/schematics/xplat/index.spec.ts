@@ -29,8 +29,8 @@ describe('xplat schematic', () => {
     expect(tree.exists('/xplat/nativescript-angular/index.ts')).toBeFalsy();
     const packagePath = '/package.json';
     const packageFile = jsonParse(getFileContent(tree, packagePath));
-    const hasScss = packageFile.dependencies[`@testing/scss`];
-    expect(hasScss).not.toBeUndefined();
+    // const hasScss = packageFile.dependencies[`@testing/scss`];
+    // expect(hasScss).not.toBeUndefined();
     // should not include these root packages
     const hasNativeScript = packageFile.dependencies[`nativescript-angular`];
     expect(hasNativeScript).toBeUndefined();

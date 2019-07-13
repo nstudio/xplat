@@ -123,7 +123,6 @@ describe('xplat schematic', () => {
       files.indexOf('/xplat/nativescript-angular/index.ts')
     ).toBeGreaterThanOrEqual(-1);
 
-    options.onlyIfNone = true;
     options.platforms = 'nativescript';
     tree = await runSchematic('xplat', options, tree);
     files = tree.files;
@@ -156,7 +155,7 @@ describe('xplat schematic', () => {
     expect(
       () => (tree = runSchematicSync('xplat', options, appTree))
     ).toThrowError(
-      `desktop is not a supported platform. Currently supported: ${supportedPlatforms}`
+      `desktop is currently not a supported platform. Supported at the moment: ${supportedPlatforms}. Please request support for this platform if you'd like and/or submit a PR which we would greatly appreciate.`
     );
   });
 });

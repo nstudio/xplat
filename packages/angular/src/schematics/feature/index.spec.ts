@@ -25,7 +25,7 @@ describe('feature schematic', () => {
     // console.log('appTree:', appTree);
     let tree = await runSchematic('feature', options, appTree);
     const files = tree.files;
-    console.log(files.slice(85,files.length));
+    // console.log(files.slice(85,files.length));
     expect(
       files.indexOf('/apps/nativescript-viewer/package.json')
     ).toBeGreaterThanOrEqual(0);

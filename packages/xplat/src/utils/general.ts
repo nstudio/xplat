@@ -1,21 +1,8 @@
-// import * as os from 'os';
-import * as fs from 'fs';
-import * as ts from 'typescript';
-import { join } from 'path';
-const util = require('util');
 const xml2js = require('xml2js');
 import * as stripJsonComments from 'strip-json-comments';
 import {
-  apply,
-  url,
-  move,
-  template,
-  mergeWith,
-  branchAndMerge,
-  noop,
   SchematicsException,
   Tree,
-  Rule,
   SchematicContext
 } from '@angular-devkit/schematics';
 import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';

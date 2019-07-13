@@ -64,9 +64,10 @@ export namespace XplatHelpers {
      */
     prefix?: string;
     /**
-     * Only if not present yet
+     * Set options as default
+     * Used to set specified framework as primary
      */
-    onlyIfNone?: boolean;
+    setDefault?: boolean;
     /**
      * Skip formatting
      */
@@ -206,9 +207,9 @@ export namespace XplatHelpers {
               ...(updates.devDependencies || {})
             },
             xplat: {
-              prefix: getPrefix()
+              prefix: getPrefix(),
+              ...(updatedXplatSettings || {})
             },
-            ...(updatedXplatSettings || {})
           };
           // console.log('updatePackageForXplat:', serializeJson(packageJson));
           return updateJsonFile(tree, packagePath, packageJson);

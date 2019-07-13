@@ -39,8 +39,8 @@ describe('xplat schematic', () => {
     ).toBeGreaterThanOrEqual(-1);
     const packagePath = '/package.json';
     const packageFile = jsonParse(getFileContent(tree, packagePath));
-    const hasScss = packageFile.dependencies[`@testing/scss`];
-    expect(hasScss).not.toBeUndefined();
+    // const hasScss = packageFile.dependencies[`@testing/scss`];
+    // expect(hasScss).not.toBeUndefined();
     const hasWebScss = packageFile.dependencies[`@testing/web`];
     expect(hasWebScss).not.toBeUndefined();
     // should not include these root packages

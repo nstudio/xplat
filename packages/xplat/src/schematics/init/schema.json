@@ -22,9 +22,9 @@
       "description": "The npm scope to use.",
       "alias": "wn"
     },
-    "onlyIfNone": {
+    "setDefault": {
       "type": "boolean",
-      "description": "Only create if not present yet.",
+      "description": "Save options as defaults. Used most often to set the specified framework as your primary.",
       "default": false
     },
     "skipFormat": {

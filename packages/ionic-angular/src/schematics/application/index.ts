@@ -46,10 +46,11 @@ export default function(options: ApplicationOptions) {
     prerun(options),
     // adjust naming convention
     XplatHelpers.applyAppNamingConvention(options, 'ionic'),
-    externalSchematic('@nstudio/ionic', 'xplat', {
-      ...options,
-      skipDependentPlatformFiles: true
-    }),
+    (tree: Tree, context: SchematicContext) =>
+      externalSchematic('@nstudio/ionic', 'xplat', {
+        ...options,
+        skipDependentPlatformFiles: true
+      }),
     // create app files
     (tree: Tree, context: SchematicContext) =>
       addAppFiles(options, options.name)(tree, context),
@@ -121,10 +122,7 @@ export default function(options: ApplicationOptions) {
   ]);
 }
 
-function addAppFiles(
-  options: ApplicationOptions,
-  appPath: string
-): Rule {
+function addAppFiles(options: ApplicationOptions, appPath: string): Rule {
   const appname = getAppName(options, 'ionic');
   return branchAndMerge(
     mergeWith(

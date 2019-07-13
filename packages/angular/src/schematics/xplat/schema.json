@@ -14,11 +14,6 @@
       "description": "The npm scope to use.",
       "alias": "wn"
     },
-    "onlyIfNone": {
-      "type": "boolean",
-      "description": "Only create if not present yet.",
-      "default": false
-    },
     "skipFormat": {
       "description": "Skip formatting files",
       "type": "boolean",

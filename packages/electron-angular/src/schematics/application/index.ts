@@ -52,10 +52,11 @@ export default function(options: Schema) {
     prerun(options),
     // adjust naming convention
     XplatHelpers.applyAppNamingConvention(options, 'electron'),
-    externalSchematic('@nstudio/electron', 'xplat', {
-      ...options,
-      skipDependentPlatformFiles: true
-    }),
+    (tree: Tree, context: SchematicContext) =>
+      externalSchematic('@nstudio/electron', 'xplat', {
+        ...options,
+        skipDependentPlatformFiles: true
+      }),
     // create app files
     (tree: Tree, context: SchematicContext) =>
       addAppFiles(options, options.name)(tree, context),
@@ -230,10 +231,7 @@ export default function(options: Schema) {
   ]);
 }
 
-function addAppFiles(
-  options: Schema,
-  appPath: string
-): Rule {
+function addAppFiles(options: Schema, appPath: string): Rule {
   const appname = getAppName(options, 'electron');
   return branchAndMerge(
     mergeWith(
