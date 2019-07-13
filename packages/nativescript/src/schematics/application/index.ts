@@ -68,9 +68,14 @@ export default function(options: Schema) {
     // add app resources
     (tree: Tree, context: SchematicContext) =>
       // inside closure to ensure it uses the modifed options.name from applyAppNamingConvention
-      externalSchematic('@nstudio/nativescript', 'app-resources', {
-        path: `apps/${options.name}`
-      }, {interactive: false})(tree, context),
+      externalSchematic(
+        '@nstudio/nativescript',
+        'app-resources',
+        {
+          path: `apps/${options.name}`
+        },
+        { interactive: false }
+      )(tree, context),
     // add root package dependencies
     XplatNativeScriptHelpers.updateRootDeps(options),
     XplatHelpers.addPackageInstallTask(options),

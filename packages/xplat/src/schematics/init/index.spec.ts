@@ -60,7 +60,7 @@ describe('xplat schematic', () => {
     expect(tree.exists('/testing/tsconfig.libs.spec.json')).toBeTruthy();
     expect(tree.exists('/testing/tsconfig.xplat.json')).toBeTruthy();
     expect(tree.exists('/testing/tsconfig.xplat.spec.json')).toBeTruthy();
-    
+
     expect(tree.exists('/xplat/web-angular/index.ts')).toBeTruthy();
     expect(tree.exists('/xplat/web/index.ts')).toBeFalsy();
     expect(tree.exists('/xplat/nativescript-angular/index.ts')).toBeTruthy();
@@ -78,9 +78,7 @@ describe('xplat schematic', () => {
     // console.log('files:', files);
     let packageJson = JSON.parse(getFileContent(tree, 'package.json'));
     // console.log(packageJson);
-    expect(
-      packageJson.xplat.framework
-    ).toBe('angular');   
+    expect(packageJson.xplat.framework).toBe('angular');
   });
 
   it('should NOT create unsupported platform xplat option and throw', () => {

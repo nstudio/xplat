@@ -17,9 +17,12 @@ export default function(options: FeatureHelpers.Schema) {
         const appDirectory = `apps/${projectName}/src/app/`;
         routingModulePathOptions.push(`${appDirectory}app.routing.ts`);
         routingModulePathOptions.push(`${appDirectory}app-routing.module.ts`);
-  
+
         chains.push((tree: Tree, context: SchematicContext) => {
-          return FeatureHelpers.addFiles(options, platPrefix, projectName)(tree, context);
+          return FeatureHelpers.addFiles(options, platPrefix, projectName)(
+            tree,
+            context
+          );
         });
         if (options.routing) {
           chains.push((tree: Tree, context: SchematicContext) => {
@@ -30,19 +33,22 @@ export default function(options: FeatureHelpers.Schema) {
           });
           if (options.adjustSandbox) {
             chains.push((tree: Tree, context: SchematicContext) => {
-              return adjustSandbox(options, <PlatformTypes>platPrefix, appDirectory)(
-                tree,
-                context
-              );
+              return adjustSandbox(
+                options,
+                <PlatformTypes>platPrefix,
+                appDirectory
+              )(tree, context);
             });
           }
         }
         if (!options.onlyModule) {
           chains.push((tree: Tree, context: SchematicContext) => {
-            return FeatureHelpers.addFiles(options, platPrefix, projectName, '_component')(
-              tree,
-              context
-            );
+            return FeatureHelpers.addFiles(
+              options,
+              platPrefix,
+              projectName,
+              '_component'
+            )(tree, context);
           });
         }
       }
@@ -63,7 +69,10 @@ export default function(options: FeatureHelpers.Schema) {
     // add starting component unless onlyModule
     if (!options.onlyModule) {
       chains.push((tree: Tree, context: SchematicContext) =>
-        FeatureHelpers.addFiles(options, 'web', null, '_component')(tree, context)
+        FeatureHelpers.addFiles(options, 'web', null, '_component')(
+          tree,
+          context
+        )
       );
     }
   }

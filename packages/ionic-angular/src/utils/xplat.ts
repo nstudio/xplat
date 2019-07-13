@@ -10,7 +10,7 @@ export namespace XplatIonicAngularHelpers {
       return XplatHelpers.updatePackageForXplat(options, {
         dependencies: {
           ...dependencies,
-          '@ionic/angular': ionicAngularVersion,
+          '@ionic/angular': ionicAngularVersion
         },
         devDependencies: {
           '@ionic/angular-toolkit': ionicAngularToolkitVersion
@@ -19,4 +19,3 @@ export namespace XplatIonicAngularHelpers {
     };
   }
 }
-

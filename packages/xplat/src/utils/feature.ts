@@ -1,8 +1,28 @@
-import { PlatformTypes, supportedSandboxPlatforms, supportedPlatforms, getDefaultTemplateOptions, stringUtils } from "./general";
-import { SchematicsException, branchAndMerge, mergeWith, apply, url, template, move, Tree, Rule } from "@angular-devkit/schematics";
-import { platformAppPrefixError, generatorError, optionsMissingError } from "./errors";
-import { createSourceFile, ScriptTarget } from "typescript";
-import { insert, addGlobal } from "./ast";
+import {
+  PlatformTypes,
+  supportedSandboxPlatforms,
+  supportedPlatforms,
+  getDefaultTemplateOptions,
+  stringUtils
+} from './general';
+import {
+  SchematicsException,
+  branchAndMerge,
+  mergeWith,
+  apply,
+  url,
+  template,
+  move,
+  Tree,
+  Rule
+} from '@angular-devkit/schematics';
+import {
+  platformAppPrefixError,
+  generatorError,
+  optionsMissingError
+} from './errors';
+import { createSourceFile, ScriptTarget } from 'typescript';
+import { insert, addGlobal } from './ast';
 
 export namespace FeatureHelpers {
   export interface Schema {
@@ -41,7 +61,13 @@ export namespace FeatureHelpers {
     skipFormat?: boolean;
   }
 
-  export function prepare(options: Schema): { featureName: string; projectNames: Array<string>;  platforms: Array<PlatformTypes>} {
+  export function prepare(
+    options: Schema
+  ): {
+    featureName: string;
+    projectNames: Array<string>;
+    platforms: Array<PlatformTypes>;
+  } {
     if (!options.name) {
       throw new SchematicsException(
         `You did not specify the name of the feature you'd like to generate. For example: ng g feature my-feature`
@@ -83,7 +109,7 @@ export namespace FeatureHelpers {
         `When generating a feature with the --routing option, please also specify --onlyProject. Support for shared code routing is under development.`
       );
     }
-  
+
     if (projects) {
       // building feature in shared code and in projects
       projectNames = projects.split(',');
@@ -102,7 +128,9 @@ export namespace FeatureHelpers {
       platforms = options.platforms.split(',');
     }
     if (platforms.length === 0) {
-      let error = projects ? platformAppPrefixError() : generatorError('feature');
+      let error = projects
+        ? platformAppPrefixError()
+        : generatorError('feature');
       throw new SchematicsException(optionsMissingError(error));
     }
     return { featureName, projectNames, platforms };
@@ -129,9 +157,12 @@ export namespace FeatureHelpers {
         ])
       )
     );
-  };
-  
-  export function adjustBarrelIndex(options: Schema, indexFilePath: string): Rule {
+  }
+
+  export function adjustBarrelIndex(
+    options: Schema,
+    indexFilePath: string
+  ): Rule {
     return (host: Tree) => {
       const indexSource = host.read(indexFilePath)!.toString('utf-8');
       const indexSourceFile = createSourceFile(
@@ -140,7 +171,7 @@ export namespace FeatureHelpers {
         ScriptTarget.Latest,
         true
       );
-  
+
       insert(host, indexFilePath, [
         ...addGlobal(
           indexSourceFile,
@@ -152,7 +183,7 @@ export namespace FeatureHelpers {
       return host;
     };
   }
-  
+
   export function getTemplateOptions(options: Schema) {
     const nameParts = options.name.split('-');
     let endingDashName = nameParts[0];
@@ -166,8 +197,12 @@ export namespace FeatureHelpers {
       endingDashName
     };
   }
-  
-  export function getMoveTo(options: Schema, platform: string, projectName?: string) {
+
+  export function getMoveTo(
+    options: Schema,
+    platform: string,
+    projectName?: string
+  ) {
     const featureName = options.name.toLowerCase();
     let moveTo = `xplat/${platform}/features/${featureName}`;
     if (projectName) {

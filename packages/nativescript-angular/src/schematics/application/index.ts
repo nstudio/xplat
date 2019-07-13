@@ -59,18 +59,19 @@ export default function(options: Schema) {
     // add features
     (tree: Tree, context: SchematicContext) =>
       options.routing
-        ? addAppFiles(
-            options,
-            options.name,
-            'routing'
-          )(tree, context)
+        ? addAppFiles(options, options.name, 'routing')(tree, context)
         : noop()(tree, context),
     // add app resources
     (tree: Tree, context: SchematicContext) =>
       // inside closure to ensure it uses the modifed options.name from applyAppNamingConvention
-      externalSchematic('@nstudio/nativescript', 'app-resources', {
-        path: `apps/${options.name}`
-      }, {interactive: false})(tree, context),
+      externalSchematic(
+        '@nstudio/nativescript',
+        'app-resources',
+        {
+          path: `apps/${options.name}`
+        },
+        { interactive: false }
+      )(tree, context),
     // add root package dependencies
     XplatNativeScriptAngularHelpers.updateRootDeps(options),
     XplatHelpers.addPackageInstallTask(options),

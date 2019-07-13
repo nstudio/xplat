@@ -1,5 +1,10 @@
 import { Tree } from '@angular-devkit/schematics';
-import { supportedPlatforms, setTest, jsonParse, XplatHelpers } from '@nstudio/xplat';
+import {
+  supportedPlatforms,
+  setTest,
+  jsonParse,
+  XplatHelpers
+} from '@nstudio/xplat';
 import { createEmptyWorkspace, getFileContent } from '@nstudio/xplat/testing';
 import { runSchematic, runSchematicSync } from '../../utils/testing';
 setTest();
@@ -43,7 +48,9 @@ describe('xplat schematic', () => {
       files.indexOf('/testing/tsconfig.xplat.spec.json')
     ).toBeGreaterThanOrEqual(0);
 
-    expect(files.indexOf('/xplat/web-angular/index.ts')).toBeGreaterThanOrEqual(0);
+    expect(files.indexOf('/xplat/web-angular/index.ts')).toBeGreaterThanOrEqual(
+      0
+    );
     expect(
       files.indexOf('/xplat/nativescript-angular/index.ts')
     ).toBeGreaterThanOrEqual(0);
@@ -55,13 +62,19 @@ describe('xplat schematic', () => {
 
     const tree = await runSchematic('xplat', options, appTree);
     const files = tree.files;
-    expect(files.indexOf('/xplat/web-angular/features/items/items.module.ts')).toBe(-1);
-    expect(files.indexOf('/xplat/web-angular/index.ts')).toBeGreaterThanOrEqual(0);
+    expect(
+      files.indexOf('/xplat/web-angular/features/items/items.module.ts')
+    ).toBe(-1);
+    expect(files.indexOf('/xplat/web-angular/index.ts')).toBeGreaterThanOrEqual(
+      0
+    );
     expect(
       files.indexOf('/xplat/nativescript-angular/index.ts')
     ).toBeGreaterThanOrEqual(0);
     expect(
-      files.indexOf('/xplat/nativescript-angular/features/items/items.module.ts')
+      files.indexOf(
+        '/xplat/nativescript-angular/features/items/items.module.ts'
+      )
     ).toBe(-1);
   });
 
@@ -71,8 +84,12 @@ describe('xplat schematic', () => {
 
     const tree = await runSchematic('xplat', options, appTree);
     const files = tree.files;
-    expect(files.indexOf('/xplat/web-angular/index.ts')).toBeGreaterThanOrEqual(0);
-    expect(files.indexOf('/xplat/ionic-angular/index.ts')).toBeGreaterThanOrEqual(0);
+    expect(files.indexOf('/xplat/web-angular/index.ts')).toBeGreaterThanOrEqual(
+      0
+    );
+    expect(
+      files.indexOf('/xplat/ionic-angular/index.ts')
+    ).toBeGreaterThanOrEqual(0);
     expect(
       files.indexOf('/xplat/nativescript-angular/index.ts')
     ).toBeGreaterThanOrEqual(-1);
@@ -93,8 +110,12 @@ describe('xplat schematic', () => {
 
     const tree = await runSchematic('xplat', options, appTree);
     const files = tree.files;
-    expect(files.indexOf('/xplat/web-angular/index.ts')).toBeGreaterThanOrEqual(0);
-    expect(files.indexOf('/xplat/electron-angular/index.ts')).toBeGreaterThanOrEqual(0);
+    expect(files.indexOf('/xplat/web-angular/index.ts')).toBeGreaterThanOrEqual(
+      0
+    );
+    expect(
+      files.indexOf('/xplat/electron-angular/index.ts')
+    ).toBeGreaterThanOrEqual(0);
     expect(
       files.indexOf('/xplat/nativescript-angular/index.ts')
     ).toBeGreaterThanOrEqual(-1);
@@ -117,8 +138,12 @@ describe('xplat schematic', () => {
 
     let tree = await runSchematic('xplat', options, appTree);
     let files = tree.files;
-    expect(files.indexOf('/xplat/web-angular/index.ts')).toBeGreaterThanOrEqual(0);
-    expect(files.indexOf('/xplat/ionic-angular/index.ts')).toBeGreaterThanOrEqual(0);
+    expect(files.indexOf('/xplat/web-angular/index.ts')).toBeGreaterThanOrEqual(
+      0
+    );
+    expect(
+      files.indexOf('/xplat/ionic-angular/index.ts')
+    ).toBeGreaterThanOrEqual(0);
     expect(
       files.indexOf('/xplat/nativescript-angular/index.ts')
     ).toBeGreaterThanOrEqual(-1);
@@ -127,8 +152,12 @@ describe('xplat schematic', () => {
     tree = await runSchematic('xplat', options, tree);
     files = tree.files;
     // should be unchanged
-    expect(files.indexOf('/xplat/web-angular/index.ts')).toBeGreaterThanOrEqual(0);
-    expect(files.indexOf('/xplat/ionic-angular/index.ts')).toBeGreaterThanOrEqual(0);
+    expect(files.indexOf('/xplat/web-angular/index.ts')).toBeGreaterThanOrEqual(
+      0
+    );
+    expect(
+      files.indexOf('/xplat/ionic-angular/index.ts')
+    ).toBeGreaterThanOrEqual(0);
     expect(
       files.indexOf('/xplat/nativescript-angular/index.ts')
     ).toBeGreaterThanOrEqual(0);

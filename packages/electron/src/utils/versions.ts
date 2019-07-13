@@ -9,4 +9,3 @@ export const electronStoreVersion = '~2.0.0';
 export const electronUpdaterVersion = '~4.0.6';
 export const npmRunAllVersion = '^4.1.5';
 export const waitOnVersion = '~3.2.0';
-

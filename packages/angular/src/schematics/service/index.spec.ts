@@ -1,6 +1,10 @@
 import { Tree } from '@angular-devkit/schematics';
 import { Schema } from './schema';
-import { createXplatWithApps, getFileContent, createXplatWithNativeScriptWeb } from '@nstudio/xplat/testing';
+import {
+  createXplatWithApps,
+  getFileContent,
+  createXplatWithNativeScriptWeb
+} from '@nstudio/xplat/testing';
 import { runSchematic } from '../../utils/testing';
 
 describe('service schematic', () => {
@@ -28,9 +32,7 @@ describe('service schematic', () => {
     tree = await runSchematic('service', options, tree);
     // console.log(files.slice(91,files.length));
 
-    expect(
-      tree.exists('/libs/core/services/auth.service.ts')
-    ).toBeTruthy();
+    expect(tree.exists('/libs/core/services/auth.service.ts')).toBeTruthy();
 
     // file content
     let content = getFileContent(tree, '/libs/core/services/auth.service.ts');
@@ -118,7 +120,7 @@ describe('service schematic', () => {
 
   it('should create service for specified platform with targeted feature only', async () => {
     // console.log('appTree:', appTree);
-    
+
     let tree = await runSchematic(
       'feature',
       {

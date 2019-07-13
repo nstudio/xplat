@@ -227,10 +227,7 @@ export default function(options: ApplicationOptions) {
   ]);
 }
 
-function addAppFiles(
-  options: ApplicationOptions,
-  appPath: string
-): Rule {
+function addAppFiles(options: ApplicationOptions, appPath: string): Rule {
   const appname = getAppName(options, 'electron');
   return branchAndMerge(
     mergeWith(

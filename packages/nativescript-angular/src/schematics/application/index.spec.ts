@@ -105,11 +105,7 @@ describe('app', () => {
 
   it('should create CoreModule with import from shared code', async () => {
     const options = { ...defaultOptions };
-    const tree = await runSchematic(
-      'app',
-      options,
-      appTree
-    );
+    const tree = await runSchematic('app', options, appTree);
     const appModule = getFileContent(
       tree,
       '/apps/nativescript-foo/src/core/core.module.ts'

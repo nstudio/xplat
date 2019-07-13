@@ -1,4 +1,9 @@
-import { supportedPlatforms, supportedHelpers, supportedFrameworks, stringUtils } from './general';
+import {
+  supportedPlatforms,
+  supportedHelpers,
+  supportedFrameworks,
+  stringUtils
+} from './general';
 
 export const errorMissingPrefix = `Missing --prefix flag. It's a good practice to specify a 2-3 character prefix for use with your project's component selectors and certain shared class/module names. Example: ng g @nstudio/xplat:init --prefix=foo`;
 
@@ -9,7 +14,9 @@ export function unsupportedPlatformError(platform: string) {
 }
 
 export function unsupportedFrameworkError(framework: string) {
-  return `${framework} is currently not a supported framework. Supported at the moment: ${supportedFrameworks.map(f => stringUtils.capitalize(f))}. Please request support for this framework if you'd like and/or submit a PR which we would greatly appreciate.`;
+  return `${framework} is currently not a supported framework. Supported at the moment: ${supportedFrameworks.map(
+    f => stringUtils.capitalize(f)
+  )}. Please request support for this framework if you'd like and/or submit a PR which we would greatly appreciate.`;
 }
 
 export function unsupportedHelperError(helper: string) {

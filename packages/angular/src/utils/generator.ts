@@ -90,7 +90,9 @@ export function generate(type: IGenerateType, options) {
     }
   } else if (options.platforms) {
     // building in shared code only
-    platforms = <Array<PlatformTypes>>(<unknown>sanitizeCommaDelimitedArg(options.platforms));
+    platforms = <Array<PlatformTypes>>(
+      (<unknown>sanitizeCommaDelimitedArg(options.platforms))
+    );
   }
   const targetPlatforms: ITargetPlatforms = {};
   for (const t of platforms) {
@@ -895,7 +897,11 @@ export function adjustRouting(
   };
 }
 
-export function adjustSandbox(options: FeatureHelpers.Schema, platform: PlatformTypes, appDirectory: string): Rule {
+export function adjustSandbox(
+  options: FeatureHelpers.Schema,
+  platform: PlatformTypes,
+  appDirectory: string
+): Rule {
   return (tree: Tree) => {
     if (supportedSandboxPlatforms.includes(platform)) {
       const homeCmpPath = `${appDirectory}/features/home/components/home.component.html`;

@@ -103,7 +103,10 @@ export function createXplatWithApps(tree: Tree): Tree {
   return tree;
 }
 
-export function createXplatWithNativeScriptWeb(tree: Tree, withRouting?: boolean): Tree {
+export function createXplatWithNativeScriptWeb(
+  tree: Tree,
+  withRouting?: boolean
+): Tree {
   tree = createEmptyWorkspace(tree);
   createXplatLibs(tree);
   createXplatNativeScriptAngular(tree);
@@ -115,7 +118,9 @@ export function createXplatWithNativeScriptWeb(tree: Tree, withRouting?: boolean
 
 export function createXplatLibs(tree: Tree) {
   tree.create('/libs/core/index.ts', '');
-  tree.create('/libs/core/core.module.ts', `import {
+  tree.create(
+    '/libs/core/core.module.ts',
+    `import {
     NgModule
   } from '@angular/core';
   import { APP_BASE_HREF, CommonModule } from '@angular/common';
@@ -132,8 +137,11 @@ export function createXplatLibs(tree: Tree) {
   @NgModule({
     imports: [CommonModule, NxModule.forRoot()]
   })
-  export class CoreModule {}`);
-  tree.create('/libs/core/services/index.ts', `import { LogService } from './log.service';
+  export class CoreModule {}`
+  );
+  tree.create(
+    '/libs/core/services/index.ts',
+    `import { LogService } from './log.service';
   import { WindowService } from './window.service';
   
   export const CORE_PROVIDERS: any[] = [LogService, WindowService];
@@ -141,9 +149,12 @@ export function createXplatLibs(tree: Tree) {
   export * from './log.service';
   export * from './window.service';
   export * from './tokens';
-  `);
+  `
+  );
   tree.create('/libs/features/index.ts', '');
-  tree.create('/libs/features/ui/ui.module.ts', `import { NgModule } from '@angular/core';
+  tree.create(
+    '/libs/features/ui/ui.module.ts',
+    `import { NgModule } from '@angular/core';
   import { TranslateModule } from '@ngx-translate/core';
   import { UI_PIPES } from './pipes';
   
@@ -155,7 +166,8 @@ export function createXplatLibs(tree: Tree) {
     exports: [...MODULES, ...UI_PIPES]
   })
   export class UISharedModule {}
-  `);
+  `
+  );
   tree.create('/libs/utils/index.ts', '');
 }
 
@@ -163,7 +175,9 @@ export function createXplatNativeScriptAngular(tree: Tree) {
   tree.create('/xplat/nativescript/index.ts', '');
   tree.create('/xplat/nativescript/package.json', '');
   tree.create('/xplat/nativescript/core/index.ts', '');
-  tree.create('/xplat/nativescript/core/core.module.ts', `import { NgModule } from '@angular/core';
+  tree.create(
+    '/xplat/nativescript/core/core.module.ts',
+    `import { NgModule } from '@angular/core';
 
   // nativescript
   import { NativeScriptModule } from 'nativescript-angular/nativescript.module';
@@ -221,16 +235,22 @@ export function createXplatNativeScriptAngular(tree: Tree) {
   export class TTCoreModule {
 
   }
-  `);
-  tree.create('/xplat/nativescript/core/services/index.ts', `import { AppService } from './app.service';
+  `
+  );
+  tree.create(
+    '/xplat/nativescript/core/services/index.ts',
+    `import { AppService } from './app.service';
   import { TNSWindowService } from './tns-window.service';
   
   export const CORE_PROVIDERS: any[] = [AppService, TNSWindowService];
   
   export * from './app.service';
-  `);
+  `
+  );
   tree.create('/xplat/nativescript/features/ui/index.ts', '');
-  tree.create('/xplat/nativescript/features/ui/ui.module.ts', `import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
+  tree.create(
+    '/xplat/nativescript/features/ui/ui.module.ts',
+    `import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 
   import { NativeScriptFormsModule } from 'nativescript-angular/forms';
   import { NativeScriptCommonModule } from 'nativescript-angular/common';
@@ -255,7 +275,8 @@ export function createXplatNativeScriptAngular(tree: Tree) {
     schemas: [NO_ERRORS_SCHEMA]
   })
   export class UIModule {}
-  `);
+  `
+  );
   tree.create('/xplat/nativescript/features/index.ts', '');
   tree.create('/xplat/nativescript/scss/_variables.scss', '');
   tree.create('/xplat/nativescript/utils/index.ts', ``);
@@ -266,7 +287,9 @@ export function createXplatWebAngular(tree: Tree) {
   tree.create('/xplat/web/package.json', '');
   tree.create('/xplat/web/core/index.ts', '');
   tree.create('/xplat/web/features/ui/index.ts', '');
-  tree.create('/xplat/web/features/ui/ui.module.ts', `import { NgModule } from '@angular/core';
+  tree.create(
+    '/xplat/web/features/ui/ui.module.ts',
+    `import { NgModule } from '@angular/core';
   import { CommonModule } from '@angular/common';
   import { FormsModule, ReactiveFormsModule } from '@angular/forms';
   import { RouterModule } from '@angular/router';
@@ -289,7 +312,8 @@ export function createXplatWebAngular(tree: Tree) {
     exports: [...MODULES, ...UI_COMPONENTS]
   })
   export class UIModule {}
-  `);
+  `
+  );
   tree.create('/xplat/web/features/index.ts', '');
   tree.create('/xplat/web/scss/_variables.scss', '');
 }
@@ -299,8 +323,13 @@ export function createWebAngularApp(tree: Tree, withRouting?: boolean) {
   tree.create('/apps/web-viewer/src/app/features/core/core.module.ts', '');
   tree.create('/apps/web-viewer/src/app/app.module.ts', '');
   if (withRouting) {
-    tree.create(`/apps/web-viewer/src/app/features/home/components/home.component.html`, '');
-    tree.create('/apps/web-viewer/src/app/app.routing.ts', `// angular
+    tree.create(
+      `/apps/web-viewer/src/app/features/home/components/home.component.html`,
+      ''
+    );
+    tree.create(
+      '/apps/web-viewer/src/app/app.routing.ts',
+      `// angular
     import { NgModule } from '@angular/core';
     import { RouterModule, Routes } from '@angular/router';
     
@@ -323,22 +352,34 @@ export function createWebAngularApp(tree: Tree, withRouting?: boolean) {
       imports: [SharedModule, RouterModule.forRoot(routes)]
     })
     export class AppRoutingModule {}
-    `);
+    `
+    );
   }
 }
 
-export function createNativeScriptAngularApp(tree: Tree, withRouting?: boolean) {
+export function createNativeScriptAngularApp(
+  tree: Tree,
+  withRouting?: boolean
+) {
   tree.create('/apps/nativescript-viewer/package.json', '');
   tree.create('/apps/nativescript-viewer/tsconfig.json', '');
   tree.create('/apps/nativescript-viewer/webpack.config.js', '');
   tree.create('/apps/nativescript-viewer/src/core/core.module.ts', '');
-  tree.create('/apps/nativescript-viewer/src/features/shared/shared.module.ts', '');
+  tree.create(
+    '/apps/nativescript-viewer/src/features/shared/shared.module.ts',
+    ''
+  );
   tree.create('/apps/nativescript-viewer/src/scss/_index.scss', '');
   tree.create('/apps/nativescript-viewer/src/app.module.ts', '');
   tree.create('/apps/nativescript-viewer/src/main.ts', '');
   if (withRouting) {
-    tree.create(`/apps/nativescript-viewer/src/features/home/components/home.component.html`, '');
-    tree.create('/apps/nativescript-viewer/src/app.routing.ts', `// angular
+    tree.create(
+      `/apps/nativescript-viewer/src/features/home/components/home.component.html`,
+      ''
+    );
+    tree.create(
+      '/apps/nativescript-viewer/src/app.routing.ts',
+      `// angular
     import { NgModule } from '@angular/core';
     import { Routes } from '@angular/router';
     
@@ -364,7 +405,8 @@ export function createNativeScriptAngularApp(tree: Tree, withRouting?: boolean) 
       imports: [SharedModule, NativeScriptRouterModule.forRoot(routes)]
     })
     export class AppRoutingModule {}
-    `);
+    `
+    );
   }
 }
 

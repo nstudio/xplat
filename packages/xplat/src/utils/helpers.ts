@@ -59,7 +59,7 @@ export function buildHelperChain(
   if (config.logNotes) {
     helperChain.push((tree: Tree) => {
       config.logNotes(options);
-      return noop();
+      // return noop();
     });
   }
 }

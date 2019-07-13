@@ -26,8 +26,12 @@ describe('xplat ionic angular', () => {
 
     const tree = await runSchematic('xplat', options, appTree);
     const files = tree.files;
-    expect(files.indexOf('/xplat/web-angular/index.ts')).toBeGreaterThanOrEqual(0);
-    expect(files.indexOf('/xplat/ionic-angular/index.ts')).toBeGreaterThanOrEqual(0);
+    expect(files.indexOf('/xplat/web-angular/index.ts')).toBeGreaterThanOrEqual(
+      0
+    );
+    expect(
+      files.indexOf('/xplat/ionic-angular/index.ts')
+    ).toBeGreaterThanOrEqual(0);
     expect(
       files.indexOf('/xplat/nativescript-angular/index.ts')
     ).toBeGreaterThanOrEqual(-1);

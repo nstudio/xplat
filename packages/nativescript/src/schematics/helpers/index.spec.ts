@@ -1,11 +1,6 @@
 import { Tree } from '@angular-devkit/schematics';
 import { Schema } from '../application/schema';
-import {
-  stringUtils,
-  setTest,
-  jsonParse,
-  IHelperSchema
-} from '@nstudio/xplat';
+import { stringUtils, setTest, jsonParse, IHelperSchema } from '@nstudio/xplat';
 import {
   createXplatWithApps,
   getFileContent,
@@ -29,7 +24,7 @@ describe('helpers schematic', () => {
     // console.log('appTree:', appTree);
     const tree = await runSchematic('helpers', options, appTree);
     const files = tree.files;
-    console.log(files);
+    // console.log(files);
 
     // xplat helpers
     expect(
@@ -50,7 +45,7 @@ describe('helpers schematic', () => {
       'xplat/nativescript/utils/@nativescript/*'
     );
 
-    filePath = '/apps/nativescript-foo/tsconfig.json';
+    filePath = '/apps/nativescript-viewer/tsconfig.json';
     fileContent = jsonParse(getFileContent(tree, filePath));
     // console.log(fileContent);
     expect(fileContent.compilerOptions.paths['@nativescript/*'][0]).toBe(

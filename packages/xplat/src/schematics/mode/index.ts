@@ -42,7 +42,9 @@ export default function(options: xPlatOptions) {
         focusOnApps = options.projects.split(',');
         for (let i = 0; i < focusOnApps.length; i++) {
           const projectName = focusOnApps[i];
-          const nameParts = <Array<PlatformTypes>>(<unknown>projectName.split('-'));
+          const nameParts = <Array<PlatformTypes>>(
+            (<unknown>projectName.split('-'))
+          );
           let containsPlatform = false;
           for (const n of nameParts) {
             if (supportedPlatforms.includes(n)) {
@@ -60,9 +62,14 @@ export default function(options: xPlatOptions) {
         }
       }
       // targets and mode should be the same
-      return XplatHelpers.updateIDESettings({
-        platforms: name
-      }, name, allApps, focusOnApps)(tree, context);
+      return XplatHelpers.updateIDESettings(
+        {
+          platforms: name
+        },
+        name,
+        allApps,
+        focusOnApps
+      )(tree, context);
     }
   ]);
 }

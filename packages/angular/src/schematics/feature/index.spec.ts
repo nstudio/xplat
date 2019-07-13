@@ -412,9 +412,7 @@ describe('feature schematic', () => {
     const options: FeatureHelpers.Schema = { ...defaultOptions };
     // console.log('appTree:', appTree);
     options.routing = true;
-    expect(
-      () => runSchematicSync('feature', options, appTree)
-    ).toThrowError(
+    expect(() => runSchematicSync('feature', options, appTree)).toThrowError(
       'When generating a feature with the --routing option, please also specify --onlyProject. Support for shared code routing is under development.'
     );
   });

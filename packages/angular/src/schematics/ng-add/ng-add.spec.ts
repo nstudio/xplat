@@ -84,7 +84,9 @@ describe('ng-add', () => {
       );
       const result = await runSchematic('ng-add', {}, appTree);
       const angularJson = readJsonInTree(result, 'angular.json');
-      expect(angularJson.cli.defaultCollection).toEqual('@nstudio/nativescript');
+      expect(angularJson.cli.defaultCollection).toEqual(
+        '@nstudio/nativescript'
+      );
     });
   });
 });

@@ -1,14 +1,7 @@
 import { Tree } from '@angular-devkit/schematics';
 import { Schema as AppWebOptions } from '../application/schema';
-import {
-  setTest,
-  jsonParse,
-  IHelperSchema
-} from '@nstudio/xplat';
-import {
-  createXplatWithApps,
-  getFileContent
-} from '@nstudio/xplat/testing';
+import { setTest, jsonParse, IHelperSchema } from '@nstudio/xplat';
+import { createXplatWithApps, getFileContent } from '@nstudio/xplat/testing';
 import { runSchematic, runSchematicSync } from '../../utils/testing';
 setTest();
 
@@ -76,9 +69,7 @@ describe('helpers schematic', () => {
     fileContent = getFileContent(tree, cypressJsonPath);
     // console.log(fileContent);
     cypressJson = jsonParse(fileContent);
-    expect(cypressJson.supportFile).toBe(
-      `./src/support/index.js`
-    );
+    expect(cypressJson.supportFile).toBe(`./src/support/index.js`);
 
     filePath = '/apps/web-foo-e2e/src/integration/app.spec.ts';
     fileContent = getFileContent(tree, filePath);

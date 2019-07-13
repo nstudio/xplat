@@ -299,16 +299,20 @@ export namespace XplatAngularHelpers {
           framework: options.framework
         };
       }
-      return XplatHelpers.updatePackageForXplat(options, {
-        dependencies: {
-          ...dependencies,
-          '@ngx-translate/core': ngxTranslateVersion,
-          '@ngx-translate/http-loader': ngxTranslateHttpLoaderVersion,
-          '@nrwl/angular': nxVersion,
-          'reflect-metadata': reflectMetadataVersion
+      return XplatHelpers.updatePackageForXplat(
+        options,
+        {
+          dependencies: {
+            ...dependencies,
+            '@ngx-translate/core': ngxTranslateVersion,
+            '@ngx-translate/http-loader': ngxTranslateHttpLoaderVersion,
+            '@nrwl/angular': nxVersion,
+            'reflect-metadata': reflectMetadataVersion
+          },
+          devDependencies
         },
-        devDependencies
-      }, updatedXplatSettings)(tree, context);
+        updatedXplatSettings
+      )(tree, context);
     };
   }
 

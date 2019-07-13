@@ -16,7 +16,10 @@ export default function(options: FeatureHelpers.Schema) {
   // add starting component unless onlyModule
   if (!options.onlyModule) {
     xplatChains.push((tree: Tree, context: SchematicContext) =>
-      FeatureHelpers.addFiles(options, 'ionic', null, '_component')(tree, context)
+      FeatureHelpers.addFiles(options, 'ionic', null, '_component')(
+        tree,
+        context
+      )
     );
   }
 

@@ -8,7 +8,7 @@ export namespace XplatElectronAngularHelpers {
     // return (tree: Tree, context: SchematicContext) => {
     //   return XplatHelpers.updatePackageForXplat(options, {
     //     dependencies: {
-          
+
     //     }
     //   })(tree, context);
     // };

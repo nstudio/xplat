@@ -1,6 +1,10 @@
 import { Tree, SchematicContext } from '@angular-devkit/schematics';
 import { XplatHelpers, getNpmScope } from '@nstudio/xplat';
-import { ionicNativeCoreVersion, ionicNativeSplashScreenVersion, ionicNativeStatusbarVersion } from './versions';
+import {
+  ionicNativeCoreVersion,
+  ionicNativeSplashScreenVersion,
+  ionicNativeStatusbarVersion
+} from './versions';
 
 export namespace XplatIonicHelpers {
   export function updateRootDeps(options: XplatHelpers.Schema) {
@@ -18,4 +22,3 @@ export namespace XplatIonicHelpers {
     };
   }
 }
-

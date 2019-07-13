@@ -1,6 +1,9 @@
 import { Tree } from '@angular-devkit/schematics';
 import { Schema as GenerateOptions } from './schema';
-import { getFileContent, createXplatWithNativeScriptWeb } from '@nstudio/xplat/testing';
+import {
+  getFileContent,
+  createXplatWithNativeScriptWeb
+} from '@nstudio/xplat/testing';
 import { runSchematic } from '../../utils/testing';
 
 describe('directive schematic', () => {
@@ -8,7 +11,6 @@ describe('directive schematic', () => {
   const defaultOptions: GenerateOptions = {
     name: 'active-link'
   };
-
 
   beforeEach(() => {
     appTree = Tree.empty();
@@ -88,7 +90,7 @@ describe('directive schematic', () => {
 
   it('should create directive for specified projects only', async () => {
     // console.log('appTree:', appTree);
-    
+
     let tree = await runSchematic(
       'feature',
       {

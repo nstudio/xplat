@@ -1,7 +1,5 @@
 import { JsonObject } from '@angular-devkit/core';
-import {
-  updateWorkspace
-} from '@nrwl/workspace';
+import { updateWorkspace } from '@nrwl/workspace';
 import {
   IHelperSchema,
   buildHelperChain,
@@ -10,7 +8,15 @@ import {
   missingArgument
 } from '@nstudio/xplat';
 import { Schema } from './schema';
-import { SchematicsException, chain, noop, externalSchematic, Rule, Tree, SchematicContext } from '@angular-devkit/schematics';
+import {
+  SchematicsException,
+  chain,
+  noop,
+  externalSchematic,
+  Rule,
+  Tree,
+  SchematicContext
+} from '@angular-devkit/schematics';
 
 export default function(options: Schema) {
   return chain([
@@ -32,7 +38,9 @@ export function setDefaults(options: Schema): Rule {
     ].unitTestRunner =
       workspace.extensions.schematics['@nrwl/angular:application']
         .unitTestRunner || options.unitTestRunner;
-    workspace.extensions.schematics['@nstudio/angular:application'].e2eTestRunner =
+    workspace.extensions.schematics[
+      '@nstudio/angular:application'
+    ].e2eTestRunner =
       workspace.extensions.schematics['@nstudio/angular:application']
         .e2eTestRunner || options.e2eTestRunner;
 
@@ -41,7 +49,12 @@ export function setDefaults(options: Schema): Rule {
       workspace.extensions.cli &&
       ((workspace.extensions.cli as JsonObject).defaultCollection as string);
 
-    if (!defaultCollection || defaultCollection === '@nrwl/angular' || defaultCollection === '@nrwl/workspace' || defaultCollection === '@nstudio/xplat') {
+    if (
+      !defaultCollection ||
+      defaultCollection === '@nrwl/angular' ||
+      defaultCollection === '@nrwl/workspace' ||
+      defaultCollection === '@nstudio/xplat'
+    ) {
       (workspace.extensions.cli as JsonObject).defaultCollection =
         '@nstudio/angular';
     }

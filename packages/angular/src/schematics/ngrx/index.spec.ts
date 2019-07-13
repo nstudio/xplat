@@ -1,6 +1,10 @@
 import { Tree } from '@angular-devkit/schematics';
 import { Schema as GenerateOptions } from './schema';
-import { createXplatWithApps, getFileContent, createXplatWithNativeScriptWeb } from '@nstudio/xplat/testing';
+import {
+  createXplatWithApps,
+  getFileContent,
+  createXplatWithNativeScriptWeb
+} from '@nstudio/xplat/testing';
 import { runSchematic } from '../../utils/testing';
 
 describe('ngrx schematic', () => {
@@ -16,7 +20,7 @@ describe('ngrx schematic', () => {
 
   it('should create root state in libs for use across any platform and apps', async () => {
     // console.log('appTree:', appTree);
-    
+
     let tree = await runSchematic(
       'feature',
       {

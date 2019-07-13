@@ -37,13 +37,18 @@ export default function(options: ComponentHelpers.Schema) {
   componentSettings = ComponentHelpers.prepare(options);
 
   const externalChains = [];
-  
+
   for (const platform of componentSettings.platforms) {
     if (supportedPlatforms.includes(platform)) {
       externalChains.push(
-        externalSchematic(`@nstudio/${platform}-angular`, 'component', options, {
-          interactive: false
-        })
+        externalSchematic(
+          `@nstudio/${platform}-angular`,
+          'component',
+          options,
+          {
+            interactive: false
+          }
+        )
       );
     } else {
       throw new Error(unsupportedPlatformError(platform));
@@ -71,7 +76,9 @@ export default function(options: ComponentHelpers.Schema) {
         ? adjustBarrelIndex(
             'component',
             options,
-            `libs/features/${componentSettings.featureName}/base/${options.subFolder}/index.ts`,
+            `libs/features/${componentSettings.featureName}/base/${
+              options.subFolder
+            }/index.ts`,
             false,
             true
           )(tree, context)

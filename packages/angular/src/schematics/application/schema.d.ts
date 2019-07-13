@@ -1,6 +1,7 @@
 // import { Schema as NrwlAngularSchema } from '@nrwl/angular/src/schematics/application/schema';
 
-export interface Schema {//extends NrwlAngularSchema {
+export interface Schema {
+  //extends NrwlAngularSchema {
   // START from @nrwl/angular package
   // TODO: submit PR to Nx to expose app schema so can be extended from @nrwl/angular
   // Right now the schema.d.ts is not published alongside the schema.json

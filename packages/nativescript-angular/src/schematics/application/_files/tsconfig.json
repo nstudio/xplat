@@ -9,12 +9,7 @@
     "removeComments": true,
     "downlevelIteration": true,
     "skipLibCheck": true,
-    "lib": [
-      "es2017",
-      "dom",
-      "webworker",
-      "es6"
-    ],
+    "lib": ["es2017", "dom", "webworker", "es6"],
     "baseUrl": ".",
     "paths": {
       "~/*": ["src/*"],
@@ -30,11 +25,9 @@
     "./src/main.ts"
   ],
   "include": [
-      "src/**/*.module.ts",
-      "../../xplat/**/*.{ios,android}.ts",
-      "../../xplat/nativescript/workers/**/*.worker.ts"
+    "src/**/*.module.ts",
+    "../../xplat/**/*.{ios,android}.ts",
+    "../../xplat/nativescript/workers/**/*.worker.ts"
   ],
-  "exclude": [
-    "../../xplat/nativescript/plugins/**/node_modules/**"
-  ]
+  "exclude": ["../../xplat/nativescript/plugins/**/node_modules/**"]
 }

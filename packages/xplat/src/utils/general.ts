@@ -6,10 +6,7 @@ import {
   SchematicContext
 } from '@angular-devkit/schematics';
 import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
-import {
-  stringUtils as nxStringUtils,
-  serializeJson
-} from '@nrwl/workspace';
+import { stringUtils as nxStringUtils, serializeJson } from '@nrwl/workspace';
 
 export interface ITargetPlatforms {
   web?: boolean;
@@ -18,21 +15,21 @@ export interface ITargetPlatforms {
   electron?: boolean;
 }
 
-export type PlatformTypes =
-| 'web'
-| 'nativescript'
-| 'ionic'
-| 'electron';
+export type PlatformTypes = 'web' | 'nativescript' | 'ionic' | 'electron';
 export type PlatformModes = PlatformTypes | 'fullstack';
-export const supportedPlatforms: Array<PlatformTypes> = ['web', 'nativescript', 'ionic', 'electron'];
+export const supportedPlatforms: Array<PlatformTypes> = [
+  'web',
+  'nativescript',
+  'ionic',
+  'electron'
+];
 
-export type FrameworkTypes =
-| 'angular';
+export type FrameworkTypes = 'angular';
 // TODO: support react/vue and more
 // | 'react'
 // | 'vue'
 export type FrameworkOptions = FrameworkTypes | 'all';
-export const supportedFrameworks: Array<FrameworkTypes> = ['angular'];//, 'react', 'vue'];
+export const supportedFrameworks: Array<FrameworkTypes> = ['angular']; //, 'react', 'vue'];
 
 export interface NodeDependency {
   name: string;
@@ -167,7 +164,14 @@ export const setDependency = (
   { name, version }: NodeDependency
 ) => Object.assign(dependenciesMap, { [name]: version });
 
-export function prerun(options?: { prefix?: string; groupByName?: boolean; defaultFramework?: FrameworkTypes; }, init?: boolean) {
+export function prerun(
+  options?: {
+    prefix?: string;
+    groupByName?: boolean;
+    defaultFramework?: FrameworkTypes;
+  },
+  init?: boolean
+) {
   return (tree: Tree) => {
     const nxJson = getNxWorkspaceConfig(tree);
     if (nxJson) {
@@ -271,7 +275,9 @@ export function updatePackageForNgrx(
 
     if (packageJson) {
       // sync version with what user has store set at
-      let rootNgrxVersion = packageJson.dependencies ? packageJson.dependencies['@ngrx/store'] : null;
+      let rootNgrxVersion = packageJson.dependencies
+        ? packageJson.dependencies['@ngrx/store']
+        : null;
 
       const deps: NodeDependency[] = [];
 

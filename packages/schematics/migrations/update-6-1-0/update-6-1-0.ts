@@ -10,7 +10,7 @@ import {
   getJsonFromFile,
   updateJsonFile,
   createOrUpdate,
-  readJsonInTree,
+  readJsonInTree
 } from '@nstudio/xplat';
 
 function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
@@ -263,11 +263,7 @@ function updateLint(host: Tree, context: SchematicContext) {
 }
 
 export default function(): Rule {
-  return chain([
-    updateNativeScriptApps,
-    updateRootPackage,
-    updateLint
-  ]);
+  return chain([updateNativeScriptApps, updateRootPackage, updateLint]);
 }
 
 function getxPlatBeforeWatch(npmScope: string) {

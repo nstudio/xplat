@@ -7,25 +7,14 @@ import {
   apply,
   url,
   template,
-  move,
-  SchematicsException,
-  chain,
-  noop
+  move
 } from '@angular-devkit/schematics';
 import {
-  PlatformTypes,
   updateTsConfig,
   IHelperSchema,
   IHelperConfig,
-  getPrefix,
-  getNpmScope,
-  missingArgument,
-  unsupportedHelperError,
-  prerun,
-  buildHelperChain,
   getDefaultTemplateOptions
 } from '@nstudio/xplat';
-import { stringUtils } from '@nrwl/workspace';
 
 export const config: IHelperConfig = {
   addHelperFiles,
@@ -33,19 +22,18 @@ export const config: IHelperConfig = {
 };
 
 function addHelperFiles(options: IHelperSchema): Rule {
-  return (tree: Tree, context: SchematicContext) => {
-    return branchAndMerge(
-      mergeWith(
-        apply(url(`./_files`), [
-          template({
-            ...(options as any),
-            ...getDefaultTemplateOptions()
-          }),
-          move(`xplat/nativescript/utils`)
-        ])
-      )
-    );
-  };
+  // executed from 'helpers' directory so ensure _files are loaded relative
+  return branchAndMerge(
+    mergeWith(
+      apply(url(`./imports/_files`), [
+        template({
+          ...(options as any),
+          ...getDefaultTemplateOptions()
+        }),
+        move(`xplat/nativescript/utils`)
+      ])
+    )
+  );
 }
 
 function imports(helperChains: Array<any>, options: IHelperSchema) {

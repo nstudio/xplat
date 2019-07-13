@@ -209,7 +209,7 @@ export namespace XplatHelpers {
             xplat: {
               prefix: getPrefix(),
               ...(updatedXplatSettings || {})
-            },
+            }
           };
           // console.log('updatePackageForXplat:', serializeJson(packageJson));
           return updateJsonFile(tree, packagePath, packageJson);
@@ -255,8 +255,8 @@ xplat/**/*.ngsummary.json
   export function updateTsConfigPaths(
     options: Schema,
     settings?: {
-      framework?: FrameworkTypes,
-      dependentPlatforms?: Array<PlatformTypes>
+      framework?: FrameworkTypes;
+      dependentPlatforms?: Array<PlatformTypes>;
     }
   ) {
     return (tree: Tree) => {
@@ -272,7 +272,9 @@ xplat/**/*.ngsummary.json
         return 0;
       });
       const defaultFramework = getDefaultFramework();
-      let frameworkSuffix: string = defaultFramework ? `-${defaultFramework}` : '';
+      let frameworkSuffix: string = defaultFramework
+        ? `-${defaultFramework}`
+        : '';
 
       if (settings) {
         if (settings.framework) {
@@ -294,8 +296,12 @@ xplat/**/*.ngsummary.json
       updates[`@${npmScope}/*`] = [`libs/*`];
       for (const t of platforms) {
         if (supportedPlatforms.includes(t)) {
-          updates[`@${npmScope}/${t}${frameworkSuffix}`] = [`xplat/${t}${frameworkSuffix}/index.ts`];
-          updates[`@${npmScope}/${t}${frameworkSuffix}/*`] = [`xplat/${t}${frameworkSuffix}/*`];
+          updates[`@${npmScope}/${t}${frameworkSuffix}`] = [
+            `xplat/${t}${frameworkSuffix}/index.ts`
+          ];
+          updates[`@${npmScope}/${t}${frameworkSuffix}/*`] = [
+            `xplat/${t}${frameworkSuffix}/*`
+          ];
         } else {
           throw new Error(
             `${t} is not a supported platform. Currently supported: ${supportedPlatforms}`
@@ -335,7 +341,9 @@ xplat/**/*.ngsummary.json
         // const dirName = cwd.split('/').slice(-1);
         const groupByName = getGroupByName();
         const defaultFramework = getDefaultFramework();
-        let frameworkSuffix: string = defaultFramework ? `-${defaultFramework}` : '';
+        let frameworkSuffix: string = defaultFramework
+          ? `-${defaultFramework}`
+          : '';
 
         let isFullstack = false;
         let isExcluding = false;
@@ -638,6 +646,6 @@ xplat/**/*.ngsummary.json
         // );
         context.addTask(new NodePackageInstallTask());
       }
-    }
+    };
   }
 }

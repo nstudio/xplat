@@ -1,5 +1,8 @@
 import { Tree } from '@angular-devkit/schematics';
-import { getFileContent, createXplatWithNativeScriptWeb } from '@nstudio/xplat/testing';
+import {
+  getFileContent,
+  createXplatWithNativeScriptWeb
+} from '@nstudio/xplat/testing';
 import { runSchematic, runSchematicSync } from '../../utils/testing';
 import { ComponentHelpers } from '../../utils/xplat';
 
@@ -294,9 +297,7 @@ describe('component schematic', () => {
       projects: 'nativescript-viewer,web-viewer'
     };
 
-    expect(
-      () => (runSchematicSync('component', options, appTree))
-    ).toThrowError(
+    expect(() => runSchematicSync('component', options, appTree)).toThrowError(
       `apps/nativescript-viewer/src/features/foo/foo.module.ts does not exist. Create the feature module first. For example: ng g feature foo --projects=nativescript-viewer --onlyModule`
     );
   });
