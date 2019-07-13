@@ -4,10 +4,10 @@ import { ensureDirSync } from 'fs-extra';
 import * as path from 'path';
 
 export enum EPlatform {
-  Web = 1,
-  NativeScript = 2,
-  Ionic = 4,
-  Electron = 8
+  Web,
+  NativeScript,
+  Ionic,
+  Electron
 }
 
 const projectName: string = 'proj';
@@ -85,7 +85,7 @@ function publishXplatPackage() {
 
 function installXplatPackage() {
   execSync(
-    'npm i ../../nstudio-schematics-$(fx ../../package.json .version).tgz',
+    'npm i ../nstudio-xplat-source-$(fx ../package.json .version).tgz',
     {
       cwd: `./tmp/${projectName}`
     }
@@ -121,12 +121,14 @@ export function generateXplatArchitecture(platforms: EPlatform) {
     isPlatform(platforms, EPlatform.Ionic) ? 'ionic,' : ''
   }${isPlatform(platforms, EPlatform.Electron) ? 'electron' : ''}`;
 
-  const cmd = `generate xplat --prefix=${projectName} ${platformsArg}`;
+  const cmd = `generate @nstudio/xplat:init --prefix=${projectName} ${platformsArg}`;
   return runCLI(cmd);
 }
 
 function getPlatformId(platform: EPlatform) {
   switch (platform) {
+    case EPlatform.Web:
+      return 'web';
     case EPlatform.NativeScript:
       return 'nativescript';
     case EPlatform.Ionic:
@@ -140,7 +142,7 @@ function getPlatformId(platform: EPlatform) {
 
 export function generateApp(platform: EPlatform, appName: string, args = '') {
   const plat = getPlatformId(platform);
-  const cmd = `generate app${plat ? '.' + plat : ''} ${appName} ${args}`;
+  const cmd = `generate @nstudio/${plat}-angular:app ${appName} ${args}`;
   return runCLI(cmd);
 }
 

@@ -10,5 +10,6 @@ tmp
 *.log
 .ng_pkg_build
 jest.debug.config.js
+nstudio-xplat-source*
 
 package-lock.json
