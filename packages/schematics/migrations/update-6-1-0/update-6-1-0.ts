@@ -5,12 +5,11 @@ import {
   Tree,
   noop
 } from '@angular-devkit/schematics';
-import { updateJsonInTree } from '@nrwl/workspace';
+import { updateJsonInTree, readJsonInTree } from '@nrwl/workspace';
 import {
   getJsonFromFile,
   updateJsonFile,
   createOrUpdate,
-  readJsonInTree
 } from '@nstudio/xplat';
 
 function updateNativeScriptApps(tree: Tree, context: SchematicContext) {

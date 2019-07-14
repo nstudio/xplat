@@ -18,10 +18,25 @@ import {
   FrameworkTypes,
   supportedFrameworks,
   XplatHelpers,
-  unsupportedFrameworkError
+  unsupportedFrameworkError,
+  errorMissingPrefix,
+  addInstallTask,
+  isTesting,
+  getJsonFromFile,
+  packageInnerDependencies
 } from '../../utils';
+import {
+  NodePackageInstallTask,
+  RunSchematicTask
+} from '@angular-devkit/schematics/tasks';
+import { xplatVersion, nrwlVersion } from '../../utils/versions';
 
+let packagesToRunXplat: Array<string> = [];
 export default function(options: XplatHelpers.Schema) {
+  if (!options.prefix) {
+    throw new SchematicsException(errorMissingPrefix);
+  }
+
   const externalChains = [];
   const platformArg = options.platforms || '';
   // frontend framework
@@ -34,30 +49,32 @@ export default function(options: XplatHelpers.Schema) {
     ))
   );
 
+  const devDependencies = {};
   if (platformArg === 'all') {
+    // requested by Mike Brocchi on AngularAir long ago :)
     // conveniently add support for all supported platforms
+    options.platforms = supportedPlatforms.join(',');
     if (frameworks.length) {
       // when using a framework, each integration has it's own xplat handler to invoke the differnet platforms so always enter through the framework
       for (const framework of frameworks) {
         if (supportedFrameworks.includes(framework)) {
-          // console.log('addchainforplatform:', `@nstudio/${framework}`);
-          options.platforms = supportedPlatforms.join(',');
-          externalChains.push(
-            externalSchematic(`@nstudio/${framework}`, 'xplat', options, {
-              interactive: false
-            })
-          );
+          const packageName = `@nstudio/${framework}`;
+          devDependencies[packageName] = xplatVersion;
+          // framework initiates xplat for all integrations
+          packagesToRunXplat.push(packageName);
+          // when framework initiates xplat, ensure any platform packages are installed
+          for (const platform of supportedPlatforms) {
+            devDependencies[`@nstudio/${platform}-${framework}`] = xplatVersion;
+          }
         } else {
           throw new SchematicsException(unsupportedFrameworkError(framework));
         }
       }
     } else {
       for (const platform of supportedPlatforms) {
-        externalChains.push(
-          externalSchematic(`@nstudio/${platform}`, 'xplat', options, {
-            interactive: false
-          })
-        );
+        const packageName = `@nstudio/${platform}`;
+        devDependencies[packageName] = xplatVersion;
+        packagesToRunXplat.push(packageName);
       }
     }
   } else {
@@ -69,11 +86,14 @@ export default function(options: XplatHelpers.Schema) {
     } else if (frameworks.length) {
       for (const framework of frameworks) {
         if (supportedFrameworks.includes(framework)) {
-          externalChains.push(
-            externalSchematic(`@nstudio/${framework}`, 'xplat', options, {
-              interactive: false
-            })
-          );
+          const packageName = `@nstudio/${framework}`;
+          devDependencies[packageName] = xplatVersion;
+          // framework initiates xplat for all integrations
+          packagesToRunXplat.push(packageName);
+          // when framework initiates xplat, ensure any platform packages are installed
+          for (const platform of platforms) {
+            devDependencies[`@nstudio/${platform}-${framework}`] = xplatVersion;
+          }
         } else {
           throw new SchematicsException(unsupportedFrameworkError(framework));
         }
@@ -81,11 +101,9 @@ export default function(options: XplatHelpers.Schema) {
     } else {
       for (const platform of platforms) {
         if (supportedPlatforms.includes(platform)) {
-          externalChains.push(
-            externalSchematic(`@nstudio/${platform}`, 'xplat', options, {
-              interactive: false
-            })
-          );
+          const packageName = `@nstudio/${platform}`;
+          devDependencies[`@nstudio/${platform}`] = xplatVersion;
+          packagesToRunXplat.push(packageName);
         } else {
           throw new SchematicsException(unsupportedPlatformError(platform));
         }
@@ -93,5 +111,57 @@ export default function(options: XplatHelpers.Schema) {
     }
   }
 
-  return chain([prerun(options, true), ...externalChains]);
+  externalChains.push((tree: Tree, context: SchematicContext) => {
+    // check if nrwl dependencies are needed
+    // check user's package for current version
+    const packageJson = getJsonFromFile(tree, 'package.json');
+    if (packageJson) {
+      for (const packageName in devDependencies) {
+        if (packageInnerDependencies[packageName]) {
+          // inner dependencies are either nstudio or nrwl based packages
+          let version =
+            packageName.indexOf('nstudio') > -1 ? xplatVersion : nrwlVersion;
+          // ensure inner schematic dependencies are installed
+          for (const name of packageInnerDependencies[packageName]) {
+            // always use existing versions if user already has them installed
+            if (packageJson.dependencies && packageJson.dependencies[name]) {
+              version = packageJson.dependencies[name];
+            } else if (
+              packageJson.devDependencies &&
+              packageJson.devDependencies[name]
+            ) {
+              version = packageJson.devDependencies[name];
+            }
+            devDependencies[name] = version;
+          }
+        }
+      }
+    }
+    // console.log(devDependencies);
+    return XplatHelpers.updatePackageForXplat(options, {
+      devDependencies
+    })(tree, context);
+  });
+
+  externalChains.push((tree: Tree, context: SchematicContext) => {
+    const installPackageTask = context.addTask(new NodePackageInstallTask());
+
+    // console.log('packagesToRunXplat:', packagesToRunXplat);
+    for (const packageName in devDependencies) {
+      if (
+        packageName.indexOf('@nstudio') > -1 &&
+        packagesToRunXplat.includes(packageName)
+      ) {
+        context.addTask(new RunSchematicTask(packageName, 'xplat', options), [
+          installPackageTask
+        ]);
+      }
+    }
+  });
+
+  return chain([
+    prerun(options, true),
+    ...externalChains,
+    addInstallTask(options)
+  ]);
 }

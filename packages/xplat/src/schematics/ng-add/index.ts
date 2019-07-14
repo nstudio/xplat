@@ -1,21 +1,18 @@
 import {
   chain,
-  SchematicsException,
   externalSchematic,
   Tree,
-  SchematicContext
+  SchematicContext,
+  noop
 } from '@angular-devkit/schematics';
-import { prerun, errorMissingPrefix } from '@nstudio/xplat';
-import { Schema as ApplicationOptions } from './schema';
+import { XplatHelpers, prerun } from '../../utils';
 
-export default function(options: ApplicationOptions) {
-  if (!options.prefix) {
-    throw new SchematicsException(errorMissingPrefix);
-  }
-
+export default function(options: XplatHelpers.NgAddSchema) {
   return chain([
     prerun(options, true),
-    (tree: Tree, context: SchematicContext) =>
-      externalSchematic('@nstudio/xplat', 'xplat', options)
+    options.platforms
+      ? (tree: Tree, context: SchematicContext) =>
+          externalSchematic('@nstudio/xplat', 'init', options)
+      : noop()
   ]);
 }

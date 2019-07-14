@@ -3,6 +3,12 @@
   "version": "0.1",
   "extends": ["@nstudio/web", "@nstudio/angular"],
   "schematics": {
+    "ng-add": {
+      "factory": "./src/schematics/ng-add",
+      "schema": "./src/schematics/ng-add/schema.json",
+      "description": "Add xplat web-angular to an existing Nx Workspace.",
+      "hidden": true
+    },
     "feature": {
       "factory": "./src/schematics/feature",
       "schema": "./src/schematics/feature/schema.json",

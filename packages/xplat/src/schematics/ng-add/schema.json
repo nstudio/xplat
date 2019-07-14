@@ -9,6 +9,10 @@
       "type": "string",
       "description": "Target platforms to support."
     },
+    "framework": {
+      "type": "string",
+      "description": "Target frameworks to support."
+    },
     "prefix": {
       "type": "string",
       "description": "The prefix to apply to xplat generated selectors.",

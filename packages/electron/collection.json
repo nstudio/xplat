@@ -3,6 +3,12 @@
   "version": "0.1",
   "extends": ["@nstudio/xplat"],
   "schematics": {
+    "ng-add": {
+      "factory": "./src/schematics/ng-add",
+      "schema": "./src/schematics/ng-add/schema.json",
+      "description": "Add xplat electron to an existing Nx Workspace.",
+      "hidden": true
+    },
     "application": {
       "factory": "./src/schematics/application",
       "schema": "./src/schematics/application/schema.json",

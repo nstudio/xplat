@@ -13,3 +13,6 @@ jest.debug.config.js
 nstudio-xplat-source*
 
 package-lock.json
+
+# TEMP
+docs

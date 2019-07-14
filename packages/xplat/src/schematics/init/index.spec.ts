@@ -6,7 +6,7 @@ import { XplatHelpers, supportedFrameworks, stringUtils } from '../../utils';
 import { getFileContent } from '@nrwl/workspace/testing';
 setTest();
 
-describe('xplat schematic', () => {
+xdescribe('xplat schematic', () => {
   let appTree: Tree;
   const defaultOptions: XplatHelpers.Schema = {
     npmScope: 'testing',

@@ -10,14 +10,13 @@ export async function updateConfig() {
   const cwd = process.cwd();
   if (
     cwd.indexOf('node_modules/@nstudio/xplat') === -1 &&
-    cwd.indexOf('node_modules\\@nstudio\\workspace') === -1
+    cwd.indexOf('node_modules\\@nstudio\\xplat') === -1
   ) {
     // ignore: local development
     return;
   }
 
   const ngCliConfigPath = path.join(process.cwd(), '/../../..', 'angular.json');
-  // console.log(ngCliConfigPath);
   try {
     const config = fs.readFileSync(ngCliConfigPath, 'UTF-8');
     if (config) {
@@ -104,7 +103,7 @@ export async function makePrettierIgnore() {
 **/App_Resources/**/*
 **/apps/nativescript-*/hooks/**/*
 **/apps/nativescript-*/tools/**/*
-**/apps/nativescript-*/app/assets/*.min.css
+**/apps/nativescript-*/src/assets/*.min.css
 **/xplat/nativescript/plugins/**/*
 **/webpack.config.js
 **/package.json

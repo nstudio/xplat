@@ -6,7 +6,7 @@
     "ng-add": {
       "factory": "./src/schematics/ng-add/ng-add",
       "schema": "./src/schematics/ng-add/schema.json",
-      "description": "Add @nstudio/angular to a project",
+      "description": "Add xplat angular to an existing Nx workspace.",
       "hidden": true
     },
     "application": {

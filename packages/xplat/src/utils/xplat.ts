@@ -9,7 +9,7 @@ import {
   move,
   SchematicContext,
   Rule,
-  SchematicsException
+  externalSchematic
 } from '@angular-devkit/schematics';
 import { createSourceFile, ScriptTarget } from 'typescript';
 import {
@@ -32,7 +32,12 @@ import {
   FrameworkTypes,
   getDefaultFramework
 } from './general';
-import { updateJsonInTree, toFileName, serializeJson } from '@nrwl/workspace';
+import {
+  updateJsonInTree,
+  toFileName,
+  serializeJson,
+  readJsonInTree
+} from '@nrwl/workspace';
 import { insert, addGlobal } from './ast';
 import {
   platformAppPrefixError,
@@ -44,6 +49,14 @@ import {
 import { join } from 'path';
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
+
+export const packageInnerDependencies = {
+  '@nstudio/angular': ['@nrwl/angular'],
+  '@nstudio/electron-angular': ['@nstudio/electron', '@nstudio/angular'],
+  '@nstudio/ionic-angular': ["@nstudio/ionic", "@nstudio/angular"],
+  '@nstudio/nativescript-angular': ["@nstudio/nativescript", "@nstudio/angular"],
+  '@nstudio/web-angular': ["@nstudio/web", "@nstudio/angular"]
+};
 
 export namespace XplatHelpers {
   export interface Schema {
@@ -80,6 +93,47 @@ export namespace XplatHelpers {
      * Skip install
      */
     skipInstall?: boolean;
+  }
+
+  export interface NgAddSchema {
+    /**
+     * Target platforms
+     */
+    platforms?: string;
+    /**
+     * Target frameworks
+     */
+    framework?: string;
+    /**
+     * The prefix to apply to generated selectors.
+     */
+    prefix?: string;
+  }
+
+  /**
+   * Calls ng-add _if_ the package does not already exist 
+   * Otherwise calls that schematic if desired, otherwise noop
+   */
+  export function addPackageWithNgAdd(
+    packageName: string,
+    options?: NgAddSchema,
+    callSchematicIfAdded?: string
+  ): Rule {
+    return (host: Tree) => {
+      const { dependencies, devDependencies } = readJsonInTree(
+        host,
+        'package.json'
+      );
+      return dependencies[packageName] || devDependencies[packageName]
+        ? callSchematicIfAdded
+          ? externalSchematic(packageName, callSchematicIfAdded, options, {
+              interactive: false
+            })
+          : noop()
+        : externalSchematic(packageName, 'ng-add', options, {
+            interactive: false
+          });
+    };
   }
 
   export function getPlatformsFromOption(

@@ -20,6 +20,7 @@
     "checkimports": "node ./scripts/check-imports.js",
     "documentation": "./scripts/documentation/documentation.sh && yarn format && ./scripts/documentation/check-documentation.sh",
     "debug": "node --debug-brk ./node_modules/@angular/cli/bin/ng g command",
+    "publish-local": "./scripts/publish_local.sh",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
     "reset.changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
     "contributors": "githubcontrib --owner nstudio --repo $(basename $(pwd)) --cols 6 --showlogin true --filter gitter-badger --sortOrder desc | pbcopy"
@@ -125,6 +126,7 @@
   "jest": {
     "modulePathIgnorePatterns": [
       "tmp",
+      "<rootDir>/build/packages/.*/src/schematics/.*/package.json",
       "<rootDir>/test",
       "<rootDir>/packages",
       "collection/.*/files"

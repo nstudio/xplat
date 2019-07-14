@@ -22,9 +22,9 @@ if (!process.env.GITHUB_TOKEN_RELEASE_IT_XPLAT) {
 
 if (parsedArgs.help) {
   console.log(`
-      Usage: yarn nx-release <version> [options]
+      Usage: yarn xplat-release <version> [options]
 
-      Example: "yarn nx-release 1.0.0-beta.1"
+      Example: "yarn xplat-release 1.0.0-beta.1"
 
       The acceptable format for the version number is:
       {number}.{number}.{number}[-{alpha|beta|rc}.{number}]
@@ -88,7 +88,7 @@ if (!parsedVersion.isValid) {
     }"`
   );
   console.error(
-    `Please run "yarn nx-release --help" for details on the acceptable version format.\n`
+    `Please run "yarn xplat-release --help" for details on the acceptable version format.\n`
   );
   return process.exit(1);
 } else {
@@ -150,14 +150,18 @@ const options = {
    */
   pkgFiles: [
     'package.json',
-    'build/npm/create-xplat-workspace/package.json',
     'build/npm/angular/package.json',
+    'build/npm/create-xplat-workspace/package.json',
     'build/npm/electron/package.json',
+    'build/npm/electron-angular/package.json',
     'build/npm/ionic/package.json',
+    'build/npm/ionic-angular/package.json',
     'build/npm/nativescript/package.json',
+    'build/npm/nativescript-angular/package.json',
     'build/npm/schematics/package.json',
     'build/npm/web/package.json',
-    'build/npm/workspace/package.json'
+    'build/npm/web-angular/package.json',
+    'build/npm/xplat/package.json'
   ],
   increment: parsedVersion.version,
   requireUpstream: false,
@@ -188,10 +192,10 @@ releaseIt(options)
       return;
     }
 
-    if (parsedArgs.nobazel) {
-      childProcess.execSync('rm -rf ./build/packages/bazel');
-      childProcess.execSync('rm -rf ./build/npm/bazel');
-    }
+    // if (parsedArgs.nobazel) {
+    //   childProcess.execSync('rm -rf ./build/packages/bazel');
+    //   childProcess.execSync('rm -rf ./build/npm/bazel');
+    // }
 
     /**
      * We always use either "latest" or "next" (i.e. no separate tags for alpha, beta etc)

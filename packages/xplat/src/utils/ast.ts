@@ -8,7 +8,7 @@
 import { Rule, Tree, SchematicContext } from '@angular-devkit/schematics';
 import * as ts from 'typescript';
 import * as stripJsonComments from 'strip-json-comments';
-import { serializeJson, updateJsonInTree } from '@nrwl/workspace';
+import { serializeJson, updateJsonInTree, readJsonInTree } from '@nrwl/workspace';
 import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 
 function nodesByPosition(first: ts.Node, second: ts.Node): number {
@@ -363,24 +363,6 @@ export function insert(host: Tree, modulePath: string, changes: any[]) {
     }
   }
   host.commitUpdate(recorder);
-}
-
-/**
- * This method is specifically for reading JSON files in a Tree
- * @param host The host tree
- * @param path The path to the JSON file
- * @returns The JSON data in the file.
- */
-export function readJsonInTree<T = any>(host: Tree, path: string): T {
-  if (!host.exists(path)) {
-    throw new Error(`Cannot find ${path}`);
-  }
-  const contents = stripJsonComments(host.read(path)!.toString('utf-8'));
-  try {
-    return JSON.parse(contents);
-  } catch (e) {
-    throw new Error(`Cannot parse ${path}: ${e.message}`);
-  }
 }
 
 let installAdded = false;

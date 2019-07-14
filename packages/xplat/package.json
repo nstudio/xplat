@@ -41,7 +41,7 @@
     ]
   },
   "scripts": {
-    "postinstall": "node scripts/postinstall.js"
+    "postinstall": "node src/utils/postinstall.js"
   },
   "dependencies": {
     "@angular-devkit/core": "8.0.1",

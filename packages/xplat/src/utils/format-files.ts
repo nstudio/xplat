@@ -5,7 +5,6 @@
  * Use of this source code is governed by an MIT- style license that can be
  * found in the LICENSE file at https://github.com/nrwl/nx/blob/master/LICENSE
  */
-import { readJsonInTree } from './ast';
 import {
   TaskConfigurationGenerator,
   TaskConfiguration,
@@ -15,6 +14,7 @@ import {
   noop
 } from '@angular-devkit/schematics';
 import { stripIndents } from '@angular-devkit/core/src/utils/literals';
+import { readJsonInTree } from '@nrwl/workspace';
 
 class FormatFiles implements TaskConfigurationGenerator<any> {
   toConfiguration(): TaskConfiguration<any> {

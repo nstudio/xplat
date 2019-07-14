@@ -84,12 +84,9 @@ function publishXplatPackage() {
 }
 
 function installXplatPackage() {
-  execSync(
-    'npm i ../nstudio-xplat-source-$(fx ../package.json .version).tgz',
-    {
-      cwd: `./tmp/${projectName}`
-    }
-  );
+  execSync('npm i ../nstudio-xplat-source-$(fx ../package.json .version).tgz', {
+    cwd: `./tmp/${projectName}`
+  });
 }
 
 export function npmInstall() {
