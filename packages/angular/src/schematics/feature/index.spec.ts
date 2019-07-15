@@ -17,7 +17,7 @@ describe('feature schematic', () => {
 
   beforeEach(() => {
     appTree = Tree.empty();
-    appTree = createXplatWithNativeScriptWeb(appTree);
+    appTree = createXplatWithNativeScriptWeb(appTree, null, 'angular');
   });
 
   it('should create feature module with a single starting component', async () => {
@@ -126,6 +126,125 @@ describe('feature schematic', () => {
     );
 
     modulePath = '/xplat/web/features/foo/foo.module.ts';
+    featureModule = getFileContent(tree, modulePath);
+    // console.log(modulePath + ':');
+    // console.log(featureModule);
+    expect(featureModule).toMatch(
+      isInModuleMetadata('FooModule', 'imports', `UIModule`, true)
+    );
+    expect(featureModule).toMatch(
+      `import { UIModule } from \'../ui/ui.module\'`
+    );
+  });
+
+  it('should create feature module with a single starting component with framework suffix for xplat when no default is set', async () => {
+    appTree = Tree.empty();
+    appTree = createXplatWithNativeScriptWeb(appTree);
+    const options: FeatureHelpers.Schema = { ...defaultOptions };
+    // console.log('appTree:', appTree);
+    let tree = await runSchematic('feature', options, appTree);
+    const files = tree.files;
+    // console.log(files.slice(85,files.length));
+    expect(
+      files.indexOf('/apps/nativescript-viewer/package.json')
+    ).toBeGreaterThanOrEqual(0);
+    expect(
+      files.indexOf('/apps/web-viewer/src/app/features/core/core.module.ts')
+    ).toBeGreaterThanOrEqual(0);
+
+    // shared code defaults
+    expect(files.indexOf('/libs/features/index.ts')).toBeGreaterThanOrEqual(0);
+    expect(
+      files.indexOf('/xplat/nativescript-angular/index.ts')
+    ).toBeGreaterThanOrEqual(0);
+    expect(files.indexOf('/xplat/web-angular/index.ts')).toBeGreaterThanOrEqual(0);
+
+    // feature in shared code
+    expect(files.indexOf('/libs/features/foo/index.ts')).toBeGreaterThanOrEqual(
+      0
+    );
+    expect(
+      files.indexOf('/libs/features/foo/foo.module.ts')
+    ).toBeGreaterThanOrEqual(0);
+    expect(
+      files.indexOf('/libs/features/foo/base/foo.base-component.ts')
+    ).toBeGreaterThanOrEqual(0);
+    expect(
+      files.indexOf('/xplat/nativescript-angular/features/foo/index.ts')
+    ).toBeGreaterThanOrEqual(0);
+    expect(
+      files.indexOf('/xplat/nativescript-angular/features/foo/foo.module.ts')
+    ).toBeGreaterThanOrEqual(0);
+    expect(
+      files.indexOf(
+        '/xplat/nativescript-angular/features/foo/components/foo/foo.component.html'
+      )
+    ).toBeGreaterThanOrEqual(0);
+    expect(
+      files.indexOf(
+        '/xplat/nativescript-angular/features/foo/components/foo/foo.component.ts'
+      )
+    ).toBeGreaterThanOrEqual(0);
+    expect(
+      files.indexOf('/xplat/web-angular/features/foo/index.ts')
+    ).toBeGreaterThanOrEqual(0);
+    expect(
+      files.indexOf('/xplat/web-angular/features/foo/foo.module.ts')
+    ).toBeGreaterThanOrEqual(0);
+    expect(
+      files.indexOf('/xplat/web-angular/features/foo/components/foo/foo.component.html')
+    ).toBeGreaterThanOrEqual(0);
+    expect(
+      files.indexOf('/xplat/web-angular/features/foo/components/foo/foo.component.ts')
+    ).toBeGreaterThanOrEqual(0);
+
+    // feature should NOT be in projects
+    expect(
+      files.indexOf('/apps/nativescript-viewer/src/features/foo/index.ts')
+    ).toBeGreaterThanOrEqual(-1);
+    expect(
+      files.indexOf('/apps/nativescript-viewer/src/features/foo/foo.module.ts')
+    ).toBeGreaterThanOrEqual(-1);
+    expect(
+      files.indexOf(
+        '/apps/nativescript-viewer/src/features/foo/components/foo/foo.component.html'
+      )
+    ).toBeGreaterThanOrEqual(-1);
+    expect(
+      files.indexOf(
+        '/apps/nativescript-viewer/src/features/foo/components/foo/foo.component.ts'
+      )
+    ).toBeGreaterThanOrEqual(-1);
+    expect(
+      files.indexOf('/apps/web-viewer/src/app/features/foo/index.ts')
+    ).toBeGreaterThanOrEqual(-1);
+    expect(
+      files.indexOf('/apps/web-viewer/src/app/features/foo/foo.module.ts')
+    ).toBeGreaterThanOrEqual(-1);
+    expect(
+      files.indexOf(
+        '/apps/web-viewer/src/app/features/foo/components/foo/foo.component.html'
+      )
+    ).toBeGreaterThanOrEqual(-1);
+    expect(
+      files.indexOf(
+        '/apps/web-viewer/src/app/features/foo/components/foo/foo.component.ts'
+      )
+    ).toBeGreaterThanOrEqual(-1);
+
+    // file content
+    let modulePath = '/xplat/nativescript-angular/features/foo/foo.module.ts';
+    let featureModule = getFileContent(tree, modulePath);
+    // console.log(modulePath + ':');
+    // console.log(featureModule);
+    expect(featureModule).toMatch(
+      isInModuleMetadata('FooModule', 'imports', `UIModule`, true)
+    );
+    expect(featureModule).toMatch(
+      `import { UIModule } from \'../ui/ui.module\'`
+    );
+
+    modulePath = '/xplat/web-angular/features/foo/foo.module.ts';
     featureModule = getFileContent(tree, modulePath);
     // console.log(modulePath + ':');
     // console.log(featureModule);

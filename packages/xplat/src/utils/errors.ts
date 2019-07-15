@@ -24,7 +24,7 @@ export function unsupportedHelperError(helper: string) {
 }
 
 export function helperTargetError(helper: string) {
-  return `The xplat-helper "${helper}" requires the --target flag.`;
+  return `The helper "${helper}" requires the --target flag.`;
 }
 
 export function helperMissingPlatforms() {
@@ -74,16 +74,24 @@ export function needFeatureModuleError(
   optionName: string,
   isOnlyProject?: boolean
 ) {
+  // let platforms = '';
   if (optionName) {
+    
+    // const optionParts = optionName.split('-');
+    // platforms =
     optionName = ` ${
       isOnlyProject ? '--projects=' : '--platforms='
     }${optionName} --onlyModule`;
   } else {
     optionName = '';
   }
-  return `${modulePath} does not exist. Create the feature module first. For example: ng g feature ${featureName}${optionName}`;
+  return `${modulePath} does not exist. Create the feature module first. For example: ng g @nstudio/angular:feature ${featureName}${optionName}`;
 }
 
 export function optionsMissingError(error: string) {
   return `Options missing. ${error} Currently supported platforms: ${supportedPlatforms}`;
+}
+
+export function noteAboutXplatSetupWithDefaultFramework(defaultFramework: string, platform: string) {
+  return `You currently have "${defaultFramework}" set as your default frontend framework and have already generated xplat support for "${platform}". A command is coming soon to auto reconfigure your workspace to later add baseline platform support for those which have previously been generated prepaired with a frontend framework.`;
 }

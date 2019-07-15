@@ -7,7 +7,7 @@ import {
   url,
   mergeWith
 } from '@angular-devkit/schematics';
-import { getDefaultTemplateOptions } from '@nstudio/xplat';
+import { getDefaultTemplateOptions, XplatHelpers } from '@nstudio/xplat';
 
 import { Schema as AppResourcesSchema } from './schema';
 
@@ -17,7 +17,8 @@ export default function(options: AppResourcesSchema) {
       apply(url('./_files'), [
         template({
           ...getDefaultTemplateOptions(),
-          name: options.name
+          name: options.name,
+          xplatFolderName: XplatHelpers.getXplatFoldername('nativescript')
         }),
         move(options.path)
       ])

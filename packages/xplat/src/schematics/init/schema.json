@@ -1,21 +1,62 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "id": "initXplatWorkspace",
+  "id": "initXplatSupport",
   "title": "xplat schema",
   "type": "object",
   "properties": {
     "platforms": {
       "type": "string",
-      "description": "Target platforms to support."
+      "description": "Target platforms to support.",
+      "x-prompt": {
+        "message": "Would you like to generate xplat structure now? (You can generate for platforms at anytime using 'ng g @nstudio/xplat:init --platforms electron,ionic,nativescript,web')",
+        "type": "list",
+        "items": [
+          {
+            "value": "",
+            "label": "not right now     [just add the tools for use later]"
+          },
+          {
+            "value": "electron",
+            "label": "electron          [generate xplat Electron support]"
+          },
+          {
+            "value": "ionic",
+            "label": "ionic             [generate xplat Ionic support]"
+          },
+          {
+            "value": "nativescript",
+            "label": "nativescript      [generate xplat NativeScript support]"
+          },
+          {
+            "value": "web",
+            "label": "web               [generate xplat Web support]"
+          }
+        ]
+      }
     },
     "framework": {
       "type": "string",
-      "description": "Target frameworks to support."
+      "description": "Frontend framework to support.",
+      "x-prompt": {
+        "message": "Do you prefer to use a frontend framework?",
+        "type": "list",
+        "items": [
+          {
+            "value": "",
+            "label": "not right now     [I'll decide later]"
+          },
+          {
+            "value": "angular",
+            "label": "angular          [ensure platforms are added with Angular]"
+          }
+        ]
+      }
     },
     "prefix": {
       "type": "string",
       "description": "The prefix to apply to generated selectors.",
-      "alias": "p"
+      "alias": "p",
+      "x-prompt": "Please input a 2-3 character prefix to use on various generated selectors for your code:"
     },
     "npmScope": {
       "type": "string",
@@ -24,8 +65,9 @@
     },
     "setDefault": {
       "type": "boolean",
-      "description": "Save options as defaults. Used most often to set the specified framework as your primary.",
-      "default": false
+      "description": "Save options as defaults. Ensure any specified framework is set as your primary.",
+      "default": false,
+      "x-prompt": "Would you like to set this choice as your default for the workspace? Encouraged if you plan to stick with a frontend framework choice for any significant time period."
     },
     "skipFormat": {
       "description": "Skip formatting files",

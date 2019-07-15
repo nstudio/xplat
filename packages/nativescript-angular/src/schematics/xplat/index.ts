@@ -28,6 +28,7 @@ export default function(options: XplatHelpers.Schema) {
         'angular'
       );
       // console.log('xplatName:', xplatName);
+      // console.log('options:', options);
       return options.skipDependentPlatformFiles
         ? noop()
         : XplatHelpers.addPlatformFiles(options, xplatFolderName)(

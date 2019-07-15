@@ -13,7 +13,8 @@ import {
   updateTsConfig,
   IHelperSchema,
   IHelperConfig,
-  getDefaultTemplateOptions
+  getDefaultTemplateOptions,
+  XplatHelpers
 } from '@nstudio/xplat';
 
 export const config: IHelperConfig = {
@@ -23,6 +24,7 @@ export const config: IHelperConfig = {
 
 function addHelperFiles(options: IHelperSchema): Rule {
   // executed from 'helpers' directory so ensure _files are loaded relative
+  const xplatFolderName = XplatHelpers.getXplatFoldername('nativescript');
   return branchAndMerge(
     mergeWith(
       apply(url(`./imports/_files`), [
@@ -30,7 +32,7 @@ function addHelperFiles(options: IHelperSchema): Rule {
           ...(options as any),
           ...getDefaultTemplateOptions()
         }),
-        move(`xplat/nativescript/utils`)
+        move(`xplat/${xplatFolderName}/utils`)
       ])
     )
   );
@@ -38,7 +40,8 @@ function addHelperFiles(options: IHelperSchema): Rule {
 
 function imports(helperChains: Array<any>, options: IHelperSchema) {
   return (tree: Tree, context: SchematicContext) => {
-    let pathRef = `xplat/nativescript/utils/@nativescript/*`;
+    const xplatFolderName = XplatHelpers.getXplatFoldername('nativescript');
+    let pathRef = `xplat/${xplatFolderName}/utils/@nativescript/*`;
     // update root tsconfig
     helperChains.push(
       updateTsConfig(tree, (tsConfig: any) => {

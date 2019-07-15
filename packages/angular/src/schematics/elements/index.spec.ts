@@ -14,7 +14,7 @@ describe('elements schematic', () => {
 
   beforeEach(() => {
     appTree = Tree.empty();
-    appTree = createXplatWithApps(appTree);
+    appTree = createXplatWithApps(appTree, 'angular');
   });
 
   it('should create an elements module that provides the specified components', async () => {

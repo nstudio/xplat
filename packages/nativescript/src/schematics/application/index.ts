@@ -170,7 +170,8 @@ function addAppFiles(
         template({
           ...(options as any),
           ...getDefaultTemplateOptions(),
-          appname
+          appname,
+          xplatFolderName: XplatHelpers.getXplatFoldername('nativescript')
         }),
         move(`apps/${appPath}`)
       ])

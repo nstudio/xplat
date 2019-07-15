@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 
 // libs
-import { <%= utils.classify(prefix) %>IonicCoreModule } from '@<%= npmScope %>/ionic';
+import { <%= utils.classify(prefix) %>IonicCoreModule } from '@<%= npmScope %>/<%= xplatFolderName %>';
 
 @NgModule({
   imports: [<%= utils.classify(prefix) %>IonicCoreModule]

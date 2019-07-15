@@ -25,7 +25,8 @@ import {
   formatFiles,
   missingArgument,
   updateAngularProjects,
-  getDefaultTemplateOptions
+  getDefaultTemplateOptions,
+  XplatHelpers
 } from '@nstudio/xplat';
 
 import { Schema as ElementsOptions } from './schema';
@@ -200,6 +201,7 @@ export default function(options: ElementsOptions) {
 
 function addFiles(options: ElementsOptions, extra: string = ''): Rule {
   extra = extra ? `${extra}_` : '';
+  const xplatFolderName = XplatHelpers.getXplatFoldername('web', 'angular');
   return branchAndMerge(
     mergeWith(
       apply(url(`./_${extra}files`), [
@@ -207,12 +209,13 @@ function addFiles(options: ElementsOptions, extra: string = ''): Rule {
           ...(options as any),
           ...getDefaultTemplateOptions(),
           name: options.name.toLowerCase(),
+          xplatFolderName,
           customElementList,
           componentSymbolList,
           componentSymbols,
           htmlElements
         }),
-        move(`xplat/web/elements`)
+        move(`xplat/${xplatFolderName}/elements`)
       ])
     )
   );

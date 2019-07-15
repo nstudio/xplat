@@ -107,6 +107,6 @@ describe('helpers schematic', () => {
 
     expect(
       () => (tree = runSchematicSync('helpers', options, appTree))
-    ).toThrowError(`The xplat-helper "applitools" requires the --target flag.`);
+    ).toThrowError(`The helper "applitools" requires the --target flag.`);
   });
 });

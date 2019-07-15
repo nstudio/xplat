@@ -3,7 +3,9 @@ import {
   supportedSandboxPlatforms,
   supportedPlatforms,
   getDefaultTemplateOptions,
-  stringUtils
+  stringUtils,
+  getDefaultFramework,
+  FrameworkTypes
 } from './general';
 import {
   SchematicsException,
@@ -23,6 +25,7 @@ import {
 } from './errors';
 import { createSourceFile, ScriptTarget } from 'typescript';
 import { insert, addGlobal } from './ast';
+import { XplatHelpers } from './xplat';
 
 export namespace FeatureHelpers {
   export interface Schema {
@@ -70,7 +73,7 @@ export namespace FeatureHelpers {
   } {
     if (!options.name) {
       throw new SchematicsException(
-        `You did not specify the name of the feature you'd like to generate. For example: ng g feature my-feature`
+        `You did not specify the name of the feature you'd like to generate. For example: ng g @nstudio/angular:feature my-feature`
       );
     }
     const featureName = options.name.toLowerCase();
@@ -137,22 +140,33 @@ export namespace FeatureHelpers {
   }
 
   export function addFiles(
+    workingDirectory: string,
     options: Schema,
     target: string = '',
     projectName: string = '',
-    extra: string = ''
+    extra: string = '',
+    framework?: FrameworkTypes
   ) {
     let moveTo: string;
     if (target) {
-      moveTo = getMoveTo(options, target, projectName);
+      moveTo = getMoveTo(options, target, projectName, framework);
     } else {
       target = 'lib';
       moveTo = `libs/features/${options.name.toLowerCase()}`;
     }
+    if (!extra) {
+      // make sure no `null` or `undefined` values get in the string path
+      extra = '';
+    }
+    // console.log('target:', target);
+    // console.log('addFiles moveTo:', moveTo);
+    // console.log('add files from:', `${workingDirectory}/${extra}_files`);
     return branchAndMerge(
       mergeWith(
         apply(url(`./${extra}_files`), [
-          template(getTemplateOptions(options)),
+          template(
+            getTemplateOptions(options, target, framework)
+          ),
           move(moveTo)
         ])
       )
@@ -163,8 +177,10 @@ export namespace FeatureHelpers {
     options: Schema,
     indexFilePath: string
   ): Rule {
-    return (host: Tree) => {
-      const indexSource = host.read(indexFilePath)!.toString('utf-8');
+    return (tree: Tree) => {
+      // console.log('adjustBarrelIndex indexFilePath:', indexFilePath);
+      // console.log('tree.exists(indexFilePath):', tree.exists(indexFilePath));
+      const indexSource = tree.read(indexFilePath)!.toString('utf-8');
       const indexSourceFile = createSourceFile(
         indexFilePath,
         indexSource,
@@ -172,7 +188,7 @@ export namespace FeatureHelpers {
         true
       );
 
-      insert(host, indexFilePath, [
+      insert(tree, indexFilePath, [
         ...addGlobal(
           indexSourceFile,
           indexFilePath,
@@ -180,33 +196,39 @@ export namespace FeatureHelpers {
           true
         )
       ]);
-      return host;
+      return tree;
     };
   }
 
-  export function getTemplateOptions(options: Schema) {
+  export function getTemplateOptions(options: Schema, platform: string, framework?: FrameworkTypes) {
     const nameParts = options.name.split('-');
     let endingDashName = nameParts[0];
     if (nameParts.length > 1) {
       endingDashName = stringUtils.capitalize(nameParts[nameParts.length - 1]);
     }
+    const xplatFolderName = XplatHelpers.getXplatFoldername(<PlatformTypes>platform, framework);
     return {
       ...(options as any),
       ...getDefaultTemplateOptions(),
       name: options.name.toLowerCase(),
-      endingDashName
+      endingDashName,
+      xplatFolderName
     };
   }
 
   export function getMoveTo(
     options: Schema,
     platform: string,
-    projectName?: string
+    projectName?: string,
+    framework?: FrameworkTypes
   ) {
+    // console.log('getMoveTo framework:', framework);
+    const xplatFolderName = XplatHelpers.getXplatFoldername(<PlatformTypes>platform, framework);
+    // console.log('getMoveTo xplatFolderName:', xplatFolderName);
     const featureName = options.name.toLowerCase();
-    let moveTo = `xplat/${platform}/features/${featureName}`;
+    let moveTo = `xplat/${xplatFolderName}/features/${featureName}`;
     if (projectName) {
-      let appDir = platform === 'web' ? '/app' : '';
+      let appDir = ['web', 'web-angular'].includes(xplatFolderName) ? '/app' : '';
       moveTo = `apps/${projectName}/src${appDir}/features/${featureName}`;
       // console.log('moveTo:', moveTo);
     }

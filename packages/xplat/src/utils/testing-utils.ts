@@ -5,23 +5,28 @@ import {
   SchematicsException
 } from '@angular-devkit/schematics';
 import { NxJson } from '@nrwl/workspace';
+import { FrameworkTypes } from './general';
 
 export { getFileContent } from '@nrwl/workspace/testing';
 
-export function createEmptyWorkspace(tree: Tree): Tree {
+export function createEmptyWorkspace(tree: Tree, defaultFramework?: FrameworkTypes): Tree {
   tree.create('/.gitignore', '');
   tree.create(
     '/angular.json',
     JSON.stringify({ version: 1, projects: {}, newProjectRoot: '' })
   );
+  const xplatSettings: any = {
+    prefix: 'tt'
+  };
+  if (defaultFramework) {
+    xplatSettings.defaultFramework = defaultFramework;
+  }
   tree.create(
     '/package.json',
     JSON.stringify({
       dependencies: {},
       devDependencies: {},
-      xplat: {
-        prefix: 'tt'
-      }
+      xplat: xplatSettings
     })
   );
   tree.create(
@@ -95,22 +100,23 @@ export function createXplatWithAppsForElectron(tree: Tree): Tree {
   return tree;
 }
 
-export function createXplatWithApps(tree: Tree): Tree {
-  tree = createEmptyWorkspace(tree);
+export function createXplatWithApps(tree: Tree, defaultFramework?: FrameworkTypes): Tree {
+  tree = createEmptyWorkspace(tree, defaultFramework);
   createXplatLibs(tree);
-  createXplatWebAngular(tree);
+  createXplatWebAngular(tree, defaultFramework);
   createWebAngularApp(tree);
   return tree;
 }
 
 export function createXplatWithNativeScriptWeb(
   tree: Tree,
-  withRouting?: boolean
+  withRouting?: boolean,
+  defaultFramework?: FrameworkTypes
 ): Tree {
-  tree = createEmptyWorkspace(tree);
+  tree = createEmptyWorkspace(tree, defaultFramework);
   createXplatLibs(tree);
-  createXplatNativeScriptAngular(tree);
-  createXplatWebAngular(tree);
+  createXplatNativeScriptAngular(tree, defaultFramework);
+  createXplatWebAngular(tree, defaultFramework);
   createNativeScriptAngularApp(tree, withRouting);
   createWebAngularApp(tree, withRouting);
   return tree;
@@ -171,12 +177,13 @@ export function createXplatLibs(tree: Tree) {
   tree.create('/libs/utils/index.ts', '');
 }
 
-export function createXplatNativeScriptAngular(tree: Tree) {
-  tree.create('/xplat/nativescript/index.ts', '');
-  tree.create('/xplat/nativescript/package.json', '');
-  tree.create('/xplat/nativescript/core/index.ts', '');
+export function createXplatNativeScriptAngular(tree: Tree, defaultFramework?: FrameworkTypes) {
+  const frameworkSuffix = defaultFramework === 'angular' ? '' : '-angular';
+  tree.create(`/xplat/nativescript${frameworkSuffix}/index.ts`, '');
+  tree.create(`/xplat/nativescript${frameworkSuffix}/package.json`, '');
+  tree.create(`/xplat/nativescript${frameworkSuffix}/core/index.ts`, '');
   tree.create(
-    '/xplat/nativescript/core/core.module.ts',
+    `/xplat/nativescript${frameworkSuffix}/core/core.module.ts`,
     `import { NgModule } from '@angular/core';
 
   // nativescript
@@ -238,7 +245,7 @@ export function createXplatNativeScriptAngular(tree: Tree) {
   `
   );
   tree.create(
-    '/xplat/nativescript/core/services/index.ts',
+    `/xplat/nativescript${frameworkSuffix}/core/services/index.ts`,
     `import { AppService } from './app.service';
   import { TNSWindowService } from './tns-window.service';
   
@@ -247,9 +254,9 @@ export function createXplatNativeScriptAngular(tree: Tree) {
   export * from './app.service';
   `
   );
-  tree.create('/xplat/nativescript/features/ui/index.ts', '');
+  tree.create(`/xplat/nativescript${frameworkSuffix}/features/ui/index.ts`, '');
   tree.create(
-    '/xplat/nativescript/features/ui/ui.module.ts',
+    `/xplat/nativescript${frameworkSuffix}/features/ui/ui.module.ts`,
     `import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 
   import { NativeScriptFormsModule } from 'nativescript-angular/forms';
@@ -277,18 +284,19 @@ export function createXplatNativeScriptAngular(tree: Tree) {
   export class UIModule {}
   `
   );
-  tree.create('/xplat/nativescript/features/index.ts', '');
-  tree.create('/xplat/nativescript/scss/_variables.scss', '');
-  tree.create('/xplat/nativescript/utils/index.ts', ``);
+  tree.create(`/xplat/nativescript${frameworkSuffix}/features/index.ts`, '');
+  tree.create(`/xplat/nativescript${frameworkSuffix}/scss/_variables.scss`, '');
+  tree.create(`/xplat/nativescript${frameworkSuffix}/utils/index.ts`, ``);
 }
 
-export function createXplatWebAngular(tree: Tree) {
-  tree.create('/xplat/web/index.ts', '');
-  tree.create('/xplat/web/package.json', '');
-  tree.create('/xplat/web/core/index.ts', '');
-  tree.create('/xplat/web/features/ui/index.ts', '');
+export function createXplatWebAngular(tree: Tree, defaultFramework?: FrameworkTypes) {
+  const frameworkSuffix = defaultFramework === 'angular' ? '' : '-angular';
+  tree.create(`/xplat/web${frameworkSuffix}/index.ts`, '');
+  tree.create(`/xplat/web${frameworkSuffix}/package.json`, '');
+  tree.create(`/xplat/web${frameworkSuffix}/core/index.ts`, '');
+  tree.create(`/xplat/web${frameworkSuffix}/features/ui/index.ts`, '');
   tree.create(
-    '/xplat/web/features/ui/ui.module.ts',
+    `/xplat/web${frameworkSuffix}/features/ui/ui.module.ts`,
     `import { NgModule } from '@angular/core';
   import { CommonModule } from '@angular/common';
   import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -314,8 +322,8 @@ export function createXplatWebAngular(tree: Tree) {
   export class UIModule {}
   `
   );
-  tree.create('/xplat/web/features/index.ts', '');
-  tree.create('/xplat/web/scss/_variables.scss', '');
+  tree.create(`/xplat/web${frameworkSuffix}/features/index.ts`, '');
+  tree.create(`/xplat/web${frameworkSuffix}/scss/_variables.scss`, '');
 }
 
 export function createWebAngularApp(tree: Tree, withRouting?: boolean) {

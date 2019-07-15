@@ -131,7 +131,8 @@ function addAppFiles(options: Schema, extra: string = ''): Rule {
       apply(url(`./_${extra}files`), [
         template({
           ...(options as any),
-          ...getDefaultTemplateOptions()
+          ...getDefaultTemplateOptions(),
+          xplatFolderName: XplatHelpers.getXplatFoldername('web', 'angular')
         }),
         move(`apps/${options.name}`)
       ])
@@ -253,7 +254,7 @@ function appCmpContent() {
   return `import { Component } from '@angular/core';
 
 // xplat
-import { AppBaseComponent } from '@${getNpmScope()}/web';
+import { AppBaseComponent } from '@${getNpmScope()}/${XplatHelpers.getXplatFoldername('web', 'angular')}';
 
 @Component({
     selector: '${getPrefix()}-root',

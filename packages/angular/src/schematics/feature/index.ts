@@ -13,7 +13,8 @@ import {
   prerun,
   unsupportedPlatformError,
   formatFiles,
-  FeatureHelpers
+  FeatureHelpers,
+  getDefaultFramework
 } from '@nstudio/xplat';
 
 export default function(options: FeatureHelpers.Schema) {
@@ -22,11 +23,18 @@ export default function(options: FeatureHelpers.Schema) {
   const externalChains = [];
   for (const platform of featureSettings.platforms) {
     if (supportedPlatforms.includes(platform)) {
-      externalChains.push(
-        externalSchematic(`@nstudio/${platform}-angular`, 'feature', options, {
-          interactive: false
-        })
-      );
+      externalChains.push((tree: Tree, context: SchematicContext) => {
+        //   console.log(`@nstudio/${platform}-angular`);
+        // console.log('angular feature chain getDefaultFramework:', getDefaultFramework());
+        return externalSchematic(
+          `@nstudio/${platform}-angular`,
+          'feature',
+          options,
+          {
+            interactive: false
+          }
+        )(tree, context);
+      });
     } else {
       throw new SchematicsException(unsupportedPlatformError(platform));
     }
@@ -38,12 +46,12 @@ export default function(options: FeatureHelpers.Schema) {
     (tree: Tree, context: SchematicContext) =>
       options.onlyProject
         ? noop()(tree, context)
-        : FeatureHelpers.addFiles(options)(tree, context),
+        : FeatureHelpers.addFiles(__dirname, options)(tree, context),
     // libs
     (tree: Tree, context: SchematicContext) =>
       options.onlyProject || !options.createBase || options.onlyModule
         ? noop()(tree, context)
-        : FeatureHelpers.addFiles(options, null, null, '_component')(
+        : FeatureHelpers.addFiles(__dirname, options, null, null, '_component')(
             tree,
             context
           ),

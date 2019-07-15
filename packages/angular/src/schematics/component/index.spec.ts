@@ -17,7 +17,7 @@ describe('component schematic', () => {
 
   beforeEach(() => {
     appTree = Tree.empty();
-    appTree = createXplatWithNativeScriptWeb(appTree);
+    appTree = createXplatWithNativeScriptWeb(appTree, false, 'angular');
   });
 
   it('should create component for specified platforms', async () => {
@@ -37,28 +37,28 @@ describe('component schematic', () => {
 
     // component
     expect(
-      files.indexOf('/libs/features/foo/base/signup.base-component.ts')
-    ).toBeGreaterThanOrEqual(0);
+      tree.exists('/libs/features/foo/base/signup.base-component.ts')
+    ).toBeTruthy();
     expect(
-      files.indexOf(
+      tree.exists(
         '/xplat/nativescript/features/foo/components/signup/signup.component.html'
       )
-    ).toBeGreaterThanOrEqual(0);
+    ).toBeTruthy();
     expect(
-      files.indexOf(
+      tree.exists(
         '/xplat/nativescript/features/foo/components/signup/signup.component.ts'
       )
-    ).toBeGreaterThanOrEqual(0);
+    ).toBeTruthy();
     expect(
-      files.indexOf(
+      tree.exists(
         '/xplat/web/features/foo/components/signup/signup.component.html'
       )
-    ).toBeGreaterThanOrEqual(0);
+    ).toBeTruthy();
     expect(
-      files.indexOf(
+      tree.exists(
         '/xplat/web/features/foo/components/signup/signup.component.ts'
       )
-    ).toBeGreaterThanOrEqual(0);
+    ).toBeTruthy();
 
     // ensure base index was modified
     let barrelPath = '/libs/features/foo/base/index.ts';
@@ -92,6 +92,49 @@ describe('component schematic', () => {
     );
   });
 
+  it('should create component for specified platforms with framework name when no default is set', async () => {
+    appTree = Tree.empty();
+    appTree = createXplatWithNativeScriptWeb(appTree);
+    // console.log('appTree:', appTree);
+    let tree = await runSchematic(
+      'feature',
+      {
+        name: 'foo',
+        platforms: 'nativescript,web'
+      },
+      appTree
+    );
+    const options: ComponentHelpers.Schema = { ...defaultOptions };
+    tree = await runSchematic('component', options, tree);
+    const files = tree.files;
+    // console.log(files);//.slice(91,files.length));
+
+    // component
+    expect(
+      tree.exists('/libs/features/foo/base/signup.base-component.ts')
+    ).toBeTruthy();
+    expect(
+      tree.exists(
+        '/xplat/nativescript-angular/features/foo/components/signup/signup.component.html'
+      )
+    ).toBeTruthy();
+    expect(
+      tree.exists(
+        '/xplat/nativescript-angular/features/foo/components/signup/signup.component.ts'
+      )
+    ).toBeTruthy();
+    expect(
+      tree.exists(
+        '/xplat/web-angular/features/foo/components/signup/signup.component.html'
+      )
+    ).toBeTruthy();
+    expect(
+      tree.exists(
+        '/xplat/web-angular/features/foo/components/signup/signup.component.ts'
+      )
+    ).toBeTruthy();
+  });
+
   it('should create component for specified platforms with subFolder option', async () => {
     // console.log('appTree:', appTree);
     let tree = await runSchematic(
@@ -110,30 +153,30 @@ describe('component schematic', () => {
 
     // component
     expect(
-      files.indexOf(
+      tree.exists(
         '/libs/features/foo/base/registration/signup.base-component.ts'
       )
-    ).toBeGreaterThanOrEqual(0);
+    ).toBeTruthy();
     expect(
-      files.indexOf(
+      tree.exists(
         '/xplat/nativescript/features/foo/components/registration/signup/signup.component.html'
       )
-    ).toBeGreaterThanOrEqual(0);
+    ).toBeTruthy();
     expect(
-      files.indexOf(
+      tree.exists(
         '/xplat/nativescript/features/foo/components/registration/signup/signup.component.ts'
       )
-    ).toBeGreaterThanOrEqual(0);
+    ).toBeTruthy();
     expect(
-      files.indexOf(
+      tree.exists(
         '/xplat/web/features/foo/components/registration/signup/signup.component.html'
       )
-    ).toBeGreaterThanOrEqual(0);
+    ).toBeTruthy();
     expect(
-      files.indexOf(
+      tree.exists(
         '/xplat/web/features/foo/components/registration/signup/signup.component.ts'
       )
-    ).toBeGreaterThanOrEqual(0);
+    ).toBeTruthy();
 
     // ensure base index was modified
     let barrelPath = '/libs/features/foo/base/registration/index.ts';
@@ -142,7 +185,7 @@ describe('component schematic', () => {
     // console.log(barrelIndex);
     expect(
       barrelIndex.indexOf(`./signup.base-component`)
-    ).toBeGreaterThanOrEqual(0);
+    ).toBeTruthy();
 
     barrelPath = '/libs/features/foo/base/index.ts';
     barrelIndex = getFileContent(tree, barrelPath);
@@ -214,50 +257,50 @@ describe('component schematic', () => {
 
     // component should not be setup to share
     expect(
-      files.indexOf('/libs/features/foo/base/signup.base-component.ts')
-    ).toBe(-1);
+      tree.exists('/libs/features/foo/base/signup.base-component.ts')
+    ).toBeFalsy();
     expect(
-      files.indexOf(
+      tree.exists(
         '/xplat/nativescript/features/foo/components/signup/signup.component.html'
       )
-    ).toBe(-1);
+    ).toBeFalsy();
     expect(
-      files.indexOf(
+      tree.exists(
         '/xplat/nativescript/features/foo/components/signup/signup.component.ts'
       )
-    ).toBe(-1);
+    ).toBeFalsy();
     expect(
-      files.indexOf(
+      tree.exists(
         '/xplat/web/features/foo/components/signup/signup.component.html'
       )
-    ).toBe(-1);
+    ).toBeFalsy();
     expect(
-      files.indexOf(
+      tree.exists(
         '/xplat/web/features/foo/components/signup/signup.component.ts'
       )
-    ).toBe(-1);
+    ).toBeFalsy();
 
     // component should be project specific
     expect(
-      files.indexOf(
+      tree.exists(
         '/apps/nativescript-viewer/src/features/foo/components/signup/signup.component.html'
       )
-    ).toBeGreaterThanOrEqual(0);
+    ).toBeTruthy();
     expect(
-      files.indexOf(
+      tree.exists(
         '/apps/nativescript-viewer/src/features/foo/components/signup/signup.component.ts'
       )
-    ).toBeGreaterThanOrEqual(0);
+    ).toBeTruthy();
     expect(
-      files.indexOf(
+      tree.exists(
         '/apps/web-viewer/src/app/features/foo/components/signup/signup.component.html'
       )
-    ).toBeGreaterThanOrEqual(0);
+    ).toBeTruthy();
     expect(
-      files.indexOf(
+      tree.exists(
         '/apps/web-viewer/src/app/features/foo/components/signup/signup.component.ts'
       )
-    ).toBeGreaterThanOrEqual(0);
+    ).toBeTruthy();
 
     // file content
     let barrelPath =
@@ -298,7 +341,7 @@ describe('component schematic', () => {
     };
 
     expect(() => runSchematicSync('component', options, appTree)).toThrowError(
-      `apps/nativescript-viewer/src/features/foo/foo.module.ts does not exist. Create the feature module first. For example: ng g feature foo --projects=nativescript-viewer --onlyModule`
+      `apps/nativescript-viewer/src/features/foo/foo.module.ts does not exist. Create the feature module first. For example: ng g @nstudio/angular:feature foo --projects=nativescript-viewer --onlyModule`
     );
   });
 });

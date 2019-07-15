@@ -24,7 +24,7 @@ import {
   isTesting,
   getJsonFromFile,
   packageInnerDependencies,
-  IXplatSettings
+  IXplatSettings,
 } from '../../utils';
 import {
   NodePackageInstallTask,
@@ -42,17 +42,8 @@ export default function(options: XplatHelpers.Schema) {
   const platformArg = options.platforms || '';
 
   // frontend framework
-  const frameworks = <Array<FrameworkTypes>>(
-    (<unknown>(
-      (options.framework === 'all'
-        ? supportedFrameworks
-        : sanitizeCommaDelimitedArg(options.framework))
-    ))
-  );
-  // can actually specify comma delimited list of frameworks to generate support for
-  // most common to generate 1 at a time but we allow multiple
-  // always default framework choice to first in list when multiple
-  const frameworkChoice = frameworks.length ? frameworks[0] : null;
+  const frameworks = XplatHelpers.getFrameworksFromOptions(options.framework);
+  const frameworkChoice = XplatHelpers.getFrameworkChoice(options.framework, frameworks);
 
   const devDependencies = {};
   if (platformArg === 'all') {

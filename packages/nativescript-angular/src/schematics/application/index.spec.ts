@@ -19,7 +19,7 @@ describe('app', () => {
 
   beforeEach(() => {
     appTree = Tree.empty();
-    appTree = createEmptyWorkspace(appTree);
+    appTree = createEmptyWorkspace(appTree, 'angular');
   });
 
   it('should create all files of an app', async () => {
@@ -103,7 +103,7 @@ describe('app', () => {
     expect(files.indexOf('/xplat/web/index.ts')).toBe(-1);
   });
 
-  it('should create CoreModule with import from shared code', async () => {
+  it('should create CoreModule with import from xplat', async () => {
     const options = { ...defaultOptions };
     const tree = await runSchematic('app', options, appTree);
     const appModule = getFileContent(
@@ -123,6 +123,39 @@ describe('app', () => {
       `import { ${stringUtils.classify(options.prefix)}CoreModule } from \'@${
         options.npmScope
       }/nativescript\'`
+    );
+  });
+
+  it('should create CoreModule with import from xplat with framework name when no default is set', async () => {
+    const options = { ...defaultOptions };
+    appTree.overwrite(
+      '/package.json',
+      JSON.stringify({
+        dependencies: {},
+        devDependencies: {},
+        xplat: {
+          prefix: 'tt'
+        }
+      })
+    );
+    const tree = await runSchematic('app', options, appTree);
+    const appModule = getFileContent(
+      tree,
+      '/apps/nativescript-foo/src/core/core.module.ts'
+    );
+
+    expect(appModule).toMatch(
+      isInModuleMetadata(
+        'CoreModule',
+        'imports',
+        `${stringUtils.classify(options.prefix)}CoreModule`,
+        true
+      )
+    );
+    expect(appModule).toMatch(
+      `import { ${stringUtils.classify(options.prefix)}CoreModule } from \'@${
+        options.npmScope
+      }/nativescript-angular\'`
     );
   });
 

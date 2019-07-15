@@ -13,6 +13,10 @@ export default function(options: XplatHelpers.Schema) {
   return chain([
     prerun(options, true),
     (tree: Tree, context: SchematicContext) =>
+      externalSchematic('@nstudio/web-angular', 'xplat', options, {
+        interactive: false
+      }),
+    (tree: Tree, context: SchematicContext) =>
       externalSchematic(
         '@nstudio/electron',
         'xplat',
@@ -22,10 +26,6 @@ export default function(options: XplatHelpers.Schema) {
         },
         { interactive: false }
       ),
-    (tree: Tree, context: SchematicContext) =>
-      externalSchematic('@nstudio/web-angular', 'xplat', options, {
-        interactive: false
-      }),
     (tree: Tree, context: SchematicContext) => {
       const xplatFolderName = XplatHelpers.getXplatFoldername(
         'electron',

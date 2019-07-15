@@ -15,7 +15,7 @@ describe('service schematic', () => {
 
   beforeEach(() => {
     appTree = Tree.empty();
-    appTree = createXplatWithNativeScriptWeb(appTree);
+    appTree = createXplatWithNativeScriptWeb(appTree, null, 'angular');
   });
 
   it('should create service in libs by default for use across any platform and apps', async () => {

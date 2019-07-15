@@ -10,7 +10,8 @@ import {
   SchematicContext,
   Tree,
   Rule,
-  SchematicsException
+  SchematicsException,
+  externalSchematic
 } from '@angular-devkit/schematics';
 import {
   addGlobal,
@@ -19,7 +20,6 @@ import {
   unsupportedPlatformError,
   needFeatureModuleError,
   supportedPlatforms,
-  ITargetPlatforms,
   prerun,
   getNpmScope,
   getPrefix,
@@ -31,7 +31,8 @@ import {
   FeatureHelpers,
   PlatformTypes,
   supportedSandboxPlatforms,
-  createOrUpdate
+  createOrUpdate,
+  XplatHelpers
 } from '@nstudio/xplat';
 import {
   addImportToModule,
@@ -67,6 +68,8 @@ export function generate(type: IGenerateType, options) {
   let featureName: string = getFeatureName(options);
   let platforms: Array<PlatformTypes> = [];
 
+  const externalChains = [];
+
   if (options.projects) {
     // building in projects
     const projects = sanitizeCommaDelimitedArg(options.projects);
@@ -94,19 +97,16 @@ export function generate(type: IGenerateType, options) {
       (<unknown>sanitizeCommaDelimitedArg(options.platforms))
     );
   }
-  const targetPlatforms: ITargetPlatforms = {};
-  for (const t of platforms) {
-    if (supportedPlatforms.includes(t)) {
-      targetPlatforms[t] = true;
-    } else {
-      throw new Error(unsupportedPlatformError(t));
-    }
-  }
 
   const projectChains = [];
   if (options.projects) {
     for (const projectName of options.projects.split(',')) {
-      const platPrefix = projectName.split('-')[0];
+      const projectNameParts = projectName.split('-');
+      const platPrefix = supportedPlatforms.includes(projectNameParts[0])
+        ? projectNameParts[0]
+        : projectNameParts.length > 1
+        ? projectNameParts[1]
+        : projectNameParts[0];
       let appDir = platPrefix === 'web' ? '/app' : '';
       const prefixPath = `apps/${projectName}/src${appDir}`;
 
@@ -128,6 +128,8 @@ export function generate(type: IGenerateType, options) {
 
       // console.log('will adjustProject:', projectName);
       projectChains.push((tree: Tree, context: SchematicContext) => {
+        // console.log('featureModulePath:', featureModulePath);
+        // console.log('projectName:', projectName);
         if (!tree.exists(featureModulePath)) {
           throw new Error(
             needFeatureModuleError(
@@ -138,7 +140,10 @@ export function generate(type: IGenerateType, options) {
             )
           );
         }
-        return addToFeature(type, options, prefixPath, tree)(tree, context);
+        return addToFeature(platPrefix, type, options, prefixPath, tree)(
+          tree,
+          context
+        );
       });
 
       if (type === 'state') {
@@ -150,10 +155,14 @@ export function generate(type: IGenerateType, options) {
           );
         });
         projectChains.push((tree: Tree, context: SchematicContext) => {
-          return addToFeature(type, options, prefixPath, tree, '_index')(
+          return addToFeature(
+            platPrefix,
+            type,
+            options,
+            prefixPath,
             tree,
-            context
-          );
+            '_index'
+          )(tree, context);
         });
         projectChains.push((tree: Tree, context: SchematicContext) => {
           return adjustFeatureModuleForState(options, featureModulePath)(
@@ -169,10 +178,14 @@ export function generate(type: IGenerateType, options) {
           return adjustBarrelIndex(type, options, barrelIndex)(tree, context);
         });
         projectChains.push((tree: Tree, context: SchematicContext) => {
-          return addToFeature(type, options, prefixPath, tree, '_index')(
+          return addToFeature(
+            platPrefix,
+            type,
+            options,
+            prefixPath,
             tree,
-            context
-          );
+            '_index'
+          )(tree, context);
         });
         projectChains.push((tree: Tree, context: SchematicContext) => {
           return adjustFeatureModule(type, options, featureModulePath)(
@@ -184,6 +197,62 @@ export function generate(type: IGenerateType, options) {
     }
   } else {
     projectChains.push(noop());
+
+    for (const platform of platforms) {
+      if (supportedPlatforms.includes(platform)) {
+        // externalChains.push(externalSchematic(`@nstudio/${platform}-angular`, type, options, {
+        //   interactive: false
+        // }));
+        externalChains.push((tree: Tree, context: SchematicContext) => {
+          const xplatFolderName = XplatHelpers.getXplatFoldername(
+            platform,
+            'angular'
+          );
+          return addToFeature(
+            xplatFolderName,
+            type,
+            options,
+            `xplat/${xplatFolderName}`,
+            tree
+          );
+        });
+        // adjust barrel
+        externalChains.push((tree: Tree, context: SchematicContext) => {
+          const xplatFolderName = XplatHelpers.getXplatFoldername(
+            platform,
+            'angular'
+          );
+          return adjustBarrel(type, options, `xplat/${xplatFolderName}`);
+        });
+        // add index barrel if needed
+        externalChains.push((tree: Tree, context: SchematicContext) => {
+          const xplatFolderName = XplatHelpers.getXplatFoldername(
+            platform,
+            'angular'
+          );
+          return options.needsIndex
+            ? addToFeature(
+                xplatFolderName,
+                type,
+                options,
+                `xplat/${xplatFolderName}`,
+                tree,
+                '_index'
+              )(tree, context)
+            : noop()(tree, context);
+        });
+        // adjust feature module metadata if needed
+        externalChains.push((tree: Tree, context: SchematicContext) => {
+          const xplatFolderName = XplatHelpers.getXplatFoldername(
+            platform,
+            'angular'
+          );
+          return adjustModule(type, options, `xplat/${xplatFolderName}`);
+        });
+      } else {
+        throw new Error(unsupportedPlatformError(platform));
+      }
+    }
   }
 
   return chain([
@@ -192,7 +261,7 @@ export function generate(type: IGenerateType, options) {
       // for entire workspace usage
       // no projects and no specific platforms specified
       !options.projects && platforms.length === 0
-        ? addToFeature(type, options, 'libs', tree)(tree, context)
+        ? addToFeature('', type, options, 'libs', tree)(tree, context)
         : noop()(tree, context),
     // adjust libs barrel
     (tree: Tree, context: SchematicContext) =>
@@ -202,7 +271,7 @@ export function generate(type: IGenerateType, options) {
     // add index barrel if needed
     (tree: Tree, context: SchematicContext) =>
       options.needsIndex
-        ? addToFeature(type, options, 'libs', tree, '_index')(tree, context)
+        ? addToFeature('', type, options, 'libs', tree, '_index')(tree, context)
         : noop()(tree, context),
     // adjust feature module metadata if needed
     (tree: Tree, context: SchematicContext) =>
@@ -210,113 +279,9 @@ export function generate(type: IGenerateType, options) {
         ? adjustModule(type, options, 'libs')(tree, context)
         : noop()(tree, context),
 
-    /**
-     * NATIVESCRIPT
-     **/
-    // add for {N}
-    (tree: Tree, context: SchematicContext) =>
-      !options.projects && targetPlatforms.nativescript
-        ? addToFeature(type, options, 'xplat/nativescript', tree)(tree, context)
-        : noop()(tree, context),
-    // adjust {N} barrel
-    (tree: Tree, context: SchematicContext) =>
-      !options.projects && targetPlatforms.nativescript
-        ? adjustBarrel(type, options, 'xplat/nativescript')(tree, context)
-        : noop()(tree, context),
-    // add index barrel if needed
-    (tree: Tree, context: SchematicContext) =>
-      options.needsIndex
-        ? addToFeature(type, options, 'xplat/nativescript', tree, '_index')(
-            tree,
-            context
-          )
-        : noop()(tree, context),
-    // adjust feature module metadata if needed
-    (tree: Tree, context: SchematicContext) =>
-      !options.projects && targetPlatforms.nativescript
-        ? adjustModule(type, options, 'xplat/nativescript')(tree, context)
-        : noop()(tree, context),
-    /**
-     * WEB
-     **/
-    // add for web
-    (tree: Tree, context: SchematicContext) =>
-      !options.projects && targetPlatforms.web
-        ? addToFeature(type, options, 'xplat/web', tree)(tree, context)
-        : noop()(tree, context),
-    // adjust web barrel
-    (tree: Tree, context: SchematicContext) =>
-      !options.projects && targetPlatforms.web
-        ? adjustBarrel(type, options, 'xplat/web')(tree, context)
-        : noop()(tree, context),
-    // add index barrel if needed
-    (tree: Tree, context: SchematicContext) =>
-      options.needsIndex
-        ? addToFeature(type, options, 'xplat/web', tree, '_index')(
-            tree,
-            context
-          )
-        : noop()(tree, context),
-    // adjust feature module metadata if needed
-    (tree: Tree, context: SchematicContext) =>
-      !options.projects && targetPlatforms.web
-        ? adjustModule(type, options, 'xplat/web')(tree, context)
-        : noop()(tree, context),
-    /**
-     * IONIC
-     **/
-    // add for ionic
-    (tree: Tree, context: SchematicContext) =>
-      !options.projects && targetPlatforms.ionic
-        ? addToFeature(type, options, 'xplat/ionic', tree)(tree, context)
-        : noop()(tree, context),
-    // adjust ionic barrel
-    (tree: Tree, context: SchematicContext) =>
-      !options.projects && targetPlatforms.ionic
-        ? adjustBarrel(type, options, 'xplat/ionic')(tree, context)
-        : noop()(tree, context),
-    // add index barrel if needed
-    (tree: Tree, context: SchematicContext) =>
-      options.needsIndex
-        ? addToFeature(type, options, 'xplat/ionic', tree, '_index')(
-            tree,
-            context
-          )
-        : noop()(tree, context),
-    // adjust feature module metadata if needed
-    (tree: Tree, context: SchematicContext) =>
-      !options.projects && targetPlatforms.nativescript
-        ? adjustModule(type, options, 'xplat/ionic')(tree, context)
-        : noop()(tree, context),
-    /**
-     * ELECTRON
-     **/
-    // add for electron
-    (tree: Tree, context: SchematicContext) =>
-      !options.projects && targetPlatforms.electron
-        ? addToFeature(type, options, 'xplat/electron', tree)(tree, context)
-        : noop()(tree, context),
-    // adjust electron barrel
-    (tree: Tree, context: SchematicContext) =>
-      !options.projects && targetPlatforms.electron
-        ? adjustBarrel(type, options, 'xplat/electron')(tree, context)
-        : noop()(tree, context),
-    // add index barrel if needed
-    (tree: Tree, context: SchematicContext) =>
-      options.needsIndex
-        ? addToFeature(type, options, 'xplat/electron', tree, '_index')(
-            tree,
-            context
-          )
-        : noop()(tree, context),
-    // adjust feature module metadata if needed
-    (tree: Tree, context: SchematicContext) =>
-      !options.projects && targetPlatforms.electron
-        ? adjustModule(type, options, 'xplat/electron')(tree, context)
-        : noop()(tree, context),
-
     // project handling
     ...projectChains,
+    ...externalChains,
     // dependency updates
     (tree: Tree, context: SchematicContext) =>
       !options.projects && type === 'state'
@@ -345,6 +310,7 @@ export function getFeatureName(options: IGenerateOptions) {
 }
 
 export function addToFeature(
+  xplatFolderName: string,
   type: IGenerateType,
   options: IGenerateOptions,
   prefixPath: string,
@@ -407,6 +373,7 @@ export function addToFeature(
             ...(options as any),
             ...getDefaultTemplateOptions(),
             name: options.name.toLowerCase(),
+            xplatFolderName,
             // feature: featureName,
             forSubFolder
           }),

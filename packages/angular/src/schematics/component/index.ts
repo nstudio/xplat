@@ -40,7 +40,7 @@ export default function(options: ComponentHelpers.Schema) {
 
   for (const platform of componentSettings.platforms) {
     if (supportedPlatforms.includes(platform)) {
-      externalChains.push(
+      externalChains.push((tree: Tree, context: SchematicContext) =>
         externalSchematic(
           `@nstudio/${platform}-angular`,
           'component',
@@ -65,7 +65,7 @@ export default function(options: ComponentHelpers.Schema) {
     // add component for base libs feature
     (tree: Tree, context: SchematicContext) =>
       !options.onlyProject && options.createBase
-        ? addToFeature('component', options, 'libs', tree, '_base', true)(
+        ? addToFeature('', 'component', options, 'libs', tree, '_base', true)(
             tree,
             context
           )
@@ -86,7 +86,7 @@ export default function(options: ComponentHelpers.Schema) {
     // add index barrel if needed for subFolder
     (tree: Tree, context: SchematicContext) =>
       options.needsIndex
-        ? addToFeature('component', options, 'libs', tree, '_base_index', true)(
+        ? addToFeature('', 'component', options, 'libs', tree, '_base_index', true)(
             tree,
             context
           )
@@ -105,7 +105,7 @@ export default function(options: ComponentHelpers.Schema) {
     // add index barrel if needed
     (tree: Tree, context: SchematicContext) =>
       options.needsIndex
-        ? addToFeature('component', options, 'libs', tree, '_base_index')(
+        ? addToFeature('', 'component', options, 'libs', tree, '_base_index')(
             tree,
             context
           )

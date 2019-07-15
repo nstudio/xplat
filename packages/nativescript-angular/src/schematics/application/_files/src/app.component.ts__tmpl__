@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 // libs
-import { AppBaseComponent, AppService } from '@<%= npmScope %>/nativescript';
+import { AppBaseComponent, AppService } from '@<%= npmScope %>/<%= xplatFolderName %>';
 
 @Component({
   selector: '<%= prefix %>-root',

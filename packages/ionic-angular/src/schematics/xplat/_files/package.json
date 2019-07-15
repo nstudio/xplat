@@ -1,5 +1,5 @@
 {
-  "name": "@<%= npmScope %>/ionic",
+  "name": "@<%= npmScope %>/<%= xplatFolderName %>",
   "version": "1.0.0",
   "main": "index",
   "typings": "index.d.ts"

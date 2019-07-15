@@ -18,7 +18,7 @@ describe('xplat schematic', () => {
 
   beforeEach(() => {
     appTree = Tree.empty();
-    appTree = createEmptyWorkspace(appTree);
+    appTree = createEmptyWorkspace(appTree, 'angular');
   });
 
   it('should create default xplat support for web,nativescript + libs + testing support', async () => {
@@ -48,11 +48,11 @@ describe('xplat schematic', () => {
       files.indexOf('/testing/tsconfig.xplat.spec.json')
     ).toBeGreaterThanOrEqual(0);
 
-    expect(files.indexOf('/xplat/web-angular/index.ts')).toBeGreaterThanOrEqual(
+    expect(files.indexOf('/xplat/web/index.ts')).toBeGreaterThanOrEqual(
       0
     );
     expect(
-      files.indexOf('/xplat/nativescript-angular/index.ts')
+      files.indexOf('/xplat/nativescript/index.ts')
     ).toBeGreaterThanOrEqual(0);
   });
 
@@ -63,17 +63,17 @@ describe('xplat schematic', () => {
     const tree = await runSchematic('xplat', options, appTree);
     const files = tree.files;
     expect(
-      files.indexOf('/xplat/web-angular/features/items/items.module.ts')
+      files.indexOf('/xplat/web/features/items/items.module.ts')
     ).toBe(-1);
-    expect(files.indexOf('/xplat/web-angular/index.ts')).toBeGreaterThanOrEqual(
+    expect(files.indexOf('/xplat/web/index.ts')).toBeGreaterThanOrEqual(
       0
     );
     expect(
-      files.indexOf('/xplat/nativescript-angular/index.ts')
+      files.indexOf('/xplat/nativescript/index.ts')
     ).toBeGreaterThanOrEqual(0);
     expect(
       files.indexOf(
-        '/xplat/nativescript-angular/features/items/items.module.ts'
+        '/xplat/nativescript/features/items/items.module.ts'
       )
     ).toBe(-1);
   });
@@ -84,14 +84,14 @@ describe('xplat schematic', () => {
 
     const tree = await runSchematic('xplat', options, appTree);
     const files = tree.files;
-    expect(files.indexOf('/xplat/web-angular/index.ts')).toBeGreaterThanOrEqual(
+    expect(files.indexOf('/xplat/web/index.ts')).toBeGreaterThanOrEqual(
       0
     );
     expect(
-      files.indexOf('/xplat/ionic-angular/index.ts')
+      files.indexOf('/xplat/ionic/index.ts')
     ).toBeGreaterThanOrEqual(0);
     expect(
-      files.indexOf('/xplat/nativescript-angular/index.ts')
+      files.indexOf('/xplat/nativescript/index.ts')
     ).toBeGreaterThanOrEqual(-1);
     const packagePath = '/package.json';
     const packageFile = jsonParse(getFileContent(tree, packagePath));
@@ -110,14 +110,14 @@ describe('xplat schematic', () => {
 
     const tree = await runSchematic('xplat', options, appTree);
     const files = tree.files;
-    expect(files.indexOf('/xplat/web-angular/index.ts')).toBeGreaterThanOrEqual(
+    expect(files.indexOf('/xplat/web/index.ts')).toBeGreaterThanOrEqual(
       0
     );
     expect(
-      files.indexOf('/xplat/electron-angular/index.ts')
+      files.indexOf('/xplat/electron/index.ts')
     ).toBeGreaterThanOrEqual(0);
     expect(
-      files.indexOf('/xplat/nativescript-angular/index.ts')
+      files.indexOf('/xplat/nativescript/index.ts')
     ).toBeGreaterThanOrEqual(-1);
     const packagePath = '/package.json';
     const packageFile = jsonParse(getFileContent(tree, packagePath));
@@ -134,33 +134,36 @@ describe('xplat schematic', () => {
 
   it('should create additional xplat support when generated with different platforms', async () => {
     const options: XplatHelpers.Schema = { ...defaultOptions };
-    options.platforms = 'web,ionic';
+    options.platforms = 'ionic';
+    options.framework = 'angular';
+    options.setDefault = true;
 
     let tree = await runSchematic('xplat', options, appTree);
-    let files = tree.files;
-    expect(files.indexOf('/xplat/web-angular/index.ts')).toBeGreaterThanOrEqual(
-      0
-    );
+    // let files = tree.files;
+    expect(tree.exists('/xplat/web/index.ts')).toBeTruthy();
     expect(
-      files.indexOf('/xplat/ionic-angular/index.ts')
-    ).toBeGreaterThanOrEqual(0);
+      tree.exists('/xplat/ionic/index.ts')
+    ).toBeTruthy();
     expect(
-      files.indexOf('/xplat/nativescript-angular/index.ts')
-    ).toBeGreaterThanOrEqual(-1);
+      tree.exists('/xplat/nativescript/index.ts')
+    ).toBeFalsy();
 
     options.platforms = 'nativescript';
+    // let packageFile = jsonParse(getFileContent(tree, 'package.json'));
+    // console.log('packageFile.xplat:', packageFile.xplat);
     tree = await runSchematic('xplat', options, tree);
-    files = tree.files;
+    // packageFile = jsonParse(getFileContent(tree, 'package.json'));
+    // console.log('after 2nd xplat run packageFile.xplat:', packageFile.xplat);
+    // files = tree.files;
+    // console.log('files:', files);
     // should be unchanged
-    expect(files.indexOf('/xplat/web-angular/index.ts')).toBeGreaterThanOrEqual(
-      0
-    );
+    expect(tree.exists('/xplat/web/index.ts')).toBeTruthy();
     expect(
-      files.indexOf('/xplat/ionic-angular/index.ts')
-    ).toBeGreaterThanOrEqual(0);
+      tree.exists('/xplat/ionic/index.ts')
+    ).toBeTruthy();
     expect(
-      files.indexOf('/xplat/nativescript-angular/index.ts')
-    ).toBeGreaterThanOrEqual(0);
+      tree.exists('/xplat/nativescript/index.ts')
+    ).toBeTruthy();
   });
 
   it('should NOT create xplat unless platforms are specified', () => {

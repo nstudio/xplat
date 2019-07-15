@@ -15,7 +15,7 @@ describe('ngrx schematic', () => {
 
   beforeEach(() => {
     appTree = Tree.empty();
-    appTree = createXplatWithNativeScriptWeb(appTree);
+    appTree = createXplatWithNativeScriptWeb(appTree, null, 'angular');
   });
 
   it('should create root state in libs for use across any platform and apps', async () => {

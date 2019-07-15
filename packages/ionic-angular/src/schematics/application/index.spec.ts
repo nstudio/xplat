@@ -13,7 +13,7 @@ describe('app.ionic schematic', () => {
 
   beforeEach(() => {
     appTree = Tree.empty();
-    appTree = createEmptyWorkspace(appTree);
+    appTree = createEmptyWorkspace(appTree, 'angular');
   });
 
   it('should create all files of an app', async () => {

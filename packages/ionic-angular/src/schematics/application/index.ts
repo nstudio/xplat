@@ -130,7 +130,8 @@ function addAppFiles(options: ApplicationOptions, appPath: string): Rule {
         template({
           ...(options as any),
           ...getDefaultTemplateOptions(),
-          appname
+          appname,
+          xplatFolderName: XplatHelpers.getXplatFoldername('ionic', 'angular')
         }),
         move(`apps/${appPath}`)
       ])

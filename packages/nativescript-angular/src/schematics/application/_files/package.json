@@ -31,7 +31,7 @@
     "@ngrx/effects": "file:../../node_modules/@ngrx/effects",
     "@ngrx/router-store": "file:../../node_modules/@ngrx/router-store",
     "@ngrx/store": "file:../../node_modules/@ngrx/store",
-    "@<%= npmScope %>/nativescript": "file:../../xplat/nativescript",
+    "@<%= npmScope %>/nativescript": "file:../../xplat/<%= xplatFolderName %>",
     "@<%= npmScope %>/scss": "file:../../libs/scss",
     "nativescript-angular": "file:../../node_modules/nativescript-angular",
     "nativescript-ngx-fonticon": "file:../../node_modules/nativescript-ngx-fonticon",

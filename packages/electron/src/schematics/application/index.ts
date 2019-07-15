@@ -235,7 +235,8 @@ function addAppFiles(options: ApplicationOptions, appPath: string): Rule {
         template({
           ...(options as any),
           ...getDefaultTemplateOptions(),
-          appname
+          appname,
+          xplatFolderName: XplatHelpers.getXplatFoldername('electron')
         }),
         move(`apps/${appPath}`)
       ])
@@ -260,7 +261,7 @@ function electronModule() {
   return `import { NgModule } from '@angular/core';
 import { ${stringUtils.classify(
     getPrefix()
-  )}ElectronCoreModule } from '@${getNpmScope()}/electron';
+  )}ElectronCoreModule } from '@${getNpmScope()}/${XplatHelpers.getXplatFoldername('electron', 'angular')}';
 import { AppModule } from './app.module';
 import { AppComponent } from './app.component';
 

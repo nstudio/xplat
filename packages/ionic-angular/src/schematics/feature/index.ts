@@ -1,10 +1,10 @@
 import { chain, Tree, SchematicContext } from '@angular-devkit/schematics';
-import { FeatureHelpers } from '@nstudio/xplat';
+import { FeatureHelpers, prerun } from '@nstudio/xplat';
 
 export default function(options: FeatureHelpers.Schema) {
   const xplatChains = [];
   xplatChains.push((tree: Tree, context: SchematicContext) =>
-    FeatureHelpers.addFiles(options, 'ionic')(tree, context)
+    FeatureHelpers.addFiles(__dirname, options, 'ionic', null, null, 'angular')(tree, context)
   );
   // update index
   xplatChains.push((tree: Tree, context: SchematicContext) =>
@@ -16,12 +16,15 @@ export default function(options: FeatureHelpers.Schema) {
   // add starting component unless onlyModule
   if (!options.onlyModule) {
     xplatChains.push((tree: Tree, context: SchematicContext) =>
-      FeatureHelpers.addFiles(options, 'ionic', null, '_component')(
+      FeatureHelpers.addFiles(__dirname, options, 'ionic', null, '_component', 'angular')(
         tree,
         context
       )
     );
   }
 
-  return chain([...xplatChains]);
+  return chain([
+    prerun(),
+    ...xplatChains
+  ]);
 }

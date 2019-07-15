@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 
 // xplat
-import { UIModule } from '@<%= npmScope %>/nativescript';
+import { UIModule } from '@<%= npmScope %>/<%= xplatFolderName %>';
 
 const MODULES = [UIModule];
 

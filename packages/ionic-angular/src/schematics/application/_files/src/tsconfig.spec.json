@@ -7,8 +7,8 @@
     "baseUrl": "./",
     "paths": {
       "@<%= npmScope %>/*": ["../../../libs/*"],
-      "@<%= npmScope %>/ionic": ["../../../xplat/ionic/index.ts"],
-      "@<%= npmScope %>/ionic/*": ["../../../xplat/ionic/*"],
+      "@<%= npmScope %>/ionic": ["../../../xplat/<%= xplatFolderName %>/index.ts"],
+      "@<%= npmScope %>/ionic/*": ["../../../xplat/<%= xplatFolderName %>/*"],
       "@<%= npmScope %>/web": ["../../../xplat/web/index.ts"],
       "@<%= npmScope %>/web/*": ["../../../xplat/web/*"]
     }

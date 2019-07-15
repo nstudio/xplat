@@ -2,7 +2,7 @@ import { NgModule, Optional, SkipSelf } from '@angular/core';
 
 import { IonicModule } from '@ionic/angular';
 import { throwIfAlreadyLoaded } from '@<%= npmScope %>/utils';
-import { <%= utils.classify(prefix) %>CoreModule } from '@<%= npmScope %>/web';
+import { <%= utils.classify(prefix) %>CoreModule } from '@<%= npmScope %>/<%= xplatFolderName %>';
 
 @NgModule({
   imports: [

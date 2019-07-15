@@ -212,10 +212,11 @@ export function prerun(
           if (frameworkChoice && options.setDefault) {
             // always override default framework when user has explicitly passed framework option in with setDefault flag
             defaultFramework = <FrameworkTypes>frameworkChoice;
-          } else if (defaultFramework) {
-            // ensure the options use the default
-            options.framework = defaultFramework;
-          }
+          } 
+          // else if (defaultFramework) {
+          //   // ensure the options use the default
+          //   options.framework = defaultFramework;
+          // }
         }
         // grouping
         groupByName =

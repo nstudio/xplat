@@ -27,7 +27,8 @@ import {
   sanitizeCommaDelimitedArg,
   noPlatformError,
   XplatHelpers,
-  getNpmScope
+  getNpmScope,
+  prerun
 } from '@nstudio/xplat';
 import { addToFeature, adjustBarrelIndex } from './generator';
 import { updateJsonInTree } from '@nrwl/workspace';
@@ -145,7 +146,7 @@ export namespace ComponentHelpers {
   }
 
   export function platformGenerator(options: Schema, platform: PlatformTypes) {
-    const chains = [];
+    const chains: Array<any> = [prerun()];
     const componentSettings = prepare(options);
 
     if (options.onlyProject) {
@@ -175,7 +176,7 @@ export namespace ComponentHelpers {
                 )
               );
             }
-            return addToFeature('component', options, prefixPath, tree)(
+            return addToFeature('', 'component', options, prefixPath, tree)(
               tree,
               context
             );
@@ -188,6 +189,7 @@ export namespace ComponentHelpers {
           });
           chains.push((tree: Tree, context: SchematicContext) => {
             return addToFeature(
+              '',
               'component',
               options,
               prefixPath,
@@ -200,10 +202,12 @@ export namespace ComponentHelpers {
     } else {
       // add component
       chains.push((tree: Tree, context: SchematicContext) => {
+        const xplatFolderName = XplatHelpers.getXplatFoldername(platform, 'angular');
         return addToFeature(
+          xplatFolderName,
           'component',
           options,
-          `xplat/${platform}`,
+          `xplat/${xplatFolderName}`,
           tree,
           ``,
           true
@@ -212,21 +216,24 @@ export namespace ComponentHelpers {
       if (options.subFolder) {
         // adjust components barrel for subFolder
         chains.push((tree: Tree, context: SchematicContext) => {
+          const xplatFolderName = XplatHelpers.getXplatFoldername(platform, 'angular');
           return adjustBarrelIndex(
             'component',
             options,
-            `xplat/${platform}/features/${
+            `xplat/${xplatFolderName}/features/${
               componentSettings.featureName
             }/components/${options.subFolder}/index.ts`,
             true
           )(tree, context);
         });
         chains.push((tree: Tree, context: SchematicContext) => {
+          const xplatFolderName = XplatHelpers.getXplatFoldername(platform, 'angular');
           return options.needsIndex
             ? addToFeature(
+               xplatFolderName,
                 'component',
                 options,
-                `xplat/${platform}`,
+                `xplat/${xplatFolderName}`,
                 tree,
                 '_index',
                 true
@@ -236,10 +243,11 @@ export namespace ComponentHelpers {
       }
       // adjust overall components barrel
       chains.push((tree: Tree, context: SchematicContext) => {
+        const xplatFolderName = XplatHelpers.getXplatFoldername(platform, 'angular');
         return adjustBarrelIndex(
           'component',
           options,
-          `xplat/${platform}/features/${
+          `xplat/${xplatFolderName}/features/${
             componentSettings.featureName
           }/components/index.ts`,
           true,
@@ -249,11 +257,13 @@ export namespace ComponentHelpers {
       });
 
       chains.push((tree: Tree, context: SchematicContext) => {
+        const xplatFolderName = XplatHelpers.getXplatFoldername(platform, 'angular');
         return options.needsIndex
           ? addToFeature(
+              xplatFolderName,
               'component',
               options,
-              `xplat/${platform}`,
+              `xplat/${xplatFolderName}`,
               tree,
               '_index'
             )(tree, context)
@@ -364,7 +374,8 @@ export namespace XplatAngularHelpers {
           apply(url(`${relativePath}_files`), [
             template({
               ...(options as any),
-              ...getDefaultTemplateOptions()
+              ...getDefaultTemplateOptions(),
+              xplatFolderName: XplatHelpers.getXplatFoldername('web', 'angular')
             }),
             move('testing')
           ])

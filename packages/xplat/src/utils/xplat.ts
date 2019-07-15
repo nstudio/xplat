@@ -9,7 +9,8 @@ import {
   move,
   SchematicContext,
   Rule,
-  externalSchematic
+  externalSchematic,
+  SchematicsException
 } from '@angular-devkit/schematics';
 import { createSourceFile, ScriptTarget } from 'typescript';
 import {
@@ -31,7 +32,8 @@ import {
   jsonParse,
   FrameworkTypes,
   getDefaultFramework,
-  IXplatSettings
+  IXplatSettings,
+  supportedFrameworks
 } from './general';
 import {
   updateJsonInTree,
@@ -45,7 +47,8 @@ import {
   generatorError,
   optionsMissingError,
   noPlatformError,
-  unsupportedPlatformError
+  unsupportedPlatformError,
+  noteAboutXplatSetupWithDefaultFramework
 } from './errors';
 import { join } from 'path';
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
@@ -54,9 +57,12 @@ import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 export const packageInnerDependencies = {
   '@nstudio/angular': ['@nrwl/angular'],
   '@nstudio/electron-angular': ['@nstudio/electron', '@nstudio/angular'],
-  '@nstudio/ionic-angular': ["@nstudio/ionic", "@nstudio/angular"],
-  '@nstudio/nativescript-angular': ["@nstudio/nativescript", "@nstudio/angular"],
-  '@nstudio/web-angular': ["@nstudio/web", "@nstudio/angular"]
+  '@nstudio/ionic-angular': ['@nstudio/ionic', '@nstudio/angular'],
+  '@nstudio/nativescript-angular': [
+    '@nstudio/nativescript',
+    '@nstudio/angular'
+  ],
+  '@nstudio/web-angular': ['@nstudio/web', '@nstudio/angular']
 };
 
 export namespace XplatHelpers {
@@ -112,7 +118,7 @@ export namespace XplatHelpers {
   }
 
   /**
-   * Calls ng-add _if_ the package does not already exist 
+   * Calls ng-add _if_ the package does not already exist
    * Otherwise calls that schematic if desired, otherwise noop
    */
   export function addPackageWithNgAdd(
@@ -168,6 +174,27 @@ export namespace XplatHelpers {
     return platforms;
   }
 
+  export function getFrameworksFromOptions(frameworkArgument: string) {
+    // will support comma delimited list of frameworks to generate support for
+    // most common to generate 1 at a time but we will allow multiple
+    // always default framework choice to first in list when multiple
+    return <Array<FrameworkTypes>>(
+      (<unknown>(
+        (frameworkArgument === 'all'
+          ? supportedFrameworks
+          : sanitizeCommaDelimitedArg(frameworkArgument))
+      ))
+    );
+  }
+
+  export function getFrameworkChoice(
+    frameworkArgument: string,
+    frameworks?: Array<FrameworkTypes>
+  ) {
+    frameworks = frameworks || getFrameworksFromOptions(frameworkArgument);
+    return frameworks.length ? frameworks[0] : null;
+  }
+
   /**
    * Returns a name with the platform.
    *
@@ -184,17 +211,23 @@ export namespace XplatHelpers {
 
   /**
    * Returns xplat folder name dependent on settings.
-   * 
+   *
    * @example ('web', 'angular') => 'web-angular' if no default framework otherwise just 'web'
-   * @param platform 
-   * @param framework 
+   * @param platform
+   * @param framework
    */
-  export function getXplatFoldername(platform: PlatformTypes, framework?: FrameworkTypes) {
+  export function getXplatFoldername(
+    platform: PlatformTypes,
+    framework?: FrameworkTypes
+  ) {
     const defaultFramework = getDefaultFramework();
-    // console.log('defaultFramework:', defaultFramework);
+    // console.log('getXplatFoldername defaultFramework:', defaultFramework);
+    // console.log('framework:', framework);
     let frameworkSuffix = '';
     if (framework && defaultFramework !== framework) {
-      // use suffix to distinguish
+      // user had a default framework set
+      // however an explicit framework is being requested
+      // if they differ, use suffix to distinguish
       frameworkSuffix = `-${framework}`;
     }
     return `${platform}${frameworkSuffix}`;
@@ -221,19 +254,35 @@ export namespace XplatHelpers {
 
   export function addPlatformFiles(options: Schema, platform: string) {
     return (tree: Tree, context: SchematicContext) => {
-      if (tree.exists(`xplat/${platform}/core/index.ts`)) {
+      let defaultFramework: FrameworkTypes;
+      if (tree.exists(`xplat/${platform}/index.ts`)) {
+        // check if defaultFramework had been set
+        defaultFramework = getDefaultFramework();
+        // console.log('addPlatformFiles defaultFramework:', defaultFramework)
+        // console.log('addPlatformFiles options.framework:', options.framework)
+        if (defaultFramework && !options.framework) {
+          // base platform support: platform without framework integrations
+          // ie: vanilla {N}, vanilla web, vanilla ionic, etc. (without angular, react, vue, etc.)
+          // if user had set a default framework and is now attempting to generate base platform support
+          throw new SchematicsException(
+            noteAboutXplatSetupWithDefaultFramework(defaultFramework, platform)
+          );
+        }
         // already added
         return noop();
       }
+
+      const xplatFolderName = XplatHelpers.getXplatFoldername(<PlatformTypes>platform, defaultFramework);
 
       return branchAndMerge(
         mergeWith(
           apply(url(`./_files`), [
             template({
               ...(options as any),
-              ...getDefaultTemplateOptions()
+              ...getDefaultTemplateOptions(),
+              xplatFolderName
             }),
-            move(`xplat/${platform}`)
+            move(`xplat/${xplatFolderName}`)
           ])
         )
       );
@@ -345,7 +394,7 @@ xplat/**/*.ngsummary.json
         return 0;
       });
       const defaultFramework = getDefaultFramework();
-      let frameworkSuffix: string = ''; 
+      let frameworkSuffix: string = '';
       // defaultFramework
       //   ? `-${defaultFramework}`
       //   : '';
