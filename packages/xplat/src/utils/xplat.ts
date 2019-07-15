@@ -30,7 +30,8 @@ import {
   isTesting,
   jsonParse,
   FrameworkTypes,
-  getDefaultFramework
+  getDefaultFramework,
+  IXplatSettings
 } from './general';
 import {
   updateJsonInTree,
@@ -181,6 +182,24 @@ export namespace XplatHelpers {
       : `${platform}-${nameSanitized}`;
   }
 
+  /**
+   * Returns xplat folder name dependent on settings.
+   * 
+   * @example ('web', 'angular') => 'web-angular' if no default framework otherwise just 'web'
+   * @param platform 
+   * @param framework 
+   */
+  export function getXplatFoldername(platform: PlatformTypes, framework?: FrameworkTypes) {
+    const defaultFramework = getDefaultFramework();
+    // console.log('defaultFramework:', defaultFramework);
+    let frameworkSuffix = '';
+    if (framework && defaultFramework !== framework) {
+      // use suffix to distinguish
+      frameworkSuffix = `-${framework}`;
+    }
+    return `${platform}${frameworkSuffix}`;
+  }
+
   export function applyAppNamingConvention(
     options: any,
     platform: PlatformTypes
@@ -229,7 +248,7 @@ export namespace XplatHelpers {
     },
     // used to update various xplat workspace settings
     // can be used in combination with other generators to adjust settings
-    updatedXplatSettings?: any
+    updatedXplatSettings?: IXplatSettings
   ) {
     return (tree: Tree, context: SchematicContext) => {
       const packagePath = 'package.json';
@@ -326,13 +345,14 @@ xplat/**/*.ngsummary.json
         return 0;
       });
       const defaultFramework = getDefaultFramework();
-      let frameworkSuffix: string = defaultFramework
-        ? `-${defaultFramework}`
-        : '';
+      let frameworkSuffix: string = ''; 
+      // defaultFramework
+      //   ? `-${defaultFramework}`
+      //   : '';
 
       if (settings) {
-        if (settings.framework) {
-          // always override default if explicitly set
+        if (settings.framework !== defaultFramework) {
+          // when users have a default framework set, generation allows name to not include the default framework of choice
           frameworkSuffix = `-${settings.framework}`;
         }
         if (settings.dependentPlatforms) {

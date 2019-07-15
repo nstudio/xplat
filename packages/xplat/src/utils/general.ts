@@ -164,11 +164,18 @@ export const setDependency = (
   { name, version }: NodeDependency
 ) => Object.assign(dependenciesMap, { [name]: version });
 
+export interface IXplatSettings {
+  prefix?: string;
+  groupByName?: boolean;
+  defaultFramework?: FrameworkTypes
+}
+
 export function prerun(
   options?: {
     prefix?: string;
     groupByName?: boolean;
-    defaultFramework?: FrameworkTypes;
+    framework?: string;
+    setDefault?: boolean;
   },
   init?: boolean
 ) {
@@ -180,19 +187,39 @@ export function prerun(
     // console.log('npmScope:', npmScope);
     const packageJson = getJsonFromFile(tree, 'package.json');
 
+    let frameworkChoice: string;
+    if (options && options.framework) {
+      // can actually specify comma delimited list of frameworks to generate support for
+      // most common to generate 1 at a time but we allow multiple
+      const frameworks = sanitizeCommaDelimitedArg(options.framework);
+      // always default framework choice to first in list when multiple
+      // when it's just one (most common) will be first already
+      frameworkChoice = frameworks[0];
+    }
+    // console.log('frameworkChoice:', frameworkChoice);
+
     if (packageJson) {
       prefix = '';
       if (packageJson.xplat) {
+        const xplatSettings = <IXplatSettings>packageJson.xplat;
         // use persisted xplat settings
-        prefix = packageJson.xplat.prefix || npmScope; // (if not prefix, default to npmScope)
-        defaultFramework = packageJson.xplat.defaultFramework;
+        prefix = xplatSettings.prefix || npmScope; // (if not prefix, default to npmScope)
+        defaultFramework = xplatSettings.defaultFramework;
+
         if (options) {
           // ensure options are updated
           options.prefix = prefix;
+          if (frameworkChoice && options.setDefault) {
+            // always override default framework when user has explicitly passed framework option in with setDefault flag
+            defaultFramework = <FrameworkTypes>frameworkChoice;
+          } else if (defaultFramework) {
+            // ensure the options use the default
+            options.framework = defaultFramework;
+          }
         }
         // grouping
         groupByName =
-          packageJson.xplat.groupByName ||
+          xplatSettings.groupByName ||
           (options ? options.groupByName : false);
       } else if (options) {
         groupByName = options.groupByName;
@@ -205,9 +232,9 @@ export function prerun(
           // default to npmScope for prefix
           options.prefix = npmScope;
         }
-        if (options.defaultFramework) {
+        if (frameworkChoice) {
           if (!defaultFramework && init) {
-            defaultFramework = options.defaultFramework;
+            defaultFramework = <FrameworkTypes>frameworkChoice;
           }
         }
       }

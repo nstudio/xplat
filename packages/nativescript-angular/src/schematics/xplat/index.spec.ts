@@ -13,7 +13,8 @@ describe('xplat schematic', () => {
   let appTree: Tree;
   const defaultOptions: XplatHelpers.Schema = {
     npmScope: 'testing',
-    prefix: 'ft' // foo test
+    prefix: 'ft', // foo test
+    platforms: 'nativescript'
   };
 
   beforeEach(() => {
@@ -47,5 +48,24 @@ describe('xplat schematic', () => {
     expect(
       packageFile.devDependencies[`tns-platform-declarations`]
     ).not.toBeUndefined();
+    const filePath = '/tsconfig.json';
+    const fileContent = jsonParse(getFileContent(tree, filePath));
+    // console.log(fileContent);
+    expect(fileContent.compilerOptions.paths['@testing/nativescript-angular']).toBeTruthy();
+    expect(fileContent.compilerOptions.paths['@testing/nativescript-angular/*']).toBeTruthy();
+  });
+
+  it('should create default xplat support without framework suffix when specifying default', async () => {
+    const options: XplatHelpers.Schema = { ...defaultOptions };
+    options.framework = 'angular';
+    options.setDefault = true;
+
+    const tree = await runSchematic('xplat', options, appTree);
+    expect(tree.exists('/xplat/nativescript/index.ts')).toBeTruthy();
+    const filePath = '/tsconfig.json';
+    const fileContent = jsonParse(getFileContent(tree, filePath));
+    // console.log(fileContent);
+    expect(fileContent.compilerOptions.paths['@testing/nativescript']).toBeTruthy();
+    expect(fileContent.compilerOptions.paths['@testing/nativescript/*']).toBeTruthy();
   });
 });
