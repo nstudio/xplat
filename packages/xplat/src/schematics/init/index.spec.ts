@@ -6,6 +6,8 @@ import { XplatHelpers, supportedFrameworks, stringUtils } from '../../utils';
 import { getFileContent } from '@nrwl/workspace/testing';
 setTest();
 
+// TODO: Not sure how to get this unit test to work given the NodePackageInstallTask with RunSchematicTask setup
+// works in use, just not sure how to get test to run right
 xdescribe('xplat schematic', () => {
   let appTree: Tree;
   const defaultOptions: XplatHelpers.Schema = {
