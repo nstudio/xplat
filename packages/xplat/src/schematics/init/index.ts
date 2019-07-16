@@ -110,7 +110,7 @@ export default function(options: XplatHelpers.Schema) {
   }
 
   externalChains.push((tree: Tree, context: SchematicContext) => {
-    // check if nrwl dependencies are needed
+    // check if other nstudio or nrwl dependencies are needed
     // check user's package for current version
     const packageJson = getJsonFromFile(tree, 'package.json');
     if (packageJson) {

@@ -27,18 +27,15 @@ yarn publish-local
 2. Setup a fresh Nx workspace to test with:
 
 ```
-npx create-nx-workspace@latest myworkspace
+yarn create-nx-test myworkspace
 ```
 
-3. Open the workspace and add `.npmrc` to root with the following:
+This will setup a fresh Nx workspace at `tmp/myworkspace` and auto open in VS Code. It will already be preconfigured to install @nstudio/xplat tools from a local build.
+
+3. You can now install your schematic changes with:
 
 ```
-@nstudio:registry=http://localhost:4873
-```
-
-4. You can now install your schematic changes with:
-
-```
+rm -rf node_modules/@nstudio
 ng add @nstudio/xplat
 ```
 

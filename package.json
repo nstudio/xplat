@@ -18,6 +18,7 @@
     "test": "yarn linknpm fast && ./scripts/test_schematics.sh",
     "checkformat": "./scripts/check_format.sh",
     "checkimports": "node ./scripts/check-imports.js",
+    "create-nx-test": "./scripts/create_nx_for_testing.sh",
     "documentation": "./scripts/documentation/documentation.sh && yarn format && ./scripts/documentation/check-documentation.sh",
     "debug": "node --debug-brk ./node_modules/@angular/cli/bin/ng g command",
     "publish-local": "./scripts/publish_local.sh",

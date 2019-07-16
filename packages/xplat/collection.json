@@ -12,7 +12,8 @@
     "application": {
       "factory": "./src/schematics/application",
       "schema": "./src/schematics/application/schema.json",
-      "description": "Add xplat applications."
+      "description": "Add xplat applications.",
+      "aliases": ["app"]
     },
     "mode": {
       "factory": "./src/schematics/mode",

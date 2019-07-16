@@ -52,12 +52,12 @@
         "type": "list",
         "items": [
           {
-            "value": "",
-            "label": "none           [Just a plain ole' vanilla app]"
-          },
-          {
             "value": "angular",
             "label": "angular        [Angular app]"
+          },
+          {
+            "value": "",
+            "label": "none           [vanilla app]"
           }
         ]
       }

@@ -2,7 +2,10 @@ import { Schema } from './schema';
 import {
   chain,
   externalSchematic,
-  SchematicsException
+  SchematicsException,
+  Tree,
+  SchematicContext,
+  noop
 } from '@angular-devkit/schematics';
 import {
   prerun,
@@ -12,11 +15,21 @@ import {
   supportedFrameworks,
   unsupportedFrameworkError,
   supportedPlatforms,
-  unsupportedPlatformError
+  unsupportedPlatformError,
+  getJsonFromFile,
+  packageInnerDependencies,
+  IXplatSettings
 } from '../../utils';
+import { xplatVersion, nrwlVersion } from '../../utils/versions';
+import {
+  NodePackageInstallTask,
+  RunSchematicTask
+} from '@angular-devkit/schematics/tasks';
 
+let packagesToRunXplat: Array<string> = [];
 export default function(options: Schema) {
   const externalChains = [];
+  const devDependencies = {};
 
   // frontend framework
   const frameworks = XplatHelpers.getFrameworksFromOptions(options.framework);
@@ -24,15 +37,33 @@ export default function(options: Schema) {
     options.framework,
     frameworks
   );
+  console.log('frameworks:', frameworks);
+  console.log('frameworkChoice:', frameworkChoice);
 
   const platforms = <Array<PlatformTypes>>(
     (<unknown>sanitizeCommaDelimitedArg(options.platforms))
   );
+  console.log('platforms:', platforms);
   if (frameworks.length) {
     for (const framework of frameworks) {
       if (supportedFrameworks.includes(framework)) {
-        const packageName = `@nstudio/${framework}`;
-        externalChains.push(externalSchematic(packageName, 'app', options));
+        if (platforms.length) {
+          for (const platform of platforms) {
+            if (platform === 'web' && framework === 'angular') {
+              // TODO: move angular app into web-angular package
+              // right now it lives in angular package
+              const packageName = `@nstudio/${framework}`;
+              devDependencies[packageName] = xplatVersion;
+              // externalChains.push(externalSchematic(`@nstudio/${framework}`, 'app', options));
+              packagesToRunXplat.push(packageName);
+            } else {
+              const packageName = `@nstudio/${platform}-${framework}`;
+              devDependencies[packageName] = xplatVersion;
+              // externalChains.push(externalSchematic(`@nstudio/${platform}-${framework}`, 'app', options));
+              packagesToRunXplat.push(packageName);
+            }
+          }
+        }
       } else {
         throw new SchematicsException(unsupportedFrameworkError(framework));
       }
@@ -41,11 +72,59 @@ export default function(options: Schema) {
     for (const platform of platforms) {
       if (supportedPlatforms.includes(platform)) {
         const packageName = `@nstudio/${platform}`;
-        externalChains.push(externalSchematic(packageName, 'app', options));
+        devDependencies[packageName] = xplatVersion;
+        // externalChains.push(externalSchematic(packageName, 'app', options));
+        packagesToRunXplat.push(packageName);
       } else {
         throw new SchematicsException(unsupportedPlatformError(platform));
       }
     }
+  }
+
+  if (Object.keys(devDependencies).length) {
+    externalChains.push((tree: Tree, context: SchematicContext) => {
+      // check if othet nstudio or nrwl dependencies are needed
+      // check user's package for current version
+      const packageJson = getJsonFromFile(tree, 'package.json');
+      if (packageJson) {
+        for (const packageName in devDependencies) {
+          if (packageInnerDependencies[packageName]) {
+            // inner dependencies are either nstudio or nrwl based packages
+            let version =
+              packageName.indexOf('nstudio') > -1 ? xplatVersion : nrwlVersion;
+            // ensure inner schematic dependencies are installed
+            for (const name of packageInnerDependencies[packageName]) {
+              // always use existing versions if user already has them installed
+              if (packageJson.dependencies && packageJson.dependencies[name]) {
+                version = packageJson.dependencies[name];
+              } else if (
+                packageJson.devDependencies &&
+                packageJson.devDependencies[name]
+              ) {
+                version = packageJson.devDependencies[name];
+              }
+              devDependencies[name] = version;
+            }
+          }
+        }
+      }
+      // console.log(devDependencies);
+
+      return XplatHelpers.updatePackageForXplat(options, {
+        devDependencies
+      })(tree, context);
+    });
+    externalChains.push((tree: Tree, context: SchematicContext) => {
+      const installPackageTask = context.addTask(new NodePackageInstallTask());
+
+      console.log('devDependencies:', devDependencies);
+      console.log('packagesToRunXplat:', packagesToRunXplat);
+      for (const packageName in packagesToRunXplat) {
+        context.addTask(new RunSchematicTask(packageName, 'app', options), [
+          installPackageTask
+        ]);
+      }
+    });
   }
 
   return chain([prerun(options, true), ...externalChains]);
