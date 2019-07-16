@@ -26,7 +26,7 @@ import {
   generatorError,
   generateOptionError,
   optionsMissingError,
-  unsupportedPlatformError,
+  unsupportedPlatformError
 } from '@nstudio/xplat';
 import { formatFiles } from '@nrwl/workspace';
 import { addToFeature, adjustBarrelIndex } from '@nstudio/angular';

@@ -1,9 +1,21 @@
-import { Schema } from "./schema";
-import { chain, externalSchematic, SchematicsException } from "@angular-devkit/schematics";
-import { prerun, XplatHelpers, PlatformTypes, sanitizeCommaDelimitedArg, supportedFrameworks, unsupportedFrameworkError, supportedPlatforms, unsupportedPlatformError } from "../../utils";
+import { Schema } from './schema';
+import {
+  chain,
+  externalSchematic,
+  SchematicsException
+} from '@angular-devkit/schematics';
+import {
+  prerun,
+  XplatHelpers,
+  PlatformTypes,
+  sanitizeCommaDelimitedArg,
+  supportedFrameworks,
+  unsupportedFrameworkError,
+  supportedPlatforms,
+  unsupportedPlatformError
+} from '../../utils';
 
 export default function(options: Schema) {
-
   const externalChains = [];
 
   // frontend framework
@@ -36,8 +48,5 @@ export default function(options: Schema) {
     }
   }
 
-  return chain([
-    prerun(options, true),
-    ...externalChains
-  ]);
+  return chain([prerun(options, true), ...externalChains]);
 }

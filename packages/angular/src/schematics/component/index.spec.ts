@@ -76,9 +76,7 @@ describe('component schematic', () => {
     // console.log(barrelPath + ':');
     // console.log(barrelIndex);
     // component symbol should be at end of components collection
-    expect(barrelIndex.indexOf(`SignupComponent];`)).toBeGreaterThanOrEqual(
-      0
-    );
+    expect(barrelIndex.indexOf(`SignupComponent];`)).toBeGreaterThanOrEqual(0);
     expect(
       barrelIndex.indexOf(`./signup/signup.component`)
     ).toBeGreaterThanOrEqual(0);
@@ -87,9 +85,7 @@ describe('component schematic', () => {
     barrelIndex = getFileContent(tree, barrelPath);
     // console.log(barrelPath + ':');
     // console.log(barrelIndex);
-    expect(barrelIndex.indexOf(`SignupComponent];`)).toBeGreaterThanOrEqual(
-      0
-    );
+    expect(barrelIndex.indexOf(`SignupComponent];`)).toBeGreaterThanOrEqual(0);
   });
 
   it('should create component for specified platforms with framework name when no default is set', async () => {
@@ -199,9 +195,7 @@ describe('component schematic', () => {
     // console.log(barrelPath + ':');
     // console.log(barrelIndex);
     // component symbol should be at end of components collection
-    expect(barrelIndex.indexOf(`SignupComponent];`)).toBeGreaterThanOrEqual(
-      0
-    );
+    expect(barrelIndex.indexOf(`SignupComponent];`)).toBeGreaterThanOrEqual(0);
     expect(
       barrelIndex.indexOf(`./signup/signup.component`)
     ).toBeGreaterThanOrEqual(0);
@@ -210,9 +204,7 @@ describe('component schematic', () => {
     barrelIndex = getFileContent(tree, barrelPath);
     // console.log(barrelPath + ':');
     // console.log(barrelIndex);
-    expect(barrelIndex.indexOf(`SignupComponent];`)).toBeGreaterThanOrEqual(
-      0
-    );
+    expect(barrelIndex.indexOf(`SignupComponent];`)).toBeGreaterThanOrEqual(0);
 
     // file content
     barrelPath = '/xplat/nativescript/features/foo/components/index.ts';
@@ -307,9 +299,7 @@ describe('component schematic', () => {
     // console.log(barrelPath + ':');
     // console.log(barrelIndex);
     // component symbol should be at end of components collection
-    expect(barrelIndex.indexOf(`SignupComponent];`)).toBeGreaterThanOrEqual(
-      0
-    );
+    expect(barrelIndex.indexOf(`SignupComponent];`)).toBeGreaterThanOrEqual(0);
     expect(
       barrelIndex.indexOf(`./signup/signup.component`)
     ).toBeGreaterThanOrEqual(0);
@@ -325,9 +315,7 @@ describe('component schematic', () => {
     barrelIndex = getFileContent(tree, barrelPath);
     // console.log(barrelPath + ':');
     // console.log(barrelIndex);
-    expect(barrelIndex.indexOf(`SignupComponent];`)).toBeGreaterThanOrEqual(
-      0
-    );
+    expect(barrelIndex.indexOf(`SignupComponent];`)).toBeGreaterThanOrEqual(0);
   });
 
   it('should THROW if feature module does not exist in projects', async () => {

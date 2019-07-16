@@ -126,10 +126,19 @@ export async function makePrettierIgnore() {
 
     // determine if extra rules are needed
     let prettierContent = await fsReadFile(prettierIgnorePath, 'UTF-8');
-    if (prettierContent.indexOf('**/apps/**/platforms/**/*') === -1 || prettierContent.indexOf('**/xplat/**/.xplatframework') === -1) {
-      console.log(`xplat is updating "${prettierIgnorePath}" with a few important extra rules. You may double-check the contents afterwards to ensure they meet your satisfaction`);
+    if (
+      prettierContent.indexOf('**/apps/**/platforms/**/*') === -1 ||
+      prettierContent.indexOf('**/xplat/**/.xplatframework') === -1
+    ) {
+      console.log(
+        `xplat is updating "${prettierIgnorePath}" with a few important extra rules. You may double-check the contents afterwards to ensure they meet your satisfaction`
+      );
       // update prettier to include the rules
-      await fsWriteFile(prettierIgnorePath, prettierContent + '\n' + prettierIgnore, 'UTF-8');
+      await fsWriteFile(
+        prettierIgnorePath,
+        prettierContent + '\n' + prettierIgnore,
+        'UTF-8'
+      );
     }
     return;
   }

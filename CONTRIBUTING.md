@@ -60,6 +60,15 @@ yarn test
 
 All tests must pass. Please add tests for any new functionality.
 
+### Debugging Tests
+
+Use path to a specific test along with `debug` to start node debug session.
+You can then open Google Chrome browser to `chrome://inspect/#devices` to see the Remote Target listed. Choose `Inspect` to open Chrome debugger tools. You can use `debugger;` statements throughout code to create breakpoints.
+
+```
+yarn test angular/src/schematics/application/index debug
+```
+
 ## Pull Requests
 
 Please follow the following guidelines:
