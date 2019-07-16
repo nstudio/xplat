@@ -27,12 +27,8 @@ describe('xplat ionic angular', () => {
 
     const tree = await runSchematic('xplat', options, appTree);
     const files = tree.files;
-    expect(files.indexOf('/xplat/web/index.ts')).toBeGreaterThanOrEqual(
-      0
-    );
-    expect(
-      files.indexOf('/xplat/ionic/index.ts')
-    ).toBeGreaterThanOrEqual(0);
+    expect(files.indexOf('/xplat/web/index.ts')).toBeGreaterThanOrEqual(0);
+    expect(files.indexOf('/xplat/ionic/index.ts')).toBeGreaterThanOrEqual(0);
     expect(
       files.indexOf('/xplat/nativescript/index.ts')
     ).toBeGreaterThanOrEqual(-1);
@@ -45,11 +41,15 @@ describe('xplat ionic angular', () => {
     // should not include these root packages
     const hasNativeScript = packageFile.dependencies[`nativescript-angular`];
     expect(hasNativeScript).toBeUndefined();
-    const filePath = '/tsconfig.json';
-    const fileContent = jsonParse(getFileContent(tree, filePath));
+    let filePath = '/tsconfig.json';
+    let fileContent = jsonParse(getFileContent(tree, filePath));
     // console.log(fileContent);
     expect(fileContent.compilerOptions.paths['@testing/ionic']).toBeTruthy();
     expect(fileContent.compilerOptions.paths['@testing/ionic/*']).toBeTruthy();
+    filePath = '/xplat/ionic/.xplatframework';
+    fileContent = getFileContent(tree, filePath);
+    // console.log(fileContent);
+    expect(fileContent.indexOf('angular')).toBeGreaterThanOrEqual(0);
   });
 
   it('should create default xplat support with framework suffix when not specifying default', async () => {
@@ -62,8 +62,12 @@ describe('xplat ionic angular', () => {
     const filePath = '/tsconfig.json';
     const fileContent = jsonParse(getFileContent(tree, filePath));
     // console.log(fileContent);
-    expect(fileContent.compilerOptions.paths['@testing/ionic-angular']).toBeTruthy();
-    expect(fileContent.compilerOptions.paths['@testing/ionic-angular/*']).toBeTruthy();
+    expect(
+      fileContent.compilerOptions.paths['@testing/ionic-angular']
+    ).toBeTruthy();
+    expect(
+      fileContent.compilerOptions.paths['@testing/ionic-angular/*']
+    ).toBeTruthy();
   });
 
   it('when default framework is set, can still create base platform support', async () => {
@@ -81,9 +85,7 @@ describe('xplat ionic angular', () => {
     expect(fileContent.compilerOptions.paths['@testing/ionic']).toBeTruthy();
     expect(fileContent.compilerOptions.paths['@testing/ionic/*']).toBeTruthy();
 
-    expect(
-      () => (runSchematicSync('xplat', defaultOptions, tree))
-    ).toThrow(
+    expect(() => runSchematicSync('xplat', defaultOptions, tree)).toThrow(
       `You currently have "angular" set as your default frontend framework and have already generated xplat support for "web". A command is coming soon to auto reconfigure your workspace to later add baseline platform support for those which have previously been generated prepaired with a frontend framework.`
     );
   });

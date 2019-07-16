@@ -8,7 +8,6 @@ import {
 import { APP_BASE_HREF, CommonModule } from '@angular/common';
 
 // libs
-import { NxModule } from '@nrwl/nx';
 import { TranslateService } from '@ngx-translate/core';
 import { throwIfAlreadyLoaded } from '@<%= npmScope %>/utils';
 
@@ -31,7 +30,7 @@ export const BASE_PROVIDERS: any[] = [
 ];
 
 @NgModule({
-  imports: [CommonModule, NxModule.forRoot()]
+  imports: [CommonModule]
 })
 export class CoreModule {
   // configuredProviders: *required to configure WindowService and others per platform

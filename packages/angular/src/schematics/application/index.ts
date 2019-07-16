@@ -13,6 +13,7 @@ import {
   externalSchematic,
   noop
 } from '@angular-devkit/schematics';
+import { formatFiles } from '@nrwl/workspace';
 import {
   stringUtils,
   prerun,
@@ -21,7 +22,6 @@ import {
   getPrefix,
   getJsonFromFile,
   updateJsonFile,
-  formatFiles,
   missingArgument,
   supportedPlatforms,
   getDefaultTemplateOptions,
@@ -69,7 +69,7 @@ export default function(options: Schema) {
       scripts[`start.${platformApp}`] = `ng serve ${options.name}`;
       return updatePackageScripts(tree, scripts);
     },
-    options.skipFormat ? noop() : formatFiles(options)
+    formatFiles({ skipFormat: options.skipFormat })
   ]);
 }
 
@@ -184,7 +184,10 @@ function adjustAppFiles(options: Schema, tree: Tree) {
     if (ngConfig.projects[options.name]) {
       if (ngConfig.projects[options.name].architect) {
         ngConfig.projects[options.name].architect.build.options.styles = [
-          'xplat/web/scss/_index.scss',
+          `xplat/${XplatHelpers.getXplatFoldername(
+            'web',
+            'angular'
+          )}/scss/_index.scss`,
           `apps/${options.name}/src/styles.scss`
         ];
       }
@@ -254,7 +257,10 @@ function appCmpContent() {
   return `import { Component } from '@angular/core';
 
 // xplat
-import { AppBaseComponent } from '@${getNpmScope()}/${XplatHelpers.getXplatFoldername('web', 'angular')}';
+import { AppBaseComponent } from '@${getNpmScope()}/${XplatHelpers.getXplatFoldername(
+    'web',
+    'angular'
+  )}';
 
 @Component({
     selector: '${getPrefix()}-root',

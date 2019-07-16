@@ -29,9 +29,7 @@ describe('xplat schematic', () => {
     // const files = tree.files;
     expect(tree.exists('/xplat/web/index.ts')).toBeFalsy();
     expect(tree.exists('/xplat/nativescript/index.ts')).toBeTruthy();
-    expect(
-      tree.exists('/xplat/nativescript/core/index.ts')
-    ).toBeTruthy();
+    expect(tree.exists('/xplat/nativescript/core/index.ts')).toBeTruthy();
     expect(
       tree.exists('/xplat/nativescript/features/ui/index.ts')
     ).toBeTruthy();
@@ -48,11 +46,19 @@ describe('xplat schematic', () => {
     expect(
       packageFile.devDependencies[`tns-platform-declarations`]
     ).not.toBeUndefined();
-    const filePath = '/tsconfig.json';
-    const fileContent = jsonParse(getFileContent(tree, filePath));
+    let filePath = '/tsconfig.json';
+    let fileContent = jsonParse(getFileContent(tree, filePath));
     // console.log(fileContent);
-    expect(fileContent.compilerOptions.paths['@testing/nativescript']).toBeTruthy();
-    expect(fileContent.compilerOptions.paths['@testing/nativescript/*']).toBeTruthy();
+    expect(
+      fileContent.compilerOptions.paths['@testing/nativescript']
+    ).toBeTruthy();
+    expect(
+      fileContent.compilerOptions.paths['@testing/nativescript/*']
+    ).toBeTruthy();
+    filePath = '/xplat/nativescript/.xplatframework';
+    fileContent = getFileContent(tree, filePath);
+    // console.log(fileContent);
+    expect(fileContent.indexOf('angular')).toBeGreaterThanOrEqual(0);
   });
 
   it('should create default xplat support with framework suffix when not specifying default', async () => {
@@ -65,8 +71,12 @@ describe('xplat schematic', () => {
     const filePath = '/tsconfig.json';
     const fileContent = jsonParse(getFileContent(tree, filePath));
     // console.log(fileContent);
-    expect(fileContent.compilerOptions.paths['@testing/nativescript-angular']).toBeTruthy();
-    expect(fileContent.compilerOptions.paths['@testing/nativescript-angular/*']).toBeTruthy();
+    expect(
+      fileContent.compilerOptions.paths['@testing/nativescript-angular']
+    ).toBeTruthy();
+    expect(
+      fileContent.compilerOptions.paths['@testing/nativescript-angular/*']
+    ).toBeTruthy();
   });
 
   it('when default framework is set, can still create base platform support', async () => {
@@ -81,12 +91,14 @@ describe('xplat schematic', () => {
     let filePath = '/tsconfig.json';
     let fileContent = jsonParse(getFileContent(tree, filePath));
     // console.log(fileContent);
-    expect(fileContent.compilerOptions.paths['@testing/nativescript']).toBeTruthy();
-    expect(fileContent.compilerOptions.paths['@testing/nativescript/*']).toBeTruthy();
-
     expect(
-      () => (runSchematicSync('xplat', defaultOptions, tree))
-    ).toThrow(
+      fileContent.compilerOptions.paths['@testing/nativescript']
+    ).toBeTruthy();
+    expect(
+      fileContent.compilerOptions.paths['@testing/nativescript/*']
+    ).toBeTruthy();
+
+    expect(() => runSchematicSync('xplat', defaultOptions, tree)).toThrow(
       `You currently have "angular" set as your default frontend framework and have already generated xplat support for "nativescript". A command is coming soon to auto reconfigure your workspace to later add baseline platform support for those which have previously been generated prepaired with a frontend framework.`
     );
   });

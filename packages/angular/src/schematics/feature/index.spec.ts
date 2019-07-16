@@ -157,7 +157,9 @@ describe('feature schematic', () => {
     expect(
       files.indexOf('/xplat/nativescript-angular/index.ts')
     ).toBeGreaterThanOrEqual(0);
-    expect(files.indexOf('/xplat/web-angular/index.ts')).toBeGreaterThanOrEqual(0);
+    expect(files.indexOf('/xplat/web-angular/index.ts')).toBeGreaterThanOrEqual(
+      0
+    );
 
     // feature in shared code
     expect(files.indexOf('/libs/features/foo/index.ts')).toBeGreaterThanOrEqual(
@@ -192,10 +194,14 @@ describe('feature schematic', () => {
       files.indexOf('/xplat/web-angular/features/foo/foo.module.ts')
     ).toBeGreaterThanOrEqual(0);
     expect(
-      files.indexOf('/xplat/web-angular/features/foo/components/foo/foo.component.html')
+      files.indexOf(
+        '/xplat/web-angular/features/foo/components/foo/foo.component.html'
+      )
     ).toBeGreaterThanOrEqual(0);
     expect(
-      files.indexOf('/xplat/web-angular/features/foo/components/foo/foo.component.ts')
+      files.indexOf(
+        '/xplat/web-angular/features/foo/components/foo/foo.component.ts'
+      )
     ).toBeGreaterThanOrEqual(0);
 
     // feature should NOT be in projects
@@ -634,7 +640,7 @@ describe('feature schematic', () => {
       `loadChildren: './features/home/home.module#HomeModule'`
     );
     expect(featureModule).toMatch(
-      `loadChildren: './features/foo-with-dash/foo-with-dash.module#FooWithDashModule'`
+      `'./features/foo-with-dash/foo-with-dash.module#FooWithDashModule'`
     );
 
     modulePath = '/apps/nativescript-viewer/src/app.routing.ts';
@@ -645,7 +651,7 @@ describe('feature schematic', () => {
       `loadChildren: '~/features/home/home.module#HomeModule'`
     );
     expect(featureModule).toMatch(
-      `loadChildren: '~/features/foo-with-dash/foo-with-dash.module#FooWithDashModule'`
+      `'~/features/foo-with-dash/foo-with-dash.module#FooWithDashModule'`
     );
 
     // check that name with dash was handled right

@@ -1,5 +1,21 @@
-import { chain, externalSchematic, branchAndMerge, SchematicContext, Tree, noop, mergeWith, apply, url, move, template } from '@angular-devkit/schematics';
-import { XplatHelpers, prerun, getDefaultTemplateOptions } from '@nstudio/xplat';
+import {
+  chain,
+  externalSchematic,
+  branchAndMerge,
+  SchematicContext,
+  Tree,
+  noop,
+  mergeWith,
+  apply,
+  url,
+  move,
+  template
+} from '@angular-devkit/schematics';
+import {
+  XplatHelpers,
+  prerun,
+  getDefaultTemplateOptions
+} from '@nstudio/xplat';
 import { XplatWebHelpers } from '../../utils/xplat';
 
 export default function(options: XplatHelpers.Schema) {

@@ -1,6 +1,6 @@
 import { chain, noop } from '@angular-devkit/schematics';
-// import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
-import { prerun, formatFiles, XplatHelpers } from '@nstudio/xplat';
+import { formatFiles } from '@nrwl/workspace';
+import { prerun, XplatHelpers } from '@nstudio/xplat';
 import { XplatAngularHelpers } from '../../utils/xplat';
 
 export default function(options: XplatHelpers.Schema) {
@@ -20,7 +20,7 @@ export default function(options: XplatHelpers.Schema) {
     XplatAngularHelpers.updateTestingConfig(options),
     XplatAngularHelpers.updateLint(options),
     XplatAngularHelpers.updateRootDeps(options),
-    formatFiles(options),
+    formatFiles({ skipFormat: options.skipFormat }),
     // clean shared code script - don't believe need this anymore
     // (tree: Tree) => {
     //   const scripts = {};

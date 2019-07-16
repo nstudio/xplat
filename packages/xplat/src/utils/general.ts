@@ -167,7 +167,7 @@ export const setDependency = (
 export interface IXplatSettings {
   prefix?: string;
   groupByName?: boolean;
-  defaultFramework?: FrameworkTypes
+  defaultFramework?: FrameworkTypes;
 }
 
 export function prerun(
@@ -212,7 +212,7 @@ export function prerun(
           if (frameworkChoice && options.setDefault) {
             // always override default framework when user has explicitly passed framework option in with setDefault flag
             defaultFramework = <FrameworkTypes>frameworkChoice;
-          } 
+          }
           // else if (defaultFramework) {
           //   // ensure the options use the default
           //   options.framework = defaultFramework;
@@ -220,8 +220,7 @@ export function prerun(
         }
         // grouping
         groupByName =
-          xplatSettings.groupByName ||
-          (options ? options.groupByName : false);
+          xplatSettings.groupByName || (options ? options.groupByName : false);
       } else if (options) {
         groupByName = options.groupByName;
         if (options.prefix) {
@@ -323,12 +322,6 @@ export function updatePackageForNgrx(
           type: 'dependency'
         };
         deps.push(dep);
-        dep = {
-          name: '@nrwl/nx',
-          version: 'file:../../node_modules/@nrwl/nx',
-          type: 'dependency'
-        };
-        deps.push(dep);
       } else {
         // update root deps
         let dep: NodeDependency = {
@@ -337,15 +330,6 @@ export function updatePackageForNgrx(
           type: 'dependency'
         };
         deps.push(dep);
-
-        if (!packageJson.dependencies['@nrwl/nx']) {
-          dep = {
-            name: '@nrwl/nx',
-            version: '~7.0.0',
-            type: 'dependency'
-          };
-          deps.push(dep);
-        }
       }
 
       const dependenciesMap = Object.assign({}, packageJson.dependencies);

@@ -13,6 +13,7 @@ import {
   noop,
   externalSchematic
 } from '@angular-devkit/schematics';
+import { formatFiles } from '@nrwl/workspace';
 import { Schema } from './schema';
 import {
   prerun,
@@ -21,7 +22,6 @@ import {
   stringUtils,
   updateAngularProjects,
   updateNxProjects,
-  formatFiles,
   getJsonFromFile,
   updatePackageScripts,
   addPostinstallers,
@@ -227,7 +227,7 @@ export default function(options: Schema) {
     // add tooling
     addPostinstallers(),
 
-    options.skipFormat ? noop() : formatFiles(options)
+    formatFiles({ skipFormat: options.skipFormat })
   ]);
 }
 
@@ -240,7 +240,10 @@ function addAppFiles(options: Schema, appPath: string): Rule {
           ...(options as any),
           ...getDefaultTemplateOptions(),
           appname,
-          xplatFolderName: XplatHelpers.getXplatFoldername('electron', 'angular')
+          xplatFolderName: XplatHelpers.getXplatFoldername(
+            'electron',
+            'angular'
+          )
         }),
         move(`apps/${appPath}`)
       ])
@@ -265,7 +268,10 @@ function electronModule() {
   return `import { NgModule } from '@angular/core';
 import { ${stringUtils.classify(
     getPrefix()
-  )}ElectronCoreModule } from '@${getNpmScope()}/${XplatHelpers.getXplatFoldername('electron', 'angular')}';
+  )}ElectronCoreModule } from '@${getNpmScope()}/${XplatHelpers.getXplatFoldername(
+    'electron',
+    'angular'
+  )}';
 import { AppModule } from './app.module';
 import { AppComponent } from './app.component';
 

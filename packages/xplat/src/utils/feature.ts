@@ -140,7 +140,6 @@ export namespace FeatureHelpers {
   }
 
   export function addFiles(
-    workingDirectory: string,
     options: Schema,
     target: string = '',
     projectName: string = '',
@@ -164,9 +163,7 @@ export namespace FeatureHelpers {
     return branchAndMerge(
       mergeWith(
         apply(url(`./${extra}_files`), [
-          template(
-            getTemplateOptions(options, target, framework)
-          ),
+          template(getTemplateOptions(options, target, framework)),
           move(moveTo)
         ])
       )
@@ -200,13 +197,20 @@ export namespace FeatureHelpers {
     };
   }
 
-  export function getTemplateOptions(options: Schema, platform: string, framework?: FrameworkTypes) {
+  export function getTemplateOptions(
+    options: Schema,
+    platform: string,
+    framework?: FrameworkTypes
+  ) {
     const nameParts = options.name.split('-');
     let endingDashName = nameParts[0];
     if (nameParts.length > 1) {
       endingDashName = stringUtils.capitalize(nameParts[nameParts.length - 1]);
     }
-    const xplatFolderName = XplatHelpers.getXplatFoldername(<PlatformTypes>platform, framework);
+    const xplatFolderName = XplatHelpers.getXplatFoldername(
+      <PlatformTypes>platform,
+      framework
+    );
     return {
       ...(options as any),
       ...getDefaultTemplateOptions(),
@@ -223,12 +227,17 @@ export namespace FeatureHelpers {
     framework?: FrameworkTypes
   ) {
     // console.log('getMoveTo framework:', framework);
-    const xplatFolderName = XplatHelpers.getXplatFoldername(<PlatformTypes>platform, framework);
+    const xplatFolderName = XplatHelpers.getXplatFoldername(
+      <PlatformTypes>platform,
+      framework
+    );
     // console.log('getMoveTo xplatFolderName:', xplatFolderName);
     const featureName = options.name.toLowerCase();
     let moveTo = `xplat/${xplatFolderName}/features/${featureName}`;
     if (projectName) {
-      let appDir = ['web', 'web-angular'].includes(xplatFolderName) ? '/app' : '';
+      let appDir = ['web', 'web-angular'].includes(xplatFolderName)
+        ? '/app'
+        : '';
       moveTo = `apps/${projectName}/src${appDir}/features/${featureName}`;
       // console.log('moveTo:', moveTo);
     }

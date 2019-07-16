@@ -27,7 +27,6 @@
     "@angular/platform-browser-dynamic": "file:../../node_modules/@angular/platform-browser-dynamic",
     "@angular/router": "file:../../node_modules/@angular/router",
     "@ngx-translate/core": "file:../../node_modules/@ngx-translate/core",
-    "@nrwl/nx": "file:../../node_modules/@nrwl/nx",
     "@ngrx/effects": "file:../../node_modules/@ngrx/effects",
     "@ngrx/router-store": "file:../../node_modules/@ngrx/router-store",
     "@ngrx/store": "file:../../node_modules/@ngrx/store",

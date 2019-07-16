@@ -3,7 +3,8 @@ import {
   Tree,
   SchematicContext,
   externalSchematic,
-  SchematicsException
+  SchematicsException,
+  noop
 } from '@angular-devkit/schematics';
 // import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 import {
@@ -24,7 +25,7 @@ import {
   isTesting,
   getJsonFromFile,
   packageInnerDependencies,
-  IXplatSettings,
+  IXplatSettings
 } from '../../utils';
 import {
   NodePackageInstallTask,
@@ -43,7 +44,10 @@ export default function(options: XplatHelpers.Schema) {
 
   // frontend framework
   const frameworks = XplatHelpers.getFrameworksFromOptions(options.framework);
-  const frameworkChoice = XplatHelpers.getFrameworkChoice(options.framework, frameworks);
+  const frameworkChoice = XplatHelpers.getFrameworkChoice(
+    options.framework,
+    frameworks
+  );
 
   const devDependencies = {};
   if (platformArg === 'all') {
@@ -77,9 +81,7 @@ export default function(options: XplatHelpers.Schema) {
     const platforms = <Array<PlatformTypes>>(
       (<unknown>sanitizeCommaDelimitedArg(platformArg))
     );
-    if (platforms.length === 0) {
-      throw new SchematicsException(noPlatformError());
-    } else if (frameworks.length) {
+    if (frameworks.length) {
       for (const framework of frameworks) {
         if (supportedFrameworks.includes(framework)) {
           const packageName = `@nstudio/${framework}`;
@@ -94,7 +96,7 @@ export default function(options: XplatHelpers.Schema) {
           throw new SchematicsException(unsupportedFrameworkError(framework));
         }
       }
-    } else {
+    } else if (platforms.length) {
       for (const platform of platforms) {
         if (supportedPlatforms.includes(platform)) {
           const packageName = `@nstudio/${platform}`;
@@ -134,31 +136,45 @@ export default function(options: XplatHelpers.Schema) {
       }
     }
     // console.log(devDependencies);
-    
-    const xplatSettings: IXplatSettings = {}; 
+
+    const xplatSettings: IXplatSettings = {};
     if (frameworkChoice && options.setDefault) {
       xplatSettings.defaultFramework = frameworkChoice;
     }
-    return XplatHelpers.updatePackageForXplat(options, {
-      devDependencies
-    }, xplatSettings)(tree, context);
+    return XplatHelpers.updatePackageForXplat(
+      options,
+      {
+        devDependencies
+      },
+      xplatSettings
+    )(tree, context);
   });
 
   externalChains.push((tree: Tree, context: SchematicContext) => {
-    const installPackageTask = context.addTask(new NodePackageInstallTask());
+    const deps = Object.keys(devDependencies);
+    if (deps.length) {
+      const installPackageTask = context.addTask(new NodePackageInstallTask());
 
-    // console.log('packagesToRunXplat:', packagesToRunXplat);
-    for (const packageName in devDependencies) {
-      if (
-        packageName.indexOf('@nstudio') > -1 &&
-        packagesToRunXplat.includes(packageName)
-      ) {
-        context.addTask(new RunSchematicTask(packageName, 'xplat', options), [
-          installPackageTask
-        ]);
+      // console.log('packagesToRunXplat:', packagesToRunXplat);
+      for (const packageName in devDependencies) {
+        if (
+          packageName.indexOf('@nstudio') > -1 &&
+          packagesToRunXplat.includes(packageName)
+        ) {
+          context.addTask(new RunSchematicTask(packageName, 'xplat', options), [
+            installPackageTask
+          ]);
+        }
       }
+    } else {
+      return noop()(tree, context);
     }
   });
+
+  if (Object.keys(devDependencies).length) {
+    // if processing dependencies, ensure IDE settings are updated to hide hidden folders used to help xplat configure workspaces
+    externalChains.push(XplatHelpers.updateIDESettings(options));
+  }
 
   return chain([
     prerun(options, true),

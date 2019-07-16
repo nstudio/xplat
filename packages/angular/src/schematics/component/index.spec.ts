@@ -76,7 +76,7 @@ describe('component schematic', () => {
     // console.log(barrelPath + ':');
     // console.log(barrelIndex);
     // component symbol should be at end of components collection
-    expect(barrelIndex.indexOf(`SignupComponent\n];`)).toBeGreaterThanOrEqual(
+    expect(barrelIndex.indexOf(`SignupComponent];`)).toBeGreaterThanOrEqual(
       0
     );
     expect(
@@ -87,7 +87,7 @@ describe('component schematic', () => {
     barrelIndex = getFileContent(tree, barrelPath);
     // console.log(barrelPath + ':');
     // console.log(barrelIndex);
-    expect(barrelIndex.indexOf(`SignupComponent\n];`)).toBeGreaterThanOrEqual(
+    expect(barrelIndex.indexOf(`SignupComponent];`)).toBeGreaterThanOrEqual(
       0
     );
   });
@@ -183,9 +183,7 @@ describe('component schematic', () => {
     let barrelIndex = getFileContent(tree, barrelPath);
     // console.log(barrelPath + ':');
     // console.log(barrelIndex);
-    expect(
-      barrelIndex.indexOf(`./signup.base-component`)
-    ).toBeTruthy();
+    expect(barrelIndex.indexOf(`./signup.base-component`)).toBeTruthy();
 
     barrelPath = '/libs/features/foo/base/index.ts';
     barrelIndex = getFileContent(tree, barrelPath);
@@ -201,7 +199,7 @@ describe('component schematic', () => {
     // console.log(barrelPath + ':');
     // console.log(barrelIndex);
     // component symbol should be at end of components collection
-    expect(barrelIndex.indexOf(`SignupComponent\n];`)).toBeGreaterThanOrEqual(
+    expect(barrelIndex.indexOf(`SignupComponent];`)).toBeGreaterThanOrEqual(
       0
     );
     expect(
@@ -212,7 +210,7 @@ describe('component schematic', () => {
     barrelIndex = getFileContent(tree, barrelPath);
     // console.log(barrelPath + ':');
     // console.log(barrelIndex);
-    expect(barrelIndex.indexOf(`SignupComponent\n];`)).toBeGreaterThanOrEqual(
+    expect(barrelIndex.indexOf(`SignupComponent];`)).toBeGreaterThanOrEqual(
       0
     );
 
@@ -309,7 +307,7 @@ describe('component schematic', () => {
     // console.log(barrelPath + ':');
     // console.log(barrelIndex);
     // component symbol should be at end of components collection
-    expect(barrelIndex.indexOf(`SignupComponent\n];`)).toBeGreaterThanOrEqual(
+    expect(barrelIndex.indexOf(`SignupComponent];`)).toBeGreaterThanOrEqual(
       0
     );
     expect(
@@ -327,7 +325,7 @@ describe('component schematic', () => {
     barrelIndex = getFileContent(tree, barrelPath);
     // console.log(barrelPath + ':');
     // console.log(barrelIndex);
-    expect(barrelIndex.indexOf(`SignupComponent\n];`)).toBeGreaterThanOrEqual(
+    expect(barrelIndex.indexOf(`SignupComponent];`)).toBeGreaterThanOrEqual(
       0
     );
   });

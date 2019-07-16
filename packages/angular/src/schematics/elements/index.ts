@@ -13,7 +13,7 @@ import {
   externalSchematic,
   noop
 } from '@angular-devkit/schematics';
-import { updateJsonInTree } from '@nrwl/workspace';
+import { updateJsonInTree, formatFiles } from '@nrwl/workspace';
 import {
   stringUtils,
   prerun,
@@ -22,7 +22,6 @@ import {
   getPrefix,
   getJsonFromFile,
   updateJsonFile,
-  formatFiles,
   missingArgument,
   updateAngularProjects,
   getDefaultTemplateOptions,
@@ -194,8 +193,7 @@ export default function(options: ElementsOptions) {
         return noop();
       }
     },
-    // formatting
-    options.skipFormat ? noop() : formatFiles(options)
+    formatFiles({ skipFormat: options.skipFormat })
   ]);
 }
 

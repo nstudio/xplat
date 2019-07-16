@@ -52,7 +52,7 @@ export async function updateConfig() {
 }
 
 /**
- * @nrwl/nx's formatter doesn't include files in the xplat-folder.
+ * @nrwl/workspace formatter doesn't include files in the xplat-folder.
  * This function patches their formatter cli to include the xplat-folder
  */
 export async function fixFormatter() {
@@ -87,7 +87,7 @@ export async function fixFormatter() {
 }
 
 /**
- * To avoid @nrwl/nx's formatter tries to format App_Resources, platforms-files etc.
+ * To avoid @nrwl/workspace formatter tries to format App_Resources, platforms-files etc.
  * Create a .prettierignore file at the root of the project.
  */
 export async function makePrettierIgnore() {

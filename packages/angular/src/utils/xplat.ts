@@ -202,7 +202,10 @@ export namespace ComponentHelpers {
     } else {
       // add component
       chains.push((tree: Tree, context: SchematicContext) => {
-        const xplatFolderName = XplatHelpers.getXplatFoldername(platform, 'angular');
+        const xplatFolderName = XplatHelpers.getXplatFoldername(
+          platform,
+          'angular'
+        );
         return addToFeature(
           xplatFolderName,
           'component',
@@ -216,7 +219,10 @@ export namespace ComponentHelpers {
       if (options.subFolder) {
         // adjust components barrel for subFolder
         chains.push((tree: Tree, context: SchematicContext) => {
-          const xplatFolderName = XplatHelpers.getXplatFoldername(platform, 'angular');
+          const xplatFolderName = XplatHelpers.getXplatFoldername(
+            platform,
+            'angular'
+          );
           return adjustBarrelIndex(
             'component',
             options,
@@ -227,10 +233,13 @@ export namespace ComponentHelpers {
           )(tree, context);
         });
         chains.push((tree: Tree, context: SchematicContext) => {
-          const xplatFolderName = XplatHelpers.getXplatFoldername(platform, 'angular');
+          const xplatFolderName = XplatHelpers.getXplatFoldername(
+            platform,
+            'angular'
+          );
           return options.needsIndex
             ? addToFeature(
-               xplatFolderName,
+                xplatFolderName,
                 'component',
                 options,
                 `xplat/${xplatFolderName}`,
@@ -243,7 +252,10 @@ export namespace ComponentHelpers {
       }
       // adjust overall components barrel
       chains.push((tree: Tree, context: SchematicContext) => {
-        const xplatFolderName = XplatHelpers.getXplatFoldername(platform, 'angular');
+        const xplatFolderName = XplatHelpers.getXplatFoldername(
+          platform,
+          'angular'
+        );
         return adjustBarrelIndex(
           'component',
           options,
@@ -257,7 +269,10 @@ export namespace ComponentHelpers {
       });
 
       chains.push((tree: Tree, context: SchematicContext) => {
-        const xplatFolderName = XplatHelpers.getXplatFoldername(platform, 'angular');
+        const xplatFolderName = XplatHelpers.getXplatFoldername(
+          platform,
+          'angular'
+        );
         return options.needsIndex
           ? addToFeature(
               xplatFolderName,

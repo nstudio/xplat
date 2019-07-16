@@ -9,7 +9,7 @@ import { updateJsonInTree, readJsonInTree } from '@nrwl/workspace';
 import {
   getJsonFromFile,
   updateJsonFile,
-  createOrUpdate,
+  createOrUpdate
 } from '@nstudio/xplat';
 
 function updateNativeScriptApps(tree: Tree, context: SchematicContext) {

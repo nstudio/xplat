@@ -1,6 +1,11 @@
 import { adjustSandbox, adjustRouting } from '@nstudio/angular';
 import { chain, Tree, SchematicContext } from '@angular-devkit/schematics';
-import { FeatureHelpers, PlatformTypes, XplatHelpers, prerun } from '@nstudio/xplat';
+import {
+  FeatureHelpers,
+  PlatformTypes,
+  XplatHelpers,
+  prerun
+} from '@nstudio/xplat';
 
 export default function(options: FeatureHelpers.Schema) {
   const featureSettings = FeatureHelpers.prepare(options);
@@ -19,7 +24,7 @@ export default function(options: FeatureHelpers.Schema) {
         routingModulePathOptions.push(`${appDirectory}app-routing.module.ts`);
 
         chains.push((tree: Tree, context: SchematicContext) => {
-          return FeatureHelpers.addFiles(__dirname, options, platPrefix, projectName)(
+          return FeatureHelpers.addFiles(options, platPrefix, projectName)(
             tree,
             context
           );
@@ -44,7 +49,6 @@ export default function(options: FeatureHelpers.Schema) {
         if (!options.onlyModule) {
           chains.push((tree: Tree, context: SchematicContext) => {
             return FeatureHelpers.addFiles(
-              __dirname,
               options,
               platPrefix,
               projectName,
@@ -58,20 +62,23 @@ export default function(options: FeatureHelpers.Schema) {
     // projectChains.push(noop());
 
     chains.push((tree: Tree, context: SchematicContext) =>
-      FeatureHelpers.addFiles(__dirname, options, 'web', null, null, 'angular')(tree, context)
+      FeatureHelpers.addFiles(options, 'web', null, null, 'angular')(
+        tree,
+        context
+      )
     );
     // update index
     chains.push((tree: Tree, context: SchematicContext) => {
       const xplatFolderName = XplatHelpers.getXplatFoldername('web', 'angular');
-      return FeatureHelpers.adjustBarrelIndex(options, `xplat/${xplatFolderName}/features/index.ts`)(
-        tree,
-        context
-      )
-      });
+      return FeatureHelpers.adjustBarrelIndex(
+        options,
+        `xplat/${xplatFolderName}/features/index.ts`
+      )(tree, context);
+    });
     // add starting component unless onlyModule
     if (!options.onlyModule) {
       chains.push((tree: Tree, context: SchematicContext) =>
-        FeatureHelpers.addFiles(__dirname, options, 'web', null, '_component', 'angular')(
+        FeatureHelpers.addFiles(options, 'web', null, '_component', 'angular')(
           tree,
           context
         )
@@ -79,8 +86,5 @@ export default function(options: FeatureHelpers.Schema) {
     }
   }
 
-  return chain([
-    prerun(),
-    ...chains
-  ]);
+  return chain([prerun(), ...chains]);
 }

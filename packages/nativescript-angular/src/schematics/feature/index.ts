@@ -1,6 +1,21 @@
 import { adjustSandbox, adjustRouting } from '@nstudio/angular';
-import { chain, Tree, SchematicContext, move, template, url, apply, branchAndMerge, mergeWith } from '@angular-devkit/schematics';
-import { FeatureHelpers, PlatformTypes, XplatHelpers, prerun } from '@nstudio/xplat';
+import {
+  chain,
+  Tree,
+  SchematicContext,
+  move,
+  template,
+  url,
+  apply,
+  branchAndMerge,
+  mergeWith
+} from '@angular-devkit/schematics';
+import {
+  FeatureHelpers,
+  PlatformTypes,
+  XplatHelpers,
+  prerun
+} from '@nstudio/xplat';
 
 export default function(options: FeatureHelpers.Schema) {
   const featureSettings = FeatureHelpers.prepare(options);
@@ -19,7 +34,7 @@ export default function(options: FeatureHelpers.Schema) {
         routingModulePathOptions.push(`${appDirectory}app-routing.module.ts`);
 
         chains.push((tree: Tree, context: SchematicContext) => {
-          return FeatureHelpers.addFiles(__dirname, options, platPrefix, projectName)(
+          return FeatureHelpers.addFiles(options, platPrefix, projectName)(
             tree,
             context
           );
@@ -44,7 +59,6 @@ export default function(options: FeatureHelpers.Schema) {
         if (!options.onlyModule) {
           chains.push((tree: Tree, context: SchematicContext) => {
             return FeatureHelpers.addFiles(
-              __dirname,
               options,
               platPrefix,
               projectName,
@@ -57,31 +71,36 @@ export default function(options: FeatureHelpers.Schema) {
   } else {
     // projectChains.push(noop());
 
-    chains.push((tree: Tree, context: SchematicContext) => 
-      FeatureHelpers.addFiles(__dirname, options, 'nativescript', null, null, 'angular')
+    chains.push((tree: Tree, context: SchematicContext) =>
+      FeatureHelpers.addFiles(options, 'nativescript', null, null, 'angular')
     );
     // update index
     chains.push((tree: Tree, context: SchematicContext) => {
-      const xplatFolderName = XplatHelpers.getXplatFoldername('nativescript', 'angular');
+      const xplatFolderName = XplatHelpers.getXplatFoldername(
+        'nativescript',
+        'angular'
+      );
       return FeatureHelpers.adjustBarrelIndex(
         options,
         `xplat/${xplatFolderName}/features/index.ts`
-      )(tree, context)
-      });
+      )(tree, context);
+    });
     // add starting component unless onlyModule
     if (!options.onlyModule) {
-      chains.push((tree: Tree, context: SchematicContext) => 
-        FeatureHelpers.addFiles(__dirname, options, 'nativescript', null, '_component', 'angular')
+      chains.push((tree: Tree, context: SchematicContext) =>
+        FeatureHelpers.addFiles(
+          options,
+          'nativescript',
+          null,
+          '_component',
+          'angular'
+        )
       );
     }
   }
 
-  return chain([
-    prerun(),
-    ...chains
-  ]);
+  return chain([prerun(), ...chains]);
 }
-
 
 // (tree: Tree, context: SchematicContext) =>
 //       !options.projects && targetPlatforms.nativescript

@@ -8,11 +8,11 @@ import {
   noop,
   externalSchematic
 } from '@angular-devkit/schematics';
+import { formatFiles } from '@nrwl/workspace';
 import {
   supportedPlatforms,
   prerun,
   unsupportedPlatformError,
-  formatFiles,
   FeatureHelpers,
   getDefaultFramework
 } from '@nstudio/xplat';
@@ -46,12 +46,12 @@ export default function(options: FeatureHelpers.Schema) {
     (tree: Tree, context: SchematicContext) =>
       options.onlyProject
         ? noop()(tree, context)
-        : FeatureHelpers.addFiles(__dirname, options)(tree, context),
+        : FeatureHelpers.addFiles(options)(tree, context),
     // libs
     (tree: Tree, context: SchematicContext) =>
       options.onlyProject || !options.createBase || options.onlyModule
         ? noop()(tree, context)
-        : FeatureHelpers.addFiles(__dirname, options, null, null, '_component')(
+        : FeatureHelpers.addFiles(options, null, null, '_component')(
             tree,
             context
           ),
@@ -65,6 +65,6 @@ export default function(options: FeatureHelpers.Schema) {
           ),
     // external schematic handling
     ...externalChains,
-    options.skipFormat ? noop() : formatFiles(options)
+    formatFiles({ skipFormat: options.skipFormat })
   ]);
 }

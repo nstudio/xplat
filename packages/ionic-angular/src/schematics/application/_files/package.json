@@ -45,7 +45,6 @@
     "@ngrx/store": "file:../../node_modules/@ngrx/store",
     "@ngx-translate/core": "file:../../node_modules/@ngx-translate/core",
     "@ngx-translate/http-loader": "file:../../node_modules/@ngx-translate/http-loader",
-    "@nrwl/nx": "file:../../node_modules/@nrwl/nx",
     "rxjs": "file:../../node_modules/rxjs",
     "zone.js": "file:../../node_modules/zone.js"
   },

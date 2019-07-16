@@ -33,12 +33,8 @@ describe('xplat schematic', () => {
 
     const tree = await runSchematic('xplat', options, appTree);
     const files = tree.files;
-    expect(files.indexOf('/xplat/web/index.ts')).toBeGreaterThanOrEqual(
-      0
-    );
-    expect(
-      files.indexOf('/xplat/electron/index.ts')
-    ).toBeGreaterThanOrEqual(0);
+    expect(files.indexOf('/xplat/web/index.ts')).toBeGreaterThanOrEqual(0);
+    expect(files.indexOf('/xplat/electron/index.ts')).toBeGreaterThanOrEqual(0);
     expect(
       files.indexOf('/xplat/nativescript/index.ts')
     ).toBeGreaterThanOrEqual(-1);
@@ -53,11 +49,17 @@ describe('xplat schematic', () => {
     expect(hasNativeScript).toBeUndefined();
     const hasElectron = packageFile.devDependencies[`electron`];
     expect(hasElectron).toBeDefined();
-    const filePath = '/tsconfig.json';
-    const fileContent = jsonParse(getFileContent(tree, filePath));
+    let filePath = '/tsconfig.json';
+    let fileContent = jsonParse(getFileContent(tree, filePath));
     // console.log(fileContent);
     expect(fileContent.compilerOptions.paths['@testing/electron']).toBeTruthy();
-    expect(fileContent.compilerOptions.paths['@testing/electron/*']).toBeTruthy();
+    expect(
+      fileContent.compilerOptions.paths['@testing/electron/*']
+    ).toBeTruthy();
+    filePath = '/xplat/electron/.xplatframework';
+    fileContent = getFileContent(tree, filePath);
+    // console.log(fileContent);
+    expect(fileContent.indexOf('angular')).toBeGreaterThanOrEqual(0);
   });
 
   it('should create default xplat support with framework suffix when not specifying default', async () => {
@@ -70,8 +72,12 @@ describe('xplat schematic', () => {
     const filePath = '/tsconfig.json';
     const fileContent = jsonParse(getFileContent(tree, filePath));
     // console.log(fileContent);
-    expect(fileContent.compilerOptions.paths['@testing/electron-angular']).toBeTruthy();
-    expect(fileContent.compilerOptions.paths['@testing/electron-angular/*']).toBeTruthy();
+    expect(
+      fileContent.compilerOptions.paths['@testing/electron-angular']
+    ).toBeTruthy();
+    expect(
+      fileContent.compilerOptions.paths['@testing/electron-angular/*']
+    ).toBeTruthy();
   });
 
   it('when default framework is set, can still create base platform support', async () => {
@@ -87,11 +93,11 @@ describe('xplat schematic', () => {
     let fileContent = jsonParse(getFileContent(tree, filePath));
     // console.log(fileContent);
     expect(fileContent.compilerOptions.paths['@testing/electron']).toBeTruthy();
-    expect(fileContent.compilerOptions.paths['@testing/electron/*']).toBeTruthy();
-
     expect(
-      () => (runSchematicSync('xplat', defaultOptions, tree))
-    ).toThrow(
+      fileContent.compilerOptions.paths['@testing/electron/*']
+    ).toBeTruthy();
+
+    expect(() => runSchematicSync('xplat', defaultOptions, tree)).toThrow(
       `You currently have "angular" set as your default frontend framework and have already generated xplat support for "web". A command is coming soon to auto reconfigure your workspace to later add baseline platform support for those which have previously been generated prepaired with a frontend framework.`
     );
   });

@@ -9,6 +9,11 @@
       "description": "Add xplat to an existing Nx Workspace",
       "hidden": true
     },
+    "application": {
+      "factory": "./src/schematics/application",
+      "schema": "./src/schematics/application/schema.json",
+      "description": "Add xplat applications."
+    },
     "mode": {
       "factory": "./src/schematics/mode",
       "schema": "./src/schematics/mode/schema.json",
@@ -17,8 +22,7 @@
     "init": {
       "factory": "./src/schematics/init",
       "schema": "./src/schematics/init/schema.json",
-      "description": "Init xplat testing support.",
-      "hidden": true
+      "description": "Init xplat testing support."
     },
     "helpers": {
       "factory": "./src/schematics/helpers",

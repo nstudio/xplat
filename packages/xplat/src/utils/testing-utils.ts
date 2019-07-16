@@ -9,7 +9,10 @@ import { FrameworkTypes } from './general';
 
 export { getFileContent } from '@nrwl/workspace/testing';
 
-export function createEmptyWorkspace(tree: Tree, defaultFramework?: FrameworkTypes): Tree {
+export function createEmptyWorkspace(
+  tree: Tree,
+  defaultFramework?: FrameworkTypes
+): Tree {
   tree.create('/.gitignore', '');
   tree.create(
     '/angular.json',
@@ -100,7 +103,10 @@ export function createXplatWithAppsForElectron(tree: Tree): Tree {
   return tree;
 }
 
-export function createXplatWithApps(tree: Tree, defaultFramework?: FrameworkTypes): Tree {
+export function createXplatWithApps(
+  tree: Tree,
+  defaultFramework?: FrameworkTypes
+): Tree {
   tree = createEmptyWorkspace(tree, defaultFramework);
   createXplatLibs(tree);
   createXplatWebAngular(tree, defaultFramework);
@@ -130,7 +136,6 @@ export function createXplatLibs(tree: Tree) {
     NgModule
   } from '@angular/core';
   import { APP_BASE_HREF, CommonModule } from '@angular/common';
-  import { NxModule } from '@nrwl/nx';
   
   export const BASE_PROVIDERS: any[] = [
     ...CORE_PROVIDERS,
@@ -141,7 +146,7 @@ export function createXplatLibs(tree: Tree) {
   ];
   
   @NgModule({
-    imports: [CommonModule, NxModule.forRoot()]
+    imports: [CommonModule]
   })
   export class CoreModule {}`
   );
@@ -177,7 +182,10 @@ export function createXplatLibs(tree: Tree) {
   tree.create('/libs/utils/index.ts', '');
 }
 
-export function createXplatNativeScriptAngular(tree: Tree, defaultFramework?: FrameworkTypes) {
+export function createXplatNativeScriptAngular(
+  tree: Tree,
+  defaultFramework?: FrameworkTypes
+) {
   const frameworkSuffix = defaultFramework === 'angular' ? '' : '-angular';
   tree.create(`/xplat/nativescript${frameworkSuffix}/index.ts`, '');
   tree.create(`/xplat/nativescript${frameworkSuffix}/package.json`, '');
@@ -289,7 +297,10 @@ export function createXplatNativeScriptAngular(tree: Tree, defaultFramework?: Fr
   tree.create(`/xplat/nativescript${frameworkSuffix}/utils/index.ts`, ``);
 }
 
-export function createXplatWebAngular(tree: Tree, defaultFramework?: FrameworkTypes) {
+export function createXplatWebAngular(
+  tree: Tree,
+  defaultFramework?: FrameworkTypes
+) {
   const frameworkSuffix = defaultFramework === 'angular' ? '' : '-angular';
   tree.create(`/xplat/web${frameworkSuffix}/index.ts`, '');
   tree.create(`/xplat/web${frameworkSuffix}/package.json`, '');

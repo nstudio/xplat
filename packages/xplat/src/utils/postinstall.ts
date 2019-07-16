@@ -55,7 +55,7 @@ export async function updateConfig() {
 }
 
 /**
- * @nrwl/nx's formatter doesn't include files in the xplat-folder.
+ * @nrwl/workspace formatter doesn't include files in the xplat-folder.
  * This function patches their formatter cli to include the xplat-folder
  */
 export async function fixFormatter() {
@@ -90,7 +90,7 @@ export async function fixFormatter() {
 }
 
 /**
- * To avoid @nrwl/nx's formatter tries to format App_Resources, platforms-files etc.
+ * To avoid @nrwl/workspace formatter tries to format App_Resources, platforms-files etc.
  * Create a .prettierignore file at the root of the project.
  */
 export async function makePrettierIgnore() {
@@ -104,10 +104,13 @@ export async function makePrettierIgnore() {
 **/*.d.ts
 **/apps/**/platforms/**/*
 **/App_Resources/**/*
-**/apps/nativescript-*/hooks/**/*
-**/apps/nativescript-*/tools/**/*
-**/apps/nativescript-*/src/assets/*.min.css
-**/xplat/nativescript/plugins/**/*
+**/apps/nativescript*/hooks/**/*
+**/apps/nativescript*/tools/**/*
+**/apps/nativescript*/src/assets/*.min.css
+**/apps/*nativescript/hooks/**/*
+**/apps/*nativescript/tools/**/*
+**/apps/*nativescript/src/assets/*.min.css
+**/xplat/nativescript*/plugins/**/*
 **/webpack.config.js
 **/package.json
 **/package-lock.json
@@ -115,10 +118,19 @@ export async function makePrettierIgnore() {
 **/tsconfig.*.json
 **/tsconfig.json
 **/*.conf.js
+**/xplat/**/.xplatframework
 `;
 
   if (!(await fsExists(prettierIgnorePath))) {
     console.log(`"${prettierIgnorePath}" already exists`);
+
+    // determine if extra rules are needed
+    let prettierContent = await fsReadFile(prettierIgnorePath, 'UTF-8');
+    if (prettierContent.indexOf('**/apps/**/platforms/**/*') === -1 || prettierContent.indexOf('**/xplat/**/.xplatframework') === -1) {
+      console.log(`xplat is updating "${prettierIgnorePath}" with a few important extra rules. You may double-check the contents afterwards to ensure they meet your satisfaction`);
+      // update prettier to include the rules
+      await fsWriteFile(prettierIgnorePath, prettierContent + '\n' + prettierIgnore, 'UTF-8');
+    }
     return;
   }
 

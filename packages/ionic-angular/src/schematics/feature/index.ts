@@ -4,7 +4,10 @@ import { FeatureHelpers, prerun } from '@nstudio/xplat';
 export default function(options: FeatureHelpers.Schema) {
   const xplatChains = [];
   xplatChains.push((tree: Tree, context: SchematicContext) =>
-    FeatureHelpers.addFiles(__dirname, options, 'ionic', null, null, 'angular')(tree, context)
+    FeatureHelpers.addFiles(options, 'ionic', null, null, 'angular')(
+      tree,
+      context
+    )
   );
   // update index
   xplatChains.push((tree: Tree, context: SchematicContext) =>
@@ -16,15 +19,12 @@ export default function(options: FeatureHelpers.Schema) {
   // add starting component unless onlyModule
   if (!options.onlyModule) {
     xplatChains.push((tree: Tree, context: SchematicContext) =>
-      FeatureHelpers.addFiles(__dirname, options, 'ionic', null, '_component', 'angular')(
+      FeatureHelpers.addFiles(options, 'ionic', null, '_component', 'angular')(
         tree,
         context
       )
     );
   }
 
-  return chain([
-    prerun(),
-    ...xplatChains
-  ]);
+  return chain([prerun(), ...xplatChains]);
 }

@@ -8,12 +8,12 @@
       "type": "string",
       "description": "Target platforms to support.",
       "x-prompt": {
-        "message": "Would you like to generate xplat structure now? (You can generate for platforms at anytime using 'ng g @nstudio/xplat:init --platforms electron,ionic,nativescript,web')",
+        "message": "Would you like to generate xplat supporting architecture now? You can also generate later with: ng g @nstudio/xplat:init",
         "type": "list",
         "items": [
           {
             "value": "",
-            "label": "not right now     [just add the tools for use later]"
+            "label": "not right now     [just add xplat tooling]"
           },
           {
             "value": "electron",
@@ -43,7 +43,7 @@
         "items": [
           {
             "value": "",
-            "label": "not right now     [I'll decide later]"
+            "label": "not right now    [I'll decide later]"
           },
           {
             "value": "angular",
@@ -55,8 +55,10 @@
     "prefix": {
       "type": "string",
       "description": "The prefix to apply to generated selectors.",
-      "alias": "p",
-      "x-prompt": "Please input a 2-3 character prefix to use on various generated selectors for your code:"
+      "x-prompt": {
+        "type": "input",
+        "message": "Please input a 2-3 character prefix to use with xplat generators:"
+      }
     },
     "npmScope": {
       "type": "string",
@@ -66,8 +68,7 @@
     "setDefault": {
       "type": "boolean",
       "description": "Save options as defaults. Ensure any specified framework is set as your primary.",
-      "default": false,
-      "x-prompt": "Would you like to set this choice as your default for the workspace? Encouraged if you plan to stick with a frontend framework choice for any significant time period."
+      "default": false
     },
     "skipFormat": {
       "description": "Skip formatting files",

@@ -27,8 +27,8 @@ import {
   generateOptionError,
   optionsMissingError,
   unsupportedPlatformError,
-  formatFiles
 } from '@nstudio/xplat';
+import { formatFiles } from '@nrwl/workspace';
 import { addToFeature, adjustBarrelIndex } from '@nstudio/angular';
 import { ComponentHelpers } from '../../utils/xplat';
 
@@ -86,10 +86,15 @@ export default function(options: ComponentHelpers.Schema) {
     // add index barrel if needed for subFolder
     (tree: Tree, context: SchematicContext) =>
       options.needsIndex
-        ? addToFeature('', 'component', options, 'libs', tree, '_base_index', true)(
+        ? addToFeature(
+            '',
+            'component',
+            options,
+            'libs',
             tree,
-            context
-          )
+            '_base_index',
+            true
+          )(tree, context)
         : noop()(tree, context),
     // adjust libs barrel
     (tree: Tree, context: SchematicContext) =>
@@ -113,6 +118,6 @@ export default function(options: ComponentHelpers.Schema) {
 
     // add platform chains
     ...externalChains,
-    options.skipFormat ? noop() : formatFiles(options)
+    formatFiles({ skipFormat: options.skipFormat })
   ]);
 }

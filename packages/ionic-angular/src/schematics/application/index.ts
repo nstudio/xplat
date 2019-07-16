@@ -14,6 +14,7 @@ import {
   noop,
   externalSchematic
 } from '@angular-devkit/schematics';
+import { formatFiles } from '@nrwl/workspace';
 import {
   stringUtils,
   prerun,
@@ -22,7 +23,6 @@ import {
   updatePackageScripts,
   updateAngularProjects,
   updateNxProjects,
-  formatFiles,
   getAppName,
   missingArgument,
   getDefaultTemplateOptions,
@@ -118,7 +118,7 @@ export default function(options: ApplicationOptions) {
       };
       return updateNxProjects(tree, projects);
     },
-    options.skipFormat ? noop() : formatFiles(options)
+    formatFiles({ skipFormat: options.skipFormat })
   ]);
 }
 

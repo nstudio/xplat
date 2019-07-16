@@ -13,6 +13,7 @@ import {
   SchematicsException,
   externalSchematic
 } from '@angular-devkit/schematics';
+import { formatFiles } from '@nrwl/workspace';
 import {
   addGlobal,
   insert,
@@ -26,7 +27,6 @@ import {
   stringUtils,
   updatePackageForNgrx,
   sanitizeCommaDelimitedArg,
-  formatFiles,
   getDefaultTemplateOptions,
   FeatureHelpers,
   PlatformTypes,
@@ -288,7 +288,7 @@ export function generate(type: IGenerateType, options) {
         ? // ensure ngrx dependencies are added to root package
           updatePackageForNgrx(tree)
         : noop()(tree, context),
-    options.skipFormat ? noop() : formatFiles(options)
+    formatFiles({ skipFormat: options.skipFormat })
   ]);
 }
 

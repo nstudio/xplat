@@ -40,6 +40,10 @@ describe('xplat schematic', () => {
     // should not include these root packages
     const hasNativeScript = fileContent.dependencies[`nativescript-angular`];
     expect(hasNativeScript).toBeUndefined();
+    filePath = '/xplat/web/.xplatframework';
+    fileContent = getFileContent(tree, filePath);
+    // console.log(fileContent);
+    expect(fileContent.indexOf('angular')).toBeGreaterThanOrEqual(0);
   });
 
   it('should create default xplat support with framework suffix when not specifying default', async () => {
@@ -52,7 +56,11 @@ describe('xplat schematic', () => {
     const filePath = '/tsconfig.json';
     const fileContent = jsonParse(getFileContent(tree, filePath));
     // console.log(fileContent);
-    expect(fileContent.compilerOptions.paths['@testing/web-angular']).toBeTruthy();
-    expect(fileContent.compilerOptions.paths['@testing/web-angular/*']).toBeTruthy();
+    expect(
+      fileContent.compilerOptions.paths['@testing/web-angular']
+    ).toBeTruthy();
+    expect(
+      fileContent.compilerOptions.paths['@testing/web-angular/*']
+    ).toBeTruthy();
   });
 });
