@@ -33,6 +33,7 @@ import {
 } from '@nstudio/xplat';
 import { Schema } from './schema';
 import { XplatNativeScriptAngularHelpers } from '../../utils';
+import { tnsCoreVersion } from '../../utils/versions';
 
 export default function(options: Schema) {
   if (!options.name) {
@@ -198,11 +199,10 @@ function addNsCli(add: boolean): Rule {
       return tree;
     }
 
-    packageJson.devDependencies = setDependency(packageJson.devDependencies, {
-      name: 'nativescript',
-      version: '^5.0.0',
-      type: 'devDependency'
-    });
+    packageJson.devDependencies = {
+      ...(packageJson.devDependencies || {}),
+      nativescript: tnsCoreVersion
+    };
 
     return updateJsonFile(tree, packagePath, packageJson);
   };

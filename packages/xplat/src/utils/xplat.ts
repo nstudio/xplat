@@ -56,13 +56,22 @@ import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 
 export const packageInnerDependencies = {
   '@nstudio/angular': ['@nrwl/angular'],
-  '@nstudio/electron-angular': ['@nstudio/electron', '@nstudio/angular'],
-  '@nstudio/ionic-angular': ['@nstudio/ionic', '@nstudio/angular'],
+  '@nstudio/electron-angular': [
+    '@nrwl/angular',
+    '@nstudio/electron',
+    '@nstudio/angular'
+  ],
+  '@nstudio/ionic-angular': [
+    '@nrwl/angular',
+    '@nstudio/ionic',
+    '@nstudio/angular'
+  ],
   '@nstudio/nativescript-angular': [
+    '@nrwl/angular',
     '@nstudio/nativescript',
     '@nstudio/angular'
   ],
-  '@nstudio/web-angular': ['@nstudio/web', '@nstudio/angular']
+  '@nstudio/web-angular': ['@nrwl/angular', '@nstudio/web', '@nstudio/angular']
 };
 
 export namespace XplatHelpers {
@@ -100,6 +109,10 @@ export namespace XplatHelpers {
      * Skip install
      */
     skipInstall?: boolean;
+    /**
+     * testing helper
+     */
+    isTesting?: boolean;
   }
 
   export interface NgAddSchema {

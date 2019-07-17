@@ -117,8 +117,8 @@ export default function(options: Schema) {
     externalChains.push((tree: Tree, context: SchematicContext) => {
       const installPackageTask = context.addTask(new NodePackageInstallTask());
 
-      console.log('devDependencies:', devDependencies);
-      console.log('packagesToRunXplat:', packagesToRunXplat);
+      // console.log('devDependencies:', devDependencies);
+      // console.log('packagesToRunXplat:', packagesToRunXplat);
       for (const packageName in packagesToRunXplat) {
         context.addTask(new RunSchematicTask(packageName, 'app', options), [
           installPackageTask

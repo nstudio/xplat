@@ -321,7 +321,7 @@ export namespace XplatAngularHelpers {
       let updatedXplatSettings;
       if (options.setDefault && options.framework) {
         updatedXplatSettings = {
-          framework: options.framework
+          defaultFramework: options.framework
         };
       }
       return XplatHelpers.updatePackageForXplat(
@@ -346,6 +346,7 @@ export namespace XplatAngularHelpers {
     const chains = [];
 
     for (const platform of platforms) {
+      // console.log('angular externalChains:', `@nstudio/${platform}-angular`)
       chains.push(
         externalSchematic(`@nstudio/${platform}-angular`, 'xplat', options, {
           interactive: false

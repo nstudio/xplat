@@ -141,6 +141,8 @@ export default function(options: XplatHelpers.Schema) {
     if (frameworkChoice && options.setDefault) {
       xplatSettings.defaultFramework = frameworkChoice;
     }
+    // console.log('options.setDefault:', options.setDefault);
+    // console.log('xplatSettings:', xplatSettings);
     return XplatHelpers.updatePackageForXplat(
       options,
       {
@@ -150,26 +152,43 @@ export default function(options: XplatHelpers.Schema) {
     )(tree, context);
   });
 
-  externalChains.push((tree: Tree, context: SchematicContext) => {
-    const deps = Object.keys(devDependencies);
-    if (deps.length) {
-      const installPackageTask = context.addTask(new NodePackageInstallTask());
-
-      // console.log('packagesToRunXplat:', packagesToRunXplat);
-      for (const packageName in devDependencies) {
-        if (
-          packageName.indexOf('@nstudio') > -1 &&
-          packagesToRunXplat.includes(packageName)
-        ) {
-          context.addTask(new RunSchematicTask(packageName, 'xplat', options), [
-            installPackageTask
-          ]);
-        }
+  if (options.isTesting) {
+    // necessary to unit test the appropriately
+    if (packagesToRunXplat.length) {
+      for (const packageName of packagesToRunXplat) {
+        externalChains.push(
+          externalSchematic(packageName, 'xplat', options, {
+            interactive: false
+          })
+        );
       }
-    } else {
-      return noop()(tree, context);
     }
-  });
+  } else {
+    // TODO: find a way to unit test schematictask runners with install tasks
+    externalChains.push((tree: Tree, context: SchematicContext) => {
+      const deps = Object.keys(devDependencies);
+      if (deps.length) {
+        const installPackageTask = context.addTask(
+          new NodePackageInstallTask()
+        );
+
+        // console.log('packagesToRunXplat:', packagesToRunXplat);
+        for (const packageName in devDependencies) {
+          if (
+            packageName.indexOf('@nstudio') > -1 &&
+            packagesToRunXplat.includes(packageName)
+          ) {
+            context.addTask(
+              new RunSchematicTask(packageName, 'xplat', options),
+              [installPackageTask]
+            );
+          }
+        }
+      } else {
+        return noop()(tree, context);
+      }
+    });
+  }
 
   if (Object.keys(devDependencies).length) {
     // if processing dependencies, ensure IDE settings are updated to hide hidden folders used to help xplat configure workspaces

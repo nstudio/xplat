@@ -1,10 +1,10 @@
 import { chain, noop } from '@angular-devkit/schematics';
 import { formatFiles } from '@nrwl/workspace';
-import { prerun, XplatHelpers } from '@nstudio/xplat';
+import { prerun, XplatHelpers, addInstallTask } from '@nstudio/xplat';
 import { XplatAngularHelpers } from '../../utils/xplat';
 
 export default function(options: XplatHelpers.Schema) {
-  // console.log(`Generating xplat angular support for: ${platforms.toString()}`);
+  // console.log(`Generating xplat angular support for: ${options.platforms}`);
   const externalChains = XplatAngularHelpers.externalChains(options);
 
   return chain([
@@ -31,6 +31,6 @@ export default function(options: XplatHelpers.Schema) {
     // },
     // update IDE settings
     XplatHelpers.updateIDESettings(options),
-    options.skipInstall ? noop() : XplatHelpers.addPackageInstallTask(options)
+    addInstallTask(options)
   ]);
 }

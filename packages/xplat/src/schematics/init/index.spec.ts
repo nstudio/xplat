@@ -8,11 +8,12 @@ setTest();
 
 // TODO: Not sure how to get this unit test to work given the NodePackageInstallTask with RunSchematicTask setup
 // works in use, just not sure how to get test to run right
-xdescribe('xplat schematic', () => {
+describe('xplat schematic', () => {
   let appTree: Tree;
   const defaultOptions: XplatHelpers.Schema = {
     npmScope: 'testing',
-    prefix: 'ft' // foo test
+    prefix: 'ft', // foo test
+    isTesting: true
   };
 
   beforeEach(() => {
@@ -67,6 +68,10 @@ xdescribe('xplat schematic', () => {
     expect(tree.exists('/xplat/web/index.ts')).toBeFalsy();
     expect(tree.exists('/xplat/nativescript-angular/index.ts')).toBeTruthy();
     expect(tree.exists('/xplat/nativescript/index.ts')).toBeFalsy();
+
+    let packageJson = JSON.parse(getFileContent(tree, 'package.json'));
+    // console.log(packageJson);
+    expect(packageJson.xplat.defaultFramework).toBeUndefined();
   });
 
   it('should init and set options as default', async () => {
@@ -80,7 +85,7 @@ xdescribe('xplat schematic', () => {
     // console.log('files:', files);
     let packageJson = JSON.parse(getFileContent(tree, 'package.json'));
     // console.log(packageJson);
-    expect(packageJson.xplat.framework).toBe('angular');
+    expect(packageJson.xplat.defaultFramework).toBe('angular');
   });
 
   it('should NOT create unsupported platform xplat option and throw', () => {

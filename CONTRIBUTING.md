@@ -4,17 +4,21 @@ We greatly appreciate your help! You will be attributed to the contributor list 
 
 ## Building and testing locally
 
+Try using `yarn` with: `brew install yarn`
+
 After cloning the project:
 
 ```
-npm i
+yarn install
 ```
 
 You can publish the schematic locally to test against any Nx workspace using [verdaccio](https://www.npmjs.com/package/verdaccio):
 
 ```
-npm i -g verdaccio
-verdaccio  // to start the private local npm registry
+yarn global add verdaccio
+
+// Then open a new tab and start the private local npm registry:
+verdaccio
 ```
 
 1. Publish the schematic to `verdaccio` with the following:
