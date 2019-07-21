@@ -91,9 +91,9 @@ export function optionsMissingError(error: string) {
   return `Options missing. ${error} Currently supported platforms: ${supportedPlatforms}`;
 }
 
-export function noteAboutXplatSetupWithDefaultFramework(
-  defaultFramework: string,
+export function noteAboutXplatSetupWithFramework(
+  framework: string,
   platform: string
 ) {
-  return `You currently have "${defaultFramework}" set as your default frontend framework and have already generated xplat support for "${platform}". A command is coming soon to auto reconfigure your workspace to later add baseline platform support for those which have previously been generated prepaired with a frontend framework.`;
+  return `You currently have "${framework}" set as your default frontend framework and have already generated xplat support for "${platform}". A command is coming soon to auto reconfigure your workspace to later add baseline platform support for those which have previously been generated prepaired with a frontend framework.`;
 }

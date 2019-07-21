@@ -36,7 +36,7 @@ describe('xplat ionic angular', () => {
     const packageFile = jsonParse(getFileContent(tree, packagePath));
     // const hasScss = packageFile.dependencies[`@testing/scss`];
     // expect(hasScss).not.toBeUndefined();
-    const hasWebScss = packageFile.dependencies[`@testing/web`];
+    const hasWebScss = packageFile.dependencies[`@testing/web-scss`];
     expect(hasWebScss).not.toBeUndefined();
     // should not include these root packages
     const hasNativeScript = packageFile.dependencies[`nativescript-angular`];
@@ -75,7 +75,6 @@ describe('xplat ionic angular', () => {
     appTree = createEmptyWorkspace(appTree);
     let options: XplatHelpers.Schema = { ...defaultOptions };
     options.framework = 'angular';
-    options.setDefault = true;
 
     let tree = await runSchematic('xplat', options, appTree);
     expect(tree.exists('/xplat/ionic/index.ts')).toBeTruthy();

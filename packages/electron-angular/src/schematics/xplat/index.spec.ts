@@ -1,12 +1,6 @@
 import { Tree } from '@angular-devkit/schematics';
-import {
-  SchematicTestRunner,
-  UnitTestTree
-} from '@angular-devkit/schematics/testing';
-import * as path from 'path';
 
 import {
-  supportedPlatforms,
   setTest,
   jsonParse,
   XplatHelpers
@@ -42,8 +36,8 @@ describe('xplat schematic', () => {
     const packageFile = jsonParse(getFileContent(tree, packagePath));
     // const hasScss = packageFile.dependencies[`@testing/scss`];
     // expect(hasScss).not.toBeUndefined();
-    const hasWebScss = packageFile.dependencies[`@testing/web`];
-    expect(hasWebScss).not.toBeUndefined();
+    // const hasWebScss = packageFile.dependencies[`@testing/web-scss`];
+    // expect(hasWebScss).not.toBeUndefined();
     // should not include these root packages
     const hasNativeScript = packageFile.dependencies[`nativescript-angular`];
     expect(hasNativeScript).toBeUndefined();
@@ -85,7 +79,6 @@ describe('xplat schematic', () => {
     appTree = createEmptyWorkspace(appTree);
     let options: XplatHelpers.Schema = { ...defaultOptions };
     options.framework = 'angular';
-    options.setDefault = true;
 
     let tree = await runSchematic('xplat', options, appTree);
     expect(tree.exists('/xplat/electron/index.ts')).toBeTruthy();

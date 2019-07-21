@@ -65,11 +65,6 @@
       "description": "The npm scope to use.",
       "alias": "wn"
     },
-    "setDefault": {
-      "type": "boolean",
-      "description": "Save options as defaults. Ensure any specified framework is set as your primary.",
-      "default": false
-    },
     "skipFormat": {
       "description": "Skip formatting files",
       "type": "boolean",

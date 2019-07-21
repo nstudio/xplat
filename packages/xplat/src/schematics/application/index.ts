@@ -37,13 +37,13 @@ export default function(options: Schema) {
     options.framework,
     frameworks
   );
-  console.log('frameworks:', frameworks);
-  console.log('frameworkChoice:', frameworkChoice);
+  // console.log('frameworks:', frameworks);
+  // console.log('frameworkChoice:', frameworkChoice);
 
   const platforms = <Array<PlatformTypes>>(
     (<unknown>sanitizeCommaDelimitedArg(options.platforms))
   );
-  console.log('platforms:', platforms);
+  // console.log('platforms:', platforms);
   if (frameworks.length) {
     for (const framework of frameworks) {
       if (supportedFrameworks.includes(framework)) {
@@ -90,20 +90,25 @@ export default function(options: Schema) {
         for (const packageName in devDependencies) {
           if (packageInnerDependencies[packageName]) {
             // inner dependencies are either nstudio or nrwl based packages
-            let version =
-              packageName.indexOf('nstudio') > -1 ? xplatVersion : nrwlVersion;
+            let version: string;
             // ensure inner schematic dependencies are installed
             for (const name of packageInnerDependencies[packageName]) {
-              // always use existing versions if user already has them installed
-              if (packageJson.dependencies && packageJson.dependencies[name]) {
-                version = packageJson.dependencies[name];
-              } else if (
-                packageJson.devDependencies &&
-                packageJson.devDependencies[name]
-              ) {
-                version = packageJson.devDependencies[name];
+              if (name.indexOf('nrwl') > -1) {
+                // default to internally managed/supported nrwl version
+                version = nrwlVersion;
+                // look for existing nrwl versions if user already has them installed and use those
+                if (packageJson.dependencies && packageJson.dependencies[name]) {
+                  version = packageJson.dependencies[name];
+                } else if (
+                  packageJson.devDependencies &&
+                  packageJson.devDependencies[name]
+                ) {
+                  version = packageJson.devDependencies[name];
+                }
+                devDependencies[name] = version;
+              } else {
+                devDependencies[name] = xplatVersion;
               }
-              devDependencies[name] = version;
             }
           }
         }
@@ -114,17 +119,31 @@ export default function(options: Schema) {
         devDependencies
       })(tree, context);
     });
-    externalChains.push((tree: Tree, context: SchematicContext) => {
-      const installPackageTask = context.addTask(new NodePackageInstallTask());
 
-      // console.log('devDependencies:', devDependencies);
-      // console.log('packagesToRunXplat:', packagesToRunXplat);
-      for (const packageName in packagesToRunXplat) {
-        context.addTask(new RunSchematicTask(packageName, 'app', options), [
-          installPackageTask
-        ]);
+    if (options.isTesting) {
+      // necessary to unit test the appropriately
+      if (packagesToRunXplat.length) {
+        for (const packageName of packagesToRunXplat) {
+          externalChains.push(
+            externalSchematic(packageName, 'app', options, {
+              interactive: false
+            })
+          );
+        }
       }
-    });
+    } else {
+      externalChains.push((tree: Tree, context: SchematicContext) => {
+        const installPackageTask = context.addTask(new NodePackageInstallTask());
+  
+        // console.log('devDependencies:', devDependencies);
+        // console.log('packagesToRunXplat:', packagesToRunXplat);
+        for (const packageName of packagesToRunXplat) {
+          context.addTask(new RunSchematicTask(packageName, 'app', options), [
+            installPackageTask
+          ]);
+        }
+      });
+    }
   }
 
   return chain([prerun(options, true), ...externalChains]);

@@ -88,6 +88,117 @@ describe('directive schematic', () => {
     );
   });
 
+  it('should create directive across various xplat folders with platforms specified', async () => {
+    // console.log('appTree:', appTree);
+    let tree = await runSchematic(
+      'feature',
+      {
+        name: 'foo',
+        platforms: 'nativescript,web'
+      },
+      appTree
+    );
+    let options: GenerateOptions = { ...defaultOptions };
+    options.platforms = 'nativescript,web';
+
+    // Directives without the feature option are added to the ui-feature
+    tree = await runSchematic('directive', options, tree);
+    let files = tree.files;
+    // console.log(files.slice(91,files.length));
+
+    expect(
+      tree.exists('/libs/features/ui/directives/active-link.directive.ts')
+    ).toBeFalsy();
+    expect(
+      tree.exists('/xplat/web/features/ui/directives/active-link.directive.ts')
+    ).toBeTruthy();
+    expect(
+      tree.exists('/xplat/nativescript/features/ui/directives/active-link.directive.ts')
+    ).toBeTruthy();
+
+    // file content
+    let content = getFileContent(
+      tree,
+      '/xplat/web/features/ui/directives/active-link.directive.ts'
+    );
+    // console.log(content);
+    expect(content.indexOf(`@Directive({`)).toBeGreaterThanOrEqual(0);
+    expect(content.indexOf(`selector: '[active-link]'`)).toBeGreaterThanOrEqual(
+      0
+    );
+
+    content = getFileContent(
+      tree,
+      '/xplat/nativescript/features/ui/directives/active-link.directive.ts'
+    );
+    // console.log(content);
+    expect(content.indexOf(`@Directive({`)).toBeGreaterThanOrEqual(0);
+    expect(content.indexOf(`selector: '[active-link]'`)).toBeGreaterThanOrEqual(
+      0
+    );
+
+    let modulePath = '/xplat/web/features/ui/ui.module.ts';
+    let moduleContent = getFileContent(tree, modulePath);
+    // console.log(modulePath + ':');
+    // console.log(moduleContent);
+    expect(moduleContent.indexOf(`...UI_DIRECTIVES`)).toBeGreaterThanOrEqual(0);
+
+    modulePath = '/xplat/nativescript/features/ui/ui.module.ts';
+    moduleContent = getFileContent(tree, modulePath);
+    expect(moduleContent.indexOf(`...UI_DIRECTIVES`)).toBeGreaterThanOrEqual(0);
+
+    // Directives added to the foo-feature
+    options = { ...defaultOptions, feature: 'foo' };
+    options.platforms = 'nativescript,web';
+    tree = await runSchematic('directive', options, tree);
+    files = tree.files;
+    // console.log(files.slice(91,files.length));
+
+    expect(
+      tree.exists('/xplat/web/features/foo/directives/active-link.directive.ts')
+    ).toBeTruthy();
+    expect(
+      tree.exists('/xplat/nativescript/features/foo/directives/active-link.directive.ts')
+    ).toBeTruthy();
+
+    // file content
+    content = getFileContent(
+      tree,
+      '/xplat/web/features/foo/directives/active-link.directive.ts'
+    );
+    // console.log(content);
+    expect(content.indexOf(`@Directive({`)).toBeGreaterThanOrEqual(0);
+    expect(content.indexOf(`selector: '[active-link]'`)).toBeGreaterThanOrEqual(
+      0
+    );
+    content = getFileContent(
+      tree,
+      '/xplat/nativescript/features/foo/directives/active-link.directive.ts'
+    );
+    // console.log(content);
+    expect(content.indexOf(`@Directive({`)).toBeGreaterThanOrEqual(0);
+    expect(content.indexOf(`selector: '[active-link]'`)).toBeGreaterThanOrEqual(
+      0
+    );
+
+    modulePath = '/xplat/web/features/foo/foo.module.ts';
+    moduleContent = getFileContent(tree, modulePath);
+
+    // console.log(modulePath + ':');
+    // console.log(moduleContent);
+    expect(moduleContent.indexOf(`...FOO_DIRECTIVES`)).toBeGreaterThanOrEqual(
+      0
+    );
+    modulePath = '/xplat/nativescript/features/foo/foo.module.ts';
+    moduleContent = getFileContent(tree, modulePath);
+
+    // console.log(modulePath + ':');
+    // console.log(moduleContent);
+    expect(moduleContent.indexOf(`...FOO_DIRECTIVES`)).toBeGreaterThanOrEqual(
+      0
+    );
+  });
+
   it('should create directive for specified projects only', async () => {
     // console.log('appTree:', appTree);
 

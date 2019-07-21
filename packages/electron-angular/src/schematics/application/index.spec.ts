@@ -13,7 +13,8 @@ describe('app', () => {
     name: 'foo',
     target: 'web-viewer',
     npmScope: 'testing',
-    prefix: 'tt'
+    prefix: 'tt',
+    isTesting: true
   };
 
   beforeEach(() => {

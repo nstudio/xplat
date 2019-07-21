@@ -27,4 +27,8 @@ export interface Schema {
    * Skip formatting files
    */
   skipFormat?: boolean;
+  /**
+   * testing helper
+   */
+  isTesting?: boolean;
 }

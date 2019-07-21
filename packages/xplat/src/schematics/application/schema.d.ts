@@ -31,4 +31,8 @@ export interface Schema {
    * Skip installing dependencies
    */
   skipInstall?: boolean;
+  /**
+   * testing helper
+   */
+  isTesting?: boolean;
 }

@@ -50,6 +50,8 @@ export default function(options: XplatHelpers.Schema) {
   );
 
   const devDependencies = {};
+  devDependencies['@nstudio/xplat'] = xplatVersion;
+  
   if (platformArg === 'all') {
     // requested by Mike Brocchi on AngularAir long ago :)
     // conveniently add support for all supported platforms
@@ -117,38 +119,33 @@ export default function(options: XplatHelpers.Schema) {
       for (const packageName in devDependencies) {
         if (packageInnerDependencies[packageName]) {
           // inner dependencies are either nstudio or nrwl based packages
-          let version =
-            packageName.indexOf('nstudio') > -1 ? xplatVersion : nrwlVersion;
           // ensure inner schematic dependencies are installed
           for (const name of packageInnerDependencies[packageName]) {
-            // always use existing versions if user already has them installed
-            if (packageJson.dependencies && packageJson.dependencies[name]) {
-              version = packageJson.dependencies[name];
-            } else if (
-              packageJson.devDependencies &&
-              packageJson.devDependencies[name]
-            ) {
-              version = packageJson.devDependencies[name];
+            // always use existing versions of nx if user already has them installed
+            if (name.indexOf('nrwl') > -1) {
+              let version = nrwlVersion;
+              if (packageJson.dependencies && packageJson.dependencies[name]) {
+                version = packageJson.dependencies[name];
+              } else if (
+                packageJson.devDependencies &&
+                packageJson.devDependencies[name]
+              ) {
+                version = packageJson.devDependencies[name];
+              }
+              devDependencies[name] = version;
+            } else {
+              devDependencies[name] = xplatVersion;
             }
-            devDependencies[name] = version;
           }
         }
       }
     }
-    // console.log(devDependencies);
-
-    const xplatSettings: IXplatSettings = {};
-    if (frameworkChoice && options.setDefault) {
-      xplatSettings.defaultFramework = frameworkChoice;
-    }
-    // console.log('options.setDefault:', options.setDefault);
-    // console.log('xplatSettings:', xplatSettings);
+    // console.log('updatePackageForXplat:', devDependencies);
     return XplatHelpers.updatePackageForXplat(
       options,
       {
         devDependencies
-      },
-      xplatSettings
+      }
     )(tree, context);
   });
 
@@ -173,6 +170,7 @@ export default function(options: XplatHelpers.Schema) {
         );
 
         // console.log('packagesToRunXplat:', packagesToRunXplat);
+        // console.log('devDependencies:', devDependencies);
         for (const packageName in devDependencies) {
           if (
             packageName.indexOf('@nstudio') > -1 &&
@@ -190,14 +188,10 @@ export default function(options: XplatHelpers.Schema) {
     });
   }
 
-  if (Object.keys(devDependencies).length) {
-    // if processing dependencies, ensure IDE settings are updated to hide hidden folders used to help xplat configure workspaces
-    externalChains.push(XplatHelpers.updateIDESettings(options));
-  }
-
   return chain([
     prerun(options, true),
     ...externalChains,
-    addInstallTask(options)
+    addInstallTask(options),
+    XplatHelpers.updateIDESettings(options)
   ]);
 }

@@ -31,7 +31,7 @@ import {
   isTesting,
   jsonParse,
   FrameworkTypes,
-  getDefaultFramework,
+  getFrontendFramework,
   IXplatSettings,
   supportedFrameworks
 } from './general';
@@ -48,7 +48,7 @@ import {
   optionsMissingError,
   noPlatformError,
   unsupportedPlatformError,
-  noteAboutXplatSetupWithDefaultFramework
+  noteAboutXplatSetupWithFramework
 } from './errors';
 import { join } from 'path';
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
@@ -93,11 +93,6 @@ export namespace XplatHelpers {
      */
     prefix?: string;
     /**
-     * Set options as default
-     * Used to set specified framework as primary
-     */
-    setDefault?: boolean;
-    /**
      * Skip formatting
      */
     skipFormat?: boolean;
@@ -109,6 +104,10 @@ export namespace XplatHelpers {
      * Skip install
      */
     skipInstall?: boolean;
+    /**
+     * group by name
+     */
+    groupByName?: boolean;
     /**
      * testing helper
      */
@@ -208,6 +207,26 @@ export namespace XplatHelpers {
     return frameworks.length ? frameworks[0] : null;
   }
 
+  export function getUpdatedXplatSettings(options: Schema) {
+    const frameworks = getFrameworksFromOptions(options.framework);
+    const frameworkChoice = XplatHelpers.getFrameworkChoice(
+      options.framework,
+      frameworks
+    );
+    const xplatSettings: IXplatSettings = {
+      prefix: getPrefix()
+    };
+
+    if (frameworkChoice && frameworks.length === 1) {
+      // when only 1 framework is specified, auto add as default
+      xplatSettings.framework = frameworkChoice;
+    }
+    if (options.groupByName) {
+      xplatSettings.groupByName = true;
+    }
+    return xplatSettings;
+  }
+
   /**
    * Returns a name with the platform.
    *
@@ -233,11 +252,11 @@ export namespace XplatHelpers {
     platform: PlatformTypes,
     framework?: FrameworkTypes
   ) {
-    const defaultFramework = getDefaultFramework();
-    // console.log('getXplatFoldername defaultFramework:', defaultFramework);
+    const frontendFramework = getFrontendFramework();
+    // console.log('getXplatFoldername frontendFramework:', frontendFramework);
     // console.log('framework:', framework);
     let frameworkSuffix = '';
-    if (framework && defaultFramework !== framework) {
+    if (framework && frontendFramework !== framework) {
       // user had a default framework set
       // however an explicit framework is being requested
       // if they differ, use suffix to distinguish
@@ -253,32 +272,27 @@ export namespace XplatHelpers {
     return (tree: Tree, context: SchematicContext) => {
       options.name = getPlatformName(options.name, platform);
       // console.log('applyAppNamingConvention:', options);
-      // if command line argument, make sure it's persisted to xplat settings
-      if (options.groupByName) {
-        return updatePackageForXplat(options, null, {
-          groupByName: true
-        })(tree, context);
-      } else {
-        // adjusted name, nothing else to do
-        return noop()(tree, context);
-      }
+      // adjusted name, nothing else to do
+      return noop()(tree, context);
     };
   }
 
   export function addPlatformFiles(options: Schema, platform: string) {
     return (tree: Tree, context: SchematicContext) => {
-      let defaultFramework: FrameworkTypes;
+      let frontendFramework: FrameworkTypes = getFrontendFramework();
       if (tree.exists(`xplat/${platform}/index.ts`)) {
-        // check if defaultFramework had been set
-        defaultFramework = getDefaultFramework();
-        // console.log('addPlatformFiles defaultFramework:', defaultFramework)
+        // check if framework had been set
+        frontendFramework = getFrontendFramework();
+        // console.log('addPlatformFiles frontendFramework:', frontendFramework)
         // console.log('addPlatformFiles options.framework:', options.framework)
-        if (defaultFramework && !options.framework) {
+        if (frontendFramework && !options.framework) {
+          // User is attempting to add xplat support for platform they added previously paired with a framework
           // base platform support: platform without framework integrations
           // ie: vanilla {N}, vanilla web, vanilla ionic, etc. (without angular, react, vue, etc.)
           // if user had set a default framework and is now attempting to generate base platform support
+          // TODO: add schematic to reconfigure workspace to rename xplat folders to support full multi-framework setup
           throw new SchematicsException(
-            noteAboutXplatSetupWithDefaultFramework(defaultFramework, platform)
+            noteAboutXplatSetupWithFramework(frontendFramework, platform)
           );
         }
         // already added
@@ -287,7 +301,7 @@ export namespace XplatHelpers {
 
       const xplatFolderName = XplatHelpers.getXplatFoldername(
         <PlatformTypes>platform,
-        defaultFramework
+        <FrameworkTypes>options.framework
       );
 
       return branchAndMerge(
@@ -310,10 +324,7 @@ export namespace XplatHelpers {
     updates: {
       dependencies?: { [key: string]: string };
       devDependencies?: { [key: string]: string };
-    },
-    // used to update various xplat workspace settings
-    // can be used in combination with other generators to adjust settings
-    updatedXplatSettings?: IXplatSettings
+    }
   ) {
     return (tree: Tree, context: SchematicContext) => {
       const packagePath = 'package.json';
@@ -324,11 +335,13 @@ export namespace XplatHelpers {
         // can migrate this later if decide enough settings for xplat.json
         // prefix is important because shared code is setup with a prefix to begin with which should be known and used for all subsequent apps which are generated
 
-        if (!updates && updatedXplatSettings) {
+        const xplatSettings: IXplatSettings = getUpdatedXplatSettings(options);
+
+        if (!updates && xplatSettings) {
           // just updating xplat internal settings
           packageJson.xplat = {
-            ...packageJson.xplat,
-            ...updatedXplatSettings
+            ...(packageJson.xplat || {}),
+            ...xplatSettings
           };
           // just update xplat workspace settings
           return updateJsonFile(tree, packagePath, packageJson);
@@ -345,8 +358,8 @@ export namespace XplatHelpers {
               ...(updates.devDependencies || {})
             },
             xplat: {
-              prefix: getPrefix(),
-              ...(updatedXplatSettings || {})
+              ...(packageJson.xplat || {}),
+              ...xplatSettings
             }
           };
           // console.log('updatePackageForXplat:', serializeJson(packageJson));
@@ -409,14 +422,11 @@ xplat/**/*.ngsummary.json
         if (a > b) return 1;
         return 0;
       });
-      const defaultFramework = getDefaultFramework();
+      const frontendFramework = getFrontendFramework();
       let frameworkSuffix: string = '';
-      // defaultFramework
-      //   ? `-${defaultFramework}`
-      //   : '';
 
       if (settings) {
-        if (settings.framework !== defaultFramework) {
+        if (settings.framework !== frontendFramework) {
           // when users have a default framework set, generation allows name to not include the default framework of choice
           frameworkSuffix = `-${settings.framework}`;
         }
@@ -478,9 +488,9 @@ xplat/**/*.ngsummary.json
         // console.log('workspace dir:', process.cwd());
         // const dirName = process.cwd().split('/').slice(-1);
         const groupByName = getGroupByName();
-        const defaultFramework = getDefaultFramework();
-        let frameworkSuffix: string = defaultFramework
-          ? `-${defaultFramework}`
+        const framework = getFrontendFramework();
+        let frameworkSuffix: string = framework
+          ? `-${framework}`
           : '';
 
         let isFullstack = false;
@@ -525,8 +535,8 @@ xplat/**/*.ngsummary.json
           }
         }
 
-        // always ensure xplat framework identifiers are hidden from view
-        userUpdates['**/xplat/**/.xplatframework'] = true;
+        // always ensure hidden xplat files are hidden from view
+        userUpdates['**/xplat/**/.xplat*'] = true;
 
         // VS Code
         const isVsCode = updateVSCode({

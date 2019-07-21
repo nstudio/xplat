@@ -14,7 +14,7 @@ import {
   prerun,
   unsupportedPlatformError,
   FeatureHelpers,
-  getDefaultFramework
+  getFrontendFramework
 } from '@nstudio/xplat';
 
 export default function(options: FeatureHelpers.Schema) {
@@ -25,7 +25,7 @@ export default function(options: FeatureHelpers.Schema) {
     if (supportedPlatforms.includes(platform)) {
       externalChains.push((tree: Tree, context: SchematicContext) => {
         //   console.log(`@nstudio/${platform}-angular`);
-        // console.log('angular feature chain getDefaultFramework:', getDefaultFramework());
+        // console.log('angular feature chain getFrontendFramework:', getFrontendFramework());
         return externalSchematic(
           `@nstudio/${platform}-angular`,
           'feature',

@@ -11,7 +11,7 @@ export { getFileContent } from '@nrwl/workspace/testing';
 
 export function createEmptyWorkspace(
   tree: Tree,
-  defaultFramework?: FrameworkTypes
+  framework?: FrameworkTypes
 ): Tree {
   tree.create('/.gitignore', '');
   tree.create(
@@ -21,8 +21,8 @@ export function createEmptyWorkspace(
   const xplatSettings: any = {
     prefix: 'tt'
   };
-  if (defaultFramework) {
-    xplatSettings.defaultFramework = defaultFramework;
+  if (framework) {
+    xplatSettings.framework = framework;
   }
   tree.create(
     '/package.json',
@@ -105,11 +105,11 @@ export function createXplatWithAppsForElectron(tree: Tree): Tree {
 
 export function createXplatWithApps(
   tree: Tree,
-  defaultFramework?: FrameworkTypes
+  framework?: FrameworkTypes
 ): Tree {
-  tree = createEmptyWorkspace(tree, defaultFramework);
+  tree = createEmptyWorkspace(tree, framework);
   createXplatLibs(tree);
-  createXplatWebAngular(tree, defaultFramework);
+  createXplatWebAngular(tree, framework);
   createWebAngularApp(tree);
   return tree;
 }
@@ -117,12 +117,12 @@ export function createXplatWithApps(
 export function createXplatWithNativeScriptWeb(
   tree: Tree,
   withRouting?: boolean,
-  defaultFramework?: FrameworkTypes
+  framework?: FrameworkTypes
 ): Tree {
-  tree = createEmptyWorkspace(tree, defaultFramework);
+  tree = createEmptyWorkspace(tree, framework);
   createXplatLibs(tree);
-  createXplatNativeScriptAngular(tree, defaultFramework);
-  createXplatWebAngular(tree, defaultFramework);
+  createXplatNativeScriptAngular(tree, framework);
+  createXplatWebAngular(tree, framework);
   createNativeScriptAngularApp(tree, withRouting);
   createWebAngularApp(tree, withRouting);
   return tree;
@@ -184,9 +184,9 @@ export function createXplatLibs(tree: Tree) {
 
 export function createXplatNativeScriptAngular(
   tree: Tree,
-  defaultFramework?: FrameworkTypes
+  framework?: FrameworkTypes
 ) {
-  const frameworkSuffix = defaultFramework === 'angular' ? '' : '-angular';
+  const frameworkSuffix = framework === 'angular' ? '' : '-angular';
   tree.create(`/xplat/nativescript${frameworkSuffix}/index.ts`, '');
   tree.create(`/xplat/nativescript${frameworkSuffix}/package.json`, '');
   tree.create(`/xplat/nativescript${frameworkSuffix}/core/index.ts`, '');
@@ -299,9 +299,9 @@ export function createXplatNativeScriptAngular(
 
 export function createXplatWebAngular(
   tree: Tree,
-  defaultFramework?: FrameworkTypes
+  framework?: FrameworkTypes
 ) {
-  const frameworkSuffix = defaultFramework === 'angular' ? '' : '-angular';
+  const frameworkSuffix = framework === 'angular' ? '' : '-angular';
   tree.create(`/xplat/web${frameworkSuffix}/index.ts`, '');
   tree.create(`/xplat/web${frameworkSuffix}/package.json`, '');
   tree.create(`/xplat/web${frameworkSuffix}/core/index.ts`, '');

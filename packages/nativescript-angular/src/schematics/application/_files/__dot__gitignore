@@ -1,30 +1,46 @@
-# system files
+# NativeScript
+hooks/
+node_modules/
+platforms/
+
+# NativeScript Template
+*.js.map
+*.js
+!webpack.config.js
+*.css
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# General
 .DS_Store
-Thumbs.db
-
-# nativescript
-/hooks
-/node_modules
-/platforms
-
-app/**/*.js
-app/**/*.d.ts
-app/**/*.map
-app/**/*.css
+.AppleDouble
+.LSOverride
+.idea
+.cloud
+.project
+tmp/
+typings/
 
 # misc
 npm-debug.log
 
 # app
-!app/assets/fontawesome.min.css
-!app/app.module.ngfactory.d.ts
+!*.d.ts
+!src/assets/fontawesome.min.css
+!src/app.module.ngfactory.d.ts
 !webpack.config.js
 /report/
 .nsbuildinfo
 /temp/
-/app/tns_modules/
+/src/tns_modules/
 
 # app uses platform specific scss which can inadvertently get renamed which will cause problems
 app/app.scss
 
 package-lock.json
+!tools/**

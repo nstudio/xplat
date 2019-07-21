@@ -5,16 +5,9 @@ import { ionicAngularVersion, ionicAngularToolkitVersion } from './versions';
 export namespace XplatIonicAngularHelpers {
   export function updateRootDeps(options: XplatHelpers.Schema) {
     return (tree: Tree, context: SchematicContext) => {
-      const xplatSettings: IXplatSettings = {};
-      const frameworkChoice = XplatHelpers.getFrameworkChoice(
-        options.framework
-      );
-      if (frameworkChoice && options.setDefault) {
-        xplatSettings.defaultFramework = frameworkChoice;
-      }
-
       const dependencies = {};
-      dependencies[`@${getNpmScope()}/web`] = 'file:xplat/web';
+      const xplatFoldername = XplatHelpers.getXplatFoldername('web', 'angular');
+      dependencies[`@${getNpmScope()}/web-scss`] = `file:xplat/${xplatFoldername}/scss`;
       return XplatHelpers.updatePackageForXplat(
         options,
         {
@@ -25,8 +18,7 @@ export namespace XplatIonicAngularHelpers {
           devDependencies: {
             '@ionic/angular-toolkit': ionicAngularToolkitVersion
           }
-        },
-        xplatSettings
+        }
       )(tree, context);
     };
   }

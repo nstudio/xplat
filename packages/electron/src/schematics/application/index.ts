@@ -13,7 +13,7 @@ import {
   noop
 } from '@angular-devkit/schematics';
 import { formatFiles } from '@nrwl/workspace';
-import { Schema as ApplicationOptions } from './schema';
+import { Schema } from './schema';
 import {
   prerun,
   getPrefix,
@@ -23,7 +23,6 @@ import {
   updateNxProjects,
   getJsonFromFile,
   updatePackageScripts,
-  addPostinstallers,
   getGroupByName,
   getAppName,
   missingArgument,
@@ -32,7 +31,7 @@ import {
 } from '@nstudio/xplat';
 import { XplatElectrontHelpers } from '../../utils';
 
-export default function(options: ApplicationOptions) {
+export default function(options: Schema) {
   if (!options.name) {
     throw new SchematicsException(
       missingArgument(
@@ -220,14 +219,12 @@ export default function(options: ApplicationOptions) {
     },
     // adjust app files
     (tree: Tree) => adjustAppFiles(options, tree),
-    // add tooling
-    addPostinstallers(),
 
     formatFiles({ skipFormat: options.skipFormat })
   ]);
 }
 
-function addAppFiles(options: ApplicationOptions, appPath: string): Rule {
+function addAppFiles(options: Schema, appPath: string): Rule {
   const appname = getAppName(options, 'electron');
   return branchAndMerge(
     mergeWith(
@@ -244,7 +241,7 @@ function addAppFiles(options: ApplicationOptions, appPath: string): Rule {
   );
 }
 
-function adjustAppFiles(options: ApplicationOptions, tree: Tree) {
+function adjustAppFiles(options: Schema, tree: Tree) {
   const fullTargetAppName = options.target;
   const electronModulePath = `/apps/${fullTargetAppName}/src/app/app.electron.module.ts`;
   if (!tree.exists(electronModulePath)) {

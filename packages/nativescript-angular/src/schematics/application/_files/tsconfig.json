@@ -29,7 +29,7 @@
     "./src/main.ts"
   ],
   "include": [
-    "src/**/*.module.ts",
+    "./src/**/*.module.ts",
     "../../xplat/**/*.{ios,android}.ts",
     "../../xplat/<%= xplatFolderName %>/workers/**/*.worker.ts"
   ],

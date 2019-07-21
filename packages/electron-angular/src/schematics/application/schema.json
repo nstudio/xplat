@@ -11,11 +11,19 @@
       "$default": {
         "$source": "argv",
         "index": 0
+      },
+      "x-prompt": {
+        "message": "What name would you like for this app?",
+        "type": "string"
       }
     },
     "target": {
       "type": "string",
-      "description": "The name of the web app to use inside the electron app. ie, web-myapp"
+      "description": "The name of the web app to use inside the electron app. ie, web-myapp",
+      "x-prompt": {
+        "message": "What's the name of the web app in your workspace you'd like to use inside Electron?",
+        "type": "string"
+      }
     },
     "prefix": {
       "type": "string",

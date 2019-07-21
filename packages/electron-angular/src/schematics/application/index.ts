@@ -24,13 +24,17 @@ import {
   updateNxProjects,
   getJsonFromFile,
   updatePackageScripts,
-  addPostinstallers,
   getGroupByName,
   getAppName,
   missingArgument,
   getDefaultTemplateOptions,
   XplatHelpers
 } from '@nstudio/xplat';
+import { XplatElectronAngularHelpers } from '../../utils';
+import {
+  NodePackageInstallTask,
+  RunSchematicTask
+} from '@angular-devkit/schematics/tasks';
 
 export default function(options: Schema) {
   if (!options.name) {
@@ -38,14 +42,40 @@ export default function(options: Schema) {
       missingArgument(
         'name',
         'Provide a name for your Electron app.',
-        'ng g @nstudio/electron:app name'
+        'ng g @nstudio/electron-angular:app name'
       )
     );
   }
   if (!options.target) {
     throw new SchematicsException(
-      `Missing target argument. Provide the name of the web app in your workspace to use inside the electron app. ie, web-myapp`
+      missingArgument(
+        'target',
+        'Provide the name of the web app in your workspace to use inside the electron app.',
+        'ng g @nstudio/electron-angular:app name --target web-myapp'
+      )
     );
+  }
+
+  const packageHandling = [];
+  if (options.isTesting) {
+    packageHandling.push(externalSchematic('@nstudio/electron-angular', 'tools', {
+      ...options
+    }));
+  } else {
+    // TODO: find a way to unit test schematictask runners with install tasks
+    packageHandling.push((tree: Tree, context: SchematicContext) => {
+      const installPackageTask = context.addTask(new NodePackageInstallTask());
+
+      // console.log('packagesToRunXplat:', packagesToRunXplat);
+      context.addTask(
+        new RunSchematicTask(
+          '@nstudio/electron-angular',
+          'tools',
+          options
+        ),
+        [installPackageTask]
+      );
+    });
   }
 
   return chain([
@@ -60,6 +90,9 @@ export default function(options: Schema) {
     // create app files
     (tree: Tree, context: SchematicContext) =>
       addAppFiles(options, options.name)(tree, context),
+    // add root package dependencies
+    XplatElectronAngularHelpers.updateRootDeps(options),
+    ...packageHandling,
     // add root package dependencies
     // add npm scripts
     (tree: Tree) => {
@@ -224,8 +257,6 @@ export default function(options: Schema) {
     },
     // adjust app files
     (tree: Tree) => adjustAppFiles(options, tree),
-    // add tooling
-    addPostinstallers(),
 
     formatFiles({ skipFormat: options.skipFormat })
   ]);

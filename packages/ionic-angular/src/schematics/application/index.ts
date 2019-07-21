@@ -37,7 +37,7 @@ export default function(options: ApplicationOptions) {
       missingArgument(
         'name',
         'Provide a name for your Ionic app.',
-        'ng g @nstudio/ionic:app name'
+        'ng g @nstudio/ionic-angular:app name'
       )
     );
   }

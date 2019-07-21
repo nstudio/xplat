@@ -84,7 +84,6 @@ describe('xplat schematic', () => {
     appTree = createEmptyWorkspace(appTree);
     let options: XplatHelpers.Schema = { ...defaultOptions };
     options.framework = 'angular';
-    options.setDefault = true;
 
     let tree = await runSchematic('xplat', options, appTree);
     expect(tree.exists('/xplat/nativescript/index.ts')).toBeTruthy();

@@ -4,7 +4,6 @@ import {
   supportedPlatforms,
   getDefaultTemplateOptions,
   stringUtils,
-  getDefaultFramework,
   FrameworkTypes
 } from './general';
 import {

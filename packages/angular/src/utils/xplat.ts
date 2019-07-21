@@ -42,7 +42,8 @@ import {
   rxjsVersion,
   zonejsVersion,
   angularDevkitVersion,
-  codelyzerVersion
+  codelyzerVersion,
+  xplatVersion
 } from './versions';
 
 export namespace ComponentHelpers {
@@ -316,14 +317,15 @@ export namespace XplatAngularHelpers {
         devDependencies[`codelyzer`] = codelyzerVersion;
       }
 
+      if (!packageJson.devDependencies['@nrwl/angular']) {
+        packageJson.devDependencies['@nrwl/angular'] = nxVersion;
+      }
+      if (!packageJson.devDependencies['@nstudio/web']) {
+        packageJson.devDependencies['@nstudio/web'] = xplatVersion;
+      }
+
       dependencies[`@${getNpmScope()}/scss`] = 'file:libs/scss';
 
-      let updatedXplatSettings;
-      if (options.setDefault && options.framework) {
-        updatedXplatSettings = {
-          defaultFramework: options.framework
-        };
-      }
       return XplatHelpers.updatePackageForXplat(
         options,
         {
@@ -331,12 +333,10 @@ export namespace XplatAngularHelpers {
             ...dependencies,
             '@ngx-translate/core': ngxTranslateVersion,
             '@ngx-translate/http-loader': ngxTranslateHttpLoaderVersion,
-            '@nrwl/angular': nxVersion,
             'reflect-metadata': reflectMetadataVersion
           },
           devDependencies
-        },
-        updatedXplatSettings
+        }
       )(tree, context);
     };
   }

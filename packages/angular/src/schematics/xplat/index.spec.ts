@@ -85,7 +85,7 @@ describe('xplat schematic', () => {
     const packageFile = jsonParse(getFileContent(tree, packagePath));
     const hasScss = packageFile.dependencies[`@testing/scss`];
     expect(hasScss).not.toBeUndefined();
-    const hasWebScss = packageFile.dependencies[`@testing/web`];
+    const hasWebScss = packageFile.dependencies[`@testing/web-scss`];
     expect(hasWebScss).not.toBeUndefined();
     // should not include these root packages
     const hasNativeScript = packageFile.dependencies[`nativescript-angular`];
@@ -107,8 +107,8 @@ describe('xplat schematic', () => {
     const packageFile = jsonParse(getFileContent(tree, packagePath));
     const hasScss = packageFile.dependencies[`@testing/scss`];
     expect(hasScss).not.toBeUndefined();
-    const hasWebScss = packageFile.dependencies[`@testing/web`];
-    expect(hasWebScss).not.toBeUndefined();
+    // const hasWebScss = packageFile.dependencies[`@testing/web-scss`];
+    // expect(hasWebScss).not.toBeUndefined();
     // should not include these root packages
     const hasNativeScript = packageFile.dependencies[`nativescript-angular`];
     expect(hasNativeScript).toBeUndefined();
@@ -120,7 +120,6 @@ describe('xplat schematic', () => {
     const options: XplatHelpers.Schema = { ...defaultOptions };
     options.platforms = 'ionic';
     options.framework = 'angular';
-    options.setDefault = true;
 
     let tree = await runSchematic('xplat', options, appTree);
     // let files = tree.files;

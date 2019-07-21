@@ -11,6 +11,10 @@
       "$default": {
         "$source": "argv",
         "index": 0
+      },
+      "x-prompt": {
+        "message": "What name would you like for this app?",
+        "type": "string"
       }
     },
     "prefix": {
@@ -66,6 +70,10 @@
       "description": "Group by app name (appname-platform) instead of the default (platform-appname)",
       "type": "boolean",
       "default": false
+    },
+    "target": {
+      "type": "string",
+      "description": "The target to use with this generator."
     },
     "npmScope": {
       "type": "string",

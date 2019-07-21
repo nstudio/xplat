@@ -11,6 +11,10 @@
       "$default": {
         "$source": "argv",
         "index": 0
+      },
+      "x-prompt": {
+        "message": "What name would you like for this app?",
+        "type": "string"
       }
     },
     "target": {

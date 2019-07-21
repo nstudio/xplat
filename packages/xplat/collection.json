@@ -1,5 +1,5 @@
 {
-  "name": "xplat/workspace",
+  "name": "xplat",
   "version": "0.1",
   "extends": ["@nrwl/workspace"],
   "schematics": {

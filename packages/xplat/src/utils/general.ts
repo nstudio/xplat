@@ -47,7 +47,7 @@ let npmScope: string;
 // selector prefix to use when generating various boilerplate for xplat support
 let prefix: string;
 // user preferred default framework
-let defaultFramework: FrameworkTypes;
+let frontendFramework: FrameworkTypes;
 // Group by app name (appname-platform) instead of the default (platform-appname)
 let groupByName = false;
 let isTest = false;
@@ -60,8 +60,8 @@ export function getPrefix() {
   return prefix;
 }
 
-export function getDefaultFramework() {
-  return defaultFramework;
+export function getFrontendFramework() {
+  return frontendFramework;
 }
 
 export function getGroupByName() {
@@ -167,16 +167,12 @@ export const setDependency = (
 export interface IXplatSettings {
   prefix?: string;
   groupByName?: boolean;
-  defaultFramework?: FrameworkTypes;
+  framework?: FrameworkTypes;
+  platforms?: string;
 }
 
 export function prerun(
-  options?: {
-    prefix?: string;
-    groupByName?: boolean;
-    framework?: string;
-    setDefault?: boolean;
-  },
+  options?: IXplatSettings | any,
   init?: boolean
 ) {
   return (tree: Tree) => {
@@ -204,18 +200,18 @@ export function prerun(
         const xplatSettings = <IXplatSettings>packageJson.xplat;
         // use persisted xplat settings
         prefix = xplatSettings.prefix || npmScope; // (if not prefix, default to npmScope)
-        defaultFramework = xplatSettings.defaultFramework;
+        frontendFramework = xplatSettings.framework;
 
         if (options) {
           // ensure options are updated
           options.prefix = prefix;
-          if (frameworkChoice && options.setDefault) {
-            // always override default framework when user has explicitly passed framework option in with setDefault flag
-            defaultFramework = <FrameworkTypes>frameworkChoice;
+          if (frameworkChoice) {
+            // always override default framework when user has explicitly passed framework option in
+            frontendFramework = <FrameworkTypes>frameworkChoice;
           }
-          // else if (defaultFramework) {
+          // else if (frontendFramework) {
           //   // ensure the options use the default
-          //   options.framework = defaultFramework;
+          //   options.framework = frontendFramework;
           // }
         }
         // grouping
@@ -233,8 +229,8 @@ export function prerun(
           options.prefix = npmScope;
         }
         if (frameworkChoice) {
-          if (!defaultFramework && init) {
-            defaultFramework = <FrameworkTypes>frameworkChoice;
+          if (!frontendFramework && init) {
+            frontendFramework = <FrameworkTypes>frameworkChoice;
           }
         }
       }
@@ -386,58 +382,6 @@ export function updateNxProjects(tree: Tree, projects: any) {
   const projectsMap = Object.assign({}, nxJson.projects);
   nxJson.projects = Object.assign(projectsMap, projects);
   return updateJsonFile(tree, path, nxJson);
-}
-
-export function addPostinstallers() {
-  return (tree: Tree) => {
-    const postinstallWeb = '/tools/web/postinstall.js';
-    if (!tree.exists(postinstallWeb)) {
-      // add references.d.ts
-      tree.create(
-        postinstallWeb,
-        `// Allow angular using electron module (native node modules)
-const fs = require('fs');
-const f_angular = 'node_modules/@angular-devkit/build-angular/src/angular-cli-files/models/webpack-configs/browser.js';
-
-fs.readFile(f_angular, 'utf8', function (err, data) {
-  if (err) {
-    return console.log(err);
-  }
-  var result = data.replace(/target: "electron-renderer",/g, '');
-  var result = result.replace(/target: "web",/g, '');
-  var result = result.replace(/return \{/g, 'return {target: "web",');
-
-  fs.writeFile(f_angular, result, 'utf8', function (err) {
-    if (err) return console.log(err);
-  });
-});`
-      );
-    }
-    const postinstallElectron = '/tools/electron/postinstall.js';
-    if (!tree.exists(postinstallElectron)) {
-      // add references.d.ts
-      tree.create(
-        postinstallElectron,
-        `// Allow angular using electron module (native node modules)
-const fs = require('fs');
-const f_angular = 'node_modules/@angular-devkit/build-angular/src/angular-cli-files/models/webpack-configs/browser.js';
-
-fs.readFile(f_angular, 'utf8', function (err, data) {
-  if (err) {
-    return console.log(err);
-  }
-  var result = data.replace(/target: "electron-renderer",/g, '');
-  var result = result.replace(/target: "web",/g, '');
-  var result = result.replace(/return \{/g, 'return {target: "electron-renderer",');
-
-  fs.writeFile(f_angular, result, 'utf8', function (err) {
-    if (err) return console.log(err);
-  });
-});`
-      );
-    }
-    return tree;
-  };
 }
 
 // export function persistPrefix(prefix: string) {

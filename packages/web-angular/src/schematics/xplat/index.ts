@@ -5,7 +5,7 @@ import {
   Tree,
   SchematicContext
 } from '@angular-devkit/schematics';
-import { XplatHelpers, prerun, getDefaultFramework } from '@nstudio/xplat';
+import { XplatHelpers, prerun } from '@nstudio/xplat';
 import { XplatWebAngularHelpers } from '../../utils/xplat';
 
 export default function(options: XplatHelpers.Schema) {

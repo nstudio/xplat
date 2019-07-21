@@ -10,7 +10,7 @@ export namespace XplatIonicHelpers {
   export function updateRootDeps(options: XplatHelpers.Schema) {
     return (tree: Tree, context: SchematicContext) => {
       const dependencies = {};
-      dependencies[`@${getNpmScope()}/web`] = 'file:xplat/web';
+      dependencies[`@${getNpmScope()}/web-scss`] = `file:xplat/web/scss`;
       return XplatHelpers.updatePackageForXplat(options, {
         dependencies,
         devDependencies: {

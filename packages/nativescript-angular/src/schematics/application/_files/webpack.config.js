@@ -65,7 +65,8 @@ module.exports = env => {
     hiddenSourceMap, // --env.hiddenSourceMap
     hmr, // --env.hmr,
     unitTesting, // --env.unitTesting
-    verbose // --env.verbose
+    verbose, // --env.verbose
+    ci // --env.ci
   } = env;
 
   const isAnySourceMapEnabled = !!sourceMap || !!hiddenSourceMap;
@@ -158,6 +159,7 @@ module.exports = env => {
     );
   }
 
+  nsWebpack.processAppComponents(appComponents, platform);
   const config = {
     mode: production ? 'production' : 'development',
     context: appFullPath,
@@ -245,7 +247,22 @@ module.exports = env => {
               // The Android SBG has problems parsing the output
               // when these options are enabled
               collapse_vars: platform !== 'android',
-              sequences: platform !== 'android'
+              sequences: platform !== 'android',
+              // custom
+              drop_console: true,
+              drop_debugger: true,
+              keep_infinity: platform === 'android', // for Chrome/V8
+              reduce_funcs: platform !== 'android', // for Chrome/V8
+              pure_funcs: [
+                'this._log.debug',
+                'this._log.error',
+                'this._log.info',
+                'this._log.warn',
+                'this.log.debug',
+                'this.log.error',
+                'this.log.info',
+                'this.log.warn',
+              ]
             }
           }
         })
@@ -269,7 +286,8 @@ module.exports = env => {
                 loadCss: !snapshot, // load the application css if in debug mode
                 unitTesting,
                 appFullPath,
-                projectRoot
+                projectRoot,
+                ignoredFiles: nsWebpack.getUserDefinedEntries(entries, platform)
               }
             }
           ].filter(loader => !!loader)
@@ -335,7 +353,9 @@ module.exports = env => {
       new nsWebpack.GenerateNativeScriptEntryPointsPlugin('bundle'),
       // For instructions on how to set up workers with webpack
       // check out https://github.com/nativescript/worker-loader
-      new NativeScriptWorkerPlugin(),
+      new NativeScriptWorkerPlugin({
+        plugins: [ngCompilerPlugin],
+      }),
       ngCompilerPlugin,
       // Does IPC communication with the {N} CLI to notify events when running in watch mode.
       new nsWebpack.WatchStateLoggerPlugin()
