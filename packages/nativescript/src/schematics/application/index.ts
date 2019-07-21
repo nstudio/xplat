@@ -56,15 +56,6 @@ export default function(options: Schema) {
     // create app files
     (tree: Tree, context: SchematicContext) =>
       addAppFiles(options, options.name),
-    // add features
-    // (tree: Tree, context: SchematicContext) =>
-    //   options.routing
-    //     ? addAppFiles(
-    //         options,
-    //         options.name,
-    //         'routing'
-    //       )(tree, context)
-    //     : noop()(tree, context),
     // add app resources
     (tree: Tree, context: SchematicContext) =>
       // inside closure to ensure it uses the modifed options.name from applyAppNamingConvention

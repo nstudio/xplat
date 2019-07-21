@@ -1,0 +1,27 @@
+{
+  "nativescript": {
+    "id": "org.nativescript.sample"
+  },
+  "main": "app.js",
+  "description": "NativeScript Application",
+  "license": "SEE LICENSE IN <your-license-filename>",
+  "repository": "<fill-your-repository-here>",
+  "scripts": {
+    "reset": "npx rimraf -- hooks node_modules platforms",
+    "build.ios": "tns build ios --env.uglify --env.production --release",
+    "build.android": "tns build android --env.uglify --env.production --release",
+    "debug.ios": "tns debug ios",
+    "debug.android": "tns debug android",
+    "postinstall": "node ./tools/xplat-postinstall.js"
+  },
+  "dependencies": {
+    "nativescript-theme-core": "file:../../node_modules/nativescript-theme-core",
+    "tns-core-modules": "file:../../node_modules/tns-core-modules"
+  },
+  "devDependencies": {
+    "nativescript-dev-webpack": "~1.0.1",
+    "terser-webpack-plugin": "file:../../node_modules/terser-webpack-plugin",
+    "tns-platform-declarations": "file:../../node_modules/tns-platform-declarations",
+    "typescript": "file:../../node_modules/typescript"
+  }
+}
