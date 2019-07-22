@@ -51,7 +51,7 @@ export default function(options: XplatHelpers.Schema) {
 
   const devDependencies = {};
   devDependencies['@nstudio/xplat'] = xplatVersion;
-  
+
   if (platformArg === 'all') {
     // requested by Mike Brocchi on AngularAir long ago :)
     // conveniently add support for all supported platforms
@@ -141,12 +141,9 @@ export default function(options: XplatHelpers.Schema) {
       }
     }
     // console.log('updatePackageForXplat:', devDependencies);
-    return XplatHelpers.updatePackageForXplat(
-      options,
-      {
-        devDependencies
-      }
-    )(tree, context);
+    return XplatHelpers.updatePackageForXplat(options, {
+      devDependencies
+    })(tree, context);
   });
 
   if (options.isTesting) {

@@ -489,9 +489,7 @@ xplat/**/*.ngsummary.json
         // const dirName = process.cwd().split('/').slice(-1);
         const groupByName = getGroupByName();
         const framework = getFrontendFramework();
-        let frameworkSuffix: string = framework
-          ? `-${framework}`
-          : '';
+        let frameworkSuffix: string = framework ? `-${framework}` : '';
 
         let isFullstack = false;
         let isExcluding = false;

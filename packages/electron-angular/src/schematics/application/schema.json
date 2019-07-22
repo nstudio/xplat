@@ -12,18 +12,12 @@
         "$source": "argv",
         "index": 0
       },
-      "x-prompt": {
-        "message": "What name would you like for this app?",
-        "type": "string"
-      }
+      "x-prompt": "What name would you like for this app?"
     },
     "target": {
       "type": "string",
       "description": "The name of the web app to use inside the electron app. ie, web-myapp",
-      "x-prompt": {
-        "message": "What's the name of the web app in your workspace you'd like to use inside Electron?",
-        "type": "string"
-      }
+      "x-prompt": "What's the name of the web app in your workspace you'd like to use inside Electron?"
     },
     "prefix": {
       "type": "string",
@@ -39,6 +33,11 @@
       "type": "string",
       "description": "The npm scope to use.",
       "alias": "wn"
+    },
+    "skipXplat": {
+      "description": "Skip generating xplat supporting architecture",
+      "type": "boolean",
+      "default": false
     },
     "skipInstall": {
       "type": "boolean",

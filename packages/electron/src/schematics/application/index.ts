@@ -10,10 +10,10 @@ import {
   url,
   template,
   move,
-  noop
+  noop,
+  externalSchematic
 } from '@angular-devkit/schematics';
 import { formatFiles } from '@nrwl/workspace';
-import { Schema } from './schema';
 import {
   prerun,
   getPrefix,
@@ -30,8 +30,12 @@ import {
   XplatHelpers
 } from '@nstudio/xplat';
 import { XplatElectrontHelpers } from '../../utils';
+import {
+  NodePackageInstallTask,
+  RunSchematicTask
+} from '@angular-devkit/schematics/tasks';
 
-export default function(options: Schema) {
+export default function(options: XplatElectrontHelpers.SchemaApp) {
   if (!options.name) {
     throw new SchematicsException(
       missingArgument(
@@ -47,6 +51,26 @@ export default function(options: Schema) {
     );
   }
 
+  const packageHandling = [];
+  if (options.isTesting) {
+    packageHandling.push(
+      externalSchematic('@nstudio/electron', 'tools', {
+        ...options
+      })
+    );
+  } else {
+    // TODO: find a way to unit test schematictask runners with install tasks
+    packageHandling.push((tree: Tree, context: SchematicContext) => {
+      const installPackageTask = context.addTask(new NodePackageInstallTask());
+
+      // console.log('packagesToRunXplat:', packagesToRunXplat);
+      context.addTask(
+        new RunSchematicTask('@nstudio/electron', 'tools', options),
+        [installPackageTask]
+      );
+    });
+  }
+
   return chain([
     prerun(options),
     // adjust naming convention
@@ -56,115 +80,8 @@ export default function(options: Schema) {
       addAppFiles(options, options.name)(tree, context),
     // add root package dependencies
     XplatElectrontHelpers.updateRootDeps(options),
-    // add npm scripts
-    (tree: Tree) => {
-      const platformApp = options.name.replace('-', '.');
-      let fullTargetAppName = options.target;
-      let targetAppScript = fullTargetAppName.replace('-', '.');
-
-      const packageConfig = getJsonFromFile(tree, 'package.json');
-      const scripts = packageConfig.scripts || {};
-      const postinstall = 'electron-rebuild install-app-deps';
-      if (scripts.postinstall) {
-        // add to the end of already existing postinstall
-        scripts['postinstall'] = `${scripts.postinstall} && ${postinstall}`;
-      } else {
-        scripts['postinstall'] = postinstall;
-      }
-      scripts['postinstall.electron'] = 'node tools/electron/postinstall';
-      scripts['postinstall.web'] = 'node tools/web/postinstall';
-      scripts[
-        `build.${platformApp}`
-      ] = `npm run prepare.${platformApp} && ng build ${
-        options.name
-      } --prod --base-href ./`;
-      scripts[
-        `build.${platformApp}.local`
-      ] = `npm run build.${platformApp} && electron dist/apps/${options.name}`;
-      scripts[
-        `build.${platformApp}.linux`
-      ] = `npm run build.${platformApp} && cd dist/apps/${
-        options.name
-      } && npx electron-builder build --linux`;
-      scripts[
-        `build.${platformApp}.windows`
-      ] = `npm run build.${platformApp} && cd dist/apps/${
-        options.name
-      } && npx electron-builder build --windows`;
-      scripts[
-        `build.${platformApp}.mac`
-      ] = `npm run build.${platformApp} && cd dist/apps/${
-        options.name
-      } && npx electron-builder build --mac`;
-      scripts[
-        `prepare.${platformApp}`
-      ] = `npm run postinstall.electron && tsc -p apps/${
-        options.name
-      }/tsconfig.json`;
-      scripts[`serve.${platformApp}.target`] = `ng serve ${options.name}`;
-      scripts[
-        `serve.${platformApp}`
-      ] = `wait-on http-get://localhost:4200/ && electron apps/${
-        options.name
-      }/src --serve`;
-      scripts[
-        `start.${platformApp}`
-      ] = `npm run prepare.${platformApp} && npm-run-all -p serve.${platformApp}.target serve.${platformApp}`;
-
-      // adjust web related scripts to account for postinstall hooks
-      const startWeb = scripts[`start.${targetAppScript}`];
-      const postinstallWeb = 'npm run postinstall.web';
-
-      if (startWeb) {
-        // prefix it
-        scripts[
-          `start.${targetAppScript}`
-        ] = `${postinstallWeb} && ${startWeb}`;
-      } else {
-        // create to be consistent
-        scripts[
-          `start.${targetAppScript}`
-        ] = `${postinstallWeb} && ng serve ${fullTargetAppName}`;
-      }
-      let startDefault = scripts[`start`];
-      if (startDefault) {
-        // prefix it
-        if (startDefault.indexOf(fullTargetAppName) === -1) {
-          // set target app as default
-          startDefault = `${startDefault} ${fullTargetAppName}`;
-        }
-        scripts[`start`] = `${postinstallWeb} && ${startDefault}`;
-      } else {
-        scripts[`start`] = `${postinstallWeb} && ng serve ${fullTargetAppName}`;
-      }
-      let buildDefault = scripts[`build`];
-      if (buildDefault) {
-        // prefix it
-        if (buildDefault.indexOf(fullTargetAppName) === -1) {
-          // set target app as default
-          buildDefault = `${buildDefault} ${fullTargetAppName}`;
-        }
-        scripts[`build`] = `${postinstallWeb} && ${buildDefault}`;
-      } else {
-        scripts[`build`] = `${postinstallWeb} && ng build ${fullTargetAppName}`;
-      }
-      let testDefault = scripts[`test`];
-      if (testDefault) {
-        // prefix it
-        scripts[`test`] = `${postinstallWeb} && ${testDefault}`;
-      } else {
-        scripts[`test`] = `${postinstallWeb} && ng test`;
-      }
-      let e2eDefault = scripts[`e2e`];
-      if (e2eDefault) {
-        // prefix it
-        scripts[`e2e`] = `${postinstallWeb} && ${e2eDefault}`;
-      } else {
-        scripts[`e2e`] = `${postinstallWeb} && ng e2e`;
-      }
-
-      return updatePackageScripts(tree, scripts);
-    },
+    ...packageHandling,
+    XplatElectrontHelpers.addNpmScripts(options),
     // angular.json
     (tree: Tree) => {
       // grab the target app configuration
@@ -190,7 +107,7 @@ export default function(options: Schema) {
       ].architect.build.options.outputPath = `dist/apps/${electronAppName}`;
       projects[
         electronAppName
-      ].architect.build.options.main = `apps/${fullTargetAppName}/src/main.electron.ts`;
+      ].architect.build.options.main = `apps/${fullTargetAppName}/src/main.ts`;
       projects[electronAppName].architect.build.options.assets.push({
         glob: '**/*',
         input: `apps/${electronAppName}/src/`,
@@ -217,14 +134,15 @@ export default function(options: Schema) {
       };
       return updateNxProjects(tree, projects);
     },
-    // adjust app files
-    (tree: Tree) => adjustAppFiles(options, tree),
 
     formatFiles({ skipFormat: options.skipFormat })
   ]);
 }
 
-function addAppFiles(options: Schema, appPath: string): Rule {
+function addAppFiles(
+  options: XplatElectrontHelpers.SchemaApp,
+  appPath: string
+): Rule {
   const appname = getAppName(options, 'electron');
   return branchAndMerge(
     mergeWith(
@@ -239,55 +157,4 @@ function addAppFiles(options: Schema, appPath: string): Rule {
       ])
     )
   );
-}
-
-function adjustAppFiles(options: Schema, tree: Tree) {
-  const fullTargetAppName = options.target;
-  const electronModulePath = `/apps/${fullTargetAppName}/src/app/app.electron.module.ts`;
-  if (!tree.exists(electronModulePath)) {
-    tree.create(electronModulePath, electronModule());
-  }
-  const electronMainPath = `/apps/${fullTargetAppName}/src/main.electron.ts`;
-  if (!tree.exists(electronMainPath)) {
-    tree.create(electronMainPath, electronMain());
-  }
-  return tree;
-}
-
-function electronModule() {
-  return `import { NgModule } from '@angular/core';
-import { ${stringUtils.classify(
-    getPrefix()
-  )}ElectronCoreModule } from '@${getNpmScope()}/${XplatHelpers.getXplatFoldername(
-    'electron',
-    'angular'
-  )}';
-import { AppModule } from './app.module';
-import { AppComponent } from './app.component';
-
-@NgModule({
-  imports: [AppModule, ${stringUtils.classify(getPrefix())}ElectronCoreModule],
-  bootstrap: [AppComponent]
-})
-export class AppElectronModule {}`;
-}
-
-function electronMain() {
-  return `import { enableProdMode } from '@angular/core';
-  import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-  
-  // libs
-  import { environment } from '@${getNpmScope()}/core';
-  
-  // app
-  import { AppElectronModule } from './app/app.electron.module';
-  
-  if (environment.production) {
-    enableProdMode();
-  }
-  
-  platformBrowserDynamic()
-    .bootstrapModule(AppElectronModule)
-    .catch(err => console.log(err));
-  `;
 }

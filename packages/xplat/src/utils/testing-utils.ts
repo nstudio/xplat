@@ -297,10 +297,7 @@ export function createXplatNativeScriptAngular(
   tree.create(`/xplat/nativescript${frameworkSuffix}/utils/index.ts`, ``);
 }
 
-export function createXplatWebAngular(
-  tree: Tree,
-  framework?: FrameworkTypes
-) {
+export function createXplatWebAngular(tree: Tree, framework?: FrameworkTypes) {
   const frameworkSuffix = framework === 'angular' ? '' : '-angular';
   tree.create(`/xplat/web${frameworkSuffix}/index.ts`, '');
   tree.create(`/xplat/web${frameworkSuffix}/package.json`, '');

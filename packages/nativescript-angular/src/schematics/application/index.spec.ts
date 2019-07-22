@@ -99,8 +99,8 @@ describe('app', () => {
     ).toBeGreaterThanOrEqual(0);
 
     // xplat file defaults
-    expect(files.indexOf('/xplat/nativescript/index.ts')).toBe(-1);
-    expect(files.indexOf('/xplat/web/index.ts')).toBe(-1);
+    expect(tree.exists('/xplat/nativescript/index.ts')).toBeTruthy();
+    expect(tree.exists('/xplat/web/index.ts')).toBeFalsy();
   });
 
   it('should create CoreModule with import from xplat', async () => {
@@ -276,5 +276,27 @@ describe('app', () => {
     expect(
       packageFile.indexOf('start.foo.nativescript.ios')
     ).toBeGreaterThanOrEqual(0);
+  });
+
+  describe('skiXplat', () => {
+    it('should geneate app with no connections to xplat architecture', async () => {
+      appTree = Tree.empty();
+      appTree = createEmptyWorkspace(appTree, 'angular');
+      const options: Schema = { ...defaultOptions };
+      options.skipXplat = true;
+      // console.log('appTree:', appTree);
+      const tree = await runSchematic('app', options, appTree);
+      // const files = tree.files;
+      // console.log(files);
+      expect(tree.exists('/apps/nativescript-foo/src/main.ts')).toBeTruthy();
+      expect(
+        tree.exists('/apps/nativescript-foo/src/app/app.module.ts')
+      ).toBeTruthy();
+      expect(
+        tree.exists('/apps/nativescript-foo/src/app/app.component.ts')
+      ).toBeTruthy();
+
+      expect(tree.exists('/xplat/nativescript/index.ts')).toBeFalsy();
+    });
   });
 });

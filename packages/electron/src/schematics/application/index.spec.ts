@@ -1,15 +1,15 @@
 import { Tree } from '@angular-devkit/schematics';
-import { Schema } from './schema';
 import { jsonParse } from '@nstudio/xplat';
 import {
   createXplatWithAppsForElectron,
   getFileContent
 } from '@nstudio/xplat/testing';
 import { runSchematic } from '../../utils/testing';
+import { XplatElectrontHelpers } from '../../utils';
 
 describe('app', () => {
   let appTree: Tree;
-  const defaultOptions: Schema = {
+  const defaultOptions: XplatElectrontHelpers.SchemaApp = {
     name: 'foo',
     target: 'web-viewer',
     npmScope: 'testing',
@@ -23,7 +23,7 @@ describe('app', () => {
   });
 
   it('should create all files of an app', async () => {
-    const options: Schema = { ...defaultOptions };
+    const options: XplatElectrontHelpers.SchemaApp = { ...defaultOptions };
     // console.log('appTree:', appTree);
     const tree = await runSchematic('app', options, appTree);
     const files = tree.files;
@@ -75,23 +75,14 @@ describe('app', () => {
     expect(packageData.scripts['serve.electron.foo']).toBeDefined();
     expect(packageData.scripts['start.electron.foo']).toBeDefined();
 
-    // check target web app for supporting files
-    checkPath = '/apps/web-viewer/src/app/app.electron.module.ts';
-    expect(files.indexOf(checkPath)).toBeGreaterThanOrEqual(0);
-
-    checkFile = getFileContent(tree, checkPath);
-    // console.log(checkFile);
-    expect(checkFile.indexOf(`TtElectronCoreModule`)).toBeGreaterThanOrEqual(0);
-    expect(checkFile.indexOf(`AppElectronModule`)).toBeGreaterThanOrEqual(0);
-
-    checkPath = '/apps/web-viewer/src/main.electron.ts';
-    expect(files.indexOf(checkPath)).toBeGreaterThanOrEqual(0);
-
-    checkFile = getFileContent(tree, checkPath);
-    // console.log(checkFile);
+    // should *NOT* generate angular specific files
     expect(
-      checkFile.indexOf(`./app/app.electron.module`)
-    ).toBeGreaterThanOrEqual(0);
+      tree.exists('/apps/web-viewer/src/app/app.electron.module.ts')
+    ).toBeFalsy();
+    expect(tree.exists('/apps/web-viewer/src/main.electron.ts')).toBeFalsy();
+
+    // should create correct files
+    expect(tree.exists('/apps/web-viewer/src/main.ts')).toBeFalsy();
 
     // make sure start script is correct
     checkPath = '/package.json';

@@ -12,10 +12,7 @@
         "$source": "argv",
         "index": 0
       },
-      "x-prompt": {
-        "message": "What name would you like for this app?",
-        "type": "string"
-      }
+      "x-prompt": "What name would you like for this app?"
     },
     "prefix": {
       "type": "string",

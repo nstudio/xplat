@@ -124,7 +124,7 @@ describe('xplat init', () => {
   //   it('should init and not set framework as default', async () => {
   //     const options: XplatHelpers.Schema = { ...defaultOptions };
   //     options.platforms = 'web';
-  
+
   //     appTree = createEmptyWorkspace(Tree.empty());
   //     const tree = await runSchematic('init', options, appTree);
   //     const files = tree.files;

@@ -24,6 +24,10 @@ export interface Schema {
    */
   setupSandbox?: boolean;
   /**
+   * Skip generating xplat supporting architecture
+   */
+  skipXplat?: boolean;
+  /**
    * Skip installing dependencies
    */
   skipInstall?: boolean;

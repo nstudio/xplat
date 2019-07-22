@@ -20,6 +20,12 @@
       "schema": "./src/schematics/xplat/schema.json",
       "description": "Add xplat for Electron.",
       "hidden": true
+    },
+    "tools": {
+      "factory": "./src/schematics/tools",
+      "schema": "./src/schematics/tools/schema.json",
+      "description": "Tools for @angular-devkit.",
+      "hidden": true
     }
   }
 }

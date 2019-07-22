@@ -1,15 +1,16 @@
 import { Tree } from '@angular-devkit/schematics';
-import { Schema as ApplicationOptions } from './schema';
+import { XplatElectrontHelpers } from '@nstudio/electron';
 import { jsonParse } from '@nstudio/xplat';
 import {
   createXplatWithAppsForElectron,
-  getFileContent
+  getFileContent,
+  createEmptyWorkspace
 } from '@nstudio/xplat/testing';
 import { runSchematic } from '../../utils/testing';
 
 describe('app', () => {
   let appTree: Tree;
-  const defaultOptions: ApplicationOptions = {
+  const defaultOptions: XplatElectrontHelpers.SchemaApp = {
     name: 'foo',
     target: 'web-viewer',
     npmScope: 'testing',
@@ -23,7 +24,7 @@ describe('app', () => {
   });
 
   it('should create all files of an app', async () => {
-    const options: ApplicationOptions = { ...defaultOptions };
+    const options: XplatElectrontHelpers.SchemaApp = { ...defaultOptions };
     // console.log('appTree:', appTree);
     const tree = await runSchematic('app', options, appTree);
     const files = tree.files;
@@ -106,5 +107,62 @@ describe('app', () => {
         }.target serve.electron.${options.name}`
       )
     ).toBeGreaterThanOrEqual(0);
+  });
+
+  describe('skipXplat', () => {
+    it('should geneate app with no connections to xplat architecture', async () => {
+      appTree = Tree.empty();
+      appTree.create('/apps/web-viewer/package.json', JSON.stringify({}));
+      appTree.create(
+        'angular.json',
+        JSON.stringify({
+          version: 1,
+          projects: {
+            'web-viewer': {
+              architect: {
+                build: {
+                  options: {
+                    assets: []
+                  }
+                },
+                serve: {
+                  options: {},
+                  configurations: {
+                    production: {}
+                  }
+                }
+              }
+            }
+          }
+        })
+      );
+      appTree.create(
+        '/package.json',
+        JSON.stringify({
+          dependencies: {},
+          devDependencies: {},
+          xplat: {}
+        })
+      );
+      appTree.create(
+        '/nx.json',
+        JSON.stringify({ npmScope: 'testing', projects: {} })
+      );
+      appTree.create(
+        '/tsconfig.json',
+        JSON.stringify({ compilerOptions: { paths: {} } })
+      );
+      const options: XplatElectrontHelpers.SchemaApp = { ...defaultOptions };
+      options.skipXplat = true;
+      // console.log('appTree:', appTree);
+      const tree = await runSchematic('app', options, appTree);
+      // const files = tree.files;
+      // console.log(files);
+      expect(tree.exists('/tools/electron/postinstall.js')).toBeTruthy();
+      expect(tree.exists('/tools/web/postinstall.js')).toBeTruthy();
+
+      // should *not* create this
+      expect(tree.exists('/apps/web-viewer/src/main.electron.ts')).toBeFalsy();
+    });
   });
 });

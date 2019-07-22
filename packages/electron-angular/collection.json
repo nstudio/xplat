@@ -15,12 +15,6 @@
       "aliases": ["app"],
       "description": "Create an Electron Angular app."
     },
-    "tools": {
-      "factory": "./src/schematics/tools",
-      "schema": "./src/schematics/tools/schema.json",
-      "description": "Tools for @angular-devkit.",
-      "hidden": true
-    },
     "xplat": {
       "factory": "./src/schematics/xplat",
       "schema": "./src/schematics/xplat/schema.json",

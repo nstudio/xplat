@@ -1,12 +1,12 @@
 import { Tree } from '@angular-devkit/schematics';
-import { Schema as ApplicationOptions } from './schema';
+import { Schema } from './schema';
 import { jsonParse } from '@nstudio/xplat';
 import { createEmptyWorkspace, getFileContent } from '@nstudio/xplat/testing';
 import { runSchematic } from '../../utils/testing';
 
 describe('app', () => {
   let appTree: Tree;
-  const defaultOptions: ApplicationOptions = {
+  const defaultOptions: Schema = {
     name: 'foo',
     skipFormat: true
   };
@@ -17,35 +17,36 @@ describe('app', () => {
   });
 
   it('should create all files for web app', async () => {
-    const options: ApplicationOptions = { ...defaultOptions };
+    const options: Schema = { ...defaultOptions };
     const tree = await runSchematic('app', options, appTree);
     const files = tree.files;
     // console.log(files);
 
-    expect(files.indexOf('/apps/web-foo/tsconfig.json')).toBeGreaterThanOrEqual(
-      0
-    );
-    expect(files.indexOf('/apps/web-foo/src/main.ts')).toBeGreaterThanOrEqual(
-      0
-    );
+    expect(tree.exists('/apps/web-foo/tsconfig.json')).toBeTruthy();
+    expect(tree.exists('/apps/web-foo/src/main.ts')).toBeTruthy();
+    expect(tree.exists('/apps/web-foo/src/app/app.module.ts')).toBeTruthy();
+
     expect(
-      files.indexOf('/apps/web-foo/src/app/app.module.ts')
-    ).toBeGreaterThanOrEqual(0);
+      tree.exists('/apps/web-foo/src/app/app.component.html')
+    ).toBeTruthy();
+    expect(
+      tree.exists('/apps/web-foo/src/app/core/core.module.ts')
+    ).toBeTruthy();
 
-    let checkPath = '/apps/web-foo/src/app/app.component.html';
-    expect(files.indexOf(checkPath)).toBeGreaterThanOrEqual(0);
+    expect(tree.exists('/package.json')).toBeTruthy();
 
-    checkPath = '/package.json';
-    expect(files.indexOf(checkPath)).toBeGreaterThanOrEqual(0);
-
-    let checkFile = getFileContent(tree, checkPath);
+    let checkFile = getFileContent(tree, '/package.json');
     // console.log(checkFile);
     const packageData: any = jsonParse(checkFile);
     expect(packageData.scripts['start.web.foo']).toBeDefined();
+
+    // should gen xplat structure by default
+    expect(tree.exists('/xplat/web/index.ts')).toBeTruthy();
+    expect(tree.exists('/xplat/web/core/index.ts')).toBeTruthy();
   });
 
   it('should create all files for web app using groupByName', async () => {
-    const options: ApplicationOptions = { ...defaultOptions };
+    const options: Schema = { ...defaultOptions };
     options.groupByName = true;
     const tree = await runSchematic('app', options, appTree);
     const files = tree.files;
@@ -74,7 +75,7 @@ describe('app', () => {
   });
 
   it('should create all files for web app using addHeadlessE2e', async () => {
-    const options: ApplicationOptions = {
+    const options: Schema = {
       ...defaultOptions,
       addHeadlessE2e: true
     };
@@ -120,7 +121,7 @@ describe('app', () => {
   });
 
   // it('should create app with --framework flag Ionic', async () => {
-  //   const options: ApplicationOptions = { ...defaultOptions };
+  //   const options: Schema = { ...defaultOptions };
   //   const tree = await runSchematic('app', options, appTree);
   //   const files = tree.files;
   //   // console.log(files);
@@ -139,7 +140,7 @@ describe('app', () => {
   // });
 
   // it('should create app with --framework flag for NativeScript', async () => {
-  //   const options: ApplicationOptions = { ...defaultOptions };
+  //   const options: Schema = { ...defaultOptions };
   //   options.framework = Framework.NativeScript;
   //   const tree = await runSchematic('app', options, appTree);
   //   const files = tree.files;
@@ -157,4 +158,22 @@ describe('app', () => {
   //   const packageData: any = jsonParse(checkFile);
   //   expect(packageData.scripts['start.nativescript.foo.ios']).toBeDefined();
   // });
+
+  describe('skipXplat', () => {
+    it('should geneate app with no connections to xplat architecture', async () => {
+      const options: Schema = { ...defaultOptions };
+      options.skipXplat = true;
+      // console.log('appTree:', appTree);
+      const tree = await runSchematic('app', options, appTree);
+      // const files = tree.files;
+      // console.log(files);
+      expect(
+        tree.exists('/apps/web-foo/src/app/app.component.html')
+      ).toBeTruthy();
+      expect(
+        tree.exists('/apps/web-foo/src/app/core/core.module.ts')
+      ).toBeFalsy();
+      expect(tree.exists('/xplat/web/index.ts')).toBeFalsy();
+    });
+  });
 });

@@ -1,10 +1,6 @@
 import { Tree } from '@angular-devkit/schematics';
 
-import {
-  setTest,
-  jsonParse,
-  XplatHelpers
-} from '@nstudio/xplat';
+import { setTest, jsonParse, XplatHelpers } from '@nstudio/xplat';
 import { createEmptyWorkspace, getFileContent } from '@nstudio/xplat/testing';
 import { runSchematic, runSchematicSync } from '../../utils/testing';
 setTest();

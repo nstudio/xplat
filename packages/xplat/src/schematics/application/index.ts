@@ -97,7 +97,10 @@ export default function(options: Schema) {
                 // default to internally managed/supported nrwl version
                 version = nrwlVersion;
                 // look for existing nrwl versions if user already has them installed and use those
-                if (packageJson.dependencies && packageJson.dependencies[name]) {
+                if (
+                  packageJson.dependencies &&
+                  packageJson.dependencies[name]
+                ) {
                   version = packageJson.dependencies[name];
                 } else if (
                   packageJson.devDependencies &&
@@ -133,8 +136,10 @@ export default function(options: Schema) {
       }
     } else {
       externalChains.push((tree: Tree, context: SchematicContext) => {
-        const installPackageTask = context.addTask(new NodePackageInstallTask());
-  
+        const installPackageTask = context.addTask(
+          new NodePackageInstallTask()
+        );
+
         // console.log('devDependencies:', devDependencies);
         // console.log('packagesToRunXplat:', packagesToRunXplat);
         for (const packageName of packagesToRunXplat) {

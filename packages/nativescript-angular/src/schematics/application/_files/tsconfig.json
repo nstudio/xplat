@@ -10,6 +10,7 @@
     "downlevelIteration": true,
     "skipLibCheck": true,
     "lib": ["es2017", "dom", "webworker", "es6"],
+    "typeRoots": ["./node_modules/@types"],
     "baseUrl": ".",
     "paths": {
       "~/*": ["src/*"],

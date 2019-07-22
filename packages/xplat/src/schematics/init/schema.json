@@ -55,10 +55,7 @@
     "prefix": {
       "type": "string",
       "description": "The prefix to apply to generated selectors.",
-      "x-prompt": {
-        "type": "input",
-        "message": "Please input a 2-3 character prefix to use with xplat generators:"
-      }
+      "x-prompt": "Please input a 2-3 character prefix to use with xplat generators:"
     },
     "npmScope": {
       "type": "string",

@@ -11,7 +11,8 @@
       "$default": {
         "$source": "argv",
         "index": 0
-      }
+      },
+      "x-prompt": "What name would you like for this app?"
     },
     "prefix": {
       "type": "string",
@@ -36,6 +37,11 @@
     "setupSandbox": {
       "type": "boolean",
       "description": "Setup app as a sandbox for the workspace.",
+      "default": false
+    },
+    "skipXplat": {
+      "description": "Skip generating xplat supporting architecture",
+      "type": "boolean",
       "default": false
     },
     "skipInstall": {

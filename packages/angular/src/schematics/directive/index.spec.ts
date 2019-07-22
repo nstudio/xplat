@@ -113,7 +113,9 @@ describe('directive schematic', () => {
       tree.exists('/xplat/web/features/ui/directives/active-link.directive.ts')
     ).toBeTruthy();
     expect(
-      tree.exists('/xplat/nativescript/features/ui/directives/active-link.directive.ts')
+      tree.exists(
+        '/xplat/nativescript/features/ui/directives/active-link.directive.ts'
+      )
     ).toBeTruthy();
 
     // file content
@@ -158,7 +160,9 @@ describe('directive schematic', () => {
       tree.exists('/xplat/web/features/foo/directives/active-link.directive.ts')
     ).toBeTruthy();
     expect(
-      tree.exists('/xplat/nativescript/features/foo/directives/active-link.directive.ts')
+      tree.exists(
+        '/xplat/nativescript/features/foo/directives/active-link.directive.ts'
+      )
     ).toBeTruthy();
 
     // file content

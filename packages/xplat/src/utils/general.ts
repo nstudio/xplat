@@ -171,10 +171,7 @@ export interface IXplatSettings {
   platforms?: string;
 }
 
-export function prerun(
-  options?: IXplatSettings | any,
-  init?: boolean
-) {
+export function prerun(options?: IXplatSettings | any, init?: boolean) {
   return (tree: Tree) => {
     const nxJson = getNxWorkspaceConfig(tree);
     if (nxJson) {

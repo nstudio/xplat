@@ -30,10 +30,22 @@ describe('xplat schematic', () => {
     // console.log('files:', files);
 
     expect(tree.exists('/apps/web-sample/tsconfig.json')).toBeTruthy();
-    expect(tree.exists('/apps/web-sample/src/app/app.component.html')).toBeTruthy();
-    expect(tree.exists('/apps/web-sample/src/app/features/shared/shared.module.ts')).toBeTruthy();
-    expect(tree.exists('/apps/web-sample/src/app/features/home/components/home.component.html')).toBeTruthy();
-    expect(tree.exists('/apps/web-sample/src/app/features/home/components/home.component.ts')).toBeTruthy();
+    expect(
+      tree.exists('/apps/web-sample/src/app/app.component.html')
+    ).toBeTruthy();
+    expect(
+      tree.exists('/apps/web-sample/src/app/features/shared/shared.module.ts')
+    ).toBeTruthy();
+    expect(
+      tree.exists(
+        '/apps/web-sample/src/app/features/home/components/home.component.html'
+      )
+    ).toBeTruthy();
+    expect(
+      tree.exists(
+        '/apps/web-sample/src/app/features/home/components/home.component.ts'
+      )
+    ).toBeTruthy();
   });
 
   it('should create nativescript angular app', async () => {
@@ -46,10 +58,22 @@ describe('xplat schematic', () => {
     // console.log('files:', files);
 
     expect(tree.exists('/apps/nativescript-sample/nsconfig.json')).toBeTruthy();
-    expect(tree.exists('/apps/nativescript-sample/webpack.config.js')).toBeTruthy();
-    expect(tree.exists('/apps/nativescript-sample/src/app.module.ts')).toBeTruthy();
-    expect(tree.exists('/apps/nativescript-sample/src/assets/fontawesome.min.css')).toBeTruthy();
-    expect(tree.exists('/apps/nativescript-sample/src/features/shared/shared.module.ts')).toBeTruthy();
-    expect(tree.exists('/apps/nativescript-sample/App_Resources/iOS/Info.plist')).toBeTruthy();
+    expect(
+      tree.exists('/apps/nativescript-sample/webpack.config.js')
+    ).toBeTruthy();
+    expect(
+      tree.exists('/apps/nativescript-sample/src/app.module.ts')
+    ).toBeTruthy();
+    expect(
+      tree.exists('/apps/nativescript-sample/src/assets/fontawesome.min.css')
+    ).toBeTruthy();
+    expect(
+      tree.exists(
+        '/apps/nativescript-sample/src/features/shared/shared.module.ts'
+      )
+    ).toBeTruthy();
+    expect(
+      tree.exists('/apps/nativescript-sample/App_Resources/iOS/Info.plist')
+    ).toBeTruthy();
   });
 });

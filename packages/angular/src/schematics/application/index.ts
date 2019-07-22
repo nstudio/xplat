@@ -46,6 +46,13 @@ export default function(options: Schema) {
     prerun(options),
     // adjust naming convention
     XplatHelpers.applyAppNamingConvention(options, 'web'),
+    // use xplat or not
+    options.skipXplat
+      ? noop()
+      : externalSchematic('@nstudio/angular', 'xplat', {
+          platforms: 'web',
+          framework: 'angular'
+        }),
     (tree: Tree, context: SchematicContext) =>
       externalSchematic('@nrwl/angular', 'app', {
         ...options,
@@ -53,12 +60,19 @@ export default function(options: Schema) {
       })(tree, context),
     (tree: Tree, context: SchematicContext) =>
       addHeadlessE2e(options)(tree, context),
-    (tree: Tree, context: SchematicContext) =>
-      addAppFiles(options)(tree, context),
-    (tree: Tree, context: SchematicContext) =>
-      addAppFiles(options, 'routing')(tree, context),
+    options.skipXplat
+      ? noop()
+      : (tree: Tree, context: SchematicContext) =>
+          addAppFiles(options)(tree, context),
+    options.skipXplat
+      ? noop()
+      : (tree: Tree, context: SchematicContext) =>
+          addAppFiles(options, 'routing')(tree, context),
     // adjust app files
-    (tree: Tree, context: SchematicContext) => adjustAppFiles(options, tree),
+    options.skipXplat
+      ? noop()
+      : (tree: Tree, context: SchematicContext) =>
+          adjustAppFiles(options, tree),
     // add start/clean scripts
     (tree: Tree) => {
       const platformApp = options.name.replace('-', '.');
