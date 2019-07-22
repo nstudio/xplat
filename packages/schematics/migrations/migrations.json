@@ -59,6 +59,11 @@
       "version": "7.3.2",
       "description": "Update NativeScript to 5.2",
       "factory": "./update-7-3-2/update-7-3-2"
+    },
+    "update-to-8.0.0": {
+      "version": "8.0.0",
+      "description": "Repackaging changes to xplat",
+      "factory": "./update-8-0-0/update-8-0-0"
     }
   }
 }
