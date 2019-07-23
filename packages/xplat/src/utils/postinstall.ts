@@ -118,7 +118,7 @@ export async function makePrettierIgnore() {
 **/tsconfig.*.json
 **/tsconfig.json
 **/*.conf.js
-**/xplat/**/.xplatframework
+**/xplat/*/.xplatframework
 `;
 
   if (!(await fsExists(prettierIgnorePath))) {

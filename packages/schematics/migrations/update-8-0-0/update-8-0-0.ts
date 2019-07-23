@@ -2,93 +2,148 @@ import {
   chain,
   Rule,
   SchematicContext,
-  Tree
+  Tree,
+  SchematicsException
 } from '@angular-devkit/schematics';
 import { join } from 'path';
 import * as fs from 'fs';
-import { updateJsonInTree } from '@nrwl/workspace';
+import {
+  updateJsonInTree,
+  readJsonInTree,
+  addDepsToPackageJson,
+  formatFiles
+} from '@nrwl/workspace';
 import {
   getJsonFromFile,
   updateJsonFile,
-  createOrUpdate
+  createOrUpdate,
+  addInstallTask
 } from '@nstudio/xplat';
+import { stripIndents } from '@angular-devkit/core/src/utils/literals';
 
-function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
-  const appsDir = tree.getDir('apps');
-  const appFolders = appsDir.subdirs;
-  const cwd = process.cwd();
-  const mainPath = join(
-    cwd,
-    'node_modules/@nstudio/schematics/src/app.nativescript/_files/app/main.ts'
-  );
-  // console.log('webpackConfigPath:', webpackConfigPath);
-  let mainFile = fs.readFileSync(mainPath, 'UTF-8');
-  const webpackConfigPath = join(
-    cwd,
-    'node_modules/@nstudio/schematics/src/app.nativescript/_files/webpack.config.js'
-  );
-  // console.log('webpackConfigPath:', webpackConfigPath);
-  const webpackConfig = fs.readFileSync(webpackConfigPath, 'UTF-8');
-
-  // update {N} apps and configs
-  for (const dir of appFolders) {
-    // console.log(dir);
-    if (
-      dir.indexOf('nativescript-') === 0 ||
-      dir.indexOf('-nativescript') === 0
-    ) {
-      const appDir = `${appsDir.path}/${dir}`;
-      // console.log('appDir:', appDir);
-
-      createOrUpdate(tree, `${appDir}/webpack.config.js`, webpackConfig);
-
-      createOrUpdate(tree, `${appDir}/app/main.ts`, mainFile);
-
-      // update {N} app deps
-      const packagePath = `${appDir}/package.json`;
-      const packageJson = getJsonFromFile(tree, packagePath);
-
-      if (packageJson) {
-        packageJson.dependencies = packageJson.dependencies || {};
-        packageJson.devDependencies = packageJson.devDependencies || {};
-        packageJson.devDependencies = {
-          ...packageJson.devDependencies,
-          '@angular/compiler-cli': '~7.2.0',
-          '@ngtools/webpack': '~7.2.0',
-          'nativescript-dev-webpack': '~0.20.0',
-          'terser-webpack-plugin':
-            'file:../../node_modules/terser-webpack-plugin'
-        };
-
-        // console.log('path:',path);
-        // console.log('packageJson overwrite:', JSON.stringify(packageJson));
-        tree = updateJsonFile(tree, packagePath, packageJson);
-      }
+function addDependencies() {
+  return (host: Tree, context: SchematicContext) => {
+    const packageJson = readJsonInTree(host, 'package.json');
+    const dependencies = packageJson.dependencies;
+    const devDependencies = packageJson.devDependencies;
+    const builders = new Set<string>();
+    const projects = readJsonInTree(host, 'angular.json').projects;
+    Object.values<any>(projects)
+      .filter(
+        project =>
+          typeof project === 'object' && project.hasOwnProperty('architect')
+      )
+      .forEach(project => {
+        Object.values<any>(project.architect).forEach(target => {
+          const [builderDependency] = target.builder.split(':');
+          builders.add(builderDependency);
+        });
+      });
+    const newDependencies = {};
+    const newDevDependencies = {
+      '@nstudio/xplat': '8.0.0'
+    };
+    context.logger.info(`Adding @nstudio/xplat as a dependency`);
+    if (dependencies['@angular/core']) {
+      newDevDependencies['@nstudio/angular'] = '8.0.0';
+      newDevDependencies['@nstudio/web'] = '8.0.0';
+      newDevDependencies['@nstudio/web-angular'] = '8.0.0';
+      context.logger.info(`Adding @nstudio/angular as a dependency`);
     }
-  }
-  return tree;
+    if (dependencies['nativescript-angular']) {
+      newDevDependencies['@nstudio/nativescript'] = '8.0.0';
+      newDevDependencies['@nstudio/nativescript-angular'] = '8.0.0';
+      context.logger.info(`Adding @nstudio/nativescript as a dependency`);
+    }
+    if (dependencies['electron'] || devDependencies['electron']) {
+      newDevDependencies['@nstudio/electron'] = '8.0.0';
+      newDevDependencies['@nstudio/electron-angular'] = '8.0.0';
+      context.logger.info(`Adding @nstudio/electron as a dependency`);
+    }
+    if (dependencies['@ionic-native'] || devDependencies['@ionic-native']) {
+      newDevDependencies['@nstudio/ionic'] = '8.0.0';
+      newDevDependencies['@nstudio/ionic-angular'] = '8.0.0';
+      context.logger.info(`Adding @nstudio/ionic as a dependency`);
+    }
+
+    return chain([addDepsToPackageJson(newDependencies, newDevDependencies)]);
+  };
 }
 
-function updateRootPackage(tree: Tree, context: SchematicContext) {
-  return updateJsonInTree('package.json', json => {
-    json.scripts = json.scripts || {};
+const removeOldDependencies = updateJsonInTree(
+  'package.json',
+  (json, context: SchematicContext) => {
     json.dependencies = json.dependencies || {};
-    json.dependencies = {
-      ...json.dependencies,
-      'nativescript-angular': '~7.2.0',
-      'tns-core-modules': '~5.2.0'
-    };
     json.devDependencies = json.devDependencies || {};
-    json.devDependencies = {
-      ...json.devDependencies,
-      'terser-webpack-plugin': '~1.2.0',
-      'tns-platform-declarations': '~5.2.0'
-    };
+
+    if (
+      json.dependencies['@nrwl/workspace'] ||
+      json.devDependencies['@nrwl/workspace']
+    ) {
+      delete json.dependencies['@nstudio/schematics'];
+      delete json.devDependencies['@nstudio/schematics'];
+      context.logger.info(`Removing @nstudio/schematics as a dependency`);
+    } else {
+      throw new SchematicsException(
+        'Please run "ng update @nrwl/schematics" first to migrate to Nx 8. If you need more help migrating Nx to version 8 please see this: https://nx.dev/angular/guides/nx7-to-nx8'
+      );
+    }
 
     return json;
-  })(tree, context);
-}
+  }
+);
+
+const displayInformation = (host: Tree, context: SchematicContext) => {
+  context.logger.info(stripIndents`
+    xplat has been repackaged. We are installing and migrating your dependencies to the ones necessary.
+
+    This migration may take a few minutes.
+  `);
+};
+
+const updateDefaultCollection = (host: Tree, context: SchematicContext) => {
+  const { dependencies, devDependencies } = readJsonInTree(
+    host,
+    'package.json'
+  );
+
+  return updateJsonInTree('angular.json', json => {
+    json.cli = json.cli || {};
+    if (dependencies['@nstudio/schematics']) {
+      json.cli.defaultCollection = '@nstudio/xplat';
+    } else if (devDependencies['@nstudio/schematics']) {
+      json.cli.defaultCollection = '@nstudio/xplat';
+    }
+    context.logger.info(
+      `Default collection is now set to ${json.cli.defaultCollection}`
+    );
+    return json;
+  });
+};
+
+// const addXplatFrameworkIdentifier = (tree: Tree, context: SchematicContext) => {
+//   if (tree.exists('/xplat/web/index.ts') && !tree.exists('/xplat/web/.xplatframework')) {
+//     tree.create('.xplatframework', 'angular');
+//   }
+//   if (tree.exists('/xplat/nativescript/index.ts') && !tree.exists('/xplat/nativescript/.xplatframework')) {
+//     tree.create('.xplatframework', 'angular');
+//   }
+//   if (tree.exists('/xplat/ionic/index.ts') && !tree.exists('/xplat/ionic/.xplatframework')) {
+//     tree.create('.xplatframework', 'angular');
+//   }
+//   if (tree.exists('/xplat/electron/index.ts') && !tree.exists('/xplat/electron/.xplatframework')) {
+//     tree.create('.xplatframework', 'angular');
+//   }
+// };
 
 export default function(): Rule {
-  return chain([updateNativeScriptApps, updateRootPackage]);
+  return chain([
+    displayInformation,
+    removeOldDependencies,
+    addDependencies(),
+    updateDefaultCollection,
+    // addXplatFrameworkIdentifier,
+    addInstallTask(),
+    formatFiles()
+  ]);
 }

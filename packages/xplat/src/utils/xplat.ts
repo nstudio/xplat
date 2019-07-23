@@ -534,7 +534,7 @@ xplat/**/*.ngsummary.json
         }
 
         // always ensure hidden xplat files are hidden from view
-        userUpdates['**/xplat/**/.xplat*'] = true;
+        userUpdates['**/xplat/*/.xplatframework'] = true;
 
         // VS Code
         const isVsCode = updateVSCode({

@@ -11,7 +11,8 @@ import {
   SchematicContext,
   SchematicsException,
   externalSchematic,
-  noop
+  noop,
+  ExecutionOptions
 } from '@angular-devkit/schematics';
 import { formatFiles } from '@nrwl/workspace';
 import {
@@ -53,11 +54,29 @@ export default function(options: Schema) {
           platforms: 'web',
           framework: 'angular'
         }),
-    (tree: Tree, context: SchematicContext) =>
-      externalSchematic('@nrwl/angular', 'app', {
+    (tree: Tree, context: SchematicContext) => {
+      const nrwlWebOptions = {
         ...options,
         skipInstall: true
-      })(tree, context),
+      };
+      let executionOptions: Partial<ExecutionOptions>;
+      if (!options.skipXplat) {
+        // when generating xplat architecture, ensure:
+        // 1. sass is used
+        // 2. default directory (TODO: allow custom directory)
+        nrwlWebOptions.directory = '';
+        nrwlWebOptions.style = 'scss';
+        // executionOptions = {
+        //   interactive: false
+        // };
+      }
+      return externalSchematic(
+        '@nrwl/angular',
+        'app',
+        nrwlWebOptions,
+        executionOptions
+      )(tree, context);
+    },
     (tree: Tree, context: SchematicContext) =>
       addHeadlessE2e(options)(tree, context),
     options.skipXplat

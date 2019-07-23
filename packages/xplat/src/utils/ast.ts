@@ -369,30 +369,6 @@ export function insert(host: Tree, modulePath: string, changes: any[]) {
   host.commitUpdate(recorder);
 }
 
-let installAdded = false;
-
-export function addDepsToPackageJson(
-  deps: any,
-  devDeps: any,
-  addInstall = true
-): Rule {
-  return updateJsonInTree('package.json', (json, context: SchematicContext) => {
-    json.dependencies = {
-      ...deps,
-      ...(json.dependencies || {})
-    };
-    json.devDependencies = {
-      ...devDeps,
-      ...(json.devDependencies || {})
-    };
-    if (addInstall && !installAdded) {
-      context.addTask(new NodePackageInstallTask());
-      installAdded = true;
-    }
-    return json;
-  });
-}
-
 export function getProjectConfig(host: Tree, name: string): any {
   const angularJson = readJsonInTree(host, '/angular.json');
   const projectConfig = angularJson.projects[name];

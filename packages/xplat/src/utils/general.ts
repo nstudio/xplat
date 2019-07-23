@@ -82,9 +82,9 @@ export function isTesting() {
   return isTest;
 }
 
-export function addInstallTask(options: any) {
+export function addInstallTask(options?: any) {
   return (host: Tree, context: SchematicContext) => {
-    if (!options.skipInstall) {
+    if (!options || (options && !options.skipInstall)) {
       context.addTask(new NodePackageInstallTask());
     }
     return host;

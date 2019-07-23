@@ -55,7 +55,7 @@ let setupXplat = `${path.join(
   'node_modules',
   '.bin',
   'ng'
-)} g xplat --prefix=${prefix} --platforms=${targets}`;
+)} g @nstudio/xplat:init --prefix=${prefix} --platforms=${targets}`;
 console.log(setupXplat);
 execSync(setupXplat, { cwd: directory, stdio: [0, 1, 2] });
 
