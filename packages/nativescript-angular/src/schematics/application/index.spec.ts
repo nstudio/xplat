@@ -103,6 +103,36 @@ describe('app', () => {
     expect(tree.exists('/xplat/web/index.ts')).toBeFalsy();
   });
 
+  it('should create all files for app in directory', async () => {
+    const options: Schema = { ...defaultOptions };
+    options.directory = 'frontend';
+    const tree = await runSchematic('app', options, appTree);
+    // const files = tree.files;
+    // console.log(files);
+
+    expect(
+      tree.exists('/apps/frontend/nativescript-foo/package.json')
+    ).toBeTruthy();
+    const fileContent = getFileContent(
+      tree,
+      '/apps/frontend/nativescript-foo/tsconfig.json'
+    );
+    // console.log('tsconfig:', fileContent)
+    expect(
+      fileContent.indexOf('../../../xplat/nativescript/*')
+    ).toBeGreaterThanOrEqual(0);
+  });
+
+  it('should create all files for app in directory and ignore platform naming when directory is a platform', async () => {
+    const options: Schema = { ...defaultOptions };
+    options.directory = 'nativescript';
+    const tree = await runSchematic('app', options, appTree);
+    // const files = tree.files;
+    // console.log(files);
+
+    expect(tree.exists('/apps/nativescript/foo/package.json')).toBeTruthy();
+  });
+
   it('should create CoreModule with import from xplat', async () => {
     const options = { ...defaultOptions };
     const tree = await runSchematic('app', options, appTree);

@@ -63,8 +63,6 @@ export default function(options: Schema) {
       if (!options.skipXplat) {
         // when generating xplat architecture, ensure:
         // 1. sass is used
-        // 2. default directory (TODO: allow custom directory)
-        nrwlWebOptions.directory = '';
         nrwlWebOptions.style = 'scss';
         // executionOptions = {
         //   interactive: false
@@ -122,9 +120,10 @@ defaultConfig.capabilities.chromeOptions = {
 
 exports.config = defaultConfig;
     `;
+    const directory = options.directory ? `${options.directory}/` : '';
     const e2eProjectName = `${options.name}-e2e`;
     const confFile = 'protractor.headless.js';
-    tree.create(`/apps/${e2eProjectName}/${confFile}`, config);
+    tree.create(`/apps/${directory}${e2eProjectName}/${confFile}`, config);
 
     const angularJson = getJsonFromFile(tree, 'angular.json');
     if (angularJson && angularJson.projects) {
@@ -133,7 +132,7 @@ exports.config = defaultConfig;
           angularJson.projects[
             e2eProjectName
           ].architect.e2e.configurations.ci = {
-            protractorConfig: `apps/${e2eProjectName}/${confFile}`
+            protractorConfig: `apps/${directory}${e2eProjectName}/${confFile}`
           };
         }
       }
@@ -159,6 +158,7 @@ function addHeadlessE2e(options: Schema) {
 
 function addAppFiles(options: Schema, extra: string = ''): Rule {
   extra = extra ? `${extra}_` : '';
+  const directory = options.directory ? `${options.directory}/` : '';
   return branchAndMerge(
     mergeWith(
       apply(url(`./_${extra}files`), [
@@ -167,24 +167,28 @@ function addAppFiles(options: Schema, extra: string = ''): Rule {
           ...getDefaultTemplateOptions(),
           xplatFolderName: XplatHelpers.getXplatFoldername('web', 'angular')
         }),
-        move(`apps/${options.name}`)
+        move(`apps/${directory}${options.name}`)
       ])
     )
   );
 }
 
 function adjustAppFiles(options: Schema, tree: Tree) {
+  const directory = options.directory ? `${options.directory}/` : '';
   tree.overwrite(
-    `/apps/${options.name}/src/index.html`,
+    `/apps/${directory}${options.name}/src/index.html`,
     indexContent(options.name)
   );
-  tree.overwrite(`/apps/${options.name}/src/main.ts`, mainContent());
   tree.overwrite(
-    `/apps/${options.name}/src/styles.scss`,
+    `/apps/${directory}${options.name}/src/main.ts`,
+    mainContent()
+  );
+  tree.overwrite(
+    `/apps/${directory}${options.name}/src/styles.scss`,
     `@import 'scss/index';`
   );
   tree.overwrite(
-    `/apps/${options.name}/src/app/app.component.html`,
+    `/apps/${directory}${options.name}/src/app/app.component.html`,
     options.routing
       ? `<router-outlet></router-outlet>`
       : appCmpHtml(options.name)
@@ -192,22 +196,22 @@ function adjustAppFiles(options: Schema, tree: Tree) {
   if (options.routing) {
     // update home route to reflect with root cmp would have been
     tree.overwrite(
-      `/apps/${
+      `/apps/${directory}${
         options.name
       }/src/app/features/home/components/home.component.html`,
       appCmpHtml(options.name)
     );
   }
   tree.overwrite(
-    `/apps/${options.name}/src/app/app.component.ts`,
+    `/apps/${directory}${options.name}/src/app/app.component.ts`,
     appCmpContent()
   );
   tree.overwrite(
-    `/apps/${options.name}/src/app/app.component.spec.ts`,
+    `/apps/${directory}${options.name}/src/app/app.component.spec.ts`,
     appCmpSpec()
   );
   tree.overwrite(
-    `/apps/${options.name}/src/app/app.module.ts`,
+    `/apps/${directory}${options.name}/src/app/app.module.ts`,
     appModuleContent(options)
   );
   // update cli config for shared web specific scss
@@ -221,7 +225,7 @@ function adjustAppFiles(options: Schema, tree: Tree) {
             'web',
             'angular'
           )}/scss/_index.scss`,
-          `apps/${options.name}/src/styles.scss`
+          `apps/${directory}${options.name}/src/styles.scss`
         ];
       }
     }

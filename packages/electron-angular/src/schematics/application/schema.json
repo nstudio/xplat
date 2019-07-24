@@ -19,6 +19,11 @@
       "description": "The name of the web app to use inside the electron app. ie, web-myapp",
       "x-prompt": "What's the name of the web app in your workspace you'd like to use inside Electron?"
     },
+    "directory": {
+      "description": "The directory of the new app.",
+      "type": "string",
+      "x-prompt": "In which directory should the app be generated?"
+    },
     "prefix": {
       "type": "string",
       "description": "The prefix to apply to generated selectors.",

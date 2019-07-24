@@ -37,7 +37,7 @@ if [[ $XPLAT_VERSION == "*" ]]; then
     if [[ "$OSTYPE" == "darwin"* ]]; then
         if [[ $PACKAGE_VERSION =~ ^[0-9]+\.[0-9]+(\.[0-9]+)?$ ]]; then
           # override package version
-          sed -E -i "" "s/\"@nstudio\/([^\"]+)\": \"\\*\"/\"@nstudio\/\1\": \"$PACKAGE_VERSION\"/" {angular,create-xplat-workspace,electron,electron-angular,ionic,ionic-angular,nativescript,nativescript-angular,web,web-angular,xplat}/package.json
+          sed -E -i "" "s/\"@nstudio\/([^\"]+)\": \"\\*\"/\"@nstudio\/\1\": \"$PACKAGE_VERSION\"/" {schematics,angular,create-xplat-workspace,electron,electron-angular,ionic,ionic-angular,nativescript,nativescript-angular,web,web-angular,xplat}/package.json
         else 
           sed -E -i "" "s/\"@nstudio\/([^\"]+)\": \"\\*\"/\"@nstudio\/\1\": \"file:..\/\1\"/" {angular,electron,electron-angular,ionic,ionic-angular,nativescript,nativescript-angular,web,web-angular,xplat}/package.json
         fi

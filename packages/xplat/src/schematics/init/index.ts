@@ -189,6 +189,10 @@ export default function(options: XplatHelpers.Schema) {
     prerun(options, true),
     ...externalChains,
     addInstallTask(options),
-    XplatHelpers.updateIDESettings(options)
+    XplatHelpers.updateIDESettings(options),
+    // after initializing new platforms always reset dev mode to fullstack to ensure user sees it
+    externalSchematic('@nstudio/xplat', 'mode', {
+      name: 'fullstack'
+    })
   ]);
 }

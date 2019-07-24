@@ -100,17 +100,18 @@ export default function(options: XplatElectrontHelpers.SchemaApp) {
 
       const projects = {};
       const electronAppName = options.name;
+      const directory = options.directory ? `${options.directory}/` : '';
       projects[electronAppName] = targetConfig;
       // update to use electron module
       projects[
         electronAppName
-      ].architect.build.options.outputPath = `dist/apps/${electronAppName}`;
+      ].architect.build.options.outputPath = `dist/apps/${directory}${electronAppName}`;
       projects[
         electronAppName
-      ].architect.build.options.main = `apps/${fullTargetAppName}/src/main.ts`;
+      ].architect.build.options.main = `apps/${directory}${fullTargetAppName}/src/main.ts`;
       projects[electronAppName].architect.build.options.assets.push({
         glob: '**/*',
-        input: `apps/${electronAppName}/src/`,
+        input: `apps/${directory}${electronAppName}/src/`,
         ignore: ['**/*.ts'],
         output: ''
       });
@@ -144,6 +145,7 @@ function addAppFiles(
   appPath: string
 ): Rule {
   const appname = getAppName(options, 'electron');
+  const directory = options.directory ? `${options.directory}/` : '';
   return branchAndMerge(
     mergeWith(
       apply(url(`./_files`), [
@@ -153,7 +155,7 @@ function addAppFiles(
           appname,
           xplatFolderName: XplatHelpers.getXplatFoldername('electron')
         }),
-        move(`apps/${appPath}`)
+        move(`apps/${directory}${appPath}`)
       ])
     )
   );

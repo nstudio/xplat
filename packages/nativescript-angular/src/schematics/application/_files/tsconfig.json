@@ -14,12 +14,12 @@
     "baseUrl": ".",
     "paths": {
       "~/*": ["src/*"],
-      "@<%= npmScope %>/*": ["../../libs/*"],
+      "@<%= npmScope %>/*": ["<%= pathOffset %>libs/*"],
       "@<%= npmScope %>/nativescript": [
-        "../../xplat/<%= xplatFolderName %>/index.ts"
+        "<%= pathOffset %>xplat/<%= xplatFolderName %>/index.ts"
       ],
       "@<%= npmScope %>/nativescript/*": [
-        "../../xplat/<%= xplatFolderName %>/*"
+        "<%= pathOffset %>xplat/<%= xplatFolderName %>/*"
       ],
       "*": ["./node_modules/tns-core-modules/*", "./node_modules/*"]
     }
@@ -31,8 +31,10 @@
   ],
   "include": [
     "./src/**/*.module.ts",
-    "../../xplat/**/*.{ios,android}.ts",
-    "../../xplat/<%= xplatFolderName %>/workers/**/*.worker.ts"
+    "<%= pathOffset %>xplat/**/*.{ios,android}.ts",
+    "<%= pathOffset %>xplat/<%= xplatFolderName %>/workers/**/*.worker.ts"
   ],
-  "exclude": ["../../xplat/<%= xplatFolderName %>/plugins/**/node_modules/**"]
+  "exclude": [
+    "<%= pathOffset %>xplat/<%= xplatFolderName %>/plugins/**/node_modules/**"
+  ]
 }

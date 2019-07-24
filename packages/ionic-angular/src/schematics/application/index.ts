@@ -60,12 +60,13 @@ export default function(options: ApplicationOptions) {
     (tree: Tree) => {
       const scripts = {};
       const platformApp = options.name.replace('-', '.');
+      const directory = options.directory ? `${options.directory}/` : '';
       // ensure convenient clean script is added for workspace
       scripts[
         `clean`
       ] = `npx rimraf -- hooks node_modules package-lock.json && npm i`;
       // add convenient ionic scripts
-      scripts[`build.${platformApp}`] = `cd apps/${
+      scripts[`build.${platformApp}`] = `cd apps/${directory}${
         options.name
       } && npm run build:web`;
       scripts[
@@ -73,34 +74,37 @@ export default function(options: ApplicationOptions) {
       ] = `npm run clean && npm run clean.${platformApp} && npm run build.${platformApp}`;
       scripts[
         `prepare.${platformApp}.ios`
-      ] = `npm run prepare.${platformApp} && cd apps/${
+      ] = `npm run prepare.${platformApp} && cd apps/${directory}${
         options.name
       } && npm run cap.add.ios`;
       scripts[
         `prepare.${platformApp}.android`
-      ] = `npm run prepare.${platformApp} && cd apps/${
+      ] = `npm run prepare.${platformApp} && cd apps/${directory}${
         options.name
       } && npm run cap.add.android`;
-      scripts[`open.${platformApp}.ios`] = `cd apps/${
+      scripts[`open.${platformApp}.ios`] = `cd apps/${directory}${
         options.name
       } && npm run cap.ios`;
-      scripts[`open.${platformApp}.android`] = `cd apps/${
+      scripts[`open.${platformApp}.android`] = `cd apps/${directory}${
         options.name
       } && npm run cap.android`;
-      scripts[`sync.${platformApp}`] = `cd apps/${
+      scripts[`sync.${platformApp}`] = `cd apps/${directory}${
         options.name
       } && npm run cap.copy`;
-      scripts[`start.${platformApp}`] = `cd apps/${options.name} && npm start`;
-      scripts[`clean.${platformApp}`] = `cd apps/${
+      scripts[`start.${platformApp}`] = `cd apps/${directory}${
+        options.name
+      } && npm start`;
+      scripts[`clean.${platformApp}`] = `cd apps/${directory}${
         options.name
       } && npx rimraf -- hooks node_modules platforms www plugins ios android package-lock.json && npm i && rimraf -- package-lock.json`;
       return updatePackageScripts(tree, scripts);
     },
     (tree: Tree) => {
+      const directory = options.directory ? `${options.directory}/` : '';
       const projects = {};
       projects[`${options.name}`] = {
-        root: `apps/${options.name}/`,
-        sourceRoot: `apps/${options.name}/src`,
+        root: `apps/${directory}${options.name}/`,
+        sourceRoot: `apps/${directory}${options.name}/src`,
         projectType: 'application',
         prefix: getPrefix(),
         schematics: {
@@ -124,6 +128,7 @@ export default function(options: ApplicationOptions) {
 
 function addAppFiles(options: ApplicationOptions, appPath: string): Rule {
   const appname = getAppName(options, 'ionic');
+  const directory = options.directory ? `${options.directory}/` : '';
   return branchAndMerge(
     mergeWith(
       apply(url(`./_files`), [
@@ -133,7 +138,7 @@ function addAppFiles(options: ApplicationOptions, appPath: string): Rule {
           appname,
           xplatFolderName: XplatHelpers.getXplatFoldername('ionic', 'angular')
         }),
-        move(`apps/${appPath}`)
+        move(`apps/${directory}${appPath}`)
       ])
     )
   );

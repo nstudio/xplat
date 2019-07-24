@@ -15,13 +15,13 @@
     "postinstall": "node ./tools/xplat-postinstall.js"
   },
   "dependencies": {
-    "nativescript-theme-core": "file:../../node_modules/nativescript-theme-core",
-    "tns-core-modules": "file:../../node_modules/tns-core-modules"
+    "nativescript-theme-core": "file:<%= pathOffset %>node_modules/nativescript-theme-core",
+    "tns-core-modules": "file:<%= pathOffset %>node_modules/tns-core-modules"
   },
   "devDependencies": {
     "nativescript-dev-webpack": "~1.0.1",
-    "terser-webpack-plugin": "file:../../node_modules/terser-webpack-plugin",
-    "tns-platform-declarations": "file:../../node_modules/tns-platform-declarations",
-    "typescript": "file:../../node_modules/typescript"
+    "terser-webpack-plugin": "file:<%= pathOffset %>node_modules/terser-webpack-plugin",
+    "tns-platform-declarations": "file:<%= pathOffset %>node_modules/tns-platform-declarations",
+    "typescript": "file:<%= pathOffset %>node_modules/typescript"
   }
 }

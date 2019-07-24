@@ -14,9 +14,9 @@
       "x-prompt": "What name would you like to use for this app?"
     },
     "directory": {
-      "description": "The directory of the new application.",
+      "description": "The directory of the new app.",
       "type": "string",
-      "x-prompt": "In which directory should the application be generated?"
+      "x-prompt": "In which directory should the app be generated?"
     },
     "style": {
       "description": "The file extension to be used for style files.",

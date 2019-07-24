@@ -163,6 +163,7 @@ function addAppFiles(
   appPath: string
 ): Rule {
   const appname = getAppName(options, 'electron');
+  const directory = options.directory ? `${options.directory}/` : '';
   return branchAndMerge(
     mergeWith(
       apply(url(`./_files`), [
@@ -175,7 +176,7 @@ function addAppFiles(
             'angular'
           )
         }),
-        move(`apps/${appPath}`)
+        move(`apps/${directory}${appPath}`)
       ])
     )
   );

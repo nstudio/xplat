@@ -3,13 +3,19 @@ import { Component } from '@angular/core';
 import { Platform } from '@ionic/angular';
 import { Plugins, StatusBarStyle } from '@capacitor/core';
 const { StatusBar } = Plugins;
+import { SplashScreen } from '@ionic-native/splash-screen/ngx';
+import { StatusBar } from '@ionic-native/status-bar/ngx';
 
 @Component({
   selector: '<%= prefix %>-root',
   templateUrl: 'app.component.html'
 })
 export class AppComponent {
-  constructor(private platform: Platform) {
+  constructor(
+    private platform: Platform,
+    private splashScreen: SplashScreen,
+    private statusBar: StatusBar
+  ) {
     this.initializeApp();
   }
 
@@ -19,7 +25,10 @@ export class AppComponent {
         StatusBar.setStyle({
           style: StatusBarStyle.Dark
         });
-      }
+      } else [
+        this.statusBar.styleDefault();
+        this.splashScreen.hide();
+      ]
     });
   }
 }

@@ -14,6 +14,11 @@
       },
       "x-prompt": "What name would you like for this app?"
     },
+    "directory": {
+      "description": "The directory of the new app.",
+      "type": "string",
+      "x-prompt": "In which directory should the app be generated?"
+    },
     "target": {
       "type": "string",
       "description": "The name of the web app to use inside the electron app. ie, web-myapp",

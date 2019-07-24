@@ -109,6 +109,28 @@ describe('app', () => {
     ).toBeGreaterThanOrEqual(0);
   });
 
+  it('should create all files for app in directory', async () => {
+    const options: XplatElectrontHelpers.SchemaApp = { ...defaultOptions };
+    options.directory = 'frontend';
+    const tree = await runSchematic('app', options, appTree);
+    // const files = tree.files;
+    // console.log(files);
+
+    expect(
+      tree.exists('/apps/frontend/electron-foo/src/index.ts')
+    ).toBeTruthy();
+  });
+
+  it('should create all files for app in directory and ignore platform naming when directory is a platform', async () => {
+    const options: XplatElectrontHelpers.SchemaApp = { ...defaultOptions };
+    options.directory = 'electron';
+    const tree = await runSchematic('app', options, appTree);
+    // const files = tree.files;
+    // console.log(files);
+
+    expect(tree.exists('/apps/electron/foo/src/index.ts')).toBeTruthy();
+  });
+
   describe('skipXplat', () => {
     it('should geneate app with no connections to xplat architecture', async () => {
       appTree = Tree.empty();

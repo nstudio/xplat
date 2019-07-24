@@ -74,6 +74,32 @@ describe('app', () => {
     expect(packageData.scripts['start.foo.web']).toBeDefined();
   });
 
+  it('should create all files for web app in directory', async () => {
+    const options: Schema = { ...defaultOptions };
+    options.directory = 'frontend';
+    const tree = await runSchematic('app', options, appTree);
+    const files = tree.files;
+    // console.log(files);
+
+    expect(tree.exists('/apps/frontend/web-foo/tsconfig.json')).toBeTruthy();
+    expect(tree.exists('/apps/frontend/web-foo/src/main.ts')).toBeTruthy();
+    expect(
+      tree.exists('/apps/frontend/web-foo/src/app/app.module.ts')
+    ).toBeTruthy();
+  });
+
+  it('should create all files for web app in directory and ignore platform naming when directory is a platform', async () => {
+    const options: Schema = { ...defaultOptions };
+    options.directory = 'web';
+    const tree = await runSchematic('app', options, appTree);
+    const files = tree.files;
+    // console.log(files);
+
+    expect(tree.exists('/apps/web/foo/tsconfig.json')).toBeTruthy();
+    expect(tree.exists('/apps/web/foo/src/main.ts')).toBeTruthy();
+    expect(tree.exists('/apps/web/foo/src/app/app.module.ts')).toBeTruthy();
+  });
+
   it('should create all files for web app using addHeadlessE2e', async () => {
     const options: Schema = {
       ...defaultOptions,

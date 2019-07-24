@@ -270,7 +270,21 @@ export namespace XplatHelpers {
     platform: PlatformTypes
   ) {
     return (tree: Tree, context: SchematicContext) => {
-      options.name = getPlatformName(options.name, platform);
+      let directory = '';
+      if (options.directory) {
+        directory = toFileName(options.directory);
+        if (
+          directory === platform &&
+          supportedPlatforms.includes(<PlatformTypes>directory)
+        ) {
+          options.name = toFileName(options.name);
+        } else {
+          options.name = getPlatformName(options.name, platform);
+        }
+      } else {
+        options.name = getPlatformName(options.name, platform);
+      }
+      options.directory = directory;
       // console.log('applyAppNamingConvention:', options);
       // adjusted name, nothing else to do
       return noop()(tree, context);
@@ -499,7 +513,7 @@ xplat/**/*.ngsummary.json
           // show all
           isFullstack = true;
           for (const p of supportedPlatforms) {
-            const appFilter = groupByName ? `*-${p}` : `${p}-*`;
+            const appFilter = groupByName ? `*-${p}` : `${p}*`;
             userUpdates[`**/apps/${appFilter}`] = false;
             userUpdates[`**/xplat/${p}`] = false;
             if (frameworkSuffix) {
@@ -511,7 +525,7 @@ xplat/**/*.ngsummary.json
           // switch on/off platforms
           for (const p of supportedPlatforms) {
             const excluded = platforms.includes(p) ? false : true;
-            const appFilter = groupByName ? `*-${p}` : `${p}-*`;
+            const appFilter = groupByName ? `*-${p}` : `${p}*`;
             if (focusOnApps.length) {
               // focusing on apps
               // fill up wildcards to use below (we will clear all app wildcards when focusing on apps)
@@ -559,31 +573,31 @@ xplat/**/*.ngsummary.json
           const workspaceUpdates: any = {
             '**/node_modules': true,
             '**/hooks': true,
-            '**/apps/nativescript-*/app/package.json': false,
+            // '**/apps/nativescript-*/src/package.json': false,
             '**/apps/nativescript-*/hooks': true,
             '**/apps/nativescript-*/platforms': true,
             '**/apps/nativescript-*/report': true,
-            '**/apps/nativescript-*/app/**/*.js': {
+            '**/apps/nativescript-*/src/**/*.js': {
               when: '$(basename).ts'
             },
-            '**/apps/nativescript-*/app/**/*.d.ts': {
+            '**/apps/nativescript-*/src/**/*.d.ts': {
               when: '$(basename).ts'
             },
-            '**/apps/nativescript-*/app/**/*.css': {
+            '**/apps/nativescript-*/src/**/*.css': {
               when: '$(basename).scss'
             },
             // also add groupByName support
-            '**/apps/*-nativescript/app/package.json': false,
+            // '**/apps/*-nativescript/src/package.json': false,
             '**/apps/*-nativescript/hooks': true,
             '**/apps/*-nativescript/platforms': true,
             '**/apps/*-nativescript/report': true,
             '**/apps/*-nativescript/app/**/*.js': {
               when: '$(basename).ts'
             },
-            '**/apps/*-nativescript/app/**/*.d.ts': {
+            '**/apps/*-nativescript/src/**/*.d.ts': {
               when: '$(basename).ts'
             },
-            '**/apps/*-nativescript/app/**/*.css': {
+            '**/apps/*-nativescript/src/**/*.css': {
               when: '$(basename).scss'
             },
             // libs/xplat

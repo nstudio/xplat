@@ -14,8 +14,6 @@ When the need arises for cross-platform development in your [Nx workspace](https
 
 **xplat** is an added value pack for [Nx](https://nrwl.io/nx) distributed via an Angular [schematic](https://blog.angular.io/schematics-an-introduction-dc1dfbc2a2b2) to provide out of the box support for cross-platform development.
 
-With the strength of [TypeScript](https://www.typescriptlang.org/) paired with the power of [Angular](https://angular.io/) we can share a lot of code between various platforms to make our projects easier to maintain and develop.
-
 ## Currently supported platforms
 
 - [Electron](https://electronjs.org/)

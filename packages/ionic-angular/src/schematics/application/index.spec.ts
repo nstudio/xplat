@@ -1,11 +1,11 @@
 import { Tree } from '@angular-devkit/schematics';
-import { Schema as ApplicationOptions } from './schema';
+import { Schema } from './schema';
 import { createEmptyWorkspace } from '@nstudio/xplat/testing';
 import { runSchematic } from '../../utils/testing';
 
 describe('app.ionic schematic', () => {
   let appTree: Tree;
-  const defaultOptions: ApplicationOptions = {
+  const defaultOptions: Schema = {
     name: 'foo',
     npmScope: 'testing',
     prefix: 'tt'
@@ -17,7 +17,7 @@ describe('app.ionic schematic', () => {
   });
 
   it('should create all files of an app', async () => {
-    const options: ApplicationOptions = { ...defaultOptions };
+    const options: Schema = { ...defaultOptions };
     // console.log('appTree:', appTree);
     const tree = await runSchematic('app', options, appTree);
     const files = tree.files;
@@ -69,5 +69,25 @@ describe('app.ionic schematic', () => {
     expect(
       files.indexOf('/apps/ionic-foo/src/app/app-routing.module.ts')
     ).toBeGreaterThanOrEqual(0);
+  });
+
+  it('should create all files for app in directory', async () => {
+    const options: Schema = { ...defaultOptions };
+    options.directory = 'frontend';
+    const tree = await runSchematic('app', options, appTree);
+    // const files = tree.files;
+    // console.log(files);
+
+    expect(tree.exists('/apps/frontend/ionic-foo/src/index.html')).toBeTruthy();
+  });
+
+  it('should create all files for app in directory and ignore platform naming when directory is a platform', async () => {
+    const options: Schema = { ...defaultOptions };
+    options.directory = 'ionic';
+    const tree = await runSchematic('app', options, appTree);
+    // const files = tree.files;
+    // console.log(files);
+
+    expect(tree.exists('/apps/ionic/foo/src/index.html')).toBeTruthy();
   });
 });

@@ -14,6 +14,11 @@
       },
       "x-prompt": "What name would you like for this app?"
     },
+    "directory": {
+      "description": "The directory of the new app.",
+      "type": "string",
+      "x-prompt": "In which directory should the app be generated?"
+    },
     "prefix": {
       "type": "string",
       "description": "The prefix to apply to generated selectors.",

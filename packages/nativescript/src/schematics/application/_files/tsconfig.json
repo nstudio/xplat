@@ -11,12 +11,12 @@
     "baseUrl": ".",
     "paths": {
       "~/*": ["src/*"],
-      "@<%= npmScope %>/*": ["../../libs/*"],
+      "@<%= npmScope %>/*": ["<%= pathOffset %>libs/*"],
       "@<%= npmScope %>/nativescript": [
-        "../../xplat/<%= xplatFolderName %>/index.ts"
+        "<%= pathOffset %>xplat/<%= xplatFolderName %>/index.ts"
       ],
       "@<%= npmScope %>/nativescript/*": [
-        "../../xplat/<%= xplatFolderName %>/*"
+        "<%= pathOffset %>xplat/<%= xplatFolderName %>/*"
       ],
       "*": ["./node_modules/*"]
     }

@@ -28,6 +28,7 @@ export namespace XplatElectrontHelpers {
      * The web app target to use inside the electron app
      */
     target: string;
+    directory?: string;
     /**
      * npm scope - auto detected from nx.json but can specify your own name
      */

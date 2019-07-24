@@ -67,16 +67,18 @@ export default function(options: Schema) {
         ? addAppFiles(options, options.name, 'routing')(tree, context)
         : noop()(tree, context),
     // add app resources
-    (tree: Tree, context: SchematicContext) =>
+    (tree: Tree, context: SchematicContext) => {
       // inside closure to ensure it uses the modifed options.name from applyAppNamingConvention
-      externalSchematic(
+      const directory = options.directory ? `${options.directory}/` : '';
+      return externalSchematic(
         '@nstudio/nativescript',
         'app-resources',
         {
-          path: `apps/${options.name}`
+          path: `apps/${directory}${options.name}`
         },
         { interactive: false }
-      )(tree, context),
+      )(tree, context);
+    },
     // add root package dependencies
     XplatNativeScriptAngularHelpers.updateRootDeps(options),
     XplatHelpers.addPackageInstallTask(options),
@@ -85,6 +87,7 @@ export default function(options: Schema) {
     (tree: Tree) => {
       const scripts = {};
       const platformApp = options.name.replace('-', '.');
+      const directory = options.directory ? `${options.directory}/` : '';
       // standard apps don't have hmr on by default since results can vary
       // more reliable to leave off by default for now
       // however, sandbox setup due to its simplicity uses hmr by default
@@ -92,26 +95,27 @@ export default function(options: Schema) {
       scripts[
         `clean`
       ] = `npx rimraf -- hooks node_modules package-lock.json && npm i`;
-      scripts[`start.${platformApp}.ios`] = `cd apps/${
+      scripts[`start.${platformApp}.ios`] = `cd apps/${directory}${
         options.name
       } && tns run ios --emulator --bundle${hmr}`;
-      scripts[`start.${platformApp}.android`] = `cd apps/${
+      scripts[`start.${platformApp}.android`] = `cd apps/${directory}${
         options.name
       } && tns run android --emulator --bundle${hmr}`;
-      scripts[`start.${platformApp}.preview`] = `cd apps/${
+      scripts[`start.${platformApp}.preview`] = `cd apps/${directory}${
         options.name
       } && tns preview --bundle${hmr}`;
-      scripts[`clean.${platformApp}`] = `cd apps/${
+      scripts[`clean.${platformApp}`] = `cd apps/${directory}${
         options.name
       } && npx rimraf -- hooks node_modules platforms package-lock.json && npm i && npx rimraf -- package-lock.json`;
       return updatePackageScripts(tree, scripts);
     },
     (tree: Tree) => {
       const platformApp = options.name.replace('-', '.');
+      const directory = options.directory ? `${options.directory}/` : '';
       const projects = {};
       projects[`${options.name}`] = {
-        root: `apps/${options.name}/`,
-        sourceRoot: `apps/${options.name}/src`,
+        root: `apps/${directory}${options.name}/`,
+        sourceRoot: `apps/${directory}${options.name}/src`,
         projectType: 'application',
         prefix: getPrefix(),
         schematics: {
@@ -167,6 +171,7 @@ function addAppFiles(
 ): Rule {
   extra = extra ? `${extra}_` : '';
   const appname = getAppName(options, 'nativescript');
+  const directory = options.directory ? `${options.directory}/` : '';
   return branchAndMerge(
     mergeWith(
       apply(url(`./_${extra}files`), [
@@ -174,12 +179,13 @@ function addAppFiles(
           ...(options as any),
           ...getDefaultTemplateOptions(),
           appname,
+          pathOffset: directory ? '../../../' : '../../',
           xplatFolderName: XplatHelpers.getXplatFoldername(
             'nativescript',
             'angular'
           )
         }),
-        move(`apps/${appPath}`)
+        move(`apps/${directory}${appPath}`)
       ])
     )
   );

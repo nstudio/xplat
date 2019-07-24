@@ -42,12 +42,12 @@
         "type": "list",
         "items": [
           {
-            "value": "",
-            "label": "not right now    [I'll decide later]"
-          },
-          {
             "value": "angular",
             "label": "angular          [ensure platforms are added with Angular]"
+          },
+          {
+            "value": "",
+            "label": "not right now    [I'll decide later]"
           }
         ]
       }
