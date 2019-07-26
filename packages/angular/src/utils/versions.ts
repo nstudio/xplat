@@ -9,23 +9,3 @@ export const coreJsVersion = '^2.5.4';
 export const rxjsVersion = '~6.4.0';
 export const zonejsVersion = '~0.9.0';
 export const codelyzerVersion = '~5.1.0';
-
-// deps.push(
-//   ...(<Array<NodeDependency>>[
-//     {
-//       name: '@ngrx/effects',
-//       version: angularVersion,
-//       type: 'dependency'
-//     },
-//     {
-//       name: '@ngrx/router-store',
-//       version: angularVersion,
-//       type: 'dependency'
-//     },
-//     {
-//       name: '@ngrx/store',
-//       version: angularVersion,
-//       type: 'dependency'
-//     }
-//   ])
-// );

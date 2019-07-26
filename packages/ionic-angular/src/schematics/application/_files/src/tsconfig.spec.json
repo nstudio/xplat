@@ -6,13 +6,15 @@
     "types": ["jasmine", "node"],
     "baseUrl": "./",
     "paths": {
-      "@<%= npmScope %>/*": ["../../../libs/*"],
+      "@<%= npmScope %>/*": ["<%= pathOffset %>../libs/*"],
       "@<%= npmScope %>/ionic": [
-        "../../../xplat/<%= xplatFolderName %>/index.ts"
+        "<%= pathOffset %>../xplat/<%= xplatFolderName %>/index.ts"
       ],
-      "@<%= npmScope %>/ionic/*": ["../../../xplat/<%= xplatFolderName %>/*"],
-      "@<%= npmScope %>/web": ["../../../xplat/web/index.ts"],
-      "@<%= npmScope %>/web/*": ["../../../xplat/web/*"]
+      "@<%= npmScope %>/ionic/*": [
+        "<%= pathOffset %>../xplat/<%= xplatFolderName %>/*"
+      ],
+      "@<%= npmScope %>/web": ["<%= pathOffset %>../xplat/web/index.ts"],
+      "@<%= npmScope %>/web/*": ["<%= pathOffset %>../xplat/web/*"]
     }
   },
   "files": ["test.ts", "polyfills.ts"],

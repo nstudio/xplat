@@ -47,8 +47,9 @@ export default function(options: ApplicationOptions) {
     // adjust naming convention
     XplatHelpers.applyAppNamingConvention(options, 'ionic'),
     (tree: Tree, context: SchematicContext) =>
-      externalSchematic('@nstudio/ionic-angular', 'xplat', {
-        ...options
+      externalSchematic('@nstudio/angular', 'xplat', {
+        ...options,
+        platforms: 'ionic,web'
       }),
     // create app files
     (tree: Tree, context: SchematicContext) =>
@@ -135,6 +136,7 @@ function addAppFiles(options: ApplicationOptions, appPath: string): Rule {
         template({
           ...(options as any),
           ...getDefaultTemplateOptions(),
+          pathOffset: directory ? '../../../' : '../../',
           appname,
           xplatFolderName: XplatHelpers.getXplatFoldername('ionic', 'angular')
         }),

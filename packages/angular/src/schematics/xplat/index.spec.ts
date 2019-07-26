@@ -70,9 +70,10 @@ describe('xplat schematic', () => {
     ).toBe(-1);
   });
 
-  it('should create default xplat support for ionic which should always include web as well', async () => {
+  xit('should create default xplat support for ionic which should always include web as well', async () => {
     const options: XplatHelpers.Schema = { ...defaultOptions };
     options.platforms = 'ionic';
+    options.framework = 'angular';
 
     const tree = await runSchematic('xplat', options, appTree);
     const files = tree.files;
@@ -118,7 +119,7 @@ describe('xplat schematic', () => {
 
   it('should create additional xplat support when generated with different platforms', async () => {
     const options: XplatHelpers.Schema = { ...defaultOptions };
-    options.platforms = 'ionic';
+    options.platforms = 'ionic,web';
     options.framework = 'angular';
 
     let tree = await runSchematic('xplat', options, appTree);

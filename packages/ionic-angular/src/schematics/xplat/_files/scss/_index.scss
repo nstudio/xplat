@@ -1,5 +1,5 @@
 // shared across all web based platforms and apps
-@import '~@<%= npmScope %>/web/scss/index';
+@import '~@<%= npmScope %>/web-scss/index';
 
 // http://ionicframework.com/docs/theming/
 @import '~@ionic/angular/css/core.css';

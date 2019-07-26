@@ -50,6 +50,24 @@ export default function(options: XplatHelpers.Schema) {
         )(tree, context);
       }
     },
+    (tree: Tree, context: SchematicContext) => {
+      if (tree.exists('/libs/scss/_index.scss')) {
+        // user may have generated support already
+        return noop()(tree, context);
+      } else {
+        return branchAndMerge(
+          mergeWith(
+            apply(url(`./_lib_files`), [
+              template({
+                ...(options as any),
+                ...getDefaultTemplateOptions()
+              }),
+              move('libs')
+            ])
+          )
+        )(tree, context);
+      }
+    },
     XplatHelpers.updateTsConfigPaths(options, { framework: 'angular' }),
     XplatWebAngularHelpers.updateRootDeps(options)
   ]);

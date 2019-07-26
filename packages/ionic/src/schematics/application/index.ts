@@ -59,6 +59,34 @@ export default function(options: Schema) {
       scripts[`start.${platformApp}`] = `cd apps/${directory}${
         options.name
       } && npm start`;
+      scripts[`build.${platformApp}`] = `cd apps/${directory}${
+        options.name
+      } && npm run build:ionic`;
+      scripts[
+        `prepare.${platformApp}`
+      ] = `npm run clean && npm run clean.${platformApp} && npm run build.${platformApp}`;
+      scripts[
+        `prepare.${platformApp}.ios`
+      ] = `npm run prepare.${platformApp} && cd apps/${directory}${
+        options.name
+      } && npm run cap.add.ios`;
+      scripts[
+        `prepare.${platformApp}.android`
+      ] = `npm run prepare.${platformApp} && cd apps/${directory}${
+        options.name
+      } && npm run cap.add.android`;
+      scripts[`open.${platformApp}.ios`] = `cd apps/${directory}${
+        options.name
+      } && npm run cap.ios`;
+      scripts[`open.${platformApp}.android`] = `cd apps/${directory}${
+        options.name
+      } && npm run cap.android`;
+      scripts[`sync.${platformApp}`] = `cd apps/${directory}${
+        options.name
+      } && npm run cap.copy`;
+      scripts[`clean.${platformApp}`] = `cd apps/${directory}${
+        options.name
+      } && npx rimraf -- hooks node_modules platforms www plugins ios android package-lock.json && npm i && rimraf -- package-lock.json`;
       return updatePackageScripts(tree, scripts);
     },
     (tree: Tree) => {
@@ -92,6 +120,7 @@ function addAppFiles(options: Schema, appPath: string) {
         template({
           ...(options as any),
           ...getDefaultTemplateOptions(),
+          pathOffset: directory ? '../../../' : '../../',
           appname,
           xplatFolderName: XplatHelpers.getXplatFoldername('ionic')
         }),

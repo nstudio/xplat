@@ -70,7 +70,8 @@ export const packageInnerDependencies = {
   '@nstudio/ionic-angular': [
     '@nrwl/angular',
     '@nstudio/ionic',
-    '@nstudio/angular'
+    '@nstudio/angular',
+    '@nstudio/web-angular'
   ],
   '@nstudio/nativescript-angular': [
     '@nrwl/angular',

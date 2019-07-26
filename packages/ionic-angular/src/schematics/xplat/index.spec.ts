@@ -22,7 +22,7 @@ describe('xplat ionic angular', () => {
     appTree = createEmptyWorkspace(appTree, 'angular');
   });
 
-  it('should create default xplat support for ionic which should always include web as well', async () => {
+  xit('should create default xplat support for ionic which should always include web as well', async () => {
     const options: XplatHelpers.Schema = { ...defaultOptions };
 
     const tree = await runSchematic('xplat', options, appTree);
@@ -85,7 +85,7 @@ describe('xplat ionic angular', () => {
     expect(fileContent.compilerOptions.paths['@testing/ionic/*']).toBeTruthy();
 
     expect(() => runSchematicSync('xplat', defaultOptions, tree)).toThrow(
-      `You currently have "angular" set as your default frontend framework and have already generated xplat support for "web". A command is coming soon to auto reconfigure your workspace to later add baseline platform support for those which have previously been generated prepaired with a frontend framework.`
+      `You currently have "angular" set as your default frontend framework and have already generated xplat support for "ionic". A command is coming soon to auto reconfigure your workspace to later add baseline platform support for those which have previously been generated prepaired with a frontend framework.`
     );
   });
 });

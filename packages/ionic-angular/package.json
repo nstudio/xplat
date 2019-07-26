@@ -31,7 +31,8 @@
   },
   "dependencies": {
     "@nstudio/angular": "*",
-    "@nstudio/ionic": "*"
+    "@nstudio/ionic": "*",
+    "@nstudio/web-angular": "*"
   },
   "peerDependencies": {
     "@nstudio/xplat": "*"
