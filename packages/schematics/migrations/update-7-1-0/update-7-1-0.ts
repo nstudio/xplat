@@ -4,14 +4,7 @@ import {
   SchematicContext,
   Tree
 } from '@angular-devkit/schematics';
-import { join } from 'path';
-import * as fs from 'fs';
-import { updateJsonInTree } from '@nrwl/workspace';
-import {
-  getJsonFromFile,
-  updateJsonFile,
-  createOrUpdate
-} from '@nstudio/xplat';
+import { updateJsonInTree, createOrUpdate } from '@nrwl/workspace';
 
 export default function(): Rule {
   return chain([updateRootPackage]);

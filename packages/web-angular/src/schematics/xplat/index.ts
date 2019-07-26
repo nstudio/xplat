@@ -3,9 +3,19 @@ import {
   externalSchematic,
   noop,
   Tree,
-  SchematicContext
+  SchematicContext,
+  branchAndMerge,
+  mergeWith,
+  apply,
+  url,
+  template,
+  move
 } from '@angular-devkit/schematics';
-import { XplatHelpers, prerun } from '@nstudio/xplat';
+import {
+  XplatHelpers,
+  prerun,
+  getDefaultTemplateOptions
+} from '@nstudio/xplat';
 import { XplatWebAngularHelpers } from '../../utils/xplat';
 
 export default function(options: XplatHelpers.Schema) {
@@ -20,6 +30,25 @@ export default function(options: XplatHelpers.Schema) {
             tree,
             context
           );
+    },
+    (tree: Tree, context: SchematicContext) => {
+      const xplatFolderName = XplatHelpers.getXplatFoldername('web', 'angular');
+      if (tree.exists(`/xplat/${xplatFolderName}/scss/_index.scss`)) {
+        // may have already generated vanilla web support
+        return noop()(tree, context);
+      } else {
+        return branchAndMerge(
+          mergeWith(
+            apply(url(`./_scss_files`), [
+              template({
+                ...(options as any),
+                ...getDefaultTemplateOptions()
+              }),
+              move(`xplat/${xplatFolderName}/scss`)
+            ])
+          )
+        )(tree, context);
+      }
     },
     XplatHelpers.updateTsConfigPaths(options, { framework: 'angular' }),
     XplatWebAngularHelpers.updateRootDeps(options)

@@ -11,12 +11,12 @@ import {
   updateJsonInTree,
   readJsonInTree,
   addDepsToPackageJson,
-  formatFiles
+  formatFiles,
+  createOrUpdate
 } from '@nrwl/workspace';
 import {
   getJsonFromFile,
   updateJsonFile,
-  createOrUpdate,
   addInstallTask
 } from '@nstudio/xplat';
 import { stripIndents } from '@angular-devkit/core/src/utils/literals';

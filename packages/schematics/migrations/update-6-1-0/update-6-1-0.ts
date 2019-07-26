@@ -5,12 +5,12 @@ import {
   Tree,
   noop
 } from '@angular-devkit/schematics';
-import { updateJsonInTree, readJsonInTree } from '@nrwl/workspace';
 import {
-  getJsonFromFile,
-  updateJsonFile,
+  updateJsonInTree,
+  readJsonInTree,
   createOrUpdate
-} from '@nstudio/xplat';
+} from '@nrwl/workspace';
+import { getJsonFromFile, updateJsonFile } from '@nstudio/xplat';
 
 function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
   const angularConfigPath = `angular.json`;

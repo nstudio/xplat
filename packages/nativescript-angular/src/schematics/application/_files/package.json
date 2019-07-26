@@ -28,6 +28,7 @@
     "@angular/router": "file:<%= pathOffset %>node_modules/@angular/router",
     "@ngx-translate/core": "file:<%= pathOffset %>node_modules/@ngx-translate/core",
     "@<%= npmScope %>/scss": "file:<%= pathOffset %>libs/scss",
+    "@<%= npmScope %>/nativescript-scss": "file:<%= pathOffset %>xplat/<%= xplatFolderName %>/scss",
     "nativescript-angular": "file:<%= pathOffset %>node_modules/nativescript-angular",
     "nativescript-ngx-fonticon": "file:<%= pathOffset %>node_modules/nativescript-ngx-fonticon",
     "nativescript-theme-core": "file:<%= pathOffset %>node_modules/nativescript-theme-core",

@@ -30,7 +30,6 @@
     "@angular/platform-browser-dynamic": "file:../../node_modules/@angular/platform-browser-dynamic",
     "@angular/router": "file:../../node_modules/@angular/router",
     "@capacitor/android": "~1.1.1",
-    "@capacitor/cli": "~1.1.1",
     "@capacitor/core": "~1.1.1",
     "@capacitor/ios": "~1.1.1",
     "@<%= npmScope %>/scss": "file:../../libs/scss",
@@ -44,10 +43,11 @@
     "zone.js": "file:../../node_modules/zone.js"
   },
   "devDependencies": {
-    "@angular-devkit/architect": "~0.13.8",
-    "@angular-devkit/build-angular": "~0.13.8",
-    "@angular-devkit/core": "~7.3.8",
-    "@angular-devkit/schematics": "~7.3.8",
+    "@capacitor/cli": "~1.1.1",
+    "@angular-devkit/architect": "file:../../node_modules/@angular-devkit/architect",
+    "@angular-devkit/build-angular": "file:../../node_modules/@angular-devkit/build-angular",
+    "@angular-devkit/core": "file:../../node_modules/@angular-devkit/core",
+    "@angular-devkit/schematics": "file:../../node_modules/@angular-devkit/schematics",
     "@angular/cli": "file:../../node_modules/@angular/cli",
     "@angular/compiler": "file:../../node_modules/@angular/compiler",
     "@angular/compiler-cli": "file:../../node_modules/@angular/compiler-cli",

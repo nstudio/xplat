@@ -1,5 +1,6 @@
 import { Tree } from '@angular-devkit/schematics';
-import { createOrUpdate, FeatureHelpers } from '@nstudio/xplat';
+import { createOrUpdate } from '@nrwl/workspace';
+import { XplatFeatureHelpers } from '@nstudio/xplat';
 import {
   isInModuleMetadata,
   getFileContent,
@@ -9,7 +10,7 @@ import { runSchematic, runSchematicSync } from '../../utils/testing';
 
 describe('feature schematic', () => {
   let appTree: Tree;
-  const defaultOptions: FeatureHelpers.Schema = {
+  const defaultOptions: XplatFeatureHelpers.Schema = {
     name: 'foo',
     projects: 'nativescript-viewer,web-viewer',
     createBase: true
@@ -21,7 +22,7 @@ describe('feature schematic', () => {
   });
 
   it('should create feature module with a single starting component', async () => {
-    const options: FeatureHelpers.Schema = { ...defaultOptions };
+    const options: XplatFeatureHelpers.Schema = { ...defaultOptions };
     // console.log('appTree:', appTree);
     let tree = await runSchematic('feature', options, appTree);
     const files = tree.files;
@@ -140,7 +141,7 @@ describe('feature schematic', () => {
   it('should create feature module with a single starting component with framework suffix for xplat when no default is set', async () => {
     appTree = Tree.empty();
     appTree = createXplatWithNativeScriptWeb(appTree);
-    const options: FeatureHelpers.Schema = { ...defaultOptions };
+    const options: XplatFeatureHelpers.Schema = { ...defaultOptions };
     // console.log('appTree:', appTree);
     let tree = await runSchematic('feature', options, appTree);
     const files = tree.files;
@@ -264,7 +265,7 @@ describe('feature schematic', () => {
 
   it('should create feature module WITHOUT a single starting component when using onlyModule', async () => {
     // console.log('appTree:', appTree);
-    const options: FeatureHelpers.Schema = { ...defaultOptions };
+    const options: XplatFeatureHelpers.Schema = { ...defaultOptions };
     options.onlyModule = true;
     let tree = await runSchematic('feature', options, appTree);
     const files = tree.files;
@@ -350,7 +351,7 @@ describe('feature schematic', () => {
 
   it('should create feature module WITH a single starting component BUT IGNORE creating matching base component', async () => {
     // console.log('appTree:', appTree);
-    const options: FeatureHelpers.Schema = {
+    const options: XplatFeatureHelpers.Schema = {
       name: 'foo',
       platforms: 'web'
     };
@@ -428,7 +429,7 @@ describe('feature schematic', () => {
   });
 
   it('should create feature module for specified projects only', async () => {
-    const options: FeatureHelpers.Schema = { ...defaultOptions };
+    const options: XplatFeatureHelpers.Schema = { ...defaultOptions };
     // console.log('appTree:', appTree);
     options.onlyProject = true;
     let tree = await runSchematic('feature', options, appTree);
@@ -534,7 +535,7 @@ describe('feature schematic', () => {
   });
 
   it('Temporary: should error if routing is used without onlyProject', async () => {
-    const options: FeatureHelpers.Schema = { ...defaultOptions };
+    const options: XplatFeatureHelpers.Schema = { ...defaultOptions };
     // console.log('appTree:', appTree);
     options.routing = true;
     expect(() => runSchematicSync('feature', options, appTree)).toThrowError(
@@ -545,7 +546,7 @@ describe('feature schematic', () => {
   it('should create feature module (with dashes in name) for specified projects WITH Routing', async () => {
     appTree = Tree.empty();
     appTree = createXplatWithNativeScriptWeb(appTree, true);
-    const options: FeatureHelpers.Schema = { ...defaultOptions };
+    const options: XplatFeatureHelpers.Schema = { ...defaultOptions };
     // console.log('appTree:', appTree);
     options.onlyProject = true;
     options.routing = true;
@@ -664,7 +665,7 @@ describe('feature schematic', () => {
   });
 
   it('should create feature module for specified project WITH Routing and adjustSandbox', async () => {
-    const options: FeatureHelpers.Schema = {
+    const options: XplatFeatureHelpers.Schema = {
       ...defaultOptions,
       projects: 'nativescript-viewer'
     };

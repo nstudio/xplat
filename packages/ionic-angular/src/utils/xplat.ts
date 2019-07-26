@@ -1,6 +1,13 @@
 import { Tree, SchematicContext } from '@angular-devkit/schematics';
 import { XplatHelpers, getNpmScope, IXplatSettings } from '@nstudio/xplat';
-import { ionicAngularVersion, ionicAngularToolkitVersion } from './versions';
+import {
+  ionicAngularVersion,
+  ionicAngularToolkitVersion,
+  ngDevKitArchitect,
+  ngDevKitBuild,
+  ngDevKitCore,
+  ngDevKitSchematics
+} from './versions';
 
 export namespace XplatIonicAngularHelpers {
   export function updateRootDeps(options: XplatHelpers.Schema) {
@@ -16,6 +23,10 @@ export namespace XplatIonicAngularHelpers {
           '@ionic/angular': ionicAngularVersion
         },
         devDependencies: {
+          '@angular-devkit/architect': ngDevKitArchitect,
+          '@angular-devkit/build-angular': ngDevKitBuild,
+          '@angular-devkit/core': ngDevKitCore,
+          '@angular-devkit/schematics': ngDevKitSchematics,
           '@ionic/angular-toolkit': ionicAngularToolkitVersion,
           '@types/jasmine': '~2.8.8',
           '@types/jasminewd2': '~2.0.3',

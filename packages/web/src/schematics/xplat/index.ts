@@ -22,8 +22,9 @@ export default function(options: XplatHelpers.Schema) {
   return chain([
     prerun(options),
     (tree: Tree, context: SchematicContext) => {
-      if (tree.exists('libs/scss')) {
-        return noop();
+      if (tree.exists('/libs/scss/_index.scss')) {
+        // may have already generated support
+        return noop()(tree, context);
       } else {
         return branchAndMerge(
           mergeWith(
@@ -35,10 +36,17 @@ export default function(options: XplatHelpers.Schema) {
               move(`libs`)
             ])
           )
-        );
+        )(tree, context);
       }
     },
-    XplatHelpers.addPlatformFiles(options, 'web'),
+    (tree: Tree, context: SchematicContext) => {
+      if (tree.exists('/xplat/web/scss/_index.scss')) {
+        // may have already generated support
+        return noop()(tree, context);
+      } else {
+        return XplatHelpers.addPlatformFiles(options, 'web')(tree, context);
+      }
+    },
     XplatHelpers.updateTsConfigPaths(options),
     XplatWebHelpers.updateRootDeps(options)
   ]);

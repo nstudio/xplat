@@ -37,7 +37,8 @@
     "routing": {
       "type": "boolean",
       "description": "Use root routing module.",
-      "default": false
+      "default": false,
+      "x-prompt": "Would you like to configure routing for this app?"
     },
     "setupSandbox": {
       "type": "boolean",

@@ -26,15 +26,16 @@ import {
   generatorError,
   generateOptionError,
   optionsMissingError,
-  unsupportedPlatformError
+  unsupportedPlatformError,
+  XplatComponentHelpers
 } from '@nstudio/xplat';
 import { formatFiles } from '@nrwl/workspace';
 import { addToFeature, adjustBarrelIndex } from '@nstudio/angular';
 import { ComponentHelpers } from '../../utils/xplat';
 
 let componentSettings;
-export default function(options: ComponentHelpers.Schema) {
-  componentSettings = ComponentHelpers.prepare(options);
+export default function(options: XplatComponentHelpers.Schema) {
+  componentSettings = XplatComponentHelpers.prepare(options);
 
   const externalChains = [];
 

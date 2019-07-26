@@ -15,19 +15,13 @@ import {
   externalSchematic
 } from '@angular-devkit/schematics';
 import {
-  stringUtils,
   prerun,
-  getNpmScope,
   getPrefix,
   updatePackageScripts,
   updateAngularProjects,
   updateNxProjects,
-  getGroupByName,
   getAppName,
   missingArgument,
-  getJsonFromFile,
-  setDependency,
-  updateJsonFile,
   getDefaultTemplateOptions,
   XplatHelpers
 } from '@nstudio/xplat';
@@ -104,14 +98,9 @@ export default function(options: Schema) {
         sourceRoot: `apps/${directory}${options.name}/src`,
         projectType: 'application',
         prefix: getPrefix(),
-        schematics: {
-          '@schematics/angular:component': {
-            styleext: 'scss'
-          }
-        },
         architect: {
           serve: {
-            builder: '@nrwl/builders:run-commands',
+            builder: '@nrwl/workspace:run-commands',
             options: {
               commands: [
                 {

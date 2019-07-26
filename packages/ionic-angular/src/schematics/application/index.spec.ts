@@ -69,6 +69,10 @@ describe('app.ionic schematic', () => {
     expect(
       files.indexOf('/apps/ionic-foo/src/app/app-routing.module.ts')
     ).toBeGreaterThanOrEqual(0);
+
+    expect(tree.exists('xplat/web/scss/_index.scss')).toBeTruthy();
+    expect(tree.exists('xplat/ionic/scss/_index.scss')).toBeTruthy();
+    expect(tree.exists('xplat/ionic/.xplatframework')).toBeTruthy();
   });
 
   it('should create all files for app in directory', async () => {

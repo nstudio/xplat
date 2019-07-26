@@ -25,10 +25,10 @@ export class AppComponent {
         StatusBar.setStyle({
           style: StatusBarStyle.Dark
         });
-      } else [
+      } else {
         this.statusBar.styleDefault();
         this.splashScreen.hide();
-      ]
+      }
     });
   }
 }

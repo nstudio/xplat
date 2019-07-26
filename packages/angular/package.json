@@ -28,8 +28,10 @@
     "requirements": {},
     "migrations": "./migrations.json"
   },
+  "dependencies": {
+    "@nrwl/angular": "^8.0.0"
+  },
   "peerDependencies": {
-    "@nrwl/angular": "^8.0.0",
     "@nstudio/xplat": "*"
   }
 }

@@ -336,6 +336,7 @@ export function createXplatWebAngular(tree: Tree, framework?: FrameworkTypes) {
 
 export function createWebAngularApp(tree: Tree, withRouting?: boolean) {
   tree.create('/apps/web-viewer/src/index.html', '');
+  tree.create('/apps/web-viewer/src/app/features/index.ts', '');
   tree.create('/apps/web-viewer/src/app/features/core/core.module.ts', '');
   tree.create('/apps/web-viewer/src/app/app.module.ts', '');
   if (withRouting) {

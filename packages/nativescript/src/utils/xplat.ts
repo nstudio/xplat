@@ -3,7 +3,8 @@ import { updateFile, XplatHelpers } from '@nstudio/xplat';
 import {
   terserWebpackVersion,
   tnsCoreVersion,
-  nsThemeCoreVersion
+  nsThemeCoreVersion,
+  nodeSassVersion
 } from './versions';
 
 export namespace XplatNativeScriptHelpers {
@@ -15,6 +16,7 @@ export namespace XplatNativeScriptHelpers {
           'tns-core-modules': tnsCoreVersion
         },
         devDependencies: {
+          'node-sass': nodeSassVersion,
           'terser-webpack-plugin': terserWebpackVersion,
           'tns-platform-declarations': tnsCoreVersion
         }

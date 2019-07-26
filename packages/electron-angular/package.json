@@ -29,7 +29,11 @@
     "requirements": {},
     "migrations": "./migrations.json"
   },
-  "peerDependencies": {
+  "dependencies": {
+    "@nstudio/angular": "*",
     "@nstudio/electron": "*"
+  },
+  "peerDependencies": {
+    "@nstudio/xplat": "*"
   }
 }

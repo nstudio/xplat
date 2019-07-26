@@ -193,22 +193,3 @@ export namespace XplatElectrontHelpers {
     };
   }
 }
-
-/** May need these
- * if (targetPlatforms.electron) {
-      // electron complains if this is missing
-      dep = {
-        name: '@angular/http',
-        version: angularVersion,
-        type: 'dependency'
-      };
-      deps.push(dep);
-
-      dep = {
-        name: 'npx',
-        version: '10.2.0',
-        type: 'devDependency'
-      };
-      deps.push(dep);
-    }
- */

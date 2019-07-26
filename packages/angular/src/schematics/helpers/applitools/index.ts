@@ -1,6 +1,6 @@
 import { Tree, SchematicContext, noop } from '@angular-devkit/schematics';
+import { createOrUpdate } from '@nrwl/workspace';
 import {
-  createOrUpdate,
   updatePackageScripts,
   getJsonFromFile,
   updateJsonFile,

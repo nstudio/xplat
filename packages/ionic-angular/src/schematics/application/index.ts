@@ -47,15 +47,15 @@ export default function(options: ApplicationOptions) {
     // adjust naming convention
     XplatHelpers.applyAppNamingConvention(options, 'ionic'),
     (tree: Tree, context: SchematicContext) =>
-      externalSchematic('@nstudio/ionic', 'xplat', {
-        ...options,
-        skipDependentPlatformFiles: true
+      externalSchematic('@nstudio/ionic-angular', 'xplat', {
+        ...options
       }),
     // create app files
     (tree: Tree, context: SchematicContext) =>
       addAppFiles(options, options.name)(tree, context),
     // add root package dependencies
     XplatIonicAngularHelpers.updateRootDeps(options),
+    XplatHelpers.addPackageInstallTask(options),
     // add start/clean scripts
     (tree: Tree) => {
       const scripts = {};

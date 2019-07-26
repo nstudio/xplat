@@ -129,10 +129,7 @@ export class AppService {
 
 const getOrientation = function() {
   if (isIOS) {
-    const deviceOrientation = tnsUtils.ios.getter(
-      UIDevice,
-      UIDevice.currentDevice
-    ).orientation;
+    const deviceOrientation = UIDevice.currentDevice.orientation;
     if (
       deviceOrientation === UIDeviceOrientation.LandscapeLeft ||
       deviceOrientation === UIDeviceOrientation.LandscapeRight
@@ -162,14 +159,13 @@ const getOrientation = function() {
   }
 };
 
-const getContext = function() {
+const getContext = function(): android.app.Application {
   const ctx = java.lang.Class.forName('android.app.AppGlobals')
     .getMethod('getInitialApplication', null)
     .invoke(null, null);
   if (ctx) {
     return ctx;
   }
-
   return java.lang.Class.forName('android.app.ActivityThread')
     .getMethod('currentApplication', null)
     .invoke(null, null);

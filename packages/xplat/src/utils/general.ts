@@ -127,14 +127,6 @@ export function updateFile(tree: Tree, path: string, content: string) {
   }
 }
 
-export function createOrUpdate(host: Tree, path: string, content: string) {
-  if (host.exists(path)) {
-    host.overwrite(path, content);
-  } else {
-    host.create(path, content);
-  }
-}
-
 export function getNxWorkspaceConfig(tree: Tree): any {
   const nxConfig = getJsonFromFile(tree, 'nx.json');
   const hasWorkspaceDirs = tree.exists('apps') && tree.exists('libs');
@@ -158,11 +150,6 @@ export const copy = (tree: Tree, from: string, to: string) => {
 
   tree.create(to, file.content);
 };
-
-export const setDependency = (
-  dependenciesMap: { [key: string]: string },
-  { name, version }: NodeDependency
-) => Object.assign(dependenciesMap, { [name]: version });
 
 export interface IXplatSettings {
   prefix?: string;
@@ -200,8 +187,13 @@ export function prerun(options?: IXplatSettings | any, init?: boolean) {
         frontendFramework = xplatSettings.framework;
 
         if (options) {
-          // ensure options are updated
-          options.prefix = prefix;
+          if (options.prefix) {
+            // always use explicit prefix user passed in
+            prefix = options.prefix;
+          } else {
+            // ensure options are updated
+            options.prefix = prefix;
+          }
           if (frameworkChoice) {
             // always override default framework when user has explicitly passed framework option in
             frontendFramework = <FrameworkTypes>frameworkChoice;
@@ -299,44 +291,29 @@ export function updatePackageForNgrx(
         ? packageJson.dependencies['@ngrx/store']
         : null;
 
-      const deps: NodeDependency[] = [];
+      const dependencies = {};
+      const devDependencies = {};
 
       if (packagePath.indexOf('apps') === 0) {
         // update project deps
-        let dep: NodeDependency = {
-          name: '@ngrx/entity',
-          version: 'file:../../node_modules/@ngrx/entity',
-          type: 'dependency'
-        };
-        deps.push(dep);
-        dep = {
-          name: 'ngrx-store-freeze',
-          version: 'file:../../node_modules/ngrx-store-freeze',
-          type: 'dependency'
-        };
-        deps.push(dep);
+        dependencies['@ngrx/entity'] = 'file:../../node_modules/@ngrx/entity';
+        dependencies['ngrx-store-freeze'] =
+          'file:../../node_modules/ngrx-store-freeze';
       } else {
         // update root deps
-        let dep: NodeDependency = {
-          name: '@ngrx/entity',
-          version: rootNgrxVersion,
-          type: 'dependency'
-        };
-        deps.push(dep);
+        dependencies['@ngrx/entity'] = rootNgrxVersion;
       }
 
-      const dependenciesMap = Object.assign({}, packageJson.dependencies);
-      const devDependenciesMap = Object.assign({}, packageJson.devDependencies);
-      for (const dependency of deps) {
-        if (dependency.type === 'dependency') {
-          packageJson.dependencies = setDependency(dependenciesMap, dependency);
-        } else {
-          packageJson.devDependencies = setDependency(
-            devDependenciesMap,
-            dependency
-          );
-        }
-      }
+      packageJson.dependencies = {
+        ...(packageJson.dependencies || {}),
+        ...dependencies
+      };
+
+      packageJson.devDependencies = {
+        ...(packageJson.devDependencies || {}),
+        ...devDependencies
+      };
+
       return updateJsonFile(tree, packagePath, packageJson);
     }
   }

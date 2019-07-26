@@ -4,11 +4,11 @@ import {
   createXplatWithNativeScriptWeb
 } from '@nstudio/xplat/testing';
 import { runSchematic, runSchematicSync } from '../../utils/testing';
-import { ComponentHelpers } from '../../utils/xplat';
+import { XplatComponentHelpers } from '@nstudio/xplat';
 
 describe('component schematic', () => {
   let appTree: Tree;
-  const defaultOptions: ComponentHelpers.Schema = {
+  const defaultOptions: XplatComponentHelpers.Schema = {
     name: 'signup',
     feature: 'foo',
     platforms: 'nativescript,web',
@@ -30,7 +30,7 @@ describe('component schematic', () => {
       },
       appTree
     );
-    const options: ComponentHelpers.Schema = { ...defaultOptions };
+    const options: XplatComponentHelpers.Schema = { ...defaultOptions };
     tree = await runSchematic('component', options, tree);
     const files = tree.files;
     // console.log(files.slice(91,files.length));
@@ -100,7 +100,7 @@ describe('component schematic', () => {
       },
       appTree
     );
-    const options: ComponentHelpers.Schema = { ...defaultOptions };
+    const options: XplatComponentHelpers.Schema = { ...defaultOptions };
     tree = await runSchematic('component', options, tree);
     const files = tree.files;
     // console.log(files);//.slice(91,files.length));
@@ -141,7 +141,7 @@ describe('component schematic', () => {
       },
       appTree
     );
-    const options: ComponentHelpers.Schema = { ...defaultOptions };
+    const options: XplatComponentHelpers.Schema = { ...defaultOptions };
     options.subFolder = 'registration';
     tree = await runSchematic('component', options, tree);
     const files = tree.files;
@@ -236,7 +236,7 @@ describe('component schematic', () => {
       },
       appTree
     );
-    const options: ComponentHelpers.Schema = {
+    const options: XplatComponentHelpers.Schema = {
       name: 'signup',
       feature: 'foo',
       projects: 'nativescript-viewer,web-viewer'
@@ -320,7 +320,7 @@ describe('component schematic', () => {
 
   it('should THROW if feature module does not exist in projects', async () => {
     // console.log('appTree:', appTree);
-    const options: ComponentHelpers.Schema = {
+    const options: XplatComponentHelpers.Schema = {
       name: 'signup',
       feature: 'foo',
       projects: 'nativescript-viewer,web-viewer'

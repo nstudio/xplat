@@ -25,6 +25,10 @@ export interface Schema {
    */
   skipInstall?: boolean;
   /**
+   * Skip generating xplat supporting architecture
+   */
+  skipXplat?: boolean;
+  /**
    * Add {N} CLI to devDependencies
    */
   addCliDependency?: boolean;

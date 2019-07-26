@@ -23,7 +23,7 @@
       "type": "string",
       "description": "Platforms.",
       "x-prompt": {
-        "message": "Which platform would you like to generate an application for?",
+        "message": "Which platform would you like to generate an app for?",
         "type": "list",
         "items": [
           {
@@ -79,7 +79,17 @@
     },
     "routing": {
       "type": "boolean",
-      "description": "Use root routing module.",
+      "description": "Configure routing.",
+      "default": false
+    },
+    "setupSandbox": {
+      "type": "boolean",
+      "description": "Setup app as a sandbox for the workspace.",
+      "default": false
+    },
+    "skipXplat": {
+      "description": "Skip generating xplat supporting architecture",
+      "type": "boolean",
       "default": false
     },
     "skipInstall": {

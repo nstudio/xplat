@@ -11,7 +11,13 @@
     "baseUrl": ".",
     "paths": {
       "~/*": ["src/*"],
-      "*": ["./node_modules/*"]
+      "@<%= npmScope %>/*": ["<%= pathOffset %>libs/*"],
+      "@<%= npmScope %>/nativescript": [
+        "<%= pathOffset %>xplat/<%= xplatFolderName %>/index.ts"
+      ],
+      "@<%= npmScope %>/nativescript/*": [
+        "<%= pathOffset %>xplat/<%= xplatFolderName %>/*"
+      ]
     }
   },
   "exclude": ["node_modules", "platforms"]

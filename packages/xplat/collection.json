@@ -15,6 +15,17 @@
       "description": "Add xplat applications.",
       "aliases": ["app"]
     },
+    "feature": {
+      "factory": "./src/schematics/feature",
+      "schema": "./src/schematics/feature/schema.json",
+      "description": "Create a feature for xplat."
+    },
+    "component": {
+      "factory": "./src/schematics/component",
+      "schema": "./src/schematics/component/schema.json",
+      "description": "Create a component for xplat.",
+      "aliases": ["c"]
+    },
     "mode": {
       "factory": "./src/schematics/mode",
       "schema": "./src/schematics/mode/schema.json",

@@ -13,7 +13,7 @@ import {
   SchematicsException,
   externalSchematic
 } from '@angular-devkit/schematics';
-import { formatFiles } from '@nrwl/workspace';
+import { formatFiles, createOrUpdate } from '@nrwl/workspace';
 import {
   addGlobal,
   insert,
@@ -28,10 +28,9 @@ import {
   updatePackageForNgrx,
   sanitizeCommaDelimitedArg,
   getDefaultTemplateOptions,
-  FeatureHelpers,
+  XplatFeatureHelpers,
   PlatformTypes,
   supportedSandboxPlatforms,
-  createOrUpdate,
   XplatHelpers
 } from '@nstudio/xplat';
 import {
@@ -815,7 +814,7 @@ export function adjustFeatureModuleForState(
 }
 
 export function adjustRouting(
-  options: FeatureHelpers.Schema,
+  options: XplatFeatureHelpers.Schema,
   routingModulePaths: Array<string>,
   platform: string
 ): Rule {
@@ -865,7 +864,7 @@ export function adjustRouting(
 }
 
 export function adjustSandbox(
-  options: FeatureHelpers.Schema,
+  options: XplatFeatureHelpers.Schema,
   platform: PlatformTypes,
   appDirectory: string
 ): Rule {

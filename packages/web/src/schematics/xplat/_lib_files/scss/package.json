@@ -1,4 +1,4 @@
 {
-  "name": "@<%= npmScope %>/web-scss",
+  "name": "@<%= npmScope %>/scss",
   "version": "1.0.0"
 }

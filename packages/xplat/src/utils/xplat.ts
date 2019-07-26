@@ -48,11 +48,17 @@ import {
   optionsMissingError,
   noPlatformError,
   unsupportedPlatformError,
-  noteAboutXplatSetupWithFramework
+  noteAboutXplatSetupWithFramework,
+  unsupportedFrameworkError,
+  generateOptionError
 } from './errors';
 import { join } from 'path';
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
-import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
+import {
+  NodePackageInstallTask,
+  RunSchematicTask
+} from '@angular-devkit/schematics/tasks';
+import { xplatVersion, nrwlVersion } from './versions';
 
 export const packageInnerDependencies = {
   '@nstudio/angular': ['@nrwl/angular'],
@@ -127,6 +133,12 @@ export namespace XplatHelpers {
      * The prefix to apply to generated selectors.
      */
     prefix?: string;
+  }
+
+  export interface IXplatGeneratorOptions {
+    featureName?: string;
+    projectNames?: Array<string>;
+    platforms: Array<PlatformTypes>;
   }
 
   /**
@@ -263,6 +275,149 @@ export namespace XplatHelpers {
       frameworkSuffix = `-${framework}`;
     }
     return `${platform}${frameworkSuffix}`;
+  }
+
+  export function getExternalChainsForGenerator(
+    options: Schema,
+    generator: string,
+    packagesToRunXplat: Array<string>
+  ) {
+    let generatorSettings: IXplatGeneratorOptions;
+    switch (generator) {
+      case 'component':
+        generatorSettings = XplatComponentHelpers.prepare(<any>options);
+        break;
+      case 'feature':
+        generatorSettings = XplatFeatureHelpers.prepare(<any>options);
+        break;
+      default:
+        generatorSettings = {
+          platforms: <Array<PlatformTypes>>(
+            (<unknown>sanitizeCommaDelimitedArg(options.platforms))
+          )
+        };
+        break;
+    }
+    const platforms = generatorSettings.platforms;
+    const externalChains = [];
+    const devDependencies = {};
+
+    // frontend framework
+    const frameworks = getFrameworksFromOptions(options.framework);
+    const frameworkChoice = getFrameworkChoice(options.framework, frameworks);
+    // console.log('frameworks:', frameworks);
+    // console.log('frameworkChoice:', frameworkChoice);
+
+    // console.log('platforms:', platforms);
+    if (frameworks.length) {
+      for (const framework of frameworks) {
+        if (supportedFrameworks.includes(framework)) {
+          if (platforms.length) {
+            for (const platform of platforms) {
+              if (platform === 'web' && framework === 'angular') {
+                // TODO: move angular app into web-angular package
+                // right now it lives in angular package
+                const packageName = `@nstudio/${framework}`;
+                devDependencies[packageName] = xplatVersion;
+                // externalChains.push(externalSchematic(`@nstudio/${framework}`, 'app', options));
+                packagesToRunXplat.push(packageName);
+              } else {
+                const packageName = `@nstudio/${platform}-${framework}`;
+                devDependencies[packageName] = xplatVersion;
+                // externalChains.push(externalSchematic(`@nstudio/${platform}-${framework}`, 'app', options));
+                packagesToRunXplat.push(packageName);
+              }
+            }
+          }
+        } else {
+          throw new SchematicsException(unsupportedFrameworkError(framework));
+        }
+      }
+    } else if (platforms.length) {
+      for (const platform of platforms) {
+        if (supportedPlatforms.includes(platform)) {
+          const packageName = `@nstudio/${platform}`;
+          devDependencies[packageName] = xplatVersion;
+          // externalChains.push(externalSchematic(packageName, 'app', options));
+          packagesToRunXplat.push(packageName);
+        } else {
+          throw new SchematicsException(unsupportedPlatformError(platform));
+        }
+      }
+    }
+
+    if (Object.keys(devDependencies).length) {
+      externalChains.push((tree: Tree, context: SchematicContext) => {
+        // check if othet nstudio or nrwl dependencies are needed
+        // check user's package for current version
+        const packageJson = getJsonFromFile(tree, 'package.json');
+        if (packageJson) {
+          for (const packageName in devDependencies) {
+            if (packageInnerDependencies[packageName]) {
+              // inner dependencies are either nstudio or nrwl based packages
+              let version: string;
+              // ensure inner schematic dependencies are installed
+              for (const name of packageInnerDependencies[packageName]) {
+                if (name.indexOf('nrwl') > -1) {
+                  // default to internally managed/supported nrwl version
+                  version = nrwlVersion;
+                  // look for existing nrwl versions if user already has them installed and use those
+                  if (
+                    packageJson.dependencies &&
+                    packageJson.dependencies[name]
+                  ) {
+                    version = packageJson.dependencies[name];
+                  } else if (
+                    packageJson.devDependencies &&
+                    packageJson.devDependencies[name]
+                  ) {
+                    version = packageJson.devDependencies[name];
+                  }
+                  devDependencies[name] = version;
+                } else {
+                  devDependencies[name] = xplatVersion;
+                }
+              }
+            }
+          }
+        }
+        // console.log(devDependencies);
+
+        return XplatHelpers.updatePackageForXplat(options, {
+          devDependencies
+        })(tree, context);
+      });
+
+      if (options.isTesting) {
+        // necessary to unit test the appropriately
+        if (packagesToRunXplat.length) {
+          for (const packageName of packagesToRunXplat) {
+            externalChains.push(
+              externalSchematic(packageName, generator, options, {
+                interactive: false
+              })
+            );
+          }
+        }
+      } else {
+        externalChains.push((tree: Tree, context: SchematicContext) => {
+          const installPackageTask = context.addTask(
+            new NodePackageInstallTask()
+          );
+
+          // console.log('devDependencies:', devDependencies);
+          // console.log('packagesToRunXplat:', packagesToRunXplat);
+          for (const packageName of packagesToRunXplat) {
+            context.addTask(
+              new RunSchematicTask(packageName, generator, options),
+              [installPackageTask]
+            );
+          }
+        });
+      }
+    }
+    debugger;
+    return externalChains;
   }
 
   export function applyAppNamingConvention(
@@ -866,5 +1021,326 @@ xplat/**/*.ngsummary.json
         context.addTask(new NodePackageInstallTask());
       }
     };
+  }
+}
+
+export namespace XplatComponentHelpers {
+  export interface Schema {
+    name: string;
+    /**
+     * Target feature. Default is 'ui' if none specified.
+     */
+    feature?: string;
+    /**
+     * Group it in a subfolder of the target feature
+     */
+    subFolder?: string;
+    /**
+     * Target apps
+     */
+    projects?: string;
+    /**
+     * Only generate for specified projects and ignore shared code
+     */
+    onlyProject?: boolean;
+    /**
+     * Target platforms
+     */
+    platforms?: string;
+    framework?: string;
+    /**
+     * Create a base component for maximum cross platform sharing
+     */
+    createBase?: boolean;
+    /**
+     * Schematic processing helpers
+     */
+    needsIndex?: boolean;
+    /**
+     * Skip formatting
+     */
+    skipFormat?: boolean;
+    /**
+     * testing helper
+     */
+    isTesting?: boolean;
+  }
+
+  export function prepare(
+    options: Schema
+  ): XplatHelpers.IXplatGeneratorOptions {
+    if (!options.name) {
+      throw new Error(generateOptionError('component'));
+    }
+
+    // reset module globals
+    options.needsIndex = false;
+    let featureName: string;
+    let projectNames = null;
+    let platforms = [];
+
+    if (options.feature) {
+      featureName = options.feature.toLowerCase();
+    }
+    const projects = options.projects;
+    if (projects) {
+      options.onlyProject = true;
+      if (!featureName) {
+        // no feature targeted, default to shared
+        featureName = 'shared';
+      }
+      // building feature in shared code and in projects
+      projectNames = sanitizeCommaDelimitedArg(projects);
+      for (const name of projectNames) {
+        const projectParts = name.split('-');
+        const platPrefix = projectParts[0];
+        const platSuffix = projectParts.pop();
+        if (
+          supportedPlatforms.includes(platPrefix) &&
+          !platforms.includes(platPrefix)
+        ) {
+          // if project name is prefixed with supported platform and not already added
+          platforms.push(platPrefix);
+        } else if (
+          supportedPlatforms.includes(platSuffix) &&
+          !platforms.includes(platSuffix)
+        ) {
+          platforms.push(platSuffix);
+        }
+      }
+    } else if (options.platforms) {
+      if (!featureName) {
+        // no feature targeted, default to ui
+        featureName = 'ui';
+      }
+      // building feature in shared code only
+      platforms = sanitizeCommaDelimitedArg(options.platforms);
+    }
+    if (platforms.length === 0) {
+      let error = projects
+        ? platformAppPrefixError()
+        : generatorError('component');
+      throw new Error(optionsMissingError(error));
+    }
+    return { featureName, projectNames, platforms };
+  }
+}
+
+export namespace XplatFeatureHelpers {
+  export interface Schema {
+    name: string;
+    /**
+     * Target apps
+     */
+    projects?: string;
+    /**
+     * Target platforms
+     */
+    platforms?: string;
+    framework?: string;
+    /**
+     * Only generate for specified projects and ignore shared code
+     */
+    onlyProject?: boolean;
+    /**
+     * Only generate the module and ignore default component creation
+     */
+    onlyModule?: boolean;
+    /**
+     * Configure routing
+     */
+    routing?: boolean;
+    /**
+     * Create base component for maximum code sharing
+     */
+    createBase?: boolean;
+    /**
+     * Add link to route for sandbox
+     */
+    adjustSandbox?: boolean;
+    /**
+     * Skip formatting
+     */
+    skipFormat?: boolean;
+    /**
+     * testing helper
+     */
+    isTesting?: boolean;
+  }
+
+  export function prepare(
+    options: Schema
+  ): XplatHelpers.IXplatGeneratorOptions {
+    if (!options.name) {
+      throw new SchematicsException(
+        `You did not specify the name of the feature you'd like to generate. For example: ng g @nstudio/angular:feature my-feature`
+      );
+    }
+    const featureName = options.name.toLowerCase();
+    let projects = options.projects;
+    let projectNames: Array<string>;
+    let platforms = [];
+    if (options.adjustSandbox) {
+      // when adjusting sandbox for the feature, turn dependent options on
+      // for convenience also setup some default fallbacks to avoid requiring so many options
+      // sandbox flags are meant to be quick and convenient
+      options.onlyProject = true;
+      options.routing = true;
+      if (!projects) {
+        if (!options.platforms) {
+          // default to {N} sandbox
+          projects = 'nativescript-sandbox';
+        } else {
+          platforms = sanitizeCommaDelimitedArg(options.platforms);
+          const projectSandboxNames = [];
+          // default to project with sandbox name
+          for (const p of platforms) {
+            if (supportedSandboxPlatforms.includes(p)) {
+              projectSandboxNames.push(`${p}-sandbox`);
+            } else {
+              throw new SchematicsException(
+                `The --adjustSandbox flag supports the following at the moment: ${supportedSandboxPlatforms}`
+              );
+            }
+          }
+          projects = projectSandboxNames.join(',');
+        }
+      }
+    }
+    if (options.routing && !options.onlyProject) {
+      throw new SchematicsException(
+        `When generating a feature with the --routing option, please also specify --onlyProject. Support for shared code routing is under development.`
+      );
+    }
+
+    if (projects) {
+      // building feature in shared code and in projects
+      projectNames = sanitizeCommaDelimitedArg(projects);
+      for (const name of projectNames) {
+        const platPrefix = <PlatformTypes>name.split('-')[0];
+        if (
+          supportedPlatforms.includes(platPrefix) &&
+          !platforms.includes(platPrefix)
+        ) {
+          // if project name is prefixed with supported platform and not already added
+          platforms.push(platPrefix);
+        }
+      }
+    } else if (options.platforms) {
+      // building feature in shared code only
+      platforms = sanitizeCommaDelimitedArg(options.platforms);
+    }
+    if (platforms.length === 0) {
+      let error = projects
+        ? platformAppPrefixError()
+        : generatorError('feature');
+      throw new SchematicsException(optionsMissingError(error));
+    }
+    return { featureName, projectNames, platforms };
+  }
+
+  export function addFiles(
+    options: Schema,
+    target: string = '',
+    projectName: string = '',
+    extra: string = '',
+    framework?: FrameworkTypes
+  ) {
+    let moveTo: string;
+    if (target) {
+      moveTo = getMoveTo(options, target, projectName, framework);
+    } else {
+      target = 'lib';
+      moveTo = `libs/features/${options.name.toLowerCase()}`;
+    }
+    if (!extra) {
+      // make sure no `null` or `undefined` values get in the string path
+      extra = '';
+    }
+    // console.log('target:', target);
+    // console.log('addFiles moveTo:', moveTo);
+    // console.log('add files from:', `${workingDirectory}/${extra}_files`);
+    return branchAndMerge(
+      mergeWith(
+        apply(url(`./${extra}_files`), [
+          template(getTemplateOptions(options, target, framework)),
+          move(moveTo)
+        ])
+      )
+    );
+  }
+
+  export function adjustBarrelIndex(
+    options: Schema,
+    indexFilePath: string
+  ): Rule {
+    return (tree: Tree) => {
+      // console.log('adjustBarrelIndex indexFilePath:', indexFilePath);
+      // console.log('tree.exists(indexFilePath):', tree.exists(indexFilePath));
+      const indexSource = tree.read(indexFilePath)!.toString('utf-8');
+      const indexSourceFile = createSourceFile(
+        indexFilePath,
+        indexSource,
+        ScriptTarget.Latest,
+        true
+      );
+
+      insert(tree, indexFilePath, [
+        ...addGlobal(
+          indexSourceFile,
+          indexFilePath,
+          `export * from './${options.name.toLowerCase()}';`,
+          true
+        )
+      ]);
+      return tree;
+    };
+  }
+
+  export function getTemplateOptions(
+    options: Schema,
+    platform: string,
+    framework?: FrameworkTypes
+  ) {
+    const nameParts = options.name.split('-');
+    let endingDashName = nameParts[0];
+    if (nameParts.length > 1) {
+      endingDashName = stringUtils.capitalize(nameParts[nameParts.length - 1]);
+    }
+    const xplatFolderName = XplatHelpers.getXplatFoldername(
+      <PlatformTypes>platform,
+      framework
+    );
+    return {
+      ...(options as any),
+      ...getDefaultTemplateOptions(),
+      name: options.name.toLowerCase(),
+      endingDashName,
+      xplatFolderName
+    };
+  }
+
+  export function getMoveTo(
+    options: Schema,
+    platform: string,
+    projectName?: string,
+    framework?: FrameworkTypes
+  ) {
+    // console.log('getMoveTo framework:', framework);
+    const xplatFolderName = XplatHelpers.getXplatFoldername(
+      <PlatformTypes>platform,
+      framework
+    );
+    // console.log('getMoveTo xplatFolderName:', xplatFolderName);
+    const featureName = options.name.toLowerCase();
+    let moveTo = `xplat/${xplatFolderName}/features/${featureName}`;
+    if (projectName) {
+      let appDir = ['web', 'web-angular'].includes(xplatFolderName)
+        ? '/app'
+        : '';
+      moveTo = `apps/${projectName}/src${appDir}/features/${featureName}`;
+      // console.log('moveTo:', moveTo);
+    }
+    return moveTo;
   }
 }

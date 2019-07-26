@@ -11,14 +11,14 @@ import {
   mergeWith
 } from '@angular-devkit/schematics';
 import {
-  FeatureHelpers,
+  XplatFeatureHelpers,
   PlatformTypes,
   XplatHelpers,
   prerun
 } from '@nstudio/xplat';
 
-export default function(options: FeatureHelpers.Schema) {
-  const featureSettings = FeatureHelpers.prepare(options);
+export default function(options: XplatFeatureHelpers.Schema) {
+  const featureSettings = XplatFeatureHelpers.prepare(options);
   const chains = [];
 
   if (options.onlyProject) {
@@ -34,7 +34,7 @@ export default function(options: FeatureHelpers.Schema) {
         routingModulePathOptions.push(`${appDirectory}app-routing.module.ts`);
 
         chains.push((tree: Tree, context: SchematicContext) => {
-          return FeatureHelpers.addFiles(options, platPrefix, projectName)(
+          return XplatFeatureHelpers.addFiles(options, platPrefix, projectName)(
             tree,
             context
           );
@@ -58,7 +58,7 @@ export default function(options: FeatureHelpers.Schema) {
         }
         if (!options.onlyModule) {
           chains.push((tree: Tree, context: SchematicContext) => {
-            return FeatureHelpers.addFiles(
+            return XplatFeatureHelpers.addFiles(
               options,
               platPrefix,
               projectName,
@@ -72,7 +72,13 @@ export default function(options: FeatureHelpers.Schema) {
     // projectChains.push(noop());
 
     chains.push((tree: Tree, context: SchematicContext) =>
-      FeatureHelpers.addFiles(options, 'nativescript', null, null, 'angular')
+      XplatFeatureHelpers.addFiles(
+        options,
+        'nativescript',
+        null,
+        null,
+        'angular'
+      )
     );
     // update index
     chains.push((tree: Tree, context: SchematicContext) => {
@@ -80,7 +86,7 @@ export default function(options: FeatureHelpers.Schema) {
         'nativescript',
         'angular'
       );
-      return FeatureHelpers.adjustBarrelIndex(
+      return XplatFeatureHelpers.adjustBarrelIndex(
         options,
         `xplat/${xplatFolderName}/features/index.ts`
       )(tree, context);
@@ -88,7 +94,7 @@ export default function(options: FeatureHelpers.Schema) {
     // add starting component unless onlyModule
     if (!options.onlyModule) {
       chains.push((tree: Tree, context: SchematicContext) =>
-        FeatureHelpers.addFiles(
+        XplatFeatureHelpers.addFiles(
           options,
           'nativescript',
           null,

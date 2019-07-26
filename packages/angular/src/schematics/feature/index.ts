@@ -13,12 +13,12 @@ import {
   supportedPlatforms,
   prerun,
   unsupportedPlatformError,
-  FeatureHelpers,
+  XplatFeatureHelpers,
   getFrontendFramework
 } from '@nstudio/xplat';
 
-export default function(options: FeatureHelpers.Schema) {
-  const featureSettings = FeatureHelpers.prepare(options);
+export default function(options: XplatFeatureHelpers.Schema) {
+  const featureSettings = XplatFeatureHelpers.prepare(options);
 
   const externalChains = [];
   for (const platform of featureSettings.platforms) {
@@ -46,12 +46,12 @@ export default function(options: FeatureHelpers.Schema) {
     (tree: Tree, context: SchematicContext) =>
       options.onlyProject
         ? noop()(tree, context)
-        : FeatureHelpers.addFiles(options)(tree, context),
+        : XplatFeatureHelpers.addFiles(options)(tree, context),
     // libs
     (tree: Tree, context: SchematicContext) =>
       options.onlyProject || !options.createBase || options.onlyModule
         ? noop()(tree, context)
-        : FeatureHelpers.addFiles(options, null, null, '_component')(
+        : XplatFeatureHelpers.addFiles(options, null, null, '_component')(
             tree,
             context
           ),
@@ -59,10 +59,10 @@ export default function(options: FeatureHelpers.Schema) {
     (tree: Tree, context: SchematicContext) =>
       options.onlyProject
         ? noop()(tree, context)
-        : FeatureHelpers.adjustBarrelIndex(options, 'libs/features/index.ts')(
-            tree,
-            context
-          ),
+        : XplatFeatureHelpers.adjustBarrelIndex(
+            options,
+            'libs/features/index.ts'
+          )(tree, context),
     // external schematic handling
     ...externalChains,
     formatFiles({ skipFormat: options.skipFormat })

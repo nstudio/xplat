@@ -1,6 +1,6 @@
 import { Tree } from '@angular-devkit/schematics';
 import { Schema } from './schema';
-import { stringUtils, FeatureHelpers } from '@nstudio/xplat';
+import { stringUtils, XplatFeatureHelpers } from '@nstudio/xplat';
 import {
   isInModuleMetadata,
   createEmptyWorkspace,

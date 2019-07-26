@@ -1,6 +1,6 @@
 import { Tree } from '@angular-devkit/schematics';
 import { Schema } from './schema';
-import { stringUtils, FeatureHelpers } from '@nstudio/xplat';
+import { stringUtils, XplatFeatureHelpers } from '@nstudio/xplat';
 import {
   isInModuleMetadata,
   createEmptyWorkspace,
@@ -252,7 +252,7 @@ describe('app', () => {
       fileContent.indexOf('Use feature generator to add pages')
     ).toBeGreaterThanOrEqual(0);
 
-    const featureOptions: FeatureHelpers.Schema = {
+    const featureOptions: XplatFeatureHelpers.Schema = {
       name: 'foo-with-dash',
       adjustSandbox: true,
       projects: 'nativescript-foo'

@@ -1,6 +1,6 @@
 import { Tree } from '@angular-devkit/schematics';
 import { Schema as ElementsOptions } from './schema';
-import { ComponentHelpers } from '../../utils/xplat';
+import { XplatComponentHelpers } from '@nstudio/xplat';
 import { getFileContent, createXplatWithApps } from '@nstudio/xplat/testing';
 import { runSchematic } from '../../utils/testing';
 
@@ -20,7 +20,7 @@ describe('elements schematic', () => {
   it('should create an elements module that provides the specified components', async () => {
     const options: ElementsOptions = { ...defaultOptions };
     // console.log('appTree:', appTree);
-    const componentOptions: ComponentHelpers.Schema = {
+    const componentOptions: XplatComponentHelpers.Schema = {
       name: 'menu',
       platforms: 'web'
     };
@@ -82,7 +82,7 @@ describe('elements schematic', () => {
   it('--builderModule argument', async () => {
     const options: ElementsOptions = { ...defaultOptions };
     // console.log('appTree:', appTree);
-    const componentOptions: ComponentHelpers.Schema = {
+    const componentOptions: XplatComponentHelpers.Schema = {
       name: 'menu',
       platforms: 'web'
     };
@@ -139,7 +139,7 @@ describe('elements schematic', () => {
       builderIndex.indexOf(`<tt-footer></tt-footer>`)
     ).toBeGreaterThanOrEqual(0);
 
-    const component2Options: ComponentHelpers.Schema = {
+    const component2Options: XplatComponentHelpers.Schema = {
       name: 'dropdown',
       platforms: 'web'
     };

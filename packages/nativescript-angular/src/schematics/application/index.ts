@@ -15,18 +15,14 @@ import {
   externalSchematic
 } from '@angular-devkit/schematics';
 import {
-  stringUtils,
   prerun,
-  getNpmScope,
   getPrefix,
   updatePackageScripts,
   updateAngularProjects,
   updateNxProjects,
-  getGroupByName,
   getAppName,
   missingArgument,
   getJsonFromFile,
-  setDependency,
   updateJsonFile,
   getDefaultTemplateOptions,
   XplatHelpers
@@ -88,22 +84,18 @@ export default function(options: Schema) {
       const scripts = {};
       const platformApp = options.name.replace('-', '.');
       const directory = options.directory ? `${options.directory}/` : '';
-      // standard apps don't have hmr on by default since results can vary
-      // more reliable to leave off by default for now
-      // however, sandbox setup due to its simplicity uses hmr by default
-      let hmr = options.setupSandbox ? ' --hmr' : '';
       scripts[
         `clean`
       ] = `npx rimraf -- hooks node_modules package-lock.json && npm i`;
       scripts[`start.${platformApp}.ios`] = `cd apps/${directory}${
         options.name
-      } && tns run ios --emulator --bundle${hmr}`;
+      } && tns run ios --emulator`;
       scripts[`start.${platformApp}.android`] = `cd apps/${directory}${
         options.name
-      } && tns run android --emulator --bundle${hmr}`;
+      } && tns run android --emulator`;
       scripts[`start.${platformApp}.preview`] = `cd apps/${directory}${
         options.name
-      } && tns preview --bundle${hmr}`;
+      } && tns preview`;
       scripts[`clean.${platformApp}`] = `cd apps/${directory}${
         options.name
       } && npx rimraf -- hooks node_modules platforms package-lock.json && npm i && npx rimraf -- package-lock.json`;
@@ -125,7 +117,7 @@ export default function(options: Schema) {
         },
         architect: {
           serve: {
-            builder: '@nrwl/builders:run-commands',
+            builder: '@nrwl/workspace:run-commands',
             options: {
               commands: [
                 {
