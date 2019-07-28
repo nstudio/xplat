@@ -32,7 +32,7 @@ import {
   XplatComponentHelpers
 } from '@nstudio/xplat';
 import { addToFeature, adjustBarrelIndex } from './generator';
-import { updateJsonInTree } from '@nrwl/workspace';
+import { updateJsonInTree, getWorkspacePath } from '@nrwl/workspace';
 import {
   ngxTranslateVersion,
   ngxTranslateHttpLoaderVersion,
@@ -304,17 +304,17 @@ export namespace XplatAngularHelpers {
 
   export function updateTestingConfig(options: XplatHelpers.Schema) {
     return (tree: Tree, context: SchematicContext) => {
-      const angularConfigPath = `angular.json`;
+      const configPath = getWorkspacePath(tree);
       const nxConfigPath = `nx.json`;
 
-      const angularJson = getJsonFromFile(tree, angularConfigPath);
+      const workspaceJson = getJsonFromFile(tree, configPath);
       const nxJson = getJsonFromFile(tree, nxConfigPath);
       const prefix = getPrefix();
       // console.log('prefix:', prefix);
 
       // update libs and xplat config
-      if (angularJson && angularJson.projects) {
-        angularJson.projects['libs'] = {
+      if (workspaceJson && workspaceJson.projects) {
+        workspaceJson.projects['libs'] = {
           root: 'libs',
           sourceRoot: 'libs',
           projectType: 'library',
@@ -340,7 +340,7 @@ export namespace XplatAngularHelpers {
             }
           }
         };
-        angularJson.projects['xplat'] = {
+        workspaceJson.projects['xplat'] = {
           root: 'xplat',
           sourceRoot: 'xplat',
           projectType: 'library',
@@ -377,7 +377,7 @@ export namespace XplatAngularHelpers {
         };
       }
 
-      tree = updateJsonFile(tree, angularConfigPath, angularJson);
+      tree = updateJsonFile(tree, configPath, workspaceJson);
       tree = updateJsonFile(tree, nxConfigPath, nxJson);
       return tree;
     };

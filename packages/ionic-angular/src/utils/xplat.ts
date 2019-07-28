@@ -29,16 +29,19 @@ export namespace XplatIonicAngularHelpers {
       const dependencies = {};
       const devDependencies = {};
       const xplatFoldername = XplatHelpers.getXplatFoldername('web', 'angular');
-      dependencies[
-        `@${getNpmScope()}/web-scss`
-      ] = `file:xplat/${xplatFoldername}/scss`;
-      const ionicXplatFoldername = XplatHelpers.getXplatFoldername(
-        'ionic',
-        'angular'
-      );
-      dependencies[
-        `@${getNpmScope()}/ionic-scss`
-      ] = `file:xplat/${ionicXplatFoldername}/scss`;
+
+      if (!options.skipXplat) {
+        dependencies[
+          `@${getNpmScope()}/web-scss`
+        ] = `file:xplat/${xplatFoldername}/scss`;
+        const ionicXplatFoldername = XplatHelpers.getXplatFoldername(
+          'ionic',
+          'angular'
+        );
+        dependencies[
+          `@${getNpmScope()}/ionic-scss`
+        ] = `file:xplat/${ionicXplatFoldername}/scss`;
+      }
 
       const packageJson = getJsonFromFile(tree, 'package.json');
       const hasAngularDeps = packageJson.dependencies['@angular/core'];
@@ -60,10 +63,12 @@ export namespace XplatIonicAngularHelpers {
         devDependencies[`codelyzer`] = codelyzerVersion;
       }
 
-      dependencies['@ngx-translate/core'] = ngxTranslateVersion;
-      dependencies[
-        '@ngx-translate/http-loader'
-      ] = ngxTranslateHttpLoaderVersion;
+      if (!options.skipXplat) {
+        dependencies['@ngx-translate/core'] = ngxTranslateVersion;
+        dependencies[
+          '@ngx-translate/http-loader'
+        ] = ngxTranslateHttpLoaderVersion;
+      }
       dependencies['reflect-metadata'] = reflectMetadataVersion;
 
       return XplatHelpers.updatePackageForXplat(options, {

@@ -19,7 +19,7 @@ import {
   getPrefix,
   getNpmScope,
   stringUtils,
-  updateAngularProjects,
+  updateWorkspace,
   updateNxProjects,
   getJsonFromFile,
   updatePackageScripts,
@@ -27,7 +27,8 @@ import {
   getAppName,
   missingArgument,
   getDefaultTemplateOptions,
-  XplatHelpers
+  XplatHelpers,
+  readWorkspaceJson
 } from '@nstudio/xplat';
 import { XplatElectronAngularHelpers } from '../../utils';
 import {
@@ -35,6 +36,7 @@ import {
   RunSchematicTask
 } from '@angular-devkit/schematics/tasks';
 import { XplatElectrontHelpers } from '@nstudio/electron';
+import { workspaceFileName } from '@nrwl/workspace/src/command-line/shared';
 
 export default function(options: XplatElectrontHelpers.SchemaApp) {
   if (!options.name) {
@@ -78,35 +80,29 @@ export default function(options: XplatElectrontHelpers.SchemaApp) {
 
   return chain([
     prerun(options),
-    // adjust naming convention
     XplatHelpers.applyAppNamingConvention(options, 'electron'),
     (tree: Tree, context: SchematicContext) =>
       externalSchematic('@nstudio/electron', 'xplat', {
         ...options,
         skipDependentPlatformFiles: true
       }),
-    // create app files
     (tree: Tree, context: SchematicContext) =>
       addAppFiles(options, options.name)(tree, context),
-    // add root package dependencies
     XplatElectronAngularHelpers.updateRootDeps(options),
     ...packageHandling,
-    // add root package dependencies
-    // add npm scripts
     XplatElectrontHelpers.addNpmScripts(options),
-    // angular.json
-    (tree: Tree) => {
+    (tree: Tree, context: SchematicContext) => {
       // grab the target app configuration
-      const ngConfig = getJsonFromFile(tree, 'angular.json');
+      const workspaceConfig = readWorkspaceJson(tree);
       // find app
       const fullTargetAppName = options.target;
       let targetConfig;
-      if (ngConfig && ngConfig.projects) {
-        targetConfig = ngConfig.projects[fullTargetAppName];
+      if (workspaceConfig && workspaceConfig.projects) {
+        targetConfig = workspaceConfig.projects[fullTargetAppName];
       }
       if (!targetConfig) {
         throw new SchematicsException(
-          `The target app name "${fullTargetAppName}" does not appear to be in your workspace angular.json. You may need to generate it first or perhaps check the spelling.`
+          `The target app name "${fullTargetAppName}" does not appear to be in ${workspaceFileName()}. You may need to generate the app first or perhaps check the spelling.`
         );
       }
 
@@ -139,9 +135,8 @@ export default function(options: XplatElectrontHelpers.SchemaApp) {
       delete projects[electronAppName].architect['extract-i18n'];
       delete projects[electronAppName].architect['test'];
       delete projects[electronAppName].architect['lint'];
-      return updateAngularProjects(tree, projects);
+      return updateWorkspace({ projects })(tree, context);
     },
-    // nx.json
     (tree: Tree) => {
       const projects = {};
       projects[`${options.name}`] = {

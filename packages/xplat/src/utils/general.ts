@@ -6,7 +6,13 @@ import {
   SchematicContext
 } from '@angular-devkit/schematics';
 import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
-import { stringUtils as nxStringUtils, serializeJson } from '@nrwl/workspace';
+import {
+  stringUtils as nxStringUtils,
+  serializeJson,
+  updateWorkspaceInTree,
+  readJsonInTree,
+  getWorkspacePath
+} from '@nrwl/workspace';
 
 export interface ITargetPlatforms {
   web?: boolean;
@@ -342,12 +348,20 @@ export function updatePackageScripts(tree: Tree, scripts: any) {
   return updateJsonFile(tree, path, packageJson);
 }
 
-export function updateAngularProjects(tree: Tree, projects: any) {
-  const path = 'angular.json';
-  const angularJson = getJsonFromFile(tree, path);
-  const projectsMap = Object.assign({}, angularJson.projects);
-  angularJson.projects = Object.assign(projectsMap, projects);
-  return updateJsonFile(tree, path, angularJson);
+export function readWorkspaceJson(tree: Tree) {
+  return readJsonInTree(tree, getWorkspacePath(tree));
+}
+
+export function updateWorkspace(updates: any) {
+  return updateWorkspaceInTree(json => {
+    for (const key in updates) {
+      json[key] = {
+        ...(json[key] || {}),
+        ...updates[key]
+      };
+    }
+    return json;
+  });
 }
 
 export function updateNxProjects(tree: Tree, projects: any) {

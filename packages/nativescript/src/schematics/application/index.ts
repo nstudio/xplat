@@ -18,7 +18,7 @@ import {
   prerun,
   getPrefix,
   updatePackageScripts,
-  updateAngularProjects,
+  updateWorkspace,
   updateNxProjects,
   getAppName,
   missingArgument,
@@ -63,6 +63,7 @@ export default function(options: Schema) {
       )(tree, context),
     // add root package dependencies
     XplatNativeScriptHelpers.updateRootDeps(options),
+    XplatNativeScriptHelpers.updatePrettierIgnore(),
     XplatHelpers.addPackageInstallTask(options),
     // add start/clean scripts
     (tree: Tree) => {
@@ -89,7 +90,7 @@ export default function(options: Schema) {
       } && npx rimraf -- hooks node_modules platforms package-lock.json && npm i && npx rimraf -- package-lock.json`;
       return updatePackageScripts(tree, scripts);
     },
-    (tree: Tree) => {
+    (tree: Tree, context: SchematicContext) => {
       const platformApp = options.name.replace('-', '.');
       const directory = options.directory ? `${options.directory}/` : '';
       const projects = {};
@@ -127,7 +128,7 @@ export default function(options: Schema) {
           }
         }
       };
-      return updateAngularProjects(tree, projects);
+      return updateWorkspace({ projects })(tree, context);
     },
     (tree: Tree) => {
       const projects = {};

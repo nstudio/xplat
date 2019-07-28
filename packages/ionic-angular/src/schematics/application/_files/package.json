@@ -1,5 +1,5 @@
 {
-  "name": "<%= utils.sanitize(name) %>",
+  "name": "<%= utils.sanitize(appname) %>",
   "license": "SEE LICENSE IN <your-license-filename>",
   "version": "0.0.0",
   "scripts": {

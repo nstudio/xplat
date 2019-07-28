@@ -21,6 +21,10 @@ export interface Schema {
    */
   skipInstall?: boolean;
   /**
+   * Skip generating xplat supporting architecture
+   */
+  skipXplat?: boolean;
+  /**
    * Skip formatting files
    */
   skipFormat?: boolean;

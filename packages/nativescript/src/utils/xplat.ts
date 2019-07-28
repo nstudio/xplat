@@ -24,6 +24,21 @@ export namespace XplatNativeScriptHelpers {
     };
   }
 
+  export function updatePrettierIgnore() {
+    return XplatHelpers.updatePrettierIgnore(`\n
+# xplat added rules
+**/*.d.ts
+**/apps/**/platforms/**/*
+**/App_Resources/**/*
+**/apps/nativescript*/hooks/**/*
+**/apps/nativescript*/tools/**/*
+**/apps/nativescript*/src/assets/*.min.css
+**/apps/*nativescript/hooks/**/*
+**/apps/*nativescript/tools/**/*
+**/apps/*nativescript/src/assets/*.min.css
+**/xplat/nativescript*/plugins/**/*`);
+  }
+
   export function updateGitIgnore() {
     return (tree: Tree) => {
       const gitIgnorePath = '.gitignore';

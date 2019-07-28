@@ -1,6 +1,6 @@
 {
   "appId": "com.example.app",
-  "appName": "example",
+  "appName": "<%= utils.sanitize(appname) %>",
   "bundledWebRuntime": false,
   "webDir": "www"
 }

@@ -8,6 +8,7 @@ export default function(options: XplatHelpers.Schema) {
     options.skipDependentPlatformFiles
       ? noop()
       : XplatHelpers.addPlatformFiles(options, 'nativescript'),
-    XplatNativeScriptHelpers.updateRootDeps(options)
+    XplatNativeScriptHelpers.updateRootDeps(options),
+    XplatNativeScriptHelpers.updatePrettierIgnore()
   ]);
 }

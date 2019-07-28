@@ -23,7 +23,7 @@ import {
   getJsonFromFile,
   updateJsonFile,
   missingArgument,
-  updateAngularProjects,
+  updateWorkspace,
   getDefaultTemplateOptions,
   XplatHelpers
 } from '@nstudio/xplat';
@@ -129,55 +129,58 @@ export default function(options: ElementsOptions) {
         return updatePackageScripts(tree, scripts);
       }
     },
-    (tree: Tree) => {
+    (tree: Tree, context: SchematicContext) => {
       if (options.builderModule) {
-        return noop();
+        return noop()(tree, context);
       } else {
-        const projects = {};
-        projects[`web-elements`] = {
-          root: '',
-          sourceRoot: 'xplat/web/elements/builder',
-          projectType: 'application',
-          prefix: 'web-elements',
-          schematics: {},
-          architect: {
-            build: {
-              builder: 'ngx-build-plus:build',
-              options: {
-                outputPath: 'dist/ngelements',
-                index: 'xplat/web/elements/builder/index.html',
-                main: 'xplat/web/elements/builder/elements.ts',
-                polyfills: 'xplat/web/elements/builder/polyfills.ts',
-                tsConfig: 'xplat/web/elements/builder/tsconfig.elements.json'
-              },
-              configurations: {
-                production: {
-                  optimization: true,
-                  outputHashing: 'all',
-                  sourceMap: false,
-                  extractCss: true,
-                  namedChunks: false,
-                  aot: true,
-                  extractLicenses: true,
-                  vendorChunk: false,
-                  buildOptimizer: true
-                }
-              }
-            },
-            serve: {
-              builder: 'ngx-build-plus:dev-server',
-              options: {
-                browserTarget: 'web-elements:build'
-              },
-              configurations: {
-                production: {
-                  browserTarget: 'web-elements:build:production'
+        return updateWorkspace({
+          projects: {
+            'web-elements': {
+              root: '',
+              sourceRoot: 'xplat/web/elements/builder',
+              projectType: 'application',
+              prefix: 'web-elements',
+              schematics: {},
+              architect: {
+                build: {
+                  builder: 'ngx-build-plus:build',
+                  options: {
+                    outputPath: 'dist/ngelements',
+                    index: 'xplat/web/elements/builder/index.html',
+                    main: 'xplat/web/elements/builder/elements.ts',
+                    polyfills: 'xplat/web/elements/builder/polyfills.ts',
+                    tsConfig:
+                      'xplat/web/elements/builder/tsconfig.elements.json'
+                  },
+                  configurations: {
+                    production: {
+                      optimization: true,
+                      outputHashing: 'all',
+                      sourceMap: false,
+                      extractCss: true,
+                      namedChunks: false,
+                      aot: true,
+                      extractLicenses: true,
+                      vendorChunk: false,
+                      buildOptimizer: true
+                    }
+                  }
+                },
+                serve: {
+                  builder: 'ngx-build-plus:dev-server',
+                  options: {
+                    browserTarget: 'web-elements:build'
+                  },
+                  configurations: {
+                    production: {
+                      browserTarget: 'web-elements:build:production'
+                    }
+                  }
                 }
               }
             }
           }
-        };
-        return updateAngularProjects(tree, projects);
+        })(tree, context);
       }
     },
     // update dependencies

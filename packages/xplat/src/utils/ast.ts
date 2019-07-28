@@ -14,6 +14,7 @@ import {
   readJsonInTree
 } from '@nrwl/workspace';
 import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
+import { readWorkspaceJson } from './general';
 
 function nodesByPosition(first: ts.Node, second: ts.Node): number {
   return first.getStart() - second.getStart();
@@ -369,9 +370,9 @@ export function insert(host: Tree, modulePath: string, changes: any[]) {
   host.commitUpdate(recorder);
 }
 
-export function getProjectConfig(host: Tree, name: string): any {
-  const angularJson = readJsonInTree(host, '/angular.json');
-  const projectConfig = angularJson.projects[name];
+export function getProjectConfig(tree: Tree, name: string): any {
+  const workspaceJson = readWorkspaceJson(tree);
+  const projectConfig = workspaceJson.projects[name];
   if (!projectConfig) {
     throw new Error(`Cannot find project '${name}'`);
   } else {

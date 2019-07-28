@@ -18,19 +18,39 @@ export async function updateConfig() {
   }
 
   // console.log(process.cwd());
-  const ngCliConfigPath = path.join(process.cwd(), '/../../..', 'angular.json');
-  // console.log(ngCliConfigPath);
+  let configFilename = 'workspace.json';
+  let workspaceConfigPath = path.join(
+    process.cwd(),
+    '/../../..',
+    configFilename
+  );
+  if (!fs.existsSync(workspaceConfigPath)) {
+    configFilename = 'angular.json';
+    workspaceConfigPath = path.join(process.cwd(), '/../../..', configFilename);
+  }
+  // console.log(workspaceConfigPath);
   try {
-    const config = fs.readFileSync(ngCliConfigPath, 'UTF-8');
+    let ngCli: any;
+    let config = fs.readFileSync(workspaceConfigPath, 'UTF-8');
     if (config) {
-      const ngCli = JSON.parse(config);
+      ngCli = JSON.parse(config);
       // update default
       ngCli.cli.defaultCollection = '@nstudio/xplat';
-      fs.writeFileSync(ngCliConfigPath, JSON.stringify(ngCli, null, 2));
+    } else {
+      // could be empty Nx workspace
+      // create angular.json in order to ng add packages
+      ngCli = {
+        version: 1,
+        projects: {},
+        cli: {
+          defaultCollection: '@nstudio/xplat'
+        }
+      };
     }
+    fs.writeFileSync(workspaceConfigPath, JSON.stringify(ngCli, null, 2));
   } catch (err) {
     console.warn(
-      'An issue was detected during installation: angular.json does not exist.'
+      `An issue was detected during installation: ${configFilename} does not exist.`
     );
   }
 
@@ -101,16 +121,6 @@ export async function makePrettierIgnore() {
   );
 
   const prettierIgnore = `.DS_Store
-**/*.d.ts
-**/apps/**/platforms/**/*
-**/App_Resources/**/*
-**/apps/nativescript*/hooks/**/*
-**/apps/nativescript*/tools/**/*
-**/apps/nativescript*/src/assets/*.min.css
-**/apps/*nativescript/hooks/**/*
-**/apps/*nativescript/tools/**/*
-**/apps/*nativescript/src/assets/*.min.css
-**/xplat/nativescript*/plugins/**/*
 **/webpack.config.js
 **/package.json
 **/package-lock.json

@@ -11,14 +11,10 @@ const parsedArgs = yargsParser(process.argv, {
 
 const { help, prefix, targets } = parsedArgs;
 const directory = parsedArgs._[2] && path.resolve(parsedArgs._[2]);
-const showHelp = help || !directory || !prefix;
+const showHelp = help || !directory;
 if (showHelp) {
   if (!directory) {
     console.log(`directory is required`);
-  }
-
-  if (!prefix) {
-    console.log(`--prefix=PREFIX is required`);
   }
 
   console.log(`
@@ -36,14 +32,20 @@ if (showHelp) {
   process.exit(0);
 }
 
-const workspaceArgs = [...process.argv.slice(2).map(a => `${a}`)]
-  .join(' ')
-  .replace(`--platforms=${targets || ''}`, '') // Don't propagate --platforms to create-nx-workspace
-  .replace(`--platforms ${targets || ''}`, '')
-  .replace(`--prefix=${prefix}`, '') // Don't propagate --prefix to create-nx-workspace
-  .replace(`--prefix ${prefix}`, '');
+let workspaceArgs = [...process.argv.slice(2).map(a => `${a}`)].join(' ');
 
-const createNXWorkspaceCmd = `npx create-nx-workspace@latest ${workspaceArgs}`;
+if (targets) {
+  workspaceArgs = workspaceArgs
+    .replace(`--platforms=${targets || ''}`, '') // Don't propagate --platforms to create-nx-workspace
+    .replace(`--platforms ${targets || ''}`, '');
+}
+if (prefix) {
+  workspaceArgs = workspaceArgs
+    .replace(`--prefix=${prefix}`, '') // Don't propagate --prefix to create-nx-workspace
+    .replace(`--prefix ${prefix}`, '');
+}
+
+const createNXWorkspaceCmd = `npx --ignore-existing create-nx-workspace@latest ${workspaceArgs}`;
 console.log(createNXWorkspaceCmd);
 execSync(createNXWorkspaceCmd, { stdio: [0, 1, 2] });
 
@@ -51,39 +53,16 @@ const installXplatCmd = `npm install -D @nstudio/xplat`;
 console.log(installXplatCmd);
 execSync(installXplatCmd, { cwd: directory, stdio: [0, 1, 2] });
 
-let setupXplat = `${path.join(
-  'node_modules',
-  '.bin',
-  'ng'
-)} g xplat --prefix=${prefix} --platforms=${targets}`;
+let setupXplat = `npx nx g @nstudio/xplat:init`;
+if (targets) {
+  setupXplat = `${setupXplat} --platforms=${targets}`;
+}
+if (prefix) {
+  setupXplat = `${setupXplat} --prefix=${prefix}`;
+}
 console.log(setupXplat);
 execSync(setupXplat, { cwd: directory, stdio: [0, 1, 2] });
 
-const gitPathsToAdd = [
-  '.vscode/settings.json',
-  '.gitignore',
-  '.editorconfig',
-  '.prettierignore',
-  '.prettierrc',
-  'angular.json',
-  'nx.json',
-  'libs/core',
-  'libs/features',
-  'libs/scss',
-  'libs/utils',
-  'references.d.ts',
-  'xplat',
-  'testing',
-  'angular.json',
-  'nx.json',
-  'package-lock.json',
-  'package.json',
-  'tsconfig.json',
-  'tslint.json'
-];
-
-const gitAdd = `git add ${gitPathsToAdd.join(
-  ' '
-)} && git commit -m "Installed @nstudio/xplat"`;
+const gitAdd = `git add . && git commit -m "chore: setup workspace with @nstudio/xplat"`;
 console.log(gitAdd);
 execSync(gitAdd, { cwd: directory, stdio: [0, 1, 2] });

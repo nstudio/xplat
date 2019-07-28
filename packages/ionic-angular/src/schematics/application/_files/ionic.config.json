@@ -1,5 +1,5 @@
 {
-  "name": "exampleApp",
+  "name": "<%= utils.sanitize(appname) %>",
   "type": "angular",
   "integrations": {
     "capacitor": {}

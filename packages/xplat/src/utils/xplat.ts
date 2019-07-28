@@ -107,6 +107,7 @@ export namespace XplatHelpers {
      * Skip dependent platform files
      */
     skipDependentPlatformFiles?: boolean;
+    skipXplat?: boolean;
     /**
      * Skip install
      */
@@ -1010,6 +1011,22 @@ xplat/**/*.ngsummary.json
     //   }
     // }
     return isWebStorm;
+  }
+
+  export function updatePrettierIgnore(content: string) {
+    return (tree: Tree) => {
+      const prettierFileName = '.prettierignore';
+      if (tree.exists(prettierFileName)) {
+        let prettier = tree.read(prettierFileName)!.toString('utf-8');
+        if (prettier) {
+          // update prettier rules
+          prettier = `${prettier}\n${content}`;
+
+          tree.overwrite(prettierFileName, prettier);
+        }
+      }
+      return tree;
+    };
   }
 
   export function addPackageInstallTask(options: Schema) {

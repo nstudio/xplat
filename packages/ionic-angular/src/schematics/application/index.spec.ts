@@ -1,6 +1,6 @@
 import { Tree } from '@angular-devkit/schematics';
 import { Schema } from './schema';
-import { createEmptyWorkspace } from '@nstudio/xplat/testing';
+import { createEmptyWorkspace, getFileContent } from '@nstudio/xplat/testing';
 import { runSchematic } from '../../utils/testing';
 
 describe('app.ionic schematic', () => {
@@ -83,6 +83,24 @@ describe('app.ionic schematic', () => {
     // console.log(files);
 
     expect(tree.exists('/apps/frontend/ionic-foo/src/index.html')).toBeTruthy();
+  });
+
+  it('should create all files for app without xplat when skipXplat is used', async () => {
+    const options: Schema = { ...defaultOptions };
+    options.skipXplat = true;
+    const tree = await runSchematic('app', options, appTree);
+    // const files = tree.files;
+    // console.log(files);
+    const content = getFileContent(
+      tree,
+      '/apps/ionic-foo/src/app/app.module.ts'
+    );
+    // console.log('content:', content);
+    expect(
+      content.indexOf(
+        `import { IonicModule, IonicRouteStrategy } from '@ionic/angular';`
+      )
+    ).toBeGreaterThan(0);
   });
 
   it('should create all files for app in directory and ignore platform naming when directory is a platform', async () => {

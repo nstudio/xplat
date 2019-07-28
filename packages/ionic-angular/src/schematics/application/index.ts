@@ -21,7 +21,7 @@ import {
   getNpmScope,
   getPrefix,
   updatePackageScripts,
-  updateAngularProjects,
+  updateWorkspace,
   updateNxProjects,
   getAppName,
   missingArgument,
@@ -46,14 +46,20 @@ export default function(options: ApplicationOptions) {
     prerun(options),
     // adjust naming convention
     XplatHelpers.applyAppNamingConvention(options, 'ionic'),
+    // use xplat or not
     (tree: Tree, context: SchematicContext) =>
-      externalSchematic('@nstudio/angular', 'xplat', {
-        ...options,
-        platforms: 'ionic,web'
-      }),
+      options.skipXplat
+        ? noop()
+        : externalSchematic('@nstudio/angular', 'xplat', {
+            ...options,
+            platforms: 'ionic,web'
+          }),
     // create app files
     (tree: Tree, context: SchematicContext) =>
-      addAppFiles(options, options.name)(tree, context),
+      addAppFiles(options, options.name, options.skipXplat ? 'skipxplat' : '')(
+        tree,
+        context
+      ),
     // add root package dependencies
     XplatIonicAngularHelpers.updateRootDeps(options),
     XplatHelpers.addPackageInstallTask(options),
@@ -100,7 +106,7 @@ export default function(options: ApplicationOptions) {
       } && npx rimraf -- hooks node_modules platforms www plugins ios android package-lock.json && npm i && rimraf -- package-lock.json`;
       return updatePackageScripts(tree, scripts);
     },
-    (tree: Tree) => {
+    (tree: Tree, context: SchematicContext) => {
       const directory = options.directory ? `${options.directory}/` : '';
       const projects = {};
       projects[`${options.name}`] = {
@@ -114,7 +120,7 @@ export default function(options: ApplicationOptions) {
           }
         }
       };
-      return updateAngularProjects(tree, projects);
+      return updateWorkspace({ projects })(tree, context);
     },
     (tree: Tree) => {
       const projects = {};
@@ -127,12 +133,17 @@ export default function(options: ApplicationOptions) {
   ]);
 }
 
-function addAppFiles(options: ApplicationOptions, appPath: string): Rule {
+function addAppFiles(
+  options: ApplicationOptions,
+  appPath: string,
+  extra: string = ''
+): Rule {
+  extra = extra ? `${extra}_` : '';
   const appname = getAppName(options, 'ionic');
   const directory = options.directory ? `${options.directory}/` : '';
   return branchAndMerge(
     mergeWith(
-      apply(url(`./_files`), [
+      apply(url(`./_${extra}files`), [
         template({
           ...(options as any),
           ...getDefaultTemplateOptions(),

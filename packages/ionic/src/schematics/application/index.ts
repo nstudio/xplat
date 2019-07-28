@@ -5,7 +5,7 @@ import {
   getAppName,
   getDefaultTemplateOptions,
   getPrefix,
-  updateAngularProjects,
+  updateWorkspace,
   updateNxProjects,
   updatePackageScripts
 } from '@nstudio/xplat';
@@ -89,7 +89,7 @@ export default function(options: Schema) {
       } && npx rimraf -- hooks node_modules platforms www plugins ios android package-lock.json && npm i && rimraf -- package-lock.json`;
       return updatePackageScripts(tree, scripts);
     },
-    (tree: Tree) => {
+    (tree: Tree, context: SchematicContext) => {
       const directory = options.directory ? `${options.directory}/` : '';
       const projects = {};
       projects[`${options.name}`] = {
@@ -98,7 +98,7 @@ export default function(options: Schema) {
         projectType: 'application',
         prefix: getPrefix()
       };
-      return updateAngularProjects(tree, projects);
+      return updateWorkspace({ projects })(tree, context);
     },
     (tree: Tree) => {
       const projects = {};

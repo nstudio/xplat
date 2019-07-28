@@ -26,7 +26,9 @@ import {
   missingArgument,
   supportedPlatforms,
   getDefaultTemplateOptions,
-  XplatHelpers
+  XplatHelpers,
+  readWorkspaceJson,
+  updateWorkspace
 } from '@nstudio/xplat';
 import { Schema } from './schema';
 
@@ -111,7 +113,7 @@ export default function(options: Schema) {
  * @param options
  */
 function addProtractorCiConfig(options: Schema) {
-  return (tree: Tree) => {
+  return (tree: Tree, context: SchematicContext) => {
     const config = `
 const defaultConfig = require('./protractor.conf').config;
 defaultConfig.capabilities.chromeOptions = {
@@ -125,11 +127,11 @@ exports.config = defaultConfig;
     const confFile = 'protractor.headless.js';
     tree.create(`/apps/${directory}${e2eProjectName}/${confFile}`, config);
 
-    const angularJson = getJsonFromFile(tree, 'angular.json');
-    if (angularJson && angularJson.projects) {
-      if (angularJson.projects[e2eProjectName]) {
-        if (angularJson.projects[e2eProjectName].architect) {
-          angularJson.projects[
+    const workspaceConfig = readWorkspaceJson(tree);
+    if (workspaceConfig && workspaceConfig.projects) {
+      if (workspaceConfig.projects[e2eProjectName]) {
+        if (workspaceConfig.projects[e2eProjectName].architect) {
+          workspaceConfig.projects[
             e2eProjectName
           ].architect.e2e.configurations.ci = {
             protractorConfig: `apps/${directory}${e2eProjectName}/${confFile}`
@@ -137,7 +139,10 @@ exports.config = defaultConfig;
         }
       }
     }
-    return updateJsonFile(tree, 'angular.json', angularJson);
+    return updateWorkspace({ projects: workspaceConfig.projects })(
+      tree,
+      context
+    );
   };
 }
 
@@ -215,12 +220,14 @@ function adjustAppFiles(options: Schema, tree: Tree) {
     appModuleContent(options)
   );
   // update cli config for shared web specific scss
-  const ngConfig = getJsonFromFile(tree, 'angular.json');
+  const workspaceConfig = readWorkspaceJson(tree);
   // find app
-  if (ngConfig && ngConfig.projects) {
-    if (ngConfig.projects[options.name]) {
-      if (ngConfig.projects[options.name].architect) {
-        ngConfig.projects[options.name].architect.build.options.styles = [
+  if (workspaceConfig && workspaceConfig.projects) {
+    if (workspaceConfig.projects[options.name]) {
+      if (workspaceConfig.projects[options.name].architect) {
+        workspaceConfig.projects[
+          options.name
+        ].architect.build.options.styles = [
           `xplat/${XplatHelpers.getXplatFoldername(
             'web',
             'angular'
@@ -230,7 +237,7 @@ function adjustAppFiles(options: Schema, tree: Tree) {
       }
     }
   }
-  return updateJsonFile(tree, 'angular.json', ngConfig);
+  return updateWorkspace({ projects: workspaceConfig.projects });
 }
 
 function indexContent(name: string) {
