@@ -3,23 +3,12 @@
   "license": "SEE LICENSE IN <your-license-filename>",
   "version": "0.0.0",
   "scripts": {
-    "ng": "ng",
-    "start": "ionic serve",
-    "build:web": "ng build",
-    "build:ionic": "ng build && npm run cap.copy",
-    "build:mobile": "npm run cap.copy && npm run cap.update",
-    "build:mobile:ios": "npm run cap.copy && npx cap update ios",
-    "build:mobile:android": "npm run cap.copy && npx cap update android",
-    "build:prod": "npm run build:web -- --prod && npm run build:mobile",
     "cap.add.ios": "npx cap add ios",
     "cap.add.android": "npx cap add android",
     "cap.ios": "npx cap open ios",
     "cap.android": "npx cap open android",
     "cap.copy": "npx cap copy",
-    "cap.update": "npx cap update",
-    "test": "ng test",
-    "lint": "ng lint",
-    "e2e": "ng e2e"
+    "cap.update": "npx cap update"
   },
   "dependencies": {
     "@angular/animations": "file:<%= pathOffset %>node_modules/@angular/animations",

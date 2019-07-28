@@ -185,10 +185,10 @@ describe('app', () => {
   //   expect(packageData.scripts['start.nativescript.foo.ios']).toBeDefined();
   // });
 
-  describe('skipXplat', () => {
+  describe('useXplat false', () => {
     it('should geneate app with no connections to xplat architecture', async () => {
       const options: Schema = { ...defaultOptions };
-      options.skipXplat = true;
+      options.useXplat = false;
       // console.log('appTree:', appTree);
       const tree = await runSchematic('app', options, appTree);
       // const files = tree.files;

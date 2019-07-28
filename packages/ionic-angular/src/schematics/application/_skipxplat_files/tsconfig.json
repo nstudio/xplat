@@ -12,17 +12,6 @@
     "target": "es2015",
     "typeRoots": ["node_modules/@types"],
     "lib": ["es2018", "dom"],
-    "baseUrl": "./",
-    "paths": {
-      "@<%= npmScope %>/*": ["<%= pathOffset %>libs/*"],
-      "@<%= npmScope %>/ionic": [
-        "<%= pathOffset %>xplat/<%= xplatFolderName %>/index.ts"
-      ],
-      "@<%= npmScope %>/ionic/*": [
-        "<%= pathOffset %>xplat/<%= xplatFolderName %>/*"
-      ],
-      "@<%= npmScope %>/web": ["<%= pathOffset %>xplat/web/index.ts"],
-      "@<%= npmScope %>/web/*": ["<%= pathOffset %>xplat/web/*"]
-    }
+    "baseUrl": "./"
   }
 }

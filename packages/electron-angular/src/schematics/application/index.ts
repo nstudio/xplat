@@ -114,7 +114,7 @@ export default function(options: XplatElectrontHelpers.SchemaApp) {
         electronAppName
       ].architect.build.options.outputPath = `dist/apps/${electronAppName}`;
 
-      if (!options.skipXplat) {
+      if (options.useXplat) {
         projects[
           electronAppName
         ].architect.build.options.main = `apps/${fullTargetAppName}/src/main.electron.ts`;
@@ -144,10 +144,7 @@ export default function(options: XplatElectrontHelpers.SchemaApp) {
       };
       return updateNxProjects(tree, projects);
     },
-    options.skipXplat
-      ? noop()
-      : // adjust app files
-        (tree: Tree) => adjustAppFiles(options, tree),
+    options.useXplat ? (tree: Tree) => adjustAppFiles(options, tree) : noop(),
 
     formatFiles({ skipFormat: options.skipFormat })
   ]);

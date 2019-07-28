@@ -87,10 +87,11 @@
       "description": "Setup app as a sandbox for the workspace.",
       "default": false
     },
-    "skipXplat": {
-      "description": "Skip generating xplat supporting architecture",
+    "useXplat": {
+      "description": "Generate xplat supporting architecture",
       "type": "boolean",
-      "default": false
+      "default": true,
+      "x-prompt": "Use xplat supporting architecture?"
     },
     "skipInstall": {
       "type": "boolean",

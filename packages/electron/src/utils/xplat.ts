@@ -46,9 +46,9 @@ export namespace XplatElectrontHelpers {
      */
     skipInstall?: boolean;
     /**
-     * Skip generating xplat supporting architecture
+     * Generate xplat supporting architecture
      */
-    skipXplat?: boolean;
+    useXplat?: boolean;
     /**
      * Skip formatting files
      */

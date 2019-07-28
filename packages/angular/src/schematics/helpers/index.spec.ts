@@ -25,7 +25,7 @@ describe('helpers schematic', () => {
       name: 'foo',
       prefix: 'tt',
       e2eTestRunner: 'cypress',
-      skipXplat: true
+      useXplat: false
     };
     // console.log('appTree:', appTree);
     appTree = await runSchematic('app', appOptions, appTree);
@@ -91,7 +91,7 @@ describe('helpers schematic', () => {
       name: 'foo',
       prefix: 'tt',
       e2eTestRunner: 'cypress',
-      skipXplat: true
+      useXplat: false
     };
     // console.log('appTree:', appTree);
     appTree = await runSchematic('app', appOptions, appTree);

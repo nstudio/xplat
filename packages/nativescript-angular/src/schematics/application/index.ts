@@ -52,15 +52,15 @@ export default function(options: Schema) {
     // adjust naming convention
     XplatHelpers.applyAppNamingConvention(options, 'nativescript'),
     // use xplat or not
-    options.skipXplat
-      ? noop()
-      : externalSchematic('@nstudio/nativescript-angular', 'xplat', options),
+    options.useXplat
+      ? externalSchematic('@nstudio/nativescript-angular', 'xplat', options)
+      : noop(),
     // create app files
     (tree: Tree, context: SchematicContext) =>
-      addAppFiles(options, options.name, options.skipXplat ? 'skipxplat' : ''),
+      addAppFiles(options, options.name, options.useXplat ? '' : 'skipxplat'),
     // add features
     (tree: Tree, context: SchematicContext) =>
-      options.routing && !options.skipXplat
+      options.routing && options.useXplat
         ? addAppFiles(options, options.name, 'routing')(tree, context)
         : noop()(tree, context),
     // add app resources

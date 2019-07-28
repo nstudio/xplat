@@ -107,7 +107,7 @@ export namespace XplatHelpers {
      * Skip dependent platform files
      */
     skipDependentPlatformFiles?: boolean;
-    skipXplat?: boolean;
+    useXplat?: boolean;
     /**
      * Skip install
      */

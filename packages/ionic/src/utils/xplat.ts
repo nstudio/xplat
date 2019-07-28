@@ -15,7 +15,9 @@ export namespace XplatIonicHelpers {
     return (tree: Tree, context: SchematicContext) => {
       const dependencies = {};
       if (options.skipDependentPlatformFiles) {
-        dependencies[`@${getNpmScope()}/web-scss`] = `file:xplat/web/scss`;
+        if (options.useXplat) {
+          dependencies[`@${getNpmScope()}/web-scss`] = `file:xplat/web/scss`;
+        }
         dependencies['@ionic-native/core'] = ionicNativeCoreVersion;
         dependencies[
           '@ionic-native/splash-screen'
@@ -26,9 +28,9 @@ export namespace XplatIonicHelpers {
       }
 
       const devDependencies = {};
+      devDependencies['@capacitor/cli'] = capacitorCore;
       if (!options.skipDependentPlatformFiles) {
         // using core deps
-        devDependencies['@capacitor/cli'] = capacitorCore;
         devDependencies['@stencil/core'] = stencilCore;
         devDependencies['@stencil/sass'] = stencilSass;
       }

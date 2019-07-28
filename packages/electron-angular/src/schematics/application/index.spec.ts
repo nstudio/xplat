@@ -131,7 +131,7 @@ describe('app', () => {
     expect(tree.exists('/apps/electron/foo/src/index.ts')).toBeTruthy();
   });
 
-  describe('skipXplat', () => {
+  describe('useXplat false', () => {
     it('should geneate app with no connections to xplat architecture', async () => {
       appTree = Tree.empty();
       appTree.create('/apps/web-viewer/package.json', JSON.stringify({}));
@@ -175,7 +175,7 @@ describe('app', () => {
         JSON.stringify({ compilerOptions: { paths: {} } })
       );
       const options: XplatElectrontHelpers.SchemaApp = { ...defaultOptions };
-      options.skipXplat = true;
+      options.useXplat = false;
       // console.log('appTree:', appTree);
       const tree = await runSchematic('app', options, appTree);
       // const files = tree.files;

@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, Routes, RouterModule } from '@angular/router';
 
-export const routes: Routes = [
+const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
-  { path: 'home', loadChildren: './pages/home/home.module#HomeModule' }
+  { path: 'home', loadChildren: () => import('./pages/home/home.module').then( m => m.HomeModule)},
 ];
 
 @NgModule({

@@ -27,9 +27,9 @@ export interface Schema {
    */
   groupByName?: boolean;
   /**
-   * Skip generating xplat supporting architecture
+   * Generate xplat supporting architecture
    */
-  skipXplat?: boolean;
+  useXplat?: boolean;
   /**
    * Add headless e2e configuration suitable for CI
    */

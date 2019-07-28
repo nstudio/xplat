@@ -85,10 +85,11 @@
       "default": false,
       "alias": "S"
     },
-    "skipXplat": {
-      "description": "Skip generating xplat supporting architecture",
+    "useXplat": {
+      "description": "Generate xplat supporting architecture",
       "type": "boolean",
-      "default": false
+      "default": true,
+      "x-prompt": "Use xplat supporting architecture?"
     },
     "skipFormat": {
       "description": "Skip formatting files",

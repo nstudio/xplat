@@ -30,7 +30,7 @@ export namespace XplatIonicAngularHelpers {
       const devDependencies = {};
       const xplatFoldername = XplatHelpers.getXplatFoldername('web', 'angular');
 
-      if (!options.skipXplat) {
+      if (options.useXplat) {
         dependencies[
           `@${getNpmScope()}/web-scss`
         ] = `file:xplat/${xplatFoldername}/scss`;
@@ -58,12 +58,13 @@ export namespace XplatIonicAngularHelpers {
         dependencies[`rxjs`] = rxjsVersion;
         dependencies[`zone.js`] = zonejsVersion;
 
+        devDependencies[`@angular/cli`] = angularVersion;
         devDependencies[`@angular/compiler-cli`] = angularVersion;
         devDependencies[`@angular/language-service`] = angularVersion;
         devDependencies[`codelyzer`] = codelyzerVersion;
       }
 
-      if (!options.skipXplat) {
+      if (options.useXplat) {
         dependencies['@ngx-translate/core'] = ngxTranslateVersion;
         dependencies[
           '@ngx-translate/http-loader'

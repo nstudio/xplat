@@ -50,19 +50,19 @@ export default function(options: Schema) {
     // adjust naming convention
     XplatHelpers.applyAppNamingConvention(options, 'web'),
     // use xplat or not
-    options.skipXplat
-      ? noop()
-      : externalSchematic('@nstudio/angular', 'xplat', {
+    options.useXplat
+      ? externalSchematic('@nstudio/angular', 'xplat', {
           platforms: 'web',
           framework: 'angular'
-        }),
+        })
+      : noop(),
     (tree: Tree, context: SchematicContext) => {
       const nrwlWebOptions = {
         ...options,
         skipInstall: true
       };
       let executionOptions: Partial<ExecutionOptions>;
-      if (!options.skipXplat) {
+      if (options.useXplat) {
         // when generating xplat architecture, ensure:
         // 1. sass is used
         nrwlWebOptions.style = 'scss';
@@ -79,19 +79,18 @@ export default function(options: Schema) {
     },
     (tree: Tree, context: SchematicContext) =>
       addHeadlessE2e(options)(tree, context),
-    options.skipXplat
-      ? noop()
-      : (tree: Tree, context: SchematicContext) =>
-          addAppFiles(options)(tree, context),
-    options.skipXplat
-      ? noop()
-      : (tree: Tree, context: SchematicContext) =>
-          addAppFiles(options, 'routing')(tree, context),
+    options.useXplat
+      ? (tree: Tree, context: SchematicContext) =>
+          addAppFiles(options)(tree, context)
+      : noop(),
+    options.useXplat
+      ? (tree: Tree, context: SchematicContext) =>
+          addAppFiles(options, 'routing')(tree, context)
+      : noop(),
     // adjust app files
-    options.skipXplat
-      ? noop()
-      : (tree: Tree, context: SchematicContext) =>
-          adjustAppFiles(options, tree),
+    options.useXplat
+      ? (tree: Tree, context: SchematicContext) => adjustAppFiles(options, tree)
+      : noop(),
     // add start/clean scripts
     (tree: Tree) => {
       const platformApp = options.name.replace('-', '.');

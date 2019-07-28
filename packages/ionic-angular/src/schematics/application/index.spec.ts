@@ -26,9 +26,6 @@ describe('app.ionic schematic', () => {
       0
     );
     expect(
-      files.indexOf('/apps/ionic-foo/angular.json')
-    ).toBeGreaterThanOrEqual(0);
-    expect(
       files.indexOf('/apps/ionic-foo/capacitor.config.json')
     ).toBeGreaterThanOrEqual(0);
     expect(
@@ -85,9 +82,9 @@ describe('app.ionic schematic', () => {
     expect(tree.exists('/apps/frontend/ionic-foo/src/index.html')).toBeTruthy();
   });
 
-  it('should create all files for app without xplat when skipXplat is used', async () => {
+  it('should create all files for app without xplat when useXplat is false', async () => {
     const options: Schema = { ...defaultOptions };
-    options.skipXplat = true;
+    options.useXplat = false;
     const tree = await runSchematic('app', options, appTree);
     // const files = tree.files;
     // console.log(files);

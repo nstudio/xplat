@@ -48,15 +48,18 @@ export default function(options: ApplicationOptions) {
     XplatHelpers.applyAppNamingConvention(options, 'ionic'),
     // use xplat or not
     (tree: Tree, context: SchematicContext) =>
-      options.skipXplat
-        ? noop()
-        : externalSchematic('@nstudio/angular', 'xplat', {
+      options.useXplat
+        ? externalSchematic('@nstudio/angular', 'xplat', {
             ...options,
             platforms: 'ionic,web'
+          })
+        : externalSchematic('@nstudio/ionic', 'xplat', {
+            ...options,
+            skipDependentPlatformFiles: true
           }),
     // create app files
     (tree: Tree, context: SchematicContext) =>
-      addAppFiles(options, options.name, options.skipXplat ? 'skipxplat' : '')(
+      addAppFiles(options, options.name, options.useXplat ? '' : 'skipxplat')(
         tree,
         context
       ),
@@ -73,9 +76,7 @@ export default function(options: ApplicationOptions) {
         `clean`
       ] = `npx rimraf -- hooks node_modules package-lock.json && npm i`;
       // add convenient ionic scripts
-      scripts[`build.${platformApp}`] = `cd apps/${directory}${
-        options.name
-      } && npm run build:web`;
+      scripts[`build.${platformApp}`] = `nx build ${options.name}`;
       scripts[
         `prepare.${platformApp}`
       ] = `npm run clean && npm run clean.${platformApp} && npm run build.${platformApp}`;
@@ -98,9 +99,6 @@ export default function(options: ApplicationOptions) {
       scripts[`sync.${platformApp}`] = `cd apps/${directory}${
         options.name
       } && npm run cap.copy`;
-      scripts[`start.${platformApp}`] = `cd apps/${directory}${
-        options.name
-      } && npm start`;
       scripts[`clean.${platformApp}`] = `cd apps/${directory}${
         options.name
       } && npx rimraf -- hooks node_modules platforms www plugins ios android package-lock.json && npm i && rimraf -- package-lock.json`;
@@ -108,15 +106,179 @@ export default function(options: ApplicationOptions) {
     },
     (tree: Tree, context: SchematicContext) => {
       const directory = options.directory ? `${options.directory}/` : '';
+      const appFolder = `apps/${directory}${options.name}/`;
       const projects = {};
       projects[`${options.name}`] = {
-        root: `apps/${directory}${options.name}/`,
-        sourceRoot: `apps/${directory}${options.name}/src`,
+        root: appFolder,
+        sourceRoot: `${appFolder}src`,
         projectType: 'application',
         prefix: getPrefix(),
         schematics: {
           '@schematics/angular:component': {
             styleext: 'scss'
+          }
+        },
+        architect: {
+          build: {
+            builder: '@angular-devkit/build-angular:browser',
+            options: {
+              outputPath: `${appFolder}www`,
+              index: `${appFolder}src/index.html`,
+              main: `${appFolder}src/main.ts`,
+              polyfills: `${appFolder}src/polyfills.ts`,
+              tsConfig: `${appFolder}tsconfig.app.json`,
+              assets: [
+                {
+                  glob: '**/*',
+                  input: `${appFolder}src/assets`,
+                  output: 'assets'
+                },
+                {
+                  glob: '**/*.svg',
+                  input: 'node_modules/ionicons/dist/ionicons/svg',
+                  output: './svg'
+                }
+              ],
+              styles: [
+                {
+                  input: `${appFolder}src/theme/variables.scss`
+                },
+                {
+                  input: `${appFolder}src/global.scss`
+                }
+              ],
+              scripts: []
+            },
+            configurations: {
+              production: {
+                fileReplacements: [
+                  {
+                    replace: `${appFolder}src/environments/environment.ts`,
+                    with: `${appFolder}src/environments/environment.prod.ts`
+                  }
+                ],
+                optimization: true,
+                outputHashing: 'all',
+                sourceMap: false,
+                extractCss: true,
+                namedChunks: false,
+                aot: true,
+                extractLicenses: true,
+                vendorChunk: false,
+                buildOptimizer: true,
+                budgets: [
+                  {
+                    type: 'initial',
+                    maximumWarning: '2mb',
+                    maximumError: '5mb'
+                  }
+                ]
+              },
+              ci: {
+                progress: false
+              }
+            }
+          },
+          serve: {
+            builder: '@angular-devkit/build-angular:dev-server',
+            options: {
+              browserTarget: `${options.name}:build`
+            },
+            configurations: {
+              production: {
+                browserTarget: `${options.name}:build:production`
+              },
+              ci: {
+                progress: false
+              }
+            }
+          },
+          'extract-i18n': {
+            builder: '@angular-devkit/build-angular:extract-i18n',
+            options: {
+              browserTarget: `${options.name}:build`
+            }
+          },
+          test: {
+            builder: '@angular-devkit/build-angular:karma',
+            options: {
+              main: `${appFolder}src/test.ts`,
+              polyfills: `${appFolder}src/polyfills.ts`,
+              tsConfig: `${appFolder}tsconfig.spec.json`,
+              karmaConfig: `${appFolder}karma.conf.js`,
+              styles: [],
+              scripts: [],
+              assets: [
+                {
+                  glob: 'favicon.ico',
+                  input: `${appFolder}src/`,
+                  output: '/'
+                },
+                {
+                  glob: '**/*',
+                  input: `${appFolder}src/assets`,
+                  output: '/assets'
+                }
+              ]
+            },
+            configurations: {
+              ci: {
+                progress: false,
+                watch: false
+              }
+            }
+          },
+          lint: {
+            builder: '@angular-devkit/build-angular:tslint',
+            options: {
+              tsConfig: [
+                `${appFolder}tsconfig.app.json`,
+                `${appFolder}tsconfig.spec.json`,
+                `${appFolder}e2e/tsconfig.json`
+              ],
+              exclude: ['**/node_modules/**']
+            }
+          },
+          e2e: {
+            builder: '@angular-devkit/build-angular:protractor',
+            options: {
+              protractorConfig: `${appFolder}e2e/protractor.conf.js`,
+              devServerTarget: `${options.name}:serve`
+            },
+            configurations: {
+              production: {
+                devServerTarget: `${options.name}:serve:production`
+              },
+              ci: {
+                devServerTarget: `${options.name}:serve:ci`
+              }
+            }
+          },
+          'ionic-cordova-build': {
+            builder: '@ionic/angular-toolkit:cordova-build',
+            options: {
+              browserTarget: `${options.name}:build`
+            },
+            configurations: {
+              production: {
+                browserTarget: `${options.name}:build:production`
+              }
+            }
+          },
+          'ionic-cordova-serve': {
+            builder: '@ionic/angular-toolkit:cordova-serve',
+            options: {
+              cordovaBuildTarget: `${options.name}:ionic-cordova-build`,
+              devServerTarget: `${options.name}:serve`
+            },
+            configurations: {
+              production: {
+                cordovaBuildTarget: `${
+                  options.name
+                }:ionic-cordova-build:production`,
+                devServerTarget: `${options.name}:serve:production`
+              }
+            }
           }
         }
       };
