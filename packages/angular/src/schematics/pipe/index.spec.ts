@@ -120,7 +120,7 @@ describe('pipe schematic', () => {
     expect(
       () => (tree = runSchematicSync('pipe', options, appTree))
     ).toThrowError(
-      `libs/features/register/register.module.ts does not exist. Create the feature module first. For example: ng g @nstudio/angular:feature register`
+      `libs/features/register/register.module.ts does not exist. Create the feature module first. For example: nx g @nstudio/angular:feature register`
     );
   });
 
@@ -205,7 +205,7 @@ describe('pipe schematic', () => {
     expect(
       () => (tree = runSchematicSync('pipe', options, appTree))
     ).toThrowError(
-      `xplat/nativescript/features/register/register.module.ts does not exist. Create the feature module first. For example: ng g @nstudio/angular:feature register --platforms=nativescript --onlyModule`
+      `xplat/nativescript/features/register/register.module.ts does not exist. Create the feature module first. For example: nx g @nstudio/angular:feature register --platforms=nativescript --onlyModule`
     );
   });
 
@@ -221,7 +221,7 @@ describe('pipe schematic', () => {
     expect(
       () => (tree = runSchematicSync('pipe', options, appTree))
     ).toThrowError(
-      `apps/nativescript-viewer/src/features/register/register.module.ts does not exist. Create the feature module first. For example: ng g @nstudio/angular:feature register --projects=nativescript-viewer --onlyModule`
+      `apps/nativescript-viewer/src/features/register/register.module.ts does not exist. Create the feature module first. For example: nx g @nstudio/angular:feature register --projects=nativescript-viewer --onlyModule`
     );
   });
 });

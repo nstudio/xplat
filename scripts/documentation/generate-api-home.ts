@@ -4,8 +4,6 @@ import { generateFile, getXplatPackageDependencies } from './utils';
 import { dedent } from 'tslint/lib/utils';
 
 let template = dedent`
-# API
-
 Here is the list of all the available packages inside the Nx ecosystem. You
 can see, for each package its dependencies.
 

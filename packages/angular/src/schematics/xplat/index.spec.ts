@@ -149,7 +149,7 @@ describe('xplat schematic', () => {
     expect(
       () => (tree = runSchematicSync('xplat', options, appTree))
     ).toThrowError(
-      `You must specify which platforms you wish to generate support for. For example: ng g @nstudio/xplat:init --prefix=foo --platforms=${supportedPlatforms.join(
+      `You must specify which platforms you wish to generate support for. For example: nx g @nstudio/xplat:init --prefix=foo --platforms=${supportedPlatforms.join(
         ','
       )}`
     );
