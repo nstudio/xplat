@@ -1,0 +1,39 @@
+# NativeScript
+hooks/
+node_modules/
+platforms/
+
+# NativeScript Template
+*.js.map
+*.js
+!webpack.config.js
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
+.idea
+.cloud
+.project
+tmp/
+typings/
+
+# misc
+npm-debug.log
+
+# app
+!*.d.ts
+/report/
+.nsbuildinfo
+/temp/
+/src/tns_modules/
+
+package-lock.json
+!tools/**

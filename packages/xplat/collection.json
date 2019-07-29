@@ -1,0 +1,45 @@
+{
+  "name": "nstudio/xplat",
+  "version": "0.1",
+  "extends": ["@nrwl/workspace"],
+  "schematics": {
+    "ng-add": {
+      "factory": "./src/schematics/ng-add",
+      "schema": "./src/schematics/ng-add/schema.json",
+      "description": "Add xplat to an existing angular configured Nx Workspace",
+      "hidden": true
+    },
+    "application": {
+      "factory": "./src/schematics/application",
+      "schema": "./src/schematics/application/schema.json",
+      "description": "Add applications.",
+      "aliases": ["app"]
+    },
+    "feature": {
+      "factory": "./src/schematics/feature",
+      "schema": "./src/schematics/feature/schema.json",
+      "description": "Create a feature for xplat."
+    },
+    "component": {
+      "factory": "./src/schematics/component",
+      "schema": "./src/schematics/component/schema.json",
+      "description": "Create a component for xplat.",
+      "aliases": ["c"]
+    },
+    "mode": {
+      "factory": "./src/schematics/mode",
+      "schema": "./src/schematics/mode/schema.json",
+      "description": "Multi-platform development modes for IDEs."
+    },
+    "init": {
+      "factory": "./src/schematics/init",
+      "schema": "./src/schematics/init/schema.json",
+      "description": "Init xplat architecture."
+    },
+    "helpers": {
+      "factory": "./src/schematics/helpers",
+      "schema": "./src/schematics/helpers/schema.json",
+      "description": "xplat helpers for various toolchains."
+    }
+  }
+}

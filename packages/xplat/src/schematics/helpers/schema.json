@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "id": "xplat-helpers",
+  "title": "xplat helpers",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Comma-delimited list of helpers to generate.",
+      "alias": "n",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      }
+    },
+    "platforms": {
+      "type": "string",
+      "description": "Target platforms to generate helpers for."
+    },
+    "target": {
+      "type": "string",
+      "description": "Some helpers support targeting to generate the helper for a specific target. ie: nx g @nstudio/xplat:helpers applitools --target=web-myapp"
+    }
+  },
+  "required": []
+}

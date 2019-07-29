@@ -1,34 +1,50 @@
 {
   "compilerOptions": {
-    "baseUrl": "tsconfig",
-    "lib": [
-      "es2017",
-      "dom"
-    ],
+    "target": "es5",
     "module": "commonjs",
     "moduleResolution": "node",
-    "noEmitOnError": true,
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitAny": false,
-    "noImplicitThis": true,
-    "noUnusedParameters": false,
-    "noUnusedLocals": false,
-    "rootDir": "src/",
-    "skipDefaultLibCheck": true,
+    "outDir": "build",
+    "typeRoots": ["node_modules/@types"],
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "skipLibCheck": true,
-    "sourceMap": true,
-    "strictNullChecks": false,
-    "target": "es6",
-    "types": [
-      "jasmine",
-      "node"
-    ]
+    "types": ["node", "jest"],
+    "lib": ["es2017"],
+    "declaration": true,
+    "baseUrl": ".",
+    "paths": {
+      "@nstudio/angular": ["./packages/angular"],
+      "@nstudio/angular/*": ["./packages/angular/*"],
+      "@nstudio/electron": ["./packages/electron"],
+      "@nstudio/electron/*": ["./packages/electron/*"],
+      "@nstudio/ionic": ["./packages/ionic"],
+      "@nstudio/ionic/*": ["./packages/ionic/*"],
+      "@nstudio/nativescript": ["./packages/nativescript"],
+      "@nstudio/nativescript/*": ["./packages/nativescript/*"],
+      "@nstudio/xplat": ["./packages/xplat"],
+      "@nstudio/xplat/*": ["./packages/xplat/*"],
+      "@nstudio/xplat/testing": ["./packages/xplat/testing"]
+    }
   },
-  "include": [
-    "scripts/*",
-    "src/**/*"
-  ],
   "exclude": [
-    "src/**/_*files/**/*"
-  ]
+    "tmp",
+    "build",
+    "packages/angular/src/schematics/*/*files/**/*",
+    "packages/electron/src/schematics/*/*files/**/*",
+    "packages/electron-angular/src/schematics/*/*files/**/*",
+    "packages/ionic/src/schematics/*/*files/**/*",
+    "packages/ionic-angular/src/schematics/*/*files/**/*",
+    "packages/nativescript/src/schematics/*/*files/**/*",
+    "packages/nativescript-angular/src/schematics/*/*files/**/*",
+    "packages/schematics/src/schematics/*/*files/**/*",
+    "packages/web/src/schematics/*/*files/**/*",
+    "packages/web-angular/src/schematics/*/*files/**/*",
+    "packages/xplat/src/schematics/*/*files/**/*",
+    "scripts"
+  ],
+  "angularCompilerOptions": {
+    "strictMetadataEmit": true,
+    "skipTemplateCodegen": true,
+    "annotationsAs": "decorators"
+  }
 }

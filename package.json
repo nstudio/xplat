@@ -1,112 +1,153 @@
 {
-  "name": "@nstudio/schematics",
-  "version": "7.4.8",
+  "name": "@nstudio/xplat-source",
+  "version": "8.0.0",
   "description": "Cross-platform (xplat) tools for Nx workspaces.",
-  "readmeFilename": "README.md",
+  "homepage": "https://nstudio.io/xplat",
+  "private": true,
   "scripts": {
-    "build": "tsc -p tsconfig.json",
-    "build:e2e": "tsc -p tsconfig.e2e.json",
-    "watch": "tsc -w -p tsconfig.json",
-    "test": "npm run build && jasmine src/**/*_spec.js",
-    "e2e": "npm run build && npm run build:e2e && (mkdir tmp || echo 'tmp folder already exists') && jasmine e2e/**/*e2e-spec.js",
-    "prepare": "npm run build",
-    "postinstall": "node scripts/postinstall.js",
+    "build": "./scripts/package.sh --local",
+    "clean": "npx rimraf -- package-lock.json node_modules",
+    "commit": "git-cz",
+    "checkcommit": "node ./scripts/commit-lint.js",
+    "e2e": "./scripts/e2e.sh",
+    "e2e-rerun": "./scripts/e2e-rerun.sh",
+    "format": "./scripts/format.sh",
+    "linknpm": "./scripts/link.sh",
+    "xplat-release": "./scripts/xplat-release.js",
+    "copy": "./scripts/copy.sh",
+    "test": "yarn linknpm fast && ./scripts/test_schematics.sh",
+    "checkformat": "./scripts/check_format.sh",
+    "checkimports": "node ./scripts/check-imports.js",
+    "create-nx-test": "./scripts/create_nx_for_testing.sh",
+    "create-xplat-workspace-test": "./scripts/create_xplat_workspace_testing.sh",
+    "documentation": "./scripts/documentation/documentation.sh && yarn format && ./scripts/documentation/check-documentation.sh",
     "debug": "node --debug-brk ./node_modules/@angular/cli/bin/ng g command",
+    "publish-local": "./scripts/publish_local.sh",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
     "reset.changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
     "contributors": "githubcontrib --owner nstudio --repo $(basename $(pwd)) --cols 6 --showlogin true --filter gitter-badger --sortOrder desc | pbcopy"
   },
-  "bin": {
-    "create-xplat-workspace": "./scripts/create-xplat-workspace.js"
-  },
-  "schematics": "./src/collection.json",
-  "ng-update": {
-    "requirements": {},
-    "packageGroup": [
-      "@nstudio/schematics"
-    ],
-    "migrations": "./src/migrations/migrations.json"
-  },
-  "bugs": {
-    "url": "https://github.com/nstudio/xplat/issues"
-  },
-  "homepage": "https://nstudio.io/xplat",
-  "keywords": [
-    "xplat",
-    "cross-platform",
-    "multi-platform",
-    "angular",
-    "schematics",
-    "nativescript",
-    "ionic",
-    "electron",
-    "nx",
-    "nstudio"
-  ],
   "author": {
     "name": "nstudio",
     "url": "https://github.com/nstudio"
   },
-  "contributors": [
-    {
-      "name": "Nathan Walker",
-      "url": "https://github.com/NathanWalker"
-    },
-    {
-      "name": "Morten Sjøgren",
-      "url": "https://github.com/m-abs"
-    },
-    {
-      "name": "Sean Perkins",
-      "url": "https://github.com/sean-perkins"
-    },
-    {
-      "name": "Baljeet Singh",
-      "url": "https://github.com/mbaljeetsingh"
-    },
-    {
-      "name": "Miguel Ramos",
-      "url": "https://github.com/miguelramos"
-    },
-    {
-      "name": "Anders Chan",
-      "url": "https://github.com/sr3dna"
-    },
-    {
-      "name": "Kamil Mysliwiec",
-      "url": "https://github.com/kamilmysliwiec"
-    },
-    {
-      "name": "Mathieu Brunot",
-      "url": "https://github.com/madmath03"
-    },
-    {
-      "name": "Emerson Jair",
-      "url": "https://github.com/dungahk"
-    }
-  ],
   "license": "MIT",
   "devDependencies": {
-    "@angular-devkit/core": "~7.2.0",
-    "@angular-devkit/schematics": "~7.2.0",
-    "@angular/cli": "7.3.6",
-    "@nrwl/schematics": "^7.5.0",
-    "@schematics/angular": "~7.2.0",
-    "@types/fs-extra": "5.0.5",
+    "@angular-devkit/architect": "0.801.1",
+    "@angular-devkit/build-angular": "0.801.1",
+    "@angular-devkit/build-ng-packagr": "0.801.1",
+    "@angular-devkit/build-webpack": "0.801.1",
+    "@angular-devkit/core": "8.1.1",
+    "@angular-devkit/schematics": "8.1.1",
+    "@angular/cli": "8.1.1",
+    "@angular/common": "^8.0.0",
+    "@angular/compiler": "^8.0.0",
+    "@angular/compiler-cli": "^8.0.0",
+    "@angular/core": "^8.0.0",
+    "@angular/platform-browser": "^8.0.0",
+    "@angular/platform-browser-dynamic": "^8.0.0",
+    "@angular/router": "^8.0.0",
+    "@cypress/webpack-preprocessor": "^4.1.0",
+    "@nrwl/angular": "~8.4.0",
+    "@nrwl/workspace": "~8.4.0",
+    "@schematics/angular": "8.1.1",
+    "@types/express": "4.16.0",
     "@types/jasmine": "~2.8.6",
-    "@types/node": "~10.3.0",
+    "@types/jasminewd2": "~2.0.3",
+    "@types/jest": "24.0.9",
+    "@types/node": "~8.9.4",
+    "@types/prettier": "^1.10.0",
+    "@types/react": "^16.8.4",
+    "@types/react-dom": "^16.8.2",
+    "@types/webpack": "^4.4.24",
+    "@types/yargs": "^11.0.0",
+    "app-root-path": "^2.0.1",
+    "circular-dependency-plugin": "^5.0.2",
+    "codelyzer": "~5.0.1",
+    "commitizen": "^2.10.1",
+    "conventional-changelog-cli": "^1.3.21",
+    "copy-webpack-plugin": "5.0.3",
+    "core-js": "^3.1.4",
+    "cosmiconfig": "^4.0.0",
+    "cypress": "~3.3.1",
     "cz-conventional-changelog": "^2.1.0",
-    "fx": "13.0.0",
+    "document-register-element": "^1.13.1",
+    "dotenv": "6.2.0",
+    "express": "4.16.3",
+    "fork-ts-checker-webpack-plugin": "^0.4.9",
+    "fs-extra": "7.0.1",
+    "fx": "^14.0.1",
     "github-contributors-list": "^1.2.3",
-    "jasmine": "~3.3.1",
-    "jasmine-core": "~3.3.0",
-    "prettier": "1.15.3",
-    "rxjs": "^6.3.3",
-    "strip-json-comments": "~2.0.1",
-    "typescript": "~3.2.0"
-  },
-  "dependencies": {
+    "graphviz": "^0.0.8",
+    "html-webpack-plugin": "^3.2.0",
+    "husky": "^1.0.0-rc.13",
+    "identity-obj-proxy": "3.0.0",
+    "ignore": "^5.0.4",
+    "jasmine-core": "~2.99.1",
+    "jasmine-marbles": "~0.5.0",
+    "jasmine-spec-reporter": "~4.2.1",
+    "jest": "^24.1.0",
+    "jest-jasmine2": "^24.1.0",
+    "jest-preset-angular": "7.0.0",
+    "karma": "~4.0.0",
+    "karma-chrome-launcher": "~2.2.0",
+    "karma-coverage-istanbul-reporter": "~2.0.1",
+    "karma-jasmine": "~1.1.1",
+    "karma-jasmine-html-reporter": "^0.2.2",
+    "karma-webpack": "2.0.4",
+    "license-webpack-plugin": "^1.4.0",
+    "ng-packagr": "5.1.0",
+    "ngrx-store-freeze": "0.2.4",
+    "npm-run-all": "^4.1.5",
+    "opn": "^5.3.0",
+    "precise-commits": "1.0.2",
+    "prettier": "1.16.4",
+    "release-it": "^7.4.0",
+    "rxjs": "~6.4.0",
+    "semver": "5.4.1",
+    "shelljs": "^0.8.3",
+    "source-map-support": "^0.5.12",
     "strip-json-comments": "2.0.1",
-    "xml2js": "^0.4.19"
+    "tmp": "0.0.33",
+    "tree-kill": "1.2.1",
+    "ts-loader": "^5.3.1",
+    "ts-node": "^8.0.2",
+    "tsconfig-paths-webpack-plugin": "^3.2.0",
+    "tsickle": "^0.33.0",
+    "tslib": "^1.9.3",
+    "tslint": "5.11.0",
+    "typescript": "~3.4.5",
+    "viz.js": "^1.8.1",
+    "weak": "^1.0.1",
+    "webpack": "4.30.0",
+    "webpack-dev-server": "3.1.14",
+    "webpack-node-externals": "^1.7.2",
+    "xml2js": "^0.4.19",
+    "yargs": "^11.0.0",
+    "yargs-parser": "10.0.0",
+    "zone.js": "^0.9.0"
+  },
+  "jest": {
+    "modulePathIgnorePatterns": [
+      "tmp",
+      "<rootDir>/build/packages/.*/src/schematics/.*/package.json",
+      "<rootDir>/test",
+      "<rootDir>/packages",
+      "collection/.*/files"
+    ],
+    "testPathIgnorePatterns": [
+      "node_modules",
+      "<rootDir>/build/packages/angular/spec"
+    ],
+    "collectCoverage": true,
+    "coverageReporters": [
+      "html"
+    ],
+    "coverageDirectory": "coverage"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }

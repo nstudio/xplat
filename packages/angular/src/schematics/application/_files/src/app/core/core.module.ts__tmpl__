@@ -1,0 +1,9 @@
+import { NgModule } from '@angular/core';
+
+// xplat
+import { <%= utils.classify(prefix) %>CoreModule } from '@<%= npmScope %>/<%= xplatFolderName %>';
+
+@NgModule({
+  imports: [<%= utils.classify(prefix) %>CoreModule]
+})
+export class CoreModule {}

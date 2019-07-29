@@ -1,0 +1,48 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "id": "angularcomponent",
+  "title": "Create an angular component in xplat.",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Component name",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      }
+    },
+    "feature": {
+      "type": "string",
+      "description": "Target feature. Default is 'ui' if none specified."
+    },
+    "subFolder": {
+      "type": "string",
+      "description": "Group it in a subfolder of the target feature."
+    },
+    "projects": {
+      "type": "string",
+      "description": "Target projects"
+    },
+    "onlyProject": {
+      "type": "boolean",
+      "description": "Generate for specified projects only and ignore shared code.",
+      "default": false
+    },
+    "platforms": {
+      "type": "string",
+      "description": "Target platforms"
+    },
+    "createBase": {
+      "type": "boolean",
+      "description": "Create a base component for maximum cross platform sharing.",
+      "default": false
+    },
+    "skipFormat": {
+      "description": "Skip formatting files",
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": []
+}

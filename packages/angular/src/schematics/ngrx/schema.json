@@ -1,0 +1,45 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "id": "ngrx",
+  "title": "Create ngrx state in xplat.",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "State name",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      }
+    },
+    "feature": {
+      "type": "string",
+      "description": "Generate inside and attach to target feature."
+    },
+    "projects": {
+      "type": "string",
+      "description": "Generate only for specified target projects."
+    },
+    "platforms": {
+      "type": "string",
+      "description": "If you need platform specific state you can specify them here. By default state is generated in /libs since it often is ordinarily platform agnostic."
+    },
+    "module": {
+      "type": "string",
+      "default": "",
+      "description": "Allows specification of the declaring module.",
+      "alias": "m"
+    },
+    "root": {
+      "type": "boolean",
+      "default": false,
+      "description": "Flag to setup the root state or feature state."
+    },
+    "skipFormat": {
+      "description": "Skip formatting files",
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": []
+}

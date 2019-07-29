@@ -1,0 +1,8 @@
+{
+  "name": "<%= utils.sanitize(appname) %>",
+  "type": "angular",
+  "integrations": {
+    "capacitor": {}
+  },
+  "app_id": ""
+}

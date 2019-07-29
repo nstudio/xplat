@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "id": "nativescript-app-resources",
+  "title": "NativeScript App Resources Options Schema",
+  "type": "object",
+  "properties": {
+    "path": {
+      "type": "string",
+      "alias": "p"
+    },
+    "name": {
+      "type": "string",
+      "alias": "n",
+      "default": "App_Resources"
+    }
+  },
+  "required": ["path"]
+}

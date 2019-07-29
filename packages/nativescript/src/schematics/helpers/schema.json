@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "id": "xplat-nativescript-helpers",
+  "title": "xplat nativescript helpers",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Comma-delimited list of helpers to generate.",
+      "alias": "n",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      }
+    },
+    "target": {
+      "type": "string",
+      "description": "Some helpers support targeting to generate the helper for a specific target. ie: ng g @nstudio/nativescript:helpers imports"
+    }
+  },
+  "required": []
+}

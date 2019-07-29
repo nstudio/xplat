@@ -1,0 +1,95 @@
+{
+  "name": "@nstudio/schematics",
+  "version": "0.0.1",
+  "description": "Cross-platform (xplat) tools for Nx workspaces.",
+  "homepage": "https://nstudio.io/xplat",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nstudio/xplat.git"
+  },
+  "keywords": [
+    "xplat",
+    "cross-platform",
+    "multi-platform",
+    "nx",
+    "angular",
+    "schematics",
+    "electron",
+    "ionic",
+    "nativescript",
+    "nstudio"
+  ],
+  "main": "index.js",
+  "types": "index.d.ts",
+  "author": "Nathan Walker",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nstudio/xplat/issues"
+  },
+  "contributors": [
+    {
+      "name": "Nathan Walker",
+      "url": "https://github.com/NathanWalker"
+    },
+    {
+      "name": "Morten Sjøgren",
+      "url": "https://github.com/m-abs"
+    },
+    {
+      "name": "Sean Perkins",
+      "url": "https://github.com/sean-perkins"
+    },
+    {
+      "name": "Baljeet Singh",
+      "url": "https://github.com/mbaljeetsingh"
+    },
+    {
+      "name": "Miguel Ramos",
+      "url": "https://github.com/miguelramos"
+    },
+    {
+      "name": "Anders Chan",
+      "url": "https://github.com/sr3dna"
+    },
+    {
+      "name": "Kamil Mysliwiec",
+      "url": "https://github.com/kamilmysliwiec"
+    },
+    {
+      "name": "Mathieu Brunot",
+      "url": "https://github.com/madmath03"
+    },
+    {
+      "name": "Emerson Jair",
+      "url": "https://github.com/dungahk"
+    }
+  ],
+  "schematics": "./src/collection.json",
+  "ng-update": {
+    "requirements": {},
+    "migrations": "./migrations/migrations.json"
+  },
+  "dependencies": {
+    "@angular-devkit/core": "8.0.1",
+    "@angular-devkit/schematics": "8.0.1",
+    "@nrwl/angular": "^8.0.0",
+    "@nrwl/workspace": "^8.0.0",
+    "@nstudio/angular": "*",
+    "@nstudio/xplat": "*",
+    "cosmiconfig": "4.0.0",
+    "fs-extra": "6.0.0",
+    "graphviz": "0.0.8",
+    "ignore": "5.0.4",
+    "npm-run-all": "4.1.5",
+    "opn": "^5.3.0",
+    "rxjs": "6.3.3",
+    "semver": "5.4.1",
+    "strip-json-comments": "2.0.1",
+    "tmp": "0.0.33",
+    "viz.js": "^1.8.1",
+    "xml2js": "^0.4.19",
+    "yargs-parser": "10.0.0",
+    "yargs": "^11.0.0",
+    "prettier": "1.16.4"
+  }
+}

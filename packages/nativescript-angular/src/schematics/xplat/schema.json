@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "id": "xplat-nativescript-angular",
+  "title": "xplat nativescript angular schema",
+  "type": "object",
+  "properties": {
+    "prefix": {
+      "type": "string",
+      "description": "The prefix to apply to generated selectors.",
+      "alias": "p"
+    },
+    "npmScope": {
+      "type": "string",
+      "description": "The npm scope to use.",
+      "alias": "wn"
+    },
+    "skipFormat": {
+      "description": "Skip formatting files",
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

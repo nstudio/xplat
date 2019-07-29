@@ -1,0 +1,103 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "id": "xplatApp",
+  "title": "Create an xplat app",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "The name of the app.",
+      "alias": "n",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      },
+      "x-prompt": "What name would you like for this app?"
+    },
+    "prefix": {
+      "type": "string",
+      "description": "The prefix to apply to generated selectors.",
+      "alias": "p"
+    },
+    "platforms": {
+      "type": "string",
+      "description": "Platforms.",
+      "x-prompt": {
+        "message": "Which platform would you like to generate an app for?",
+        "type": "list",
+        "items": [
+          {
+            "value": "electron",
+            "label": "electron          [Electron app]"
+          },
+          {
+            "value": "ionic",
+            "label": "ionic             [Ionic app]"
+          },
+          {
+            "value": "nativescript",
+            "label": "nativescript      [NativeScript app]"
+          },
+          {
+            "value": "web",
+            "label": "web               [Web app]"
+          }
+        ]
+      }
+    },
+    "framework": {
+      "type": "string",
+      "description": "Frontend framework.",
+      "x-prompt": {
+        "message": "Which frontend framework should it use?",
+        "type": "list",
+        "items": [
+          {
+            "value": "angular",
+            "label": "angular        [Angular app]"
+          },
+          {
+            "value": "",
+            "label": "none           [vanilla app]"
+          }
+        ]
+      }
+    },
+    "groupByName": {
+      "description": "Group by app name (appname-platform) instead of the default (platform-appname)",
+      "type": "boolean",
+      "default": false
+    },
+    "target": {
+      "type": "string",
+      "description": "The target to use with this generator."
+    },
+    "npmScope": {
+      "type": "string",
+      "description": "The npm scope to use.",
+      "alias": "wn"
+    },
+    "routing": {
+      "type": "boolean",
+      "description": "Configure routing.",
+      "default": false
+    },
+    "setupSandbox": {
+      "type": "boolean",
+      "description": "Setup app as a sandbox for the workspace.",
+      "default": false
+    },
+    "useXplat": {
+      "description": "Generate xplat supporting architecture",
+      "type": "boolean",
+      "default": true,
+      "x-prompt": "Use xplat supporting architecture?"
+    },
+    "skipInstall": {
+      "type": "boolean",
+      "description": "Skip installing dependencies.",
+      "default": false
+    }
+  },
+  "required": []
+}

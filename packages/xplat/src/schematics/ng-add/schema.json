@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "id": "ng-add",
+  "title": "Add xplat to Workspace",
+  "description": "NOTE: Does not work in the --dry-run mode",
+  "type": "object",
+  "properties": {
+    "platforms": {
+      "type": "string",
+      "description": "Target platforms to support."
+    },
+    "framework": {
+      "type": "string",
+      "description": "Target frameworks to support."
+    },
+    "prefix": {
+      "type": "string",
+      "description": "The prefix to apply to xplat generated selectors."
+    },
+    "skipFormat": {
+      "description": "Skip formatting files",
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

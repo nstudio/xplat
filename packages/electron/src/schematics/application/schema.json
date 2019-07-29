@@ -1,0 +1,54 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "id": "xplatElectronApp",
+  "title": "Create an Electron App",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "The name of the app.",
+      "alias": "n",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      },
+      "x-prompt": "What name would you like for this app?"
+    },
+    "directory": {
+      "description": "The directory of the new app.",
+      "type": "string",
+      "x-prompt": "In which directory should the app be generated?"
+    },
+    "target": {
+      "type": "string",
+      "description": "The name of the web app to use inside the electron app. ie, web-myapp",
+      "x-prompt": "What's the name of the web app in your workspace you'd like to use inside Electron?"
+    },
+    "prefix": {
+      "type": "string",
+      "description": "The prefix to apply to generated selectors.",
+      "alias": "p"
+    },
+    "groupByName": {
+      "description": "Group by app name (appname-platform) instead of the default (platform-appname)",
+      "type": "boolean",
+      "default": false
+    },
+    "npmScope": {
+      "type": "string",
+      "description": "The npm scope to use.",
+      "alias": "wn"
+    },
+    "skipInstall": {
+      "type": "boolean",
+      "description": "Skip installing dependencies.",
+      "default": false
+    },
+    "skipFormat": {
+      "description": "Skip formatting files",
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": []
+}

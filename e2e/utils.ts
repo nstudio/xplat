@@ -1,17 +1,16 @@
-import { statSync, writeFileSync } from "fs";
-import { execSync } from "child_process";
-import { ensureDirSync } from "fs-extra";
-import * as path from "path";
+import { statSync, writeFileSync } from 'fs';
+import { execSync } from 'child_process';
+import { ensureDirSync } from 'fs-extra';
+import * as path from 'path';
 
 export enum EPlatform {
-  Web = 1,
-  NativeScript = 2,
-  Ionic = 4,
-  Electron = 8,
-  Nest = 16
+  Web,
+  NativeScript,
+  Ionic,
+  Electron
 }
 
-const projectName: string = "proj";
+const projectName: string = 'proj';
 
 export function uniq(prefix: string) {
   return `${prefix}${Math.floor(Math.random() * 10000000)}`;
@@ -24,14 +23,14 @@ export function runCLI(
   }
 ): string {
   try {
-    console.log("Running ng", command);
+    console.log('Running ng', command);
     return execSync(`./node_modules/.bin/ng ${command}`, {
       cwd: `./tmp/${projectName}`
     })
       .toString()
       .replace(
         /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g,
-        ""
+        ''
       );
   } catch (e) {
     if (opts.silenceError) {
@@ -60,7 +59,7 @@ export function runNgNew(command?: string, silent?: boolean): string {
     `../node_modules/.bin/ng new ${projectName} --no-interactive ${command}`,
     {
       cwd: `./tmp`,
-      ...(silent ? { stdio: ["ignore", "ignore", "ignore"] } : {})
+      ...(silent ? { stdio: ['ignore', 'ignore', 'ignore'] } : {})
     }
   );
   return buffer ? buffer.toString() : null;
@@ -76,25 +75,22 @@ export function getCwd(): string {
 }
 
 export function updateFile(f: string, content: string): void {
-  ensureDirSync(path.dirname(path.join(getCwd(), "tmp", projectName, f)));
-  writeFileSync(path.join(getCwd(), "tmp", projectName, f), content);
+  ensureDirSync(path.dirname(path.join(getCwd(), 'tmp', projectName, f)));
+  writeFileSync(path.join(getCwd(), 'tmp', projectName, f), content);
 }
 
 function publishXplatPackage() {
-  execSync("npm pack");
+  execSync('npm pack');
 }
 
 function installXplatPackage() {
-  execSync(
-    "npm i ../../nstudio-schematics-$(fx ../../package.json .version).tgz",
-    {
-      cwd: `./tmp/${projectName}`
-    }
-  );
+  execSync('npm i ../nstudio-xplat-source-$(fx ../package.json .version).tgz', {
+    cwd: `./tmp/${projectName}`
+  });
 }
 
 export function npmInstall() {
-  return execSync("npm i", {
+  return execSync('npm i', {
     cwd: `./tmp/${projectName}`
   });
 }
@@ -102,7 +98,7 @@ export function npmInstall() {
 export function newProject(): void {
   cleanup();
   if (!directoryExists(`./tmp/${projectName}_backup`)) {
-    runNgNew(`--collection=@nrwl/schematics --npmScope=${projectName}`, true);
+    runNgNew(`--collection=@nrwl/workspace --npmScope=${projectName}`, true);
     npmInstall();
     execSync(`mv ./tmp/${projectName} ./tmp/${projectName}_backup`);
   }
@@ -117,44 +113,42 @@ export function generateXplatArchitecture(platforms: EPlatform) {
   publishXplatPackage();
   installXplatPackage();
   const platformsArg = `--platforms=${
-    isPlatform(platforms, EPlatform.Web) ? "web," : ""
-  }${isPlatform(platforms, EPlatform.NativeScript) ? "nativescript," : ""}${
-    isPlatform(platforms, EPlatform.Ionic) ? "ionic," : ""
-  }${isPlatform(platforms, EPlatform.Electron) ? "electron," : ""}${
-    isPlatform(platforms, EPlatform.Nest) ? "nest," : ""
-  }`;
+    isPlatform(platforms, EPlatform.Web) ? 'web,' : ''
+  }${isPlatform(platforms, EPlatform.NativeScript) ? 'nativescript,' : ''}${
+    isPlatform(platforms, EPlatform.Ionic) ? 'ionic,' : ''
+  }${isPlatform(platforms, EPlatform.Electron) ? 'electron' : ''}`;
 
-  const cmd = `generate xplat --prefix=${projectName} ${platformsArg}`;
+  const cmd = `generate @nstudio/xplat:init --prefix=${projectName} ${platformsArg}`;
   return runCLI(cmd);
 }
 
 function getPlatformId(platform: EPlatform) {
   switch (platform) {
+    case EPlatform.Web:
+      return 'web';
     case EPlatform.NativeScript:
-      return "nativescript";
+      return 'nativescript';
     case EPlatform.Ionic:
-      return "ionic";
+      return 'ionic';
     case EPlatform.Electron:
-      return "electron";
-    case EPlatform.Nest:
-      return "nest";
+      return 'electron';
     default:
-      return "";
+      return '';
   }
 }
 
-export function generateApp(platform: EPlatform, appName: string, args = "") {
+export function generateApp(platform: EPlatform, appName: string, args = '') {
   const plat = getPlatformId(platform);
-  const cmd = `generate app${plat ? "." + plat : ""} ${appName} ${args}`;
+  const cmd = `generate @nstudio/${plat}-angular:app ${appName} ${args}`;
   return runCLI(cmd);
 }
 
 function getPlatformName(appName: string, platform: EPlatform, e2e = false) {
   const plat = getPlatformId(platform);
-  return `${plat || "web"}-${appName}${e2e ? "-e2e" : ""}`;
+  return `${plat || 'web'}-${appName}${e2e ? '-e2e' : ''}`;
 }
 
-export function runE2e(appName: string, args = "") {
+export function runE2e(appName: string, args = '') {
   const cmd = `e2e ${getPlatformName(appName, EPlatform.Web, true)} ${args}`;
   return runCLI(cmd);
 }

@@ -1,0 +1,19 @@
+{
+  "name": "nstudio/web",
+  "version": "0.1",
+  "extends": ["@nstudio/xplat"],
+  "schematics": {
+    "ng-add": {
+      "factory": "./src/schematics/ng-add",
+      "schema": "./src/schematics/ng-add/schema.json",
+      "description": "Add xplat web to an existing Nx Workspace.",
+      "hidden": true
+    },
+    "xplat": {
+      "factory": "./src/schematics/xplat",
+      "schema": "./src/schematics/xplat/schema.json",
+      "description": "Add xplat for web.",
+      "hidden": true
+    }
+  }
+}

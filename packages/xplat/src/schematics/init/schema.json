@@ -1,0 +1,76 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "id": "initXplatSupport",
+  "title": "xplat schema",
+  "type": "object",
+  "properties": {
+    "platforms": {
+      "type": "string",
+      "description": "Target platforms to support.",
+      "x-prompt": {
+        "message": "Would you like to generate xplat supporting architecture now? You can also generate later with: nx generate @nstudio/xplat:init",
+        "type": "list",
+        "items": [
+          {
+            "value": "",
+            "label": "not right now     [just add xplat tooling]"
+          },
+          {
+            "value": "electron",
+            "label": "electron          [generate xplat Electron support]"
+          },
+          {
+            "value": "ionic",
+            "label": "ionic             [generate xplat Ionic support]"
+          },
+          {
+            "value": "nativescript",
+            "label": "nativescript      [generate xplat NativeScript support]"
+          },
+          {
+            "value": "web",
+            "label": "web               [generate xplat Web support]"
+          }
+        ]
+      }
+    },
+    "framework": {
+      "type": "string",
+      "description": "Frontend framework to support.",
+      "x-prompt": {
+        "message": "Do you prefer to use a frontend framework?",
+        "type": "list",
+        "items": [
+          {
+            "value": "angular",
+            "label": "angular          [ensure platforms are added with Angular]"
+          },
+          {
+            "value": "",
+            "label": "not right now    [I'll decide later]"
+          }
+        ]
+      }
+    },
+    "prefix": {
+      "type": "string",
+      "description": "The prefix to apply to generated selectors.",
+      "x-prompt": "Please input a 2-3 character prefix to use with xplat generators:"
+    },
+    "npmScope": {
+      "type": "string",
+      "description": "The npm scope to use.",
+      "alias": "wn"
+    },
+    "skipFormat": {
+      "description": "Skip formatting files",
+      "type": "boolean",
+      "default": false
+    },
+    "skipInstall": {
+      "description": "Skip installing dependency packages.",
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

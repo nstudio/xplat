@@ -1,0 +1,60 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "id": "NativeScriptApp",
+  "title": "Create a NativeScript app",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "The name of the app.",
+      "alias": "n",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      },
+      "x-prompt": "What name would you like for this app?"
+    },
+    "prefix": {
+      "type": "string",
+      "description": "The prefix to apply to generated selectors.",
+      "alias": "p"
+    },
+    "directory": {
+      "description": "The directory of the new app.",
+      "type": "string",
+      "x-prompt": "In which directory should the app be generated?"
+    },
+    "groupByName": {
+      "description": "Group by app name (appname-platform) instead of the default (platform-appname)",
+      "type": "boolean",
+      "default": false
+    },
+    "npmScope": {
+      "type": "string",
+      "description": "The npm scope to use.",
+      "alias": "wn"
+    },
+    "setupSandbox": {
+      "type": "boolean",
+      "description": "Setup app as a sandbox for the workspace.",
+      "default": false
+    },
+    "useXplat": {
+      "description": "Generate xplat supporting architecture",
+      "type": "boolean",
+      "default": true,
+      "x-prompt": "Use xplat supporting architecture?"
+    },
+    "skipInstall": {
+      "type": "boolean",
+      "description": "Skip installing dependencies.",
+      "default": false
+    },
+    "addCliDependency": {
+      "type": "boolean",
+      "description": "Add {N} CLI to devDependencies",
+      "default": false
+    }
+  },
+  "required": []
+}
