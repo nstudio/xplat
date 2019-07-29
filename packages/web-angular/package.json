@@ -1,5 +1,5 @@
 {
-  "name": "nstudio-xplat-web-angular",
+  "name": "@nstudio/web-angular",
   "version": "0.0.1",
   "description": "Web Angular Plugin for xplat",
   "homepage": "https://nstudio.io/xplat",

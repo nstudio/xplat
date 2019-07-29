@@ -1,0 +1,43 @@
+[
+  {
+    "id": "xplat",
+    "itemList": [
+      {
+        "name": "Getting Started",
+        "id": "getting-started",
+        "itemList": [
+          {
+            "name": "What is xplat?",
+            "id": "what-is-xplat"
+          },
+          {
+            "name": "Getting Started",
+            "id": "getting-started"
+          },
+          {
+            "name": "xplat and Nx",
+            "id": "xplat-and-nx"
+          },
+          {
+            "name": "Resources",
+            "id": "resources"
+          },
+          {
+            "name": "About",
+            "id": "about"
+          }
+        ]
+      },
+      {
+        "name": "Fundamentals",
+        "id": "fundamentals",
+        "itemList": [
+          {
+            "name": "Understanding xplat architecture",
+            "id": "architecture"
+          }
+        ]
+      }
+    ]
+  }
+]

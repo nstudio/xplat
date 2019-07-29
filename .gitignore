@@ -12,6 +12,3 @@ tmp
 jest.debug.config.js
 
 package-lock.json
-
-# TEMP
-docs
