@@ -14,9 +14,9 @@
     "nx",
     "angular",
     "schematics",
-    "nativescript",
-    "ionic",
     "electron",
+    "ionic",
+    "nativescript",
     "nstudio"
   ],
   "main": "index.js",

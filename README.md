@@ -9,7 +9,7 @@
 </div>
 <hr>
 
-**xplat** is an added value pack for [Nx](https://nrwl.io/nx) which includes additional app generators and _optional_ supporting architecture for different platform/framework combinations.
+**xplat** is an added value pack for [Nx](https://nrwl.io/nx) which provides additional app generators and optional supporting architecture for different platform/framework combinations.
 
 ## Currently supported platforms
 
@@ -22,8 +22,9 @@
 
 ## Documentation
 
-- [Setup Guide](https://nstudio.io/xplat/)
-- [Generators](https://nstudio.io/xplat/generators/)
+- [Getting Started](https://nstudio.io/xplat/getting-started)
+- [Fundamentals](https://nstudio.io/xplat/fundamentals)
+- [API Documentation](https://nstudio.io/xplat/api)
 - [Design Doc](https://t.co/z2lRxOBFAg)
 - [Wiki](https://github.com/nstudio/xplat/wiki/FAQ)
 

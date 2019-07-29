@@ -41,28 +41,29 @@ function addDependencies() {
       });
     const newDependencies = {};
     const newDevDependencies = {
-      '@nstudio/xplat': '8.0.0'
+      '@nstudio/xplat': '^8.0.0',
+      '@nstudio/angular': '^8.0.0'
     };
     context.logger.info(`Adding @nstudio/xplat as a dependency`);
     if (dependencies['@angular/core']) {
-      newDevDependencies['@nstudio/angular'] = '8.0.0';
-      newDevDependencies['@nstudio/web'] = '8.0.0';
-      newDevDependencies['@nstudio/web-angular'] = '8.0.0';
+      newDevDependencies['@nstudio/web'] = '^8.0.0';
+      newDevDependencies['@nstudio/web-angular'] = '^8.0.0';
       context.logger.info(`Adding @nstudio/angular as a dependency`);
     }
     if (dependencies['nativescript-angular']) {
-      newDevDependencies['@nstudio/nativescript'] = '8.0.0';
-      newDevDependencies['@nstudio/nativescript-angular'] = '8.0.0';
+      newDevDependencies['@nstudio/nativescript'] = '^8.0.0';
+      newDevDependencies['@nstudio/nativescript-angular'] = '^8.0.0';
       context.logger.info(`Adding @nstudio/nativescript as a dependency`);
     }
     if (dependencies['electron'] || devDependencies['electron']) {
-      newDevDependencies['@nstudio/electron'] = '8.0.0';
-      newDevDependencies['@nstudio/electron-angular'] = '8.0.0';
+      newDevDependencies['@nstudio/electron'] = '^8.0.0';
+      newDevDependencies['@nstudio/electron-angular'] = '^8.0.0';
       context.logger.info(`Adding @nstudio/electron as a dependency`);
     }
     if (dependencies['@ionic-native'] || devDependencies['@ionic-native']) {
-      newDevDependencies['@nstudio/ionic'] = '8.0.0';
-      newDevDependencies['@nstudio/ionic-angular'] = '8.0.0';
+      newDevDependencies['@nstudio/ionic'] = '^8.0.0';
+      newDevDependencies['@nstudio/ionic-angular'] = '^8.0.0';
+      newDevDependencies['@nstudio/web-angular'] = '^8.0.0';
       context.logger.info(`Adding @nstudio/ionic as a dependency`);
     }
 

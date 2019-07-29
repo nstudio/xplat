@@ -25,7 +25,7 @@ export default function(options: Schema) {
       missingArgument(
         'name',
         `Provide a comma delimited list of helpers to generate like this for 'applitools'.`,
-        'ng g @nstudio/xplat:helpers applitools --target=web-myapp'
+        'nx g @nstudio/xplat:helpers applitools --target=web-myapp'
       )
     );
   }

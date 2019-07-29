@@ -12,8 +12,8 @@
     "cross-platform",
     "multi-platform",
     "nx",
-    "angular",
     "electron",
+    "angular",
     "schematics",
     "nstudio"
   ],

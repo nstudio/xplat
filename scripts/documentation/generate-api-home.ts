@@ -1,6 +1,6 @@
 import * as path from 'path';
 import { getPackageConfigurations } from './get-package-configurations';
-import { generateFile, getNxPackageDependencies } from './utils';
+import { generateFile, getXplatPackageDependencies } from './utils';
 import { dedent } from 'tslint/lib/utils';
 
 let template = dedent`
@@ -13,36 +13,36 @@ can see, for each package its dependencies.
 | ----------- | ------------ | ---------------- |
 `;
 
-const imagesTemplate = dedent`
-## Angular
-![Angular](/assets/content/api/angular.jpg)
+// const imagesTemplate = dedent`
+// ## Angular
+// ![Angular](/assets/content/api/angular.jpg)
 
-## React
-![React](/assets/content/api/react.jpg)
+// ## React
+// ![React](/assets/content/api/react.jpg)
 
-## Nest
-![Nest](/assets/content/api/nest.jpg)
+// ## Nest
+// ![Nest](/assets/content/api/nest.jpg)
 
-## Express
-![Express](/assets/content/api/express.jpg)
+// ## Express
+// ![Express](/assets/content/api/express.jpg)
 
-## Node
-![Node](/assets/content/api/node.jpg)
+// ## Node
+// ![Node](/assets/content/api/node.jpg)
 
-## Cypress
-![Cypress](/assets/content/api/cypress.jpg)
+// ## Cypress
+// ![Cypress](/assets/content/api/cypress.jpg)
 
-## Jest
-![Jest](/assets/content/api/jest.jpg)
+// ## Jest
+// ![Jest](/assets/content/api/jest.jpg)
 
-## Web
-![Web](/assets/content/api/web.jpg)
-`;
+// ## Web
+// ![Web](/assets/content/api/web.jpg)
+// `;
 
 getPackageConfigurations()
   .filter(item => item.hasBuilders || item.hasSchematics)
   .map(item => {
-    const dependencies = getNxPackageDependencies(
+    const dependencies = getXplatPackageDependencies(
       path.join(item.root, 'package.json')
     );
 
@@ -61,7 +61,7 @@ getPackageConfigurations()
   });
 
 // Adding images of dependency graphs
-template += imagesTemplate;
+// template += imagesTemplate;
 
 generateFile(path.join(__dirname, '../../docs', 'api'), {
   name: 'home',

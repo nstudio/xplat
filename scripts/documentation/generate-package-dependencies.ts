@@ -1,12 +1,12 @@
 import * as fs from 'fs-extra';
 import * as path from 'path';
 import { getPackageConfigurations } from './get-package-configurations';
-import { getNxPackageDependencies } from './utils';
+import { getXplatPackageDependencies } from './utils';
 
 getPackageConfigurations()
   .filter(item => item.hasBuilders || item.hasSchematics)
   .map(config => {
-    const dependencies = getNxPackageDependencies(
+    const dependencies = getXplatPackageDependencies(
       path.join(config.root, 'package.json')
     );
     if (dependencies) {

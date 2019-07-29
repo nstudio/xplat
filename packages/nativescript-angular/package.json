@@ -12,8 +12,8 @@
     "cross-platform",
     "multi-platform",
     "nx",
-    "angular",
     "nativescript",
+    "angular",
     "schematics",
     "nstudio"
   ],

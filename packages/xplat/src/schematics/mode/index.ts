@@ -16,7 +16,7 @@ export default function(options: xPlatOptions) {
   if (!options.name) {
     name = 'fullstack';
     console.warn(
-      `Using 'fullstack' since no mode was specified. Currently supported: fullstack,${supportedPlatforms}. Example: ng g mode nativescript`
+      `Using 'fullstack' since no mode was specified. Currently supported: fullstack,${supportedPlatforms}. Example: nx g mode nativescript`
     );
   } else {
     name = options.name;

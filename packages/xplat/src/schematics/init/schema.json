@@ -8,7 +8,7 @@
       "type": "string",
       "description": "Target platforms to support.",
       "x-prompt": {
-        "message": "Would you like to generate xplat supporting architecture now? You can also generate later with: ng g @nstudio/xplat:init",
+        "message": "Would you like to generate xplat supporting architecture now? You can also generate later with: nx generate @nstudio/xplat:init",
         "type": "list",
         "items": [
           {

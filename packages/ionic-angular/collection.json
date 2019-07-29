@@ -1,5 +1,5 @@
 {
-  "name": "xplat/ionic-angular",
+  "name": "nstudio/ionic-angular",
   "version": "0.1",
   "extends": ["@nstudio/ionic", "@nstudio/angular"],
   "schematics": {

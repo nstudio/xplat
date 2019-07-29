@@ -1,5 +1,5 @@
 {
-  "name": "@nstudio/web-angular",
+  "name": "nstudio-xplat-web-angular",
   "version": "0.0.1",
   "description": "Web Angular Plugin for xplat",
   "homepage": "https://nstudio.io/xplat",
@@ -14,7 +14,8 @@
     "nx",
     "angular",
     "schematics",
-    "nstudio"
+    "nstudio",
+    "web"
   ],
   "main": "index.js",
   "types": "index.d.ts",

@@ -339,7 +339,7 @@ xdescribe('component', () => {
     };
 
     expect(() => runSchematicSync('component', options, appTree)).toThrowError(
-      `apps/nativescript-viewer/src/features/foo/foo.module.ts does not exist. Create the feature module first. For example: ng g @nstudio/angular:feature foo --projects=nativescript-viewer --onlyModule`
+      `apps/nativescript-viewer/src/features/foo/foo.module.ts does not exist. Create the feature module first. For example: nx g @nstudio/angular:feature foo --projects=nativescript-viewer --onlyModule`
     );
   });
 });

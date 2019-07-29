@@ -1,5 +1,5 @@
 {
-  "name": "xplat/web",
+  "name": "nstudio/web",
   "version": "0.1",
   "extends": ["@nstudio/xplat"],
   "schematics": {

@@ -24,7 +24,7 @@ export function generateFile(
   );
 }
 
-export function getNxPackageDependencies(
+export function getXplatPackageDependencies(
   packageJsonPath: string
 ): { name: string; dependencies: string[]; peerDependencies: string[] } {
   const packageJson = fs.readJsonSync(packageJsonPath);
@@ -35,13 +35,13 @@ export function getNxPackageDependencies(
   return {
     name: packageJson.name,
     dependencies: packageJson.dependencies
-      ? Object.keys(packageJson.dependencies).filter(item =>
-          item.includes('@nrwl')
+      ? Object.keys(packageJson.dependencies).filter(
+          item => item.includes('@nrwl') || item.includes('@nstudio')
         )
       : [],
     peerDependencies: packageJson.peerDependencies
-      ? Object.keys(packageJson.peerDependencies).filter(item =>
-          item.includes('@nrwl')
+      ? Object.keys(packageJson.peerDependencies).filter(
+          item => item.includes('@nrwl') || item.includes('@nstudio')
         )
       : []
   };

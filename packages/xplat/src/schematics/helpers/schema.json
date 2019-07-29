@@ -19,7 +19,7 @@
     },
     "target": {
       "type": "string",
-      "description": "Some helpers support targeting to generate the helper for a specific target. ie: ng g @nstudio/xplat:helpers applitools --target=web-myapp"
+      "description": "Some helpers support targeting to generate the helper for a specific target. ie: nx g @nstudio/xplat:helpers applitools --target=web-myapp"
     }
   },
   "required": []

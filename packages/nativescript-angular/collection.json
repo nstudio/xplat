@@ -1,5 +1,5 @@
 {
-  "name": "xplat/nativescript-angular",
+  "name": "nstudio/nativescript-angular",
   "version": "0.1",
   "extends": ["@nstudio/nativescript", "@nstudio/angular"],
   "schematics": {

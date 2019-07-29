@@ -1,18 +1,18 @@
 {
-  "name": "xplat",
+  "name": "nstudio/xplat",
   "version": "0.1",
   "extends": ["@nrwl/workspace"],
   "schematics": {
     "ng-add": {
       "factory": "./src/schematics/ng-add",
       "schema": "./src/schematics/ng-add/schema.json",
-      "description": "Add xplat to an existing Nx Workspace",
+      "description": "Add xplat to an existing angular configured Nx Workspace",
       "hidden": true
     },
     "application": {
       "factory": "./src/schematics/application",
       "schema": "./src/schematics/application/schema.json",
-      "description": "Add xplat applications.",
+      "description": "Add applications.",
       "aliases": ["app"]
     },
     "feature": {
@@ -34,7 +34,7 @@
     "init": {
       "factory": "./src/schematics/init",
       "schema": "./src/schematics/init/schema.json",
-      "description": "Init xplat testing support."
+      "description": "Init xplat architecture."
     },
     "helpers": {
       "factory": "./src/schematics/helpers",

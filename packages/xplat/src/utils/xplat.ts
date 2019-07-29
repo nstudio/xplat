@@ -1191,7 +1191,7 @@ export namespace XplatFeatureHelpers {
   ): XplatHelpers.IXplatGeneratorOptions {
     if (!options.name) {
       throw new SchematicsException(
-        `You did not specify the name of the feature you'd like to generate. For example: ng g @nstudio/angular:feature my-feature`
+        `You did not specify the name of the feature you'd like to generate. For example: nx g @nstudio/angular:feature my-feature`
       );
     }
     const featureName = options.name.toLowerCase();

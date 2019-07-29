@@ -1,5 +1,5 @@
 {
-  "name": "xplat/ionic",
+  "name": "nstudio/ionic",
   "version": "0.1",
   "extends": ["@nstudio/xplat"],
   "schematics": {

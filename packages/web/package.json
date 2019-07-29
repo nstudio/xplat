@@ -14,7 +14,8 @@
     "nx",
     "ionic",
     "schematics",
-    "nstudio"
+    "nstudio",
+    "web"
   ],
   "main": "index.js",
   "types": "index.d.ts",

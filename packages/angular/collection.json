@@ -1,5 +1,5 @@
 {
-  "name": "xplat/angular",
+  "name": "nstudio/angular",
   "version": "0.1",
   "extends": ["@nrwl/angular", "@nstudio/xplat"],
   "schematics": {

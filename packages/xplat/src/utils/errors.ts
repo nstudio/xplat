@@ -5,9 +5,9 @@ import {
   stringUtils
 } from './general';
 
-export const errorMissingPrefix = `Missing --prefix flag. It's a good practice to specify a 2-3 character prefix for use with your project's component selectors and certain shared class/module names. Example: ng g @nstudio/xplat:init --prefix=foo`;
+export const errorMissingPrefix = `Missing --prefix flag. It's a good practice to specify a 2-3 character prefix for use with your project's component selectors and certain shared class/module names. Example: nx g @nstudio/xplat:init --prefix=foo`;
 
-export const errorXplat = `You have the xplat tools installed but have yet to generate it. Before generating apps you should generate xplat first. Example: ng g @nstudio/xplat:init --prefix=foo`;
+export const errorXplat = `You have the xplat tools installed but have yet to generate it. Before generating apps you should generate xplat first. Example: nx g @nstudio/xplat:init --prefix=foo`;
 
 export function unsupportedPlatformError(platform: string) {
   return `${platform} is currently not a supported platform. Supported at the moment: ${supportedPlatforms}. Please request support for this platform if you'd like and/or submit a PR which we would greatly appreciate.`;
@@ -28,7 +28,7 @@ export function helperTargetError(helper: string) {
 }
 
 export function helperMissingPlatforms() {
-  return `Missing platforms argument. Example: ng g @nstudio/xplat:helpers imports --platforms=nativescript`;
+  return `Missing platforms argument. Example: nx g @nstudio/xplat:helpers imports --platforms=nativescript`;
 }
 
 export function missingArgument(
@@ -42,7 +42,7 @@ export function missingArgument(
 }
 
 export function noPlatformError() {
-  return `You must specify which platforms you wish to generate support for. For example: ng g @nstudio/xplat:init --prefix=foo --platforms=${supportedPlatforms.join(
+  return `You must specify which platforms you wish to generate support for. For example: nx g @nstudio/xplat:init --prefix=foo --platforms=${supportedPlatforms.join(
     ','
   )}`;
 }
@@ -60,7 +60,7 @@ export function generatorError(type: string) {
 }
 
 export function generateOptionError(type: string, missingFeature?: boolean) {
-  const exampleCommand = `ng g ${type} my-${type} --feature=foo --platforms=web,nativescript`;
+  const exampleCommand = `nx g ${type} my-${type} --feature=foo --platforms=web,nativescript`;
   if (missingFeature) {
     return `You did not specify the name of the feature you'd like your ${type} to be a part of. For example: ${exampleCommand}`;
   } else {
@@ -84,7 +84,7 @@ export function needFeatureModuleError(
   } else {
     optionName = '';
   }
-  return `${modulePath} does not exist. Create the feature module first. For example: ng g @nstudio/angular:feature ${featureName}${optionName}`;
+  return `${modulePath} does not exist. Create the feature module first. For example: nx g @nstudio/angular:feature ${featureName}${optionName}`;
 }
 
 export function optionsMissingError(error: string) {

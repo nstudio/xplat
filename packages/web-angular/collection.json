@@ -1,5 +1,5 @@
 {
-  "name": "xplat/web-angular",
+  "name": "nstudio/web-angular",
   "version": "0.1",
   "extends": ["@nstudio/web", "@nstudio/angular"],
   "schematics": {

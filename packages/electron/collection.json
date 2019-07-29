@@ -1,5 +1,5 @@
 {
-  "name": "xplat/electron",
+  "name": "nstudio/electron",
   "version": "0.1",
   "extends": ["@nstudio/xplat"],
   "schematics": {
