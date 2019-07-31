@@ -5,19 +5,19 @@ Add xplat electron to an existing Nx Workspace.
 ## Usage
 
 ```bash
-ng generate ng-add ...
+nx generate ng-add ...
 
 ```
 
 ## Options
 
-### platforms
+### --platforms
 
 Type: `string`
 
 Target platforms to support.
 
-### prefix
+### --prefix
 
 Alias(es): p
 
@@ -25,7 +25,7 @@ Type: `string`
 
 The prefix to apply to xplat generated selectors.
 
-### skipFormat
+### --skipFormat
 
 Default: `false`
 

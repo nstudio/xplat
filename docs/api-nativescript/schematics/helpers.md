@@ -5,13 +5,13 @@ Helpers for NativeScript.
 ## Usage
 
 ```bash
-ng generate helpers ...
+nx generate helpers ...
 
 ```
 
 ## Options
 
-### name
+### --name
 
 Alias(es): n
 
@@ -19,7 +19,7 @@ Type: `string`
 
 Comma-delimited list of helpers to generate.
 
-### target
+### --target
 
 Type: `string`
 

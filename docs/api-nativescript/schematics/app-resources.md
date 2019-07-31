@@ -5,13 +5,13 @@ Create app resources for NativeScript app.
 ## Usage
 
 ```bash
-ng generate app-resources ...
+nx generate app-resources ...
 
 ```
 
 ## Options
 
-### name
+### --name
 
 Alias(es): n
 
@@ -19,7 +19,7 @@ Default: `App_Resources`
 
 Type: `string`
 
-### path
+### --path
 
 Alias(es): p
 

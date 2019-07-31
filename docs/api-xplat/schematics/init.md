@@ -5,19 +5,19 @@ Init xplat architecture.
 ## Usage
 
 ```bash
-ng generate init ...
+nx generate init ...
 
 ```
 
 ## Options
 
-### framework
+### --framework
 
 Type: `string`
 
 Frontend framework to support.
 
-### npmScope
+### --npmScope
 
 Alias(es): wn
 
@@ -25,19 +25,19 @@ Type: `string`
 
 The npm scope to use.
 
-### platforms
+### --platforms
 
 Type: `string`
 
 Target platforms to support.
 
-### prefix
+### --prefix
 
 Type: `string`
 
 The prefix to apply to generated selectors.
 
-### skipFormat
+### --skipFormat
 
 Default: `false`
 
@@ -45,7 +45,7 @@ Type: `boolean`
 
 Skip formatting files
 
-### skipInstall
+### --skipInstall
 
 Default: `false`
 

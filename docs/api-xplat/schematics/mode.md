@@ -5,13 +5,13 @@ Multi-platform development modes for IDEs.
 ## Usage
 
 ```bash
-ng generate mode ...
+nx generate mode ...
 
 ```
 
 ## Options
 
-### name
+### --name
 
 Alias(es): n
 
@@ -19,7 +19,7 @@ Type: `string`
 
 The platform development mode to focus on.
 
-### projects
+### --projects
 
 Alias(es): apps
 

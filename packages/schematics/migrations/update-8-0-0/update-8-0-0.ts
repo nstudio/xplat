@@ -90,6 +90,12 @@ const removeOldDependencies = updateJsonInTree(
       );
     }
 
+    json.xplat = {
+      ...(json.xplat || {}),
+      // all updates into 8.0 will be angular based since that was all that was previously supported
+      framework: 'angular'
+    };
+
     return json;
   }
 );
@@ -102,13 +108,18 @@ const displayInformation = (host: Tree, context: SchematicContext) => {
   `);
 };
 
-const updateDefaultCollection = (host: Tree, context: SchematicContext) => {
+const updateDefaultCollection = (tree: Tree, context: SchematicContext) => {
   const { dependencies, devDependencies } = readJsonInTree(
-    host,
+    tree,
     'package.json'
   );
 
-  return updateJsonInTree('angular.json', json => {
+  let workspaceFile = 'angular.json';
+  if (tree.exists('workspace.json')) {
+    workspaceFile = 'workspace.json';
+  }
+
+  return updateJsonInTree(workspaceFile, json => {
     json.cli = json.cli || {};
     if (dependencies['@nstudio/schematics']) {
       json.cli.defaultCollection = '@nstudio/xplat';

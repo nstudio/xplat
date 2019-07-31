@@ -5,37 +5,37 @@ Create a service configured for xplat projects and shared code.
 ## Usage
 
 ```bash
-ng generate service ...
+nx generate service ...
 
 ```
 
 ## Options
 
-### feature
+### --feature
 
 Type: `string`
 
 Target feature
 
-### name
+### --name
 
 Type: `string`
 
 Service name
 
-### platforms
+### --platforms
 
 Type: `string`
 
 Target platforms
 
-### projects
+### --projects
 
 Type: `string`
 
 Target projects
 
-### skipFormat
+### --skipFormat
 
 Default: `false`
 

@@ -12,7 +12,7 @@ _NOTE_: You can optionally create Nx + xplat all with one command:
 npx create-xplat-workspace myworkspace
 ```
 
-## Install Nrwl cli
+# Install Nrwl cli
 
 Having Nrwl's cli installed globally will enhance usabiity of the tooling:
 

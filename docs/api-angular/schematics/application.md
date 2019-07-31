@@ -5,19 +5,19 @@ Create an Angular app.
 ## Usage
 
 ```bash
-ng generate application ...
+nx generate application ...
 
 ```
 
 ## Options
 
-### directory
+### --directory
 
 Type: `string`
 
 The directory of the new app.
 
-### e2eTestRunner
+### --e2eTestRunner
 
 Default: `cypress`
 
@@ -25,7 +25,7 @@ Type: `string`
 
 Test runner to use for end to end (e2e) tests
 
-### enableIvy
+### --enableIvy
 
 Default: `false`
 
@@ -33,7 +33,7 @@ Type: `boolean`
 
 **EXPERIMENTAL** True to create a new app that uses the Ivy rendering engine.
 
-### groupByName
+### --groupByName
 
 Default: `false`
 
@@ -41,7 +41,7 @@ Type: `boolean`
 
 Group by app name (appname-platform) instead of the default (platform-appname).
 
-### inlineStyle
+### --inlineStyle
 
 Alias(es): s
 
@@ -51,7 +51,7 @@ Type: `boolean`
 
 Specifies if the style will be in the ts file.
 
-### inlineTemplate
+### --inlineTemplate
 
 Alias(es): t
 
@@ -61,13 +61,13 @@ Type: `boolean`
 
 Specifies if the template will be in the ts file.
 
-### name
+### --name
 
 Type: `string`
 
 The name of the application.
 
-### prefix
+### --prefix
 
 Alias(es): p
 
@@ -75,7 +75,7 @@ Type: `string`
 
 The prefix to apply to generated selectors.
 
-### routing
+### --routing
 
 Default: `false`
 
@@ -83,7 +83,7 @@ Type: `boolean`
 
 Generates a routing module.
 
-### skipFormat
+### --skipFormat
 
 Default: `false`
 
@@ -91,7 +91,7 @@ Type: `boolean`
 
 Skip formatting files
 
-### skipPackageJson
+### --skipPackageJson
 
 Default: `false`
 
@@ -99,7 +99,7 @@ Type: `boolean`
 
 Do not add dependencies to package.json.
 
-### skipTests
+### --skipTests
 
 Alias(es): S
 
@@ -109,7 +109,7 @@ Type: `boolean`
 
 Skip creating spec files.
 
-### style
+### --style
 
 Default: `css`
 
@@ -117,13 +117,13 @@ Type: `string`
 
 The file extension to be used for style files.
 
-### tags
+### --tags
 
 Type: `string`
 
 Add tags to the application (used for linting)
 
-### unitTestRunner
+### --unitTestRunner
 
 Default: `jest`
 
@@ -131,7 +131,7 @@ Type: `string`
 
 Test runner to use for unit tests
 
-### useXplat
+### --useXplat
 
 Default: `true`
 
@@ -139,7 +139,7 @@ Type: `boolean`
 
 Generate xplat supporting architecture
 
-### viewEncapsulation
+### --viewEncapsulation
 
 Type: `string`
 

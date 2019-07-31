@@ -5,13 +5,13 @@ Tools for @angular-devkit.
 ## Usage
 
 ```bash
-ng generate tools ...
+nx generate tools ...
 
 ```
 
 ## Options
 
-### skipFormat
+### --skipFormat
 
 Default: `false`
 

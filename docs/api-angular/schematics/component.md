@@ -5,13 +5,13 @@ Create a component configured for xplat projects and shared code.
 ## Usage
 
 ```bash
-ng generate component ...
+nx generate component ...
 
 ```
 
 ## Options
 
-### createBase
+### --createBase
 
 Default: `false`
 
@@ -19,19 +19,19 @@ Type: `boolean`
 
 Create a base component for maximum cross platform sharing.
 
-### feature
+### --feature
 
 Type: `string`
 
 Target feature. Default is 'ui' if none specified.
 
-### name
+### --name
 
 Type: `string`
 
 Component name
 
-### onlyProject
+### --onlyProject
 
 Default: `false`
 
@@ -39,19 +39,19 @@ Type: `boolean`
 
 Generate for specified projects only and ignore shared code.
 
-### platforms
+### --platforms
 
 Type: `string`
 
 Target platforms
 
-### projects
+### --projects
 
 Type: `string`
 
 Target projects
 
-### skipFormat
+### --skipFormat
 
 Default: `false`
 
@@ -59,7 +59,7 @@ Type: `boolean`
 
 Skip formatting files
 
-### subFolder
+### --subFolder
 
 Type: `string`
 

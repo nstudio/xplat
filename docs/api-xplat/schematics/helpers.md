@@ -5,13 +5,13 @@ xplat helpers for various toolchains.
 ## Usage
 
 ```bash
-ng generate helpers ...
+nx generate helpers ...
 
 ```
 
 ## Options
 
-### name
+### --name
 
 Alias(es): n
 
@@ -19,13 +19,13 @@ Type: `string`
 
 Comma-delimited list of helpers to generate.
 
-### platforms
+### --platforms
 
 Type: `string`
 
 Target platforms to generate helpers for.
 
-### target
+### --target
 
 Type: `string`
 

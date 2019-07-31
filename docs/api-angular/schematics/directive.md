@@ -5,37 +5,37 @@ Create a directive configured for xplat projects and shared code.
 ## Usage
 
 ```bash
-ng generate directive ...
+nx generate directive ...
 
 ```
 
 ## Options
 
-### feature
+### --feature
 
 Type: `string`
 
 Target feature
 
-### name
+### --name
 
 Type: `string`
 
 Directive name
 
-### platforms
+### --platforms
 
 Type: `string`
 
 Target platforms
 
-### projects
+### --projects
 
 Type: `string`
 
 Target projects
 
-### skipFormat
+### --skipFormat
 
 Default: `false`
 

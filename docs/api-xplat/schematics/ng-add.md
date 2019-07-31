@@ -5,31 +5,31 @@ Add xplat to an existing angular configured Nx Workspace
 ## Usage
 
 ```bash
-ng generate ng-add ...
+nx generate ng-add ...
 
 ```
 
 ## Options
 
-### framework
+### --framework
 
 Type: `string`
 
 Target frameworks to support.
 
-### platforms
+### --platforms
 
 Type: `string`
 
 Target platforms to support.
 
-### prefix
+### --prefix
 
 Type: `string`
 
 The prefix to apply to xplat generated selectors.
 
-### skipFormat
+### --skipFormat
 
 Default: `false`
 

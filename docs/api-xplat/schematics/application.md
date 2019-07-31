@@ -5,19 +5,19 @@ Add applications.
 ## Usage
 
 ```bash
-ng generate application ...
+nx generate application ...
 
 ```
 
 ## Options
 
-### framework
+### --framework
 
 Type: `string`
 
 Frontend framework.
 
-### groupByName
+### --groupByName
 
 Default: `false`
 
@@ -25,7 +25,7 @@ Type: `boolean`
 
 Group by app name (appname-platform) instead of the default (platform-appname)
 
-### name
+### --name
 
 Alias(es): n
 
@@ -33,7 +33,7 @@ Type: `string`
 
 The name of the app.
 
-### npmScope
+### --npmScope
 
 Alias(es): wn
 
@@ -41,13 +41,13 @@ Type: `string`
 
 The npm scope to use.
 
-### platforms
+### --platforms
 
 Type: `string`
 
 Platforms.
 
-### prefix
+### --prefix
 
 Alias(es): p
 
@@ -55,7 +55,7 @@ Type: `string`
 
 The prefix to apply to generated selectors.
 
-### routing
+### --routing
 
 Default: `false`
 
@@ -63,7 +63,7 @@ Type: `boolean`
 
 Configure routing.
 
-### setupSandbox
+### --setupSandbox
 
 Default: `false`
 
@@ -71,7 +71,7 @@ Type: `boolean`
 
 Setup app as a sandbox for the workspace.
 
-### skipInstall
+### --skipInstall
 
 Default: `false`
 
@@ -79,13 +79,13 @@ Type: `boolean`
 
 Skip installing dependencies.
 
-### target
+### --target
 
 Type: `string`
 
 The target to use with this generator.
 
-### useXplat
+### --useXplat
 
 Default: `true`
 

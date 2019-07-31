@@ -5,13 +5,13 @@ Add xplat for ionic.
 ## Usage
 
 ```bash
-ng generate xplat ...
+nx generate xplat ...
 
 ```
 
 ## Options
 
-### npmScope
+### --npmScope
 
 Alias(es): wn
 
@@ -19,7 +19,7 @@ Type: `string`
 
 The npm scope to use.
 
-### prefix
+### --prefix
 
 Alias(es): p
 
@@ -27,7 +27,7 @@ Type: `string`
 
 The prefix to apply to generated selectors.
 
-### skipFormat
+### --skipFormat
 
 Default: `false`
 

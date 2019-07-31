@@ -1,12 +1,10 @@
 <a name="8.0.0"></a>
-# [8.0.0](https://github.com/nstudio/xplat/compare/7.4.8...8.0.0) (2019-07-29)
 
+# [8.0.0](https://github.com/nstudio/xplat/compare/7.4.8...8.0.0) (2019-07-29)
 
 ### Features
 
-* **generators:** v8 repackaging ([#131](https://github.com/nstudio/xplat/issues/131)) ([de05db5](https://github.com/nstudio/xplat/commit/de05db5))
-
-
+- **generators:** v8 repackaging ([#131](https://github.com/nstudio/xplat/issues/131)) ([de05db5](https://github.com/nstudio/xplat/commit/de05db5))
 
 <a name="7.4.8"></a>
 

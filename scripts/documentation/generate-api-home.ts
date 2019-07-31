@@ -4,8 +4,7 @@ import { generateFile, getXplatPackageDependencies } from './utils';
 import { dedent } from 'tslint/lib/utils';
 
 let template = dedent`
-Here is the list of all the available packages inside the Nx ecosystem. You
-can see, for each package its dependencies.
+Here's a list of all available packages provided via xplat.
 
 | PackageName | Dependencies | PeerDependencies |
 | ----------- | ------------ | ---------------- |
@@ -53,10 +52,22 @@ getPackageConfigurations()
       dependencies
     );
 
-    template += dedent`| ${data.name} | ${data.dependencies.join(
-      ', '
-    )} | ${data.peerDependencies.join(', ')} |\n`;
+    template += dedent`| ${generateLinkForPackage(
+      data.name
+    )} | ${data.dependencies
+      .map(name =>
+        name.indexOf('@nstudio') > -1 ? generateLinkForPackage(name) : name
+      )
+      .join(', ')} | ${data.peerDependencies
+      .map(name =>
+        name.indexOf('@nstudio') > -1 ? generateLinkForPackage(name) : name
+      )
+      .join(', ')} |\n`;
   });
+
+function generateLinkForPackage(name: string) {
+  return `<a href="/xplat/api/${name.replace('@nstudio/', '')}">${name}</a>`;
+}
 
 // Adding images of dependency graphs
 // template += imagesTemplate;

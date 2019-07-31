@@ -62,8 +62,8 @@ function generateTemplate(schematic): { name: string; template: string } {
   
     ## Usage
     \`\`\`bash
-    ng generate ${schematic.name} ...
-    ${schematic.alias ? `ng g ${schematic.name} ... # Same` : ''}
+    nx generate ${schematic.name} ...
+    ${schematic.alias ? `nx g ${schematic.name} ... # Same` : ''}
     \`\`\`
     \n`;
 
@@ -75,7 +75,7 @@ function generateTemplate(schematic): { name: string; template: string } {
       .forEach(
         option =>
           (template += dedent`
-          ### ${option.name} ${option.required ? '(*__required__*)' : ''} ${
+          ### --${option.name} ${option.required ? '(*__required__*)' : ''} ${
             option.hidden ? '(__hidden__)' : ''
           }
           

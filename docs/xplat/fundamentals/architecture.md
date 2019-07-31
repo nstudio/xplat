@@ -2,9 +2,9 @@
 
 Using xplat allows you to add [Electron](https://electronjs.org/), [Ionic](https://ionicframework.com/) and [NativeScript](https://www.nativescript.org/) apps into your Nx workspace. These apps can be paired with a frontend framework or not.
 
-For instance, when you generate an [Ionic](https://ionicframework.com/) app with no framework it will add a [Stencil](https://stenciljs.com/) based app to your workspace. If Angular is chosen it will be preconfigured to work with Angular instead. All Ionic app flavors are preconfigured to work with [Capacitor](https://capacitor.ionicframework.com/) ready to build mobile apps.
+For instance, when you generate an [Ionic](https://ionicframework.com/) app with no framework it will add a [Stencil](https://stenciljs.com/) based app to your workspace. If Angular is chosen it will be preconfigured to work with Angular instead. All Ionic app flavors are preconfigured to work with [Capacitor](https://capacitor.ionicframework.com/) for mobile development.
 
-When you generate a [NativeScript](https://www.nativescript.org/) app with no framework it will add a standard TypeScript based NativeScript app with `.xml` view files. However when paired with Angular as the frontend framework it will generate a [NativeScript for Angular](https://github.com/NativeScript/nativescript-angular) app preconfigured to work with Angular.
+When you generate a [NativeScript](https://www.nativescript.org/) app with no framework it will add a standard TypeScript based NativeScript app with `.xml` view files. However when paired with Angular as the frontend framework it will generate a [NativeScript for Angular](https://github.com/NativeScript/nativescript-angular).
 
 All apps are generated with a xplat supporting architecture by default however **you can use the app generators standalone without the supporting layer** by adding the `--useXplat=false` flag to any of the generators.
 

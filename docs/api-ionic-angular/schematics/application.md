@@ -5,19 +5,19 @@ Create an Ionic Angular app.
 ## Usage
 
 ```bash
-ng generate application ...
+nx generate application ...
 
 ```
 
 ## Options
 
-### directory
+### --directory
 
 Type: `string`
 
 The directory of the new app.
 
-### groupByName
+### --groupByName
 
 Default: `false`
 
@@ -25,7 +25,7 @@ Type: `boolean`
 
 Group by app name (appname-platform) instead of the default (platform-appname)
 
-### name
+### --name
 
 Alias(es): n
 
@@ -33,7 +33,7 @@ Type: `string`
 
 The name of the app.
 
-### npmScope
+### --npmScope
 
 Alias(es): wn
 
@@ -41,7 +41,7 @@ Type: `string`
 
 The npm scope to use.
 
-### prefix
+### --prefix
 
 Alias(es): p
 
@@ -49,7 +49,7 @@ Type: `string`
 
 The prefix to apply to generated selectors.
 
-### skipFormat
+### --skipFormat
 
 Default: `false`
 
@@ -57,7 +57,7 @@ Type: `boolean`
 
 Skip formatting files
 
-### skipInstall
+### --skipInstall
 
 Default: `false`
 
@@ -65,7 +65,7 @@ Type: `boolean`
 
 Skip installing dependencies.
 
-### useXplat
+### --useXplat
 
 Default: `true`
 

@@ -5,37 +5,37 @@ Create a pipe configured for xplat projects and shared code.
 ## Usage
 
 ```bash
-ng generate pipe ...
+nx generate pipe ...
 
 ```
 
 ## Options
 
-### feature
+### --feature
 
 Type: `string`
 
 Target feature
 
-### name
+### --name
 
 Type: `string`
 
 Pipe name
 
-### platforms
+### --platforms
 
 Type: `string`
 
 Target platforms
 
-### projects
+### --projects
 
 Type: `string`
 
 Target projects
 
-### skipFormat
+### --skipFormat
 
 Default: `false`
 
