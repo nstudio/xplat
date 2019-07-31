@@ -34,7 +34,7 @@ export default function(options: Schema) {
       missingArgument(
         'name',
         'Provide a name for your NativeScript app.',
-        'ng g @nstudio/nativescript:app name'
+        'nx g @nstudio/nativescript:app name'
       )
     );
   }

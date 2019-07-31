@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { promisify } from 'util';
+import { output } from './output';
 
 const fsExists = promisify(fs.exists);
 const fsWriteFile = promisify(fs.writeFile);
@@ -121,7 +122,6 @@ export async function makePrettierIgnore() {
   );
 
   const prettierIgnore = `.DS_Store
-**/webpack.config.js
 **/package.json
 **/package-lock.json
 **/tslint.json
@@ -131,7 +131,7 @@ export async function makePrettierIgnore() {
 **/xplat/*/.xplatframework
 `;
 
-  if (!(await fsExists(prettierIgnorePath))) {
+  if (await fsExists(prettierIgnorePath)) {
     console.log(`"${prettierIgnorePath}" already exists`);
 
     // determine if extra rules are needed
@@ -140,9 +140,12 @@ export async function makePrettierIgnore() {
       prettierContent.indexOf('**/apps/**/platforms/**/*') === -1 ||
       prettierContent.indexOf('**/xplat/**/.xplatframework') === -1
     ) {
-      console.log(
-        `xplat is updating "${prettierIgnorePath}" with a few important extra rules. You may double-check the contents afterwards to ensure they meet your satisfaction`
-      );
+      output.log({
+        title: 'Note:',
+        bodyLines: [
+          `xplat is updating "${prettierIgnorePath}" with a few important extra rules. You may double-check the contents afterwards to ensure they meet your satisfaction.`
+        ]
+      });
       // update prettier to include the rules
       await fsWriteFile(
         prettierIgnorePath,

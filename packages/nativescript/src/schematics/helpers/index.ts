@@ -18,7 +18,7 @@ export default function(options: IHelperSchema) {
       missingArgument(
         'name',
         'Provide the name of the helper to generate.',
-        'ng g @nstudio/nativescript:helpers imports'
+        'nx g @nstudio/nativescript:helpers imports'
       )
     );
   }

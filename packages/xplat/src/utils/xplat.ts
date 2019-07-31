@@ -59,6 +59,7 @@ import {
   RunSchematicTask
 } from '@angular-devkit/schematics/tasks';
 import { xplatVersion, nrwlVersion } from './versions';
+import { output } from './output';
 
 export const packageInnerDependencies = {
   '@nstudio/angular': ['@nrwl/angular'],
@@ -1021,6 +1022,13 @@ xplat/**/*.ngsummary.json
         if (prettier) {
           // update prettier rules
           prettier = `${prettier}\n${content}`;
+
+          output.log({
+            title: 'Note:',
+            bodyLines: [
+              `Updating "${prettierFileName}" with a few important extra rules. You may double-check the contents afterwards to ensure they meet your satisfaction.`
+            ]
+          });
 
           tree.overwrite(prettierFileName, prettier);
         }

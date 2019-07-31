@@ -32,7 +32,7 @@ export default function(options: Schema) {
       missingArgument(
         'name',
         'Provide a name for your Ionic app.',
-        'ng g @nstudio/ionic:app name'
+        'nx g @nstudio/ionic:app name'
       )
     );
   }

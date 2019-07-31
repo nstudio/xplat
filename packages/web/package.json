@@ -29,6 +29,9 @@
     "requirements": {},
     "migrations": "./migrations.json"
   },
+  "dependencies": {
+    "@nrwl/web": "^8.0.0"
+  },
   "peerDependencies": {
     "@nstudio/xplat": "*"
   }

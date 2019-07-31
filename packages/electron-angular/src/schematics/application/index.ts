@@ -44,7 +44,7 @@ export default function(options: XplatElectrontHelpers.SchemaApp) {
       missingArgument(
         'name',
         'Provide a name for your Electron app.',
-        'ng g @nstudio/electron-angular:app name'
+        'nx g @nstudio/electron-angular:app name'
       )
     );
   }
@@ -53,7 +53,7 @@ export default function(options: XplatElectrontHelpers.SchemaApp) {
       missingArgument(
         'target',
         'Provide the name of the web app in your workspace to use inside the electron app.',
-        'ng g @nstudio/electron-angular:app name --target web-myapp'
+        'nx g @nstudio/electron-angular:app name --target web-myapp'
       )
     );
   }

@@ -38,7 +38,7 @@ export default function(options: Schema) {
       missingArgument(
         'name',
         'Provide a name for your app.',
-        'ng g @nstudio/angular:app my-app'
+        'nx g @nstudio/angular:app my-app'
       )
     );
   }

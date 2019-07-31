@@ -1,6 +1,6 @@
 {
   "name": "@nstudio/xplat-source",
-  "version": "8.0.0",
+  "version": "8.0.1",
   "description": "Cross-platform (xplat) tools for Nx workspaces.",
   "homepage": "https://nstudio.io/xplat",
   "private": true,
@@ -23,6 +23,7 @@
     "documentation": "./scripts/documentation/documentation.sh && yarn format && ./scripts/documentation/check-documentation.sh",
     "debug": "node --debug-brk ./node_modules/@angular/cli/bin/ng g command",
     "publish-local": "./scripts/publish_local.sh",
+    "publish-npm": "./scripts/publish.sh",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
     "reset.changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
     "contributors": "githubcontrib --owner nstudio --repo $(basename $(pwd)) --cols 6 --showlogin true --filter gitter-badger --sortOrder desc | pbcopy"

@@ -43,7 +43,7 @@ export default function(options: XplatElectrontHelpers.SchemaApp) {
       missingArgument(
         'name',
         'Provide a name for your Electron app.',
-        'ng g @nstudio/electron:app name'
+        'nx g @nstudio/electron:app name'
       )
     );
   }

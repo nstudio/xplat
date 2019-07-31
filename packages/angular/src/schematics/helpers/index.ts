@@ -17,7 +17,7 @@ export default function(options: IHelperSchema) {
       missingArgument(
         'name',
         'Provide the name of the helper to generate.',
-        'ng g @nstudio/angular:helpers applitools --target=web-myapp'
+        'nx g @nstudio/angular:helpers applitools --target=web-myapp'
       )
     );
   }
