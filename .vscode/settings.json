@@ -37,5 +37,6 @@
     "statusBar.background": "#eb5324",
     "statusBarItem.hoverBackground": "#ef7853",
     "statusBar.foreground": "#e7e7e7"
-  }
+  },
+  "peacock.color": "#eb5324"
 }

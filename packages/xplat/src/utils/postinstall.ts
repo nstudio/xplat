@@ -124,11 +124,11 @@ export async function makePrettierIgnore() {
   const prettierIgnore = `**/xplat/*/.xplatframework`;
 
   if (await fsExists(prettierIgnorePath)) {
-    console.log(`"${prettierIgnorePath}" already exists`);
+    // console.log(`"${prettierIgnorePath}" already exists`);
 
     // determine if extra rules are needed
     let prettierContent = await fsReadFile(prettierIgnorePath, 'UTF-8');
-    if (prettierContent.indexOf('**/xplat/**/.xplatframework') === -1) {
+    if (prettierContent.indexOf('**/xplat/*/.xplatframework') === -1) {
       output.log({
         title: 'Note:',
         bodyLines: [
