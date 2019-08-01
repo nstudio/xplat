@@ -121,25 +121,14 @@ export async function makePrettierIgnore() {
     '.prettierignore'
   );
 
-  const prettierIgnore = `.DS_Store
-**/package.json
-**/package-lock.json
-**/tslint.json
-**/tsconfig.*.json
-**/tsconfig.json
-**/*.conf.js
-**/xplat/*/.xplatframework
-`;
+  const prettierIgnore = `**/xplat/*/.xplatframework`;
 
   if (await fsExists(prettierIgnorePath)) {
     console.log(`"${prettierIgnorePath}" already exists`);
 
     // determine if extra rules are needed
     let prettierContent = await fsReadFile(prettierIgnorePath, 'UTF-8');
-    if (
-      prettierContent.indexOf('**/apps/**/platforms/**/*') === -1 ||
-      prettierContent.indexOf('**/xplat/**/.xplatframework') === -1
-    ) {
+    if (prettierContent.indexOf('**/xplat/**/.xplatframework') === -1) {
       output.log({
         title: 'Note:',
         bodyLines: [

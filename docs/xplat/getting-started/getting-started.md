@@ -14,7 +14,7 @@ npx create-xplat-workspace myworkspace
 
 # Install Nrwl cli
 
-Having Nrwl's cli installed globally will enhance usabiity of the tooling:
+Having Nrwl's cli installed globally will enhance usability of the tooling:
 
 **Using `npm`**
 
