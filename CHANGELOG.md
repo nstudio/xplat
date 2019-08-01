@@ -1,5 +1,5 @@
-<a name="8.0.2"></a>
-## [8.0.2](https://github.com/nstudio/xplat/compare/8.0.0...8.0.2) (2019-08-01)
+<a name="8.0.3"></a>
+## [8.0.3](https://github.com/nstudio/xplat/compare/8.0.0...8.0.3) (2019-08-01)
 
 
 ### Bug Fixes
@@ -7,6 +7,14 @@
 * **scripts:** postinstall adjustment and cleanup ([423aa49](https://github.com/nstudio/xplat/commit/423aa49))
 
 
+
+<a name="8.0.2"></a>
+
+## [8.0.2](https://github.com/nstudio/xplat/compare/8.0.0...8.0.2) (2019-08-01)
+
+### Bug Fixes
+
+- **scripts:** postinstall adjustment and cleanup ([423aa49](https://github.com/nstudio/xplat/commit/423aa49))
 
 <a name="8.0.1"></a>
 
