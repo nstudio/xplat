@@ -98,6 +98,7 @@ The type must be one of the following:
 - style
 - docs
 - test
+- chore
 
 #### Scope
 
@@ -114,6 +115,8 @@ The scope must be one of the following:
 - helpers
 - react
 - vue
+- build
+- contributing
 
 #### Subject
 
