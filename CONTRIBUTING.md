@@ -116,6 +116,7 @@ The scope must be one of the following:
 - react
 - vue
 - build
+- changelog
 - contributing
 
 #### Subject

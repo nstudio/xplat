@@ -1,3 +1,19 @@
+<a name="8.0.5"></a>
+## [8.0.5](https://github.com/nstudio/xplat/compare/8.0.0...8.0.5) (2019-08-04)
+
+
+### Bug Fixes
+
+* **electron:** update electron-installer-dmg to latest ([78e6804](https://github.com/nstudio/xplat/commit/78e6804))
+* **scripts:** postinstall adjustment and cleanup ([423aa49](https://github.com/nstudio/xplat/commit/423aa49))
+
+
+### Features
+
+* **electron:** convenient gitignore rule ([5f0dff0](https://github.com/nstudio/xplat/commit/5f0dff0))
+
+
+
 <a name="8.0.3"></a>
 
 ## [8.0.3](https://github.com/nstudio/xplat/compare/8.0.0...8.0.3) (2019-08-01)
