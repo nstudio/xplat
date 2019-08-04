@@ -76,4 +76,17 @@ describe('xplat schematic', () => {
       tree.exists('/apps/nativescript-sample/App_Resources/iOS/Info.plist')
     ).toBeTruthy();
   });
+
+  // describe('Nx app generators supporte via proxy xplat app generator', () => {
+  //   it('should create Nx express', async () => {
+  //     const options: XplatHelpers.Schema = { ...defaultOptions };
+  //     options.platforms = 'express';
+
+  //     const tree = await runSchematic('app', options, appTree);
+  //     const files = tree.files;
+  //     console.log('files:', files);
+
+  //     // expect(tree.exists('/apps/nativescript-sample/nsconfig.json')).toBeTruthy();
+  //   });
+  // });
 });

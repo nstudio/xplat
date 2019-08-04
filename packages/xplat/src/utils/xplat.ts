@@ -33,7 +33,10 @@ import {
   FrameworkTypes,
   getFrontendFramework,
   IXplatSettings,
-  supportedFrameworks
+  supportedFrameworks,
+  PlatformWithNxTypes,
+  supportedNxExtraPlatforms,
+  PlatformNxExtraTypes
 } from './general';
 import {
   updateJsonInTree,
@@ -58,7 +61,7 @@ import {
   NodePackageInstallTask,
   RunSchematicTask
 } from '@angular-devkit/schematics/tasks';
-import { xplatVersion, nrwlVersion } from './versions';
+import { xplatVersion, nxVersion } from './versions';
 import { output } from './output';
 
 export const packageInnerDependencies = {
@@ -141,7 +144,7 @@ export namespace XplatHelpers {
   export interface IXplatGeneratorOptions {
     featureName?: string;
     projectNames?: Array<string>;
-    platforms: Array<PlatformTypes>;
+    platforms: Array<PlatformWithNxTypes>;
   }
 
   /**
@@ -286,6 +289,7 @@ export namespace XplatHelpers {
     packagesToRunXplat: Array<string>
   ) {
     let generatorSettings: IXplatGeneratorOptions;
+    let isApp = false;
     switch (generator) {
       case 'component':
         generatorSettings = XplatComponentHelpers.prepare(<any>options);
@@ -294,8 +298,9 @@ export namespace XplatHelpers {
         generatorSettings = XplatFeatureHelpers.prepare(<any>options);
         break;
       default:
+        isApp = ['application', 'app'].includes(generator);
         generatorSettings = {
-          platforms: <Array<PlatformTypes>>(
+          platforms: <Array<PlatformWithNxTypes>>(
             (<unknown>sanitizeCommaDelimitedArg(options.platforms))
           )
         };
@@ -322,7 +327,21 @@ export namespace XplatHelpers {
                 // right now it lives in angular package
                 const packageName = `@nstudio/${framework}`;
                 devDependencies[packageName] = xplatVersion;
+                // also need web-angular (won't need this once moved to web-angular)
+                devDependencies[`@nstudio/web-angular`] = xplatVersion;
+                devDependencies[`@nstudio/web`] = xplatVersion;
                 // externalChains.push(externalSchematic(`@nstudio/${framework}`, 'app', options));
+                packagesToRunXplat.push(packageName);
+              } else if (
+                isApp &&
+                supportedNxExtraPlatforms.includes(<PlatformNxExtraTypes>(
+                  platform
+                ))
+              ) {
+                // platforms that are supported directly via Nx only right now
+                // 'app'/'application' is only schematic supported via xplat proxy at moment
+                const packageName = `@nrwl/${platform}`;
+                devDependencies[packageName] = nxVersion;
                 packagesToRunXplat.push(packageName);
               } else {
                 const packageName = `@nstudio/${platform}-${framework}`;
@@ -338,10 +357,19 @@ export namespace XplatHelpers {
       }
     } else if (platforms.length) {
       for (const platform of platforms) {
-        if (supportedPlatforms.includes(platform)) {
+        if (supportedPlatforms.includes(<PlatformTypes>platform)) {
           const packageName = `@nstudio/${platform}`;
           devDependencies[packageName] = xplatVersion;
           // externalChains.push(externalSchematic(packageName, 'app', options));
+          packagesToRunXplat.push(packageName);
+        } else if (
+          isApp &&
+          supportedNxExtraPlatforms.includes(<PlatformNxExtraTypes>platform)
+        ) {
+          // platforms supported directly via Nx only right now
+          // 'app'/'application' is only schematic supported via xplat proxy at moment
+          const packageName = `@nrwl/${platform}`;
+          devDependencies[packageName] = nxVersion;
           packagesToRunXplat.push(packageName);
         } else {
           throw new SchematicsException(unsupportedPlatformError(platform));
@@ -363,7 +391,7 @@ export namespace XplatHelpers {
               for (const name of packageInnerDependencies[packageName]) {
                 if (name.indexOf('nrwl') > -1) {
                   // default to internally managed/supported nrwl version
-                  version = nrwlVersion;
+                  version = nxVersion;
                   // look for existing nrwl versions if user already has them installed and use those
                   if (
                     packageJson.dependencies &&
@@ -419,7 +447,6 @@ export namespace XplatHelpers {
         });
       }
     }
-    debugger;
     return externalChains;
   }
 
@@ -616,18 +643,12 @@ xplat/**/*.ngsummary.json
       // ensure default Nx libs path is in place
       updates[`@${npmScope}/*`] = [`libs/*`];
       for (const t of platforms) {
-        if (supportedPlatforms.includes(t)) {
-          updates[`@${npmScope}/${t}${frameworkSuffix}`] = [
-            `xplat/${t}${frameworkSuffix}/index.ts`
-          ];
-          updates[`@${npmScope}/${t}${frameworkSuffix}/*`] = [
-            `xplat/${t}${frameworkSuffix}/*`
-          ];
-        } else {
-          throw new Error(
-            `${t} is not a supported platform. Currently supported: ${supportedPlatforms}`
-          );
-        }
+        updates[`@${npmScope}/${t}${frameworkSuffix}`] = [
+          `xplat/${t}${frameworkSuffix}/index.ts`
+        ];
+        updates[`@${npmScope}/${t}${frameworkSuffix}/*`] = [
+          `xplat/${t}${frameworkSuffix}/*`
+        ];
       }
 
       return updateTsConfig(tree, (tsConfig: any) => {

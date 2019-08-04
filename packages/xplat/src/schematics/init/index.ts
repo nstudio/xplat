@@ -25,13 +25,16 @@ import {
   isTesting,
   getJsonFromFile,
   packageInnerDependencies,
-  IXplatSettings
+  IXplatSettings,
+  PlatformWithNxTypes,
+  supportedPlatformsWithNx,
+  unsupportedPlatformErrorWithNxNote
 } from '../../utils';
 import {
   NodePackageInstallTask,
   RunSchematicTask
 } from '@angular-devkit/schematics/tasks';
-import { xplatVersion, nrwlVersion } from '../../utils/versions';
+import { xplatVersion, nxVersion } from '../../utils/versions';
 
 let packagesToRunXplat: Array<string> = [];
 export default function(options: XplatHelpers.Schema) {
@@ -80,7 +83,7 @@ export default function(options: XplatHelpers.Schema) {
       }
     }
   } else {
-    const platforms = <Array<PlatformTypes>>(
+    const platforms = <Array<PlatformWithNxTypes>>(
       (<unknown>sanitizeCommaDelimitedArg(platformArg))
     );
     if (frameworks.length) {
@@ -92,7 +95,17 @@ export default function(options: XplatHelpers.Schema) {
           packagesToRunXplat.push(packageName);
           // when framework initiates xplat, ensure any platform packages are installed
           for (const platform of platforms) {
-            devDependencies[`@nstudio/${platform}-${framework}`] = xplatVersion;
+            if (supportedPlatforms.includes(<PlatformTypes>platform)) {
+              devDependencies[
+                `@nstudio/${platform}-${framework}`
+              ] = xplatVersion;
+            } else if (
+              supportedPlatformsWithNx.includes(<PlatformWithNxTypes>platform)
+            ) {
+              throw new SchematicsException(
+                unsupportedPlatformErrorWithNxNote(platform, 'xplat')
+              );
+            }
           }
         } else {
           throw new SchematicsException(unsupportedFrameworkError(framework));
@@ -100,10 +113,16 @@ export default function(options: XplatHelpers.Schema) {
       }
     } else if (platforms.length) {
       for (const platform of platforms) {
-        if (supportedPlatforms.includes(platform)) {
+        if (supportedPlatforms.includes(<PlatformTypes>platform)) {
           const packageName = `@nstudio/${platform}`;
           devDependencies[`@nstudio/${platform}`] = xplatVersion;
           packagesToRunXplat.push(packageName);
+        } else if (
+          supportedPlatformsWithNx.includes(<PlatformWithNxTypes>platform)
+        ) {
+          throw new SchematicsException(
+            unsupportedPlatformErrorWithNxNote(platform, 'xplat')
+          );
         } else {
           throw new SchematicsException(unsupportedPlatformError(platform));
         }
@@ -123,7 +142,7 @@ export default function(options: XplatHelpers.Schema) {
           for (const name of packageInnerDependencies[packageName]) {
             // always use existing versions of nx if user already has them installed
             if (name.indexOf('nrwl') > -1) {
-              let version = nrwlVersion;
+              let version = nxVersion;
               if (packageJson.dependencies && packageJson.dependencies[name]) {
                 version = packageJson.dependencies[name];
               } else if (

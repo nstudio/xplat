@@ -42,8 +42,10 @@ export default function(options: Schema) {
       )
     );
   }
-  // xplat is configured for sass only (at moment)
-  options.style = 'scss';
+  if (options.useXplat) {
+    // xplat is configured for sass only (at moment)
+    options.style = 'scss';
+  }
 
   return chain([
     prerun(options),
@@ -98,7 +100,7 @@ export default function(options: Schema) {
       scripts[
         `clean`
       ] = `npx rimraf hooks node_modules package-lock.json && npm i`;
-      scripts[`start.${platformApp}`] = `ng serve ${options.name}`;
+      scripts[`start.${platformApp}`] = `nx serve ${options.name}`;
       return updatePackageScripts(tree, scripts);
     },
     formatFiles({ skipFormat: options.skipFormat })

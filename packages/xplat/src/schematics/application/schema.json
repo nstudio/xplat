@@ -23,24 +23,24 @@
       "type": "string",
       "description": "Platforms.",
       "x-prompt": {
-        "message": "Which platform would you like to generate an app for?",
+        "message": "What type of app would like to create?",
         "type": "list",
         "items": [
           {
             "value": "electron",
-            "label": "electron          [Electron app]"
+            "label": "electron        [Electron app]"
           },
           {
             "value": "ionic",
-            "label": "ionic             [Ionic app]"
+            "label": "ionic           [Ionic app]"
           },
           {
             "value": "nativescript",
-            "label": "nativescript      [NativeScript app]"
+            "label": "nativescript    [NativeScript app]"
           },
           {
             "value": "web",
-            "label": "web               [Web app]"
+            "label": "web             [Web app]"
           }
         ]
       }

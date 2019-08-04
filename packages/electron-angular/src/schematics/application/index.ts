@@ -86,6 +86,10 @@ export default function(options: XplatElectrontHelpers.SchemaApp) {
         ...options,
         skipDependentPlatformFiles: true
       }),
+    // use xplat or not
+    options.useXplat
+      ? externalSchematic('@nstudio/electron-angular', 'xplat', options)
+      : noop(),
     (tree: Tree, context: SchematicContext) =>
       addAppFiles(options, options.name)(tree, context),
     XplatElectronAngularHelpers.updateRootDeps(options),
@@ -146,7 +150,8 @@ export default function(options: XplatElectrontHelpers.SchemaApp) {
     },
     options.useXplat ? (tree: Tree) => adjustAppFiles(options, tree) : noop(),
 
-    formatFiles({ skipFormat: options.skipFormat })
+    formatFiles({ skipFormat: options.skipFormat }),
+    XplatElectrontHelpers.noteAppCommands(options)
   ]);
 }
 

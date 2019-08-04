@@ -13,6 +13,13 @@ export function unsupportedPlatformError(platform: string) {
   return `${platform} is currently not a supported platform. Supported at the moment: ${supportedPlatforms}. Please request support for this platform if you'd like and/or submit a PR which we would greatly appreciate.`;
 }
 
+export function unsupportedPlatformErrorWithNxNote(
+  platform: string,
+  generator: string
+) {
+  return `"${platform}" in xplat currently does not support the "${generator}" generator. However it would be awesome to have a "${generator}" generator for "${platform}". Please add an issue to https://github.com/nstudio/xplat/issues with some details of how you'd like it to work for "${platform}" and we'll try to queue it up in a future release.`;
+}
+
 export function unsupportedFrameworkError(framework: string) {
   return `${framework} is currently not a supported framework. Supported at the moment: ${supportedFrameworks.map(
     f => stringUtils.capitalize(f)

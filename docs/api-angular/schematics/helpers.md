@@ -23,4 +23,4 @@ Comma-delimited list of helpers to generate.
 
 Type: `string`
 
-Some helpers support targeting to generate the helper for a specific target. ie: ng g @nstudio/angular:helpers applitools --target=web-myapp
+Some helpers support targeting to generate the helper for a specific target. ie: nx g @nstudio/angular:helpers applitools --target=web-myapp

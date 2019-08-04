@@ -3,7 +3,8 @@ import {
   XplatHelpers,
   getNpmScope,
   getJsonFromFile,
-  updatePackageScripts
+  updatePackageScripts,
+  output
 } from '@nstudio/xplat';
 import {
   waitOnVersion,
@@ -127,7 +128,7 @@ export namespace XplatElectrontHelpers {
       ] = `npm run postinstall.electron && tsc -p apps/${
         options.name
       }/tsconfig.json`;
-      scripts[`serve.${platformApp}.target`] = `ng serve ${options.name}`;
+      scripts[`serve.${platformApp}.target`] = `nx serve ${options.name}`;
       scripts[
         `serve.${platformApp}`
       ] = `wait-on http-get://localhost:4200/ && electron apps/${
@@ -150,7 +151,7 @@ export namespace XplatElectrontHelpers {
         // create to be consistent
         scripts[
           `start.${targetAppScript}`
-        ] = `${postinstallWeb} && ng serve ${fullTargetAppName}`;
+        ] = `${postinstallWeb} && nx serve ${fullTargetAppName}`;
       }
       let startDefault = scripts[`start`];
       if (startDefault) {
@@ -161,7 +162,7 @@ export namespace XplatElectrontHelpers {
         }
         scripts[`start`] = `${postinstallWeb} && ${startDefault}`;
       } else {
-        scripts[`start`] = `${postinstallWeb} && ng serve ${fullTargetAppName}`;
+        scripts[`start`] = `${postinstallWeb} && nx serve ${fullTargetAppName}`;
       }
       let buildDefault = scripts[`build`];
       if (buildDefault) {
@@ -172,24 +173,37 @@ export namespace XplatElectrontHelpers {
         }
         scripts[`build`] = `${postinstallWeb} && ${buildDefault}`;
       } else {
-        scripts[`build`] = `${postinstallWeb} && ng build ${fullTargetAppName}`;
+        scripts[`build`] = `${postinstallWeb} && nx build ${fullTargetAppName}`;
       }
       let testDefault = scripts[`test`];
       if (testDefault) {
         // prefix it
         scripts[`test`] = `${postinstallWeb} && ${testDefault}`;
       } else {
-        scripts[`test`] = `${postinstallWeb} && ng test`;
+        scripts[`test`] = `${postinstallWeb} && nx test`;
       }
       let e2eDefault = scripts[`e2e`];
       if (e2eDefault) {
         // prefix it
         scripts[`e2e`] = `${postinstallWeb} && ${e2eDefault}`;
       } else {
-        scripts[`e2e`] = `${postinstallWeb} && ng e2e`;
+        scripts[`e2e`] = `${postinstallWeb} && nx e2e`;
       }
 
       return updatePackageScripts(tree, scripts);
+    };
+  }
+
+  export function noteAppCommands(options: SchemaApp) {
+    return (tree: Tree) => {
+      const platformApp = options.name.replace('-', '.');
+      output.log({
+        title: 'Note:',
+        bodyLines: [
+          `Develop your Electron app with: yarn start.${platformApp} (or: npm run start.${platformApp})`
+        ]
+      });
+      return tree;
     };
   }
 }

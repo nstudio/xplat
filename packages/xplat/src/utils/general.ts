@@ -21,7 +21,11 @@ export interface ITargetPlatforms {
   electron?: boolean;
 }
 
+// Officially supported via xplat directly
 export type PlatformTypes = 'web' | 'nativescript' | 'ionic' | 'electron';
+// Proxy support via Nx
+export type PlatformNxExtraTypes = 'express' | 'nest' | 'node' | 'react';
+export type PlatformWithNxTypes = PlatformTypes | PlatformNxExtraTypes;
 export type PlatformModes = PlatformTypes | 'fullstack';
 export const supportedPlatforms: Array<PlatformTypes> = [
   'web',
@@ -29,6 +33,15 @@ export const supportedPlatforms: Array<PlatformTypes> = [
   'ionic',
   'electron'
 ];
+export const supportedNxExtraPlatforms: Array<PlatformNxExtraTypes> = [
+  'express',
+  'nest',
+  'node',
+  'react'
+];
+export const supportedPlatformsWithNx: Array<
+  PlatformWithNxTypes
+> = supportedPlatforms.concat(<any>supportedNxExtraPlatforms);
 
 export type FrameworkTypes = 'angular';
 // TODO: support react/vue and more
