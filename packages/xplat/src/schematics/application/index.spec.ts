@@ -77,16 +77,75 @@ describe('xplat schematic', () => {
     ).toBeTruthy();
   });
 
-  // describe('Nx app generators supporte via proxy xplat app generator', () => {
-  //   it('should create Nx express', async () => {
-  //     const options: XplatHelpers.Schema = { ...defaultOptions };
-  //     options.platforms = 'express';
+  fdescribe('Nx app generators supporte via proxy xplat app generator', () => {
 
-  //     const tree = await runSchematic('app', options, appTree);
-  //     const files = tree.files;
-  //     console.log('files:', files);
+    it('should create Nx express', async () => {
+      appTree = Tree.empty();
+      appTree = createEmptyWorkspace(appTree);
+      const options: XplatHelpers.Schema = { ...defaultOptions };
+      options.platforms = 'express';
 
-  //     // expect(tree.exists('/apps/nativescript-sample/nsconfig.json')).toBeTruthy();
-  //   });
-  // });
+      const tree = await runSchematic('app', options, appTree);
+      const files = tree.files;
+      // console.log('files:', files);
+
+      expect(tree.exists('/apps/express-sample/src/main.ts')).toBeTruthy();
+
+      let fileContent = getFileContent(
+        tree,
+        '/apps/express-sample/src/main.ts'
+      );
+      // console.log(fileContent);
+      expect(fileContent.indexOf(`from 'express'`)).toBeGreaterThan(0);
+    });
+
+    it('should create Nx nest', async () => {
+      appTree = Tree.empty();
+      appTree = createEmptyWorkspace(appTree);
+      const options: XplatHelpers.Schema = { ...defaultOptions };
+      options.platforms = 'nest';
+
+      const tree = await runSchematic('app', options, appTree);
+      const files = tree.files;
+      // console.log('files:', files);
+      expect(tree.exists('/apps/nest-sample/src/main.ts')).toBeTruthy();
+
+      let fileContent = getFileContent(tree, '/apps/nest-sample/src/main.ts');
+      // console.log(fileContent);
+      expect(fileContent.indexOf(`from '@nestjs/core'`)).toBeGreaterThan(0);
+    });
+
+    fit('should create Nx node', async () => {
+      appTree = Tree.empty();
+      appTree = createEmptyWorkspace(appTree);
+      const options: XplatHelpers.Schema = { ...defaultOptions };
+      options.platforms = 'node';
+
+      const tree = await runSchematic('app', options, appTree);
+      const files = tree.files;
+      // console.log('files:', files);
+
+      expect(tree.exists('/apps/node-sample/src/main.ts')).toBeTruthy();
+
+      let fileContent = getFileContent(tree, '/apps/node-sample/src/main.ts');
+      // console.log(fileContent);
+      expect(fileContent.indexOf(`console.log('Hello World!')`)).toBeGreaterThanOrEqual(0);
+    });
+
+    it('should create Nx react', async () => {
+      appTree = Tree.empty();
+      appTree = createEmptyWorkspace(appTree);
+      const options: XplatHelpers.Schema = { ...defaultOptions };
+      options.platforms = 'react';
+
+      const tree = await runSchematic('app', options, appTree);
+      const files = tree.files;
+      // console.log('files:', files);
+      expect(tree.exists('/apps/react-sample/src/app/app.tsx')).toBeTruthy();
+
+      let fileContent = getFileContent(tree, '/apps/react-sample/src/app/app.tsx');
+      // console.log(fileContent);
+      expect(fileContent.indexOf(`from 'react'`)).toBeGreaterThan(0);
+    });
+  });
 });

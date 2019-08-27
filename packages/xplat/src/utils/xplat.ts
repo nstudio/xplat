@@ -36,7 +36,8 @@ import {
   supportedFrameworks,
   PlatformWithNxTypes,
   supportedNxExtraPlatforms,
-  PlatformNxExtraTypes
+  PlatformNxExtraTypes,
+  supportedPlatformsWithNx
 } from './general';
 import {
   updateJsonInTree,
@@ -53,7 +54,8 @@ import {
   unsupportedPlatformError,
   noteAboutXplatSetupWithFramework,
   unsupportedFrameworkError,
-  generateOptionError
+  generateOptionError,
+  noXplatLayerNote
 } from './errors';
 import { join } from 'path';
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
@@ -252,7 +254,7 @@ export namespace XplatHelpers {
    * @param name
    * @param platform
    */
-  export function getPlatformName(name: string, platform: PlatformTypes) {
+  export function getPlatformName(name: string, platform: PlatformWithNxTypes) {
     const nameSanitized = toFileName(name);
     return getGroupByName()
       ? `${nameSanitized}-${platform}`
@@ -421,6 +423,7 @@ export namespace XplatHelpers {
 
       if (options.isTesting) {
         // necessary to unit test the appropriately
+        // console.log('packagesToRunXplat:', packagesToRunXplat)
         if (packagesToRunXplat.length) {
           for (const packageName of packagesToRunXplat) {
             externalChains.push(
@@ -450,29 +453,200 @@ export namespace XplatHelpers {
     return externalChains;
   }
 
+  export function getExternalChainsForApplication(
+    options: Schema,
+    generator: string,
+    packagesToRun: Array<string>
+  ) {
+    let generatorSettings: IXplatGeneratorOptions = {
+      platforms: <Array<PlatformWithNxTypes>>(
+        (<unknown>sanitizeCommaDelimitedArg(options.platforms))
+      )
+    };
+    const platforms = generatorSettings.platforms;
+    const externalChains = [];
+    const devDependencies = {};
+    let xplatPlatforms = 0;
+
+    // console.log('platforms:', platforms);
+    if (platforms.length) {
+      for (const platform of platforms) {
+        if (supportedPlatforms.includes(<PlatformTypes>platform)) {
+          xplatPlatforms++;
+        } else if (
+          supportedNxExtraPlatforms.includes(<PlatformNxExtraTypes>platform)
+        ) {
+          // platforms supported directly via Nx only right now
+          // 'app'/'application' is only schematic supported via xplat proxy at moment
+          const packageName = `@nrwl/${platform}`;
+          devDependencies[packageName] = nxVersion;
+          packagesToRun.push(packageName);
+        } else {
+          throw new SchematicsException(unsupportedPlatformError(platform));
+        }
+      }
+    }
+
+    if (Object.keys(devDependencies).length) {
+      externalChains.push((tree: Tree, context: SchematicContext) => {
+        // check if othet nstudio or nrwl dependencies are needed
+        // check user's package for current version
+        const packageJson = getJsonFromFile(tree, 'package.json');
+        if (packageJson) {
+          for (const packageName in devDependencies) {
+            if (packageInnerDependencies[packageName]) {
+              // inner dependencies are either nstudio or nrwl based packages
+              let version: string;
+              // ensure inner schematic dependencies are installed
+              for (const name of packageInnerDependencies[packageName]) {
+                if (name.indexOf('nrwl') > -1) {
+                  // default to internally managed/supported nrwl version
+                  version = nxVersion;
+                  // look for existing nrwl versions if user already has them installed and use those
+                  if (
+                    packageJson.dependencies &&
+                    packageJson.dependencies[name]
+                  ) {
+                    version = packageJson.dependencies[name];
+                  } else if (
+                    packageJson.devDependencies &&
+                    packageJson.devDependencies[name]
+                  ) {
+                    version = packageJson.devDependencies[name];
+                  }
+                  devDependencies[name] = version;
+                } else {
+                  devDependencies[name] = xplatVersion;
+                }
+              }
+            }
+          }
+        }
+        // console.log(devDependencies);
+
+        return XplatHelpers.updatePackageForXplat(options, {
+          devDependencies
+        })(tree, context);
+      });
+    }
+
+    if (options.isTesting) {
+      // necessary to unit test the appropriately
+      if (xplatPlatforms) {
+        externalChains.push(
+          externalSchematic('@nstudio/xplat', 'app-generate', options, {
+            interactive: false
+          })
+        );
+      }
+
+      if (packagesToRun.length) {
+        for (const packageName of packagesToRun) {
+          const nxPlatform = <PlatformWithNxTypes>(
+            packageName.replace('@nrwl/', '')
+          );
+          const { name, directory } = getAppNamingConvention(
+            options,
+            nxPlatform
+          );
+          output.log({
+            title: 'Note:',
+            bodyLines: [noXplatLayerNote(nxPlatform)]
+          });
+
+          externalChains.push(
+            externalSchematic(
+              packageName,
+              generator,
+              {
+                ...options,
+                name,
+                directory
+              },
+              {
+                interactive: false
+              }
+            )
+          );
+        }
+      }
+    } else {
+      if (xplatPlatforms) {
+        externalChains.push(
+          externalSchematic('@nstudio/xplat', 'app-generate', options)
+        );
+      }
+      if (packagesToRun.length) {
+        externalChains.push((tree: Tree, context: SchematicContext) => {
+          const installPackageTask = context.addTask(
+            new NodePackageInstallTask()
+          );
+
+          // console.log('devDependencies:', devDependencies);
+          // console.log('packagesToRunXplat:', packagesToRunXplat);
+          for (const packageName of packagesToRun) {
+            const nxPlatform = <PlatformWithNxTypes>(
+              packageName.replace('@nrwl/', '')
+            );
+            const { name, directory } = getAppNamingConvention(
+              options,
+              nxPlatform
+            );
+            output.log({
+              title: 'Note:',
+              bodyLines: [noXplatLayerNote(nxPlatform)]
+            });
+            context.addTask(
+              new RunSchematicTask(packageName, generator, {
+                ...options,
+                name,
+                directory
+              }),
+              [installPackageTask]
+            );
+          }
+        });
+      }
+    }
+    return externalChains;
+  }
+
   export function applyAppNamingConvention(
     options: any,
-    platform: PlatformTypes
+    platform: PlatformWithNxTypes
   ) {
     return (tree: Tree, context: SchematicContext) => {
-      let directory = '';
-      if (options.directory) {
-        directory = toFileName(options.directory);
-        if (
-          directory === platform &&
-          supportedPlatforms.includes(<PlatformTypes>directory)
-        ) {
-          options.name = toFileName(options.name);
-        } else {
-          options.name = getPlatformName(options.name, platform);
-        }
-      } else {
-        options.name = getPlatformName(options.name, platform);
-      }
+      const { name, directory } = getAppNamingConvention(options, platform);
+      options.name = name;
       options.directory = directory;
       // console.log('applyAppNamingConvention:', options);
       // adjusted name, nothing else to do
       return noop()(tree, context);
+    };
+  }
+
+  export function getAppNamingConvention(
+    options: any,
+    platform: PlatformWithNxTypes
+  ) {
+    let name = '';
+    let directory = '';
+    if (options.directory) {
+      directory = toFileName(options.directory);
+      if (
+        directory === platform &&
+        supportedPlatformsWithNx.includes(<PlatformWithNxTypes>directory)
+      ) {
+        name = toFileName(options.name);
+      } else {
+        name = getPlatformName(options.name, platform);
+      }
+    } else {
+      name = getPlatformName(options.name, platform);
+    }
+    return {
+      name,
+      directory
     };
   }
 

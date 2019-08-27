@@ -15,6 +15,12 @@
       "description": "Add applications.",
       "aliases": ["app"]
     },
+    "app-generate": {
+      "factory": "./src/schematics/app-generate",
+      "schema": "./src/schematics/app-generate/schema.json",
+      "description": "Generate apps.",
+      "hidden": true
+    },
     "feature": {
       "factory": "./src/schematics/feature",
       "schema": "./src/schematics/feature/schema.json",

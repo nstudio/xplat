@@ -33,7 +33,7 @@ yarn global add @nrwl/cli
 **Using `npm`**
 
 ```bash
-npm install -save-dev @nstudio/xplat
+npm install --save-dev @nstudio/xplat
 ```
 
 **Using `yarn`**

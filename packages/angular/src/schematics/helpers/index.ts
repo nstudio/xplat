@@ -2,7 +2,8 @@ import {
   IHelperSchema,
   buildHelperChain,
   prerun,
-  missingArgument
+  missingArgument,
+  addInstallTask
 } from '@nstudio/xplat';
 import { config as configApplitools } from './applitools';
 import { SchematicsException, chain, noop } from '@angular-devkit/schematics';
@@ -33,5 +34,5 @@ export default function(options: IHelperSchema) {
     }
   }
 
-  return chain([prerun(<any>options), ...helperChain]);
+  return chain([prerun(<any>options), ...helperChain, addInstallTask(options)]);
 }

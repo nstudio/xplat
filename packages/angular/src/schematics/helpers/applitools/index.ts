@@ -49,7 +49,7 @@ function applitools(helperChains: Array<any>, options: IHelperSchema) {
     // Add applitools modules
     const packageJson = getJsonFromFile(tree, 'package.json');
     packageJson.devDependencies = packageJson.devDependencies || {};
-    packageJson.devDependencies['@applitools/eyes-cypress'] = '^3.5.2';
+    packageJson.devDependencies['@applitools/eyes-cypress'] = '^3.7.1';
     helperChains.push(updateJsonFile(tree, 'package.json', packageJson));
 
     // update sample test
@@ -122,6 +122,7 @@ require('@applitools/eyes-cypress')(module);
 
 function updateSampleTest() {
   return `import { getGreeting } from '../support/app.po';
+import { eyesOpen, eyesCheckWindow, eyesClose } from '@applitools/eyes-cypress';
 
 describe('Hello Nx', () => {
   beforeEach(() => cy.visit('/'));
@@ -129,20 +130,20 @@ describe('Hello Nx', () => {
   it('should display welcome message', () => {
 
     // start applitools test
-    (<any>cy).eyesOpen({
+    eyesOpen({
       appName: 'myapp',
       testName: 'Welcome message',
       browser: { width: 800, height: 600 },
     });
 
     // check window with applitools
-    (<any>cy).eyesCheckWindow('Main Page');
+    eyesCheckWindow('Main Page');
 
     // standard cypress testing
     getGreeting().contains('Welcome to web-myapp!');
 
     // end applitools test
-    (<any>cy).eyesClose();
+    eyesClose();
   });
 });  
 `;

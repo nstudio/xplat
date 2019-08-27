@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "id": "xplatApp",
-  "title": "Create an xplat app",
+  "id": "xplatAppGen",
+  "title": "Generate an xplat app",
   "type": "object",
   "properties": {
     "name": {
@@ -11,56 +11,31 @@
       "$default": {
         "$source": "argv",
         "index": 0
-      },
-      "x-prompt": "What name would you like for this app?"
+      }
     },
     "prefix": {
       "type": "string",
       "description": "The prefix to apply to generated selectors.",
       "alias": "p"
     },
-    "framework": {
-      "type": "string",
-      "description": "Frontend framework."
-    },
     "platforms": {
       "type": "string",
-      "description": "Platforms.",
+      "description": "Platforms."
+    },
+    "framework": {
+      "type": "string",
+      "description": "Frontend framework.",
       "x-prompt": {
-        "message": "What type of app would like to create?",
+        "message": "Which frontend framework should it use?",
         "type": "list",
         "items": [
           {
-            "value": "electron",
-            "label": "electron        [Electron app]"
+            "value": "angular",
+            "label": "angular        [Angular app]"
           },
           {
-            "value": "express",
-            "label": "express         [Express app]"
-          },
-          {
-            "value": "ionic",
-            "label": "ionic           [Ionic app]"
-          },
-          {
-            "value": "nativescript",
-            "label": "nativescript    [NativeScript app]"
-          },
-          {
-            "value": "nest",
-            "label": "nest            [Nest app]"
-          },
-          {
-            "value": "node",
-            "label": "node            [Node app]"
-          },
-          {
-            "value": "react",
-            "label": "react           [React app]"
-          },
-          {
-            "value": "web",
-            "label": "web             [Web app]"
+            "value": "",
+            "label": "none           [vanilla app]"
           }
         ]
       }
@@ -91,7 +66,9 @@
     },
     "useXplat": {
       "description": "Generate xplat supporting architecture",
-      "type": "boolean"
+      "type": "boolean",
+      "default": true,
+      "x-prompt": "Use xplat supporting architecture?"
     },
     "skipInstall": {
       "type": "boolean",

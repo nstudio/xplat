@@ -17,7 +17,13 @@ export function unsupportedPlatformErrorWithNxNote(
   platform: string,
   generator: string
 ) {
-  return `"${platform}" in xplat currently does not support the "${generator}" generator. However it would be awesome to have a "${generator}" generator for "${platform}". Please add an issue to https://github.com/nstudio/xplat/issues with some details of how you'd like it to work for "${platform}" and we'll try to queue it up in a future release.`;
+  return `"${platform}" in xplat currently does not support the "${generator}" generator. However it would be awesome to have a "${generator}" generator for "${platform}". Please add an issue to https://github.com/nstudio/xplat/issues with some details of how you'd like it to work for "${platform}" and we'll look into adding to a future release.`;
+}
+
+export function noXplatLayerNote(
+  platform: string
+) {
+  return `Generating "${platform}" app in your workspace. Just so you know, "${platform}" does not have an xplat supporting architecture layer yet. If you'd like to see "${platform}" with an xplat layer in future, please add an issue to https://github.com/nstudio/xplat/issues with some details of how you'd like it to work and we'll look into adding to a future release.`;
 }
 
 export function unsupportedFrameworkError(framework: string) {
