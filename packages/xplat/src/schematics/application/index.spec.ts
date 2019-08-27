@@ -78,7 +78,6 @@ describe('xplat schematic', () => {
   });
 
   fdescribe('Nx app generators supporte via proxy xplat app generator', () => {
-
     it('should create Nx express', async () => {
       appTree = Tree.empty();
       appTree = createEmptyWorkspace(appTree);
@@ -129,7 +128,9 @@ describe('xplat schematic', () => {
 
       let fileContent = getFileContent(tree, '/apps/node-sample/src/main.ts');
       // console.log(fileContent);
-      expect(fileContent.indexOf(`console.log('Hello World!')`)).toBeGreaterThanOrEqual(0);
+      expect(
+        fileContent.indexOf(`console.log('Hello World!')`)
+      ).toBeGreaterThanOrEqual(0);
     });
 
     it('should create Nx react', async () => {
@@ -143,7 +144,10 @@ describe('xplat schematic', () => {
       // console.log('files:', files);
       expect(tree.exists('/apps/react-sample/src/app/app.tsx')).toBeTruthy();
 
-      let fileContent = getFileContent(tree, '/apps/react-sample/src/app/app.tsx');
+      let fileContent = getFileContent(
+        tree,
+        '/apps/react-sample/src/app/app.tsx'
+      );
       // console.log(fileContent);
       expect(fileContent.indexOf(`from 'react'`)).toBeGreaterThan(0);
     });

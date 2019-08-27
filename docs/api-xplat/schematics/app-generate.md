@@ -1,11 +1,11 @@
-# application
+# app-generate [hidden]
 
-Add applications.
+Generate apps.
 
 ## Usage
 
 ```bash
-nx generate application ...
+nx generate app-generate ...
 
 ```
 
@@ -86,6 +86,8 @@ Type: `string`
 The target to use with this generator.
 
 ### --useXplat
+
+Default: `true`
 
 Type: `boolean`
 
