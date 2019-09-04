@@ -50,6 +50,12 @@
 - iOS: https://itunes.apple.com/us/app/id902026228?mt=8
 - Android: https://play.google.com/store/apps/details?id=com.ugroupmedia.pnp14&hl=en
 
+### My PreSonus
+
+- Web: http://my.presonus.com/
+- iOS: https://apps.apple.com/us/app/mypresonus/id1282534772
+- Android: https://play.google.com/store/apps/details?id=com.presonus.mypresonus&hl=en_US
+
 ## Context
 
 - [Why it's Hard to Decide on Technologies](https://medium.com/@adamklein_66511/why-its-hard-to-decide-on-technologies-9d67b6adf157) by [Adam Klein](https://github.com/adamkleingit)
