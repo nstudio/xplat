@@ -53,7 +53,7 @@ ng add @nstudio/xplat
 After installing xplat tools, your default schematic collection should now be set to `@nstudio/xplat` allowing you to execute the following:
 
 ```
-nx generate app
+ng generate app
 ```
 
 Follow the prompts to generate the type of app you'd like:
@@ -63,9 +63,9 @@ Follow the prompts to generate the type of app you'd like:
 If you would like to set your default schematics to anything other than `@nstudio/xplat` you can always execute app generators via the more verbose style:
 
 ```
-nx generate @nstudio/xplat:app
+ng generate @nstudio/xplat:app
 ```
 
 ## Serving Application
 
-Run `nx serve appname` to serve the newly generated application!
+Run `ng serve appname` to serve the newly generated application!
