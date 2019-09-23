@@ -55,7 +55,8 @@ After installing xplat tools, your default schematic collection should now be se
 ```
 nx generate app
 ```
-**Side note:** if your using a `nx` workspace with the angular presets you may need to repalace `nx` with `ng`. This also applies to the `nx serve appname` step.
+
+**Note:** If you're using an Nx workspace with any angular presets you may need to replace `nx` with `ng`. This also applies to the `nx serve appname` step.
 
 Follow the prompts to generate the type of app you'd like:
 
