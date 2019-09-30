@@ -1,3 +1,18 @@
+<a name="8.0.7"></a>
+## [8.0.7](https://github.com/nstudio/xplat/compare/8.0.5...8.0.7) (2019-09-30)
+
+
+### Bug Fixes
+
+* **generators:** remove create-xplat-workspace and updated deps ([0117f53](https://github.com/nstudio/xplat/commit/0117f53))
+
+
+### Features
+
+* **schematics:** app generator now includes Nx + xplat options ([0650c4f](https://github.com/nstudio/xplat/commit/0650c4f))
+
+
+
 <a name="8.0.6"></a>
 
 ## [8.0.6](https://github.com/nstudio/xplat/compare/8.0.5...8.0.6) (2019-08-27)

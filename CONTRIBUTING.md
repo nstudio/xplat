@@ -128,7 +128,7 @@ The subject must contain a description of the change.
 ```
 feat(vue): application generator
 
-`ng g @nstudio/vue:app myapp` adds a vue app
+`nx g @nstudio/vue:app myapp` adds a vue app
 ```
 
 ## Migrations
