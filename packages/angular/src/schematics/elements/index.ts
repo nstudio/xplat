@@ -250,9 +250,7 @@ function updateWorkspaceSupport(
 function createCustomElementList(componentSymbols) {
   const customElements = ['let component;'];
   for (const comp of componentSymbols) {
-    customElements.push(`component = createCustomElement(${
-      comp.symbol
-    }, { injector: this.injector });
+    customElements.push(`component = createCustomElement(${comp.symbol}, { injector: this.injector });
     customElements.define('${comp.selector}', component);`);
   }
   return customElements.join('\n');
@@ -264,9 +262,7 @@ function updateBuilder(tree: Tree, options: ElementsOptions) {
       `xplat/web/elements/builder/elements.ts`,
       builderElementsContent(options.builderModule)
     );
-    const moduleFilePath = `xplat/web/elements/${
-      options.builderModule
-    }.module.ts`;
+    const moduleFilePath = `xplat/web/elements/${options.builderModule}.module.ts`;
     if (tree.exists(moduleFilePath)) {
       const moduleFile = tree.get(moduleFilePath).content.toString();
       const selectorParts = moduleFile.split('.define(');

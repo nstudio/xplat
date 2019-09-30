@@ -90,11 +90,7 @@ describe('app', () => {
     // console.log(checkFile);
     expect(
       checkFile.indexOf(
-        `npm run prepare.electron.${
-          options.name
-        } && npm-run-all -p serve.electron.${
-          options.name
-        }.target serve.electron.${options.name}`
+        `npm run prepare.electron.${options.name} && npm-run-all -p serve.electron.${options.name}.target serve.electron.${options.name}`
       )
     ).toBeGreaterThanOrEqual(0);
   });

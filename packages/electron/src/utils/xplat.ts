@@ -102,38 +102,26 @@ export namespace XplatElectrontHelpers {
       scripts['postinstall.web'] = 'node tools/web/postinstall';
       scripts[
         `build.${platformApp}`
-      ] = `npm run prepare.${platformApp} && ng build ${
-        options.name
-      } --prod --base-href ./`;
+      ] = `npm run prepare.${platformApp} && ng build ${options.name} --prod --base-href ./`;
       scripts[
         `build.${platformApp}.local`
       ] = `npm run build.${platformApp} && electron dist/apps/${options.name}`;
       scripts[
         `build.${platformApp}.linux`
-      ] = `npm run build.${platformApp} && cd dist/apps/${
-        options.name
-      } && npx electron-builder build --linux`;
+      ] = `npm run build.${platformApp} && cd dist/apps/${options.name} && npx electron-builder build --linux`;
       scripts[
         `build.${platformApp}.windows`
-      ] = `npm run build.${platformApp} && cd dist/apps/${
-        options.name
-      } && npx electron-builder build --windows`;
+      ] = `npm run build.${platformApp} && cd dist/apps/${options.name} && npx electron-builder build --windows`;
       scripts[
         `build.${platformApp}.mac`
-      ] = `npm run build.${platformApp} && cd dist/apps/${
-        options.name
-      } && npx electron-builder build --mac`;
+      ] = `npm run build.${platformApp} && cd dist/apps/${options.name} && npx electron-builder build --mac`;
       scripts[
         `prepare.${platformApp}`
-      ] = `npm run postinstall.electron && tsc -p apps/${
-        options.name
-      }/tsconfig.json`;
+      ] = `npm run postinstall.electron && tsc -p apps/${options.name}/tsconfig.json`;
       scripts[`serve.${platformApp}.target`] = `nx serve ${options.name}`;
       scripts[
         `serve.${platformApp}`
-      ] = `wait-on http-get://localhost:4200/ && electron apps/${
-        options.name
-      }/src --serve`;
+      ] = `wait-on http-get://localhost:4200/ && electron apps/${options.name}/src --serve`;
       scripts[
         `start.${platformApp}`
       ] = `npm run prepare.${platformApp} && npm-run-all -p serve.${platformApp}.target serve.${platformApp}`;

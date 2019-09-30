@@ -113,9 +113,7 @@ Promise.all(
         )
         .then(() => {
           console.log(
-            `Documentation from ${config.root} generated to ${
-              config.schematicOutput
-            }`
+            `Documentation from ${config.root} generated to ${config.schematicOutput}`
           );
         });
     })

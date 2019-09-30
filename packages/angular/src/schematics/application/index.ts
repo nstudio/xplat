@@ -202,9 +202,7 @@ function adjustAppFiles(options: Schema, tree: Tree) {
   if (options.routing) {
     // update home route to reflect with root cmp would have been
     tree.overwrite(
-      `/apps/${directory}${
-        options.name
-      }/src/app/features/home/components/home.component.html`,
+      `/apps/${directory}${options.name}/src/app/features/home/components/home.component.html`,
       appCmpHtml(options.name)
     );
   }

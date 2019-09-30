@@ -82,26 +82,22 @@ export default function(options: ApplicationOptions) {
       ] = `npm run clean && npm run clean.${platformApp} && npm run build.${platformApp}`;
       scripts[
         `prepare.${platformApp}.ios`
-      ] = `npm run prepare.${platformApp} && cd apps/${directory}${
-        options.name
-      } && npm run cap.add.ios`;
+      ] = `npm run prepare.${platformApp} && cd apps/${directory}${options.name} && npm run cap.add.ios`;
       scripts[
         `prepare.${platformApp}.android`
-      ] = `npm run prepare.${platformApp} && cd apps/${directory}${
-        options.name
-      } && npm run cap.add.android`;
-      scripts[`open.${platformApp}.ios`] = `cd apps/${directory}${
-        options.name
-      } && npm run cap.ios`;
-      scripts[`open.${platformApp}.android`] = `cd apps/${directory}${
-        options.name
-      } && npm run cap.android`;
-      scripts[`sync.${platformApp}`] = `cd apps/${directory}${
-        options.name
-      } && npm run cap.copy`;
-      scripts[`clean.${platformApp}`] = `cd apps/${directory}${
-        options.name
-      } && npx rimraf -- hooks node_modules platforms www plugins ios android package-lock.json && npm i && rimraf -- package-lock.json`;
+      ] = `npm run prepare.${platformApp} && cd apps/${directory}${options.name} && npm run cap.add.android`;
+      scripts[
+        `open.${platformApp}.ios`
+      ] = `cd apps/${directory}${options.name} && npm run cap.ios`;
+      scripts[
+        `open.${platformApp}.android`
+      ] = `cd apps/${directory}${options.name} && npm run cap.android`;
+      scripts[
+        `sync.${platformApp}`
+      ] = `cd apps/${directory}${options.name} && npm run cap.copy`;
+      scripts[
+        `clean.${platformApp}`
+      ] = `cd apps/${directory}${options.name} && npx rimraf -- hooks node_modules platforms www plugins ios android package-lock.json && npm i && rimraf -- package-lock.json`;
       return updatePackageScripts(tree, scripts);
     },
     (tree: Tree, context: SchematicContext) => {
@@ -273,9 +269,7 @@ export default function(options: ApplicationOptions) {
             },
             configurations: {
               production: {
-                cordovaBuildTarget: `${
-                  options.name
-                }:ionic-cordova-build:production`,
+                cordovaBuildTarget: `${options.name}:ionic-cordova-build:production`,
                 devServerTarget: `${options.name}:serve:production`
               }
             }

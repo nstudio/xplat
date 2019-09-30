@@ -63,12 +63,8 @@ export namespace ComponentHelpers {
         if (platPrefix === platform || platSuffix === platform) {
           const appDir = platform === 'web' ? '/app' : '';
           const prefixPath = `apps/${projectName}/src${appDir}`;
-          const featurePath = `${prefixPath}/features/${
-            componentSettings.featureName
-          }`;
-          const featureModulePath = `${featurePath}/${
-            componentSettings.featureName
-          }.module.ts`;
+          const featurePath = `${prefixPath}/features/${componentSettings.featureName}`;
+          const featureModulePath = `${featurePath}/${componentSettings.featureName}.module.ts`;
           const barrelIndex = `${featurePath}/components/index.ts`;
           // console.log('will adjustProject:', projectName);
           chains.push((tree: Tree, context: SchematicContext) => {
@@ -132,9 +128,7 @@ export namespace ComponentHelpers {
           return adjustBarrelIndex(
             'component',
             options,
-            `xplat/${xplatFolderName}/features/${
-              componentSettings.featureName
-            }/components/${options.subFolder}/index.ts`,
+            `xplat/${xplatFolderName}/features/${componentSettings.featureName}/components/${options.subFolder}/index.ts`,
             true
           )(tree, context);
         });
@@ -165,9 +159,7 @@ export namespace ComponentHelpers {
         return adjustBarrelIndex(
           'component',
           options,
-          `xplat/${xplatFolderName}/features/${
-            componentSettings.featureName
-          }/components/index.ts`,
+          `xplat/${xplatFolderName}/features/${componentSettings.featureName}/components/index.ts`,
           true,
           false,
           true
