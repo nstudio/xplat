@@ -11,11 +11,8 @@ echo "Compiled Typescript"
 
 rsync -a --exclude=*.ts packages/ build/packages
 
-chmod +x build/packages/xplat/bin/create-xplat-workspace.js
-chmod +x build/packages/create-xplat-workspace/bin/create-xplat-workspace.js
 rm -rf build/packages/install
 cp README.md build/packages/angular
-cp README.md build/packages/create-xplat-workspace
 cp README.md build/packages/electron
 cp README.md build/packages/electron-angular
 cp README.md build/packages/ionic
@@ -27,7 +24,6 @@ cp README.md build/packages/web
 cp README.md build/packages/web-angular
 cp README.md build/packages/xplat
 cp LICENSE build/packages/angular
-cp LICENSE build/packages/create-xplat-workspace
 cp LICENSE build/packages/electron
 cp LICENSE build/packages/electron-angular
 cp LICENSE build/packages/ionic

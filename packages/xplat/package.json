@@ -21,9 +21,6 @@
   ],
   "main": "index.js",
   "types": "index.d.ts",
-  "bin": {
-    "create-xplat-workspace": "./bin/create-xplat-workspace.js"
-  },
   "schematics": "./collection.json",
   "ng-update": {
     "requirements": {},

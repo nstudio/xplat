@@ -6,12 +6,6 @@ Everything starts with a [Nx workspace](https://nx.dev).
 npx create-nx-workspace myworkspace
 ```
 
-_NOTE_: You can optionally create Nx + xplat all with one command:
-
-```
-npx create-xplat-workspace myworkspace
-```
-
 # Install Nrwl cli
 
 Having Nrwl's cli installed globally will enhance usability of the tooling:

@@ -93,7 +93,7 @@ export async function fixFormatter() {
     return;
   }
 
-  const patchRegExp = /(^\s+var chunkList)/m;
+  const patchRegExp = /(^\s+const chunkList)/m;
   if (!patchRegExp.test(formatContent)) {
     throw new Error(`Apply couldn't patch for nx format`);
   }
