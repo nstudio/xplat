@@ -1,10 +1,17 @@
+<a name="8.0.10"></a>
+
+## [8.0.10](https://github.com/nstudio/xplat/compare/8.0.7...8.0.10) (2019-10-07)
+
+### Bug Fixes
+
+- **ionic:** feature/component generators ([816ae3b](https://github.com/nstudio/xplat/commit/816ae3b))
+
 <a name="8.0.9"></a>
 
 ## [8.0.9](https://github.com/nstudio/xplat/compare/8.0.7...8.0.9) (2019-10-07)
 
 ### Bug Fixes
 
-- **generators:** angular feature/component + update {N} deps ([98309eb](https://github.com/nstudio/xplat/commit/98309eb))
 - **generators:** app platform ([9a99c6e](https://github.com/nstudio/xplat/commit/9a99c6e))
 
 <a name="8.0.8"></a>
