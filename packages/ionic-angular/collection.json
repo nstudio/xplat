@@ -22,6 +22,12 @@
       "aliases": ["c"],
       "hidden": true
     },
+    "feature": {
+      "factory": "./src/schematics/feature",
+      "schema": "./src/schematics/feature/schema.json",
+      "description": "Create an Ionic Angular feature module configured for xplat projects and shared code.",
+      "hidden": true
+    },
     "xplat": {
       "factory": "./src/schematics/xplat",
       "schema": "./src/schematics/xplat/schema.json",
