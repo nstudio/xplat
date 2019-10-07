@@ -1,3 +1,13 @@
+<a name="8.0.8"></a>
+## [8.0.8](https://github.com/nstudio/xplat/compare/8.0.7...8.0.8) (2019-10-07)
+
+
+### Bug Fixes
+
+* **generators:** angular feature/component + update {N} deps ([98309eb](https://github.com/nstudio/xplat/commit/98309eb))
+
+
+
 <a name="8.0.7"></a>
 
 ## [8.0.7](https://github.com/nstudio/xplat/compare/8.0.5...8.0.7) (2019-09-30)
