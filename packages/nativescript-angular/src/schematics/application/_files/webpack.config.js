@@ -57,7 +57,7 @@ module.exports = env => {
 
     // You can provide the following flags when running 'tns run android|ios'
     aot, // --env.aot
-    snapshot, // --env.snapshot,
+    snapshot, // --env.snapshot
     production, // --env.production
     uglify, // --env.uglify
     report, // --env.report
@@ -91,8 +91,22 @@ module.exports = env => {
     ngCompilerTransformers.push(nsReplaceBootstrap);
   }
 
-  if (hmr) {
-    ngCompilerTransformers.push(nsSupportHmrNg);
+  const copyTargets = [
+    { from: { glob: 'assets/**' } },
+    { from: { glob: 'fonts/**' } }
+    // copy monorepo shared assests
+    // for example:
+    // { from: '../../../libs/assets/i18n', to: 'assets/i18n' }
+  ];
+
+  if (!production) {
+    // copy monorepo shared assets which are for development purposes only
+    // for example: a mock data json folder
+    // copyTargets.push({ from: '../../../libs/assets/mockdata', to: 'assets/mockdata' });
+
+    if (hmr) {
+      ngCompilerTransformers.push(nsSupportHmrNg);
+    }
   }
 
   // when "@angular/core" is external, it's not included in the bundles. In this way, it will be used
@@ -236,7 +250,7 @@ module.exports = env => {
       minimizer: [
         new TerserPlugin({
           parallel: true,
-          cache: true,
+          cache: !ci,
           sourceMap: isAnySourceMapEnabled,
           terserOptions: {
             output: {
@@ -251,6 +265,7 @@ module.exports = env => {
               // custom
               drop_console: true,
               drop_debugger: true,
+              ecma: 6,
               keep_infinity: platform === 'android', // for Chrome/V8
               reduce_funcs: platform !== 'android', // for Chrome/V8
               pure_funcs: [
@@ -262,8 +277,14 @@ module.exports = env => {
                 'this.log.error',
                 'this.log.info',
                 'this.log.warn'
-              ]
-            }
+              ],
+              global_defs: {
+                __UGLIFIED__: true
+              }
+            },
+            // custom
+            ecma: 6,
+            safari10: platform !== 'android'
           }
         })
       ]
@@ -271,7 +292,7 @@ module.exports = env => {
     module: {
       rules: [
         {
-          test: nsWebpack.getEntryPathRegExp(appFullPath, entryPath),
+          include: join(appFullPath, entryPath),
           use: [
             // Require all Android app components
             platform === 'android' && {
@@ -346,16 +367,13 @@ module.exports = env => {
       // Remove all files from the out dir.
       new CleanWebpackPlugin(itemsToClean, { verbose: !!verbose }),
       // Copy assets to out dir. Add your own globs as needed.
-      new CopyWebpackPlugin(
-        [{ from: { glob: 'assets/**' } }, { from: { glob: 'fonts/**' } }],
-        { ignore: [`${relative(appPath, appResourcesFullPath)}/**`] }
-      ),
+      new CopyWebpackPlugin(copyTargets, {
+        ignore: [`${relative(appPath, appResourcesFullPath)}/**`]
+      }),
       new nsWebpack.GenerateNativeScriptEntryPointsPlugin('bundle'),
       // For instructions on how to set up workers with webpack
       // check out https://github.com/nativescript/worker-loader
-      new NativeScriptWorkerPlugin({
-        plugins: [ngCompilerPlugin]
-      }),
+      new NativeScriptWorkerPlugin(),
       ngCompilerPlugin,
       // Does IPC communication with the {N} CLI to notify events when running in watch mode.
       new nsWebpack.WatchStateLoggerPlugin()
@@ -395,7 +413,7 @@ module.exports = env => {
     );
   }
 
-  if (hmr) {
+  if (!production && hmr) {
     config.plugins.push(new webpack.HotModuleReplacementPlugin());
   }
 

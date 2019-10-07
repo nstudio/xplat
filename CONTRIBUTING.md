@@ -40,7 +40,7 @@ This will setup a fresh Nx workspace at `tmp/myworkspace` and auto open in VS Co
 
 ```
 rm -rf node_modules/@nstudio
-ng add @nstudio/xplat
+npm i -D @nstudio/xplat
 ```
 
 Anytime you make further changes to the schematic just rebuild/republish:

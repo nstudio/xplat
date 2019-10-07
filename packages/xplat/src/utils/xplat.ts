@@ -324,16 +324,16 @@ export namespace XplatHelpers {
         if (supportedFrameworks.includes(framework)) {
           if (platforms.length) {
             for (const platform of platforms) {
-              if (platform === 'web' && framework === 'angular') {
-                // TODO: move angular app into web-angular package
-                // right now it lives in angular package
-                const packageName = `@nstudio/${framework}`;
+              if (framework === 'angular') {
+                // Angular generators start with @nstudio/angular and branch from there
+                const packageName = `@nstudio/angular`;
                 devDependencies[packageName] = xplatVersion;
-                // also need web-angular (won't need this once moved to web-angular)
-                devDependencies[`@nstudio/web-angular`] = xplatVersion;
-                devDependencies[`@nstudio/web`] = xplatVersion;
-                // externalChains.push(externalSchematic(`@nstudio/${framework}`, 'app', options));
-                packagesToRunXplat.push(packageName);
+                // install platform dependencies
+                devDependencies[`@nstudio/${platform}-angular`] = xplatVersion;
+                devDependencies[`@nstudio/${platform}`] = xplatVersion;
+                if (!packagesToRunXplat.includes(packageName)) {
+                  packagesToRunXplat.push(packageName);
+                }
               } else if (
                 isApp &&
                 supportedNxExtraPlatforms.includes(<PlatformNxExtraTypes>(
@@ -865,7 +865,7 @@ xplat/**/*.ngsummary.json
         if (!devMode || devMode === 'fullstack') {
           // show all
           isFullstack = true;
-          for (const p of supportedPlatforms) {
+          for (const p of supportedPlatformsWithNx) {
             const appFilter = groupByName ? `*-${p}` : `${p}*`;
             userUpdates[`**/apps/${appFilter}`] = false;
             userUpdates[`**/xplat/${p}`] = false;
@@ -876,7 +876,7 @@ xplat/**/*.ngsummary.json
         } else if (options.platforms) {
           const platforms = sanitizeCommaDelimitedArg(options.platforms);
           // switch on/off platforms
-          for (const p of supportedPlatforms) {
+          for (const p of supportedPlatformsWithNx) {
             const excluded = platforms.includes(p) ? false : true;
             const appFilter = groupByName ? `*-${p}` : `${p}*`;
             if (focusOnApps.length) {

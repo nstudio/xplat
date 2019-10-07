@@ -36,8 +36,7 @@ module.exports = env => {
 
   const {
     // The 'appPath' and 'appResourcesPath' values are fetched from
-    // the nsconfig.json configuration file
-    // when bundling with `tns run android|ios --bundle`.
+    // the nsconfig.json configuration file.
     appPath = 'app',
     appResourcesPath = 'app/App_Resources',
 
@@ -50,7 +49,9 @@ module.exports = env => {
     hiddenSourceMap, // --env.hiddenSourceMap
     hmr, // --env.hmr,
     unitTesting, // --env.unitTesting,
-    verbose // --env.verbose
+    verbose, // --env.verbose
+    snapshotInDocker, // --env.snapshotInDocker
+    skipSnapshotTools // --env.skipSnapshotTools
   } = env;
   const isAnySourceMapEnabled = !!sourceMap || !!hiddenSourceMap;
   const externals = nsWebpack.getConvertedExternals(env.externals);
@@ -204,7 +205,7 @@ module.exports = env => {
     module: {
       rules: [
         {
-          test: nsWebpack.getEntryPathRegExp(appFullPath, entryPath),
+          include: join(appFullPath, entryPath),
           use: [
             // Require all Android app components
             platform === 'android' && {
@@ -324,7 +325,9 @@ module.exports = env => {
         chunk: 'vendor',
         requireModules: ['tns-core-modules/bundle-entry-points'],
         projectRoot,
-        webpackConfig: config
+        webpackConfig: config,
+        snapshotInDocker,
+        skipSnapshotTools
       })
     );
   }

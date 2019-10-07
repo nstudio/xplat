@@ -9,14 +9,14 @@ import {
   XplatHelpers
 } from '@nstudio/xplat';
 import { Schema as xPlatOptions } from './schema';
-import { PlatformModes } from '../../utils';
+import { PlatformModes, supportedPlatformsWithNx } from '../../utils';
 
 let name: PlatformModes;
 export default function(options: xPlatOptions) {
   if (!options.name) {
     name = 'fullstack';
     console.warn(
-      `Using 'fullstack' since no mode was specified. Currently supported: fullstack,${supportedPlatforms}. Example: nx g mode nativescript`
+      `Using 'fullstack' since no mode was specified. Currently supported: fullstack,${supportedPlatformsWithNx}. Example: nx g mode nativescript`
     );
   } else {
     name = options.name;
@@ -47,7 +47,7 @@ export default function(options: xPlatOptions) {
           );
           let containsPlatform = false;
           for (const n of nameParts) {
-            if (supportedPlatforms.includes(n)) {
+            if (supportedPlatformsWithNx.includes(n)) {
               containsPlatform = true;
             }
           }

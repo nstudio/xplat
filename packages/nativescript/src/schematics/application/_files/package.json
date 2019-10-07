@@ -19,7 +19,7 @@
     "tns-core-modules": "file:<%= pathOffset %>node_modules/tns-core-modules"
   },
   "devDependencies": {
-    "nativescript-dev-webpack": "~1.0.1",
+    "nativescript-dev-webpack": "~1.2.0",
     "terser-webpack-plugin": "file:<%= pathOffset %>node_modules/terser-webpack-plugin",
     "tns-platform-declarations": "file:<%= pathOffset %>node_modules/tns-platform-declarations",
     "typescript": "file:<%= pathOffset %>node_modules/typescript"
