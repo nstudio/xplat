@@ -324,8 +324,9 @@ export namespace XplatHelpers {
         if (supportedFrameworks.includes(framework)) {
           if (platforms.length) {
             for (const platform of platforms) {
-              if (framework === 'angular') {
+              if (framework === 'angular' && (!isApp || (isApp && platform === 'web'))) {
                 // Angular generators start with @nstudio/angular and branch from there
+                // Exception: if app generator and with web platform, also use this configuration
                 const packageName = `@nstudio/angular`;
                 devDependencies[packageName] = xplatVersion;
                 // install platform dependencies
