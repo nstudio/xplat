@@ -1,0 +1,16 @@
+import { View } from 'tns-core-modules/ui/core/view';
+
+export class <%= utils.classify(name) %> extends View {
+
+  createNativeView() {
+    return UIView.alloc().initWithFrame(CGRectMake(0, 0, 0, 0));
+  } 
+
+  initNativeView() {
+    // optional
+  }
+
+  disposeNativeView() {
+    // optional
+  }
+}

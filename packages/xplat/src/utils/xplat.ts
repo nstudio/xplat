@@ -1314,22 +1314,23 @@ export namespace XplatComponentHelpers {
         // no feature targeted, default to shared
         featureName = 'shared';
       }
-      // building feature in shared code and in projects
+      // building feature in projects
       projectNames = sanitizeCommaDelimitedArg(projects);
       for (const name of projectNames) {
         const projectParts = name.split('-');
         const platPrefix = projectParts[0];
         const platSuffix = projectParts.pop();
         if (
-          supportedPlatforms.includes(platPrefix) &&
+          supportedPlatformsWithNx.includes(platPrefix) &&
           !platforms.includes(platPrefix)
         ) {
           // if project name is prefixed with supported platform and not already added
           platforms.push(platPrefix);
         } else if (
-          supportedPlatforms.includes(platSuffix) &&
+          supportedPlatformsWithNx.includes(platSuffix) &&
           !platforms.includes(platSuffix)
         ) {
+          // if project name is suffixed with supported platform and not already added
           platforms.push(platSuffix);
         }
       }

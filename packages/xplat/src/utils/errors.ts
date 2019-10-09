@@ -59,7 +59,7 @@ export function noPlatformError() {
 }
 
 export function platformAppPrefixError() {
-  return `Normally a platform identifier prefixes the project name in xplat. It's possible you may not have generated your app with xplat tools. Please generate your app with xplat or prefix your app's name with the platform it's intended for. For example: web-viewer, nativescript-viewer, ionic-viewer, etc.`;
+  return `Normally a platform identifier prefixes the project name in xplat. It's possible you may not have generated your app with xplat tools. Please generate your app with xplat or prefix your app's name with the platform it's intended for. For example: web-viewer, nativescript-viewer, ionic-viewer, etc. You could also put the platform designator at the end as a suffix, ie: viewer-web, viewer-nativescript, viewer-ionic, etc.`;
 }
 
 export function generatorError(type: string) {

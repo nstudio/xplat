@@ -26,6 +26,12 @@
       "schema": "./src/schematics/helpers/schema.json",
       "description": "Helpers for NativeScript."
     },
+    "native-ui": {
+      "factory": "./src/schematics/native-ui",
+      "schema": "./src/schematics/native-ui/schema.json",
+      "aliases": ["native"],
+      "description": "Create a NativeScript platform split ui view."
+    },
     "xplat": {
       "factory": "./src/schematics/xplat",
       "schema": "./src/schematics/xplat/schema.json",
