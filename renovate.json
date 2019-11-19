@@ -1,0 +1,10 @@
+  
+{
+  "semanticCommits": true,
+  "packageRules": [{
+    "automerge": true
+  }],
+  "extends": [
+    "config:base"
+  ]
+}
