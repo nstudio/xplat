@@ -60,7 +60,7 @@
 
 - Web: https://sweet.io/
 - iOS: https://apps.apple.com/us/app/sweet/id1452120535
-- Android: Coming soon
+- Android: https://play.google.com/store/apps/details?id=io.sweet.app&hl=en_US
 
 ## Context
 
