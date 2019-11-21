@@ -57,7 +57,7 @@ module.exports = env => {
 
     // You can provide the following flags when running 'tns run android|ios'
     aot, // --env.aot
-    snapshot, // --env.snapshot
+    snapshot, // --env.snapshot,
     production, // --env.production
     uglify, // --env.uglify
     report, // --env.report
@@ -66,9 +66,13 @@ module.exports = env => {
     hmr, // --env.hmr,
     unitTesting, // --env.unitTesting
     verbose, // --env.verbose
-    ci // --env.ci
+    ci, // --env.ci
+    snapshotInDocker, // --env.snapshotInDocker
+    skipSnapshotTools, // --env.skipSnapshotTools
+    compileSnapshot // --env.compileSnapshot
   } = env;
 
+  const useLibs = compileSnapshot;
   const isAnySourceMapEnabled = !!sourceMap || !!hiddenSourceMap;
   const externals = nsWebpack.getConvertedExternals(env.externals);
   const appFullPath = resolve(projectRoot, appPath);
@@ -408,7 +412,10 @@ module.exports = env => {
           'nativescript-angular/router'
         ],
         projectRoot,
-        webpackConfig: config
+        webpackConfig: config,
+        snapshotInDocker,
+        skipSnapshotTools,
+        useLibs
       })
     );
   }

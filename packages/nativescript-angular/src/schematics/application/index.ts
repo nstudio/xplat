@@ -29,7 +29,7 @@ import {
 } from '@nstudio/xplat';
 import { Schema } from './schema';
 import { XplatNativeScriptAngularHelpers } from '../../utils';
-import { tnsCoreVersion } from '../../utils/versions';
+import { nsCoreVersion } from '../../utils/versions';
 import { XplatNativeScriptHelpers } from '@nstudio/nativescript/src/utils';
 
 export default function(options: Schema) {
@@ -205,7 +205,7 @@ function addNsCli(add: boolean): Rule {
 
     packageJson.devDependencies = {
       ...(packageJson.devDependencies || {}),
-      nativescript: tnsCoreVersion
+      nativescript: nsCoreVersion
     };
 
     return updateJsonFile(tree, packagePath, packageJson);

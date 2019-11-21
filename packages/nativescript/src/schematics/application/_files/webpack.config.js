@@ -50,6 +50,7 @@ module.exports = env => {
     hmr, // --env.hmr,
     unitTesting, // --env.unitTesting,
     verbose, // --env.verbose
+    ci, // --env.ci
     snapshotInDocker, // --env.snapshotInDocker
     skipSnapshotTools // --env.skipSnapshotTools
   } = env;

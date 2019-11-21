@@ -1,6 +1,6 @@
 import { Tree, SchematicContext } from '@angular-devkit/schematics';
 import { updateFile, XplatHelpers, IXplatSettings } from '@nstudio/xplat';
-import { nsNgVersion, nsNgFonticonVersion, nodeSassVersion } from './versions';
+import { nsNgVersion, nsNgFonticonVersion, nodeSassVersion, nsCoreVersion } from './versions';
 
 export namespace XplatNativeScriptAngularHelpers {
   export function updateRootDeps(options: XplatHelpers.Schema) {
@@ -8,7 +8,8 @@ export namespace XplatNativeScriptAngularHelpers {
       return XplatHelpers.updatePackageForXplat(options, {
         dependencies: {
           'nativescript-angular': nsNgVersion,
-          'nativescript-ngx-fonticon': nsNgFonticonVersion
+          'nativescript-ngx-fonticon': nsNgFonticonVersion,
+          'tns-core-modules': nsCoreVersion
         },
         devDependencies: {
           'node-sass': nodeSassVersion
