@@ -1,3 +1,13 @@
+<a name="8.0.11"></a>
+## [8.0.11](https://github.com/nstudio/xplat/compare/8.0.10...8.0.11) (2019-11-21)
+
+
+### Features
+
+* **nativescript:** 6.2 support ([#165](https://github.com/nstudio/xplat/issues/165)) ([2c81cc2](https://github.com/nstudio/xplat/commit/2c81cc2))
+
+
+
 <a name="8.0.10"></a>
 
 ## [8.0.10](https://github.com/nstudio/xplat/compare/8.0.7...8.0.10) (2019-10-07)
