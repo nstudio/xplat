@@ -2,7 +2,7 @@ import { Tree, SchematicContext } from '@angular-devkit/schematics';
 import { updateFile, XplatHelpers } from '@nstudio/xplat';
 import {
   terserWebpackVersion,
-  tnsCoreVersion,
+  nsCoreVersion,
   nsThemeCoreVersion,
   nodeSassVersion
 } from './versions';
@@ -13,12 +13,12 @@ export namespace XplatNativeScriptHelpers {
       return XplatHelpers.updatePackageForXplat(options, {
         dependencies: {
           'nativescript-theme-core': nsThemeCoreVersion,
-          'tns-core-modules': tnsCoreVersion
+          'tns-core-modules': nsCoreVersion
         },
         devDependencies: {
           'node-sass': nodeSassVersion,
           'terser-webpack-plugin': terserWebpackVersion,
-          'tns-platform-declarations': tnsCoreVersion
+          'tns-platform-declarations': nsCoreVersion
         }
       })(tree, context);
     };
