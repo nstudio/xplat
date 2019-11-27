@@ -70,9 +70,11 @@
     "migrations": "./migrations/migrations.json"
   },
   "dependencies": {
+    "@nrwl/angular": "^8.0.0"
+  },
+  "devDependencies": {
     "@angular-devkit/core": "8.0.1",
     "@angular-devkit/schematics": "8.0.1",
-    "@nrwl/angular": "^8.0.0",
     "@nrwl/workspace": "^8.0.0",
     "@nstudio/angular": "*",
     "@nstudio/xplat": "*",
