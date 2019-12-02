@@ -1,3 +1,13 @@
+<a name="8.0.15"></a>
+## [8.0.15](https://github.com/nstudio/xplat/compare/8.0.13...8.0.15) (2019-12-02)
+
+
+### Bug Fixes
+
+* **generators:** feature now properly supports groupByName workspaces ([fb8d096](https://github.com/nstudio/xplat/commit/fb8d096))
+
+
+
 <a name="8.0.13"></a>
 ## [8.0.13](https://github.com/nstudio/xplat/compare/8.0.11...8.0.13) (2019-11-24)
 
