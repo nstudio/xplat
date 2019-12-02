@@ -1442,13 +1442,21 @@ export namespace XplatFeatureHelpers {
       // building feature in shared code and in projects
       projectNames = sanitizeCommaDelimitedArg(projects);
       for (const name of projectNames) {
-        const platPrefix = <PlatformTypes>name.split('-')[0];
+        const projectParts = name.split('-');
+        const platPrefix = <PlatformTypes>projectParts[0];
+        const platSuffix = <PlatformTypes>projectParts.pop();
         if (
           supportedPlatforms.includes(platPrefix) &&
           !platforms.includes(platPrefix)
         ) {
           // if project name is prefixed with supported platform and not already added
           platforms.push(platPrefix);
+        } else if (
+          supportedPlatforms.includes(platSuffix) &&
+          !platforms.includes(platSuffix)
+        ) {
+          // if project name is suffixed with supported platform and not already added
+          platforms.push(platSuffix);
         }
       }
     } else if (options.platforms) {
