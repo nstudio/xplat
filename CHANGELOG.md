@@ -1,3 +1,13 @@
+<a name="8.1.1"></a>
+## [8.1.1](https://github.com/nstudio/xplat/compare/8.0.15...8.1.1) (2020-01-05)
+
+
+### Features
+
+* **electron:** support for v7 ([#172](https://github.com/nstudio/xplat/issues/172)) ([e328f7a](https://github.com/nstudio/xplat/commit/e328f7a))
+
+
+
 <a name="8.0.15"></a>
 ## [8.0.15](https://github.com/nstudio/xplat/compare/8.0.13...8.0.15) (2019-12-02)
 
