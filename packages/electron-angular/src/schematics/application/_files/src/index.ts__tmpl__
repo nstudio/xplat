@@ -24,8 +24,11 @@ const mainWindowSettings: Electron.BrowserWindowConstructorOptions = {
   focusable: true,
   fullscreenable: true,
   kiosk: false,
+  // to hide title bar, uncomment:
+  // titleBarStyle: 'hidden',
   webPreferences: {
-    devTools: debugMode
+    devTools: debugMode,
+    nodeIntegration: debugMode
   }
 };
 
@@ -48,7 +51,7 @@ function createWindow() {
   const sizes = screen.getPrimaryDisplay().workAreaSize;
 
   if (debugMode) {
-    process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
+    process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true';
 
     mainWindowSettings.width = 800;
     mainWindowSettings.height = 600;
@@ -98,10 +101,20 @@ function createWindow() {
 try {
   app.on('ready', createWindow);
 
-  app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') {
-      app.quit();
-    }
+  app.on('window-all-closed', quit);
+
+  ipcMain.on('quit', quit);
+
+  ipcMain.on('minimize', () => {
+    win.minimize();
+  });
+
+  ipcMain.on('maximize', () => {
+    win.maximize();
+  });
+
+  ipcMain.on('restore', () => {
+    win.restore();
   });
 
   app.on('activate', () => {
@@ -112,3 +125,9 @@ try {
     }
   });
 } catch (err) {}
+
+function quit() {
+  if (process.platform !== 'darwin') {
+    app.quit();
+  }
+}
