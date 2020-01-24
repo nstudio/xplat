@@ -21,8 +21,6 @@ export namespace XplatNativeScriptAngularHelpers {
         angularDeps['@angular/platform-browser-dynamic'] = angularVersion;
         angularDeps['@angular/router'] = angularVersion;
         angularDeps['@ngx-translate/core'] = ngxTranslateVersion;
-        // angularDeps['@nstest/scss'] = 'file:libs/scss';
-        // angularDeps['@nstest/nativescript-scss'] = 'file:xplat/nativescript/scss';
         angularDeps['reflect-metadata'] = reflectMetadataVersion;
         angularDeps['rxjs'] = rxjsVersion;
         angularDeps['zone.js'] = zonejsVersion;
