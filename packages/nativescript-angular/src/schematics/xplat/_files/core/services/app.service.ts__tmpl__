@@ -2,10 +2,8 @@
 import { Injectable, Inject, NgZone } from '@angular/core';
 
 // nativescript
-import * as tnsApp from 'tns-core-modules/application';
-import * as tnsUtils from 'tns-core-modules/utils/utils';
-import { device, isIOS, isAndroid } from 'tns-core-modules/platform';
-import { DeviceOrientation } from 'tns-core-modules/ui/enums';
+import { Device, isIOS, Application } from '@nativescript/core';
+import { DeviceOrientation } from '@nativescript/core/ui/enums';
 
 // libs
 import { TranslateService } from '@ngx-translate/core';
@@ -69,13 +67,13 @@ export class AppService {
     let versionName: string;
     let buildNumber: string;
 
-    if (tnsApp.android) {
-      const pi = tnsApp.android.context
+    if (Application.android) {
+      const pi = Application.android.context
         .getPackageManager()
-        .getPackageInfo(tnsApp.android.context.getPackageName(), 0);
+        .getPackageInfo(Application.android.context.getPackageName(), 0);
       versionName = pi.versionName;
       buildNumber = pi.versionCode.toString();
-    } else if (tnsApp.ios) {
+    } else if (Application.ios) {
       versionName = NSBundle.mainBundle.objectForInfoDictionaryKey(
         'CFBundleShortVersionString'
       );
@@ -93,16 +91,16 @@ export class AppService {
 
   private _initAppEvents() {
     // For the future - may want to use these
-    tnsApp.on(tnsApp.resumeEvent, () => {
-      this._log.debug('tnsApp.resumeEvent');
+    Application.on(Application.resumeEvent, () => {
+      this._log.debug('app resume.');
     });
-    tnsApp.on(tnsApp.suspendEvent, () => {
-      this._log.debug('tnsApp.suspendEvent');
+    Application.on(Application.suspendEvent, () => {
+      this._log.debug('app suspend.');
     });
   }
 
   private _initOrientation() {
-    this._deviceType = device.deviceType;
+    this._deviceType = Device.deviceType;
     this._log.debug('deviceType:', this._deviceType);
     this._log.debug('initializing orientation handling.');
 
@@ -112,7 +110,7 @@ export class AppService {
     this._log.debug('current orientation:', this.orientation);
 
     // handle orientation changes
-    tnsApp.on(tnsApp.orientationChangedEvent, e => {
+    Application.on(Application.orientationChangedEvent, e => {
       // sometimes e.newValue will be undefined, ignore those
       if (e.newValue && this.orientation !== e.newValue) {
         orientation = getOrientation();

@@ -1,9 +1,8 @@
 import { NgModule, Optional, SkipSelf } from '@angular/core';
 
 // nativescript
-import { NativeScriptModule } from 'nativescript-angular/nativescript.module';
-import { NativeScriptHttpClientModule } from 'nativescript-angular/http-client';
-import { device } from 'tns-core-modules/platform';
+import { NativeScriptModule, NativeScriptHttpClientModule } from '@nativescript/angular';
+import { Device } from '@nativescript/core';
 import { TNSFontIconModule } from 'nativescript-ngx-fonticon';
 
 // libs
@@ -18,7 +17,7 @@ import { TNSTranslateLoader } from './services/tns-translate.loader';
 
 // factories
 export function platformLangFactory() {
-  return device.language;
+  return Device.language;
 }
 
 export function createTranslateLoader() {

@@ -20,7 +20,8 @@
       ],
       "@<%= npmScope %>/nativescript/*": [
         "<%= pathOffset %>xplat/<%= xplatFolderName %>/*"
-      ]
+      ],
+      "*": ["./node_modules/*"]
     }
   },
   "files": [
