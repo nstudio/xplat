@@ -1,3 +1,13 @@
+<a name="8.1.2"></a>
+## [8.1.2](https://github.com/nstudio/xplat/compare/8.1.1...8.1.2) (2020-01-24)
+
+
+### Features
+
+* **nativescript:** 6.3 and scoping updates ([#177](https://github.com/nstudio/xplat/issues/177)) ([dd54238](https://github.com/nstudio/xplat/commit/dd54238))
+
+
+
 <a name="8.1.1"></a>
 ## [8.1.1](https://github.com/nstudio/xplat/compare/8.0.15...8.1.1) (2020-01-05)
 
