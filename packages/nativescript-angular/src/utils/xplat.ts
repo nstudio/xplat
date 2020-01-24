@@ -1,17 +1,45 @@
 import { Tree, SchematicContext } from '@angular-devkit/schematics';
-import { updateFile, XplatHelpers, IXplatSettings } from '@nstudio/xplat';
-import { nsNgVersion, nsNgFonticonVersion, nodeSassVersion, nsCoreVersion } from './versions';
+import { updateFile, XplatHelpers, IXplatSettings, getJsonFromFile } from '@nstudio/xplat';
+import { nsNgVersion, nsNgFonticonVersion, nodeSassVersion, nsCoreVersion, angularVersion, ngxTranslateVersion, reflectMetadataVersion, rxjsVersion, codelyzerVersion, zonejsVersion } from './versions';
 
 export namespace XplatNativeScriptAngularHelpers {
   export function updateRootDeps(options: XplatHelpers.Schema) {
     return (tree: Tree, context: SchematicContext) => {
+      const packagePath = 'package.json';
+      let packageJson = getJsonFromFile(tree, packagePath);
+
+      const angularDeps = {};
+      const angularDevDeps = {};
+      if (packageJson.dependencies && !packageJson.dependencies['@angular/core']) {
+        // ensure angular deps are present
+        angularDeps['@angular/animations'] = angularVersion;
+        angularDeps['@angular/common'] = angularVersion;
+        angularDeps['@angular/compiler'] = angularVersion;
+        angularDeps['@angular/core'] = angularVersion;
+        angularDeps['@angular/forms'] = angularVersion;
+        angularDeps['@angular/platform-browser'] = angularVersion;
+        angularDeps['@angular/platform-browser-dynamic'] = angularVersion;
+        angularDeps['@angular/router'] = angularVersion;
+        angularDeps['@ngx-translate/core'] = ngxTranslateVersion;
+        // angularDeps['@nstest/scss'] = 'file:libs/scss';
+        // angularDeps['@nstest/nativescript-scss'] = 'file:xplat/nativescript/scss';
+        angularDeps['reflect-metadata'] = reflectMetadataVersion;
+        angularDeps['rxjs'] = rxjsVersion;
+        angularDeps['zone.js'] = zonejsVersion;
+
+        angularDevDeps['@angular/compiler-cli'] = angularVersion;
+        angularDevDeps['@angular/language-service'] = angularVersion;
+        angularDevDeps['codelyzer'] = codelyzerVersion;
+      }
       return XplatHelpers.updatePackageForXplat(options, {
         dependencies: {
+          ...angularDeps,
           'nativescript-angular': nsNgVersion,
           'nativescript-ngx-fonticon': nsNgFonticonVersion,
           'tns-core-modules': nsCoreVersion
         },
         devDependencies: {
+          ...angularDevDeps,
           'node-sass': nodeSassVersion
         }
       })(tree, context);

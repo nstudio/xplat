@@ -1222,12 +1222,12 @@ xplat/**/*.ngsummary.json
           // update prettier rules
           prettier = `${prettier}\n${content}`;
 
-          output.log({
-            title: 'Note:',
-            bodyLines: [
-              `Updating "${prettierFileName}" with a few important extra rules. You may double-check the contents afterwards to ensure they meet your satisfaction.`
-            ]
-          });
+          // output.log({
+          //   title: 'Note:',
+          //   bodyLines: [
+          //     `Updating "${prettierFileName}" with a few important extra rules. You may double-check the contents afterwards to ensure they meet your satisfaction.`
+          //   ]
+          // });
 
           tree.overwrite(prettierFileName, prettier);
         }
