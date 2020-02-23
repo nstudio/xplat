@@ -8,7 +8,18 @@ import { join } from 'path';
 import * as fs from 'fs';
 import { updateJsonInTree, createOrUpdate } from '@nrwl/workspace';
 import { getJsonFromFile, updateJsonFile, output } from '@nstudio/xplat';
-import { electronBuilderVersion, electronInstallerDmgVersion, electronPackagerVersion, electronRebuildVersion, electronReloadVersion, electronStoreVersion, electronUpdaterVersion, electronVersion, npmRunAllVersion, waitOnVersion } from '@nstudio/electron';
+import {
+  electronBuilderVersion,
+  electronInstallerDmgVersion,
+  electronPackagerVersion,
+  electronRebuildVersion,
+  electronReloadVersion,
+  electronStoreVersion,
+  electronUpdaterVersion,
+  electronVersion,
+  npmRunAllVersion,
+  waitOnVersion
+} from '@nstudio/electron';
 
 function updateElectronApps(tree: Tree, context: SchematicContext) {
   const nxConfigPath = `nx.json`;
@@ -30,7 +41,7 @@ function updateElectronApps(tree: Tree, context: SchematicContext) {
   );
   // console.log('webpackConfigPath:', webpackConfigPath);
   let electronService = fs.readFileSync(servicePath, 'UTF-8');
-  electronService = electronService.replace(/<%= npmScope %>/ig, npmScope);
+  electronService = electronService.replace(/<%= npmScope %>/gi, npmScope);
 
   const appsNames = [];
   // update electron apps and configs
@@ -45,7 +56,11 @@ function updateElectronApps(tree: Tree, context: SchematicContext) {
       appsNames.push(dir);
 
       createOrUpdate(tree, `${appDir}/src/index.ts`, indexContent);
-      createOrUpdate(tree, `xplat/electron/core/services/electron.service.ts`, electronService);
+      createOrUpdate(
+        tree,
+        `xplat/electron/core/services/electron.service.ts`,
+        electronService
+      );
     }
     output.log({
       title: 'Migration Note:',

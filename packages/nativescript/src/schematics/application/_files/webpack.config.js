@@ -141,7 +141,7 @@ module.exports = env => {
       ],
       alias: {
         '~': appFullPath,
-        "tns-core-modules": "@nativescript/core"
+        'tns-core-modules': '@nativescript/core'
       },
       // resolve symlinks to symlinked modules
       symlinks: true

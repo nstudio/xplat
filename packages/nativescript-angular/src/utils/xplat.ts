@@ -1,6 +1,22 @@
 import { Tree, SchematicContext } from '@angular-devkit/schematics';
-import { updateFile, XplatHelpers, IXplatSettings, getJsonFromFile } from '@nstudio/xplat';
-import { nsNgVersion, nsNgFonticonVersion, nodeSassVersion, nsCoreVersion, angularVersion, ngxTranslateVersion, reflectMetadataVersion, rxjsVersion, codelyzerVersion, zonejsVersion } from './versions';
+import {
+  updateFile,
+  XplatHelpers,
+  IXplatSettings,
+  getJsonFromFile
+} from '@nstudio/xplat';
+import {
+  nsNgVersion,
+  nsNgFonticonVersion,
+  nodeSassVersion,
+  nsCoreVersion,
+  angularVersion,
+  ngxTranslateVersion,
+  reflectMetadataVersion,
+  rxjsVersion,
+  codelyzerVersion,
+  zonejsVersion
+} from './versions';
 
 export namespace XplatNativeScriptAngularHelpers {
   export function updateRootDeps(options: XplatHelpers.Schema) {
@@ -10,7 +26,10 @@ export namespace XplatNativeScriptAngularHelpers {
 
       const angularDeps = {};
       const angularDevDeps = {};
-      if (packageJson.dependencies && !packageJson.dependencies['@angular/core']) {
+      if (
+        packageJson.dependencies &&
+        !packageJson.dependencies['@angular/core']
+      ) {
         // ensure angular deps are present
         angularDeps['@angular/animations'] = angularVersion;
         angularDeps['@angular/common'] = angularVersion;

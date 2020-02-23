@@ -29,9 +29,6 @@ if (exitCode === 0) {
   console.log(
     'possible scopes: angular|core|docs|electron|ionic|nativescript|node|platform|testing|repo|misc (if unsure use "core")'
   );
-  console.log(
-    '\nEXAMPLE: \n' +
-      'feat(platform): add a Vue app generator\n'
-  );
+  console.log('\nEXAMPLE: \n' + 'feat(platform): add a Vue app generator\n');
 }
 process.exit(exitCode);
