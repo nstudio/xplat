@@ -8,6 +8,7 @@ import {
   template,
   url,
   move,
+  Rule,
   SchematicsException,
   externalSchematic
 } from '@angular-devkit/schematics';
@@ -375,7 +376,7 @@ export namespace XplatAngularHelpers {
     };
   }
 
-  export function updateLint(options: XplatHelpers.Schema) {
+  export function updateLint(options: XplatHelpers.Schema): Rule {
     return (tree: Tree, context: SchematicContext) => {
       const prefix = getPrefix();
 

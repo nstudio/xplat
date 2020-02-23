@@ -618,7 +618,7 @@ export namespace XplatHelpers {
   export function applyAppNamingConvention(
     options: any,
     platform: PlatformWithNxTypes
-  ) {
+  ): Rule {
     return (tree: Tree, context: SchematicContext) => {
       const { name, directory } = getAppNamingConvention(options, platform);
       options.name = name;
