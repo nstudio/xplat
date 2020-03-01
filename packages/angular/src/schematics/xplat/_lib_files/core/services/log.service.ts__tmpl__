@@ -9,7 +9,9 @@ export interface IDebug {
   LEVEL_5: boolean;
 }
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class LogService {
   public static DEBUG: IDebug = {
     LEVEL_1: false, // .warn only

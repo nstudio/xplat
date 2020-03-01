@@ -6,7 +6,9 @@ import { isObject, isNativeScript } from '@<%= npmScope %>/utils';
 import { XPlatWindow } from '../models';
 import { PlatformWindowToken } from './tokens';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class WindowService {
   constructor(
     @Inject(PlatformWindowToken) private _platformWindow: XPlatWindow

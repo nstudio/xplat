@@ -1,11 +1,11 @@
 import { NgModule, Optional, SkipSelf } from '@angular/core';
 
 import { throwIfAlreadyLoaded } from '@<%= npmScope %>/utils';
-import { ELECTRON_PROVIDERS, ElectronService } from './services';
+import { ElectronService } from './services';
 
 @NgModule({
   providers: [
-    ...ELECTRON_PROVIDERS
+    ElectronService
   ]
 })
 export class <%= utils.classify(prefix) %>ElectronCoreModule {

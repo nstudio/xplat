@@ -53,7 +53,7 @@ describe('pipe schematic', () => {
 
     // console.log(modulePath + ':');
     // console.log(moduleContent);
-    expect(moduleContent.indexOf(`...UI_PIPES`)).toBeGreaterThanOrEqual(0);
+    expect(moduleContent.indexOf(`TruncatePipe`)).toBeGreaterThanOrEqual(0);
 
     options = { ...defaultOptions, feature: 'foo' };
     tree = await runSchematic('pipe', options, tree);
@@ -76,7 +76,7 @@ describe('pipe schematic', () => {
 
     // console.log(modulePath + ':');
     // console.log(moduleContent);
-    expect(moduleContent.indexOf(`...FOO_PIPES`)).toBeGreaterThanOrEqual(0);
+    expect(moduleContent.indexOf(`TruncatePipe`)).toBeGreaterThanOrEqual(0);
   });
 
   it('should create pipe in libs and handle camel case properly', async () => {
@@ -172,25 +172,25 @@ describe('pipe schematic', () => {
     // console.log(barrelPath + ':');
     // console.log(barrelIndex);
     // component symbol should be at end of components collection
-    expect(pipeIndex.indexOf(`TruncatePipe`)).toBeGreaterThanOrEqual(0);
+    expect(pipeIndex.indexOf(`./truncate.pipe`)).toBeGreaterThanOrEqual(0);
 
     let modulePath = '/apps/nativescript-viewer/src/features/foo/foo.module.ts';
     let moduleContent = getFileContent(tree, modulePath);
     // console.log(modulePath + ':');
     // console.log(moduleContent);
-    expect(moduleContent.indexOf(`...FOO_PIPES`)).toBeGreaterThanOrEqual(0);
+    expect(moduleContent.indexOf(`TruncatePipe`)).toBeGreaterThanOrEqual(0);
 
     pipeIndexPath = '/apps/web-viewer/src/app/features/foo/pipes/index.ts';
     pipeIndex = getFileContent(tree, pipeIndexPath);
     // console.log(barrelPath + ':');
     // console.log(barrelIndex);
-    expect(pipeIndex.indexOf(`TruncatePipe`)).toBeGreaterThanOrEqual(0);
+    expect(pipeIndex.indexOf(`./truncate.pipe`)).toBeGreaterThanOrEqual(0);
 
     modulePath = '/apps/web-viewer/src/app/features/foo/foo.module.ts';
     moduleContent = getFileContent(tree, modulePath);
     // console.log(modulePath + ':');
     // console.log(moduleContent);
-    expect(moduleContent.indexOf(`...FOO_PIPES`)).toBeGreaterThanOrEqual(0);
+    expect(moduleContent.indexOf(`TruncatePipe`)).toBeGreaterThanOrEqual(0);
   });
 
   it('should THROW if feature module does not exist in shared code', async () => {

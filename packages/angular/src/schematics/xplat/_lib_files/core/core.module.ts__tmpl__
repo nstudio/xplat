@@ -13,21 +13,14 @@ import { throwIfAlreadyLoaded } from '@<%= npmScope %>/utils';
 
 // app
 import { environment } from './environments/environment';
-import { CORE_PROVIDERS, PlatformLanguageToken } from './services';
 import { LogService } from './services/log.service';
+import { PlatformLanguageToken } from './services/tokens';
+import { WindowService } from './services/window.service';
 
 /**
  * DEBUGGING
  */
 LogService.DEBUG.LEVEL_4 = !environment.production;
-
-export const BASE_PROVIDERS: any[] = [
-  ...CORE_PROVIDERS,
-  {
-    provide: APP_BASE_HREF,
-    useValue: '/'
-  }
-];
 
 @NgModule({
   imports: [CommonModule]
@@ -37,7 +30,15 @@ export class CoreModule {
   static forRoot(configuredProviders: Array<any>): ModuleWithProviders {
     return {
       ngModule: CoreModule,
-      providers: [...BASE_PROVIDERS, ...configuredProviders]
+      providers: [
+        LogService, 
+        WindowService,
+        {
+          provide: APP_BASE_HREF,
+          useValue: '/'
+        },
+        ...configuredProviders
+      ]
     };
   }
 

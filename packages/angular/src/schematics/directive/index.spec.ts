@@ -55,7 +55,7 @@ describe('directive schematic', () => {
 
     // console.log(modulePath + ':');
     // console.log(moduleContent);
-    expect(moduleContent.indexOf(`...UI_DIRECTIVES`)).toBeGreaterThanOrEqual(0);
+    expect(moduleContent.indexOf(`ActiveLinkDirective`)).toBeGreaterThanOrEqual(0);
 
     // Directives added to the foo-feature
     options = { ...defaultOptions, feature: 'foo' };
@@ -83,7 +83,7 @@ describe('directive schematic', () => {
 
     // console.log(modulePath + ':');
     // console.log(moduleContent);
-    expect(moduleContent.indexOf(`...FOO_DIRECTIVES`)).toBeGreaterThanOrEqual(
+    expect(moduleContent.indexOf(`ActiveLinkDirective`)).toBeGreaterThanOrEqual(
       0
     );
   });
@@ -143,11 +143,11 @@ describe('directive schematic', () => {
     let moduleContent = getFileContent(tree, modulePath);
     // console.log(modulePath + ':');
     // console.log(moduleContent);
-    expect(moduleContent.indexOf(`...UI_DIRECTIVES`)).toBeGreaterThanOrEqual(0);
+    expect(moduleContent.indexOf(`ActiveLinkDirective`)).toBeGreaterThanOrEqual(0);
 
     modulePath = '/xplat/nativescript/features/ui/ui.module.ts';
     moduleContent = getFileContent(tree, modulePath);
-    expect(moduleContent.indexOf(`...UI_DIRECTIVES`)).toBeGreaterThanOrEqual(0);
+    expect(moduleContent.indexOf(`ActiveLinkDirective`)).toBeGreaterThanOrEqual(0);
 
     // Directives added to the foo-feature
     options = { ...defaultOptions, feature: 'foo' };
@@ -190,7 +190,7 @@ describe('directive schematic', () => {
 
     // console.log(modulePath + ':');
     // console.log(moduleContent);
-    expect(moduleContent.indexOf(`...FOO_DIRECTIVES`)).toBeGreaterThanOrEqual(
+    expect(moduleContent.indexOf(`ActiveLinkDirective`)).toBeGreaterThanOrEqual(
       0
     );
     modulePath = '/xplat/nativescript/features/foo/foo.module.ts';
@@ -198,7 +198,7 @@ describe('directive schematic', () => {
 
     // console.log(modulePath + ':');
     // console.log(moduleContent);
-    expect(moduleContent.indexOf(`...FOO_DIRECTIVES`)).toBeGreaterThanOrEqual(
+    expect(moduleContent.indexOf(`ActiveLinkDirective`)).toBeGreaterThanOrEqual(
       0
     );
   });
@@ -258,12 +258,12 @@ describe('directive schematic', () => {
     // console.log(barrelPath + ':');
     // console.log(barrelIndex);
     // symbol should be at end of collection
-    expect(index.indexOf(`ActiveLinkDirective`)).toBeGreaterThanOrEqual(0);
+    expect(index.indexOf(`./active-link.directive`)).toBeGreaterThanOrEqual(0);
 
     indexPath = '/apps/web-viewer/src/app/features/foo/directives/index.ts';
     index = getFileContent(tree, indexPath);
     // console.log(barrelPath + ':');
     // console.log(barrelIndex);
-    expect(index.indexOf(`ActiveLinkDirective`)).toBeGreaterThanOrEqual(0);
+    expect(index.indexOf(`./active-link.directive`)).toBeGreaterThanOrEqual(0);
   });
 });

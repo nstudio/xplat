@@ -77,7 +77,7 @@ describe('xplat schematic', () => {
     ).toBeTruthy();
   });
 
-  fdescribe('Nx app generators supporte via proxy xplat app generator', () => {
+  describe('Nx app generators supporte via proxy xplat app generator', () => {
     it('should create Nx express', async () => {
       appTree = Tree.empty();
       appTree = createEmptyWorkspace(appTree);

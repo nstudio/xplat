@@ -37,18 +37,18 @@ describe('service schematic', () => {
     // file content
     let content = getFileContent(tree, '/libs/core/services/auth.service.ts');
     // console.log(content);
-    expect(content.indexOf(`@Injectable()`)).toBeGreaterThanOrEqual(0);
+    expect(content.indexOf(`@Injectable({`)).toBeGreaterThanOrEqual(0);
     expect(content.indexOf(`AuthService`)).toBeGreaterThanOrEqual(0);
 
     content = getFileContent(tree, '/libs/core/services/index.ts');
     // console.log(content);
-    expect(content.indexOf(`AuthService`)).toBeGreaterThanOrEqual(0);
+    expect(content.indexOf(`./auth.service`)).toBeGreaterThanOrEqual(0);
 
     let modulePath = '/libs/core/core.module.ts';
     let moduleContent = getFileContent(tree, modulePath);
     // console.log(modulePath + ':');
     // console.log(moduleContent);
-    expect(moduleContent.indexOf(`...CORE_PROVIDERS`)).toBeGreaterThanOrEqual(
+    expect(moduleContent.indexOf(`AuthService`)).toBeGreaterThanOrEqual(
       0
     );
   });
@@ -103,19 +103,19 @@ describe('service schematic', () => {
     // console.log(barrelPath + ':');
     // console.log(barrelIndex);
     // symbol should be at end of components collection
-    expect(index.indexOf(`AuthService`)).toBeGreaterThanOrEqual(0);
+    expect(index.indexOf(`./auth.service`)).toBeGreaterThanOrEqual(0);
 
     let modulePath = '/apps/nativescript-viewer/src/features/foo/foo.module.ts';
     let moduleContent = getFileContent(tree, modulePath);
     // console.log(modulePath + ':');
     // console.log(moduleContent);
-    expect(moduleContent.indexOf(`...FOO_PROVIDERS`)).toBeGreaterThanOrEqual(0);
+    expect(moduleContent.indexOf(`./services`)).toBeGreaterThanOrEqual(0);
 
     indexPath = '/apps/web-viewer/src/app/features/foo/services/index.ts';
     index = getFileContent(tree, indexPath);
     // console.log(barrelPath + ':');
     // console.log(barrelIndex);
-    expect(index.indexOf(`AuthService`)).toBeGreaterThanOrEqual(0);
+    expect(index.indexOf(`./auth.service`)).toBeGreaterThanOrEqual(0);
   });
 
   it('should create service for specified platform with targeted feature only', async () => {
@@ -152,7 +152,7 @@ describe('service schematic', () => {
       '/xplat/nativescript/features/foo/services/auth.service.ts'
     );
     // console.log(content);
-    expect(content.indexOf(`@Injectable()`)).toBeGreaterThanOrEqual(0);
+    expect(content.indexOf(`@Injectable({`)).toBeGreaterThanOrEqual(0);
     expect(content.indexOf(`AuthService`)).toBeGreaterThanOrEqual(0);
 
     content = getFileContent(
@@ -160,13 +160,13 @@ describe('service schematic', () => {
       '/xplat/nativescript/features/foo/services/index.ts'
     );
     // console.log(content);
-    expect(content.indexOf(`AuthService`)).toBeGreaterThanOrEqual(0);
+    expect(content.indexOf(`./auth.service`)).toBeGreaterThanOrEqual(0);
 
     let modulePath = '/xplat/nativescript/features/foo/foo.module.ts';
     let moduleContent = getFileContent(tree, modulePath);
     // console.log(modulePath + ':');
     // console.log(moduleContent);
-    expect(moduleContent.indexOf(`...FOO_PROVIDERS`)).toBeGreaterThanOrEqual(0);
+    expect(moduleContent.indexOf(`AuthService`)).toBeGreaterThanOrEqual(0);
   });
 
   it('should create service for specified platform only and by default add to core for that platform', async () => {
@@ -191,7 +191,7 @@ describe('service schematic', () => {
       '/xplat/nativescript/core/services/auth.service.ts'
     );
     // console.log(content);
-    expect(content.indexOf(`@Injectable()`)).toBeGreaterThanOrEqual(0);
+    expect(content.indexOf(`@Injectable({`)).toBeGreaterThanOrEqual(0);
     expect(content.indexOf(`AuthService`)).toBeGreaterThanOrEqual(0);
 
     content = getFileContent(
@@ -199,13 +199,13 @@ describe('service schematic', () => {
       '/xplat/nativescript/core/services/index.ts'
     );
     // console.log(content);
-    expect(content.indexOf(`AuthService`)).toBeGreaterThanOrEqual(0);
+    expect(content.indexOf(`./auth.service`)).toBeGreaterThanOrEqual(0);
 
     let modulePath = '/xplat/nativescript/core/core.module.ts';
     let moduleContent = getFileContent(tree, modulePath);
     // console.log(modulePath + ':');
     // console.log(moduleContent);
-    expect(moduleContent.indexOf(`...CORE_PROVIDERS`)).toBeGreaterThanOrEqual(
+    expect(moduleContent.indexOf(`AuthService`)).toBeGreaterThanOrEqual(
       0
     );
   });

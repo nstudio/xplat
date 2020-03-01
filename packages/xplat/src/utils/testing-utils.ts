@@ -138,7 +138,6 @@ export function createXplatLibs(tree: Tree) {
   import { APP_BASE_HREF, CommonModule } from '@angular/common';
   
   export const BASE_PROVIDERS: any[] = [
-    ...CORE_PROVIDERS,
     {
       provide: APP_BASE_HREF,
       useValue: '/'
@@ -152,12 +151,7 @@ export function createXplatLibs(tree: Tree) {
   );
   tree.create(
     '/libs/core/services/index.ts',
-    `import { LogService } from './log.service';
-  import { WindowService } from './window.service';
-  
-  export const CORE_PROVIDERS: any[] = [LogService, WindowService];
-  
-  export * from './log.service';
+    `export * from './log.service';
   export * from './window.service';
   export * from './tokens';
   `
@@ -167,14 +161,12 @@ export function createXplatLibs(tree: Tree) {
     '/libs/features/ui/ui.module.ts',
     `import { NgModule } from '@angular/core';
   import { TranslateModule } from '@ngx-translate/core';
-  import { UI_PIPES } from './pipes';
-  
-  const MODULES = [TranslateModule];
+  import { DatePipe } from './pipes';
   
   @NgModule({
-    imports: [...MODULES],
-    declarations: [...UI_PIPES],
-    exports: [...MODULES, ...UI_PIPES]
+    imports: [TranslateModule],
+    declarations: [DatePipe],
+    exports: [TranslateModule]
   })
   export class UISharedModule {}
   `
@@ -192,75 +184,70 @@ export function createXplatNativeScriptAngular(
   tree.create(`/xplat/nativescript${frameworkSuffix}/core/index.ts`, '');
   tree.create(
     `/xplat/nativescript${frameworkSuffix}/core/core.module.ts`,
-    `import { NgModule } from '@angular/core';
+    `import { NgModule, Optional, SkipSelf } from '@angular/core';
 
-  // nativescript
-  import { NativeScriptModule } from 'nativescript-angular/nativescript.module';
-  import { NativeScriptHttpClientModule } from 'nativescript-angular/http-client';
-  import { device } from 'tns-core-modules/platform';
-  import { TNSFontIconModule } from 'nativescript-ngx-fonticon';
-  
-  // libs
-  import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-  import { CoreModule, PlatformLanguageToken, PlatformWindowToken } from '@testing/core';
-  import { throwIfAlreadyLoaded } from '@testing/utils';
-  
-  // app
-  import { CORE_PROVIDERS } from './services';
-  import { TNSWindowService } from './services/tns-window.service';
-  import { TNSTranslateLoader } from './services/tns-translate.loader';
-  
-  // factories
-  export function platformLangFactory() {
-    return device.language;
-  }
-  
-  export function createTranslateLoader() {
-    return new TNSTranslateLoader('/assets/i18n/');
-  }
-  
-  @NgModule({
-    imports: [
-      NativeScriptModule,
-      NativeScriptHttpClientModule,
-      TNSFontIconModule.forRoot({
-        fa: './assets/fontawesome.min.css'
-      }),
-      CoreModule.forRoot([
-        {
-          provide: PlatformLanguageToken,
-          useFactory: platformLangFactory
-        },
-        {
-          provide: PlatformWindowToken,
-          useClass: TNSWindowService
-        }
-      ]),
-      TranslateModule.forRoot({
-        loader: {
-          provide: TranslateLoader,
-          useFactory: createTranslateLoader
-        }
-      }),
-    ],
-    providers: [
-      ...CORE_PROVIDERS
-    ]
-  })
-  export class TTCoreModule {
-
-  }
+    // nativescript
+    import { NativeScriptModule, NativeScriptHttpClientModule } from '@nativescript/angular';
+    import { Device } from '@nativescript/core';
+    import { TNSFontIconModule } from 'nativescript-ngx-fonticon';
+    
+    // libs
+    import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+    import { CoreModule, PlatformLanguageToken, PlatformWindowToken } from '@<%= npmScope %>/core';
+    import { throwIfAlreadyLoaded } from '@<%= npmScope %>/utils';
+    
+    // app
+    import { TNSWindowService } from './services/tns-window.service';
+    import { TNSTranslateLoader } from './services/tns-translate.loader';
+    
+    // factories
+    export function platformLangFactory() {
+      return Device.language;
+    }
+    
+    export function createTranslateLoader() {
+      return new TNSTranslateLoader('/assets/i18n/');
+    }
+    
+    @NgModule({
+      imports: [
+        NativeScriptModule,
+        NativeScriptHttpClientModule,
+        TNSFontIconModule.forRoot({
+          fa: './assets/fontawesome.min.css'
+        }),
+        CoreModule.forRoot([
+          {
+            provide: PlatformLanguageToken,
+            useFactory: platformLangFactory
+          },
+          {
+            provide: PlatformWindowToken,
+            useClass: TNSWindowService
+          }
+        ]),
+        TranslateModule.forRoot({
+          loader: {
+            provide: TranslateLoader,
+            useFactory: createTranslateLoader
+          }
+        }),
+      ]
+    })
+    export class TTCoreModule {
+      constructor(
+        @Optional()
+        @SkipSelf()
+        parentModule: TTCoreModule
+      ) {
+        throwIfAlreadyLoaded(parentModule, 'TTCoreModule');
+      }
+    }    
   `
   );
   tree.create(
     `/xplat/nativescript${frameworkSuffix}/core/services/index.ts`,
-    `import { AppService } from './app.service';
-  import { TNSWindowService } from './tns-window.service';
-  
-  export const CORE_PROVIDERS: any[] = [AppService, TNSWindowService];
-  
-  export * from './app.service';
-  `
+    `export * from './app.service';`
   );
   tree.create(`/xplat/nativescript${frameworkSuffix}/features/ui/index.ts`, '');
   tree.create(
@@ -272,24 +259,31 @@ export function createXplatNativeScriptAngular(
   import { NativeScriptRouterModule } from 'nativescript-angular/router';
   
   import { TNSFontIconModule } from 'nativescript-ngx-fonticon';
-  import { UISharedModule } from '@testing/features';
-  import { UI_COMPONENTS } from './components';
-  
-  const MODULES = [
-    NativeScriptCommonModule,
-    NativeScriptFormsModule,
-    NativeScriptRouterModule,
-    TNSFontIconModule,
-    UISharedModule
-  ];
+  import { UISharedModule } from '@<%= npmScope %>/features';
+  import { HeaderComponent } from './components';
   
   @NgModule({
-    imports: [...MODULES],
-    declarations: [...UI_COMPONENTS],
-    exports: [...MODULES, ...UI_COMPONENTS],
+    imports: [
+      NativeScriptCommonModule,
+      NativeScriptFormsModule,
+      NativeScriptRouterModule,
+      TNSFontIconModule,
+      UISharedModule
+    ],
+    declarations: [
+      HeaderComponent
+    ],
+    exports: [
+      NativeScriptCommonModule,
+      NativeScriptFormsModule,
+      NativeScriptRouterModule,
+      TNSFontIconModule,
+      UISharedModule,
+      HeaderComponent
+    ],
     schemas: [NO_ERRORS_SCHEMA]
   })
-  export class UIModule {}
+  export class UIModule {}    
   `
   );
   tree.create(`/xplat/nativescript${frameworkSuffix}/features/index.ts`, '');
@@ -311,21 +305,26 @@ export function createXplatWebAngular(tree: Tree, framework?: FrameworkTypes) {
   import { RouterModule } from '@angular/router';
   
   // libs
-  import { UISharedModule } from '@testing/features';
-  import { UI_COMPONENTS } from './components';
-  
-  const MODULES = [
-    CommonModule,
-    RouterModule,
-    FormsModule,
-    ReactiveFormsModule,
-    UISharedModule
-  ];
+  import { UISharedModule } from '@<%= npmScope %>/features';
+  import { HeaderComponent } from './components';
   
   @NgModule({
-    imports: [...MODULES],
-    declarations: [...UI_COMPONENTS],
-    exports: [...MODULES, ...UI_COMPONENTS]
+    imports: [
+      CommonModule,
+      RouterModule,
+      FormsModule,
+      ReactiveFormsModule,
+      UISharedModule
+    ],
+    declarations: [HeaderComponent],
+    exports: [
+      CommonModule,
+      RouterModule,
+      FormsModule,
+      ReactiveFormsModule,
+      UISharedModule,
+      HeaderComponent
+    ]
   })
   export class UIModule {}
   `
