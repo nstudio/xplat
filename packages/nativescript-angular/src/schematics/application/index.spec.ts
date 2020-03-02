@@ -54,7 +54,7 @@ describe('app', () => {
 
     // source dir
     expect(
-      files.indexOf('/apps/nativescript-foo/src/assets/fontawesome.min.css')
+      files.indexOf('/xplat/nativescript/scss/fonticons/fontawesome.min.css')
     ).toBeGreaterThanOrEqual(0);
     expect(
       files.indexOf('/apps/nativescript-foo/src/core/core.module.ts')

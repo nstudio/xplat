@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-<% if (setupSandbox) { %>import { RouterExtensions } from 'nativescript-angular/router';<% } %>
+<% if (setupSandbox) { %>import { RouterExtensions } from '@nativescript/angular';<% } %>
 import { BaseComponent } from '@<%= npmScope %>/core';
 
 @Component({

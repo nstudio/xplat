@@ -611,7 +611,7 @@ describe('feature schematic', () => {
     // console.log(modulePath + ':');
     // console.log(featureModule);
     expect(featureModule).toMatch(
-      `import { NativeScriptRouterModule } from \'nativescript-angular/router\'`
+      `import { NativeScriptRouterModule } from \'@nativescript/angular\'`
     );
     expect(featureModule).toMatch(`component: FooWithDashComponent`);
     // expect(featureModule).toMatch(isInModuleMetadata('FooModule', 'imports', `SharedModule`, true));

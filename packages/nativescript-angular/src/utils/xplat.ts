@@ -7,6 +7,7 @@ import {
 } from '@nstudio/xplat';
 import {
   nsNgVersion,
+  nsNgScopedVersion,
   nsNgFonticonVersion,
   nodeSassVersion,
   nsCoreVersion,
@@ -14,6 +15,7 @@ import {
   ngxTranslateVersion,
   reflectMetadataVersion,
   rxjsVersion,
+  tslibVersion,
   codelyzerVersion,
   zonejsVersion
 } from './versions';
@@ -42,6 +44,7 @@ export namespace XplatNativeScriptAngularHelpers {
         angularDeps['@ngx-translate/core'] = ngxTranslateVersion;
         angularDeps['reflect-metadata'] = reflectMetadataVersion;
         angularDeps['rxjs'] = rxjsVersion;
+        angularDeps['tslib'] = tslibVersion;
         angularDeps['zone.js'] = zonejsVersion;
 
         angularDevDeps['@angular/compiler-cli'] = angularVersion;
@@ -51,6 +54,7 @@ export namespace XplatNativeScriptAngularHelpers {
       return XplatHelpers.updatePackageForXplat(options, {
         dependencies: {
           ...angularDeps,
+          '@nativescript/angular': nsNgScopedVersion,
           'nativescript-angular': nsNgVersion,
           'nativescript-ngx-fonticon': nsNgFonticonVersion,
           'tns-core-modules': nsCoreVersion

@@ -48,9 +48,7 @@ describe('service schematic', () => {
     let moduleContent = getFileContent(tree, modulePath);
     // console.log(modulePath + ':');
     // console.log(moduleContent);
-    expect(moduleContent.indexOf(`AuthService`)).toBeGreaterThanOrEqual(
-      0
-    );
+    expect(moduleContent.indexOf(`AuthService`)).toBeGreaterThanOrEqual(0);
   });
 
   it('should create service for specified projects only', async () => {
@@ -205,8 +203,6 @@ describe('service schematic', () => {
     let moduleContent = getFileContent(tree, modulePath);
     // console.log(modulePath + ':');
     // console.log(moduleContent);
-    expect(moduleContent.indexOf(`AuthService`)).toBeGreaterThanOrEqual(
-      0
-    );
+    expect(moduleContent.indexOf(`AuthService`)).toBeGreaterThanOrEqual(0);
   });
 });

@@ -15,7 +15,8 @@
     "build.android": "tns build android --env.aot --env.uglify --env.production --release",
     "debug.ios": "tns debug ios",
     "debug.android": "tns debug android",
-    "postinstall": "node ./tools/xplat-postinstall.js"
+    "postinstall": "node ./tools/xplat-postinstall.js && npm run ngcc",
+    "ngcc": "ngcc --properties es2015 module main --first-only"
   },
   "dependencies": {
     "@angular/animations": "file:<%= pathOffset %>node_modules/@angular/animations",
@@ -26,6 +27,7 @@
     "@angular/platform-browser": "file:<%= pathOffset %>node_modules/@angular/platform-browser",
     "@angular/platform-browser-dynamic": "file:<%= pathOffset %>node_modules/@angular/platform-browser-dynamic",
     "@angular/router": "file:<%= pathOffset %>node_modules/@angular/router",
+    "@nativescript/angular": "file:<%= pathOffset %>node_modules/@nativescript/angular",
     "@ngx-translate/core": "file:<%= pathOffset %>node_modules/@ngx-translate/core",
     "@<%= npmScope %>/scss": "file:<%= pathOffset %>libs/scss",
     "@<%= npmScope %>/nativescript-scss": "file:<%= pathOffset %>xplat/<%= xplatFolderName %>/scss",
@@ -38,11 +40,11 @@
     "zone.js": "file:<%= pathOffset %>node_modules/zone.js"
   },
   "devDependencies": {
-    "@angular/compiler-cli": "~8.2.0",
+    "@angular/compiler-cli": "~9.0.0",
     "@angular/language-service": "file:<%= pathOffset %>node_modules/@angular/language-service",
-    "@ngtools/webpack": "~8.3.0",
+    "@ngtools/webpack": "~9.0.0",
     "codelyzer": "file:<%= pathOffset %>node_modules/codelyzer",
-    "nativescript-dev-webpack": "~1.4.0",
+    "nativescript-dev-webpack": "~1.5.0",
     "terser-webpack-plugin": "file:<%= pathOffset %>node_modules/terser-webpack-plugin",
     "tns-platform-declarations": "file:<%= pathOffset %>node_modules/tns-platform-declarations",
     "typescript": "file:<%= pathOffset %>node_modules/typescript"

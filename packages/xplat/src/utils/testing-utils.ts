@@ -254,9 +254,7 @@ export function createXplatNativeScriptAngular(
     `/xplat/nativescript${frameworkSuffix}/features/ui/ui.module.ts`,
     `import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 
-  import { NativeScriptFormsModule } from 'nativescript-angular/forms';
-  import { NativeScriptCommonModule } from 'nativescript-angular/common';
-  import { NativeScriptRouterModule } from 'nativescript-angular/router';
+  import { NativeScriptCommonModule, NativeScriptFormsModule, NativeScriptRouterModule } from '@nativescript/angular';
   
   import { TNSFontIconModule } from 'nativescript-ngx-fonticon';
   import { UISharedModule } from '@<%= npmScope %>/features';
@@ -400,7 +398,7 @@ export function createNativeScriptAngularApp(
     import { Routes } from '@angular/router';
     
     // nativescript
-    import { NativeScriptRouterModule } from 'nativescript-angular/router';
+    import { NativeScriptRouterModule } from '@nativescript/angular';
     
     // app
     import { SharedModule } from './features/shared/shared.module';

@@ -113,13 +113,10 @@ export default function(options: Schema) {
       ] = `npx rimraf -- hooks node_modules package-lock.json && npm i`;
       scripts[
         `start.${platformApp}.ios`
-      ] = `cd apps/${directory}${options.name} && tns run ios --emulator`;
+      ] = `cd apps/${directory}${options.name} && tns debug ios --env.aot --no-hmr --emulator`;
       scripts[
         `start.${platformApp}.android`
-      ] = `cd apps/${directory}${options.name} && tns run android --emulator`;
-      scripts[
-        `start.${platformApp}.preview`
-      ] = `cd apps/${directory}${options.name} && tns preview`;
+      ] = `cd apps/${directory}${options.name} && tns debug android --env.aot --no-hmr --emulator`;
       scripts[
         `clean.${platformApp}`
       ] = `cd apps/${directory}${options.name} && npx rimraf -- hooks node_modules platforms package-lock.json && npm i && npx rimraf -- package-lock.json`;

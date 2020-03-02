@@ -597,9 +597,9 @@ export function adjustFeatureModule(
 
       const changes = [];
       const name = options.name.toLowerCase();
-      const symbolName = `${stringUtils.classify(
-        name
-      )}${stringUtils.capitalize(type)}`;
+      const symbolName = `${stringUtils.classify(name)}${stringUtils.capitalize(
+        type
+      )}`;
       if (moduleSource.indexOf(symbolName) > -1) {
         // already handled
         return host;
@@ -615,19 +615,11 @@ export function adjustFeatureModule(
 
         if (type === 'service') {
           changes.push(
-            ...addProviderToModule(
-              moduleSourceFile,
-              modulePath,
-              symbolName
-            )
+            ...addProviderToModule(moduleSourceFile, modulePath, symbolName)
           );
         } else {
           changes.push(
-            ...addDeclarationToModule(
-              moduleSourceFile,
-              modulePath,
-              symbolName
-            ),
+            ...addDeclarationToModule(moduleSourceFile, modulePath, symbolName),
             ...addSymbolToNgModuleMetadata(
               moduleSourceFile,
               modulePath,
@@ -636,78 +628,78 @@ export function adjustFeatureModule(
             )
           );
         }
-      // let featureName: string;
-      // if (options.feature) {
-      //   featureName = stringUtils.sanitize(options.feature).toUpperCase();
-      // } else {
-      //   // default collections
-      //   if (type === 'service') {
-      //     featureName = 'CORE';
-      //   } else {
-      //     if (modulePath.indexOf('apps') > -1) {
-      //       // app specific shared
-      //       featureName = 'SHARED';
-      //     } else {
-      //       // workspace cross platform ui libraries
-      //       featureName = 'UI';
-      //     }
-      //   }
-      // }
-      // let collectionName: string;
+        // let featureName: string;
+        // if (options.feature) {
+        //   featureName = stringUtils.sanitize(options.feature).toUpperCase();
+        // } else {
+        //   // default collections
+        //   if (type === 'service') {
+        //     featureName = 'CORE';
+        //   } else {
+        //     if (modulePath.indexOf('apps') > -1) {
+        //       // app specific shared
+        //       featureName = 'SHARED';
+        //     } else {
+        //       // workspace cross platform ui libraries
+        //       featureName = 'UI';
+        //     }
+        //   }
+        // }
+        // let collectionName: string;
 
-      // switch (type) {
-      //   case 'component':
-      //     collectionName = `${featureName}_COMPONENTS`;
-      //     break;
-      //   case 'directive':
-      //     collectionName = `${featureName}_DIRECTIVES`;
-      //     break;
-      //   case 'pipe':
-      //     collectionName = `${featureName}_PIPES`;
-      //     break;
-      //   case 'service':
-      //     collectionName = `${featureName}_PROVIDERS`;
-      //     break;
-      // }
-      // console.log('collectionName:', collectionName);
-      // console.log('moduleSource:', moduleSource);
+        // switch (type) {
+        //   case 'component':
+        //     collectionName = `${featureName}_COMPONENTS`;
+        //     break;
+        //   case 'directive':
+        //     collectionName = `${featureName}_DIRECTIVES`;
+        //     break;
+        //   case 'pipe':
+        //     collectionName = `${featureName}_PIPES`;
+        //     break;
+        //   case 'service':
+        //     collectionName = `${featureName}_PROVIDERS`;
+        //     break;
+        // }
+        // console.log('collectionName:', collectionName);
+        // console.log('moduleSource:', moduleSource);
 
-      // if (moduleSource.indexOf(collectionName) > -1) {
-      //   // already handled
-      //   return host;
-      // } else {
-      //   // add to module
-      //   changes.push(
-      //     ...addGlobal(
-      //       moduleSourceFile,
-      //       modulePath,
-      //       `import { ${collectionName} } from './${type}s';`
-      //     )
-      //   );
+        // if (moduleSource.indexOf(collectionName) > -1) {
+        //   // already handled
+        //   return host;
+        // } else {
+        //   // add to module
+        //   changes.push(
+        //     ...addGlobal(
+        //       moduleSourceFile,
+        //       modulePath,
+        //       `import { ${collectionName} } from './${type}s';`
+        //     )
+        //   );
 
-      //   if (type === 'service') {
-      //     changes.push(
-      //       ...addProviderToModule(
-      //         moduleSourceFile,
-      //         modulePath,
-      //         `...${collectionName}`
-      //       )
-      //     );
-      //   } else {
-      //     changes.push(
-      //       ...addDeclarationToModule(
-      //         moduleSourceFile,
-      //         modulePath,
-      //         `...${collectionName}`
-      //       ),
-      //       ...addSymbolToNgModuleMetadata(
-      //         moduleSourceFile,
-      //         modulePath,
-      //         'exports',
-      //         `...${collectionName}`
-      //       )
-      //     );
-      //   }
+        //   if (type === 'service') {
+        //     changes.push(
+        //       ...addProviderToModule(
+        //         moduleSourceFile,
+        //         modulePath,
+        //         `...${collectionName}`
+        //       )
+        //     );
+        //   } else {
+        //     changes.push(
+        //       ...addDeclarationToModule(
+        //         moduleSourceFile,
+        //         modulePath,
+        //         `...${collectionName}`
+        //       ),
+        //       ...addSymbolToNgModuleMetadata(
+        //         moduleSourceFile,
+        //         modulePath,
+        //         'exports',
+        //         `...${collectionName}`
+        //       )
+        //     );
+        //   }
 
         insert(host, modulePath, changes);
       }
