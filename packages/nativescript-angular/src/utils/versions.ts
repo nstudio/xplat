@@ -1,7 +1,9 @@
 export const xplatVersion = '*';
 export const nsCoreVersion = '~6.4.0';
-export const nsNgScopedVersion = 'https://github.com/nstudio/ns-ng/blob/master/nativescript-angular-9.0.0.tgz?raw=true';
-export const nsNgVersion = 'https://github.com/nstudio/ns-ng/blob/master/nativescript-angular-compat.tgz?raw=true';// '~8.20.0';
+export const nsNgScopedVersion =
+  'https://github.com/nstudio/ns-ng/blob/master/nativescript-angular-9.0.0.tgz?raw=true';
+export const nsNgVersion =
+  'https://github.com/nstudio/ns-ng/blob/master/nativescript-angular-compat.tgz?raw=true'; // '~8.20.0';
 export const nsNgFonticonVersion = '~5.0.1';
 export const nodeSassVersion = '^4.12.0';
 export const terserWebpackVersion = '~2.2.0';

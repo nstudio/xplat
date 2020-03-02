@@ -38,6 +38,6 @@
     "<%= pathOffset %>xplat/<%= xplatFolderName %>/plugins/**/node_modules/**"
   ],
   "angularCompilerOptions": {
-      "enableIvy": true
+    "enableIvy": true
   }
 }
