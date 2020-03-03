@@ -10,7 +10,8 @@ packages/nativescript/src/schematics/**/_**files/**/*.json
 packages/nativescript/src/schematics/**/App_Resources/**/*
 packages/nativescript/src/schematics/**/hooks/**/*
 packages/nativescript/src/schematics/**/tools/**/*
-packages/nativescript/src/schematics/**/src/**/*.min.css
+packages/nativescript/src/schematics/**/_**files/**/*.css
+packages/nativescript-angular/src/schematics/**/_**files/**/*.css
 packages/web/src/schematics/**/_*/**/*.json
 packages/xplat/src/schematics/**/_*/**/*.json
 /.vscode

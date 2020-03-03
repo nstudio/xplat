@@ -30,7 +30,24 @@ import {
 } from '@nstudio/xplat';
 import { Schema } from './schema';
 import { XplatNativeScriptAngularHelpers } from '../../utils';
-import { nsCoreVersion, angularVersion, nsNgVersion, nsNgScopedVersion, nsIntlVersion, nsNgFonticonVersion, ngxTranslateVersion, nsThemeCoreVersion, codelyzerVersion, terserWebpackVersion, tslibVersion, reflectMetadataVersion, rxjsVersion, zonejsVersion, nsDevWebpackVersion, typescriptVersion } from '../../utils/versions';
+import {
+  nsCoreVersion,
+  angularVersion,
+  nsNgVersion,
+  nsNgScopedVersion,
+  nsIntlVersion,
+  nsNgFonticonVersion,
+  ngxTranslateVersion,
+  nsThemeCoreVersion,
+  codelyzerVersion,
+  terserWebpackVersion,
+  tslibVersion,
+  reflectMetadataVersion,
+  rxjsVersion,
+  zonejsVersion,
+  nsDevWebpackVersion,
+  typescriptVersion
+} from '../../utils/versions';
 import { XplatNativeScriptHelpers } from '@nstudio/nativescript/src/utils';
 
 export default function(options: Schema) {

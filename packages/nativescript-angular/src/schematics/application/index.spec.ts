@@ -224,9 +224,7 @@ describe('app', () => {
       '/apps/nativescript-foo/src/app.routing.ts'
     );
 
-    expect(appModule).toMatch(
-      `loadChildren: () =>`
-    );
+    expect(appModule).toMatch(`loadChildren: () =>`);
   });
 
   it('should create a sandbox app with --setupSandbox and feature should work as expected', async () => {
@@ -240,9 +238,7 @@ describe('app', () => {
       '/apps/nativescript-foo/src/app.routing.ts'
     );
 
-    expect(fileContent).toMatch(
-      `loadChildren: () =>`
-    );
+    expect(fileContent).toMatch(`loadChildren: () =>`);
     fileContent = getFileContent(
       tree,
       '/apps/nativescript-foo/src/features/home/components/home.component.html'
