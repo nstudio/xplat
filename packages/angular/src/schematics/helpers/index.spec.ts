@@ -5,7 +5,7 @@ import { createXplatWithApps, getFileContent } from '@nstudio/xplat/testing';
 import { runSchematic, runSchematicSync } from '../../utils/testing';
 setTest();
 
-describe('helpers schematic', () => {
+xdescribe('helpers schematic', () => {
   let appTree: Tree;
 
   beforeEach(() => {

@@ -416,7 +416,7 @@ describe('feature schematic', () => {
     expect(featureModule).toMatch(
       `import { UIModule } from \'../ui/ui.module\'`
     );
-    expect(featureModule.indexOf('FOO_COMPONENTS')).toBeGreaterThanOrEqual(0);
+    expect(featureModule.indexOf('FooComponent')).toBeGreaterThanOrEqual(0);
     expect(featureModule.indexOf('declarations')).toBeGreaterThanOrEqual(0);
 
     let compPath = '/xplat/web/features/foo/components/foo/foo.component.ts';
@@ -611,7 +611,7 @@ describe('feature schematic', () => {
     // console.log(modulePath + ':');
     // console.log(featureModule);
     expect(featureModule).toMatch(
-      `import { NativeScriptRouterModule } from \'nativescript-angular/router\'`
+      `import { NativeScriptRouterModule } from \'@nativescript/angular\'`
     );
     expect(featureModule).toMatch(`component: FooWithDashComponent`);
     // expect(featureModule).toMatch(isInModuleMetadata('FooModule', 'imports', `SharedModule`, true));
@@ -661,7 +661,7 @@ describe('feature schematic', () => {
     featureModule = getFileContent(tree, modulePath);
     // console.log(modulePath + ':');
     // console.log(featureModule);
-    expect(featureModule).toMatch(`export const FOOWITHDASH_COMPONENTS`);
+    expect(featureModule).toMatch(`./foo-with-dash/foo-with-dash.component`);
   });
 
   it('should create feature module for specified project WITH Routing and adjustSandbox', async () => {

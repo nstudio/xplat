@@ -91,33 +91,27 @@ body
 
 The type must be one of the following:
 
-- build
+- chore
 - feat
 - fix
-- refactor
-- style
+- cleanup
 - docs
-- test
-- chore
 
 #### Scope
 
 The scope must be one of the following:
 
-- generators
-- scripts
-- angular
-- electron
-- ionic
-- nativescript
-- web
-- elements
-- helpers
-- react
-- vue
-- build
-- changelog
-- contributing
+- angular - anything Angular specific
+- core - anything xplat core specific
+- docs - anything related to docs infrastructure
+- electron - anything Electron specific
+- ionic - anything Ionic specific
+- nativescript - anything NativeScript specific
+- node - anything Node specific
+- platform - anything platform specific
+- testing - anything testing specific (e.g., jest or cypress)
+- repo - anything related to managing the repo itself
+- misc - misc stuff
 
 #### Subject
 
@@ -126,7 +120,7 @@ The subject must contain a description of the change.
 #### Example
 
 ```
-feat(vue): application generator
+feat(platform): vue application generator
 
 `nx g @nstudio/vue:app myapp` adds a vue app
 ```

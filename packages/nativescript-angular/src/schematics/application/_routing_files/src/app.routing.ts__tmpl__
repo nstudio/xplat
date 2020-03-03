@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { Routes } from '@angular/router';
 
 // nativescript
-import { NativeScriptRouterModule } from 'nativescript-angular/router';
+import { NativeScriptRouterModule } from '@nativescript/angular';
 
 // app
 import { SharedModule } from './features/shared/shared.module';
@@ -16,7 +16,8 @@ const routes: Routes = [
   },
   {
     path: 'home',
-    loadChildren: '~/features/home/home.module#HomeModule'
+    loadChildren: () => 
+      import('./features/home/home.module').then(m => m.HomeModule)
   }
 ];
 

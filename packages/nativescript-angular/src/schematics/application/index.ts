@@ -30,7 +30,24 @@ import {
 } from '@nstudio/xplat';
 import { Schema } from './schema';
 import { XplatNativeScriptAngularHelpers } from '../../utils';
-import { nsCoreVersion } from '../../utils/versions';
+import {
+  nsCoreVersion,
+  angularVersion,
+  nsNgVersion,
+  nsNgScopedVersion,
+  nsIntlVersion,
+  nsNgFonticonVersion,
+  ngxTranslateVersion,
+  nsThemeCoreVersion,
+  codelyzerVersion,
+  terserWebpackVersion,
+  tslibVersion,
+  reflectMetadataVersion,
+  rxjsVersion,
+  zonejsVersion,
+  nsDevWebpackVersion,
+  typescriptVersion
+} from '../../utils/versions';
 import { XplatNativeScriptHelpers } from '@nstudio/nativescript/src/utils';
 
 export default function(options: Schema) {
@@ -113,13 +130,10 @@ export default function(options: Schema) {
       ] = `npx rimraf -- hooks node_modules package-lock.json && npm i`;
       scripts[
         `start.${platformApp}.ios`
-      ] = `cd apps/${directory}${options.name} && tns run ios --emulator`;
+      ] = `cd apps/${directory}${options.name} && tns debug ios --env.aot --no-hmr --emulator`;
       scripts[
         `start.${platformApp}.android`
-      ] = `cd apps/${directory}${options.name} && tns run android --emulator`;
-      scripts[
-        `start.${platformApp}.preview`
-      ] = `cd apps/${directory}${options.name} && tns preview`;
+      ] = `cd apps/${directory}${options.name} && tns debug android --env.aot --no-hmr --emulator`;
       scripts[
         `clean.${platformApp}`
       ] = `cd apps/${directory}${options.name} && npx rimraf -- hooks node_modules platforms package-lock.json && npm i && npx rimraf -- package-lock.json`;
@@ -196,6 +210,22 @@ function addAppFiles(
           ...getDefaultTemplateOptions(),
           appname,
           pathOffset: directory ? '../../../' : '../../',
+          angularVersion: angularVersion,
+          nsNgScopedVersion: nsNgScopedVersion,
+          nsNgVersion: nsNgVersion,
+          nsIntlVersion: nsIntlVersion,
+          nsNgFonticonVersion: nsNgFonticonVersion,
+          nsDevWebpackVersion: nsDevWebpackVersion,
+          ngxTranslateVersion: ngxTranslateVersion,
+          nsThemeCoreVersion: nsThemeCoreVersion,
+          nsCoreVersion: nsCoreVersion,
+          terserWebpackVersion: terserWebpackVersion,
+          tslibVersion: tslibVersion,
+          reflectMetadataVersion: reflectMetadataVersion,
+          rxjsVersion: rxjsVersion,
+          zonejsVersion: zonejsVersion,
+          codelyzerVersion: codelyzerVersion,
+          typescriptVersion: typescriptVersion,
           xplatFolderName: XplatHelpers.getXplatFoldername(
             'nativescript',
             'angular'

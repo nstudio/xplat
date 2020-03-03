@@ -618,7 +618,7 @@ export namespace XplatHelpers {
   export function applyAppNamingConvention(
     options: any,
     platform: PlatformWithNxTypes
-  ) {
+  ): Rule {
     return (tree: Tree, context: SchematicContext) => {
       const { name, directory } = getAppNamingConvention(options, platform);
       options.name = name;
@@ -1213,12 +1213,12 @@ xplat/**/*.ngsummary.json
     return isWebStorm;
   }
 
-  export function updatePrettierIgnore(content: string) {
+  export function updatePrettierIgnore(content: string, checkExisting: string) {
     return (tree: Tree) => {
       const prettierFileName = '.prettierignore';
       if (tree.exists(prettierFileName)) {
         let prettier = tree.read(prettierFileName)!.toString('utf-8');
-        if (prettier) {
+        if (prettier && prettier.indexOf(checkExisting) === -1) {
           // update prettier rules
           prettier = `${prettier}\n${content}`;
 

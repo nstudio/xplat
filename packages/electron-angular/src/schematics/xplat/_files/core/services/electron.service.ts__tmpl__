@@ -5,7 +5,9 @@ import * as childProcess from 'child_process';
 import { ipcRenderer } from 'electron';
 import IpcRendererEvent = Electron.IpcRendererEvent;
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ElectronService {
   private readonly _ipc: typeof ipcRenderer;
   private _childProcess: typeof childProcess;

@@ -8,25 +8,30 @@
     "postinstall": "node ./tools/xplat-postinstall.js"
   },
   "dependencies": {
-    "@angular/animations": "file:<%= pathOffset %>node_modules/@angular/animations",
-    "@angular/common": "file:<%= pathOffset %>node_modules/@angular/common",
-    "@angular/compiler": "file:<%= pathOffset %>node_modules/@angular/compiler",
-    "@angular/core": "file:<%= pathOffset %>node_modules/@angular/core",
-    "@angular/forms": "file:<%= pathOffset %>node_modules/@angular/forms",
-    "@angular/platform-browser": "file:<%= pathOffset %>node_modules/@angular/platform-browser",
-    "@angular/platform-browser-dynamic": "file:<%= pathOffset %>node_modules/@angular/platform-browser-dynamic",
-    "@angular/router": "file:<%= pathOffset %>node_modules/@angular/router",
-    "nativescript-angular": "file:<%= pathOffset %>node_modules/nativescript-angular",
-    "nativescript-theme-core": "file:<%= pathOffset %>node_modules/nativescript-theme-core",
-    "reflect-metadata": "file:<%= pathOffset %>node_modules/reflect-metadata",
-    "rxjs": "file:<%= pathOffset %>node_modules/rxjs",
-    "tns-core-modules": "file:<%= pathOffset %>node_modules/tns-core-modules",
-    "zone.js": "file:<%= pathOffset %>node_modules/zone.js"
+    "@angular/animations": "<%= angularVersion %>",
+    "@angular/common": "<%= angularVersion %>",
+    "@angular/compiler": "<%= angularVersion %>",
+    "@angular/core": "<%= angularVersion %>",
+    "@angular/forms": "<%= angularVersion %>",
+    "@angular/platform-browser": "<%= angularVersion %>",
+    "@angular/platform-browser-dynamic": "<%= angularVersion %>",
+    "@angular/router": "<%= angularVersion %>",
+    "@nativescript/angular": "<%= nsNgScopedVersion %>",
+    "nativescript-angular": "<%= nsNgVersion %>",
+    "nativescript-intl": "<%= nsIntlVersion %>",
+    "nativescript-theme-core": "<%= nsThemeCoreVersion %>",
+    "reflect-metadata": "<%= reflectMetadataVersion %>",
+    "rxjs": "<%= rxjsVersion %>",
+    "tns-core-modules": "<%= nsCoreVersion %>",
+    "tslib": "<%= tslibVersion %>",
+    "zone.js": "<%= zonejsVersion %>"
   },
   "devDependencies": {
-    "@angular/compiler-cli": "~8.1.0",
-    "@ngtools/webpack": "~8.1.0",
-    "nativescript-dev-webpack": "~1.0.1",
-    "typescript": "file:<%= pathOffset %>node_modules/typescript"
+    "@angular/compiler-cli": "<%= angularVersion %>",
+    "@ngtools/webpack": "<%= angularVersion %>",
+    "nativescript-dev-webpack": "<%= nsDevWebpackVersion %>",
+    "terser-webpack-plugin": "<%= terserWebpackVersion %>",
+    "tns-platform-declarations": "<%= nsCoreVersion %>",
+    "typescript": "<%= typescriptVersion %>"
   }
 }

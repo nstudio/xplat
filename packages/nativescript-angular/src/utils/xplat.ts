@@ -1,6 +1,25 @@
 import { Tree, SchematicContext } from '@angular-devkit/schematics';
-import { updateFile, XplatHelpers, IXplatSettings, getJsonFromFile } from '@nstudio/xplat';
-import { nsNgVersion, nsNgFonticonVersion, nodeSassVersion, nsCoreVersion, angularVersion, ngxTranslateVersion, reflectMetadataVersion, rxjsVersion, codelyzerVersion, zonejsVersion } from './versions';
+import {
+  updateFile,
+  XplatHelpers,
+  IXplatSettings,
+  getJsonFromFile
+} from '@nstudio/xplat';
+import {
+  nsNgVersion,
+  nsNgScopedVersion,
+  nsNgFonticonVersion,
+  nodeSassVersion,
+  nsCoreVersion,
+  angularVersion,
+  ngxTranslateVersion,
+  reflectMetadataVersion,
+  rxjsVersion,
+  tslibVersion,
+  codelyzerVersion,
+  zonejsVersion,
+  nsIntlVersion
+} from './versions';
 
 export namespace XplatNativeScriptAngularHelpers {
   export function updateRootDeps(options: XplatHelpers.Schema) {
@@ -10,7 +29,10 @@ export namespace XplatNativeScriptAngularHelpers {
 
       const angularDeps = {};
       const angularDevDeps = {};
-      if (packageJson.dependencies && !packageJson.dependencies['@angular/core']) {
+      if (
+        packageJson.dependencies &&
+        !packageJson.dependencies['@angular/core']
+      ) {
         // ensure angular deps are present
         angularDeps['@angular/animations'] = angularVersion;
         angularDeps['@angular/common'] = angularVersion;
@@ -23,6 +45,7 @@ export namespace XplatNativeScriptAngularHelpers {
         angularDeps['@ngx-translate/core'] = ngxTranslateVersion;
         angularDeps['reflect-metadata'] = reflectMetadataVersion;
         angularDeps['rxjs'] = rxjsVersion;
+        angularDeps['tslib'] = tslibVersion;
         angularDeps['zone.js'] = zonejsVersion;
 
         angularDevDeps['@angular/compiler-cli'] = angularVersion;
@@ -32,7 +55,9 @@ export namespace XplatNativeScriptAngularHelpers {
       return XplatHelpers.updatePackageForXplat(options, {
         dependencies: {
           ...angularDeps,
+          '@nativescript/angular': nsNgScopedVersion,
           'nativescript-angular': nsNgVersion,
+          'nativescript-intl': nsIntlVersion,
           'nativescript-ngx-fonticon': nsNgFonticonVersion,
           'tns-core-modules': nsCoreVersion
         },

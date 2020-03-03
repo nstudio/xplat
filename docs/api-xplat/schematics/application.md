@@ -57,11 +57,11 @@ The prefix to apply to generated selectors.
 
 ### --routing
 
-Default: `false`
+Default: `true`
 
 Type: `boolean`
 
-Configure routing.
+Use root routing module.
 
 ### --setupSandbox
 

@@ -18,7 +18,9 @@ import { LogService, PlatformLanguageToken } from '@<%= npmScope %>/core';
  * - deviceType to help component bindings
  * - example of global app event wiring for resume/suspend
  */
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class AppService {
   // fundamentals
   private _appVersion: string;

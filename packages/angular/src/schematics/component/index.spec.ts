@@ -76,7 +76,9 @@ describe('component schematic', () => {
     // console.log(barrelPath + ':');
     // console.log(barrelIndex);
     // component symbol should be at end of components collection
-    expect(barrelIndex.indexOf(`SignupComponent];`)).toBeGreaterThanOrEqual(0);
+    expect(
+      barrelIndex.indexOf(`export * from './signup/signup.component';`)
+    ).toBeGreaterThanOrEqual(0);
     expect(
       barrelIndex.indexOf(`./signup/signup.component`)
     ).toBeGreaterThanOrEqual(0);
@@ -85,7 +87,9 @@ describe('component schematic', () => {
     barrelIndex = getFileContent(tree, barrelPath);
     // console.log(barrelPath + ':');
     // console.log(barrelIndex);
-    expect(barrelIndex.indexOf(`SignupComponent];`)).toBeGreaterThanOrEqual(0);
+    expect(
+      barrelIndex.indexOf(`export * from './signup/signup.component';`)
+    ).toBeGreaterThanOrEqual(0);
   });
 
   it('should create component for specified platforms with framework name when no default is set', async () => {
@@ -195,7 +199,6 @@ describe('component schematic', () => {
     // console.log(barrelPath + ':');
     // console.log(barrelIndex);
     // component symbol should be at end of components collection
-    expect(barrelIndex.indexOf(`SignupComponent];`)).toBeGreaterThanOrEqual(0);
     expect(
       barrelIndex.indexOf(`./signup/signup.component`)
     ).toBeGreaterThanOrEqual(0);
@@ -204,7 +207,9 @@ describe('component schematic', () => {
     barrelIndex = getFileContent(tree, barrelPath);
     // console.log(barrelPath + ':');
     // console.log(barrelIndex);
-    expect(barrelIndex.indexOf(`SignupComponent];`)).toBeGreaterThanOrEqual(0);
+    expect(
+      barrelIndex.indexOf(`./signup/signup.component`)
+    ).toBeGreaterThanOrEqual(0);
 
     // file content
     barrelPath = '/xplat/nativescript/features/foo/components/index.ts';
@@ -212,17 +217,13 @@ describe('component schematic', () => {
     // console.log(barrelPath + ':');
     // console.log(barrelIndex);
     // component symbol should be at end of components collection
-    expect(
-      barrelIndex.indexOf(`REGISTRATION_COMPONENTS`)
-    ).toBeGreaterThanOrEqual(0);
+    expect(barrelIndex.indexOf(`./registration`)).toBeGreaterThanOrEqual(0);
 
     barrelPath = '/xplat/web/features/foo/components/index.ts';
     barrelIndex = getFileContent(tree, barrelPath);
     // console.log(barrelPath + ':');
     // console.log(barrelIndex);
-    expect(
-      barrelIndex.indexOf(`REGISTRATION_COMPONENTS`)
-    ).toBeGreaterThanOrEqual(0);
+    expect(barrelIndex.indexOf(`./registration`)).toBeGreaterThanOrEqual(0);
   });
 
   it('should create component for specified projects only', async () => {
@@ -299,7 +300,6 @@ describe('component schematic', () => {
     // console.log(barrelPath + ':');
     // console.log(barrelIndex);
     // component symbol should be at end of components collection
-    expect(barrelIndex.indexOf(`SignupComponent];`)).toBeGreaterThanOrEqual(0);
     expect(
       barrelIndex.indexOf(`./signup/signup.component`)
     ).toBeGreaterThanOrEqual(0);
@@ -315,7 +315,9 @@ describe('component schematic', () => {
     barrelIndex = getFileContent(tree, barrelPath);
     // console.log(barrelPath + ':');
     // console.log(barrelIndex);
-    expect(barrelIndex.indexOf(`SignupComponent];`)).toBeGreaterThanOrEqual(0);
+    expect(
+      barrelIndex.indexOf(`./signup/signup.component`)
+    ).toBeGreaterThanOrEqual(0);
   });
 
   it('should THROW if feature module does not exist in projects', async () => {

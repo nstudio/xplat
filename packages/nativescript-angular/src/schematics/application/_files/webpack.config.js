@@ -30,7 +30,8 @@ const hashSalt = Date.now().toString();
 module.exports = env => {
   // Add your custom Activities, Services and other Android app components here.
   const appComponents = [
-    "@nativescript/core/ui/frame", "@nativescript/core/ui/frame/activity"
+    '@nativescript/core/ui/frame',
+    '@nativescript/core/ui/frame/activity'
   ];
 
   const platform = env && ((env.android && 'android') || (env.ios && 'ios'));
@@ -96,7 +97,7 @@ module.exports = env => {
 
   const copyTargets = [
     { from: { glob: 'assets/**' } },
-    { from: { glob: 'fonts/**' } },
+    { from: { glob: 'fonts/**' } }
     // copy monorepo shared assests
     // for example:
     // { from: '../../../libs/assets/i18n', to: 'assets/i18n' }
@@ -210,8 +211,8 @@ module.exports = env => {
       ],
       alias: {
         '~': appFullPath,
-        "tns-core-modules": "@nativescript/core",
-        "nativescript-angular": "@nativescript/angular"
+        'tns-core-modules': '@nativescript/core',
+        'nativescript-angular': '@nativescript/angular'
       },
       symlinks: true
     },
