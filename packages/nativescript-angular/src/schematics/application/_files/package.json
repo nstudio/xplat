@@ -32,6 +32,7 @@
     "@<%= npmScope %>/scss": "file:<%= pathOffset %>libs/scss",
     "@<%= npmScope %>/nativescript-scss": "file:<%= pathOffset %>xplat/<%= xplatFolderName %>/scss",
     "nativescript-angular": "file:<%= pathOffset %>node_modules/nativescript-angular",
+    "nativescript-intl": "file:<%= pathOffset %>node_modules/nativescript-intl",
     "nativescript-ngx-fonticon": "file:<%= pathOffset %>node_modules/nativescript-ngx-fonticon",
     "nativescript-theme-core": "file:<%= pathOffset %>node_modules/nativescript-theme-core",
     "reflect-metadata": "file:<%= pathOffset %>node_modules/reflect-metadata",

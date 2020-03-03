@@ -17,7 +17,8 @@ import {
   rxjsVersion,
   tslibVersion,
   codelyzerVersion,
-  zonejsVersion
+  zonejsVersion,
+  nsIntlVersion
 } from './versions';
 
 export namespace XplatNativeScriptAngularHelpers {
@@ -56,6 +57,7 @@ export namespace XplatNativeScriptAngularHelpers {
           ...angularDeps,
           '@nativescript/angular': nsNgScopedVersion,
           'nativescript-angular': nsNgVersion,
+          'nativescript-intl': nsIntlVersion,
           'nativescript-ngx-fonticon': nsNgFonticonVersion,
           'tns-core-modules': nsCoreVersion
         },
