@@ -1,3 +1,13 @@
+<a name="9.0.0"></a>
+# [9.0.0](https://github.com/nstudio/xplat/compare/8.1.2...9.0.0) (2020-03-03)
+
+
+### Features
+
+* **core:** update to Nx and Angular 9 ([#179](https://github.com/nstudio/xplat/issues/179)) ([f5f05c6](https://github.com/nstudio/xplat/commit/f5f05c6))
+
+
+
 <a name="8.1.2"></a>
 
 ## [8.1.2](https://github.com/nstudio/xplat/compare/8.1.1...8.1.2) (2020-01-24)
