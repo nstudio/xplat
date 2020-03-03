@@ -225,7 +225,7 @@ describe('app', () => {
     );
 
     expect(appModule).toMatch(
-      `loadChildren: '~/features/home/home.module#HomeModule'`
+      `loadChildren: () =>`
     );
   });
 
@@ -241,7 +241,7 @@ describe('app', () => {
     );
 
     expect(fileContent).toMatch(
-      `loadChildren: '~/features/home/home.module#HomeModule'`
+      `loadChildren: () =>`
     );
     fileContent = getFileContent(
       tree,

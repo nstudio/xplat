@@ -81,8 +81,9 @@
     },
     "routing": {
       "type": "boolean",
-      "description": "Configure routing.",
-      "default": false
+      "description": "Use root routing module.",
+      "default": true,
+      "x-prompt": "Would you like to configure routing for this app?"
     },
     "setupSandbox": {
       "type": "boolean",
