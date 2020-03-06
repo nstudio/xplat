@@ -30,6 +30,7 @@ import {
 } from '@nstudio/xplat';
 import { Schema as ApplicationOptions } from './schema';
 import { XplatIonicAngularHelpers } from '../../utils';
+import { angularVersion, ngxTranslateVersion, ngxTranslateHttpLoaderVersion, reflectMetadataVersion, rxjsVersion, zonejsVersion, codelyzerVersion, capacitorVersion, ionicNativeVersion, angularDevkitVersion, ionicAngularToolkitVersion, ionicAngularVersion } from '../../utils/versions';
 
 export default function(options: ApplicationOptions) {
   if (!options.name) {
@@ -305,7 +306,19 @@ function addAppFiles(
           ...getDefaultTemplateOptions(),
           pathOffset: directory ? '../../../' : '../../',
           appname,
-          xplatFolderName: XplatHelpers.getXplatFoldername('ionic', 'angular')
+          xplatFolderName: XplatHelpers.getXplatFoldername('ionic', 'angular'),
+          angularVersion: angularVersion,
+          ngxTranslateVersion: ngxTranslateVersion,
+          ngxTranslateHttpVersion: ngxTranslateHttpLoaderVersion,
+          reflectMetadataVersion: reflectMetadataVersion,
+          rxjsVersion: rxjsVersion,
+          zonejsVersion: zonejsVersion,
+          codelyzerVersion: codelyzerVersion,
+          capacitorVersion: capacitorVersion,
+          ionicNativeVersion: ionicNativeVersion,
+          ionicAngularVersion: ionicAngularVersion,
+          ionicAngularToolkitVersion: ionicAngularToolkitVersion,
+          angularDevkitVersion: angularDevkitVersion
         }),
         move(`apps/${directory}${appPath}`)
       ])
