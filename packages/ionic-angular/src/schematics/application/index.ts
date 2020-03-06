@@ -30,7 +30,20 @@ import {
 } from '@nstudio/xplat';
 import { Schema as ApplicationOptions } from './schema';
 import { XplatIonicAngularHelpers } from '../../utils';
-import { angularVersion, ngxTranslateVersion, ngxTranslateHttpLoaderVersion, reflectMetadataVersion, rxjsVersion, zonejsVersion, codelyzerVersion, capacitorVersion, ionicNativeVersion, angularDevkitVersion, ionicAngularToolkitVersion, ionicAngularVersion } from '../../utils/versions';
+import {
+  angularVersion,
+  ngxTranslateVersion,
+  ngxTranslateHttpLoaderVersion,
+  reflectMetadataVersion,
+  rxjsVersion,
+  zonejsVersion,
+  codelyzerVersion,
+  capacitorVersion,
+  ionicNativeVersion,
+  angularDevkitVersion,
+  ionicAngularToolkitVersion,
+  ionicAngularVersion
+} from '../../utils/versions';
 
 export default function(options: ApplicationOptions) {
   if (!options.name) {
