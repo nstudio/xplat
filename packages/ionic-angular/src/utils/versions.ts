@@ -10,7 +10,7 @@ export const ngDevKitSchematics = '~9.0.0';
 
 export const angularVersion = '~9.0.0';
 export const angularDevkitVersion = '~0.900.0';
-export const ngxTranslateVersion = '~11.0.0';
+export const ngxTranslateVersion = '~12.1.0';
 export const ngxTranslateHttpLoaderVersion = '~4.0.0';
 export const reflectMetadataVersion = '^0.1.12';
 export const coreJsVersion = '^3.1.4';
