@@ -57,7 +57,7 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
           ...packageJson.devDependencies,
           '@angular/compiler-cli': '~8.2.0',
           '@ngtools/webpack': '~8.3.0',
-          'nativescript-dev-webpack': '~1.3.0'
+          'nativescript-dev-webpack': '~1.4.0'
         };
 
         // console.log('path:',path);
@@ -69,7 +69,7 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
       title: 'Migration Note:',
       bodyLines: [
         `Please ensure you have the latest NativeScript cli installed: npm i -g nativescript`,
-        `The following NativeScript apps have been updated to 6.2: ${appsNames}. The following files in those apps have been updated: webpack.config.js, src/package.json, and package.json. You may want to check the changeset to keep any customizations you may have made.`
+        `The following NativeScript apps have been updated to 6.3: ${appsNames}. The following files in those apps have been updated: webpack.config.js, src/package.json, and package.json. You may want to check the changeset to keep any customizations you may have made.`
       ]
     });
   }

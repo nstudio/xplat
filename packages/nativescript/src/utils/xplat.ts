@@ -25,7 +25,8 @@ export namespace XplatNativeScriptHelpers {
   }
 
   export function updatePrettierIgnore() {
-    return XplatHelpers.updatePrettierIgnore(`\n
+    return XplatHelpers.updatePrettierIgnore(
+      `\n
 # xplat added rules
 **/*.d.ts
 **/apps/**/platforms/**/*
@@ -35,8 +36,11 @@ export namespace XplatNativeScriptHelpers {
 **/apps/nativescript*/src/assets/*.min.css
 **/apps/*nativescript/hooks/**/*
 **/apps/*nativescript/tools/**/*
-**/apps/*nativescript/src/assets/*.min.css
-**/xplat/nativescript*/plugins/**/*`);
+**/apps/*nativescript/src/assets/*.css
+**/xplat/nativescript/scss/fonticons/*.css
+**/xplat/nativescript*/plugins/**/*`,
+      '**/xplat/nativescript/scss/fonticons/*.css'
+    );
   }
 
   export function updateGitIgnore() {

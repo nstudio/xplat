@@ -20,7 +20,8 @@
       ],
       "@<%= npmScope %>/nativescript/*": [
         "<%= pathOffset %>xplat/<%= xplatFolderName %>/*"
-      ]
+      ],
+      "*": ["./node_modules/*"]
     }
   },
   "files": [
@@ -35,5 +36,8 @@
   ],
   "exclude": [
     "<%= pathOffset %>xplat/<%= xplatFolderName %>/plugins/**/node_modules/**"
-  ]
+  ],
+  "angularCompilerOptions": {
+    "enableIvy": true
+  }
 }

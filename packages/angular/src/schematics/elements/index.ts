@@ -234,13 +234,13 @@ function updateWorkspaceSupport(
     json.dependencies = {
       ...json.dependencies,
       '@angular/elements': angularVersion,
-      '@webcomponents/webcomponentsjs': '^2.2.7'
+      '@webcomponents/webcomponentsjs': '^2.4.1'
     };
     json.devDependencies = json.devDependencies || {};
     json.devDependencies = {
       ...json.devDependencies,
-      'http-server': '^0.11.1',
-      'ngx-build-plus': '^7.7.5'
+      'http-server': '^0.12.1',
+      'ngx-build-plus': '^9.0.6'
     };
 
     return json;

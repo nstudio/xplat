@@ -54,7 +54,7 @@ describe('app', () => {
 
     // source dir
     expect(
-      files.indexOf('/apps/nativescript-foo/src/assets/fontawesome.min.css')
+      files.indexOf('/xplat/nativescript/scss/fonticons/fontawesome.min.css')
     ).toBeGreaterThanOrEqual(0);
     expect(
       files.indexOf('/apps/nativescript-foo/src/core/core.module.ts')
@@ -224,9 +224,7 @@ describe('app', () => {
       '/apps/nativescript-foo/src/app.routing.ts'
     );
 
-    expect(appModule).toMatch(
-      `loadChildren: '~/features/home/home.module#HomeModule'`
-    );
+    expect(appModule).toMatch(`loadChildren: () =>`);
   });
 
   it('should create a sandbox app with --setupSandbox and feature should work as expected', async () => {
@@ -240,9 +238,7 @@ describe('app', () => {
       '/apps/nativescript-foo/src/app.routing.ts'
     );
 
-    expect(fileContent).toMatch(
-      `loadChildren: '~/features/home/home.module#HomeModule'`
-    );
+    expect(fileContent).toMatch(`loadChildren: () =>`);
     fileContent = getFileContent(
       tree,
       '/apps/nativescript-foo/src/features/home/components/home.component.html'

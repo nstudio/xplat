@@ -1,4 +1,4 @@
-import { platformNativeScriptDynamic } from 'nativescript-angular/platform';
+import { platformNativeScriptDynamic } from '@nativescript/angular/platform';
 import { enableProdMode } from '@angular/core';
 import { environment } from '@<%= npmScope %>/core';
 import { AppModule } from './app.module';

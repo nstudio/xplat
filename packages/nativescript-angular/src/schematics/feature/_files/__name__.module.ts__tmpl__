@@ -1,10 +1,10 @@
 import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';<% if (!onlyModule && onlyProject && routing) { %>
 import { Routes } from '@angular/router';
-import { NativeScriptRouterModule } from 'nativescript-angular/router';<% } %>
+import { NativeScriptRouterModule } from '@nativescript/angular';<% } %>
 <% if (!onlyProject) { %>import { <%= utils.classify(name) %>Module as Shared<%= utils.classify(name) %>Module } from '@<%= npmScope %>/features';<% } if (onlyProject) { %>
 import { SharedModule } from '../shared/shared.module';<% } else { %>
 import { UIModule } from '../ui/ui.module';<% } if (!onlyModule) { %>
-import { <%= utils.sanitize(name).toUpperCase() %>_COMPONENTS<% if (onlyProject && routing) { %>, <%= utils.classify(name) %>Component<% } %> } from './components';
+import { <%= utils.classify(name) %>Component } from './components';
 <% if (onlyProject && routing) { %>
 export const routes: Routes = [
   {
@@ -19,10 +19,10 @@ export const routes: Routes = [
     NativeScriptRouterModule.forChild(routes)<% } } else { %>UIModule<% } %>
   ],<% if (!onlyModule) { %>
   declarations: [
-    ...<%= utils.sanitize(name).toUpperCase() %>_COMPONENTS
+    <%= utils.classify(name) %>Component
   ],
   exports: [
-    ...<%= utils.sanitize(name).toUpperCase() %>_COMPONENTS
+    <%= utils.classify(name) %>Component
   ],<% } %>
   schemas: [NO_ERRORS_SCHEMA]
 })

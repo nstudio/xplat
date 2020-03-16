@@ -49,12 +49,26 @@ yarn add --dev @nstudio/xplat
 ng add @nstudio/xplat
 ```
 
-# Generate apps
+# Generate supporting architecture
 
-After installing xplat tools, your default schematic collection should now be set to `@nstudio/xplat` allowing you to execute the following:
+After installing xplat tools, your default schematic collection should now be set to `@nstudio/xplat`.
+
+The most common use case is to use the supporting xplat architecture. Initialize your workspace with the platforms you intend to develop apps with:
 
 ```
-nx generate app
+nx g init
+```
+
+You will be prompted for which platforms to generate support for. You can optionally pass a collection of platforms:
+
+```
+nx g init --platforms web,nativescript
+```
+
+# Generate apps
+
+```
+nx g app
 ```
 
 **Note:** If you're using an Nx workspace with any angular presets you may need to replace `nx` with `ng`. This also applies to the `nx serve appname` step.
@@ -66,7 +80,7 @@ Follow the prompts to generate the type of app you'd like:
 If you would like to set your default schematics to anything other than `@nstudio/xplat` you can always execute app generators via the more verbose style:
 
 ```
-nx generate @nstudio/xplat:app
+nx g @nstudio/xplat:app
 ```
 
 ## Serving Application

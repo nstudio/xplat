@@ -1,42 +1,50 @@
-<a name="8.1.1"></a>
-## [8.1.1](https://github.com/nstudio/xplat/compare/8.0.15...8.1.1) (2020-01-05)
+<a name="9.0.0"></a>
 
+# [9.0.0](https://github.com/nstudio/xplat/compare/8.1.2...9.0.0) (2020-03-03)
 
 ### Features
 
-* **electron:** support for v7 ([#172](https://github.com/nstudio/xplat/issues/172)) ([e328f7a](https://github.com/nstudio/xplat/commit/e328f7a))
+- **core:** update to Nx and Angular 9 ([#179](https://github.com/nstudio/xplat/issues/179)) ([f5f05c6](https://github.com/nstudio/xplat/commit/f5f05c6))
 
+<a name="8.1.2"></a>
 
+## [8.1.2](https://github.com/nstudio/xplat/compare/8.1.1...8.1.2) (2020-01-24)
+
+### Features
+
+- **nativescript:** 6.3 and scoping updates ([#177](https://github.com/nstudio/xplat/issues/177)) ([dd54238](https://github.com/nstudio/xplat/commit/dd54238))
+
+<a name="8.1.1"></a>
+
+## [8.1.1](https://github.com/nstudio/xplat/compare/8.0.15...8.1.1) (2020-01-05)
+
+### Features
+
+- **electron:** support for v7 ([#172](https://github.com/nstudio/xplat/issues/172)) ([e328f7a](https://github.com/nstudio/xplat/commit/e328f7a))
 
 <a name="8.0.15"></a>
-## [8.0.15](https://github.com/nstudio/xplat/compare/8.0.13...8.0.15) (2019-12-02)
 
+## [8.0.15](https://github.com/nstudio/xplat/compare/8.0.13...8.0.15) (2019-12-02)
 
 ### Bug Fixes
 
-* **generators:** feature now properly supports groupByName workspaces ([fb8d096](https://github.com/nstudio/xplat/commit/fb8d096))
-
-
+- **generators:** feature now properly supports groupByName workspaces ([fb8d096](https://github.com/nstudio/xplat/commit/fb8d096))
 
 <a name="8.0.13"></a>
+
 ## [8.0.13](https://github.com/nstudio/xplat/compare/8.0.11...8.0.13) (2019-11-24)
 
-
 ### Features
 
-* **nativescript:** 6.2 migration ([6b0ca80](https://github.com/nstudio/xplat/commit/6b0ca80))
-
-
+- **nativescript:** 6.2 migration ([6b0ca80](https://github.com/nstudio/xplat/commit/6b0ca80))
 
 <a name="8.0.11"></a>
-## [8.0.11](https://github.com/nstudio/xplat/compare/8.0.10...8.0.11) (2019-11-21)
 
+## [8.0.11](https://github.com/nstudio/xplat/compare/8.0.10...8.0.11) (2019-11-21)
 
 ### Features
 
-* **nativescript:** 6.2 support ([#165](https://github.com/nstudio/xplat/issues/165)) ([2c81cc2](https://github.com/nstudio/xplat/commit/2c81cc2))
-
-
+- **nativescript:** 6.2 support ([#165](https://github.com/nstudio/xplat/issues/165)) ([2c81cc2](https://github.com/nstudio/xplat/commit/2c81cc2))
 
 <a name="8.0.10"></a>
 

@@ -70,12 +70,12 @@
     "migrations": "./migrations/migrations.json"
   },
   "dependencies": {
-    "@nrwl/angular": "^8.0.0"
+    "@nrwl/angular": "^9.0.0"
   },
   "devDependencies": {
-    "@angular-devkit/core": "8.0.1",
-    "@angular-devkit/schematics": "8.0.1",
-    "@nrwl/workspace": "^8.0.0",
+    "@angular-devkit/core": "~9.0.1",
+    "@angular-devkit/schematics": "~9.0.1",
+    "@nrwl/workspace": "^9.0.0",
     "@nstudio/angular": "*",
     "@nstudio/xplat": "*",
     "cosmiconfig": "4.0.0",

@@ -16,8 +16,8 @@ const hashSalt = Date.now().toString();
 module.exports = env => {
   // Add your custom Activities, Services and other Android app components here.
   const appComponents = [
-    'tns-core-modules/ui/frame',
-    'tns-core-modules/ui/frame/activity'
+    '@nativescript/core/ui/frame',
+    '@nativescript/core/ui/frame/activity'
   ];
 
   const platform = env && ((env.android && 'android') || (env.ios && 'ios'));
@@ -37,8 +37,8 @@ module.exports = env => {
   const {
     // The 'appPath' and 'appResourcesPath' values are fetched from
     // the nsconfig.json configuration file.
-    appPath = 'app',
-    appResourcesPath = 'app/App_Resources',
+    appPath = 'src',
+    appResourcesPath = 'App_Resources',
 
     // You can provide the following flags when running 'tns run android|ios'
     snapshot, // --env.snapshot
@@ -68,9 +68,9 @@ module.exports = env => {
 
   const areCoreModulesExternal =
     Array.isArray(env.externals) &&
-    env.externals.some(e => e.indexOf('tns-core-modules') > -1);
+    env.externals.some(e => e.indexOf('@nativescript') > -1);
   if (platform === 'ios' && !areCoreModulesExternal) {
-    entries['tns_modules/tns-core-modules/inspector_modules'] =
+    entries['tns_modules/@nativescript/core/inspector_modules'] =
       'inspector_modules';
   }
 
@@ -132,15 +132,16 @@ module.exports = env => {
     },
     resolve: {
       extensions: ['.ts', '.js', '.scss', '.css'],
-      // Resolve {N} system modules from tns-core-modules
+      // Resolve {N} system modules from @nativescript/core
       modules: [
-        resolve(__dirname, 'node_modules/tns-core-modules'),
+        resolve(__dirname, 'node_modules/@nativescript/core'),
         resolve(__dirname, 'node_modules'),
-        'node_modules/tns-core-modules',
+        'node_modules/@nativescript/core',
         'node_modules'
       ],
       alias: {
-        '~': appFullPath
+        '~': appFullPath,
+        'tns-core-modules': '@nativescript/core'
       },
       // resolve symlinks to symlinked modules
       symlinks: true
@@ -324,7 +325,7 @@ module.exports = env => {
     config.plugins.push(
       new nsWebpack.NativeScriptSnapshotPlugin({
         chunk: 'vendor',
-        requireModules: ['tns-core-modules/bundle-entry-points'],
+        requireModules: ['@nativescript/core/bundle-entry-points'],
         projectRoot,
         webpackConfig: config,
         snapshotInDocker,

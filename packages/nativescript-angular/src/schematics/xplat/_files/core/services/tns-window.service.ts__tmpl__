@@ -1,20 +1,22 @@
 import { Injectable } from '@angular/core';
 
 // nativescript
-import * as dialogs from 'tns-core-modules/ui/dialogs';
-import { device, isIOS } from 'tns-core-modules/platform';
-import * as timer from 'tns-core-modules/timer';
+import * as dialogs from '@nativescript/core/ui/dialogs';
+import { Device, isIOS } from '@nativescript/core';
+import * as timer from '@nativescript/core/timer';
 
 // app
 import { isString } from '@<%= npmScope %>/utils';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class TNSWindowService {
   private _dialogOpened = false;
 
   public get navigator(): any {
     return {
-      language: device.language,
+      language: Device.language,
       userAgent: 'nativescript'
     };
   }
