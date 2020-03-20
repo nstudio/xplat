@@ -20,7 +20,7 @@ do
     npm unpublish $PACKAGE_NAME --registry http://localhost:4873 --force
   else
     echo "Publishing locally ${PACKAGE_NAME} --registry http://localhost:4873"
-    npm publish --registry http://localhost:4873
+    npm publish --force --registry http://localhost:4873
   fi
 
   cd $ORIG_DIRECTORY

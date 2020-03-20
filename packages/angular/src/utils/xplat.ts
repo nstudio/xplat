@@ -276,7 +276,7 @@ export namespace XplatAngularHelpers {
 
   export function addTestingFiles(options: any, relativePath: string = './') {
     return (tree: Tree, context: SchematicContext) => {
-      if (tree.exists(`testing/karma.conf.js`)) {
+      if (tree.exists(`testing/test-setup.ts`)) {
         return noop();
       }
 
@@ -314,11 +314,12 @@ export namespace XplatAngularHelpers {
           prefix: prefix,
           architect: {
             test: {
-              builder: '@angular-devkit/build-angular:karma',
+              builder: '@nrwl/jest:jest',
               options: {
-                main: 'testing/test.libs.ts',
+                jestConfig: 'testing/jest.libs.config.js',
                 tsConfig: 'testing/tsconfig.libs.spec.json',
-                karmaConfig: 'testing/karma.conf.js'
+                passWithNoTests: true,
+                setupFile: 'testing/test-setup.ts'
               }
             },
             lint: {
@@ -340,11 +341,12 @@ export namespace XplatAngularHelpers {
           prefix: prefix,
           architect: {
             test: {
-              builder: '@angular-devkit/build-angular:karma',
+              builder: '@nrwl/jest:jest',
               options: {
-                main: 'testing/test.xplat.ts',
+                jestConfig: 'testing/jest.xplat.config.js',
                 tsConfig: 'testing/tsconfig.xplat.spec.json',
-                karmaConfig: 'testing/karma.conf.js'
+                passWithNoTests: true,
+                setupFile: 'testing/test-setup.ts'
               }
             },
             lint: {
