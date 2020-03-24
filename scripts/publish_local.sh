@@ -17,10 +17,10 @@ do
 
   if [[ $UNPUBLISH == "unpublish" ]]; then
     echo "Unpublishing locally ${PACKAGE_NAME} --registry http://localhost:4873"
-    npm unpublish $PACKAGE_NAME --registry http://localhost:4873 --force
+    npm unpublish $PACKAGE_NAME --registry http://localhost:4873
   else
     echo "Publishing locally ${PACKAGE_NAME} --registry http://localhost:4873"
-    npm publish --force --registry http://localhost:4873
+    npm publish --registry http://localhost:4873
   fi
 
   cd $ORIG_DIRECTORY
