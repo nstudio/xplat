@@ -50,7 +50,7 @@ import {
   karmaCoverageVersion,
   karmaJasmineVersion,
   karmaJasmineHtmlVersion,
-  typescriptVersion,
+  typescriptVersion
 } from '../../utils/versions';
 
 export default function(options: ApplicationOptions) {

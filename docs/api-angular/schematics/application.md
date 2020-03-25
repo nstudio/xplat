@@ -31,7 +31,7 @@ Default: `false`
 
 Type: `boolean`
 
-**EXPERIMENTAL** True to create a new app that uses the Ivy rendering engine.
+Use the Ivy rendering engine.
 
 ### --groupByName
 

@@ -73,9 +73,7 @@ export namespace XplatIonicAngularHelpers {
 
       if (options.useXplat) {
         dependencies['@ngx-translate/core'] = ngxTranslateVersion;
-        dependencies[
-          '@ngx-translate/http-loader'
-        ] = ngxTranslateHttpVersion;
+        dependencies['@ngx-translate/http-loader'] = ngxTranslateHttpVersion;
       }
       dependencies['reflect-metadata'] = reflectMetadataVersion;
 
