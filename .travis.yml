@@ -4,10 +4,10 @@ services:
   - docker
 
 before_install:
-  - docker build -t @nstudio/xplat -f Dockerfile.dev .
+  - docker build -t nstudio/xplat -f Dockerfile.dev .
 
 script:
-  - docker run -e CI=true @nstudio/xplat npm run test
+  - docker run -e CI=true nstudio/xplat npm run test
 
 notifications:
   email: false
