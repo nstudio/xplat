@@ -1,17 +1,11 @@
-FROM ubuntu
-
-# RUN apt-get update && apt-get -y install sudo curl
-# RUN useradd -m docker && echo "docker:docker" | chpasswd && adduser docker sudo
-# USER docker
+FROM ubuntu:18.04
 
 WORKDIR '/app'
 
 COPY . .
 
-# RUN pwd
-# RUN ls -la
+RUN chmod +x ./scripts/*.sh
+RUN ./scripts/docker-npm-setup.sh
 
-RUN chmod +x ./*.sh && chmod +x ./scripts/*.sh
-RUN ./docker-npm-setup.sh
-
-CMD ["/bin/sh", "./docker-run-tests.sh"]
+# keep container opened during development
+CMD tail -f /dev/null

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-apt-get update && apt-get install -y curl gnupg rsync
+apt-get update && apt-get install -y curl gnupg rsync git
 
 curl -sL https://deb.nodesource.com/setup_12.x | bash -
 apt-get install -y nodejs

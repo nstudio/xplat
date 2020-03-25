@@ -7,7 +7,8 @@ before_install:
   - docker build -t nstudio/xplat -f Dockerfile.dev .
 
 script:
-  - docker run -e CI=true nstudio/xplat npm run test
+  - docker run -e CI=true nstudio/xplat yarn test
+  - docker run -e CI=true nstudio/xplat yarn checkcommit
 
 notifications:
   email: false
