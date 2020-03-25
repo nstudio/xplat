@@ -36,7 +36,7 @@ import { addToFeature, adjustBarrelIndex } from './generator';
 import { updateJsonInTree, getWorkspacePath } from '@nrwl/workspace';
 import {
   ngxTranslateVersion,
-  ngxTranslateHttpLoaderVersion,
+  ngxTranslateHttpVersion,
   nxVersion,
   reflectMetadataVersion,
   angularVersion,
@@ -231,7 +231,7 @@ export namespace XplatAngularHelpers {
         dependencies: {
           ...dependencies,
           '@ngx-translate/core': ngxTranslateVersion,
-          '@ngx-translate/http-loader': ngxTranslateHttpLoaderVersion,
+          '@ngx-translate/http-loader': ngxTranslateHttpVersion,
           'reflect-metadata': reflectMetadataVersion
         },
         devDependencies: {

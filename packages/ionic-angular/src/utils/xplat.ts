@@ -18,9 +18,16 @@ import {
   zonejsVersion,
   codelyzerVersion,
   ngxTranslateVersion,
-  ngxTranslateHttpLoaderVersion,
+  ngxTranslateHttpVersion,
   reflectMetadataVersion,
-  xplatVersion
+  xplatVersion,
+  jasmineCoreVersion,
+  jasmineSpecVersion,
+  karmaVersion,
+  karmaChromeVersion,
+  karmaCoverageVersion,
+  karmaJasmineVersion,
+  karmaJasmineHtmlVersion
 } from './versions';
 
 export namespace XplatIonicAngularHelpers {
@@ -68,7 +75,7 @@ export namespace XplatIonicAngularHelpers {
         dependencies['@ngx-translate/core'] = ngxTranslateVersion;
         dependencies[
           '@ngx-translate/http-loader'
-        ] = ngxTranslateHttpLoaderVersion;
+        ] = ngxTranslateHttpVersion;
       }
       dependencies['reflect-metadata'] = reflectMetadataVersion;
 
@@ -84,17 +91,16 @@ export namespace XplatIonicAngularHelpers {
           '@angular-devkit/core': ngDevKitCore,
           '@angular-devkit/schematics': ngDevKitSchematics,
           '@ionic/angular-toolkit': ionicAngularToolkitVersion,
-          '@types/jasmine': '~2.8.8',
+          '@types/jasmine': '~3.5.9',
           '@types/jasminewd2': '~2.0.3',
-          codelyzer: '~4.5.0',
-          'jasmine-core': '~2.99.1',
-          'jasmine-spec-reporter': '~4.2.1',
-          karma: '~4.1.0',
-          'karma-chrome-launcher': '~2.2.0',
-          'karma-coverage-istanbul-reporter': '~2.0.1',
-          'karma-jasmine': '~1.1.2',
-          'karma-jasmine-html-reporter': '^0.2.2',
-          protractor: '^5.4.2'
+          codelyzer: codelyzerVersion,
+          'jasmine-core': jasmineCoreVersion,
+          'jasmine-spec-reporter': jasmineSpecVersion,
+          karma: karmaVersion,
+          'karma-chrome-launcher': karmaChromeVersion,
+          'karma-coverage-istanbul-reporter': karmaCoverageVersion,
+          'karma-jasmine': karmaJasmineVersion,
+          'karma-jasmine-html-reporter': karmaJasmineHtmlVersion
         }
       })(tree, context);
     };

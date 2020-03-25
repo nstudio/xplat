@@ -33,7 +33,7 @@ import { XplatIonicAngularHelpers } from '../../utils';
 import {
   angularVersion,
   ngxTranslateVersion,
-  ngxTranslateHttpLoaderVersion,
+  ngxTranslateHttpVersion,
   reflectMetadataVersion,
   rxjsVersion,
   zonejsVersion,
@@ -42,7 +42,15 @@ import {
   ionicNativeVersion,
   angularDevkitVersion,
   ionicAngularToolkitVersion,
-  ionicAngularVersion
+  ionicAngularVersion,
+  jasmineCoreVersion,
+  jasmineSpecVersion,
+  karmaVersion,
+  karmaChromeVersion,
+  karmaCoverageVersion,
+  karmaJasmineVersion,
+  karmaJasmineHtmlVersion,
+  typescriptVersion,
 } from '../../utils/versions';
 
 export default function(options: ApplicationOptions) {
@@ -322,16 +330,24 @@ function addAppFiles(
           xplatFolderName: XplatHelpers.getXplatFoldername('ionic', 'angular'),
           angularVersion: angularVersion,
           ngxTranslateVersion: ngxTranslateVersion,
-          ngxTranslateHttpVersion: ngxTranslateHttpLoaderVersion,
-          reflectMetadataVersion: reflectMetadataVersion,
-          rxjsVersion: rxjsVersion,
-          zonejsVersion: zonejsVersion,
-          codelyzerVersion: codelyzerVersion,
-          capacitorVersion: capacitorVersion,
-          ionicNativeVersion: ionicNativeVersion,
-          ionicAngularVersion: ionicAngularVersion,
-          ionicAngularToolkitVersion: ionicAngularToolkitVersion,
-          angularDevkitVersion: angularDevkitVersion
+          ngxTranslateHttpVersion,
+          reflectMetadataVersion,
+          rxjsVersion,
+          zonejsVersion,
+          codelyzerVersion,
+          capacitorVersion,
+          ionicNativeVersion,
+          ionicAngularVersion,
+          ionicAngularToolkitVersion,
+          angularDevkitVersion,
+          jasmineCoreVersion,
+          jasmineSpecVersion,
+          karmaVersion,
+          karmaChromeVersion,
+          karmaCoverageVersion,
+          karmaJasmineVersion,
+          karmaJasmineHtmlVersion,
+          typescriptVersion
         }),
         move(`apps/${directory}${appPath}`)
       ])
