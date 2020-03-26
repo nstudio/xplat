@@ -1,6 +1,6 @@
 {
   "name": "@nstudio/xplat-source",
-  "version": "9.0.0",
+  "version": "9.0.1",
   "description": "Cross-platform (xplat) tools for Nx workspaces.",
   "homepage": "https://nstudio.io/xplat",
   "private": true,
@@ -25,7 +25,7 @@
     "publish-npm": "./scripts/publish.sh",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
     "reset.changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
-    "contributors": "githubcontrib --owner nstudio --repo $(basename $(pwd)) --cols 6 --showlogin true --filter gitter-badger --sortOrder desc | pbcopy"
+    "contributors": "githubcontrib --owner nstudio --repo $(basename $(pwd)) --cols 6 --showlogin true --sortOrder desc | pbcopy"
   },
   "author": {
     "name": "nstudio",
@@ -147,7 +147,7 @@
     "testPathIgnorePatterns": [
       "node_modules",
       "<rootDir>/build/packages/angular/spec",
-      "packages/web/src/utils/third-party/cli-files/models/webpack-configs"
+      "webpack-configs"
     ],
     "coverageReporters": [
       "html"
