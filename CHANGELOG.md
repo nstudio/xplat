@@ -1,3 +1,12 @@
+<a name="9.0.1"></a>
+## [9.0.1](https://github.com/nstudio/xplat/compare/9.0.0...9.0.1) (2020-03-26)
+
+
+### Features
+
+* **core:** Jest for testing /libs and /xplat ([#185](https://github.com/nstudio/xplat/issues/185)) ([aaaae83](https://github.com/nstudio/xplat/commit/aaaae83))
+
+
 <a name="9.0.0"></a>
 
 # [9.0.0](https://github.com/nstudio/xplat/compare/8.1.2...9.0.0) (2020-03-03)
