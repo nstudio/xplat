@@ -17,7 +17,7 @@ do
 
   if [[ $UNPUBLISH == "unpublish" ]]; then
     echo "Unpublishing locally ${PACKAGE_NAME} --registry http://localhost:4873"
-    npm unpublish $PACKAGE_NAME --registry http://localhost:4873
+    npm unpublish $PACKAGE_NAME --registry http://localhost:4873 --force
   else
     echo "Publishing locally ${PACKAGE_NAME} --registry http://localhost:4873"
     npm publish --registry http://localhost:4873

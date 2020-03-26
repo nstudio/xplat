@@ -45,7 +45,10 @@ import {
   zonejsVersion,
   angularDevkitVersion,
   codelyzerVersion,
-  xplatVersion
+  xplatVersion,
+  jestJasmine2,
+  jestPresetAngular,
+  typesJest
 } from './versions';
 
 export namespace ComponentHelpers {
@@ -231,7 +234,12 @@ export namespace XplatAngularHelpers {
           '@ngx-translate/http-loader': ngxTranslateHttpLoaderVersion,
           'reflect-metadata': reflectMetadataVersion
         },
-        devDependencies
+        devDependencies: {
+          ...devDependencies,
+          '@types/jest': typesJest,
+          'jest-jasmine2': jestJasmine2,
+          'jest-preset-angular': jestPresetAngular
+        }
       })(tree, context);
     };
   }

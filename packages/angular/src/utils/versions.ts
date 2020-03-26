@@ -9,3 +9,6 @@ export const coreJsVersion = '^3.3.2';
 export const rxjsVersion = '~6.5.3';
 export const zonejsVersion = '~0.10.2';
 export const codelyzerVersion = '~5.2.0';
+export const jestJasmine2 = '~25.2.0';
+export const jestPresetAngular = '~8.1.2';
+export const typesJest = '~25.1.4';
