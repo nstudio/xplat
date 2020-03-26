@@ -32,18 +32,22 @@ describe('xplat schematic', () => {
     expect(files.indexOf('/libs/features/index.ts')).toBeGreaterThanOrEqual(0);
     expect(files.indexOf('/libs/scss/package.json')).toBeGreaterThanOrEqual(0);
 
-    expect(files.indexOf('/testing/karma.conf.js')).toBeGreaterThanOrEqual(0);
-    expect(files.indexOf('/testing/test.libs.ts')).toBeGreaterThanOrEqual(0);
-    expect(files.indexOf('/testing/test.xplat.ts')).toBeGreaterThanOrEqual(0);
-    expect(files.indexOf('/testing/tsconfig.libs.json')).toBeGreaterThanOrEqual(
-      0
-    );
+    expect(
+      files.indexOf('/testing/jest.libs.config.js')
+    ).toBeGreaterThanOrEqual(0);
+    expect(
+      files.indexOf('/testing/jest.xplat.config.js')
+    ).toBeGreaterThanOrEqual(0);
+    expect(files.indexOf('/testing/test-setup.ts')).toBeGreaterThanOrEqual(0);
+    expect(files.indexOf('/testing/tsconfig.json')).toBeGreaterThanOrEqual(0);
+    //expect(files.indexOf('/testing/karma.conf.js')).toBeGreaterThanOrEqual(0);
+    //expect(files.indexOf('/testing/test.libs.ts')).toBeGreaterThanOrEqual(0);
+    //expect(files.indexOf('/testing/test.xplat.ts')).toBeGreaterThanOrEqual(0);
+    //expect(files.indexOf('/testing/tsconfig.libs.json')).toBeGreaterThanOrEqual(0);
     expect(
       files.indexOf('/testing/tsconfig.libs.spec.json')
     ).toBeGreaterThanOrEqual(0);
-    expect(
-      files.indexOf('/testing/tsconfig.xplat.json')
-    ).toBeGreaterThanOrEqual(0);
+    //expect(files.indexOf('/testing/tsconfig.xplat.json')).toBeGreaterThanOrEqual(0);
     expect(
       files.indexOf('/testing/tsconfig.xplat.spec.json')
     ).toBeGreaterThanOrEqual(0);

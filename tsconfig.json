@@ -41,10 +41,5 @@
     "packages/web-angular/src/schematics/*/*files/**/*",
     "packages/xplat/src/schematics/*/*files/**/*",
     "scripts"
-  ],
-  "angularCompilerOptions": {
-    "strictMetadataEmit": true,
-    "skipTemplateCodegen": true,
-    "annotationsAs": "decorators"
-  }
+  ]
 }
