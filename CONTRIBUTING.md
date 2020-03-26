@@ -24,7 +24,7 @@ verdaccio
 1. Publish the schematic to `verdaccio` with the following:
 
 ```
-yarn build
+yarn build 9.0.0   // use next version string
 yarn publish-local
 ```
 
@@ -46,7 +46,7 @@ npm i -D @nstudio/xplat
 Anytime you make further changes to the schematic just rebuild/republish:
 
 ```
-yarn build
+yarn build 9.0.0
 // unpublish
 yarn publish-local unpublish
 // republish

@@ -3,7 +3,7 @@
   "compilerOptions": {
     "outDir": "../dist/out-tsc/xplat"
   },
-  "files": ["test.xplat.ts"],
+  "files": ["test-setup.ts"],
   "include": [
     "../libs/**/*.spec.ts",
     "../libs/**/*.d.ts",
