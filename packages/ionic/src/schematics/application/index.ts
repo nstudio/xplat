@@ -23,7 +23,7 @@ import {
   move
 } from '@angular-devkit/schematics';
 import { Schema } from './schema';
-import { XplatIonicHelpers, } from '../../utils';
+import { XplatIonicHelpers } from '../../utils';
 import { capacitorVersion } from '../../utils/versions';
 import { formatFiles } from '@nrwl/workspace';
 
