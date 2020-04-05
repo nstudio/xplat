@@ -38,7 +38,6 @@ import {
   ngxTranslateVersion,
   ngxTranslateHttpVersion,
   nxVersion,
-  reflectMetadataVersion,
   angularVersion,
   coreJsVersion,
   rxjsVersion,
@@ -231,8 +230,7 @@ export namespace XplatAngularHelpers {
         dependencies: {
           ...dependencies,
           '@ngx-translate/core': ngxTranslateVersion,
-          '@ngx-translate/http-loader': ngxTranslateHttpVersion,
-          'reflect-metadata': reflectMetadataVersion
+          '@ngx-translate/http-loader': ngxTranslateHttpVersion
         },
         devDependencies: {
           ...devDependencies,

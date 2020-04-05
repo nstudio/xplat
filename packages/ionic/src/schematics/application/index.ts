@@ -23,7 +23,8 @@ import {
   move
 } from '@angular-devkit/schematics';
 import { Schema } from './schema';
-import { XplatIonicHelpers } from '../../utils';
+import { XplatIonicHelpers, } from '../../utils';
+import { capacitorVersion } from '../../utils/versions';
 import { formatFiles } from '@nrwl/workspace';
 
 export default function(options: Schema) {
@@ -118,7 +119,8 @@ function addAppFiles(options: Schema, appPath: string) {
           ...getDefaultTemplateOptions(),
           pathOffset: directory ? '../../../' : '../../',
           appname,
-          xplatFolderName: XplatHelpers.getXplatFoldername('ionic')
+          xplatFolderName: XplatHelpers.getXplatFoldername('ionic'),
+          capacitorVersion
         }),
         move(`apps/${directory}${appPath}`)
       ])

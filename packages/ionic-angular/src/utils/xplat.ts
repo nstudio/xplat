@@ -19,7 +19,6 @@ import {
   codelyzerVersion,
   ngxTranslateVersion,
   ngxTranslateHttpVersion,
-  reflectMetadataVersion,
   xplatVersion,
   jasmineCoreVersion,
   jasmineSpecVersion,
@@ -75,7 +74,6 @@ export namespace XplatIonicAngularHelpers {
         dependencies['@ngx-translate/core'] = ngxTranslateVersion;
         dependencies['@ngx-translate/http-loader'] = ngxTranslateHttpVersion;
       }
-      dependencies['reflect-metadata'] = reflectMetadataVersion;
 
       return XplatHelpers.updatePackageForXplat(options, {
         dependencies: {

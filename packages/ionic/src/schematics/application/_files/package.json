@@ -20,13 +20,13 @@
     "cap.update": "npx cap update"
   },
   "dependencies": {
-    "@capacitor/android": "^1.1.1",
-    "@capacitor/core": "1.1.1",
-    "@capacitor/ios": "^1.1.1",
+    "@capacitor/android": "<%= capacitorVersion %>",
+    "@capacitor/core": "<%= capacitorVersion %>",
+    "@capacitor/ios": "<%= capacitorVersion %>",
     "@ionic/core": "file:<%= pathOffset %>node_modules/@ionic/core"
   },
   "devDependencies": {
-    "@capacitor/cli": "1.1.1",
+    "@capacitor/cli": "<%= capacitorVersion %>",
     "@stencil/core": "file:<%= pathOffset %>node_modules/@stencil/core",
     "@stencil/sass": "file:<%= pathOffset %>node_modules/@stencil/sass"
   }

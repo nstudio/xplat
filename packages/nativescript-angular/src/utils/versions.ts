@@ -17,7 +17,6 @@ export const typescriptVersion = '~3.7.4';
 // TODO: move deps to nstudio/xplat to ref from everywhere for all supported framework versions
 export const angularVersion = '~9.0.0';
 export const ngxTranslateVersion = '~11.0.0';
-export const reflectMetadataVersion = '^0.1.12';
 export const rxjsVersion = '^6.5.0';
 export const zonejsVersion = '~0.10.2';
 export const codelyzerVersion = '~5.1.0';

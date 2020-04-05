@@ -28,7 +28,6 @@ export namespace XplatIonicHelpers {
       }
 
       const devDependencies = {};
-      devDependencies['@capacitor/cli'] = capacitorCore;
       if (!options.skipDependentPlatformFiles) {
         // using core deps
         devDependencies['@stencil/core'] = stencilCore;
