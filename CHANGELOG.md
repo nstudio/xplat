@@ -1,3 +1,12 @@
+<a name="9.0.2"></a>
+
+## [9.0.2](https://github.com/nstudio/xplat/compare/9.0.0...9.0.2) (2020-04-06)
+
+### Features
+
+- **core:** jest for testing libs and xplat ([#185](https://github.com/nstudio/xplat/issues/185)) ([f6f3ea5](https://github.com/nstudio/xplat/commit/f6f3ea5))
+- **ionic:** support for Ionic v5 and Angular v9 ([#183](https://github.com/nstudio/xplat/issues/183)) ([223013c](https://github.com/nstudio/xplat/commit/223013c))
+
 <a name="9.0.1"></a>
 
 ## [9.0.1](https://github.com/nstudio/xplat/compare/9.0.0...9.0.1) (2020-03-26)
