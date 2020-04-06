@@ -20,7 +20,6 @@
     "nativescript-angular": "<%= nsNgVersion %>",
     "nativescript-intl": "<%= nsIntlVersion %>",
     "nativescript-theme-core": "<%= nsThemeCoreVersion %>",
-    "reflect-metadata": "<%= reflectMetadataVersion %>",
     "rxjs": "<%= rxjsVersion %>",
     "tns-core-modules": "<%= nsCoreVersion %>",
     "tslib": "<%= tslibVersion %>",

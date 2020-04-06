@@ -30,6 +30,7 @@ import {
 } from '@nstudio/xplat';
 import { Schema as ApplicationOptions } from './schema';
 import { XplatIonicAngularHelpers } from '../../utils';
+import { capacitorVersion } from '../../utils/versions';
 
 export default function(options: ApplicationOptions) {
   if (!options.name) {
@@ -235,21 +236,22 @@ export default function(options: ApplicationOptions) {
               exclude: ['**/node_modules/**']
             }
           },
-          e2e: {
-            builder: '@angular-devkit/build-angular:protractor',
-            options: {
-              protractorConfig: `${appFolder}e2e/protractor.conf.js`,
-              devServerTarget: `${options.name}:serve`
-            },
-            configurations: {
-              production: {
-                devServerTarget: `${options.name}:serve:production`
-              },
-              ci: {
-                devServerTarget: `${options.name}:serve:ci`
-              }
-            }
-          },
+          // TODO: add jest e2e configuration for ionic
+          // e2e: {
+          //   builder: '@angular-devkit/build-angular:protractor',
+          //   options: {
+          //     protractorConfig: `${appFolder}e2e/protractor.conf.js`,
+          //     devServerTarget: `${options.name}:serve`
+          //   },
+          //   configurations: {
+          //     production: {
+          //       devServerTarget: `${options.name}:serve:production`
+          //     },
+          //     ci: {
+          //       devServerTarget: `${options.name}:serve:ci`
+          //     }
+          //   }
+          // },
           'ionic-cordova-build': {
             builder: '@ionic/angular-toolkit:cordova-build',
             options: {
@@ -305,7 +307,8 @@ function addAppFiles(
           ...getDefaultTemplateOptions(),
           pathOffset: directory ? '../../../' : '../../',
           appname,
-          xplatFolderName: XplatHelpers.getXplatFoldername('ionic', 'angular')
+          xplatFolderName: XplatHelpers.getXplatFoldername('ionic', 'angular'),
+          capacitorVersion
         }),
         move(`apps/${directory}${appPath}`)
       ])

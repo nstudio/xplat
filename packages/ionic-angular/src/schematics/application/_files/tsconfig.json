@@ -22,7 +22,8 @@
         "<%= pathOffset %>xplat/<%= xplatFolderName %>/*"
       ],
       "@<%= npmScope %>/web": ["<%= pathOffset %>xplat/web/index.ts"],
-      "@<%= npmScope %>/web/*": ["<%= pathOffset %>xplat/web/*"]
+      "@<%= npmScope %>/web/*": ["<%= pathOffset %>xplat/web/*"],
+      "@angular/*": ["../../node_modules/@angular/*"]
     }
   }
 }

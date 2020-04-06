@@ -36,9 +36,8 @@ import { addToFeature, adjustBarrelIndex } from './generator';
 import { updateJsonInTree, getWorkspacePath } from '@nrwl/workspace';
 import {
   ngxTranslateVersion,
-  ngxTranslateHttpLoaderVersion,
+  ngxTranslateHttpVersion,
   nxVersion,
-  reflectMetadataVersion,
   angularVersion,
   coreJsVersion,
   rxjsVersion,
@@ -221,6 +220,9 @@ export namespace XplatAngularHelpers {
       if (!packageJson.devDependencies['@nrwl/angular']) {
         packageJson.devDependencies['@nrwl/angular'] = nxVersion;
       }
+      if (!packageJson.devDependencies['@nrwl/jest']) {
+        packageJson.devDependencies['@nrwl/jest'] = nxVersion;
+      }
       if (!packageJson.devDependencies['@nstudio/web']) {
         packageJson.devDependencies['@nstudio/web'] = xplatVersion;
       }
@@ -231,8 +233,7 @@ export namespace XplatAngularHelpers {
         dependencies: {
           ...dependencies,
           '@ngx-translate/core': ngxTranslateVersion,
-          '@ngx-translate/http-loader': ngxTranslateHttpLoaderVersion,
-          'reflect-metadata': reflectMetadataVersion
+          '@ngx-translate/http-loader': ngxTranslateHttpVersion
         },
         devDependencies: {
           ...devDependencies,
@@ -259,18 +260,21 @@ export namespace XplatAngularHelpers {
     return chains;
   }
 
-  export function addLibFiles(options: XplatHelpers.Schema) {
+  export function addLibFiles(
+    options: XplatHelpers.Schema,
+    relativeTo: string = './'
+  ) {
     return (tree: Tree, context: SchematicContext) => {
       if (
         tree.exists(`libs/core/base/base-component.ts`) ||
         tree.exists(`libs/features/index.ts`)
       ) {
-        return noop();
+        return noop()(tree, context);
       }
 
       return branchAndMerge(
         mergeWith(
-          apply(url(`./_lib_files`), [
+          apply(url(`${relativeTo}_lib_files`), [
             template({
               ...(options as any),
               ...getDefaultTemplateOptions()
@@ -278,14 +282,37 @@ export namespace XplatAngularHelpers {
             move('libs')
           ])
         )
-      );
+      )(tree, context);
+    };
+  }
+
+  export function addScssFiles(
+    options: XplatHelpers.Schema,
+    relativeTo: string = './'
+  ) {
+    return (tree: Tree, context: SchematicContext) => {
+      if (tree.exists(`libs/scss/_index.scss`)) {
+        return noop()(tree, context);
+      }
+
+      return branchAndMerge(
+        mergeWith(
+          apply(url(`${relativeTo}_scss_files`), [
+            template({
+              ...(options as any),
+              ...getDefaultTemplateOptions()
+            }),
+            move('libs/scss')
+          ])
+        )
+      )(tree, context);
     };
   }
 
   export function addTestingFiles(options: any, relativePath: string = './') {
     return (tree: Tree, context: SchematicContext) => {
       if (tree.exists(`testing/test-setup.ts`)) {
-        return noop();
+        return noop()(tree, context);
       }
 
       return branchAndMerge(
@@ -299,7 +326,28 @@ export namespace XplatAngularHelpers {
             move('testing')
           ])
         )
-      );
+      )(tree, context);
+    };
+  }
+
+  export function addJestConfig(options: any, relativePath: string = './') {
+    return (tree: Tree, context: SchematicContext) => {
+      if (tree.exists('jest.config.js')) {
+        // user may have generated support already
+        return noop()(tree, context);
+      } else {
+        return branchAndMerge(
+          mergeWith(
+            apply(url(`${relativePath}_files`), [
+              template({
+                ...(options as any),
+                ...getDefaultTemplateOptions()
+              }),
+              move('/')
+            ])
+          )
+        )(tree, context);
+      }
     };
   }
 

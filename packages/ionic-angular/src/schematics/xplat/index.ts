@@ -6,6 +6,7 @@ import {
   noop
 } from '@angular-devkit/schematics';
 import { XplatHelpers, prerun } from '@nstudio/xplat';
+import { XplatAngularHelpers } from '@nstudio/angular';
 import { XplatIonicAngularHelpers } from '../../utils/xplat';
 
 export default function(options: XplatHelpers.Schema) {
@@ -34,6 +35,15 @@ export default function(options: XplatHelpers.Schema) {
             context
           );
     },
+    // TODO: convert these @nstudio/angular api's to singular external schematics so could be called with externalSchematic api
+    XplatAngularHelpers.addLibFiles(
+      options,
+      `../../../../angular/src/schematics/xplat/`
+    ),
+    XplatAngularHelpers.addScssFiles(
+      options,
+      `../../../../angular/src/schematics/xplat/`
+    ),
     XplatHelpers.updateTsConfigPaths(options, { framework: 'angular' }),
     XplatIonicAngularHelpers.updateRootDeps(options)
   ]);

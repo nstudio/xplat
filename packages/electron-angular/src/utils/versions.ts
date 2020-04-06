@@ -1,2 +1,2 @@
 export const xplatVersion = '*';
-export const nxVersion = '~9.1.3';
+export const nxVersion = '~9.2.2';

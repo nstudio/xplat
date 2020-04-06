@@ -29,28 +29,12 @@ export default function(options: XplatHelpers.Schema) {
     XplatHelpers.updateGitIgnore(),
     // libs
     XplatAngularHelpers.addLibFiles(options),
-    (tree: Tree, context: SchematicContext) => {
-      if (tree.exists('/libs/scss/_index.scss')) {
-        // user may have generated support already
-        return noop()(tree, context);
-      } else {
-        return branchAndMerge(
-          mergeWith(
-            apply(url(`./_scss_files`), [
-              template({
-                ...(options as any),
-                ...getDefaultTemplateOptions()
-              }),
-              move('libs/scss')
-            ])
-          )
-        )(tree, context);
-      }
-    },
+    XplatAngularHelpers.addScssFiles(options),
     // cross platform support
     ...externalChains,
     // testing
     XplatAngularHelpers.addTestingFiles(options, '_testing'),
+    XplatAngularHelpers.addJestConfig(options, '_jest'),
     XplatAngularHelpers.updateTestingConfig(options),
     XplatAngularHelpers.updateLint(options),
     XplatAngularHelpers.updateRootDeps(options),

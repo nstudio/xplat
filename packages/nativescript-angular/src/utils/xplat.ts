@@ -13,7 +13,6 @@ import {
   nsCoreVersion,
   angularVersion,
   ngxTranslateVersion,
-  reflectMetadataVersion,
   rxjsVersion,
   tslibVersion,
   codelyzerVersion,
@@ -43,7 +42,6 @@ export namespace XplatNativeScriptAngularHelpers {
         angularDeps['@angular/platform-browser-dynamic'] = angularVersion;
         angularDeps['@angular/router'] = angularVersion;
         angularDeps['@ngx-translate/core'] = ngxTranslateVersion;
-        angularDeps['reflect-metadata'] = reflectMetadataVersion;
         angularDeps['rxjs'] = rxjsVersion;
         angularDeps['tslib'] = tslibVersion;
         angularDeps['zone.js'] = zonejsVersion;

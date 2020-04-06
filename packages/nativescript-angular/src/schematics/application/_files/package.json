@@ -35,7 +35,6 @@
     "nativescript-intl": "<%= nsIntlVersion %>",
     "nativescript-ngx-fonticon": "<%= nsNgFonticonVersion %>",
     "nativescript-theme-core": "<%= nsThemeCoreVersion %>",
-    "reflect-metadata": "<%= reflectMetadataVersion %>",
     "rxjs": "<%= rxjsVersion %>",
     "tns-core-modules": "<%= nsCoreVersion %>",
     "tslib": "<%= tslibVersion %>",
