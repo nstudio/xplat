@@ -27,6 +27,7 @@ describe('xplat schematic', () => {
 
     const tree = await runSchematic('xplat', options, appTree);
     // const files = tree.files;
+    expect(tree.exists('/libs/core/index.ts')).toBeTruthy();
     expect(tree.exists('/xplat/web/index.ts')).toBeFalsy();
     expect(tree.exists('/xplat/nativescript/index.ts')).toBeTruthy();
     expect(tree.exists('/xplat/nativescript/core/index.ts')).toBeTruthy();
@@ -67,6 +68,9 @@ describe('xplat schematic', () => {
     const options: XplatHelpers.Schema = { ...defaultOptions };
 
     const tree = await runSchematic('xplat', options, appTree);
+    // console.log(tree.files);
+    expect(tree.exists('/libs/core/index.ts')).toBeTruthy();
+    expect(tree.exists('/libs/scss/_index.scss')).toBeTruthy();
     expect(tree.exists('/xplat/nativescript-angular/index.ts')).toBeTruthy();
     const filePath = '/tsconfig.json';
     const fileContent = jsonParse(getFileContent(tree, filePath));

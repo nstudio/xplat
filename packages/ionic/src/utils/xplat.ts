@@ -4,7 +4,7 @@ import {
   ionicNativeCoreVersion,
   ionicNativeSplashScreenVersion,
   ionicNativeStatusbarVersion,
-  capacitorCore,
+  capacitorVersion,
   stencilCore,
   stencilSass,
   ionicCore

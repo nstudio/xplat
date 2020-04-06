@@ -22,12 +22,9 @@
   "dependencies": {
     "@capacitor/android": "<%= capacitorVersion %>",
     "@capacitor/core": "<%= capacitorVersion %>",
-    "@capacitor/ios": "<%= capacitorVersion %>",
-    "@ionic/core": "file:<%= pathOffset %>node_modules/@ionic/core"
+    "@capacitor/ios": "<%= capacitorVersion %>"
   },
   "devDependencies": {
-    "@capacitor/cli": "<%= capacitorVersion %>",
-    "@stencil/core": "file:<%= pathOffset %>node_modules/@stencil/core",
-    "@stencil/sass": "file:<%= pathOffset %>node_modules/@stencil/sass"
+    "@capacitor/cli": "<%= capacitorVersion %>"
   }
 }

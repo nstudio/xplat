@@ -15,8 +15,8 @@ export const typescriptVersion = '~3.7.4';
 
 // in case workspace had not added angular yet
 // TODO: move deps to nstudio/xplat to ref from everywhere for all supported framework versions
-export const angularVersion = '~9.0.0';
-export const ngxTranslateVersion = '~11.0.0';
+export const angularVersion = '~9.1.0';
+export const ngxTranslateVersion = '~12.1.0';
 export const rxjsVersion = '^6.5.0';
 export const zonejsVersion = '~0.10.2';
 export const codelyzerVersion = '~5.1.0';
