@@ -1,3 +1,11 @@
+<a name="9.0.3"></a>
+
+## [9.0.3](https://github.com/nstudio/xplat/compare/9.0.0...9.0.3) (2020-04-25)
+
+### Bug Fixes
+
+- **nativescript:** app generator option without structure ([#194](https://github.com/nstudio/xplat/issues/194)) ([384713b](https://github.com/nstudio/xplat/commit/384713b))
+
 <a name="9.0.2"></a>
 
 ## [9.0.2](https://github.com/nstudio/xplat/compare/9.0.0...9.0.2) (2020-04-06)
