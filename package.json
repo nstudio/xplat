@@ -51,7 +51,6 @@
     "@angular/router": "^9.1.0",
     "@angular/service-worker": "^9.1.0",
     "@angular/upgrade": "^9.1.0",
-
     "@cypress/webpack-preprocessor": "^4.1.0",
     "@nrwl/angular": "~9.2.2",
     "@nrwl/express": "~9.2.2",

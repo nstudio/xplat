@@ -5,7 +5,8 @@
   },
   "description": "NativeScript Application",
   "scripts": {
-    "postinstall": "node ./tools/xplat-postinstall.js"
+    "postinstall": "node ./tools/xplat-postinstall.js && npm run ngcc",
+    "ngcc": "ngcc --properties es2015 module main --first-only"
   },
   "dependencies": {
     "@angular/animations": "<%= angularVersion %>",
