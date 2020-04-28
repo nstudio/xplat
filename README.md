@@ -35,7 +35,8 @@
 
 ## Recommended extra tooling
 
-- [Angular Console](https://angularconsole.com/)
+- [VS Code](https://code.visualstudio.com/)
+- [Nx Console for VS Code](https://marketplace.visualstudio.com/items?itemName=nrwl.angular-console)
 
 ## Example repos for different scenarios
 
