@@ -18,7 +18,6 @@
     "@angular/platform-browser-dynamic": "<%= angularVersion %>",
     "@angular/router": "<%= angularVersion %>",
     "@nativescript/angular": "<%= nsNgScopedVersion %>",
-    "nativescript-angular": "<%= nsNgVersion %>",
     "nativescript-intl": "<%= nsIntlVersion %>",
     "nativescript-theme-core": "<%= nsThemeCoreVersion %>",
     "rxjs": "<%= rxjsVersion %>",
