@@ -1,9 +1,6 @@
 export const xplatVersion = '*';
 export const nsCoreVersion = '~6.4.0';
-export const nsNgScopedVersion =
-  'https://github.com/nstudio/ns-ng/blob/master/nativescript-angular-9.0.0.tgz?raw=true';
-export const nsNgVersion =
-  'https://github.com/nstudio/ns-ng/blob/master/nativescript-angular-compat.tgz?raw=true'; // '~8.20.0';
+export const nsNgScopedVersion = '~9.0.0';
 export const nsNgFonticonVersion = '~6.0.3';
 export const nsDevWebpackVersion = '~1.5.0';
 export const nsIntlVersion = '~3.0.0';

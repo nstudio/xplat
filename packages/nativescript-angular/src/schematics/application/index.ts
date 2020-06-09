@@ -33,7 +33,6 @@ import { XplatNativeScriptAngularHelpers } from '../../utils';
 import {
   nsCoreVersion,
   angularVersion,
-  nsNgVersion,
   nsNgScopedVersion,
   nsIntlVersion,
   nsNgFonticonVersion,
@@ -211,7 +210,6 @@ function addAppFiles(
           pathOffset: directory ? '../../../' : '../../',
           angularVersion: angularVersion,
           nsNgScopedVersion: nsNgScopedVersion,
-          nsNgVersion: nsNgVersion,
           nsIntlVersion: nsIntlVersion,
           nsNgFonticonVersion: nsNgFonticonVersion,
           nsDevWebpackVersion: nsDevWebpackVersion,

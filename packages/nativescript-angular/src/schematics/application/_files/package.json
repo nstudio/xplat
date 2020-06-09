@@ -31,7 +31,6 @@
     "@ngx-translate/core": "<%= ngxTranslateVersion %>",
     "@<%= npmScope %>/scss": "file:<%= pathOffset %>libs/scss",
     "@<%= npmScope %>/nativescript-scss": "file:<%= pathOffset %>xplat/<%= xplatFolderName %>/scss",
-    "nativescript-angular": "<%= nsNgVersion %>",
     "nativescript-intl": "<%= nsIntlVersion %>",
     "nativescript-ngx-fonticon": "<%= nsNgFonticonVersion %>",
     "nativescript-theme-core": "<%= nsThemeCoreVersion %>",

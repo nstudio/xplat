@@ -34,7 +34,6 @@ npm-debug.log
 !*.d.ts
 !src/assets/fontawesome.min.css
 !src/app.module.ngfactory.d.ts
-!webpack.config.js
 /report/
 .nsbuildinfo
 /temp/
