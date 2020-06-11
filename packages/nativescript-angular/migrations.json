@@ -9,6 +9,11 @@
       "version": "8.1.2",
       "description": "Migrate NativeScript apps to 6.3",
       "factory": "./migrations/update-8-1-2/update-8-1-2"
+    },
+    "update-to-9.0.4": {
+      "version": "9.0.4",
+      "description": "Migrate NativeScript apps to Angular 9",
+      "factory": "./migrations/update-9-0-4/update-9-0-4"
     }
   }
 }
