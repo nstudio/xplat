@@ -1,3 +1,12 @@
+<a name="9.0.4"></a>
+
+## [9.0.4](https://github.com/nstudio/xplat/compare/9.0.3...9.0.4) (2020-06-11)
+
+### Features
+
+- **angular:** allow other decorators like @Input and @Output on base class. ([#199](https://github.com/nstudio/xplat/issues/199)) ([cc6ced2](https://github.com/nstudio/xplat/commit/cc6ced2))
+- **angular:** official v9 ivy support ([#201](https://github.com/nstudio/xplat/issues/201)) ([a5f2e62](https://github.com/nstudio/xplat/commit/a5f2e62))
+
 <a name="9.0.3"></a>
 
 ## [9.0.3](https://github.com/nstudio/xplat/compare/9.0.0...9.0.3) (2020-04-25)
