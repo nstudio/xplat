@@ -92,13 +92,12 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
         packageJson.devDependencies = packageJson.devDependencies || {};
         packageJson.devDependencies = {
           ...packageJson.devDependencies,
-          "@angular/compiler-cli": angularVersion,
-          "@ngtools/webpack": angularVersion,
+          '@angular/compiler-cli': angularVersion,
+          '@ngtools/webpack': angularVersion,
           'nativescript-dev-webpack': nsDevWebpackVersion,
           'terser-webpack-plugin': terserWebpackVersion,
-          "tns-platform-declarations": nsCoreVersion,
-          typescript: typescriptVersion,
-
+          'tns-platform-declarations': nsCoreVersion,
+          typescript: typescriptVersion
         };
 
         // console.log('path:',path);

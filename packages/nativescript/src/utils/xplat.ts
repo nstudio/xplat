@@ -13,7 +13,7 @@ export namespace XplatNativeScriptHelpers {
       return XplatHelpers.updatePackageForXplat(options, {
         dependencies: {
           '@nativescript/core': nsCoreVersion,
-          'nativescript-theme-core': nsThemeCoreVersion,
+          'nativescript-theme-core': nsThemeCoreVersion
         },
         devDependencies: {
           'node-sass': nodeSassVersion,
