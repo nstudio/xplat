@@ -28,6 +28,7 @@
     "@angular/platform-browser-dynamic": "<%= angularVersion %>",
     "@angular/router": "<%= angularVersion %>",
     "@nativescript/angular": "<%= nsNgScopedVersion %>",
+    "@nativescript/core": "<%= nsCoreVersion %>",
     "@ngx-translate/core": "<%= ngxTranslateVersion %>",
     "@<%= npmScope %>/scss": "file:<%= pathOffset %>libs/scss",
     "@<%= npmScope %>/nativescript-scss": "file:<%= pathOffset %>xplat/<%= xplatFolderName %>/scss",
@@ -35,7 +36,6 @@
     "nativescript-ngx-fonticon": "<%= nsNgFonticonVersion %>",
     "nativescript-theme-core": "<%= nsThemeCoreVersion %>",
     "rxjs": "<%= rxjsVersion %>",
-    "tns-core-modules": "<%= nsCoreVersion %>",
     "tslib": "<%= tslibVersion %>",
     "zone.js": "<%= zonejsVersion %>"
   },

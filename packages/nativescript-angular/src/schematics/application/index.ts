@@ -160,22 +160,46 @@ export default function(options: Schema) {
                   command: `yarn start.${platformApp}.preview`
                 }
               ]
-            },
-            configurations: {
-              ios: {
-                commands: [
-                  {
-                    command: `yarn start.${platformApp}.ios`
-                  }
-                ]
-              },
-              android: {
-                commands: [
-                  {
-                    command: `yarn start.${platformApp}.android`
-                  }
-                ]
-              }
+            }
+          },
+          ios: {
+            builder: '@nrwl/workspace:run-commands',
+            options: {
+              commands: [
+                {
+                  command: 'tns debug ios --env.aot --no-hmr'
+                }
+              ],
+              cwd: `apps/${directory}${options.name}`,
+              parallel: false
+            }
+          },
+          android: {
+            builder: '@nrwl/workspace:run-commands',
+            options: {
+              commands: [
+                {
+                  command: 'tns debug android --env.aot --no-hmr'
+                }
+              ],
+              cwd: `apps/${directory}${options.name}`,
+              parallel: false
+            }
+          },
+          clean: {
+            builder: '@nrwl/workspace:run-commands',
+            options: {
+              commands: [
+                {
+                  command:
+                    'npx rimraf -- hooks node_modules platforms package-lock.json'
+                },
+                {
+                  command: 'npm i && npx rimraf -- package-lock.json'
+                }
+              ],
+              cwd: `apps/${directory}${options.name}`,
+              parallel: false
             }
           }
         }

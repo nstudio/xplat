@@ -12,8 +12,8 @@ export namespace XplatNativeScriptHelpers {
     return (tree: Tree, context: SchematicContext) => {
       return XplatHelpers.updatePackageForXplat(options, {
         dependencies: {
+          '@nativescript/core': nsCoreVersion,
           'nativescript-theme-core': nsThemeCoreVersion,
-          'tns-core-modules': nsCoreVersion
         },
         devDependencies: {
           'node-sass': nodeSassVersion,

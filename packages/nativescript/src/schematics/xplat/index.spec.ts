@@ -30,7 +30,7 @@ describe('xplat schematic', () => {
     expect(tree.exists('/xplat/nativescript/index.ts')).toBeTruthy();
     const packagePath = '/package.json';
     const packageFile = jsonParse(getFileContent(tree, packagePath));
-    const hasNativeScript = packageFile.dependencies[`tns-core-modules`];
+    const hasNativeScript = packageFile.dependencies[`@nativescript/core`];
     expect(hasNativeScript).not.toBeUndefined();
 
     const prettier = getFileContent(tree, '.prettierignore');

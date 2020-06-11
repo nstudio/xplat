@@ -37,10 +37,12 @@ describe('xplat schematic', () => {
     const packagePath = '/package.json';
     const packageFile = jsonParse(getFileContent(tree, packagePath));
     // console.log('packageFile:', packageFile);
-    expect(packageFile.dependencies[`tns-core-modules`]).not.toBeUndefined();
+    expect(packageFile.dependencies[`tns-core-modules`]).toBeUndefined();
+    expect(packageFile.dependencies[`@nativescript/core`]).toBeDefined();
     expect(
       packageFile.dependencies[`nativescript-angular`]
-    ).not.toBeUndefined();
+    ).toBeUndefined();
+    expect(packageFile.dependencies[`@nativescript/angular`]).toBeDefined();
     expect(
       packageFile.dependencies[`nativescript-ngx-fonticon`]
     ).not.toBeUndefined();

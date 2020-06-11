@@ -14,8 +14,20 @@ import {
   nsNgScopedVersion,
   ngxTranslateVersion,
   nsDevWebpackVersion,
-  typescriptVersion
+  typescriptVersion,
+  angularVersion
 } from '../../src/utils/versions';
+
+const ngDeps = {
+  '@angular/animations': angularVersion,
+  '@angular/common': angularVersion,
+  '@angular/compiler': angularVersion,
+  '@angular/core': angularVersion,
+  '@angular/forms': angularVersion,
+  '@angular/platform-browser': angularVersion,
+  '@angular/platform-browser-dynamic': angularVersion,
+  '@angular/router': angularVersion
+};
 
 function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
   const appsDir = tree.getDir('apps');
@@ -70,16 +82,23 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
         packageJson.dependencies = packageJson.dependencies || {};
         packageJson.dependencies = {
           ...packageJson.dependencies,
+          ...ngDeps,
           '@nativescript/angular': nsNgScopedVersion,
+          '@nativescript/core': nsCoreVersion,
           '@ngx-translate/core': ngxTranslateVersion
         };
         delete packageJson.dependencies['nativescript-angular'];
+        delete packageJson.dependencies['tns-core-modules'];
         packageJson.devDependencies = packageJson.devDependencies || {};
         packageJson.devDependencies = {
           ...packageJson.devDependencies,
+          "@angular/compiler-cli": angularVersion,
+          "@ngtools/webpack": angularVersion,
           'nativescript-dev-webpack': nsDevWebpackVersion,
           'terser-webpack-plugin': terserWebpackVersion,
-          typescript: typescriptVersion
+          "tns-platform-declarations": nsCoreVersion,
+          typescript: typescriptVersion,
+
         };
 
         // console.log('path:',path);
@@ -105,10 +124,12 @@ function updateRootPackage(tree: Tree, context: SchematicContext) {
     json.dependencies = json.dependencies || {};
     json.dependencies = {
       ...json.dependencies,
+      ...ngDeps,
       '@nativescript/angular': nsNgScopedVersion,
       '@ngx-translate/core': ngxTranslateVersion
     };
     delete json.dependencies['nativescript-angular'];
+    delete json.dependencies['tns-core-modules'];
     json.devDependencies = json.devDependencies || {};
 
     return json;

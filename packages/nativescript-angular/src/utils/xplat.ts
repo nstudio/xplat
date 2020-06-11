@@ -53,9 +53,9 @@ export namespace XplatNativeScriptAngularHelpers {
         dependencies: {
           ...angularDeps,
           '@nativescript/angular': nsNgScopedVersion,
+          '@nativescript/core': nsCoreVersion,
           'nativescript-intl': nsIntlVersion,
           'nativescript-ngx-fonticon': nsNgFonticonVersion,
-          'tns-core-modules': nsCoreVersion
         },
         devDependencies: {
           ...angularDevDeps,

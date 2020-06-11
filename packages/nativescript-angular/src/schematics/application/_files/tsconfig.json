@@ -26,7 +26,6 @@
   },
   "files": [
     "./references.d.ts",
-    "./src/app.module.ngfactory.d.ts",
     "./src/main.ts"
   ],
   "include": [
