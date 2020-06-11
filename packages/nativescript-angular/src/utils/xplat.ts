@@ -6,7 +6,6 @@ import {
   getJsonFromFile
 } from '@nstudio/xplat';
 import {
-  nsNgVersion,
   nsNgScopedVersion,
   nsNgFonticonVersion,
   nodeSassVersion,
@@ -54,10 +53,9 @@ export namespace XplatNativeScriptAngularHelpers {
         dependencies: {
           ...angularDeps,
           '@nativescript/angular': nsNgScopedVersion,
-          'nativescript-angular': nsNgVersion,
+          '@nativescript/core': nsCoreVersion,
           'nativescript-intl': nsIntlVersion,
-          'nativescript-ngx-fonticon': nsNgFonticonVersion,
-          'tns-core-modules': nsCoreVersion
+          'nativescript-ngx-fonticon': nsNgFonticonVersion
         },
         devDependencies: {
           ...angularDevDeps,

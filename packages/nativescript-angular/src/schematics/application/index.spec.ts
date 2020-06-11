@@ -35,6 +35,9 @@ describe('app', () => {
       files.indexOf('/apps/nativescript-foo/package.json')
     ).toBeGreaterThanOrEqual(0);
     expect(
+      files.indexOf('/apps/nativescript-foo/ngcc.config.js')
+    ).toBeGreaterThanOrEqual(0);
+    expect(
       files.indexOf('/apps/nativescript-foo/references.d.ts')
     ).toBeGreaterThanOrEqual(0);
     expect(
@@ -81,9 +84,6 @@ describe('app', () => {
     ).toBeGreaterThanOrEqual(0);
     expect(
       files.indexOf('/apps/nativescript-foo/src/app.ios.scss')
-    ).toBeGreaterThanOrEqual(0);
-    expect(
-      files.indexOf('/apps/nativescript-foo/src/app.module.ngfactory.d.ts')
     ).toBeGreaterThanOrEqual(0);
     expect(
       files.indexOf('/apps/nativescript-foo/src/app.module.ts')

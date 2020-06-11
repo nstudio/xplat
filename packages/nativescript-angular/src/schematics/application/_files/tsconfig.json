@@ -24,11 +24,7 @@
       "*": ["./node_modules/*"]
     }
   },
-  "files": [
-    "./references.d.ts",
-    "./src/app.module.ngfactory.d.ts",
-    "./src/main.ts"
-  ],
+  "files": ["./references.d.ts", "./src/main.ts"],
   "include": [
     "./src/**/*.module.ts",
     "<%= pathOffset %>xplat/**/*.{ios,android}.ts",
