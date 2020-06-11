@@ -9,9 +9,9 @@ import * as fs from 'fs';
 import { updateJsonInTree, createOrUpdate } from '@nrwl/workspace';
 import { getJsonFromFile, updateJsonFile, output } from '@nstudio/xplat';
 import {
-  nsNgVersion,
   nsCoreVersion,
-  terserWebpackVersion
+  terserWebpackVersion,
+  nsNgScopedVersion
 } from '../../src/utils/versions';
 
 function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
@@ -82,7 +82,7 @@ function updateRootPackage(tree: Tree, context: SchematicContext) {
     json.dependencies = json.dependencies || {};
     json.dependencies = {
       ...json.dependencies,
-      'nativescript-angular': nsNgVersion,
+      'nativescript-angular': nsNgScopedVersion,
       'tns-core-modules': nsCoreVersion
     };
     json.devDependencies = json.devDependencies || {};

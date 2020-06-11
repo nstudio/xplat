@@ -34,7 +34,7 @@ yarn publish-local
 yarn create-nx-test myworkspace
 ```
 
-This will setup a fresh Nx workspace at `tmp/myworkspace` and auto open in VS Code. It will already be preconfigured to install @nstudio/xplat tools from a local build.
+This will setup a fresh Nx workspace at `tmp/myworkspace` and auto open in VS Code. It will already be preconfigured to install @nstudio/xplat tools from the local build which is published to verdaccio (if you followed these steps in order)
 
 3. You can now install your schematic changes with:
 
@@ -51,6 +51,13 @@ yarn build 9.0.0
 yarn publish-local unpublish
 // republish
 yarn publish-local
+```
+
+You can then remove the dependency and reinstall to ensure you get the latest local changes in your test workspace:
+
+```
+rm -rf node_modules/@nstudio
+npm i -D @nstudio/xplat
 ```
 
 ### Unit Tests
