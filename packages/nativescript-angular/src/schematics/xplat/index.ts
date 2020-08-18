@@ -5,7 +5,10 @@ import {
   SchematicContext,
   noop
 } from '@angular-devkit/schematics';
-import { XplatHelpers, prerun } from '@nstudio/xplat';
+import { XplatHelpers } from '@nstudio/xplat';
+import {
+  prerun,
+} from '@nstudio/xplat-utils';
 import { XplatAngularHelpers } from '@nstudio/angular';
 import { XplatNativeScriptAngularHelpers } from '../../utils/xplat';
 

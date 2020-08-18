@@ -1,9 +1,11 @@
 import {
-  supportedPlatforms,
   supportedHelpers,
-  supportedFrameworks,
   stringUtils
 } from './general';
+import {
+  supportedPlatforms,
+  supportedFrameworks,
+} from '@nstudio/xplat-utils';
 
 export const errorMissingPrefix = `Missing --prefix flag. It's a good practice to specify a 2-3 character prefix for use with your project's component selectors and certain shared class/module names. Example: nx g @nstudio/xplat:init --prefix=foo`;
 

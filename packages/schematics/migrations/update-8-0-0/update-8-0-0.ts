@@ -18,7 +18,7 @@ import {
   getJsonFromFile,
   updateJsonFile,
   addInstallTask
-} from '@nstudio/xplat';
+} from '@nstudio/xplat-utils';
 import { stripIndents } from '@angular-devkit/core/src/utils/literals';
 
 function addDependencies() {

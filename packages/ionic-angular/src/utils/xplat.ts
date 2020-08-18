@@ -1,10 +1,12 @@
 import { Tree, SchematicContext } from '@angular-devkit/schematics';
 import {
   XplatHelpers,
-  getNpmScope,
   IXplatSettings,
-  getJsonFromFile
 } from '@nstudio/xplat';
+import {
+  getNpmScope,
+  getJsonFromFile
+} from '@nstudio/xplat-utils';
 import {
   ionicAngularVersion,
   ionicAngularToolkitVersion,

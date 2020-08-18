@@ -10,7 +10,7 @@ import {
   readJsonInTree,
   createOrUpdate
 } from '@nrwl/workspace';
-import { getJsonFromFile, updateJsonFile } from '@nstudio/xplat';
+import { getJsonFromFile, updateJsonFile } from '@nstudio/xplat-utils';
 
 function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
   const angularConfigPath = `angular.json`;
@@ -119,7 +119,6 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
       }
 
       createOrUpdate(tree, `${appDir}/tsconfig.esm.json`, getTsConfigESM());
-      createOrUpdate(tree, `${appDir}/webpack.config.js`, getWebpackConfig());
       createOrUpdate(
         tree,
         `${appDir}/tools/xplat-before-watch.js`,

@@ -17,11 +17,6 @@ import {
 
 import {
   stringUtils,
-  supportedPlatforms,
-  ITargetPlatforms,
-  prerun,
-  getPrefix,
-  getNpmScope,
   platformAppPrefixError,
   generatorError,
   generateOptionError,
@@ -29,6 +24,15 @@ import {
   unsupportedPlatformError,
   XplatComponentHelpers
 } from '@nstudio/xplat';
+import {
+  prerun,
+  getNpmScope,
+  getPrefix,
+  getJsonFromFile,
+  updateJsonFile,
+  supportedPlatforms,
+  ITargetPlatforms
+ } from '@nstudio/xplat-utils';
 import { formatFiles } from '@nrwl/workspace';
 import { addToFeature, adjustBarrelIndex } from '@nstudio/angular';
 import { ComponentHelpers } from '../../utils/xplat';

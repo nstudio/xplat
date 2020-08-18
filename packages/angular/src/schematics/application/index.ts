@@ -17,19 +17,21 @@ import {
 import { formatFiles } from '@nrwl/workspace';
 import {
   stringUtils,
-  prerun,
   updatePackageScripts,
-  getNpmScope,
-  getPrefix,
-  getJsonFromFile,
-  updateJsonFile,
   missingArgument,
-  supportedPlatforms,
   getDefaultTemplateOptions,
   XplatHelpers,
   readWorkspaceJson,
   updateWorkspace
 } from '@nstudio/xplat';
+import {
+  prerun,
+  getNpmScope,
+  getPrefix,
+  getJsonFromFile,
+  updateJsonFile,
+  supportedPlatforms
+ } from '@nstudio/xplat-utils';
 import { Schema } from './schema';
 
 export default function(options: Schema) {

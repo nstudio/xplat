@@ -1,6 +1,7 @@
 import { Tree } from '@angular-devkit/schematics';
 import { Schema } from '../application/schema';
-import { stringUtils, setTest, jsonParse, IHelperSchema } from '@nstudio/xplat';
+import { setTest, jsonParse } from '@nstudio/xplat-utils';
+import { IHelperSchema, stringUtils } from '@nstudio/xplat';
 import {
   createXplatWithApps,
   getFileContent,

@@ -7,7 +7,7 @@ import {
 import { join } from 'path';
 import * as fs from 'fs';
 import { updateJsonInTree, createOrUpdate } from '@nrwl/workspace';
-import { getJsonFromFile, updateJsonFile } from '@nstudio/xplat';
+import { getJsonFromFile, updateJsonFile } from '@nstudio/xplat-utils';
 
 function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
   const appsDir = tree.getDir('apps');

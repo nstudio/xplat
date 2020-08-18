@@ -6,7 +6,7 @@ import {
   getFileContent,
   createXplatWithNativeScriptWeb
 } from '@nstudio/xplat/testing';
-import { runSchematic, runSchematicSync } from '../../utils/testing';
+import { runSchematic } from '../../utils/testing';
 
 describe('feature schematic', () => {
   let appTree: Tree;
@@ -538,7 +538,7 @@ describe('feature schematic', () => {
     const options: XplatFeatureHelpers.Schema = { ...defaultOptions };
     // console.log('appTree:', appTree);
     options.routing = true;
-    expect(() => runSchematicSync('feature', options, appTree)).toThrowError(
+    await expect(() => runSchematic('feature', options, appTree)).rejects.toThrow(
       'When generating a feature with the --routing option, please also specify --onlyProject. Support for shared code routing is under development.'
     );
   });

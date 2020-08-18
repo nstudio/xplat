@@ -14,22 +14,24 @@ import {
   externalSchematic
 } from '@angular-devkit/schematics';
 import { formatFiles } from '@nrwl/workspace';
-import {
-  prerun,
-  getPrefix,
-  getNpmScope,
+import { 
   stringUtils,
   updateWorkspace,
   updateNxProjects,
-  getJsonFromFile,
   updatePackageScripts,
-  getGroupByName,
-  getAppName,
   missingArgument,
   getDefaultTemplateOptions,
   XplatHelpers,
   readWorkspaceJson
 } from '@nstudio/xplat';
+import { 
+  prerun,
+  getPrefix,
+  getNpmScope,
+  getJsonFromFile,
+  getGroupByName,
+  getAppName, 
+} from '@nstudio/xplat-utils';
 import { XplatElectronAngularHelpers } from '../../utils';
 import {
   NodePackageInstallTask,

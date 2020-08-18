@@ -5,8 +5,7 @@ import {
   SchematicsException,
   noop
 } from '@angular-devkit/schematics';
-import { PlatformTypes } from '@nstudio/xplat';
-import { supportedPlatforms } from './general';
+import { PlatformTypes, supportedPlatforms } from '@nstudio/xplat-utils';
 import { helperMissingPlatforms, helperTargetError } from './errors';
 
 export interface IHelperSchema {

@@ -17,21 +17,23 @@ import {
   platformAppPrefixError,
   generatorError,
   optionsMissingError,
+  needFeatureModuleError,
+  getDefaultTemplateOptions,
+  unsupportedPlatformError,
+  noPlatformError,
+  XplatHelpers,
+  XplatComponentHelpers
+} from '@nstudio/xplat';
+import { 
+  prerun,
   supportedPlatforms,
   PlatformTypes,
-  needFeatureModuleError,
   getPrefix,
   updateJsonFile,
   getJsonFromFile,
-  getDefaultTemplateOptions,
-  unsupportedPlatformError,
   sanitizeCommaDelimitedArg,
-  noPlatformError,
-  XplatHelpers,
   getNpmScope,
-  prerun,
-  XplatComponentHelpers
-} from '@nstudio/xplat';
+} from '@nstudio/xplat-utils';
 import { addToFeature, adjustBarrelIndex } from './generator';
 import { updateJsonInTree, getWorkspacePath } from '@nrwl/workspace';
 import {
@@ -263,7 +265,7 @@ export namespace XplatAngularHelpers {
   export function addLibFiles(
     options: XplatHelpers.Schema,
     relativeTo: string = './'
-  ) {
+  ): Rule {
     return (tree: Tree, context: SchematicContext) => {
       if (
         tree.exists(`libs/core/base/base-component.ts`) ||
@@ -289,7 +291,7 @@ export namespace XplatAngularHelpers {
   export function addScssFiles(
     options: XplatHelpers.Schema,
     relativeTo: string = './'
-  ) {
+  ): Rule {
     return (tree: Tree, context: SchematicContext) => {
       if (tree.exists(`libs/scss/_index.scss`)) {
         return noop()(tree, context);
@@ -309,7 +311,7 @@ export namespace XplatAngularHelpers {
     };
   }
 
-  export function addTestingFiles(options: any, relativePath: string = './') {
+  export function addTestingFiles(options: any, relativePath: string = './'): void | Tree | Rule | Promise<void> | Promise<Rule> {
     return (tree: Tree, context: SchematicContext) => {
       if (tree.exists(`testing/test-setup.ts`)) {
         return noop()(tree, context);
@@ -330,7 +332,7 @@ export namespace XplatAngularHelpers {
     };
   }
 
-  export function addJestConfig(options: any, relativePath: string = './') {
+  export function addJestConfig(options: any, relativePath: string = './'): void | Tree | Rule | Promise<void> | Promise<Rule> {
     return (tree: Tree, context: SchematicContext) => {
       if (tree.exists('jest.config.js')) {
         // user may have generated support already

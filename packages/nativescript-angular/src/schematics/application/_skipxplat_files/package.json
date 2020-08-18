@@ -19,18 +19,15 @@
     "@angular/router": "<%= angularVersion %>",
     "@nativescript/angular": "<%= nsNgScopedVersion %>",
     "@nativescript/core": "<%= nsCoreVersion %>",
-    "nativescript-intl": "<%= nsIntlVersion %>",
     "nativescript-theme-core": "<%= nsThemeCoreVersion %>",
     "rxjs": "<%= rxjsVersion %>",
-    "tslib": "<%= tslibVersion %>",
     "zone.js": "<%= zonejsVersion %>"
   },
   "devDependencies": {
     "@angular/compiler-cli": "<%= angularVersion %>",
     "@ngtools/webpack": "<%= angularVersion %>",
-    "nativescript-dev-webpack": "<%= nsDevWebpackVersion %>",
-    "terser-webpack-plugin": "<%= terserWebpackVersion %>",
-    "tns-platform-declarations": "<%= nsCoreVersion %>",
+    "@nativescript/types": "<%= nsCoreVersion %>",
+    "@nativescript/webpack": "<%= nsDevWebpackVersion %>",
     "typescript": "<%= typescriptVersion %>"
   }
 }

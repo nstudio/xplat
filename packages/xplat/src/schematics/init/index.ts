@@ -8,26 +8,28 @@ import {
 } from '@angular-devkit/schematics';
 // import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 import {
-  supportedPlatforms,
-  prerun,
   unsupportedPlatformError,
   noPlatformError,
-  sanitizeCommaDelimitedArg
 } from '@nstudio/xplat';
-import {
+import { 
+  prerun,
+  sanitizeCommaDelimitedArg,
+  supportedPlatforms,
   PlatformTypes,
   FrameworkTypes,
   supportedFrameworks,
-  XplatHelpers,
-  unsupportedFrameworkError,
-  errorMissingPrefix,
+  PlatformWithNxTypes,
+  supportedPlatformsWithNx,
   addInstallTask,
   isTesting,
   getJsonFromFile,
+} from '@nstudio/xplat-utils';
+import {
+  XplatHelpers,
+  unsupportedFrameworkError,
+  errorMissingPrefix,
   packageInnerDependencies,
   IXplatSettings,
-  PlatformWithNxTypes,
-  supportedPlatformsWithNx,
   unsupportedPlatformErrorWithNxNote
 } from '../../utils';
 import {
@@ -35,6 +37,7 @@ import {
   RunSchematicTask
 } from '@angular-devkit/schematics/tasks';
 import { xplatVersion, nxVersion } from '../../utils/versions';
+import { FocusHelpers } from '@nstudio/focus';
 
 let packagesToRunXplat: Array<string> = [];
 export default function(options: XplatHelpers.Schema) {
@@ -208,7 +211,7 @@ export default function(options: XplatHelpers.Schema) {
     prerun(options, true),
     ...externalChains,
     addInstallTask(options),
-    XplatHelpers.updateIDESettings(options),
+    FocusHelpers.updateIDESettings(options),
     // after initializing new platforms always reset dev mode to fullstack to ensure user sees it
     externalSchematic('@nstudio/xplat', 'mode', {
       name: 'fullstack'

@@ -5,7 +5,10 @@ import {
   Tree,
   noop
 } from '@angular-devkit/schematics';
-import { XplatHelpers, prerun } from '@nstudio/xplat';
+import { XplatHelpers } from '@nstudio/xplat';
+import {
+  prerun,
+} from '@nstudio/xplat-utils';
 import { XplatAngularHelpers } from '@nstudio/angular';
 import { XplatIonicAngularHelpers } from '../../utils/xplat';
 

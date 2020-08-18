@@ -16,17 +16,21 @@ import {
 import { updateJsonInTree, formatFiles } from '@nrwl/workspace';
 import {
   stringUtils,
-  prerun,
   updatePackageScripts,
-  getNpmScope,
-  getPrefix,
-  getJsonFromFile,
-  updateJsonFile,
   missingArgument,
   updateWorkspace,
   getDefaultTemplateOptions,
   XplatHelpers
 } from '@nstudio/xplat';
+import {
+  prerun,
+  getNpmScope,
+  getPrefix,
+  getJsonFromFile,
+  updateJsonFile,
+  supportedPlatforms,
+  ITargetPlatforms
+ } from '@nstudio/xplat-utils';
 
 import { Schema as ElementsOptions } from './schema';
 

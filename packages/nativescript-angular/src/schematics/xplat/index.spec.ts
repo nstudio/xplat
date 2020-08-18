@@ -2,11 +2,13 @@ import { Tree } from '@angular-devkit/schematics';
 import {
   supportedPlatforms,
   setTest,
-  jsonParse,
+  jsonParse
+} from '@nstudio/xplat-utils';
+import {
   XplatHelpers
 } from '@nstudio/xplat';
 import { createEmptyWorkspace, getFileContent } from '@nstudio/xplat/testing';
-import { runSchematic, runSchematicSync } from '../../utils/testing';
+import { runSchematic } from '../../utils/testing';
 setTest();
 
 describe('xplat schematic', () => {
@@ -45,7 +47,7 @@ describe('xplat schematic', () => {
       packageFile.dependencies[`nativescript-ngx-fonticon`]
     ).not.toBeUndefined();
     expect(
-      packageFile.devDependencies[`tns-platform-declarations`]
+      packageFile.devDependencies[`@nativescript/types`]
     ).not.toBeUndefined();
     let filePath = '/tsconfig.json';
     let fileContent = jsonParse(getFileContent(tree, filePath));
@@ -101,7 +103,7 @@ describe('xplat schematic', () => {
       fileContent.compilerOptions.paths['@testing/nativescript/*']
     ).toBeTruthy();
 
-    expect(() => runSchematicSync('xplat', defaultOptions, tree)).toThrow(
+    await expect(runSchematic('xplat', defaultOptions, tree)).rejects.toThrow(
       `You currently have "angular" set as your default frontend framework and have already generated xplat support for "nativescript". A command is coming soon to auto reconfigure your workspace to later add baseline platform support for those which have previously been generated prepaired with a frontend framework.`
     );
   });

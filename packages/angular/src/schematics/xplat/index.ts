@@ -12,12 +12,15 @@ import {
 } from '@angular-devkit/schematics';
 import { formatFiles } from '@nrwl/workspace';
 import {
-  prerun,
   XplatHelpers,
-  addInstallTask,
   getDefaultTemplateOptions
 } from '@nstudio/xplat';
+import {
+  prerun,
+  addInstallTask
+ } from '@nstudio/xplat-utils';
 import { XplatAngularHelpers } from '../../utils/xplat';
+import { FocusHelpers } from '@nstudio/focus';
 
 export default function(options: XplatHelpers.Schema) {
   // console.log(`Generating xplat angular support for: ${options.platforms}`);
@@ -48,7 +51,7 @@ export default function(options: XplatHelpers.Schema) {
     //   return updatePackageScripts(tree, scripts);
     // },
     // update IDE settings
-    XplatHelpers.updateIDESettings(options),
+    FocusHelpers.updateIDESettings(options),
     addInstallTask(options)
   ]);
 }

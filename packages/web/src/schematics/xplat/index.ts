@@ -13,9 +13,9 @@ import {
 } from '@angular-devkit/schematics';
 import {
   XplatHelpers,
-  prerun,
   getDefaultTemplateOptions
 } from '@nstudio/xplat';
+import { prerun } from '@nstudio/xplat-utils';
 import { XplatWebHelpers } from '../../utils/xplat';
 
 export default function(options: XplatHelpers.Schema) {

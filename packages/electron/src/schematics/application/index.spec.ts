@@ -1,5 +1,5 @@
 import { Tree } from '@angular-devkit/schematics';
-import { jsonParse } from '@nstudio/xplat';
+import { jsonParse } from '@nstudio/xplat-utils';
 import {
   createXplatWithAppsForElectron,
   getFileContent

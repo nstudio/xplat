@@ -1,11 +1,14 @@
 import { Tree, SchematicContext } from '@angular-devkit/schematics';
 import {
   XplatHelpers,
-  getNpmScope,
-  getJsonFromFile,
   updatePackageScripts,
   output
 } from '@nstudio/xplat';
+import {
+  getNpmScope,
+  getJsonFromFile,
+  
+} from '@nstudio/xplat-utils';
 import {
   waitOnVersion,
   npmRunAllVersion,

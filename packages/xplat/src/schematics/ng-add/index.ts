@@ -5,7 +5,10 @@ import {
   SchematicContext,
   noop
 } from '@angular-devkit/schematics';
-import { XplatHelpers, prerun } from '../../utils';
+import {
+  prerun,
+} from '@nstudio/xplat-utils';
+import { XplatHelpers } from '../../utils';
 
 export default function(options: XplatHelpers.NgAddSchema) {
   return chain([

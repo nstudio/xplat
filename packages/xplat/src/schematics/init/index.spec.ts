@@ -1,8 +1,8 @@
 import { Tree } from '@angular-devkit/schematics';
-import { supportedPlatforms, setTest, jsonParse } from '@nstudio/xplat';
+import { supportedPlatforms, setTest, jsonParse, supportedFrameworks } from '@nstudio/xplat-utils';
 import { createEmptyWorkspace } from '@nstudio/xplat/testing';
-import { runSchematic, runSchematicSync } from '../../utils/testing';
-import { XplatHelpers, supportedFrameworks, stringUtils } from '../../utils';
+import { runSchematic } from '../../utils/testing';
+import { XplatHelpers, stringUtils } from '../../utils';
 import { getFileContent } from '@nrwl/workspace/testing';
 setTest();
 
@@ -94,27 +94,22 @@ describe('xplat init', () => {
     expect(packageJson.xplat.framework).toBe('angular');
   });
 
-  it('should NOT create unsupported platform xplat option and throw', () => {
+  it('should NOT create unsupported platform xplat option and throw', async () => {
     const options: XplatHelpers.Schema = { ...defaultOptions };
     options.platforms = 'desktop';
 
-    let tree;
-    expect(
-      () => (tree = runSchematicSync('init', options, appTree))
-    ).toThrowError(
+    await expect(runSchematic('init', options, appTree)).rejects.toThrow(
       `desktop is currently not a supported platform. Supported at the moment: ${supportedPlatforms}. Please request support for this platform if you'd like and/or submit a PR which we would greatly appreciate.`
     );
   });
 
-  it('should NOT create unsupported framework xplat option and throw', () => {
+  it('should NOT create unsupported framework xplat option and throw', async () => {
     const options: XplatHelpers.Schema = { ...defaultOptions };
     options.platforms = 'web';
     options.framework = 'blah';
 
     let tree;
-    expect(
-      () => (tree = runSchematicSync('init', options, appTree))
-    ).toThrowError(
+    await expect(runSchematic('init', options, appTree)).rejects.toThrow(
       `blah is currently not a supported framework. Supported at the moment: ${supportedFrameworks.map(
         f => stringUtils.capitalize(f)
       )}. Please request support for this framework if you'd like and/or submit a PR which we would greatly appreciate.`

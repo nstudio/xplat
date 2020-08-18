@@ -2,7 +2,9 @@ import { Tree } from '@angular-devkit/schematics';
 import {
   supportedPlatforms,
   setTest,
-  jsonParse,
+  jsonParse
+} from '@nstudio/xplat-utils';
+import {
   XplatHelpers
 } from '@nstudio/xplat';
 import { createEmptyWorkspace, getFileContent } from '@nstudio/xplat/testing';

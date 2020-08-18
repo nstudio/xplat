@@ -7,7 +7,8 @@ import {
 import { join } from 'path';
 import * as fs from 'fs';
 import { updateJsonInTree, createOrUpdate } from '@nrwl/workspace';
-import { getJsonFromFile, updateJsonFile, output } from '@nstudio/xplat';
+import { output } from '@nstudio/xplat';
+import { getJsonFromFile, updateJsonFile } from '@nstudio/xplat-utils';
 import {
   nsCoreVersion,
   terserWebpackVersion,
@@ -18,12 +19,6 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
   const appsDir = tree.getDir('apps');
   const appFolders = appsDir.subdirs;
   const cwd = process.cwd();
-  const webpackConfigPath = join(
-    cwd,
-    'node_modules/@nstudio/nativescript-angular/src/schematics/application/_files/webpack.config.js'
-  );
-  // console.log('webpackConfigPath:', webpackConfigPath);
-  const webpackConfig = fs.readFileSync(webpackConfigPath, 'UTF-8');
   const srcPackagePath = join(
     cwd,
     'node_modules/@nstudio/nativescript-angular/src/schematics/application/_files/src/package.json'
@@ -43,7 +38,6 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
       // console.log('appDir:', appDir);
       appsNames.push(dir);
 
-      createOrUpdate(tree, `${appDir}/webpack.config.js`, webpackConfig);
       createOrUpdate(tree, `${appDir}/src/package.json`, srcPackage);
 
       // update {N} app deps
@@ -82,14 +76,13 @@ function updateRootPackage(tree: Tree, context: SchematicContext) {
     json.dependencies = json.dependencies || {};
     json.dependencies = {
       ...json.dependencies,
-      'nativescript-angular': nsNgScopedVersion,
-      'tns-core-modules': nsCoreVersion
+      '@nativescript/angular': nsNgScopedVersion,
+      '@nativescript/core': nsCoreVersion
     };
     json.devDependencies = json.devDependencies || {};
     json.devDependencies = {
       ...json.devDependencies,
-      'terser-webpack-plugin': terserWebpackVersion,
-      'tns-platform-declarations': nsCoreVersion
+      '@nativescript/types': nsCoreVersion
     };
 
     return json;

@@ -6,7 +6,8 @@ import {
   noop
 } from '@angular-devkit/schematics';
 // import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
-import { XplatHelpers, prerun } from '@nstudio/xplat';
+import { XplatHelpers } from '@nstudio/xplat';
+import { prerun } from '@nstudio/xplat-utils';
 import { XplatElectronAngularHelpers } from '../../utils';
 
 export default function(options: XplatHelpers.Schema) {

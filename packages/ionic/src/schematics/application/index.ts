@@ -1,14 +1,16 @@
 import {
   XplatHelpers,
-  prerun,
   missingArgument,
-  getAppName,
   getDefaultTemplateOptions,
-  getPrefix,
   updateWorkspace,
   updateNxProjects,
   updatePackageScripts
 } from '@nstudio/xplat';
+import {
+  prerun,
+  getAppName,
+  getPrefix,
+} from '@nstudio/xplat-utils';
 import {
   chain,
   noop,

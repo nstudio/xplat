@@ -5,7 +5,7 @@ import {
   Tree
 } from '@angular-devkit/schematics';
 import { updateJsonInTree, createOrUpdate } from '@nrwl/workspace';
-import { getJsonFromFile } from '@nstudio/xplat';
+import { getJsonFromFile, updateJsonFile } from '@nstudio/xplat-utils';
 
 function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
   const nxConfigPath = `nx.json`;

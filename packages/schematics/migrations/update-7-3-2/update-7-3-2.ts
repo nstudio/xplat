@@ -7,7 +7,7 @@ import {
 import { join } from 'path';
 import * as fs from 'fs';
 import { updateJsonInTree, createOrUpdate } from '@nrwl/workspace';
-import { getJsonFromFile, updateJsonFile } from '@nstudio/xplat';
+import { getJsonFromFile, updateJsonFile } from '@nstudio/xplat-utils';
 
 function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
   const appsDir = tree.getDir('apps');
@@ -19,12 +19,6 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
   );
   // console.log('webpackConfigPath:', webpackConfigPath);
   let mainFile = fs.readFileSync(mainPath, 'UTF-8');
-  const webpackConfigPath = join(
-    cwd,
-    'node_modules/@nstudio/schematics/src/app.nativescript/_files/webpack.config.js'
-  );
-  // console.log('webpackConfigPath:', webpackConfigPath);
-  const webpackConfig = fs.readFileSync(webpackConfigPath, 'UTF-8');
 
   // update {N} apps and configs
   for (const dir of appFolders) {
@@ -35,8 +29,6 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
     ) {
       const appDir = `${appsDir.path}/${dir}`;
       // console.log('appDir:', appDir);
-
-      createOrUpdate(tree, `${appDir}/webpack.config.js`, webpackConfig);
 
       createOrUpdate(tree, `${appDir}/app/main.ts`, mainFile);
 

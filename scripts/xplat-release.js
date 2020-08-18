@@ -150,6 +150,7 @@ const options = {
     'build/npm/create-xplat-workspace/package.json',
     'build/npm/electron/package.json',
     'build/npm/electron-angular/package.json',
+    'build/npm/focus/package.json',
     'build/npm/ionic/package.json',
     'build/npm/ionic-angular/package.json',
     'build/npm/nativescript/package.json',
@@ -157,7 +158,8 @@ const options = {
     'build/npm/schematics/package.json',
     'build/npm/web/package.json',
     'build/npm/web-angular/package.json',
-    'build/npm/xplat/package.json'
+    'build/npm/xplat/package.json',
+    'build/npm/xplat-utils/package.json'
   ],
   increment: parsedVersion.version,
   requireUpstream: false,

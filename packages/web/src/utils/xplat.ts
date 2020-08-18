@@ -1,5 +1,6 @@
 import { Tree, SchematicContext, noop } from '@angular-devkit/schematics';
-import { updateFile, XplatHelpers, getNpmScope } from '@nstudio/xplat';
+import { XplatHelpers } from '@nstudio/xplat';
+import { updateFile, getNpmScope } from '@nstudio/xplat-utils';
 
 export namespace XplatWebHelpers {
   export function updateRootDeps(options: XplatHelpers.Schema) {

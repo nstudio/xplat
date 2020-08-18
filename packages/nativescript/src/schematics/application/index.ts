@@ -15,17 +15,20 @@ import {
   externalSchematic
 } from '@angular-devkit/schematics';
 import {
-  prerun,
-  getPrefix,
   updatePackageScripts,
   updateWorkspace,
   updateNxProjects,
-  getAppName,
   missingArgument,
   getDefaultTemplateOptions,
   XplatHelpers,
   updateTsConfig
 } from '@nstudio/xplat';
+import {
+  prerun,
+  getNpmScope,
+  getPrefix,
+  getAppName,
+} from '@nstudio/xplat-utils';
 import { Schema } from './schema';
 import { XplatNativeScriptHelpers } from '../../utils';
 

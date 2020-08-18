@@ -1,5 +1,8 @@
 import { chain } from '@angular-devkit/schematics';
-import { prerun, XplatHelpers, XplatFeatureHelpers } from '../../utils';
+import {
+  prerun
+} from '@nstudio/xplat-utils';
+import { XplatHelpers, XplatFeatureHelpers } from '../../utils';
 
 let packagesToRunXplat: Array<string> = [];
 export default function(options: XplatFeatureHelpers.Schema) {

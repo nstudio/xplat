@@ -1,0 +1,73 @@
+{
+  "name": "@nstudio/xplat-utils",
+  "version": "0.0.1",
+  "description": "Utilities for xplat tooling.",
+  "homepage": "https://nstudio.io/xplat",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nstudio/xplat.git"
+  },
+  "keywords": [
+    "xplat",
+    "cross-platform",
+    "multi-platform",
+    "nx",
+    "angular",
+    "schematics",
+    "electron",
+    "ionic",
+    "nativescript",
+    "nstudio"
+  ],
+  "main": "index.js",
+  "types": "index.d.ts",
+  "dependencies": {
+    "@angular-devkit/core": "~10.0.0",
+    "@angular-devkit/schematics": "~10.0.0",
+    "@nrwl/workspace": "~10.0.0",
+    "strip-json-comments": "~3.1.1"
+  },
+  "author": "Nathan Walker",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nstudio/xplat/issues"
+  },
+  "contributors": [
+    {
+      "name": "Nathan Walker",
+      "url": "https://github.com/NathanWalker"
+    },
+    {
+      "name": "Morten Sjøgren",
+      "url": "https://github.com/m-abs"
+    },
+    {
+      "name": "Sean Perkins",
+      "url": "https://github.com/sean-perkins"
+    },
+    {
+      "name": "Baljeet Singh",
+      "url": "https://github.com/mbaljeetsingh"
+    },
+    {
+      "name": "Miguel Ramos",
+      "url": "https://github.com/miguelramos"
+    },
+    {
+      "name": "Anders Chan",
+      "url": "https://github.com/sr3dna"
+    },
+    {
+      "name": "Kamil Mysliwiec",
+      "url": "https://github.com/kamilmysliwiec"
+    },
+    {
+      "name": "Mathieu Brunot",
+      "url": "https://github.com/madmath03"
+    },
+    {
+      "name": "Emerson Jair",
+      "url": "https://github.com/dungahk"
+    }
+  ]
+}

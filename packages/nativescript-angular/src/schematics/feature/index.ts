@@ -12,10 +12,12 @@ import {
 } from '@angular-devkit/schematics';
 import {
   XplatFeatureHelpers,
-  PlatformTypes,
   XplatHelpers,
-  prerun
 } from '@nstudio/xplat';
+import {
+  prerun,
+  PlatformTypes,
+} from '@nstudio/xplat-utils';
 
 export default function(options: XplatFeatureHelpers.Schema) {
   const featureSettings = XplatFeatureHelpers.prepare(options);

@@ -17,12 +17,16 @@
       "@nstudio/angular/*": ["./packages/angular/*"],
       "@nstudio/electron": ["./packages/electron"],
       "@nstudio/electron/*": ["./packages/electron/*"],
+      "@nstudio/focus": ["./packages/focus"],
+      "@nstudio/focus/*": ["./packages/focus/*"],
       "@nstudio/ionic": ["./packages/ionic"],
       "@nstudio/ionic/*": ["./packages/ionic/*"],
       "@nstudio/nativescript": ["./packages/nativescript"],
       "@nstudio/nativescript/*": ["./packages/nativescript/*"],
       "@nstudio/xplat": ["./packages/xplat"],
       "@nstudio/xplat/*": ["./packages/xplat/*"],
+      "@nstudio/xplat-utils": ["./packages/xplat-utils"],
+      "@nstudio/xplat-utils/*": ["./packages/xplat-utils/*"],
       "@nstudio/xplat/testing": ["./packages/xplat/testing"]
     }
   },

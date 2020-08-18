@@ -5,7 +5,7 @@ import {
   SchematicsException
 } from '@angular-devkit/schematics';
 import { NxJson } from '@nrwl/workspace';
-import { FrameworkTypes } from './general';
+import { FrameworkTypes } from '@nstudio/xplat-utils';
 
 export { getFileContent } from '@nrwl/workspace/testing';
 
@@ -38,6 +38,10 @@ export function createEmptyWorkspace(
   );
   tree.create(
     '/tsconfig.json',
+    JSON.stringify({ compilerOptions: { paths: {} } })
+  );
+  tree.create(
+    '/tsconfig.base.json',
     JSON.stringify({ compilerOptions: { paths: {} } })
   );
   tree.create(
@@ -377,7 +381,6 @@ export function createNativeScriptAngularApp(
 ) {
   tree.create('/apps/nativescript-viewer/package.json', '');
   tree.create('/apps/nativescript-viewer/tsconfig.json', '');
-  tree.create('/apps/nativescript-viewer/webpack.config.js', '');
   tree.create('/apps/nativescript-viewer/src/core/core.module.ts', '');
   tree.create(
     '/apps/nativescript-viewer/src/features/shared/shared.module.ts',

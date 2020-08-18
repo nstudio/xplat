@@ -1,8 +1,8 @@
 import { Tree } from '@angular-devkit/schematics';
-import { supportedPlatforms, setTest, jsonParse } from '@nstudio/xplat';
+import { supportedPlatforms, setTest, jsonParse, supportedFrameworks } from '@nstudio/xplat-utils';
 import { createEmptyWorkspace } from '@nstudio/xplat/testing';
-import { runSchematic, runSchematicSync } from '../../utils/testing';
-import { XplatHelpers, supportedFrameworks, stringUtils } from '../../utils';
+import { runSchematic } from '../../utils/testing';
+import { XplatHelpers, stringUtils } from '../../utils';
 import { getFileContent } from '@nrwl/workspace/testing';
 import { Schema } from './schema';
 setTest();
@@ -59,13 +59,7 @@ describe('xplat schematic', () => {
 
     expect(tree.exists('/apps/nativescript-sample/nsconfig.json')).toBeTruthy();
     expect(
-      tree.exists('/apps/nativescript-sample/webpack.config.js')
-    ).toBeTruthy();
-    expect(
       tree.exists('/apps/nativescript-sample/src/app.module.ts')
-    ).toBeTruthy();
-    expect(
-      tree.exists('/apps/nativescript-sample/src/assets/fontawesome.min.css')
     ).toBeTruthy();
     expect(
       tree.exists(
@@ -114,7 +108,7 @@ describe('xplat schematic', () => {
       expect(fileContent.indexOf(`from '@nestjs/core'`)).toBeGreaterThan(0);
     });
 
-    fit('should create Nx node', async () => {
+    it('should create Nx node', async () => {
       appTree = Tree.empty();
       appTree = createEmptyWorkspace(appTree);
       const options: XplatHelpers.Schema = { ...defaultOptions };

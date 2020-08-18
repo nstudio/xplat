@@ -2,9 +2,11 @@ import {
   IHelperSchema,
   buildHelperChain,
   unsupportedHelperError,
-  prerun,
   missingArgument
 } from '@nstudio/xplat';
+import {
+  prerun,
+} from '@nstudio/xplat-utils';
 import { SchematicsException, chain, noop } from '@angular-devkit/schematics';
 import { config as configImports } from './imports';
 

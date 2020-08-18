@@ -2,13 +2,15 @@ import { Tree, SchematicContext, noop } from '@angular-devkit/schematics';
 import { createOrUpdate } from '@nrwl/workspace';
 import {
   updatePackageScripts,
-  getJsonFromFile,
-  updateJsonFile,
-  PlatformTypes,
-  isTesting,
   IHelperConfig,
   IHelperSchema
 } from '@nstudio/xplat';
+import {
+  getJsonFromFile,
+  updateJsonFile,
+  PlatformTypes,
+  isTesting
+} from '@nstudio/xplat-utils';
 
 export const config: IHelperConfig = {
   requiresTarget: true,

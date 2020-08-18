@@ -20,19 +20,21 @@ import {
   generateOptionError,
   unsupportedPlatformError,
   needFeatureModuleError,
+  stringUtils,
+  updatePackageForNgrx,
+  getDefaultTemplateOptions,
+  XplatFeatureHelpers,
+  supportedSandboxPlatforms,
+  XplatHelpers
+} from '@nstudio/xplat';
+import { 
   supportedPlatforms,
   prerun,
   getNpmScope,
   getPrefix,
-  stringUtils,
-  updatePackageForNgrx,
   sanitizeCommaDelimitedArg,
-  getDefaultTemplateOptions,
-  XplatFeatureHelpers,
   PlatformTypes,
-  supportedSandboxPlatforms,
-  XplatHelpers
-} from '@nstudio/xplat';
+} from '@nstudio/xplat-utils';
 import {
   addImportToModule,
   addProviderToModule,

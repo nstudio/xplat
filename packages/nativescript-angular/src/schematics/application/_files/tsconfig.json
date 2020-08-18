@@ -1,16 +1,16 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "target": "es2015",
+    "module": "ESNext",
+    "target": "es2017",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
+    "moduleResolution": "node",
     "noEmitHelpers": true,
     "noEmitOnError": true,
-    "removeComments": true,
-    "downlevelIteration": true,
     "skipLibCheck": true,
-    "lib": ["es2017", "dom", "webworker", "es6"],
-    "typeRoots": ["./node_modules/@types"],
+    "lib": [
+      "es2018", "es2017", "dom", "webworker", "es6"
+    ],
     "baseUrl": ".",
     "paths": {
       "~/*": ["src/*"],

@@ -37,13 +37,7 @@ describe('app', () => {
       files.indexOf('/apps/nativescript-foo/references.d.ts')
     ).toBeGreaterThanOrEqual(0);
     expect(
-      files.indexOf('/apps/nativescript-foo/tsconfig.tns.json')
-    ).toBeGreaterThanOrEqual(0);
-    expect(
       files.indexOf('/apps/nativescript-foo/tsconfig.json')
-    ).toBeGreaterThanOrEqual(0);
-    expect(
-      files.indexOf('/apps/nativescript-foo/webpack.config.js')
     ).toBeGreaterThanOrEqual(0);
 
     // tools
@@ -86,13 +80,7 @@ describe('app', () => {
       files.indexOf('/apps/foo-nativescript/references.d.ts')
     ).toBeGreaterThanOrEqual(0);
     expect(
-      files.indexOf('/apps/foo-nativescript/tsconfig.tns.json')
-    ).toBeGreaterThanOrEqual(0);
-    expect(
       files.indexOf('/apps/foo-nativescript/tsconfig.json')
-    ).toBeGreaterThanOrEqual(0);
-    expect(
-      files.indexOf('/apps/foo-nativescript/webpack.config.js')
     ).toBeGreaterThanOrEqual(0);
 
     // tools

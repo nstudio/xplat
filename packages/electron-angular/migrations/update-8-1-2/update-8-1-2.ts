@@ -7,7 +7,11 @@ import {
 import { join } from 'path';
 import * as fs from 'fs';
 import { updateJsonInTree, createOrUpdate } from '@nrwl/workspace';
-import { getJsonFromFile, updateJsonFile, output } from '@nstudio/xplat';
+import { output } from '@nstudio/xplat';
+import {
+  getJsonFromFile,
+  updateJsonFile,
+} from '@nstudio/xplat-utils';
 import {
   electronBuilderVersion,
   electronInstallerDmgVersion,

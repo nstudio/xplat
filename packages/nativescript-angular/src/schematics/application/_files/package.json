@@ -32,11 +32,9 @@
     "@ngx-translate/core": "<%= ngxTranslateVersion %>",
     "@<%= npmScope %>/scss": "file:<%= pathOffset %>libs/scss",
     "@<%= npmScope %>/nativescript-scss": "file:<%= pathOffset %>xplat/<%= xplatFolderName %>/scss",
-    "nativescript-intl": "<%= nsIntlVersion %>",
     "nativescript-ngx-fonticon": "<%= nsNgFonticonVersion %>",
     "nativescript-theme-core": "<%= nsThemeCoreVersion %>",
     "rxjs": "<%= rxjsVersion %>",
-    "tslib": "<%= tslibVersion %>",
     "zone.js": "<%= zonejsVersion %>"
   },
   "devDependencies": {
@@ -44,9 +42,8 @@
     "@angular/language-service": "<%= angularVersion %>",
     "@ngtools/webpack": "<%= angularVersion %>",
     "codelyzer": "<%= codelyzerVersion %>",
-    "nativescript-dev-webpack": "<%= nsDevWebpackVersion %>",
-    "terser-webpack-plugin": "<%= terserWebpackVersion %>",
-    "tns-platform-declarations": "<%= nsCoreVersion %>",
+    "@nativescript/types": "<%= nsCoreVersion %>",
+    "@nativescript/webpack": "<%= nsDevWebpackVersion %>",
     "typescript": "<%= typescriptVersion %>"
   }
 }

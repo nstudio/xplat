@@ -2,10 +2,12 @@ import { adjustSandbox, adjustRouting } from '@nstudio/angular';
 import { chain, Tree, SchematicContext } from '@angular-devkit/schematics';
 import {
   XplatFeatureHelpers,
-  PlatformTypes,
   XplatHelpers,
-  prerun
 } from '@nstudio/xplat';
+import {
+  PlatformTypes,
+  prerun
+} from '@nstudio/xplat-utils';
 
 export default function(options: XplatFeatureHelpers.Schema) {
   const featureSettings = XplatFeatureHelpers.prepare(options);

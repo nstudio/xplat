@@ -3,7 +3,7 @@ import {
   getFileContent,
   createXplatWithNativeScriptWeb
 } from '@nstudio/xplat/testing';
-import { runSchematic, runSchematicSync } from '../../utils/testing';
+import { runSchematic } from '../../utils/testing';
 import { XplatComponentHelpers } from '../../utils';
 
 xdescribe('component', () => {
@@ -337,7 +337,7 @@ xdescribe('component', () => {
       framework: 'angular'
     };
 
-    expect(() => runSchematicSync('component', options, appTree)).toThrowError(
+    await expect(runSchematic('component', options, appTree)).rejects.toThrow(
       `apps/nativescript-viewer/src/features/foo/foo.module.ts does not exist. Create the feature module first. For example: nx g @nstudio/angular:feature foo --projects=nativescript-viewer --onlyModule`
     );
   });

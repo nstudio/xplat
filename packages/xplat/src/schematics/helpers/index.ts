@@ -4,15 +4,17 @@ import {
   externalSchematic
 } from '@angular-devkit/schematics';
 import {
-  prerun,
-  PlatformTypes,
-  supportedPlatforms,
   unsupportedPlatformError,
   helperMissingPlatforms,
   missingArgument
 } from '@nstudio/xplat';
+import {
+  prerun,
+  PlatformTypes,
+  supportedPlatforms,
+  sanitizeCommaDelimitedArg
+} from '@nstudio/xplat-utils';
 import { Schema } from './schema';
-import { sanitizeCommaDelimitedArg } from '../../utils';
 
 const platformToPackage: { [platform: string]: string } = {
   nativescript: '@nstudio/nativescript',

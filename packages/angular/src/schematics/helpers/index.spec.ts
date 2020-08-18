@@ -1,8 +1,9 @@
 import { Tree } from '@angular-devkit/schematics';
 import { Schema as AppWebOptions } from '../application/schema';
-import { setTest, jsonParse, IHelperSchema } from '@nstudio/xplat';
+import { IHelperSchema } from '@nstudio/xplat';
+import { setTest, jsonParse } from '@nstudio/xplat-utils';
 import { createXplatWithApps, getFileContent } from '@nstudio/xplat/testing';
-import { runSchematic, runSchematicSync } from '../../utils/testing';
+import { runSchematic } from '../../utils/testing';
 setTest();
 
 xdescribe('helpers schematic', () => {
@@ -105,10 +106,7 @@ xdescribe('helpers schematic', () => {
       name: 'applitools'
     };
     // console.log('appTree:', appTree);
-    let tree;
 
-    expect(
-      () => (tree = runSchematicSync('helpers', options, appTree))
-    ).toThrowError(`The helper "applitools" requires the --target flag.`);
+    await expect(runSchematic('helpers', options, appTree)).rejects.toThrow(`The helper "applitools" requires the --target flag.`);
   });
 });

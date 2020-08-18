@@ -1,10 +1,13 @@
 import { Tree, SchematicContext } from '@angular-devkit/schematics';
 import {
-  updateFile,
   XplatHelpers,
   IXplatSettings,
-  getJsonFromFile
 } from '@nstudio/xplat';
+import {
+  updateFile,
+  getJsonFromFile,
+  updateJsonFile,
+} from '@nstudio/xplat-utils';
 import {
   nsNgScopedVersion,
   nsNgFonticonVersion,
@@ -54,7 +57,6 @@ export namespace XplatNativeScriptAngularHelpers {
           ...angularDeps,
           '@nativescript/angular': nsNgScopedVersion,
           '@nativescript/core': nsCoreVersion,
-          'nativescript-intl': nsIntlVersion,
           'nativescript-ngx-fonticon': nsNgFonticonVersion
         },
         devDependencies: {
@@ -72,8 +74,8 @@ export namespace XplatNativeScriptAngularHelpers {
         // add references.d.ts
         tree.create(
           filename,
-          `/// <reference path="./node_modules/tns-platform-declarations/ios.d.ts" />
-  /// <reference path="./node_modules/tns-platform-declarations/android.d.ts" />
+          `/// <reference path="./node_modules/@nativescript/types/ios.d.ts" />
+  /// <reference path="./node_modules/@nativescript/types/android.d.ts" />
       `
         );
       }

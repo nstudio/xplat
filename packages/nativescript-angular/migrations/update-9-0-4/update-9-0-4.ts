@@ -7,7 +7,8 @@ import {
 import { join } from 'path';
 import * as fs from 'fs';
 import { updateJsonInTree, createOrUpdate } from '@nrwl/workspace';
-import { getJsonFromFile, updateJsonFile, output } from '@nstudio/xplat';
+import { output } from '@nstudio/xplat';
+import { getJsonFromFile, updateJsonFile } from '@nstudio/xplat-utils';
 import {
   nsCoreVersion,
   terserWebpackVersion,
@@ -33,29 +34,12 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
   const appsDir = tree.getDir('apps');
   const appFolders = appsDir.subdirs;
   const cwd = process.cwd();
-  const webpackConfigPath = join(
-    cwd,
-    'node_modules/@nstudio/nativescript-angular/src/schematics/application/_files/webpack.config.js'
-  );
-  // console.log('webpackConfigPath:', webpackConfigPath);
-  const webpackConfig = fs.readFileSync(webpackConfigPath, 'UTF-8');
   const srcPackagePath = join(
     cwd,
     'node_modules/@nstudio/nativescript-angular/src/schematics/application/_files/src/package.json'
   );
   // console.log('webpackConfigPath:', webpackConfigPath);
   const srcPackage = fs.readFileSync(srcPackagePath, 'UTF-8');
-  const ngccConfigPath = join(
-    cwd,
-    'node_modules/@nstudio/nativescript-angular/src/schematics/application/_files/ngcc.config.js'
-  );
-  const ngccConfig = fs.readFileSync(ngccConfigPath, 'UTF-8');
-
-  const tsconfigTnsPath = join(
-    cwd,
-    'node_modules/@nstudio/nativescript-angular/src/schematics/application/_files/tsconfig.tns.json'
-  );
-  const tsconfigTns = fs.readFileSync(tsconfigTnsPath, 'UTF-8');
 
   const appsNames = [];
   // update {N} apps and configs
@@ -69,10 +53,7 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
       // console.log('appDir:', appDir);
       appsNames.push(dir);
 
-      createOrUpdate(tree, `${appDir}/webpack.config.js`, webpackConfig);
       createOrUpdate(tree, `${appDir}/src/package.json`, srcPackage);
-      createOrUpdate(tree, `${appDir}/ngcc.config.js`, ngccConfig);
-      createOrUpdate(tree, `${appDir}/tsconfig.tns.json`, tsconfigTns);
 
       // update {N} app deps
       const packagePath = `${appDir}/package.json`;
@@ -94,9 +75,8 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
           ...packageJson.devDependencies,
           '@angular/compiler-cli': angularVersion,
           '@ngtools/webpack': angularVersion,
-          'nativescript-dev-webpack': nsDevWebpackVersion,
-          'terser-webpack-plugin': terserWebpackVersion,
-          'tns-platform-declarations': nsCoreVersion,
+          '@nativescript/types': nsCoreVersion,
+          '@nativescript/webpack': nsDevWebpackVersion,
           typescript: typescriptVersion
         };
 

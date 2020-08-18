@@ -10,16 +10,23 @@ import {
 } from '@angular-devkit/schematics';
 import { formatFiles } from '@nrwl/workspace';
 import {
-  supportedPlatforms,
-  prerun,
   unsupportedPlatformError,
   XplatFeatureHelpers,
+  unsupportedPlatformErrorWithNxNote
+} from '@nstudio/xplat';
+import {
+  prerun,
+  getNpmScope,
+  getPrefix,
+  getJsonFromFile,
+  updateJsonFile,
+  supportedPlatforms,
+  ITargetPlatforms,
   getFrontendFramework,
   supportedNxExtraPlatforms,
   PlatformNxExtraTypes,
   PlatformTypes,
-  unsupportedPlatformErrorWithNxNote
-} from '@nstudio/xplat';
+ } from '@nstudio/xplat-utils';
 
 export default function(options: XplatFeatureHelpers.Schema) {
   const featureSettings = XplatFeatureHelpers.prepare(options);

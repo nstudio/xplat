@@ -1,6 +1,6 @@
 import { Tree } from '@angular-devkit/schematics';
 import { Schema } from './schema';
-import { jsonParse } from '@nstudio/xplat';
+import { jsonParse } from '@nstudio/xplat-utils';
 import { createEmptyWorkspace, getFileContent } from '@nstudio/xplat/testing';
 import { runSchematic } from '../../utils/testing';
 

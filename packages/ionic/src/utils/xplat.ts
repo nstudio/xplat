@@ -1,5 +1,8 @@
 import { Tree, SchematicContext } from '@angular-devkit/schematics';
-import { XplatHelpers, getNpmScope } from '@nstudio/xplat';
+import { XplatHelpers  } from '@nstudio/xplat';
+import {
+  getNpmScope
+} from '@nstudio/xplat-utils';
 import {
   ionicNativeCoreVersion,
   ionicNativeSplashScreenVersion,

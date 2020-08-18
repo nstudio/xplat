@@ -17,17 +17,19 @@ import {
 import { formatFiles } from '@nrwl/workspace';
 import {
   stringUtils,
-  prerun,
-  getNpmScope,
-  getPrefix,
   updatePackageScripts,
   updateWorkspace,
   updateNxProjects,
-  getAppName,
   missingArgument,
   getDefaultTemplateOptions,
   XplatHelpers
 } from '@nstudio/xplat';
+import {
+  prerun,
+  getNpmScope,
+  getPrefix,
+  getAppName,
+} from '@nstudio/xplat-utils';
 import { Schema as ApplicationOptions } from './schema';
 import { XplatIonicAngularHelpers } from '../../utils';
 import { capacitorVersion } from '../../utils/versions';
