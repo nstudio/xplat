@@ -2,15 +2,15 @@ import {
   chain,
   Rule,
   SchematicContext,
-  Tree
+  Tree,
 } from '@angular-devkit/schematics';
 import { join } from 'path';
 import * as fs from 'fs';
 import { updateJsonInTree, createOrUpdate } from '@nrwl/workspace';
-import { getJsonFromFile, updateJsonFile } from '@nstudio/xplat';
+import { getJsonFromFile, updateJsonFile } from '@nstudio/xplat-utils';
 
 function updateRootPackage(tree: Tree, context: SchematicContext) {
-  return updateJsonInTree('package.json', json => {
+  return updateJsonInTree('package.json', (json) => {
     json.dependencies = json.dependencies || {};
     if (json.dependencies['nativescript-angular']) {
       json.dependencies['nativescript-angular'] = '~6.1.0';
@@ -50,12 +50,6 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
   const appsDir = tree.getDir('apps');
   const appFolders = appsDir.subdirs;
   const cwd = process.cwd();
-  const webpackConfigPath = join(
-    cwd,
-    'node_modules/@nstudio/schematics/src/app.nativescript/_files/webpack.config.js'
-  );
-  // console.log('webpackConfigPath:', webpackConfigPath);
-  const webpackConfig = fs.readFileSync(webpackConfigPath, 'UTF-8');
 
   // update {N} apps and configs
   for (const dir of appFolders) {
@@ -63,8 +57,6 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
     if (dir.indexOf('nativescript-') === 0) {
       const appDir = `${appsDir.path}/${dir}`;
       // console.log('appDir:', appDir);
-
-      createOrUpdate(tree, `${appDir}/webpack.config.js`, webpackConfig);
 
       // update {N} app deps
       const packagePath = `${appDir}/package.json`;
@@ -78,7 +70,7 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
           ...packageJson.devDependencies,
           '@angular/compiler-cli': '~6.1.1',
           'nativescript-dev-webpack': '~0.15.0',
-          '@ngtools/webpack': '~6.1.1'
+          '@ngtools/webpack': '~6.1.1',
         };
 
         // console.log('path:',path);
@@ -113,7 +105,7 @@ function updateIonicApps(tree: Tree, context: SchematicContext) {
           '@capacitor/android': '^1.0.0-beta.3',
           '@capacitor/cli': '^1.0.0-beta.3',
           '@capacitor/core': '^1.0.0-beta.3',
-          '@capacitor/ios': '^1.0.0-beta.3'
+          '@capacitor/ios': '^1.0.0-beta.3',
         };
         packageJson.devDependencies = packageJson.devDependencies || {};
         packageJson.devDependencies = {
@@ -121,7 +113,7 @@ function updateIonicApps(tree: Tree, context: SchematicContext) {
           '@angular-devkit/architect': '0.7.2',
           '@angular-devkit/build-angular': '0.7.2',
           '@angular-devkit/core': '0.7.2',
-          '@angular-devkit/schematics': '0.7.2'
+          '@angular-devkit/schematics': '0.7.2',
         };
 
         // console.log('path:',path);
@@ -133,6 +125,6 @@ function updateIonicApps(tree: Tree, context: SchematicContext) {
   return tree;
 }
 
-export default function(): Rule {
+export default function (): Rule {
   return chain([updateRootPackage, updateNativeScriptApps, updateIonicApps]);
 }

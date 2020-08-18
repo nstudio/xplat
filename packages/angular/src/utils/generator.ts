@@ -11,7 +11,7 @@ import {
   Tree,
   Rule,
   SchematicsException,
-  externalSchematic
+  externalSchematic,
 } from '@angular-devkit/schematics';
 import { formatFiles, createOrUpdate } from '@nrwl/workspace';
 import {
@@ -20,25 +20,27 @@ import {
   generateOptionError,
   unsupportedPlatformError,
   needFeatureModuleError,
+  stringUtils,
+  updatePackageForNgrx,
+  getDefaultTemplateOptions,
+  XplatFeatureHelpers,
+  supportedSandboxPlatforms,
+  XplatHelpers,
+} from '@nstudio/xplat';
+import {
   supportedPlatforms,
   prerun,
   getNpmScope,
   getPrefix,
-  stringUtils,
-  updatePackageForNgrx,
   sanitizeCommaDelimitedArg,
-  getDefaultTemplateOptions,
-  XplatFeatureHelpers,
   PlatformTypes,
-  supportedSandboxPlatforms,
-  XplatHelpers
-} from '@nstudio/xplat';
+} from '@nstudio/xplat-utils';
 import {
   addImportToModule,
   addProviderToModule,
   addToCollection,
   addDeclarationToModule,
-  addSymbolToNgModuleMetadata
+  addSymbolToNgModuleMetadata,
 } from './ast';
 import * as ts from 'typescript';
 
@@ -139,19 +141,23 @@ export function generate(type: IGenerateType, options) {
             )
           );
         }
-        return addToFeature(platPrefix, type, options, prefixPath, tree)(
-          tree,
-          context
-        );
+        return addToFeature(
+          platPrefix,
+          type,
+          options,
+          prefixPath,
+          tree
+        )(tree, context);
       });
 
       if (type === 'state') {
         // ngrx handling
         projectChains.push((tree: Tree, context: SchematicContext) => {
-          return adjustBarrelIndexForType(type, options, barrelIndex)(
-            tree,
-            context
-          );
+          return adjustBarrelIndexForType(
+            type,
+            options,
+            barrelIndex
+          )(tree, context);
         });
         projectChains.push((tree: Tree, context: SchematicContext) => {
           return addToFeature(
@@ -187,10 +193,11 @@ export function generate(type: IGenerateType, options) {
           )(tree, context);
         });
         projectChains.push((tree: Tree, context: SchematicContext) => {
-          return adjustFeatureModule(type, options, featureModulePath)(
-            tree,
-            context
-          );
+          return adjustFeatureModule(
+            type,
+            options,
+            featureModulePath
+          )(tree, context);
         });
       }
     }
@@ -287,7 +294,7 @@ export function generate(type: IGenerateType, options) {
         ? // ensure ngrx dependencies are added to root package
           updatePackageForNgrx(tree)
         : noop()(tree, context),
-    formatFiles({ skipFormat: options.skipFormat })
+    formatFiles({ skipFormat: options.skipFormat }),
   ]);
 }
 
@@ -374,9 +381,9 @@ export function addToFeature(
             name: options.name.toLowerCase(),
             xplatFolderName,
             // feature: featureName,
-            forSubFolder
+            forSubFolder,
           }),
-          move(moveTo)
+          move(moveTo),
         ])
       )
     );
@@ -882,9 +889,9 @@ export function adjustRouting(
           routingModulePath,
           `{ 
               path: '${featureName}',
-              loadChildren: '${loadPrefix}/features/${featureName}/${featureName}.module#${stringUtils.classify(
+              loadChildren: () => import('./features/${featureName}/${featureName}.module').then(m => m.${stringUtils.classify(
             featureName
-          )}Module'
+          )}Module)'
           }`
         )
       );

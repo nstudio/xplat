@@ -22,13 +22,13 @@ function parseCommandInstance(name, command) {
     command: command['original'],
     description: command['description'],
     options:
-      Object.keys(builderDescriptions).map(name => ({
+      Object.keys(builderDescriptions).map((name) => ({
         command: '--'.concat(name),
         description: builderDescriptions[name]
           ? builderDescriptions[name].replace('__yargsString__:', '')
           : '',
-        default: builderDefaultOptions[name]
-      })) || null
+        default: builderDefaultOptions[name],
+      })) || null,
   };
 }
 function generateMarkdown(command) {
@@ -53,7 +53,7 @@ function generateMarkdown(command) {
         )
       )
       .forEach(
-        option =>
+        (option) =>
           (template += dedent`
           ### ${option.command.replace('--', '')}
           ${
@@ -71,7 +71,7 @@ function generateMarkdown(command) {
       .replace(':', '-')
       .replace(' ', '-')
       .replace(/[\]\[.]+/gm, ''),
-    template
+    template,
   };
 }
 

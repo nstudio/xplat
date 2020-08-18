@@ -6,12 +6,12 @@ import { Schematic } from '@angular-devkit/schematics/collection-schema';
 import { CoreSchemaRegistry } from '@angular-devkit/core/src/json/schema';
 import {
   htmlSelectorFormat,
-  pathFormat
+  pathFormat,
 } from '@angular-devkit/schematics/src/formats';
 import { generateFile, sortAlphabeticallyFunction } from './utils';
 import {
   Configuration,
-  getPackageConfigurations
+  getPackageConfigurations,
 } from './get-package-configurations';
 
 /**
@@ -33,7 +33,7 @@ function generateSchematicList(
   fs.removeSync(config.schematicOutput);
   const schematicCollection = fs.readJsonSync(schematicCollectionFile)
     .schematics;
-  return Object.keys(schematicCollection).map(schematicName => {
+  return Object.keys(schematicCollection).map((schematicName) => {
     const schematic = {
       name: schematicName,
       ...schematicCollection[schematicName],
@@ -42,12 +42,12 @@ function generateSchematicList(
         : null,
       rawSchema: fs.readJsonSync(
         path.join(config.root, schematicCollection[schematicName]['schema'])
-      )
+      ),
     };
 
     return parseJsonSchemaToOptions(registry, schematic.rawSchema)
-      .then(options => ({ ...schematic, options }))
-      .catch(error =>
+      .then((options) => ({ ...schematic, options }))
+      .catch((error) =>
         console.error(
           `Can't parse schema option of ${schematic.name}:\n${error}`
         )
@@ -73,7 +73,7 @@ function generateTemplate(schematic): { name: string; template: string } {
     schematic.options
       .sort((a, b) => sortAlphabeticallyFunction(a.name, b.name))
       .forEach(
-        option =>
+        (option) =>
           (template += dedent`
           ### --${option.name} ${option.required ? '(*__required__*)' : ''} ${
             option.hidden ? '(__hidden__)' : ''
@@ -102,12 +102,12 @@ function generateTemplate(schematic): { name: string; template: string } {
 
 Promise.all(
   getPackageConfigurations()
-    .filter(item => item.hasSchematics)
-    .map(config => {
+    .filter((item) => item.hasSchematics)
+    .map((config) => {
       return Promise.all(generateSchematicList(config, registry))
-        .then(schematicList => schematicList.map(generateTemplate))
-        .then(markdownList =>
-          markdownList.forEach(template =>
+        .then((schematicList) => schematicList.map(generateTemplate))
+        .then((markdownList) =>
+          markdownList.forEach((template) =>
             generateFile(config.schematicOutput, template)
           )
         )
@@ -122,8 +122,8 @@ Promise.all(
 });
 
 const schematics = getPackageConfigurations()
-  .filter(item => item.hasSchematics)
-  .map(item => item.name);
+  .filter((item) => item.hasSchematics)
+  .map((item) => item.name);
 fs.outputJsonSync(
   path.join(__dirname, '../../docs', 'schematics.json'),
   schematics

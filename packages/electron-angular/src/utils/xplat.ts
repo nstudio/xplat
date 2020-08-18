@@ -9,8 +9,8 @@ export namespace XplatElectronAngularHelpers {
         // nothing extra needed at moment
         devDependencies: {
           '@nrwl/angular': nxVersion,
-          '@nstudio/angular': xplatVersion
-        }
+          '@nstudio/angular': xplatVersion,
+        },
       })(tree, context);
     };
   }

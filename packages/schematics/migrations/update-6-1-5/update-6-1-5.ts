@@ -2,23 +2,17 @@ import {
   chain,
   Rule,
   SchematicContext,
-  Tree
+  Tree,
 } from '@angular-devkit/schematics';
 import { join } from 'path';
 import * as fs from 'fs';
 import { createOrUpdate } from '@nrwl/workspace';
-import { getJsonFromFile, updateJsonFile } from '@nstudio/xplat';
+import { getJsonFromFile, updateJsonFile } from '@nstudio/xplat-utils';
 
 function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
   const appsDir = tree.getDir('apps');
   const appFolders = appsDir.subdirs;
   const cwd = process.cwd();
-  const webpackConfigPath = join(
-    cwd,
-    'node_modules/@nstudio/schematics/src/app.nativescript/_files/webpack.config.js'
-  );
-  // console.log('webpackConfigPath:', webpackConfigPath);
-  const webpackConfig = fs.readFileSync(webpackConfigPath, 'UTF-8');
   // console.log('webpackConfig:',webpackConfig);
 
   // update {N} apps and configs
@@ -27,8 +21,6 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
     if (dir.indexOf('nativescript-') === 0) {
       const appDir = `${appsDir.path}/${dir}`;
       // console.log('appDir:', appDir);
-
-      createOrUpdate(tree, `${appDir}/webpack.config.js`, webpackConfig);
 
       // update {N} app deps
       const packagePath = `${appDir}/package.json`;
@@ -56,7 +48,7 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
           webpack: '~4.12.0',
           'webpack-bundle-analyzer': '~2.13.0',
           'webpack-cli': '~3.0.7',
-          'webpack-sources': '~1.1.0'
+          'webpack-sources': '~1.1.0',
         };
         // ensure dev sass is removed
         delete packageJson.devDependencies['nativescript-dev-sass'];
@@ -70,6 +62,6 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
   return tree;
 }
 
-export default function(): Rule {
+export default function (): Rule {
   return chain([updateNativeScriptApps]);
 }

@@ -7,7 +7,7 @@ export enum EPlatform {
   Web,
   NativeScript,
   Ionic,
-  Electron
+  Electron,
 }
 
 const projectName: string = 'proj';
@@ -19,13 +19,13 @@ export function uniq(prefix: string) {
 export function runCLI(
   command?: string,
   opts = {
-    silenceError: false
+    silenceError: false,
   }
 ): string {
   try {
     console.log('Running ng', command);
     return execSync(`./node_modules/.bin/ng ${command}`, {
-      cwd: `./tmp/${projectName}`
+      cwd: `./tmp/${projectName}`,
     })
       .toString()
       .replace(
@@ -59,7 +59,7 @@ export function runNgNew(command?: string, silent?: boolean): string {
     `../node_modules/.bin/ng new ${projectName} --no-interactive ${command}`,
     {
       cwd: `./tmp`,
-      ...(silent ? { stdio: ['ignore', 'ignore', 'ignore'] } : {})
+      ...(silent ? { stdio: ['ignore', 'ignore', 'ignore'] } : {}),
     }
   );
   return buffer ? buffer.toString() : null;
@@ -85,13 +85,13 @@ function publishXplatPackage() {
 
 function installXplatPackage() {
   execSync('npm i ../nstudio-xplat-source-$(fx ../package.json .version).tgz', {
-    cwd: `./tmp/${projectName}`
+    cwd: `./tmp/${projectName}`,
   });
 }
 
 export function npmInstall() {
   return execSync('npm i', {
-    cwd: `./tmp/${projectName}`
+    cwd: `./tmp/${projectName}`,
   });
 }
 

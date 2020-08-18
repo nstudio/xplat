@@ -8,5 +8,5 @@ if [ -n "$1" ]; then
     jest --maxWorkers=1 ./build/packages/$1.spec.js
   fi
 else
-  jest --maxWorkers=1 ./build/packages/{angular,electron,electron-angular,ionic,ionic-angular,nativescript,nativescript-angular,web,web-angular,xplat} --passWithNoTests
+  jest --maxWorkers=1 ./build/packages/{angular,electron,electron-angular,focus,ionic,ionic-angular,nativescript,nativescript-angular,web,web-angular,xplat,xplat-utils} --passWithNoTests
 fi

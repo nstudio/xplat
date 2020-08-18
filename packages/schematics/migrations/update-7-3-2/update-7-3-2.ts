@@ -2,12 +2,12 @@ import {
   chain,
   Rule,
   SchematicContext,
-  Tree
+  Tree,
 } from '@angular-devkit/schematics';
 import { join } from 'path';
 import * as fs from 'fs';
 import { updateJsonInTree, createOrUpdate } from '@nrwl/workspace';
-import { getJsonFromFile, updateJsonFile } from '@nstudio/xplat';
+import { getJsonFromFile, updateJsonFile } from '@nstudio/xplat-utils';
 
 function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
   const appsDir = tree.getDir('apps');
@@ -19,12 +19,6 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
   );
   // console.log('webpackConfigPath:', webpackConfigPath);
   let mainFile = fs.readFileSync(mainPath, 'UTF-8');
-  const webpackConfigPath = join(
-    cwd,
-    'node_modules/@nstudio/schematics/src/app.nativescript/_files/webpack.config.js'
-  );
-  // console.log('webpackConfigPath:', webpackConfigPath);
-  const webpackConfig = fs.readFileSync(webpackConfigPath, 'UTF-8');
 
   // update {N} apps and configs
   for (const dir of appFolders) {
@@ -35,8 +29,6 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
     ) {
       const appDir = `${appsDir.path}/${dir}`;
       // console.log('appDir:', appDir);
-
-      createOrUpdate(tree, `${appDir}/webpack.config.js`, webpackConfig);
 
       createOrUpdate(tree, `${appDir}/app/main.ts`, mainFile);
 
@@ -53,7 +45,7 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
           '@ngtools/webpack': '~7.2.0',
           'nativescript-dev-webpack': '~0.20.0',
           'terser-webpack-plugin':
-            'file:../../node_modules/terser-webpack-plugin'
+            'file:../../node_modules/terser-webpack-plugin',
         };
 
         // console.log('path:',path);
@@ -66,25 +58,25 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
 }
 
 function updateRootPackage(tree: Tree, context: SchematicContext) {
-  return updateJsonInTree('package.json', json => {
+  return updateJsonInTree('package.json', (json) => {
     json.scripts = json.scripts || {};
     json.dependencies = json.dependencies || {};
     json.dependencies = {
       ...json.dependencies,
       'nativescript-angular': '~7.2.0',
-      'tns-core-modules': '~5.2.0'
+      'tns-core-modules': '~5.2.0',
     };
     json.devDependencies = json.devDependencies || {};
     json.devDependencies = {
       ...json.devDependencies,
       'terser-webpack-plugin': '~1.2.0',
-      'tns-platform-declarations': '~5.2.0'
+      'tns-platform-declarations': '~5.2.0',
     };
 
     return json;
   })(tree, context);
 }
 
-export default function(): Rule {
+export default function (): Rule {
   return chain([updateNativeScriptApps, updateRootPackage]);
 }

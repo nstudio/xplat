@@ -1,10 +1,10 @@
 import { Tree, SchematicContext } from '@angular-devkit/schematics';
+import { XplatHelpers, IXplatSettings } from '@nstudio/xplat';
 import {
   updateFile,
-  XplatHelpers,
-  IXplatSettings,
-  getJsonFromFile
-} from '@nstudio/xplat';
+  getJsonFromFile,
+  updateJsonFile,
+} from '@nstudio/xplat-utils';
 import {
   nsNgScopedVersion,
   nsNgFonticonVersion,
@@ -16,7 +16,7 @@ import {
   tslibVersion,
   codelyzerVersion,
   zonejsVersion,
-  nsIntlVersion
+  nsIntlVersion,
 } from './versions';
 
 export namespace XplatNativeScriptAngularHelpers {
@@ -54,13 +54,12 @@ export namespace XplatNativeScriptAngularHelpers {
           ...angularDeps,
           '@nativescript/angular': nsNgScopedVersion,
           '@nativescript/core': nsCoreVersion,
-          'nativescript-intl': nsIntlVersion,
-          'nativescript-ngx-fonticon': nsNgFonticonVersion
+          'nativescript-ngx-fonticon': nsNgFonticonVersion,
         },
         devDependencies: {
           ...angularDevDeps,
-          'node-sass': nodeSassVersion
-        }
+          'node-sass': nodeSassVersion,
+        },
       })(tree, context);
     };
   }
@@ -72,8 +71,8 @@ export namespace XplatNativeScriptAngularHelpers {
         // add references.d.ts
         tree.create(
           filename,
-          `/// <reference path="./node_modules/tns-platform-declarations/ios.d.ts" />
-  /// <reference path="./node_modules/tns-platform-declarations/android.d.ts" />
+          `/// <reference path="./node_modules/@nativescript/types/ios.d.ts" />
+/// <reference path="./node_modules/@nativescript/types/android.d.ts" />
       `
         );
       }

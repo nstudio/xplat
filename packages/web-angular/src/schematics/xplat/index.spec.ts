@@ -1,10 +1,6 @@
 import { Tree } from '@angular-devkit/schematics';
-import {
-  supportedPlatforms,
-  setTest,
-  jsonParse,
-  XplatHelpers
-} from '@nstudio/xplat';
+import { supportedPlatforms, setTest, jsonParse } from '@nstudio/xplat-utils';
+import { XplatHelpers } from '@nstudio/xplat';
 import { createEmptyWorkspace, getFileContent } from '@nstudio/xplat/testing';
 import { runSchematic } from '../../utils/testing';
 setTest();
@@ -14,7 +10,7 @@ describe('xplat schematic', () => {
   const defaultOptions: XplatHelpers.Schema = {
     npmScope: 'testing',
     prefix: 'ft', // foo test
-    platforms: 'web'
+    platforms: 'web',
   };
 
   beforeEach(() => {

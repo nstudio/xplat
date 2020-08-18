@@ -2,17 +2,17 @@ import {
   IHelperSchema,
   buildHelperChain,
   unsupportedHelperError,
-  prerun,
-  missingArgument
+  missingArgument,
 } from '@nstudio/xplat';
+import { prerun } from '@nstudio/xplat-utils';
 import { SchematicsException, chain, noop } from '@angular-devkit/schematics';
 import { config as configImports } from './imports';
 
 const supportedHelpers = {
-  imports: configImports
+  imports: configImports,
 };
 
-export default function(options: IHelperSchema) {
+export default function (options: IHelperSchema) {
   if (!options.name) {
     throw new SchematicsException(
       missingArgument(

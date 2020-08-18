@@ -1,8 +1,9 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Directive, Input, Output, EventEmitter } from '@angular/core';
 
 // libs
 import { BaseComponent } from '@<%= npmScope %>/core/base';
 
+@Directive()
 export abstract class HeaderBaseComponent extends BaseComponent {
   /**
    * These are just samples to give you an idea of what can be done.

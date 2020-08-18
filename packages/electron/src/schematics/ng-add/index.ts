@@ -3,12 +3,13 @@ import {
   externalSchematic,
   Tree,
   SchematicContext,
-  noop
+  noop,
 } from '@angular-devkit/schematics';
-import { prerun, XplatHelpers, addInstallTask } from '@nstudio/xplat';
+import { XplatHelpers } from '@nstudio/xplat';
+import { prerun, addInstallTask } from '@nstudio/xplat-utils';
 import { XplatElectrontHelpers } from '../../utils';
 
-export default function(options: XplatHelpers.NgAddSchema) {
+export default function (options: XplatHelpers.NgAddSchema) {
   const chains = [];
 
   if (options.platforms) {

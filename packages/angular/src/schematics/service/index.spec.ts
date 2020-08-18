@@ -3,14 +3,14 @@ import { Schema } from './schema';
 import {
   createXplatWithApps,
   getFileContent,
-  createXplatWithNativeScriptWeb
+  createXplatWithNativeScriptWeb,
 } from '@nstudio/xplat/testing';
 import { runSchematic } from '../../utils/testing';
 
 describe('service schematic', () => {
   let appTree: Tree;
   const defaultOptions: Schema = {
-    name: 'auth'
+    name: 'auth',
   };
 
   beforeEach(() => {
@@ -24,7 +24,7 @@ describe('service schematic', () => {
       'feature',
       {
         name: 'foo',
-        platforms: 'nativescript,web'
+        platforms: 'nativescript,web',
       },
       appTree
     );
@@ -58,14 +58,14 @@ describe('service schematic', () => {
       {
         name: 'foo',
         projects: 'nativescript-viewer,web-viewer',
-        onlyProject: true
+        onlyProject: true,
       },
       appTree
     );
     const options: Schema = {
       name: 'auth',
       feature: 'foo',
-      projects: 'nativescript-viewer,web-viewer'
+      projects: 'nativescript-viewer,web-viewer',
     };
     tree = await runSchematic('service', options, tree);
     const files = tree.files;
@@ -123,14 +123,14 @@ describe('service schematic', () => {
       'feature',
       {
         name: 'foo',
-        platforms: 'nativescript'
+        platforms: 'nativescript',
       },
       appTree
     );
     const options: Schema = {
       name: 'auth',
       feature: 'foo',
-      platforms: 'nativescript'
+      platforms: 'nativescript',
     };
     tree = await runSchematic('service', options, tree);
     const files = tree.files;
@@ -171,7 +171,7 @@ describe('service schematic', () => {
     // console.log('appTree:', appTree);
     const options: Schema = {
       name: 'auth',
-      platforms: 'nativescript'
+      platforms: 'nativescript',
     };
     let tree = await runSchematic('service', options, appTree);
     const files = tree.files;

@@ -6,7 +6,7 @@ import {
   getProjectConfig,
   getSourceNodes,
   InsertChange,
-  RemoveChange
+  RemoveChange,
 } from '@nrwl/workspace/src/utils/ast-utils';
 import { Tree } from '@angular-devkit/schematics';
 import * as path from 'path';
@@ -31,7 +31,7 @@ export function addToCollection(
         barrelIndexPath,
         collection.end,
         `,\n${insertSpaces}${symbolName}`
-      )
+      ),
     ];
   }
 }
@@ -80,7 +80,7 @@ function _angularImportsFromNode(
       if (nb.kind == ts.SyntaxKind.NamespaceImport) {
         // This is of the form `import * as name from 'path'`. Return `name.`.
         return {
-          [(nb as ts.NamespaceImport).name.text + '.']: modulePath
+          [(nb as ts.NamespaceImport).name.text + '.']: modulePath,
         };
       } else {
         // This is of the form `import {a,b,c} from 'path'`
@@ -130,14 +130,14 @@ function getDecoratorMetadata(
     );
 
   return getSourceNodes(source)
-    .filter(node => {
+    .filter((node) => {
       return (
         node.kind == ts.SyntaxKind.Decorator &&
         (node as ts.Decorator).expression.kind == ts.SyntaxKind.CallExpression
       );
     })
-    .map(node => (node as ts.Decorator).expression as ts.CallExpression)
-    .filter(expr => {
+    .map((node) => (node as ts.Decorator).expression as ts.CallExpression)
+    .filter((expr) => {
       if (expr.expression.kind == ts.SyntaxKind.Identifier) {
         const id = expr.expression as ts.Identifier;
 
@@ -164,11 +164,11 @@ function getDecoratorMetadata(
       return false;
     })
     .filter(
-      expr =>
+      (expr) =>
         expr.arguments[0] &&
         expr.arguments[0].kind == ts.SyntaxKind.ObjectLiteralExpression
     )
-    .map(expr => expr.arguments[0] as ts.ObjectLiteralExpression);
+    .map((expr) => expr.arguments[0] as ts.ObjectLiteralExpression);
 }
 
 export function addSymbolToNgModuleMetadata(
@@ -186,7 +186,7 @@ export function addSymbolToNgModuleMetadata(
   }
   // Get all the children property assignment of object literals.
   const matchingProperties: ts.ObjectLiteralElement[] = (node as ts.ObjectLiteralExpression).properties
-    .filter(prop => prop.kind == ts.SyntaxKind.PropertyAssignment)
+    .filter((prop) => prop.kind == ts.SyntaxKind.PropertyAssignment)
     // Filter out every fields that's not "metadataField". Also handles string literals
     // (but not expressions).
     .filter((prop: ts.PropertyAssignment) => {
@@ -259,7 +259,7 @@ export function addSymbolToNgModuleMetadata(
 
   if (Array.isArray(node)) {
     const nodeArray = (node as {}) as Array<ts.Node>;
-    const symbolsArray = nodeArray.map(node => node.getText());
+    const symbolsArray = nodeArray.map((node) => node.getText());
     if (symbolsArray.includes(expression)) {
       return [];
     }
@@ -332,7 +332,7 @@ export function removeFromNgModule(
         modulePath,
         matchingProperty.getStart(source),
         matchingProperty.getFullText(source)
-      )
+      ),
     ];
   } else {
     return [];
@@ -357,11 +357,11 @@ export function addImportToTestBed(
   );
 
   const configureTestingModuleObjectLiterals = allCalls
-    .filter(c => c.expression.kind === ts.SyntaxKind.PropertyAccessExpression)
+    .filter((c) => c.expression.kind === ts.SyntaxKind.PropertyAccessExpression)
     .filter(
       (c: any) => c.expression.name.getText(source) === 'configureTestingModule'
     )
-    .map(c =>
+    .map((c) =>
       c.arguments[0].kind === ts.SyntaxKind.ObjectLiteralExpression
         ? c.arguments[0]
         : null
@@ -372,7 +372,7 @@ export function addImportToTestBed(
       .getFirstToken(source)
       .getEnd();
     return [
-      new InsertChange(specPath, startPosition, `imports: [${symbolName}], `)
+      new InsertChange(specPath, startPosition, `imports: [${symbolName}], `),
     ];
   } else {
     return [];
@@ -543,7 +543,7 @@ export function readBootstrapInfo(
     throw new Error(`main.ts can only import a single module`);
   }
   const moduleImport = moduleImports[0];
-  const moduleClassName = moduleImport.bindings.filter(b =>
+  const moduleClassName = moduleImport.bindings.filter((b) =>
     b.endsWith('Module')
   )[0];
 
@@ -584,7 +584,7 @@ export function readBootstrapInfo(
     moduleSource,
     moduleClassName,
     bootstrapComponentClassName,
-    bootstrapComponentFileName
+    bootstrapComponentFileName,
   };
 }
 
@@ -619,7 +619,7 @@ function getMatchingObjectLiteralElement(
 ) {
   return (
     (node as ts.ObjectLiteralExpression).properties
-      .filter(prop => prop.kind == ts.SyntaxKind.PropertyAssignment)
+      .filter((prop) => prop.kind == ts.SyntaxKind.PropertyAssignment)
       // Filter out every fields that's not "metadataField". Also handles string literals
       // (but not expressions).
       .filter((prop: ts.PropertyAssignment) => {

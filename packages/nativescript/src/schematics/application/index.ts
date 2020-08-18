@@ -12,24 +12,27 @@ import {
   SchematicsException,
   schematic,
   noop,
-  externalSchematic
+  externalSchematic,
 } from '@angular-devkit/schematics';
 import {
-  prerun,
-  getPrefix,
   updatePackageScripts,
   updateWorkspace,
   updateNxProjects,
-  getAppName,
   missingArgument,
   getDefaultTemplateOptions,
   XplatHelpers,
-  updateTsConfig
+  updateTsConfig,
 } from '@nstudio/xplat';
+import {
+  prerun,
+  getNpmScope,
+  getPrefix,
+  getAppName,
+} from '@nstudio/xplat-utils';
 import { Schema } from './schema';
 import { XplatNativeScriptHelpers } from '../../utils';
 
-export default function(options: Schema) {
+export default function (options: Schema) {
   if (!options.name) {
     throw new SchematicsException(
       missingArgument(
@@ -58,7 +61,7 @@ export default function(options: Schema) {
         '@nstudio/nativescript',
         'app-resources',
         {
-          path: `apps/${options.name}`
+          path: `apps/${options.name}`,
         },
         { interactive: false }
       )(tree, context),
@@ -100,13 +103,13 @@ export default function(options: Schema) {
       ] = `npx rimraf -- hooks node_modules package-lock.json && npm i`;
       scripts[
         `start.${platformApp}.ios`
-      ] = `cd apps/${directory}${options.name} && tns run ios --emulator`;
+      ] = `cd apps/${directory}${options.name} && ns run ios --emulator`;
       scripts[
         `start.${platformApp}.android`
-      ] = `cd apps/${directory}${options.name} && tns run android --emulator`;
+      ] = `cd apps/${directory}${options.name} && ns run android --emulator`;
       scripts[
         `start.${platformApp}.preview`
-      ] = `cd apps/${directory}${options.name} && tns preview`;
+      ] = `cd apps/${directory}${options.name} && ns preview`;
       scripts[
         `clean.${platformApp}`
       ] = `cd apps/${directory}${options.name} && npx rimraf -- hooks node_modules platforms package-lock.json && npm i && npx rimraf -- package-lock.json`;
@@ -127,38 +130,38 @@ export default function(options: Schema) {
             options: {
               commands: [
                 {
-                  command: `yarn start.${platformApp}.preview`
-                }
-              ]
+                  command: `yarn start.${platformApp}.preview`,
+                },
+              ],
             },
             configurations: {
               ios: {
                 commands: [
                   {
-                    command: `yarn start.${platformApp}.ios`
-                  }
-                ]
+                    command: `yarn start.${platformApp}.ios`,
+                  },
+                ],
               },
               android: {
                 commands: [
                   {
-                    command: `yarn start.${platformApp}.android`
-                  }
-                ]
-              }
-            }
-          }
-        }
+                    command: `yarn start.${platformApp}.android`,
+                  },
+                ],
+              },
+            },
+          },
+        },
       };
       return updateWorkspace({ projects })(tree, context);
     },
     (tree: Tree) => {
       const projects = {};
       projects[`${options.name}`] = {
-        tags: []
+        tags: [],
       };
       return updateNxProjects(tree, projects);
-    }
+    },
   ]);
 }
 
@@ -178,9 +181,9 @@ function addAppFiles(
           ...getDefaultTemplateOptions(),
           appname,
           pathOffset: directory ? '../../../' : '../../',
-          xplatFolderName: XplatHelpers.getXplatFoldername('nativescript')
+          xplatFolderName: XplatHelpers.getXplatFoldername('nativescript'),
         }),
-        move(`apps/${directory}${appPath}`)
+        move(`apps/${directory}${appPath}`),
       ])
     )
   );

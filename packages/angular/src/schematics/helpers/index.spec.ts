@@ -1,8 +1,9 @@
 import { Tree } from '@angular-devkit/schematics';
 import { Schema as AppWebOptions } from '../application/schema';
-import { setTest, jsonParse, IHelperSchema } from '@nstudio/xplat';
+import { IHelperSchema } from '@nstudio/xplat';
+import { setTest, jsonParse } from '@nstudio/xplat-utils';
 import { createXplatWithApps, getFileContent } from '@nstudio/xplat/testing';
-import { runSchematic, runSchematicSync } from '../../utils/testing';
+import { runSchematic } from '../../utils/testing';
 setTest();
 
 xdescribe('helpers schematic', () => {
@@ -25,7 +26,7 @@ xdescribe('helpers schematic', () => {
       name: 'foo',
       prefix: 'tt',
       e2eTestRunner: 'cypress',
-      useXplat: false
+      useXplat: false,
     };
     // console.log('appTree:', appTree);
     appTree = await runSchematic('app', appOptions, appTree);
@@ -37,7 +38,7 @@ xdescribe('helpers schematic', () => {
 
     const options: IHelperSchema = {
       name: 'applitools',
-      target: 'web-foo'
+      target: 'web-foo',
     };
     // console.log('appTree:', appTree);
     const tree = await runSchematic('helpers', options, appTree);
@@ -91,7 +92,7 @@ xdescribe('helpers schematic', () => {
       name: 'foo',
       prefix: 'tt',
       e2eTestRunner: 'cypress',
-      useXplat: false
+      useXplat: false,
     };
     // console.log('appTree:', appTree);
     appTree = await runSchematic('app', appOptions, appTree);
@@ -102,13 +103,12 @@ xdescribe('helpers schematic', () => {
     expect(cypressJson.supportFile).toBe(false);
 
     const options: IHelperSchema = {
-      name: 'applitools'
+      name: 'applitools',
     };
     // console.log('appTree:', appTree);
-    let tree;
 
-    expect(
-      () => (tree = runSchematicSync('helpers', options, appTree))
-    ).toThrowError(`The helper "applitools" requires the --target flag.`);
+    await expect(runSchematic('helpers', options, appTree)).rejects.toThrow(
+      `The helper "applitools" requires the --target flag.`
+    );
   });
 });

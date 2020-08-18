@@ -1,0 +1,11 @@
+{
+  "name": "nstudio/focus",
+  "version": "0.1",
+  "schematics": {
+    "mode": {
+      "factory": "./src/schematics/mode",
+      "schema": "./src/schematics/mode/schema.json",
+      "description": "Focus helpers for monorepos in various IDEs"
+    }
+  }
+}

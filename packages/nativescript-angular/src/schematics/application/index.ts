@@ -12,22 +12,24 @@ import {
   SchematicsException,
   schematic,
   noop,
-  externalSchematic
+  externalSchematic,
 } from '@angular-devkit/schematics';
 import {
-  prerun,
-  getPrefix,
   updatePackageScripts,
   updateWorkspace,
   updateNxProjects,
-  getAppName,
   missingArgument,
-  getJsonFromFile,
-  updateJsonFile,
   getDefaultTemplateOptions,
   XplatHelpers,
-  updateTsConfig
+  updateTsConfig,
 } from '@nstudio/xplat';
+import {
+  prerun,
+  getPrefix,
+  getAppName,
+  getJsonFromFile,
+  updateJsonFile,
+} from '@nstudio/xplat-utils';
 import { Schema } from './schema';
 import { XplatNativeScriptAngularHelpers } from '../../utils';
 import {
@@ -44,11 +46,11 @@ import {
   rxjsVersion,
   zonejsVersion,
   nsDevWebpackVersion,
-  typescriptVersion
+  typescriptVersion,
 } from '../../utils/versions';
 import { XplatNativeScriptHelpers } from '@nstudio/nativescript/src/utils';
 
-export default function(options: Schema) {
+export default function (options: Schema) {
   if (!options.name) {
     throw new SchematicsException(
       missingArgument(
@@ -87,7 +89,7 @@ export default function(options: Schema) {
         '@nstudio/nativescript',
         'app-resources',
         {
-          path: `apps/${directory}${options.name}`
+          path: `apps/${directory}${options.name}`,
         },
         { interactive: false }
       )(tree, context);
@@ -128,10 +130,10 @@ export default function(options: Schema) {
       ] = `npx rimraf -- hooks node_modules package-lock.json && npm i`;
       scripts[
         `start.${platformApp}.ios`
-      ] = `cd apps/${directory}${options.name} && tns debug ios --env.aot --no-hmr --emulator`;
+      ] = `cd apps/${directory}${options.name} && ns debug ios --no-hmr --emulator`;
       scripts[
         `start.${platformApp}.android`
-      ] = `cd apps/${directory}${options.name} && tns debug android --env.aot --no-hmr --emulator`;
+      ] = `cd apps/${directory}${options.name} && ns debug android --no-hmr --emulator`;
       scripts[
         `clean.${platformApp}`
       ] = `cd apps/${directory}${options.name} && npx rimraf -- hooks node_modules platforms package-lock.json && npm i && npx rimraf -- package-lock.json`;
@@ -148,8 +150,8 @@ export default function(options: Schema) {
         prefix: getPrefix(),
         schematics: {
           '@schematics/angular:component': {
-            styleext: 'scss'
-          }
+            styleext: 'scss',
+          },
         },
         architect: {
           serve: {
@@ -157,34 +159,34 @@ export default function(options: Schema) {
             options: {
               commands: [
                 {
-                  command: `yarn start.${platformApp}.preview`
-                }
-              ]
-            }
+                  command: `yarn start.${platformApp}.preview`,
+                },
+              ],
+            },
           },
           ios: {
             builder: '@nrwl/workspace:run-commands',
             options: {
               commands: [
                 {
-                  command: 'tns debug ios --env.aot --no-hmr'
-                }
+                  command: 'ns debug ios --no-hmr',
+                },
               ],
               cwd: `apps/${directory}${options.name}`,
-              parallel: false
-            }
+              parallel: false,
+            },
           },
           android: {
             builder: '@nrwl/workspace:run-commands',
             options: {
               commands: [
                 {
-                  command: 'tns debug android --env.aot --no-hmr'
-                }
+                  command: 'ns debug android --no-hmr',
+                },
               ],
               cwd: `apps/${directory}${options.name}`,
-              parallel: false
-            }
+              parallel: false,
+            },
           },
           clean: {
             builder: '@nrwl/workspace:run-commands',
@@ -192,27 +194,30 @@ export default function(options: Schema) {
               commands: [
                 {
                   command:
-                    'npx rimraf -- hooks node_modules platforms package-lock.json'
+                    'npx rimraf -- hooks node_modules platforms package-lock.json',
                 },
                 {
-                  command: 'npm i && npx rimraf -- package-lock.json'
-                }
+                  command: 'npm i',
+                },
+                {
+                  command: 'npx rimraf -- package-lock.json',
+                },
               ],
               cwd: `apps/${directory}${options.name}`,
-              parallel: false
-            }
-          }
-        }
+              parallel: false,
+            },
+          },
+        },
       };
       return updateWorkspace({ projects })(tree, context);
     },
     (tree: Tree) => {
       const projects = {};
       projects[`${options.name}`] = {
-        tags: []
+        tags: [],
       };
       return updateNxProjects(tree, projects);
-    }
+    },
   ]);
 }
 
@@ -249,9 +254,9 @@ function addAppFiles(
           xplatFolderName: XplatHelpers.getXplatFoldername(
             'nativescript',
             'angular'
-          )
+          ),
         }),
-        move(`apps/${directory}${appPath}`)
+        move(`apps/${directory}${appPath}`),
       ])
     )
   );
@@ -277,7 +282,7 @@ function addNsCli(add: boolean): Rule {
 
     packageJson.devDependencies = {
       ...(packageJson.devDependencies || {}),
-      nativescript: nsCoreVersion
+      nativescript: nsCoreVersion,
     };
 
     return updateJsonFile(tree, packagePath, packageJson);

@@ -1,10 +1,11 @@
 import { Tree } from '@angular-devkit/schematics';
 import { Schema } from '../application/schema';
-import { stringUtils, setTest, jsonParse, IHelperSchema } from '@nstudio/xplat';
+import { setTest, jsonParse } from '@nstudio/xplat-utils';
+import { IHelperSchema, stringUtils } from '@nstudio/xplat';
 import {
   createXplatWithApps,
   getFileContent,
-  createXplatWithNativeScriptWeb
+  createXplatWithNativeScriptWeb,
 } from '@nstudio/xplat/testing';
 import { runSchematic } from '../../utils/testing';
 setTest();
@@ -20,7 +21,7 @@ describe('helpers schematic', () => {
   // No longer needed: keeping here as example for future potential for similar helpers
   xit('imports: should create all files', async () => {
     const options: IHelperSchema = {
-      name: 'imports'
+      name: 'imports',
     };
     // console.log('appTree:', appTree);
     const tree = await runSchematic('helpers', options, appTree);

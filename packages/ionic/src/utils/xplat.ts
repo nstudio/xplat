@@ -1,5 +1,6 @@
 import { Tree, SchematicContext } from '@angular-devkit/schematics';
-import { XplatHelpers, getNpmScope } from '@nstudio/xplat';
+import { XplatHelpers } from '@nstudio/xplat';
+import { getNpmScope } from '@nstudio/xplat-utils';
 import {
   ionicNativeCoreVersion,
   ionicNativeSplashScreenVersion,
@@ -7,7 +8,7 @@ import {
   capacitorVersion,
   stencilCore,
   stencilSass,
-  ionicCore
+  ionicCore,
 } from './versions';
 
 export namespace XplatIonicHelpers {
@@ -35,11 +36,11 @@ export namespace XplatIonicHelpers {
       }
       return XplatHelpers.updatePackageForXplat(options, {
         dependencies: {
-          ...dependencies
+          ...dependencies,
         },
         devDependencies: {
-          ...devDependencies
-        }
+          ...devDependencies,
+        },
       })(tree, context);
     };
   }

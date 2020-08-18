@@ -3,16 +3,17 @@ import {
   externalSchematic,
   Tree,
   SchematicContext,
-  noop
+  noop,
 } from '@angular-devkit/schematics';
-import { XplatHelpers, prerun } from '@nstudio/xplat';
+import { XplatHelpers } from '@nstudio/xplat';
+import { prerun } from '@nstudio/xplat-utils';
 
-export default function(options: XplatHelpers.NgAddSchema) {
+export default function (options: XplatHelpers.NgAddSchema) {
   return chain([
     prerun(options, true),
     options.platforms
       ? (tree: Tree, context: SchematicContext) =>
           externalSchematic('@nstudio/web-angular', 'xplat', options)
-      : noop()
+      : noop(),
   ]);
 }

@@ -1,13 +1,9 @@
 import { adjustSandbox, adjustRouting } from '@nstudio/angular';
 import { chain, Tree, SchematicContext } from '@angular-devkit/schematics';
-import {
-  XplatFeatureHelpers,
-  PlatformTypes,
-  XplatHelpers,
-  prerun
-} from '@nstudio/xplat';
+import { XplatFeatureHelpers, XplatHelpers } from '@nstudio/xplat';
+import { prerun, PlatformTypes } from '@nstudio/xplat-utils';
 
-export default function(options: XplatFeatureHelpers.Schema) {
+export default function (options: XplatFeatureHelpers.Schema) {
   const featureSettings = XplatFeatureHelpers.prepare(options);
   const chains = [];
 
@@ -24,17 +20,19 @@ export default function(options: XplatFeatureHelpers.Schema) {
         routingModulePathOptions.push(`${appDirectory}app-routing.module.ts`);
 
         chains.push((tree: Tree, context: SchematicContext) => {
-          return XplatFeatureHelpers.addFiles(options, platPrefix, projectName)(
-            tree,
-            context
-          );
+          return XplatFeatureHelpers.addFiles(
+            options,
+            platPrefix,
+            projectName
+          )(tree, context);
         });
         if (options.routing) {
           chains.push((tree: Tree, context: SchematicContext) => {
-            return adjustRouting(options, routingModulePathOptions, platPrefix)(
-              tree,
-              context
-            );
+            return adjustRouting(
+              options,
+              routingModulePathOptions,
+              platPrefix
+            )(tree, context);
           });
           if (options.adjustSandbox) {
             chains.push((tree: Tree, context: SchematicContext) => {
@@ -62,10 +60,13 @@ export default function(options: XplatFeatureHelpers.Schema) {
     // projectChains.push(noop());
 
     chains.push((tree: Tree, context: SchematicContext) =>
-      XplatFeatureHelpers.addFiles(options, 'ionic', null, null, 'angular')(
-        tree,
-        context
-      )
+      XplatFeatureHelpers.addFiles(
+        options,
+        'ionic',
+        null,
+        null,
+        'angular'
+      )(tree, context)
     );
     // update index
     chains.push((tree: Tree, context: SchematicContext) => {

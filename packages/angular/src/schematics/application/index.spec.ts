@@ -1,6 +1,6 @@
 import { Tree } from '@angular-devkit/schematics';
 import { Schema } from './schema';
-import { jsonParse } from '@nstudio/xplat';
+import { jsonParse } from '@nstudio/xplat-utils';
 import { createEmptyWorkspace, getFileContent } from '@nstudio/xplat/testing';
 import { runSchematic } from '../../utils/testing';
 
@@ -8,7 +8,7 @@ describe('app', () => {
   let appTree: Tree;
   const defaultOptions: Schema = {
     name: 'foo',
-    skipFormat: true
+    skipFormat: true,
   };
 
   beforeEach(() => {
@@ -103,7 +103,7 @@ describe('app', () => {
   it('should create all files for web app using addHeadlessE2e', async () => {
     const options: Schema = {
       ...defaultOptions,
-      addHeadlessE2e: true
+      addHeadlessE2e: true,
     };
     options.e2eTestRunner = 'protractor';
     const tree = await runSchematic('app', options, appTree);

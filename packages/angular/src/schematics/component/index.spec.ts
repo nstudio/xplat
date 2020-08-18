@@ -1,9 +1,9 @@
 import { Tree } from '@angular-devkit/schematics';
 import {
   getFileContent,
-  createXplatWithNativeScriptWeb
+  createXplatWithNativeScriptWeb,
 } from '@nstudio/xplat/testing';
-import { runSchematic, runSchematicSync } from '../../utils/testing';
+import { runSchematic } from '../../utils/testing';
 import { XplatComponentHelpers } from '@nstudio/xplat';
 
 describe('component schematic', () => {
@@ -12,7 +12,7 @@ describe('component schematic', () => {
     name: 'signup',
     feature: 'foo',
     platforms: 'nativescript,web',
-    createBase: true
+    createBase: true,
   };
 
   beforeEach(() => {
@@ -26,7 +26,7 @@ describe('component schematic', () => {
       'feature',
       {
         name: 'foo',
-        platforms: 'nativescript,web'
+        platforms: 'nativescript,web',
       },
       appTree
     );
@@ -100,7 +100,7 @@ describe('component schematic', () => {
       'feature',
       {
         name: 'foo',
-        platforms: 'nativescript,web'
+        platforms: 'nativescript,web',
       },
       appTree
     );
@@ -141,7 +141,7 @@ describe('component schematic', () => {
       'feature',
       {
         name: 'foo',
-        platforms: 'nativescript,web'
+        platforms: 'nativescript,web',
       },
       appTree
     );
@@ -233,14 +233,14 @@ describe('component schematic', () => {
       {
         name: 'foo',
         projects: 'nativescript-viewer,web-viewer',
-        onlyProject: true
+        onlyProject: true,
       },
       appTree
     );
     const options: XplatComponentHelpers.Schema = {
       name: 'signup',
       feature: 'foo',
-      projects: 'nativescript-viewer,web-viewer'
+      projects: 'nativescript-viewer,web-viewer',
     };
     tree = await runSchematic('component', options, tree);
     const files = tree.files;
@@ -325,10 +325,10 @@ describe('component schematic', () => {
     const options: XplatComponentHelpers.Schema = {
       name: 'signup',
       feature: 'foo',
-      projects: 'nativescript-viewer,web-viewer'
+      projects: 'nativescript-viewer,web-viewer',
     };
 
-    expect(() => runSchematicSync('component', options, appTree)).toThrowError(
+    await expect(runSchematic('component', options, appTree)).rejects.toThrow(
       `apps/nativescript-viewer/src/features/foo/foo.module.ts does not exist. Create the feature module first. For example: nx g @nstudio/angular:feature foo --projects=nativescript-viewer --onlyModule`
     );
   });

@@ -1,11 +1,6 @@
 import { Tree, SchematicContext } from '@angular-devkit/schematics';
-import {
-  XplatHelpers,
-  getNpmScope,
-  getJsonFromFile,
-  updatePackageScripts,
-  output
-} from '@nstudio/xplat';
+import { XplatHelpers, updatePackageScripts, output } from '@nstudio/xplat';
+import { getNpmScope, getJsonFromFile } from '@nstudio/xplat-utils';
 import {
   waitOnVersion,
   npmRunAllVersion,
@@ -16,7 +11,7 @@ import {
   electronInstallerDmgVersion,
   electronRebuildVersion,
   electronBuilderVersion,
-  electronVersion
+  electronVersion,
 } from './versions';
 
 export namespace XplatElectrontHelpers {
@@ -77,8 +72,8 @@ export namespace XplatElectrontHelpers {
           'electron-store': electronStoreVersion,
           'electron-updater': electronUpdaterVersion,
           'npm-run-all': npmRunAllVersion,
-          'wait-on': waitOnVersion
-        }
+          'wait-on': waitOnVersion,
+        },
       })(tree, context);
     };
   }
@@ -188,8 +183,8 @@ export namespace XplatElectrontHelpers {
       output.log({
         title: 'Note:',
         bodyLines: [
-          `Develop your Electron app with: yarn start.${platformApp} (or: npm run start.${platformApp})`
-        ]
+          `Develop your Electron app with: yarn start.${platformApp} (or: npm run start.${platformApp})`,
+        ],
       });
       return tree;
     };

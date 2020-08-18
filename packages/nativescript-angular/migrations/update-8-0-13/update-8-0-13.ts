@@ -2,28 +2,23 @@ import {
   chain,
   Rule,
   SchematicContext,
-  Tree
+  Tree,
 } from '@angular-devkit/schematics';
 import { join } from 'path';
 import * as fs from 'fs';
 import { updateJsonInTree, createOrUpdate } from '@nrwl/workspace';
-import { getJsonFromFile, updateJsonFile, output } from '@nstudio/xplat';
+import { output } from '@nstudio/xplat';
+import { getJsonFromFile, updateJsonFile } from '@nstudio/xplat-utils';
 import {
   nsCoreVersion,
   terserWebpackVersion,
-  nsNgScopedVersion
+  nsNgScopedVersion,
 } from '../../src/utils/versions';
 
 function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
   const appsDir = tree.getDir('apps');
   const appFolders = appsDir.subdirs;
   const cwd = process.cwd();
-  const webpackConfigPath = join(
-    cwd,
-    'node_modules/@nstudio/nativescript-angular/src/schematics/application/_files/webpack.config.js'
-  );
-  // console.log('webpackConfigPath:', webpackConfigPath);
-  const webpackConfig = fs.readFileSync(webpackConfigPath, 'UTF-8');
   const srcPackagePath = join(
     cwd,
     'node_modules/@nstudio/nativescript-angular/src/schematics/application/_files/src/package.json'
@@ -43,7 +38,6 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
       // console.log('appDir:', appDir);
       appsNames.push(dir);
 
-      createOrUpdate(tree, `${appDir}/webpack.config.js`, webpackConfig);
       createOrUpdate(tree, `${appDir}/src/package.json`, srcPackage);
 
       // update {N} app deps
@@ -57,7 +51,7 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
           ...packageJson.devDependencies,
           '@angular/compiler-cli': '~8.2.0',
           '@ngtools/webpack': '~8.3.0',
-          'nativescript-dev-webpack': '~1.3.0'
+          'nativescript-dev-webpack': '~1.3.0',
         };
 
         // console.log('path:',path);
@@ -69,33 +63,32 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
       title: 'Migration Note:',
       bodyLines: [
         `Please ensure you have the latest NativeScript cli installed: npm i -g nativescript`,
-        `The following NativeScript apps have been updated to 6.2: ${appsNames}. The following files in those apps have been updated: webpack.config.js, src/package.json, and package.json. You may want to check the changeset to keep any customizations you may have made.`
-      ]
+        `The following NativeScript apps have been updated to 6.2: ${appsNames}. The following files in those apps have been updated: webpack.config.js, src/package.json, and package.json. You may want to check the changeset to keep any customizations you may have made.`,
+      ],
     });
   }
   return tree;
 }
 
 function updateRootPackage(tree: Tree, context: SchematicContext) {
-  return updateJsonInTree('package.json', json => {
+  return updateJsonInTree('package.json', (json) => {
     json.scripts = json.scripts || {};
     json.dependencies = json.dependencies || {};
     json.dependencies = {
       ...json.dependencies,
-      'nativescript-angular': nsNgScopedVersion,
-      'tns-core-modules': nsCoreVersion
+      '@nativescript/angular': nsNgScopedVersion,
+      '@nativescript/core': nsCoreVersion,
     };
     json.devDependencies = json.devDependencies || {};
     json.devDependencies = {
       ...json.devDependencies,
-      'terser-webpack-plugin': terserWebpackVersion,
-      'tns-platform-declarations': nsCoreVersion
+      '@nativescript/types': nsCoreVersion,
     };
 
     return json;
   })(tree, context);
 }
 
-export default function(): Rule {
+export default function (): Rule {
   return chain([updateNativeScriptApps, updateRootPackage]);
 }

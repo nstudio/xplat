@@ -1,9 +1,9 @@
 import { Tree } from '@angular-devkit/schematics';
 import {
   getFileContent,
-  createXplatWithNativeScriptWeb
+  createXplatWithNativeScriptWeb,
 } from '@nstudio/xplat/testing';
-import { runSchematic, runSchematicSync } from '../../utils/testing';
+import { runSchematic } from '../../utils/testing';
 import { XplatComponentHelpers } from '../../utils';
 
 xdescribe('component', () => {
@@ -14,7 +14,7 @@ xdescribe('component', () => {
     platforms: 'nativescript,web',
     createBase: true,
     framework: 'angular',
-    isTesting: true
+    isTesting: true,
   };
 
   beforeEach(() => {
@@ -30,7 +30,7 @@ xdescribe('component', () => {
         name: 'foo',
         platforms: 'nativescript,web',
         framework: 'angular',
-        isTesting: true
+        isTesting: true,
       },
       appTree
     );
@@ -102,7 +102,7 @@ xdescribe('component', () => {
       {
         name: 'foo',
         platforms: 'nativescript,web',
-        isTesting: true
+        isTesting: true,
       },
       appTree
     );
@@ -146,7 +146,7 @@ xdescribe('component', () => {
         name: 'foo',
         platforms: 'nativescript,web',
         framework: 'angular',
-        isTesting: true
+        isTesting: true,
       },
       appTree
     );
@@ -240,7 +240,7 @@ xdescribe('component', () => {
         projects: 'nativescript-viewer,web-viewer',
         onlyProject: true,
         framework: 'angular',
-        isTesting: true
+        isTesting: true,
       },
       appTree
     );
@@ -248,7 +248,7 @@ xdescribe('component', () => {
       name: 'signup',
       feature: 'foo',
       projects: 'nativescript-viewer,web-viewer',
-      framework: 'angular'
+      framework: 'angular',
     };
     tree = await runSchematic('component', options, tree);
     const files = tree.files;
@@ -334,10 +334,10 @@ xdescribe('component', () => {
       name: 'signup',
       feature: 'foo',
       projects: 'nativescript-viewer,web-viewer',
-      framework: 'angular'
+      framework: 'angular',
     };
 
-    expect(() => runSchematicSync('component', options, appTree)).toThrowError(
+    await expect(runSchematic('component', options, appTree)).rejects.toThrow(
       `apps/nativescript-viewer/src/features/foo/foo.module.ts does not exist. Create the feature module first. For example: nx g @nstudio/angular:feature foo --projects=nativescript-viewer --onlyModule`
     );
   });

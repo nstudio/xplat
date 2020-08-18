@@ -1,9 +1,10 @@
 import { Schema } from '../application/schema';
 import { chain } from '@angular-devkit/schematics';
-import { prerun, XplatHelpers } from '../../utils';
+import { XplatHelpers } from '../../utils';
+import { prerun } from '@nstudio/xplat-utils';
 
 let packagesToRunXplat: Array<string> = [];
-export default function(options: Schema) {
+export default function (options: Schema) {
   const externalChains = XplatHelpers.getExternalChainsForGenerator(
     options,
     'app',

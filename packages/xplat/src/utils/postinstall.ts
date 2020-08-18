@@ -44,8 +44,8 @@ export async function updateConfig() {
         version: 1,
         projects: {},
         cli: {
-          defaultCollection: '@nstudio/xplat'
-        }
+          defaultCollection: '@nstudio/xplat',
+        },
       };
     }
     fs.writeFileSync(workspaceConfigPath, JSON.stringify(ngCli, null, 2));

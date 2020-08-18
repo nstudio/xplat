@@ -1,9 +1,8 @@
-const xml2js = require('xml2js');
 import * as stripJsonComments from 'strip-json-comments';
 import {
   SchematicsException,
   Tree,
-  SchematicContext
+  SchematicContext,
 } from '@angular-devkit/schematics';
 import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 import {
@@ -11,164 +10,27 @@ import {
   serializeJson,
   updateWorkspaceInTree,
   readJsonInTree,
-  getWorkspacePath
+  getWorkspacePath,
 } from '@nrwl/workspace';
-
-export interface ITargetPlatforms {
-  web?: boolean;
-  nativescript?: boolean;
-  ionic?: boolean;
-  electron?: boolean;
-}
-
-// Officially supported via xplat directly
-export type PlatformTypes = 'web' | 'nativescript' | 'ionic' | 'electron';
-// Proxy support via Nx
-export type PlatformNxExtraTypes = 'express' | 'nest' | 'node' | 'react';
-export type PlatformWithNxTypes = PlatformTypes | PlatformNxExtraTypes;
-export type PlatformModes = PlatformTypes | 'fullstack';
-export const supportedPlatforms: Array<PlatformTypes> = [
-  'web',
-  'nativescript',
-  'ionic',
-  'electron'
-];
-export const supportedNxExtraPlatforms: Array<PlatformNxExtraTypes> = [
-  'express',
-  'nest',
-  'node',
-  'react'
-];
-export const supportedPlatformsWithNx: Array<
-  PlatformWithNxTypes
-> = supportedPlatforms.concat(<any>supportedNxExtraPlatforms);
-
-export type FrameworkTypes = 'angular';
-// TODO: support react/vue and more
-// | 'react'
-// | 'vue'
-export type FrameworkOptions = FrameworkTypes | 'all';
-export const supportedFrameworks: Array<FrameworkTypes> = ['angular']; //, 'react', 'vue'];
+import {
+  supportedPlatforms,
+  PlatformTypes,
+  FrameworkTypes,
+  supportedFrameworks,
+  PlatformWithNxTypes,
+  supportedPlatformsWithNx,
+  ITargetPlatforms,
+  getJsonFromFile,
+  updateJsonFile,
+  getNpmScope,
+  getPrefix,
+} from '@nstudio/xplat-utils';
 
 export interface NodeDependency {
   name: string;
   version: string;
   type: 'dependency' | 'devDependency';
 }
-
-// list of all supported helpers
-// TODO: add more convenient helpers (like firebase or Travis ci support files)
-export const supportedHelpers = ['imports', 'applitools'];
-// list of platforms that support various sandbox flags
-export const supportedSandboxPlatforms: Array<PlatformTypes> = ['nativescript'];
-
-let npmScope: string;
-// selector prefix to use when generating various boilerplate for xplat support
-let prefix: string;
-// user preferred default framework
-let frontendFramework: FrameworkTypes;
-// Group by app name (appname-platform) instead of the default (platform-appname)
-let groupByName = false;
-let isTest = false;
-
-export function getNpmScope() {
-  return npmScope;
-}
-
-export function getPrefix() {
-  return prefix;
-}
-
-export function getFrontendFramework() {
-  return frontendFramework;
-}
-
-export function getGroupByName() {
-  return groupByName;
-}
-
-export function getAppName(options: any, platform: PlatformTypes) {
-  return groupByName
-    ? options.name.replace(`-${platform}`, '')
-    : options.name.replace(`${platform}-`, '');
-}
-
-export function setTest() {
-  isTest = true;
-}
-
-export function isTesting() {
-  return isTest;
-}
-
-export function addInstallTask(options?: any) {
-  return (host: Tree, context: SchematicContext) => {
-    if (!options || (options && !options.skipInstall)) {
-      context.addTask(new NodePackageInstallTask());
-    }
-    return host;
-  };
-}
-
-export function jsonParse(content: string) {
-  if (content) {
-    // ensure comments are stripped when parsing (otherwise will fail)
-    return JSON.parse(stripJsonComments(content));
-  }
-  return {};
-}
-
-export function getJsonFromFile(tree: Tree, path: string) {
-  return jsonParse(tree.get(path).content.toString());
-}
-
-export function updateJsonFile(tree: Tree, path: string, jsonData: any) {
-  try {
-    // if (tree.exists(path)) {
-    tree.overwrite(path, serializeJson(jsonData));
-    // }
-    return tree;
-  } catch (err) {
-    // console.warn(err);
-    throw new SchematicsException(`${path}: ${err}`);
-  }
-}
-
-export function updateFile(tree: Tree, path: string, content: string) {
-  try {
-    // if (tree.exists(path)) {
-    tree.overwrite(path, content);
-    // }
-    return tree;
-  } catch (err) {
-    // console.warn(err);
-    throw new SchematicsException(`${path}: ${err}`);
-  }
-}
-
-export function getNxWorkspaceConfig(tree: Tree): any {
-  const nxConfig = getJsonFromFile(tree, 'nx.json');
-  const hasWorkspaceDirs = tree.exists('apps') && tree.exists('libs');
-
-  // determine if Nx workspace
-  if (nxConfig) {
-    if (nxConfig.npmScope || hasWorkspaceDirs) {
-      return nxConfig;
-    }
-  }
-  throw new SchematicsException(
-    '@nstudio/xplat must be used inside an Nx workspace. Create a workspace first. https://nx.dev'
-  );
-}
-
-export const copy = (tree: Tree, from: string, to: string) => {
-  const file = tree.get(from);
-  if (!file) {
-    throw new SchematicsException(`File ${from} does not exist!`);
-  }
-
-  tree.create(to, file.content);
-};
 
 export interface IXplatSettings {
   prefix?: string;
@@ -177,96 +39,11 @@ export interface IXplatSettings {
   platforms?: string;
 }
 
-export function prerun(options?: IXplatSettings | any, init?: boolean) {
-  return (tree: Tree) => {
-    const nxJson = getNxWorkspaceConfig(tree);
-    if (nxJson) {
-      npmScope = nxJson.npmScope || 'workspace';
-    }
-    // console.log('npmScope:', npmScope);
-    const packageJson = getJsonFromFile(tree, 'package.json');
-
-    let frameworkChoice: string;
-    if (options && options.framework) {
-      // can actually specify comma delimited list of frameworks to generate support for
-      // most common to generate 1 at a time but we allow multiple
-      const frameworks = sanitizeCommaDelimitedArg(options.framework);
-      // always default framework choice to first in list when multiple
-      // when it's just one (most common) will be first already
-      frameworkChoice = frameworks[0];
-    }
-    // console.log('frameworkChoice:', frameworkChoice);
-
-    if (packageJson) {
-      prefix = '';
-      if (packageJson.xplat) {
-        const xplatSettings = <IXplatSettings>packageJson.xplat;
-        // use persisted xplat settings
-        prefix = xplatSettings.prefix || npmScope; // (if not prefix, default to npmScope)
-        frontendFramework = xplatSettings.framework;
-
-        if (options) {
-          if (options.prefix) {
-            // always use explicit prefix user passed in
-            prefix = options.prefix;
-          } else {
-            // ensure options are updated
-            options.prefix = prefix;
-          }
-          if (frameworkChoice) {
-            // always override default framework when user has explicitly passed framework option in
-            frontendFramework = <FrameworkTypes>frameworkChoice;
-          }
-          // else if (frontendFramework) {
-          //   // ensure the options use the default
-          //   options.framework = frontendFramework;
-          // }
-        }
-        // grouping
-        groupByName =
-          xplatSettings.groupByName || (options ? options.groupByName : false);
-      } else if (options) {
-        groupByName = options.groupByName;
-        if (options.prefix) {
-          if (!prefix && init) {
-            // initializing for first time
-            prefix = options.prefix;
-          }
-        } else {
-          // default to npmScope for prefix
-          options.prefix = npmScope;
-        }
-        if (frameworkChoice) {
-          if (!frontendFramework && init) {
-            frontendFramework = <FrameworkTypes>frameworkChoice;
-          }
-        }
-      }
-      // console.log('prefix:', prefix);
-      // if (!prefix) {
-      //   if (init) {
-      //     // if no prefix was found and we're initializing, user need to specify a prefix
-      //     throw new SchematicsException(errorMissingPrefix);
-      //   } else {
-      //     // if no prefix was found and we're not initializing, user needs to generate xplat first
-      //     throw new SchematicsException(errorXplat);
-      //   }
-      // }
-    }
-    // console.log('prefix:', prefix);
-    return tree;
-  };
-}
-
-export function sanitizeCommaDelimitedArg(input: string): Array<string> {
-  if (input) {
-    return input
-      .split(',')
-      .filter(i => !!i)
-      .map(i => i.trim().toLowerCase());
-  }
-  return [];
-}
+// list of all supported helpers
+// TODO: add more convenient helpers (like firebase or Travis ci support files)
+export const supportedHelpers = ['imports', 'applitools'];
+// list of platforms that support various sandbox flags
+export const supportedSandboxPlatforms: Array<PlatformTypes> = ['nativescript'];
 
 /**
  * Check if the platform is frontend (some could be backend only)
@@ -325,12 +102,12 @@ export function updatePackageForNgrx(
 
       packageJson.dependencies = {
         ...(packageJson.dependencies || {}),
-        ...dependencies
+        ...dependencies,
       };
 
       packageJson.devDependencies = {
         ...(packageJson.devDependencies || {}),
-        ...devDependencies
+        ...devDependencies,
       };
 
       return updateJsonFile(tree, packagePath, packageJson);
@@ -345,9 +122,18 @@ export function updateTsConfig(
   targetSuffix: string = '',
   prefixPath: string = ''
 ) {
-  const tsConfigPath = `${prefixPath}tsconfig${
+  let tsConfigPath: string = `${prefixPath}tsconfig${
     targetSuffix ? '.' + targetSuffix : ''
   }.json`;
+  const tsConfigPrefix = 'tsconfig';
+  if (!targetSuffix) {
+    if (tree.exists(`${tsConfigPrefix}.json`)) {
+      tsConfigPath = `${tsConfigPrefix}.json`;
+    } else if (tree.exists(`${tsConfigPrefix}.base.json`)) {
+      tsConfigPath = `${tsConfigPrefix}.base.json`;
+    }
+  }
+  // console.log('tsConfigPath:', tsConfigPath)
   const tsConfig = getJsonFromFile(tree, tsConfigPath);
   callback(tsConfig);
   return updateJsonFile(tree, tsConfigPath, tsConfig);
@@ -366,11 +152,11 @@ export function readWorkspaceJson(tree: Tree) {
 }
 
 export function updateWorkspace(updates: any) {
-  return updateWorkspaceInTree(json => {
+  return updateWorkspaceInTree((json) => {
     for (const key in updates) {
       json[key] = {
         ...(json[key] || {}),
-        ...updates[key]
+        ...updates[key],
       };
     }
     return json;
@@ -397,32 +183,6 @@ export function getPrefixWarning(prefix: string) {
   return `A default prefix had already been set for your workspace: ${prefix}. Since xplat had already been configured we will be using '${prefix}' as the prefix.`;
 }
 
-export function createWebStormProjectView(isExcluding: boolean) {
-  const projectViewObject = {
-    application: {
-      component: [
-        {
-          $: {
-            name: 'ProjectViewSharedSettings'
-          },
-          option: [webStormExcludedViewNode(isExcluding)]
-        }
-      ]
-    }
-  };
-  const builder = new xml2js.Builder({ headless: true });
-  return builder.buildObject(projectViewObject);
-}
-
-export function webStormExcludedViewNode(isExcluding: boolean) {
-  return {
-    $: {
-      name: 'showExcludedFiles',
-      value: `${!isExcluding}`
-    }
-  };
-}
-
 export function getDefaultTemplateOptions() {
   // console.log('getDefaultTemplateOptions getPrefix:', getPrefix());
   return {
@@ -430,7 +190,7 @@ export function getDefaultTemplateOptions() {
     utils: stringUtils,
     npmScope: getNpmScope(),
     prefix: getPrefix(),
-    dot: '.'
+    dot: '.',
   };
 }
 
@@ -452,7 +212,7 @@ export function getDefaultTemplateOptions() {
 export const sanitize = (str: string): string =>
   str
     .split('')
-    .filter(char => /[a-zA-Z0-9]/.test(char))
+    .filter((char) => /[a-zA-Z0-9]/.test(char))
     .join('');
 
 export const stringUtils = { sanitize, ...nxStringUtils };

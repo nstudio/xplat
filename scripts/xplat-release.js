@@ -9,8 +9,8 @@ const parsedArgs = yargsParser(process.argv, {
   boolean: ['dry-run', 'nobazel'],
   alias: {
     d: 'dry-run',
-    h: 'help'
-  }
+    h: 'help',
+  },
 });
 
 console.log('parsedArgs', parsedArgs);
@@ -42,7 +42,7 @@ if (parsedArgs.help) {
 
 console.log('> git fetch --all');
 childProcess.execSync('git fetch --all', {
-  stdio: [0, 1, 2]
+  stdio: [0, 1, 2],
 });
 
 function parseVersion(version) {
@@ -50,7 +50,7 @@ function parseVersion(version) {
     return {
       version,
       isValid: false,
-      isPrerelease: false
+      isPrerelease: false,
     };
   }
   const sections = version.split('-');
@@ -62,7 +62,7 @@ function parseVersion(version) {
     return {
       version,
       isValid: !!sections[0].match(/\d+\.\d+\.\d+$/),
-      isPrerelease: false
+      isPrerelease: false,
     };
   }
   /**
@@ -76,7 +76,7 @@ function parseVersion(version) {
       sections[0].match(/\d+\.\d+\.\d+$/) &&
       sections[1].match(/(alpha|beta|rc)\.\d+$/)
     ),
-    isPrerelease: true
+    isPrerelease: true,
   };
 }
 
@@ -103,23 +103,23 @@ console.log('Executing build script:');
 const buildCommand = `./scripts/package.sh ${parsedVersion.version} ${cliVersion} ${typescriptVersion}`;
 console.log(`> ${buildCommand}`);
 childProcess.execSync(buildCommand, {
-  stdio: [0, 1, 2]
+  stdio: [0, 1, 2],
 });
 
 /**
  * Create working directory and copy over built packages
  */
 childProcess.execSync('rm -rf build/npm && mkdir -p build/npm', {
-  stdio: [0, 1, 2]
+  stdio: [0, 1, 2],
 });
 childProcess.execSync('cp -R build/packages/* build/npm', {
-  stdio: [0, 1, 2]
+  stdio: [0, 1, 2],
 });
 /**
  * Get rid of tarballs at top of copied directory (made with npm pack)
  */
 childProcess.execSync(`find build/npm -maxdepth 1 -name "*.tgz" -delete`, {
-  stdio: [0, 1, 2]
+  stdio: [0, 1, 2],
 });
 
 /**
@@ -150,6 +150,7 @@ const options = {
     'build/npm/create-xplat-workspace/package.json',
     'build/npm/electron/package.json',
     'build/npm/electron-angular/package.json',
+    'build/npm/focus/package.json',
     'build/npm/ionic/package.json',
     'build/npm/ionic-angular/package.json',
     'build/npm/nativescript/package.json',
@@ -157,7 +158,8 @@ const options = {
     'build/npm/schematics/package.json',
     'build/npm/web/package.json',
     'build/npm/web-angular/package.json',
-    'build/npm/xplat/package.json'
+    'build/npm/xplat/package.json',
+    'build/npm/xplat-utils/package.json',
   ],
   increment: parsedVersion.version,
   requireUpstream: false,
@@ -168,20 +170,20 @@ const options = {
      * The environment variable containing a valid GitHub
      * auth token with "repo" access (no other permissions required)
      */
-    token: process.env.GITHUB_TOKEN_RELEASE_IT_XPLAT
+    token: process.env.GITHUB_TOKEN_RELEASE_IT_XPLAT,
   },
   npm: {
     /**
      * We don't use release-it to do the npm publish, because it is not
      * able to understand our multi-package setup.
      */
-    release: false
+    release: false,
   },
-  requireCleanWorkingDir: false
+  requireCleanWorkingDir: false,
 };
 
 releaseIt(options)
-  .then(output => {
+  .then((output) => {
     if (DRY_RUN) {
       console.warn('WARNING: In DRY_RUN mode - not running publishing script');
       process.exit(0);
@@ -204,11 +206,11 @@ releaseIt(options)
       `Note: You will need to authenticate with your NPM credentials`
     );
     childProcess.execSync(npmPublishCommand, {
-      stdio: [0, 1, 2]
+      stdio: [0, 1, 2],
     });
     process.exit(0);
   })
-  .catch(err => {
+  .catch((err) => {
     console.error(err.message);
     process.exit(1);
   });

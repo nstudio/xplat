@@ -4,6 +4,7 @@ import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { NativeScriptModule, NativeScriptHttpClientModule } from '@nativescript/angular';
 import { Device } from '@nativescript/core';
 import { TNSFontIconModule, USE_STORE } from 'nativescript-ngx-fonticon';
+import { fontAwesomeIcons } from '../utils';
 
 // libs
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -47,10 +48,10 @@ export function createTranslateLoader() {
   ],
   providers: [
     {
-      // ensure dependency injector inlines icons sets (TNSFontIconModule.forRoot doesn't work with inlining)
+      // inline icons to avoid extra file handling on app boot
       provide: USE_STORE,
       useValue: {
-        fa: require('../scss/fonticons/fontawesome.min.css'),
+        fa: fontAwesomeIcons
       },
     },
   ]

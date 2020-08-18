@@ -3,15 +3,15 @@ import { Schema as GenerateOptions } from './schema';
 import {
   createXplatWithApps,
   getFileContent,
-  createXplatWithNativeScriptWeb
+  createXplatWithNativeScriptWeb,
 } from '@nstudio/xplat/testing';
-import { runSchematic, runSchematicSync } from '../../utils/testing';
+import { runSchematic } from '../../utils/testing';
 import { UnitTestTree } from '@angular-devkit/schematics/testing';
 
 describe('pipe schematic', () => {
   let appTree: Tree;
   const defaultOptions: GenerateOptions = {
-    name: 'truncate'
+    name: 'truncate',
   };
 
   beforeEach(() => {
@@ -25,7 +25,7 @@ describe('pipe schematic', () => {
       'feature',
       {
         name: 'foo',
-        platforms: 'nativescript,web'
+        platforms: 'nativescript,web',
       },
       appTree
     );
@@ -85,13 +85,13 @@ describe('pipe schematic', () => {
       'feature',
       {
         name: 'foo',
-        platforms: 'nativescript,web'
+        platforms: 'nativescript,web',
       },
       appTree
     );
     let options: GenerateOptions = {
       ...defaultOptions,
-      name: 'test-with-dashes'
+      name: 'test-with-dashes',
     };
     tree = await runSchematic('pipe', options, tree);
     const files = tree.files;
@@ -117,9 +117,7 @@ describe('pipe schematic', () => {
     let tree;
     const options: GenerateOptions = { ...defaultOptions };
     options.feature = 'register';
-    expect(
-      () => (tree = runSchematicSync('pipe', options, appTree))
-    ).toThrowError(
+    await expect(runSchematic('pipe', options, appTree)).rejects.toThrow(
       `libs/features/register/register.module.ts does not exist. Create the feature module first. For example: nx g @nstudio/angular:feature register`
     );
   });
@@ -131,14 +129,14 @@ describe('pipe schematic', () => {
       {
         name: 'foo',
         projects: 'nativescript-viewer,web-viewer',
-        onlyProject: true
+        onlyProject: true,
       },
       appTree
     );
     const options: GenerateOptions = {
       name: 'truncate',
       feature: 'foo',
-      projects: 'nativescript-viewer,web-viewer'
+      projects: 'nativescript-viewer,web-viewer',
     };
     tree = await runSchematic('pipe', options, tree);
     const files = tree.files;
@@ -199,12 +197,10 @@ describe('pipe schematic', () => {
     const options: GenerateOptions = {
       name: 'truncate',
       feature: 'register',
-      platforms: 'nativescript,web'
+      platforms: 'nativescript,web',
     };
 
-    expect(
-      () => (tree = runSchematicSync('pipe', options, appTree))
-    ).toThrowError(
+    await expect(runSchematic('pipe', options, appTree)).rejects.toThrow(
       `xplat/nativescript/features/register/register.module.ts does not exist. Create the feature module first. For example: nx g @nstudio/angular:feature register --platforms=nativescript --onlyModule`
     );
   });
@@ -215,12 +211,10 @@ describe('pipe schematic', () => {
     const options: GenerateOptions = {
       name: 'truncate',
       feature: 'register',
-      projects: 'nativescript-viewer,web-viewer'
+      projects: 'nativescript-viewer,web-viewer',
     };
 
-    expect(
-      () => (tree = runSchematicSync('pipe', options, appTree))
-    ).toThrowError(
+    await expect(runSchematic('pipe', options, appTree)).rejects.toThrow(
       `apps/nativescript-viewer/src/features/register/register.module.ts does not exist. Create the feature module first. For example: nx g @nstudio/angular:feature register --projects=nativescript-viewer --onlyModule`
     );
   });

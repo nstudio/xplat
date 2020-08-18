@@ -17,7 +17,7 @@ Alias(es): n
 
 Type: `string`
 
-The platform development mode to focus on.
+The development mode, folder path or file suffix to focus on.
 
 ### --projects
 

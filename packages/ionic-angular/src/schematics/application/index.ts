@@ -12,27 +12,29 @@ import {
   SchematicsException,
   schematic,
   noop,
-  externalSchematic
+  externalSchematic,
 } from '@angular-devkit/schematics';
 import { formatFiles } from '@nrwl/workspace';
 import {
   stringUtils,
-  prerun,
-  getNpmScope,
-  getPrefix,
   updatePackageScripts,
   updateWorkspace,
   updateNxProjects,
-  getAppName,
   missingArgument,
   getDefaultTemplateOptions,
-  XplatHelpers
+  XplatHelpers,
 } from '@nstudio/xplat';
+import {
+  prerun,
+  getNpmScope,
+  getPrefix,
+  getAppName,
+} from '@nstudio/xplat-utils';
 import { Schema as ApplicationOptions } from './schema';
 import { XplatIonicAngularHelpers } from '../../utils';
 import { capacitorVersion } from '../../utils/versions';
 
-export default function(options: ApplicationOptions) {
+export default function (options: ApplicationOptions) {
   if (!options.name) {
     throw new SchematicsException(
       missingArgument(
@@ -52,18 +54,19 @@ export default function(options: ApplicationOptions) {
       options.useXplat
         ? externalSchematic('@nstudio/angular', 'xplat', {
             ...options,
-            platforms: 'ionic,web'
+            platforms: 'ionic,web',
           })
         : externalSchematic('@nstudio/ionic', 'xplat', {
             ...options,
-            skipDependentPlatformFiles: true
+            skipDependentPlatformFiles: true,
           }),
     // create app files
     (tree: Tree, context: SchematicContext) =>
-      addAppFiles(options, options.name, options.useXplat ? '' : 'skipxplat')(
-        tree,
-        context
-      ),
+      addAppFiles(
+        options,
+        options.name,
+        options.useXplat ? '' : 'skipxplat'
+      )(tree, context),
     // add root package dependencies
     XplatIonicAngularHelpers.updateRootDeps(options),
     XplatHelpers.addPackageInstallTask(options),
@@ -112,8 +115,8 @@ export default function(options: ApplicationOptions) {
         prefix: getPrefix(),
         schematics: {
           '@schematics/angular:component': {
-            styleext: 'scss'
-          }
+            styleext: 'scss',
+          },
         },
         architect: {
           build: {
@@ -128,31 +131,31 @@ export default function(options: ApplicationOptions) {
                 {
                   glob: '**/*',
                   input: `${appFolder}src/assets`,
-                  output: 'assets'
+                  output: 'assets',
                 },
                 {
                   glob: '**/*.svg',
                   input: 'node_modules/ionicons/dist/ionicons/svg',
-                  output: './svg'
-                }
+                  output: './svg',
+                },
               ],
               styles: [
                 {
-                  input: `${appFolder}src/theme/variables.scss`
+                  input: `${appFolder}src/theme/variables.scss`,
                 },
                 {
-                  input: `${appFolder}src/global.scss`
-                }
+                  input: `${appFolder}src/global.scss`,
+                },
               ],
-              scripts: []
+              scripts: [],
             },
             configurations: {
               production: {
                 fileReplacements: [
                   {
                     replace: `${appFolder}src/environments/environment.ts`,
-                    with: `${appFolder}src/environments/environment.prod.ts`
-                  }
+                    with: `${appFolder}src/environments/environment.prod.ts`,
+                  },
                 ],
                 optimization: true,
                 outputHashing: 'all',
@@ -167,34 +170,34 @@ export default function(options: ApplicationOptions) {
                   {
                     type: 'initial',
                     maximumWarning: '2mb',
-                    maximumError: '5mb'
-                  }
-                ]
+                    maximumError: '5mb',
+                  },
+                ],
               },
               ci: {
-                progress: false
-              }
-            }
+                progress: false,
+              },
+            },
           },
           serve: {
             builder: '@angular-devkit/build-angular:dev-server',
             options: {
-              browserTarget: `${options.name}:build`
+              browserTarget: `${options.name}:build`,
             },
             configurations: {
               production: {
-                browserTarget: `${options.name}:build:production`
+                browserTarget: `${options.name}:build:production`,
               },
               ci: {
-                progress: false
-              }
-            }
+                progress: false,
+              },
+            },
           },
           'extract-i18n': {
             builder: '@angular-devkit/build-angular:extract-i18n',
             options: {
-              browserTarget: `${options.name}:build`
-            }
+              browserTarget: `${options.name}:build`,
+            },
           },
           test: {
             builder: '@angular-devkit/build-angular:karma',
@@ -209,21 +212,21 @@ export default function(options: ApplicationOptions) {
                 {
                   glob: 'favicon.ico',
                   input: `${appFolder}src/`,
-                  output: '/'
+                  output: '/',
                 },
                 {
                   glob: '**/*',
                   input: `${appFolder}src/assets`,
-                  output: '/assets'
-                }
-              ]
+                  output: '/assets',
+                },
+              ],
             },
             configurations: {
               ci: {
                 progress: false,
-                watch: false
-              }
-            }
+                watch: false,
+              },
+            },
           },
           lint: {
             builder: '@angular-devkit/build-angular:tslint',
@@ -231,10 +234,10 @@ export default function(options: ApplicationOptions) {
               tsConfig: [
                 `${appFolder}tsconfig.app.json`,
                 `${appFolder}tsconfig.spec.json`,
-                `${appFolder}e2e/tsconfig.json`
+                `${appFolder}e2e/tsconfig.json`,
               ],
-              exclude: ['**/node_modules/**']
-            }
+              exclude: ['**/node_modules/**'],
+            },
           },
           // TODO: add jest e2e configuration for ionic
           // e2e: {
@@ -255,39 +258,39 @@ export default function(options: ApplicationOptions) {
           'ionic-cordova-build': {
             builder: '@ionic/angular-toolkit:cordova-build',
             options: {
-              browserTarget: `${options.name}:build`
+              browserTarget: `${options.name}:build`,
             },
             configurations: {
               production: {
-                browserTarget: `${options.name}:build:production`
-              }
-            }
+                browserTarget: `${options.name}:build:production`,
+              },
+            },
           },
           'ionic-cordova-serve': {
             builder: '@ionic/angular-toolkit:cordova-serve',
             options: {
               cordovaBuildTarget: `${options.name}:ionic-cordova-build`,
-              devServerTarget: `${options.name}:serve`
+              devServerTarget: `${options.name}:serve`,
             },
             configurations: {
               production: {
                 cordovaBuildTarget: `${options.name}:ionic-cordova-build:production`,
-                devServerTarget: `${options.name}:serve:production`
-              }
-            }
-          }
-        }
+                devServerTarget: `${options.name}:serve:production`,
+              },
+            },
+          },
+        },
       };
       return updateWorkspace({ projects })(tree, context);
     },
     (tree: Tree) => {
       const projects = {};
       projects[`${options.name}`] = {
-        tags: []
+        tags: [],
       };
       return updateNxProjects(tree, projects);
     },
-    formatFiles({ skipFormat: options.skipFormat })
+    formatFiles({ skipFormat: options.skipFormat }),
   ]);
 }
 
@@ -308,9 +311,9 @@ function addAppFiles(
           pathOffset: directory ? '../../../' : '../../',
           appname,
           xplatFolderName: XplatHelpers.getXplatFoldername('ionic', 'angular'),
-          capacitorVersion
+          capacitorVersion,
         }),
-        move(`apps/${directory}${appPath}`)
+        move(`apps/${directory}${appPath}`),
       ])
     )
   );

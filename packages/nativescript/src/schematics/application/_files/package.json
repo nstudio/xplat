@@ -8,10 +8,10 @@
   "repository": "<fill-your-repository-here>",
   "scripts": {
     "reset": "npx rimraf -- hooks node_modules platforms",
-    "build.ios": "tns build ios --env.uglify --env.production --release",
-    "build.android": "tns build android --env.uglify --env.production --release",
-    "debug.ios": "tns debug ios",
-    "debug.android": "tns debug android",
+    "build.ios": "ns build ios --env.uglify --env.production --release",
+    "build.android": "ns build android --env.uglify --env.production --release",
+    "debug.ios": "ns debug ios",
+    "debug.android": "ns debug android",
     "postinstall": "node ./tools/xplat-postinstall.js"
   },
   "dependencies": {
@@ -19,9 +19,8 @@
     "@nativescript/core": "file:<%= pathOffset %>node_modules/@nativescript/core"
   },
   "devDependencies": {
-    "nativescript-dev-webpack": "~1.2.0",
-    "terser-webpack-plugin": "file:<%= pathOffset %>node_modules/terser-webpack-plugin",
-    "tns-platform-declarations": "file:<%= pathOffset %>node_modules/tns-platform-declarations",
+    "@nativescript/webpack": "~2.1.0",
+    "@nativescript/types": "file:<%= pathOffset %>node_modules/@nativescript/types",
     "typescript": "file:<%= pathOffset %>node_modules/typescript"
   }
 }

@@ -10,28 +10,30 @@ import {
   move,
   Rule,
   SchematicsException,
-  externalSchematic
+  externalSchematic,
 } from '@angular-devkit/schematics';
 import {
   generateOptionError,
   platformAppPrefixError,
   generatorError,
   optionsMissingError,
+  needFeatureModuleError,
+  getDefaultTemplateOptions,
+  unsupportedPlatformError,
+  noPlatformError,
+  XplatHelpers,
+  XplatComponentHelpers,
+} from '@nstudio/xplat';
+import {
+  prerun,
   supportedPlatforms,
   PlatformTypes,
-  needFeatureModuleError,
   getPrefix,
   updateJsonFile,
   getJsonFromFile,
-  getDefaultTemplateOptions,
-  unsupportedPlatformError,
   sanitizeCommaDelimitedArg,
-  noPlatformError,
-  XplatHelpers,
   getNpmScope,
-  prerun,
-  XplatComponentHelpers
-} from '@nstudio/xplat';
+} from '@nstudio/xplat-utils';
 import { addToFeature, adjustBarrelIndex } from './generator';
 import { updateJsonInTree, getWorkspacePath } from '@nrwl/workspace';
 import {
@@ -47,7 +49,7 @@ import {
   xplatVersion,
   jestJasmine2,
   jestPresetAngular,
-  typesJest
+  typesJest,
 } from './versions';
 
 export namespace ComponentHelpers {
@@ -81,16 +83,21 @@ export namespace ComponentHelpers {
                 )
               );
             }
-            return addToFeature('', 'component', options, prefixPath, tree)(
-              tree,
-              context
-            );
+            return addToFeature(
+              '',
+              'component',
+              options,
+              prefixPath,
+              tree
+            )(tree, context);
           });
           chains.push((tree: Tree, context: SchematicContext) => {
-            return adjustBarrelIndex('component', options, barrelIndex, true)(
-              tree,
-              context
-            );
+            return adjustBarrelIndex(
+              'component',
+              options,
+              barrelIndex,
+              true
+            )(tree, context);
           });
           chains.push((tree: Tree, context: SchematicContext) => {
             return addToFeature(
@@ -233,14 +240,14 @@ export namespace XplatAngularHelpers {
         dependencies: {
           ...dependencies,
           '@ngx-translate/core': ngxTranslateVersion,
-          '@ngx-translate/http-loader': ngxTranslateHttpVersion
+          '@ngx-translate/http-loader': ngxTranslateHttpVersion,
         },
         devDependencies: {
           ...devDependencies,
           '@types/jest': typesJest,
           'jest-jasmine2': jestJasmine2,
-          'jest-preset-angular': jestPresetAngular
-        }
+          'jest-preset-angular': jestPresetAngular,
+        },
       })(tree, context);
     };
   }
@@ -253,7 +260,7 @@ export namespace XplatAngularHelpers {
       // console.log('angular externalChains:', `@nstudio/${platform}-angular`)
       chains.push(
         externalSchematic(`@nstudio/${platform}-angular`, 'xplat', options, {
-          interactive: false
+          interactive: false,
         })
       );
     }
@@ -263,7 +270,7 @@ export namespace XplatAngularHelpers {
   export function addLibFiles(
     options: XplatHelpers.Schema,
     relativeTo: string = './'
-  ) {
+  ): Rule {
     return (tree: Tree, context: SchematicContext) => {
       if (
         tree.exists(`libs/core/base/base-component.ts`) ||
@@ -277,9 +284,9 @@ export namespace XplatAngularHelpers {
           apply(url(`${relativeTo}_lib_files`), [
             template({
               ...(options as any),
-              ...getDefaultTemplateOptions()
+              ...getDefaultTemplateOptions(),
             }),
-            move('libs')
+            move('libs'),
           ])
         )
       )(tree, context);
@@ -289,7 +296,7 @@ export namespace XplatAngularHelpers {
   export function addScssFiles(
     options: XplatHelpers.Schema,
     relativeTo: string = './'
-  ) {
+  ): Rule {
     return (tree: Tree, context: SchematicContext) => {
       if (tree.exists(`libs/scss/_index.scss`)) {
         return noop()(tree, context);
@@ -300,16 +307,19 @@ export namespace XplatAngularHelpers {
           apply(url(`${relativeTo}_scss_files`), [
             template({
               ...(options as any),
-              ...getDefaultTemplateOptions()
+              ...getDefaultTemplateOptions(),
             }),
-            move('libs/scss')
+            move('libs/scss'),
           ])
         )
       )(tree, context);
     };
   }
 
-  export function addTestingFiles(options: any, relativePath: string = './') {
+  export function addTestingFiles(
+    options: any,
+    relativePath: string = './'
+  ): void | Tree | Rule | Promise<void> | Promise<Rule> {
     return (tree: Tree, context: SchematicContext) => {
       if (tree.exists(`testing/test-setup.ts`)) {
         return noop()(tree, context);
@@ -321,16 +331,22 @@ export namespace XplatAngularHelpers {
             template({
               ...(options as any),
               ...getDefaultTemplateOptions(),
-              xplatFolderName: XplatHelpers.getXplatFoldername('web', 'angular')
+              xplatFolderName: XplatHelpers.getXplatFoldername(
+                'web',
+                'angular'
+              ),
             }),
-            move('testing')
+            move('testing'),
           ])
         )
       )(tree, context);
     };
   }
 
-  export function addJestConfig(options: any, relativePath: string = './') {
+  export function addJestConfig(
+    options: any,
+    relativePath: string = './'
+  ): void | Tree | Rule | Promise<void> | Promise<Rule> {
     return (tree: Tree, context: SchematicContext) => {
       if (tree.exists('jest.config.js')) {
         // user may have generated support already
@@ -341,9 +357,9 @@ export namespace XplatAngularHelpers {
             apply(url(`${relativePath}_files`), [
               template({
                 ...(options as any),
-                ...getDefaultTemplateOptions()
+                ...getDefaultTemplateOptions(),
               }),
-              move('/')
+              move('/'),
             ])
           )
         )(tree, context);
@@ -375,20 +391,20 @@ export namespace XplatAngularHelpers {
                 jestConfig: 'testing/jest.libs.config.js',
                 tsConfig: 'testing/tsconfig.libs.spec.json',
                 passWithNoTests: true,
-                setupFile: 'testing/test-setup.ts'
-              }
+                setupFile: 'testing/test-setup.ts',
+              },
             },
             lint: {
               builder: '@angular-devkit/build-angular:tslint',
               options: {
                 tsConfig: [
                   'testing/tsconfig.libs.json',
-                  'testing/tsconfig.libs.spec.json'
+                  'testing/tsconfig.libs.spec.json',
                 ],
-                exclude: ['**/node_modules/**']
-              }
-            }
-          }
+                exclude: ['**/node_modules/**'],
+              },
+            },
+          },
         };
         workspaceJson.projects['xplat'] = {
           root: 'xplat',
@@ -402,29 +418,29 @@ export namespace XplatAngularHelpers {
                 jestConfig: 'testing/jest.xplat.config.js',
                 tsConfig: 'testing/tsconfig.xplat.spec.json',
                 passWithNoTests: true,
-                setupFile: 'testing/test-setup.ts'
-              }
+                setupFile: 'testing/test-setup.ts',
+              },
             },
             lint: {
               builder: '@angular-devkit/build-angular:tslint',
               options: {
                 tsConfig: [
                   'testing/tsconfig.xplat.json',
-                  'testing/tsconfig.xplat.spec.json'
+                  'testing/tsconfig.xplat.spec.json',
                 ],
-                exclude: ['**/node_modules/**']
-              }
-            }
-          }
+                exclude: ['**/node_modules/**'],
+              },
+            },
+          },
         };
       }
 
       if (nxJson && nxJson.projects) {
         nxJson.projects['libs'] = {
-          tags: []
+          tags: [],
         };
         nxJson.projects['xplat'] = {
-          tags: []
+          tags: [],
         };
       }
 
@@ -438,7 +454,7 @@ export namespace XplatAngularHelpers {
     return (tree: Tree, context: SchematicContext) => {
       const prefix = getPrefix();
 
-      return updateJsonInTree('tslint.json', json => {
+      return updateJsonInTree('tslint.json', (json) => {
         json.rules = json.rules || {};
         // remove forin rule as collides with LogService
         delete json.rules['forin'];
@@ -448,13 +464,13 @@ export namespace XplatAngularHelpers {
           true,
           'attribute',
           prefix,
-          'camelCase'
+          'camelCase',
         ];
         json.rules['component-selector'] = [
           true,
           'element',
           prefix,
-          'kebab-case'
+          'kebab-case',
         ];
 
         return json;

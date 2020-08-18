@@ -9,12 +9,10 @@
     "reset": "npx rimraf -- hooks node_modules platforms && npm run js.clean",
     "clean": "npm run js.clean",
     "js.clean": "npx rimraf -- app/**/*.js",
-    "prepare.ios.release": "tns prepare ios --release",
-    "prepare.android.release": "tns prepare android --release",
-    "build.ios": "tns build ios --env.aot --env.uglify --env.production --release",
-    "build.android": "tns build android --env.aot --env.uglify --env.production --release",
-    "debug.ios": "tns debug ios",
-    "debug.android": "tns debug android",
+    "build.ios": "ns build ios --env.uglify --env.production --release",
+    "build.android": "ns build android --env.uglify --env.production --release",
+    "debug.ios": "ns debug ios",
+    "debug.android": "ns debug android",
     "postinstall": "node ./tools/xplat-postinstall.js && npm run ngcc",
     "ngcc": "ngcc --properties es2015 module main --first-only"
   },
@@ -32,11 +30,9 @@
     "@ngx-translate/core": "<%= ngxTranslateVersion %>",
     "@<%= npmScope %>/scss": "file:<%= pathOffset %>libs/scss",
     "@<%= npmScope %>/nativescript-scss": "file:<%= pathOffset %>xplat/<%= xplatFolderName %>/scss",
-    "nativescript-intl": "<%= nsIntlVersion %>",
     "nativescript-ngx-fonticon": "<%= nsNgFonticonVersion %>",
     "nativescript-theme-core": "<%= nsThemeCoreVersion %>",
     "rxjs": "<%= rxjsVersion %>",
-    "tslib": "<%= tslibVersion %>",
     "zone.js": "<%= zonejsVersion %>"
   },
   "devDependencies": {
@@ -44,9 +40,8 @@
     "@angular/language-service": "<%= angularVersion %>",
     "@ngtools/webpack": "<%= angularVersion %>",
     "codelyzer": "<%= codelyzerVersion %>",
-    "nativescript-dev-webpack": "<%= nsDevWebpackVersion %>",
-    "terser-webpack-plugin": "<%= terserWebpackVersion %>",
-    "tns-platform-declarations": "<%= nsCoreVersion %>",
+    "@nativescript/types": "<%= nsCoreVersion %>",
+    "@nativescript/webpack": "<%= nsDevWebpackVersion %>",
     "typescript": "<%= typescriptVersion %>"
   }
 }

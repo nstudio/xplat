@@ -11,34 +11,36 @@ import {
   template,
   move,
   noop,
-  externalSchematic
+  externalSchematic,
 } from '@angular-devkit/schematics';
 import { formatFiles } from '@nrwl/workspace';
+import {
+  stringUtils,
+  updateWorkspace,
+  updateNxProjects,
+  updatePackageScripts,
+  missingArgument,
+  getDefaultTemplateOptions,
+  XplatHelpers,
+  readWorkspaceJson,
+} from '@nstudio/xplat';
 import {
   prerun,
   getPrefix,
   getNpmScope,
-  stringUtils,
-  updateWorkspace,
-  updateNxProjects,
   getJsonFromFile,
-  updatePackageScripts,
   getGroupByName,
   getAppName,
-  missingArgument,
-  getDefaultTemplateOptions,
-  XplatHelpers,
-  readWorkspaceJson
-} from '@nstudio/xplat';
+} from '@nstudio/xplat-utils';
 import { XplatElectronAngularHelpers } from '../../utils';
 import {
   NodePackageInstallTask,
-  RunSchematicTask
+  RunSchematicTask,
 } from '@angular-devkit/schematics/tasks';
 import { XplatElectrontHelpers } from '@nstudio/electron';
 import { workspaceFileName } from '@nrwl/workspace/src/core/file-utils';
 
-export default function(options: XplatElectrontHelpers.SchemaApp) {
+export default function (options: XplatElectrontHelpers.SchemaApp) {
   if (!options.name) {
     throw new SchematicsException(
       missingArgument(
@@ -62,7 +64,7 @@ export default function(options: XplatElectrontHelpers.SchemaApp) {
   if (options.isTesting) {
     packageHandling.push(
       externalSchematic('@nstudio/electron', 'tools', {
-        ...options
+        ...options,
       })
     );
   } else {
@@ -84,7 +86,7 @@ export default function(options: XplatElectrontHelpers.SchemaApp) {
     (tree: Tree, context: SchematicContext) =>
       externalSchematic('@nstudio/electron', 'xplat', {
         ...options,
-        skipDependentPlatformFiles: true
+        skipDependentPlatformFiles: true,
       }),
     // use xplat or not
     options.useXplat
@@ -127,7 +129,7 @@ export default function(options: XplatElectrontHelpers.SchemaApp) {
         glob: '**/*',
         input: `apps/${electronAppName}/src/`,
         ignore: ['**/*.ts'],
-        output: ''
+        output: '',
       });
       projects[
         electronAppName
@@ -144,14 +146,14 @@ export default function(options: XplatElectrontHelpers.SchemaApp) {
     (tree: Tree) => {
       const projects = {};
       projects[`${options.name}`] = {
-        tags: []
+        tags: [],
       };
       return updateNxProjects(tree, projects);
     },
     options.useXplat ? (tree: Tree) => adjustAppFiles(options, tree) : noop(),
 
     formatFiles({ skipFormat: options.skipFormat }),
-    XplatElectrontHelpers.noteAppCommands(options)
+    XplatElectrontHelpers.noteAppCommands(options),
   ]);
 }
 
@@ -171,9 +173,9 @@ function addAppFiles(
           xplatFolderName: XplatHelpers.getXplatFoldername(
             'electron',
             'angular'
-          )
+          ),
         }),
-        move(`apps/${directory}${appPath}`)
+        move(`apps/${directory}${appPath}`),
       ])
     )
   );

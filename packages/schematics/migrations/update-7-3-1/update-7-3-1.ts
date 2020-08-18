@@ -2,7 +2,7 @@ import {
   chain,
   Rule,
   SchematicContext,
-  Tree
+  Tree,
 } from '@angular-devkit/schematics';
 import { join } from 'path';
 import * as fs from 'fs';
@@ -34,14 +34,14 @@ function updateElectronApps(tree: Tree, context: SchematicContext) {
 }
 
 function updateRootPackage(tree: Tree, context: SchematicContext) {
-  return updateJsonInTree('package.json', json => {
+  return updateJsonInTree('package.json', (json) => {
     json.scripts = json.scripts || {};
     json.dependencies = json.dependencies || {};
     const angularVersion = json.dependencies['@angular/core'];
     // electron dep check looks for @angular/http so adding to make sure not a problem
     json.dependencies = {
       ...json.dependencies,
-      '@angular/http': angularVersion
+      '@angular/http': angularVersion,
     };
     json.devDependencies = json.devDependencies || {};
     json.devDependencies = {
@@ -54,7 +54,7 @@ function updateRootPackage(tree: Tree, context: SchematicContext) {
       'electron-reload': '~1.4.0',
       'electron-store': '~2.0.0',
       'electron-updater': '~4.0.6',
-      'wait-on': '~3.2.0'
+      'wait-on': '~3.2.0',
     };
 
     const appsDir = tree.getDir('apps');
@@ -70,6 +70,6 @@ function updateRootPackage(tree: Tree, context: SchematicContext) {
   })(tree, context);
 }
 
-export default function(): Rule {
+export default function (): Rule {
   return chain([updateElectronApps, updateRootPackage]);
 }

@@ -1,8 +1,8 @@
 import { Tree } from '@angular-devkit/schematics';
-import { jsonParse } from '@nstudio/xplat';
+import { jsonParse } from '@nstudio/xplat-utils';
 import {
   createXplatWithAppsForElectron,
-  getFileContent
+  getFileContent,
 } from '@nstudio/xplat/testing';
 import { runSchematic } from '../../utils/testing';
 import { XplatElectrontHelpers } from '../../utils';
@@ -14,7 +14,7 @@ describe('app', () => {
     target: 'web-viewer',
     npmScope: 'testing',
     prefix: 'tt',
-    isTesting: true
+    isTesting: true,
   };
 
   beforeEach(() => {

@@ -9,16 +9,13 @@ import {
   apply,
   url,
   move,
-  template
+  template,
 } from '@angular-devkit/schematics';
-import {
-  XplatHelpers,
-  prerun,
-  getDefaultTemplateOptions
-} from '@nstudio/xplat';
+import { XplatHelpers, getDefaultTemplateOptions } from '@nstudio/xplat';
+import { prerun } from '@nstudio/xplat-utils';
 import { XplatWebHelpers } from '../../utils/xplat';
 
-export default function(options: XplatHelpers.Schema) {
+export default function (options: XplatHelpers.Schema) {
   return chain([
     prerun(options),
     (tree: Tree, context: SchematicContext) => {
@@ -31,9 +28,9 @@ export default function(options: XplatHelpers.Schema) {
             apply(url(`./_lib_files`), [
               template({
                 ...(options as any),
-                ...getDefaultTemplateOptions()
+                ...getDefaultTemplateOptions(),
               }),
-              move(`libs`)
+              move(`libs`),
             ])
           )
         )(tree, context);
@@ -48,6 +45,6 @@ export default function(options: XplatHelpers.Schema) {
       }
     },
     XplatHelpers.updateTsConfigPaths(options),
-    XplatWebHelpers.updateRootDeps(options)
+    XplatWebHelpers.updateRootDeps(options),
   ]);
 }

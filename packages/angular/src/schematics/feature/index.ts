@@ -6,22 +6,29 @@ import {
   // schematic,
   Rule,
   noop,
-  externalSchematic
+  externalSchematic,
 } from '@angular-devkit/schematics';
 import { formatFiles } from '@nrwl/workspace';
 import {
-  supportedPlatforms,
-  prerun,
   unsupportedPlatformError,
   XplatFeatureHelpers,
+  unsupportedPlatformErrorWithNxNote,
+} from '@nstudio/xplat';
+import {
+  prerun,
+  getNpmScope,
+  getPrefix,
+  getJsonFromFile,
+  updateJsonFile,
+  supportedPlatforms,
+  ITargetPlatforms,
   getFrontendFramework,
   supportedNxExtraPlatforms,
   PlatformNxExtraTypes,
   PlatformTypes,
-  unsupportedPlatformErrorWithNxNote
-} from '@nstudio/xplat';
+} from '@nstudio/xplat-utils';
 
-export default function(options: XplatFeatureHelpers.Schema) {
+export default function (options: XplatFeatureHelpers.Schema) {
   const featureSettings = XplatFeatureHelpers.prepare(options);
 
   const externalChains = [];
@@ -35,7 +42,7 @@ export default function(options: XplatFeatureHelpers.Schema) {
           'feature',
           options,
           {
-            interactive: false
+            interactive: false,
           }
         )(tree, context);
       });
@@ -61,10 +68,12 @@ export default function(options: XplatFeatureHelpers.Schema) {
     (tree: Tree, context: SchematicContext) =>
       options.onlyProject || !options.createBase || options.onlyModule
         ? noop()(tree, context)
-        : XplatFeatureHelpers.addFiles(options, null, null, '_component')(
-            tree,
-            context
-          ),
+        : XplatFeatureHelpers.addFiles(
+            options,
+            null,
+            null,
+            '_component'
+          )(tree, context),
     // update libs index
     (tree: Tree, context: SchematicContext) =>
       options.onlyProject
@@ -75,6 +84,6 @@ export default function(options: XplatFeatureHelpers.Schema) {
           )(tree, context),
     // external schematic handling
     ...externalChains,
-    formatFiles({ skipFormat: options.skipFormat })
+    formatFiles({ skipFormat: options.skipFormat }),
   ]);
 }

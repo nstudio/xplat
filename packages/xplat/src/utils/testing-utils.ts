@@ -2,10 +2,10 @@ import {
   SchematicContext,
   Tree,
   externalSchematic,
-  SchematicsException
+  SchematicsException,
 } from '@angular-devkit/schematics';
 import { NxJson } from '@nrwl/workspace';
-import { FrameworkTypes } from './general';
+import { FrameworkTypes } from '@nstudio/xplat-utils';
 
 export { getFileContent } from '@nrwl/workspace/testing';
 
@@ -19,7 +19,7 @@ export function createEmptyWorkspace(
     JSON.stringify({ version: 1, projects: {}, newProjectRoot: '' })
   );
   const xplatSettings: any = {
-    prefix: 'tt'
+    prefix: 'tt',
   };
   if (framework) {
     xplatSettings.framework = framework;
@@ -29,7 +29,7 @@ export function createEmptyWorkspace(
     JSON.stringify({
       dependencies: {},
       devDependencies: {},
-      xplat: xplatSettings
+      xplat: xplatSettings,
     })
   );
   tree.create(
@@ -41,6 +41,10 @@ export function createEmptyWorkspace(
     JSON.stringify({ compilerOptions: { paths: {} } })
   );
   tree.create(
+    '/tsconfig.base.json',
+    JSON.stringify({ compilerOptions: { paths: {} } })
+  );
+  tree.create(
     '/tslint.json',
     JSON.stringify({
       rules: {
@@ -49,10 +53,10 @@ export function createEmptyWorkspace(
           {
             npmScope: '<%= npmScope %>',
             lazyLoad: [],
-            allow: []
-          }
-        ]
-      }
+            allow: [],
+          },
+        ],
+      },
     })
   );
   return tree;
@@ -69,18 +73,18 @@ export function createXplatWithAppsForElectron(tree: Tree): Tree {
           architect: {
             build: {
               options: {
-                assets: []
-              }
+                assets: [],
+              },
             },
             serve: {
               options: {},
               configurations: {
-                production: {}
-              }
-            }
-          }
-        }
-      }
+                production: {},
+              },
+            },
+          },
+        },
+      },
     })
   );
   tree.overwrite(
@@ -89,15 +93,15 @@ export function createXplatWithAppsForElectron(tree: Tree): Tree {
       npmScope: 'testing',
       projects: {
         'web-viewer': {
-          tags: []
-        }
-      }
+          tags: [],
+        },
+      },
     })
   );
   tree.create(
     '/tools/tsconfig.tools.json',
     JSON.stringify({
-      extends: '../tsconfig.json'
+      extends: '../tsconfig.json',
     })
   );
   return tree;
@@ -358,7 +362,8 @@ export function createWebAngularApp(tree: Tree, withRouting?: boolean) {
       },
       {
         path: 'home',
-        loadChildren: './features/home/home.module#HomeModule'
+        loadChildren: () => 
+          import('./features/home/home.module').then(m => m.HomeModule)
       }
     ];
     
@@ -377,7 +382,6 @@ export function createNativeScriptAngularApp(
 ) {
   tree.create('/apps/nativescript-viewer/package.json', '');
   tree.create('/apps/nativescript-viewer/tsconfig.json', '');
-  tree.create('/apps/nativescript-viewer/webpack.config.js', '');
   tree.create('/apps/nativescript-viewer/src/core/core.module.ts', '');
   tree.create(
     '/apps/nativescript-viewer/src/features/shared/shared.module.ts',
@@ -411,7 +415,8 @@ export function createNativeScriptAngularApp(
       },
       {
         path: 'home',
-        loadChildren: '~/features/home/home.module#HomeModule'
+        loadChildren: () => 
+          import('./features/home/home.module').then(m => m.HomeModule)
       }
     ];
     

@@ -3,7 +3,7 @@ import {
   Rule,
   SchematicContext,
   Tree,
-  SchematicsException
+  SchematicsException,
 } from '@angular-devkit/schematics';
 import { join } from 'path';
 import * as fs from 'fs';
@@ -12,13 +12,13 @@ import {
   readJsonInTree,
   addDepsToPackageJson,
   formatFiles,
-  createOrUpdate
+  createOrUpdate,
 } from '@nrwl/workspace';
 import {
   getJsonFromFile,
   updateJsonFile,
-  addInstallTask
-} from '@nstudio/xplat';
+  addInstallTask,
+} from '@nstudio/xplat-utils';
 import { stripIndents } from '@angular-devkit/core/src/utils/literals';
 
 function addDependencies() {
@@ -30,11 +30,11 @@ function addDependencies() {
     const projects = readJsonInTree(host, 'angular.json').projects;
     Object.values<any>(projects)
       .filter(
-        project =>
+        (project) =>
           typeof project === 'object' && project.hasOwnProperty('architect')
       )
-      .forEach(project => {
-        Object.values<any>(project.architect).forEach(target => {
+      .forEach((project) => {
+        Object.values<any>(project.architect).forEach((target) => {
           const [builderDependency] = target.builder.split(':');
           builders.add(builderDependency);
         });
@@ -42,7 +42,7 @@ function addDependencies() {
     const newDependencies = {};
     const newDevDependencies = {
       '@nstudio/xplat': '^8.0.0',
-      '@nstudio/angular': '^8.0.0'
+      '@nstudio/angular': '^8.0.0',
     };
     context.logger.info(`Adding @nstudio/xplat as a dependency`);
     if (dependencies['@angular/core']) {
@@ -93,7 +93,7 @@ const removeOldDependencies = updateJsonInTree(
     json.xplat = {
       ...(json.xplat || {}),
       // all updates into 8.0 will be angular based since that was all that was previously supported
-      framework: 'angular'
+      framework: 'angular',
     };
 
     return json;
@@ -119,7 +119,7 @@ const updateDefaultCollection = (tree: Tree, context: SchematicContext) => {
     workspaceFile = 'workspace.json';
   }
 
-  return updateJsonInTree(workspaceFile, json => {
+  return updateJsonInTree(workspaceFile, (json) => {
     json.cli = json.cli || {};
     if (dependencies['@nstudio/schematics']) {
       json.cli.defaultCollection = '@nstudio/xplat';
@@ -148,7 +148,7 @@ const updateDefaultCollection = (tree: Tree, context: SchematicContext) => {
 //   }
 // };
 
-export default function(): Rule {
+export default function (): Rule {
   return chain([
     displayInformation,
     removeOldDependencies,
@@ -156,6 +156,6 @@ export default function(): Rule {
     updateDefaultCollection,
     // addXplatFrameworkIdentifier,
     addInstallTask(),
-    formatFiles()
+    formatFiles(),
   ]);
 }

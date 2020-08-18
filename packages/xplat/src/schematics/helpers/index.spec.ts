@@ -1,10 +1,11 @@
 import { Tree } from '@angular-devkit/schematics';
 import { Schema } from './schema';
-import { stringUtils, setTest, XplatHelpers } from '@nstudio/xplat';
+import { stringUtils, XplatHelpers } from '@nstudio/xplat';
+import { setTest } from '@nstudio/xplat-utils';
 import {
   isInModuleMetadata,
   createEmptyWorkspace,
-  getFileContent
+  getFileContent,
 } from '@nstudio/xplat/testing';
 import { runSchematic } from '../../utils/testing';
 setTest();
@@ -21,13 +22,13 @@ describe('xplat-helper schematic', () => {
     const optionsXplat: XplatHelpers.Schema = {
       npmScope: 'testing',
       prefix: 'tt',
-      platforms: 'web,nativescript'
+      platforms: 'web,nativescript',
     };
 
     appTree = await runSchematic('init', optionsXplat, appTree);
     const options: Schema = {
       name: 'imports',
-      platforms: 'web'
+      platforms: 'web',
     };
     // console.log('appTree:', appTree);
     const tree = await runSchematic('helpers', options, appTree);

@@ -2,10 +2,10 @@ import {
   chain,
   Rule,
   SchematicContext,
-  Tree
+  Tree,
 } from '@angular-devkit/schematics';
 
-import { getJsonFromFile, updateJsonFile } from '@nstudio/xplat';
+import { getJsonFromFile, updateJsonFile } from '@nstudio/xplat-utils';
 
 function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
   const appsDir = tree.getDir('apps');
@@ -29,7 +29,7 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
         packageJson.devDependencies = {
           ...packageJson.devDependencies,
           '@angular/compiler-cli': '6.1.0-rc.0',
-          '@ngtools/webpack': '6.1.0-rc.0'
+          '@ngtools/webpack': '6.1.0-rc.0',
         };
         // ensure dev sass is removed
         delete packageJson.devDependencies['nativescript-dev-sass'];
@@ -43,6 +43,6 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
   return tree;
 }
 
-export default function(): Rule {
+export default function (): Rule {
   return chain([updateNativeScriptApps]);
 }

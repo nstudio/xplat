@@ -3,13 +3,14 @@ import {
   externalSchematic,
   Tree,
   SchematicContext,
-  noop
+  noop,
 } from '@angular-devkit/schematics';
 // import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
-import { XplatHelpers, prerun } from '@nstudio/xplat';
+import { XplatHelpers } from '@nstudio/xplat';
+import { prerun } from '@nstudio/xplat-utils';
 import { XplatElectronAngularHelpers } from '../../utils';
 
-export default function(options: XplatHelpers.Schema) {
+export default function (options: XplatHelpers.Schema) {
   return chain([
     prerun(options, true),
     (tree: Tree, context: SchematicContext) => {
@@ -17,7 +18,7 @@ export default function(options: XplatHelpers.Schema) {
         return noop();
       } else {
         return externalSchematic('@nstudio/web-angular', 'xplat', options, {
-          interactive: false
+          interactive: false,
         })(tree, context);
       }
     },
@@ -27,7 +28,7 @@ export default function(options: XplatHelpers.Schema) {
         'xplat',
         {
           ...options,
-          skipDependentPlatformFiles: true
+          skipDependentPlatformFiles: true,
         },
         { interactive: false }
       ),
@@ -45,6 +46,6 @@ export default function(options: XplatHelpers.Schema) {
           );
     },
     XplatHelpers.updateTsConfigPaths(options, { framework: 'angular' }),
-    XplatElectronAngularHelpers.updateRootDeps(options)
+    XplatElectronAngularHelpers.updateRootDeps(options),
   ]);
 }

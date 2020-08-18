@@ -1,11 +1,7 @@
 import { Tree, SchematicContext } from '@angular-devkit/schematics';
-import { updateFile, XplatHelpers } from '@nstudio/xplat';
-import {
-  terserWebpackVersion,
-  nsCoreVersion,
-  nsThemeCoreVersion,
-  nodeSassVersion
-} from './versions';
+import { XplatHelpers } from '@nstudio/xplat';
+import { updateFile } from '@nstudio/xplat-utils';
+import { nsCoreVersion, nsThemeCoreVersion, nodeSassVersion } from './versions';
 
 export namespace XplatNativeScriptHelpers {
   export function updateRootDeps(options: XplatHelpers.Schema) {
@@ -13,13 +9,12 @@ export namespace XplatNativeScriptHelpers {
       return XplatHelpers.updatePackageForXplat(options, {
         dependencies: {
           '@nativescript/core': nsCoreVersion,
-          'nativescript-theme-core': nsThemeCoreVersion
+          'nativescript-theme-core': nsThemeCoreVersion,
         },
         devDependencies: {
           'node-sass': nodeSassVersion,
-          'terser-webpack-plugin': terserWebpackVersion,
-          'tns-platform-declarations': nsCoreVersion
-        }
+          '@nativescript/types': nsCoreVersion,
+        },
       })(tree, context);
     };
   }

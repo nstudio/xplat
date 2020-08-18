@@ -2,18 +2,20 @@ import { Tree, SchematicContext, noop } from '@angular-devkit/schematics';
 import { createOrUpdate } from '@nrwl/workspace';
 import {
   updatePackageScripts,
+  IHelperConfig,
+  IHelperSchema,
+} from '@nstudio/xplat';
+import {
   getJsonFromFile,
   updateJsonFile,
   PlatformTypes,
   isTesting,
-  IHelperConfig,
-  IHelperSchema
-} from '@nstudio/xplat';
+} from '@nstudio/xplat-utils';
 
 export const config: IHelperConfig = {
   requiresTarget: true,
   additionalSupport: applitools,
-  logNotes: note
+  logNotes: note,
 };
 
 function applitools(helperChains: Array<any>, options: IHelperSchema) {

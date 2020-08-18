@@ -1,19 +1,15 @@
 import { Tree } from '@angular-devkit/schematics';
-import {
-  supportedPlatforms,
-  setTest,
-  jsonParse,
-  XplatHelpers
-} from '@nstudio/xplat';
+import { supportedPlatforms, setTest, jsonParse } from '@nstudio/xplat-utils';
+import { XplatHelpers } from '@nstudio/xplat';
 import { createEmptyWorkspace, getFileContent } from '@nstudio/xplat/testing';
-import { runSchematic, runSchematicSync } from '../../utils/testing';
+import { runSchematic } from '../../utils/testing';
 setTest();
 
 describe('xplat schematic', () => {
   let appTree: Tree;
   const defaultOptions: XplatHelpers.Schema = {
     npmScope: 'testing',
-    prefix: 'ft' // foo test
+    prefix: 'ft', // foo test
   };
 
   beforeEach(() => {
@@ -146,27 +142,21 @@ describe('xplat schematic', () => {
     expect(tree.exists('/xplat/nativescript/index.ts')).toBeTruthy();
   });
 
-  it('should NOT create xplat unless platforms are specified', () => {
+  it('should NOT create xplat unless platforms are specified', async () => {
     const options: XplatHelpers.Schema = { ...defaultOptions };
 
-    let tree;
-    expect(
-      () => (tree = runSchematicSync('xplat', options, appTree))
-    ).toThrowError(
+    await expect(runSchematic('xplat', options, appTree)).rejects.toThrow(
       `You must specify which platforms you wish to generate support for. For example: nx g @nstudio/xplat:init --prefix=foo --platforms=${supportedPlatforms.join(
         ','
       )}`
     );
   });
 
-  it('should NOT create unsupported xplat option and throw', () => {
+  it('should NOT create unsupported xplat option and throw', async () => {
     const options: XplatHelpers.Schema = { ...defaultOptions };
     options.platforms = 'desktop';
 
-    let tree;
-    expect(
-      () => (tree = runSchematicSync('xplat', options, appTree))
-    ).toThrowError(
+    await expect(runSchematic('xplat', options, appTree)).rejects.toThrow(
       `desktop is currently not a supported platform. Supported at the moment: ${supportedPlatforms}. Please request support for this platform if you'd like and/or submit a PR which we would greatly appreciate.`
     );
   });

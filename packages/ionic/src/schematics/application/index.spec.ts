@@ -8,7 +8,7 @@ describe('ionic app', () => {
   const defaultOptions: Schema = {
     name: 'foo',
     npmScope: 'testing',
-    prefix: 'tt'
+    prefix: 'tt',
   };
 
   beforeEach(() => {

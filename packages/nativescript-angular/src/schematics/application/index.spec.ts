@@ -4,7 +4,7 @@ import { stringUtils, XplatFeatureHelpers } from '@nstudio/xplat';
 import {
   isInModuleMetadata,
   createEmptyWorkspace,
-  getFileContent
+  getFileContent,
 } from '@nstudio/xplat/testing';
 import { runSchematic } from '../../utils/testing';
 
@@ -14,7 +14,7 @@ describe('app', () => {
     name: 'foo',
     npmScope: 'testing',
     routing: true,
-    prefix: 'tt' // foo test
+    prefix: 'tt', // foo test
   };
 
   beforeEach(() => {
@@ -35,19 +35,10 @@ describe('app', () => {
       files.indexOf('/apps/nativescript-foo/package.json')
     ).toBeGreaterThanOrEqual(0);
     expect(
-      files.indexOf('/apps/nativescript-foo/ngcc.config.js')
-    ).toBeGreaterThanOrEqual(0);
-    expect(
       files.indexOf('/apps/nativescript-foo/references.d.ts')
     ).toBeGreaterThanOrEqual(0);
     expect(
-      files.indexOf('/apps/nativescript-foo/tsconfig.tns.json')
-    ).toBeGreaterThanOrEqual(0);
-    expect(
       files.indexOf('/apps/nativescript-foo/tsconfig.json')
-    ).toBeGreaterThanOrEqual(0);
-    expect(
-      files.indexOf('/apps/nativescript-foo/webpack.config.js')
     ).toBeGreaterThanOrEqual(0);
 
     // tools
@@ -57,7 +48,7 @@ describe('app', () => {
 
     // source dir
     expect(
-      files.indexOf('/xplat/nativescript/scss/fonticons/fontawesome.min.css')
+      files.indexOf('/xplat/nativescript/utils/font-awesome.ts')
     ).toBeGreaterThanOrEqual(0);
     expect(
       files.indexOf('/apps/nativescript-foo/src/core/core.module.ts')
@@ -164,8 +155,8 @@ describe('app', () => {
         dependencies: {},
         devDependencies: {},
         xplat: {
-          prefix: 'tt'
-        }
+          prefix: 'tt',
+        },
       })
     );
     const tree = await runSchematic('app', options, appTree);
@@ -251,7 +242,7 @@ describe('app', () => {
     const featureOptions: XplatFeatureHelpers.Schema = {
       name: 'foo-with-dash',
       adjustSandbox: true,
-      projects: 'nativescript-foo'
+      projects: 'nativescript-foo',
     };
     tree = await runSchematic('feature', featureOptions, tree);
     fileContent = getFileContent(
@@ -283,13 +274,7 @@ describe('app', () => {
       files.indexOf('/apps/foo-nativescript/references.d.ts')
     ).toBeGreaterThanOrEqual(0);
     expect(
-      files.indexOf('/apps/foo-nativescript/tsconfig.tns.json')
-    ).toBeGreaterThanOrEqual(0);
-    expect(
       files.indexOf('/apps/foo-nativescript/tsconfig.json')
-    ).toBeGreaterThanOrEqual(0);
-    expect(
-      files.indexOf('/apps/foo-nativescript/webpack.config.js')
     ).toBeGreaterThanOrEqual(0);
 
     // tools

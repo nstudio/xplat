@@ -8,18 +8,15 @@ import {
   url,
   move,
   template,
-  SchematicContext
+  SchematicContext,
 } from '@angular-devkit/schematics';
 import { formatFiles } from '@nrwl/workspace';
-import {
-  prerun,
-  XplatHelpers,
-  addInstallTask,
-  getDefaultTemplateOptions
-} from '@nstudio/xplat';
+import { XplatHelpers, getDefaultTemplateOptions } from '@nstudio/xplat';
+import { prerun, addInstallTask } from '@nstudio/xplat-utils';
 import { XplatAngularHelpers } from '../../utils/xplat';
+import { FocusHelpers } from '@nstudio/focus';
 
-export default function(options: XplatHelpers.Schema) {
+export default function (options: XplatHelpers.Schema) {
   // console.log(`Generating xplat angular support for: ${options.platforms}`);
   const externalChains = XplatAngularHelpers.externalChains(options);
 
@@ -48,7 +45,7 @@ export default function(options: XplatHelpers.Schema) {
     //   return updatePackageScripts(tree, scripts);
     // },
     // update IDE settings
-    XplatHelpers.updateIDESettings(options),
-    addInstallTask(options)
+    FocusHelpers.updateIDESettings(options),
+    addInstallTask(options),
   ]);
 }
