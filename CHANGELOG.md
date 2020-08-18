@@ -1,3 +1,9 @@
+# [10.0.0](https://github.com/nstudio/xplat/compare/9.0.4...10.0.0) (2020-08-18)
+
+### Features
+
+- **core:** Nx 10 and Angular 10 ([#208](https://github.com/nstudio/xplat/issues/208)) ([5e9276e](https://github.com/nstudio/xplat/commit/5e9276e14137b3dcefa061ca945a2cf8e6947be1))
+
 <a name="9.0.4"></a>
 
 ## [9.0.4](https://github.com/nstudio/xplat/compare/9.0.3...9.0.4) (2020-06-11)
