@@ -201,7 +201,7 @@ export default function (options: Schema) {
                 },
                 {
                   command: 'npx rimraf -- package-lock.json',
-                }
+                },
               ],
               cwd: `apps/${directory}${options.name}`,
               parallel: false,

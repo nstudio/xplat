@@ -639,9 +639,7 @@ describe('feature schematic', () => {
     expect(featureModule).toMatch(
       `import { RouterModule, Routes } from \'@angular/router\'`
     );
-    expect(featureModule).toMatch(
-      `loadChildren: () =>`
-    );
+    expect(featureModule).toMatch(`loadChildren: () =>`);
     expect(featureModule).toMatch(
       `'./features/foo-with-dash/foo-with-dash.module'`
     );
@@ -650,9 +648,7 @@ describe('feature schematic', () => {
     featureModule = getFileContent(tree, modulePath);
     // console.log(modulePath + ':');
     // console.log(featureModule);
-    expect(featureModule).toMatch(
-      `loadChildren: () =>`
-    );
+    expect(featureModule).toMatch(`loadChildren: () =>`);
     expect(featureModule).toMatch(
       `'./features/foo-with-dash/foo-with-dash.module'`
     );
