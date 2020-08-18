@@ -1,6 +1,6 @@
 # mode
 
-Multi-platform development modes for IDEs.
+Focus helpers for monorepos in various IDEs
 
 ## Usage
 
