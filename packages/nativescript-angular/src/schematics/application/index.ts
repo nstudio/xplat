@@ -130,10 +130,10 @@ export default function (options: Schema) {
       ] = `npx rimraf -- hooks node_modules package-lock.json && npm i`;
       scripts[
         `start.${platformApp}.ios`
-      ] = `cd apps/${directory}${options.name} && tns debug ios --env.aot --no-hmr --emulator`;
+      ] = `cd apps/${directory}${options.name} && ns debug ios --no-hmr --emulator`;
       scripts[
         `start.${platformApp}.android`
-      ] = `cd apps/${directory}${options.name} && tns debug android --env.aot --no-hmr --emulator`;
+      ] = `cd apps/${directory}${options.name} && ns debug android --no-hmr --emulator`;
       scripts[
         `clean.${platformApp}`
       ] = `cd apps/${directory}${options.name} && npx rimraf -- hooks node_modules platforms package-lock.json && npm i && npx rimraf -- package-lock.json`;
@@ -169,7 +169,7 @@ export default function (options: Schema) {
             options: {
               commands: [
                 {
-                  command: 'tns debug ios --env.aot --no-hmr',
+                  command: 'ns debug ios --no-hmr',
                 },
               ],
               cwd: `apps/${directory}${options.name}`,
@@ -181,7 +181,7 @@ export default function (options: Schema) {
             options: {
               commands: [
                 {
-                  command: 'tns debug android --env.aot --no-hmr',
+                  command: 'ns debug android --no-hmr',
                 },
               ],
               cwd: `apps/${directory}${options.name}`,
@@ -197,8 +197,11 @@ export default function (options: Schema) {
                     'npx rimraf -- hooks node_modules platforms package-lock.json',
                 },
                 {
-                  command: 'npm i && npx rimraf -- package-lock.json',
+                  command: 'npm i',
                 },
+                {
+                  command: 'npx rimraf -- package-lock.json',
+                }
               ],
               cwd: `apps/${directory}${options.name}`,
               parallel: false,

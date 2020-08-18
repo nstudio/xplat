@@ -889,9 +889,9 @@ export function adjustRouting(
           routingModulePath,
           `{ 
               path: '${featureName}',
-              loadChildren: '${loadPrefix}/features/${featureName}/${featureName}.module#${stringUtils.classify(
+              loadChildren: () => import('./features/${featureName}/${featureName}.module').then(m => m.${stringUtils.classify(
             featureName
-          )}Module'
+          )}Module)'
           }`
         )
       );

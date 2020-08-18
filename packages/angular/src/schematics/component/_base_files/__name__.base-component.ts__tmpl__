@@ -1,6 +1,7 @@
+import { Directive } from '@angular/core';
 import { BaseComponent } from '@<%= npmScope %>/core';
 
-@Injectable() // decorator allows base input, outputs and other angular specifics to be inherited
+@Directive()
 export abstract class <%= utils.classify(name) %>BaseComponent extends BaseComponent {
   
   public text: string = '<%= utils.classify(name) %>';

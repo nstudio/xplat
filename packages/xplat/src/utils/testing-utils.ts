@@ -362,7 +362,8 @@ export function createWebAngularApp(tree: Tree, withRouting?: boolean) {
       },
       {
         path: 'home',
-        loadChildren: './features/home/home.module#HomeModule'
+        loadChildren: () => 
+          import('./features/home/home.module').then(m => m.HomeModule)
       }
     ];
     
@@ -414,7 +415,8 @@ export function createNativeScriptAngularApp(
       },
       {
         path: 'home',
-        loadChildren: '~/features/home/home.module#HomeModule'
+        loadChildren: () => 
+          import('./features/home/home.module').then(m => m.HomeModule)
       }
     ];
     

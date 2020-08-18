@@ -640,10 +640,10 @@ describe('feature schematic', () => {
       `import { RouterModule, Routes } from \'@angular/router\'`
     );
     expect(featureModule).toMatch(
-      `loadChildren: './features/home/home.module#HomeModule'`
+      `loadChildren: () =>`
     );
     expect(featureModule).toMatch(
-      `'./features/foo-with-dash/foo-with-dash.module#FooWithDashModule'`
+      `'./features/foo-with-dash/foo-with-dash.module'`
     );
 
     modulePath = '/apps/nativescript-viewer/src/app.routing.ts';
@@ -651,10 +651,10 @@ describe('feature schematic', () => {
     // console.log(modulePath + ':');
     // console.log(featureModule);
     expect(featureModule).toMatch(
-      `loadChildren: '~/features/home/home.module#HomeModule'`
+      `loadChildren: () =>`
     );
     expect(featureModule).toMatch(
-      `'~/features/foo-with-dash/foo-with-dash.module#FooWithDashModule'`
+      `'./features/foo-with-dash/foo-with-dash.module'`
     );
 
     // check that name with dash was handled right

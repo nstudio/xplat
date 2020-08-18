@@ -72,7 +72,7 @@ export namespace XplatNativeScriptAngularHelpers {
         tree.create(
           filename,
           `/// <reference path="./node_modules/@nativescript/types/ios.d.ts" />
-  /// <reference path="./node_modules/@nativescript/types/android.d.ts" />
+/// <reference path="./node_modules/@nativescript/types/android.d.ts" />
       `
         );
       }
