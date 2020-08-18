@@ -12,7 +12,7 @@ import {
   SchematicsException,
   externalSchematic,
   noop,
-  ExecutionOptions
+  ExecutionOptions,
 } from '@angular-devkit/schematics';
 import { formatFiles } from '@nrwl/workspace';
 import {
@@ -22,7 +22,7 @@ import {
   getDefaultTemplateOptions,
   XplatHelpers,
   readWorkspaceJson,
-  updateWorkspace
+  updateWorkspace,
 } from '@nstudio/xplat';
 import {
   prerun,
@@ -30,11 +30,11 @@ import {
   getPrefix,
   getJsonFromFile,
   updateJsonFile,
-  supportedPlatforms
- } from '@nstudio/xplat-utils';
+  supportedPlatforms,
+} from '@nstudio/xplat-utils';
 import { Schema } from './schema';
 
-export default function(options: Schema) {
+export default function (options: Schema) {
   if (!options.name) {
     throw new SchematicsException(
       missingArgument(
@@ -57,13 +57,13 @@ export default function(options: Schema) {
     options.useXplat
       ? externalSchematic('@nstudio/angular', 'xplat', {
           platforms: 'web',
-          framework: 'angular'
+          framework: 'angular',
         })
       : noop(),
     (tree: Tree, context: SchematicContext) => {
       const nrwlWebOptions = {
         ...options,
-        skipInstall: true
+        skipInstall: true,
       };
       let executionOptions: Partial<ExecutionOptions>;
       if (options.useXplat) {
@@ -105,7 +105,7 @@ export default function(options: Schema) {
       scripts[`start.${platformApp}`] = `nx serve ${options.name}`;
       return updatePackageScripts(tree, scripts);
     },
-    formatFiles({ skipFormat: options.skipFormat })
+    formatFiles({ skipFormat: options.skipFormat }),
   ]);
 }
 
@@ -137,7 +137,7 @@ exports.config = defaultConfig;
           workspaceConfig.projects[
             e2eProjectName
           ].architect.e2e.configurations.ci = {
-            protractorConfig: `apps/${directory}${e2eProjectName}/${confFile}`
+            protractorConfig: `apps/${directory}${e2eProjectName}/${confFile}`,
           };
         }
       }
@@ -173,9 +173,9 @@ function addAppFiles(options: Schema, extra: string = ''): Rule {
         template({
           ...(options as any),
           ...getDefaultTemplateOptions(),
-          xplatFolderName: XplatHelpers.getXplatFoldername('web', 'angular')
+          xplatFolderName: XplatHelpers.getXplatFoldername('web', 'angular'),
         }),
-        move(`apps/${directory}${options.name}`)
+        move(`apps/${directory}${options.name}`),
       ])
     )
   );
@@ -233,7 +233,7 @@ function adjustAppFiles(options: Schema, tree: Tree) {
             'web',
             'angular'
           )}/scss/_index.scss`,
-          `apps/${directory}${options.name}/src/styles.scss`
+          `apps/${directory}${options.name}/src/styles.scss`,
         ];
       }
     }

@@ -11,7 +11,7 @@ import {
   template,
   move,
   noop,
-  externalSchematic
+  externalSchematic,
 } from '@angular-devkit/schematics';
 import { formatFiles } from '@nrwl/workspace';
 import {
@@ -22,24 +22,24 @@ import {
   missingArgument,
   getDefaultTemplateOptions,
   XplatHelpers,
-  readWorkspaceJson
+  readWorkspaceJson,
 } from '@nstudio/xplat';
-import { 
+import {
   prerun,
   getPrefix,
   getNpmScope,
   getJsonFromFile,
   getGroupByName,
-  getAppName, 
+  getAppName,
 } from '@nstudio/xplat-utils';
 import { XplatElectrontHelpers } from '../../utils';
 import {
   NodePackageInstallTask,
-  RunSchematicTask
+  RunSchematicTask,
 } from '@angular-devkit/schematics/tasks';
 import { workspaceFileName } from '@nrwl/workspace/src/core/file-utils';
 
-export default function(options: XplatElectrontHelpers.SchemaApp) {
+export default function (options: XplatElectrontHelpers.SchemaApp) {
   if (!options.name) {
     throw new SchematicsException(
       missingArgument(
@@ -59,7 +59,7 @@ export default function(options: XplatElectrontHelpers.SchemaApp) {
   if (options.isTesting) {
     packageHandling.push(
       externalSchematic('@nstudio/electron', 'tools', {
-        ...options
+        ...options,
       })
     );
   } else {
@@ -113,7 +113,7 @@ export default function(options: XplatElectrontHelpers.SchemaApp) {
         glob: '**/*',
         input: `apps/${directory}${electronAppName}/src/`,
         ignore: ['**/*.ts'],
-        output: ''
+        output: '',
       });
       projects[
         electronAppName
@@ -130,12 +130,12 @@ export default function(options: XplatElectrontHelpers.SchemaApp) {
     (tree: Tree) => {
       const projects = {};
       projects[`${options.name}`] = {
-        tags: []
+        tags: [],
       };
       return updateNxProjects(tree, projects);
     },
 
-    formatFiles({ skipFormat: options.skipFormat })
+    formatFiles({ skipFormat: options.skipFormat }),
   ]);
 }
 
@@ -152,9 +152,9 @@ function addAppFiles(
           ...(options as any),
           ...getDefaultTemplateOptions(),
           appname,
-          xplatFolderName: XplatHelpers.getXplatFoldername('electron')
+          xplatFolderName: XplatHelpers.getXplatFoldername('electron'),
         }),
-        move(`apps/${directory}${appPath}`)
+        move(`apps/${directory}${appPath}`),
       ])
     )
   );

@@ -3,12 +3,12 @@ import {
   Rule,
   SchematicContext,
   Tree,
-  noop
+  noop,
 } from '@angular-devkit/schematics';
 import {
   updateJsonInTree,
   readJsonInTree,
-  createOrUpdate
+  createOrUpdate,
 } from '@nrwl/workspace';
 import { getJsonFromFile, updateJsonFile } from '@nstudio/xplat-utils';
 
@@ -39,20 +39,20 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
           options: {
             main: 'testing/test.libs.ts',
             tsConfig: 'testing/tsconfig.libs.spec.json',
-            karmaConfig: 'testing/karma.conf.js'
-          }
+            karmaConfig: 'testing/karma.conf.js',
+          },
         },
         lint: {
           builder: '@angular-devkit/build-angular:tslint',
           options: {
             tsConfig: [
               'testing/tsconfig.libs.json',
-              'testing/tsconfig.libs.spec.json'
+              'testing/tsconfig.libs.spec.json',
             ],
-            exclude: ['**/node_modules/**']
-          }
-        }
-      }
+            exclude: ['**/node_modules/**'],
+          },
+        },
+      },
     };
     angularJson.projects['xplat'] = {
       root: 'xplat',
@@ -65,29 +65,29 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
           options: {
             main: 'testing/test.xplat.ts',
             tsConfig: 'testing/tsconfig.xplat.spec.json',
-            karmaConfig: 'testing/karma.conf.js'
-          }
+            karmaConfig: 'testing/karma.conf.js',
+          },
         },
         lint: {
           builder: '@angular-devkit/build-angular:tslint',
           options: {
             tsConfig: [
               'testing/tsconfig.xplat.json',
-              'testing/tsconfig.xplat.spec.json'
+              'testing/tsconfig.xplat.spec.json',
             ],
-            exclude: ['**/node_modules/**']
-          }
-        }
-      }
+            exclude: ['**/node_modules/**'],
+          },
+        },
+      },
     };
   }
 
   if (nxJson && nxJson.projects) {
     nxJson.projects['libs'] = {
-      tags: []
+      tags: [],
     };
     nxJson.projects['xplat'] = {
-      tags: []
+      tags: [],
     };
   }
 
@@ -106,15 +106,15 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
           prefix,
           schematics: {
             '@schematics/angular:component': {
-              styleext: 'scss'
-            }
-          }
+              styleext: 'scss',
+            },
+          },
         };
       }
 
       if (nxJson && nxJson.projects) {
         nxJson.projects[dir] = {
-          tags: []
+          tags: [],
         };
       }
 
@@ -138,7 +138,7 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
       if (packageJson) {
         packageJson.scripts = {
           ...packageJson.scripts,
-          postinstall: 'node ./tools/xplat-postinstall.js'
+          postinstall: 'node ./tools/xplat-postinstall.js',
         };
         packageJson.dependencies = packageJson.dependencies || {};
         packageJson.devDependencies = packageJson.devDependencies || {};
@@ -160,7 +160,7 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
           webpack: '~4.6.0',
           'webpack-bundle-analyzer': '~2.13.0',
           'webpack-cli': '~2.1.3',
-          'webpack-sources': '~1.1.0'
+          'webpack-sources': '~1.1.0',
         };
         // ensure dev sass is removed
         delete packageJson.devDependencies['nativescript-dev-sass'];
@@ -187,7 +187,7 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
 }
 
 function updateRootPackage(tree: Tree, context: SchematicContext) {
-  return updateJsonInTree('package.json', json => {
+  return updateJsonInTree('package.json', (json) => {
     json.scripts = json.scripts || {};
     json.dependencies = json.dependencies || {};
     json.devDependencies = json.devDependencies || {};
@@ -214,11 +214,11 @@ function updateRootPackage(tree: Tree, context: SchematicContext) {
     json.dependencies = {
       ...json.dependencies,
       'nativescript-angular': '~6.0.0',
-      'tns-core-modules': '~4.1.0'
+      'tns-core-modules': '~4.1.0',
     };
     json.devDependencies = {
       ...json.devDependencies,
-      'tns-platform-declarations': '~4.1.0'
+      'tns-platform-declarations': '~4.1.0',
     };
 
     return json;
@@ -247,7 +247,7 @@ function getPrefix(host: Tree) {
 function updateLint(host: Tree, context: SchematicContext) {
   const prefix = getPrefix(host);
 
-  return updateJsonInTree('tslint.json', json => {
+  return updateJsonInTree('tslint.json', (json) => {
     json.rules = json.rules || {};
     // remove forin rule as collides with LogService
     delete json.rules['forin'];
@@ -260,7 +260,7 @@ function updateLint(host: Tree, context: SchematicContext) {
   })(host, context);
 }
 
-export default function(): Rule {
+export default function (): Rule {
   return chain([updateNativeScriptApps, updateRootPackage, updateLint]);
 }
 

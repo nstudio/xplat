@@ -11,7 +11,7 @@ describe('xplat schematic', () => {
   const defaultOptions: XplatHelpers.Schema = {
     npmScope: 'testing',
     prefix: 'ft', // foo test
-    platforms: 'electron'
+    platforms: 'electron',
   };
 
   beforeEach(() => {

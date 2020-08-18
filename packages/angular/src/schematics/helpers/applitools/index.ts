@@ -3,19 +3,19 @@ import { createOrUpdate } from '@nrwl/workspace';
 import {
   updatePackageScripts,
   IHelperConfig,
-  IHelperSchema
+  IHelperSchema,
 } from '@nstudio/xplat';
 import {
   getJsonFromFile,
   updateJsonFile,
   PlatformTypes,
-  isTesting
+  isTesting,
 } from '@nstudio/xplat-utils';
 
 export const config: IHelperConfig = {
   requiresTarget: true,
   additionalSupport: applitools,
-  logNotes: note
+  logNotes: note,
 };
 
 function applitools(helperChains: Array<any>, options: IHelperSchema) {

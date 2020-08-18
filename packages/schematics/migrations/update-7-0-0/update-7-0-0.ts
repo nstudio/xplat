@@ -2,7 +2,7 @@ import {
   chain,
   Rule,
   SchematicContext,
-  Tree
+  Tree,
 } from '@angular-devkit/schematics';
 import { join } from 'path';
 import * as fs from 'fs';
@@ -42,7 +42,7 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
           ...packageJson.devDependencies,
           '@angular/compiler-cli': '~7.0.0',
           '@ngtools/webpack': '~7.0.0',
-          'nativescript-dev-webpack': '~0.18.0'
+          'nativescript-dev-webpack': '~0.18.0',
         };
 
         // console.log('path:',path);
@@ -55,7 +55,7 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
 }
 
 function updateRootPackage(tree: Tree, context: SchematicContext) {
-  return updateJsonInTree('package.json', json => {
+  return updateJsonInTree('package.json', (json) => {
     json.scripts = json.scripts || {};
     json.dependencies = json.dependencies || {};
     json.dependencies = {
@@ -63,12 +63,12 @@ function updateRootPackage(tree: Tree, context: SchematicContext) {
       '@ngx-translate/core': '~11.0.0',
       '@ngx-translate/http-loader': '~4.0.0',
       'nativescript-angular': '~7.0.0',
-      'tns-core-modules': '~5.0.0'
+      'tns-core-modules': '~5.0.0',
     };
     json.devDependencies = json.devDependencies || {};
     json.devDependencies = {
       ...json.devDependencies,
-      'tns-platform-declarations': '~5.0.0'
+      'tns-platform-declarations': '~5.0.0',
     };
 
     const appsDir = tree.getDir('apps');
@@ -91,6 +91,6 @@ function updateRootPackage(tree: Tree, context: SchematicContext) {
   })(tree, context);
 }
 
-export default function(): Rule {
+export default function (): Rule {
   return chain([updateNativeScriptApps, updateRootPackage]);
 }

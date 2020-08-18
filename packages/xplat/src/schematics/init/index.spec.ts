@@ -1,5 +1,10 @@
 import { Tree } from '@angular-devkit/schematics';
-import { supportedPlatforms, setTest, jsonParse, supportedFrameworks } from '@nstudio/xplat-utils';
+import {
+  supportedPlatforms,
+  setTest,
+  jsonParse,
+  supportedFrameworks,
+} from '@nstudio/xplat-utils';
 import { createEmptyWorkspace } from '@nstudio/xplat/testing';
 import { runSchematic } from '../../utils/testing';
 import { XplatHelpers, stringUtils } from '../../utils';
@@ -11,7 +16,7 @@ describe('xplat init', () => {
   const defaultOptions: XplatHelpers.Schema = {
     npmScope: 'testing',
     prefix: 'ft', // foo test
-    isTesting: true
+    isTesting: true,
   };
 
   beforeEach(() => {
@@ -57,7 +62,7 @@ describe('xplat init', () => {
       '@angular/compiler-cli',
       '@angular/language-service',
       '@angular-devkit/build-angular',
-      'codelyzer'
+      'codelyzer',
     ];
     for (const dep of devDeps) {
       expect(packageJson.devDependencies[dep]).toBeDefined();
@@ -111,7 +116,7 @@ describe('xplat init', () => {
     let tree;
     await expect(runSchematic('init', options, appTree)).rejects.toThrow(
       `blah is currently not a supported framework. Supported at the moment: ${supportedFrameworks.map(
-        f => stringUtils.capitalize(f)
+        (f) => stringUtils.capitalize(f)
       )}. Please request support for this framework if you'd like and/or submit a PR which we would greatly appreciate.`
     );
   });

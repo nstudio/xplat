@@ -4,14 +4,11 @@ import {
   SchematicContext,
   externalSchematic,
   SchematicsException,
-  noop
+  noop,
 } from '@angular-devkit/schematics';
 // import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
+import { unsupportedPlatformError, noPlatformError } from '@nstudio/xplat';
 import {
-  unsupportedPlatformError,
-  noPlatformError,
-} from '@nstudio/xplat';
-import { 
   prerun,
   sanitizeCommaDelimitedArg,
   supportedPlatforms,
@@ -30,17 +27,17 @@ import {
   errorMissingPrefix,
   packageInnerDependencies,
   IXplatSettings,
-  unsupportedPlatformErrorWithNxNote
+  unsupportedPlatformErrorWithNxNote,
 } from '../../utils';
 import {
   NodePackageInstallTask,
-  RunSchematicTask
+  RunSchematicTask,
 } from '@angular-devkit/schematics/tasks';
 import { xplatVersion, nxVersion } from '../../utils/versions';
 import { FocusHelpers } from '@nstudio/focus';
 
 let packagesToRunXplat: Array<string> = [];
-export default function(options: XplatHelpers.Schema) {
+export default function (options: XplatHelpers.Schema) {
   if (!options.prefix) {
     throw new SchematicsException(errorMissingPrefix);
   }
@@ -164,7 +161,7 @@ export default function(options: XplatHelpers.Schema) {
     }
     // console.log('updatePackageForXplat:', devDependencies);
     return XplatHelpers.updatePackageForXplat(options, {
-      devDependencies
+      devDependencies,
     })(tree, context);
   });
 
@@ -174,7 +171,7 @@ export default function(options: XplatHelpers.Schema) {
       for (const packageName of packagesToRunXplat) {
         externalChains.push(
           externalSchematic(packageName, 'xplat', options, {
-            interactive: false
+            interactive: false,
           })
         );
       }
@@ -214,7 +211,7 @@ export default function(options: XplatHelpers.Schema) {
     FocusHelpers.updateIDESettings(options),
     // after initializing new platforms always reset dev mode to fullstack to ensure user sees it
     externalSchematic('@nstudio/xplat', 'mode', {
-      name: 'fullstack'
-    })
+      name: 'fullstack',
+    }),
   ]);
 }

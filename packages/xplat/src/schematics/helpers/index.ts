@@ -1,27 +1,27 @@
 import {
   chain,
   SchematicsException,
-  externalSchematic
+  externalSchematic,
 } from '@angular-devkit/schematics';
 import {
   unsupportedPlatformError,
   helperMissingPlatforms,
-  missingArgument
+  missingArgument,
 } from '@nstudio/xplat';
 import {
   prerun,
   PlatformTypes,
   supportedPlatforms,
-  sanitizeCommaDelimitedArg
+  sanitizeCommaDelimitedArg,
 } from '@nstudio/xplat-utils';
 import { Schema } from './schema';
 
 const platformToPackage: { [platform: string]: string } = {
   nativescript: '@nstudio/nativescript',
-  web: '@nstudio/angular'
+  web: '@nstudio/angular',
 };
 
-export default function(options: Schema) {
+export default function (options: Schema) {
   if (!options.name) {
     throw new SchematicsException(
       missingArgument(
@@ -60,7 +60,7 @@ export default function(options: Schema) {
     helperChains.push(
       externalSchematic(platformToPackage[platform], 'helpers', {
         name: options.name,
-        target: options.target
+        target: options.target,
       })
     );
   };
@@ -80,6 +80,6 @@ export default function(options: Schema) {
   return chain([
     prerun(),
     // add helper chains
-    ...helperChains
+    ...helperChains,
   ]);
 }

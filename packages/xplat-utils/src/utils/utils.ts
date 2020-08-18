@@ -1,5 +1,17 @@
-import type { FrameworkOptions, FrameworkTypes, ITargetPlatforms, PlatformModes, PlatformNxExtraTypes, PlatformTypes, PlatformWithNxTypes } from './types';
-import { Tree, SchematicContext, SchematicsException } from '@angular-devkit/schematics';
+import type {
+  FrameworkOptions,
+  FrameworkTypes,
+  ITargetPlatforms,
+  PlatformModes,
+  PlatformNxExtraTypes,
+  PlatformTypes,
+  PlatformWithNxTypes,
+} from './types';
+import {
+  Tree,
+  SchematicContext,
+  SchematicsException,
+} from '@angular-devkit/schematics';
 import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 import stripJsonComments = require('strip-json-comments');
 import { serializeJson } from '@nrwl/workspace';
@@ -8,18 +20,17 @@ export const supportedPlatforms: Array<PlatformTypes> = [
   'web',
   'nativescript',
   'ionic',
-  'electron'
+  'electron',
 ];
 export const supportedNxExtraPlatforms: Array<PlatformNxExtraTypes> = [
   'express',
   'nest',
   'node',
-  'react'
+  'react',
 ];
-export const supportedPlatformsWithNx: Array<
-  PlatformWithNxTypes
-> = supportedPlatforms.concat(<any>supportedNxExtraPlatforms);
-
+export const supportedPlatformsWithNx: Array<PlatformWithNxTypes> = supportedPlatforms.concat(
+  <any>supportedNxExtraPlatforms
+);
 
 export const supportedFrameworks: Array<FrameworkTypes> = ['angular']; //, 'react', 'vue'];
 
@@ -155,7 +166,7 @@ export function prerun(options?: any, init?: boolean) {
     if (packageJson) {
       prefix = '';
       if (packageJson.xplat) {
-        const xplatSettings = packageJson.xplat;//<IXplatSettings>packageJson.xplat;
+        const xplatSettings = packageJson.xplat; //<IXplatSettings>packageJson.xplat;
         // use persisted xplat settings
         prefix = xplatSettings.prefix || npmScope; // (if not prefix, default to npmScope)
         frontendFramework = xplatSettings.framework;
@@ -217,8 +228,8 @@ export function sanitizeCommaDelimitedArg(input: string): Array<string> {
   if (input) {
     return input
       .split(',')
-      .filter(i => !!i)
-      .map(i => i.trim().toLowerCase());
+      .filter((i) => !!i)
+      .map((i) => i.trim().toLowerCase());
   }
   return [];
 }

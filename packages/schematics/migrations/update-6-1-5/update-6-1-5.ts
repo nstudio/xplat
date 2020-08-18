@@ -2,7 +2,7 @@ import {
   chain,
   Rule,
   SchematicContext,
-  Tree
+  Tree,
 } from '@angular-devkit/schematics';
 import { join } from 'path';
 import * as fs from 'fs';
@@ -48,7 +48,7 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
           webpack: '~4.12.0',
           'webpack-bundle-analyzer': '~2.13.0',
           'webpack-cli': '~3.0.7',
-          'webpack-sources': '~1.1.0'
+          'webpack-sources': '~1.1.0',
         };
         // ensure dev sass is removed
         delete packageJson.devDependencies['nativescript-dev-sass'];
@@ -62,6 +62,6 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
   return tree;
 }
 
-export default function(): Rule {
+export default function (): Rule {
   return chain([updateNativeScriptApps]);
 }

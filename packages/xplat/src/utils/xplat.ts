@@ -10,7 +10,7 @@ import {
   SchematicContext,
   Rule,
   externalSchematic,
-  SchematicsException
+  SchematicsException,
 } from '@angular-devkit/schematics';
 import { createSourceFile, ScriptTarget } from 'typescript';
 import {
@@ -20,7 +20,7 @@ import {
   updateTsConfig,
   IXplatSettings,
 } from './general';
-import { 
+import {
   getPrefix,
   updateJsonFile,
   getJsonFromFile,
@@ -39,13 +39,13 @@ import {
   PlatformWithNxTypes,
   supportedNxExtraPlatforms,
   PlatformNxExtraTypes,
-  supportedPlatformsWithNx
+  supportedPlatformsWithNx,
 } from '@nstudio/xplat-utils';
 import {
   updateJsonInTree,
   toFileName,
   serializeJson,
-  readJsonInTree
+  readJsonInTree,
 } from '@nrwl/workspace';
 import { insert, addGlobal } from './ast';
 import {
@@ -57,11 +57,11 @@ import {
   noteAboutXplatSetupWithFramework,
   unsupportedFrameworkError,
   generateOptionError,
-  noXplatLayerNote
+  noXplatLayerNote,
 } from './errors';
 import {
   NodePackageInstallTask,
-  RunSchematicTask
+  RunSchematicTask,
 } from '@angular-devkit/schematics/tasks';
 import { xplatVersion, nxVersion } from './versions';
 import { output } from './output';
@@ -71,20 +71,20 @@ export const packageInnerDependencies = {
   '@nstudio/electron-angular': [
     '@nrwl/angular',
     '@nstudio/electron',
-    '@nstudio/angular'
+    '@nstudio/angular',
   ],
   '@nstudio/ionic-angular': [
     '@nrwl/angular',
     '@nstudio/ionic',
     '@nstudio/angular',
-    '@nstudio/web-angular'
+    '@nstudio/web-angular',
   ],
   '@nstudio/nativescript-angular': [
     '@nrwl/angular',
     '@nstudio/nativescript',
-    '@nstudio/angular'
+    '@nstudio/angular',
   ],
-  '@nstudio/web-angular': ['@nrwl/angular', '@nstudio/web', '@nstudio/angular']
+  '@nstudio/web-angular': ['@nrwl/angular', '@nstudio/web', '@nstudio/angular'],
 };
 
 export namespace XplatHelpers {
@@ -166,11 +166,11 @@ export namespace XplatHelpers {
       return dependencies[packageName] || devDependencies[packageName]
         ? callSchematicIfAdded
           ? externalSchematic(packageName, callSchematicIfAdded, options, {
-              interactive: false
+              interactive: false,
             })
           : noop()
         : externalSchematic(packageName, 'ng-add', options, {
-            interactive: false
+            interactive: false,
           });
     };
   }
@@ -234,7 +234,7 @@ export namespace XplatHelpers {
       frameworks
     );
     const xplatSettings: IXplatSettings = {
-      prefix: getPrefix()
+      prefix: getPrefix(),
     };
 
     if (frameworkChoice && frameworks.length === 1) {
@@ -304,7 +304,7 @@ export namespace XplatHelpers {
         generatorSettings = {
           platforms: <Array<PlatformWithNxTypes>>(
             (<unknown>sanitizeCommaDelimitedArg(options.platforms))
-          )
+          ),
         };
         break;
     }
@@ -340,9 +340,9 @@ export namespace XplatHelpers {
                 }
               } else if (
                 isApp &&
-                supportedNxExtraPlatforms.includes(<PlatformNxExtraTypes>(
-                  platform
-                ))
+                supportedNxExtraPlatforms.includes(
+                  <PlatformNxExtraTypes>platform
+                )
               ) {
                 // platforms that are supported directly via Nx only right now
                 // 'app'/'application' is only schematic supported via xplat proxy at moment
@@ -421,7 +421,7 @@ export namespace XplatHelpers {
         // console.log(devDependencies);
 
         return XplatHelpers.updatePackageForXplat(options, {
-          devDependencies
+          devDependencies,
         })(tree, context);
       });
 
@@ -432,7 +432,7 @@ export namespace XplatHelpers {
           for (const packageName of packagesToRunXplat) {
             externalChains.push(
               externalSchematic(packageName, generator, options, {
-                interactive: false
+                interactive: false,
               })
             );
           }
@@ -465,7 +465,7 @@ export namespace XplatHelpers {
     let generatorSettings: IXplatGeneratorOptions = {
       platforms: <Array<PlatformWithNxTypes>>(
         (<unknown>sanitizeCommaDelimitedArg(options.platforms))
-      )
+      ),
     };
     const platforms = generatorSettings.platforms;
     const externalChains = [];
@@ -529,7 +529,7 @@ export namespace XplatHelpers {
         // console.log(devDependencies);
 
         return XplatHelpers.updatePackageForXplat(options, {
-          devDependencies
+          devDependencies,
         })(tree, context);
       });
     }
@@ -539,7 +539,7 @@ export namespace XplatHelpers {
       if (xplatPlatforms) {
         externalChains.push(
           externalSchematic('@nstudio/xplat', 'app-generate', options, {
-            interactive: false
+            interactive: false,
           })
         );
       }
@@ -555,7 +555,7 @@ export namespace XplatHelpers {
           );
           output.log({
             title: 'Note:',
-            bodyLines: [noXplatLayerNote(nxPlatform)]
+            bodyLines: [noXplatLayerNote(nxPlatform)],
           });
 
           externalChains.push(
@@ -565,10 +565,10 @@ export namespace XplatHelpers {
               {
                 ...options,
                 name,
-                directory
+                directory,
               },
               {
-                interactive: false
+                interactive: false,
               }
             )
           );
@@ -598,13 +598,13 @@ export namespace XplatHelpers {
             );
             output.log({
               title: 'Note:',
-              bodyLines: [noXplatLayerNote(nxPlatform)]
+              bodyLines: [noXplatLayerNote(nxPlatform)],
             });
             context.addTask(
               new RunSchematicTask(packageName, generator, {
                 ...options,
                 name,
-                directory
+                directory,
               }),
               [installPackageTask]
             );
@@ -650,7 +650,7 @@ export namespace XplatHelpers {
     }
     return {
       name,
-      directory
+      directory,
     };
   }
 
@@ -687,9 +687,9 @@ export namespace XplatHelpers {
             template({
               ...(options as any),
               ...getDefaultTemplateOptions(),
-              xplatFolderName
+              xplatFolderName,
             }),
-            move(`xplat/${xplatFolderName}`)
+            move(`xplat/${xplatFolderName}`),
           ])
         )
       );
@@ -718,7 +718,7 @@ export namespace XplatHelpers {
           // just updating xplat internal settings
           packageJson.xplat = {
             ...(packageJson.xplat || {}),
-            ...xplatSettings
+            ...xplatSettings,
           };
           // just update xplat workspace settings
           return updateJsonFile(tree, packagePath, packageJson);
@@ -728,16 +728,16 @@ export namespace XplatHelpers {
             ...packageJson,
             dependencies: {
               ...(packageJson.dependencies || {}),
-              ...(updates.dependencies || {})
+              ...(updates.dependencies || {}),
             },
             devDependencies: {
               ...(packageJson.devDependencies || {}),
-              ...(updates.devDependencies || {})
+              ...(updates.devDependencies || {}),
             },
             xplat: {
               ...(packageJson.xplat || {}),
-              ...xplatSettings
-            }
+              ...xplatSettings,
+            },
           };
           // console.log('updatePackageForXplat:', serializeJson(packageJson));
           return updateJsonFile(tree, packagePath, packageJson);
@@ -794,7 +794,7 @@ xplat/**/*.ngsummary.json
       // sort for consistency
       const platforms = (<Array<PlatformTypes>>(
         (<unknown>sanitizeCommaDelimitedArg(platformArg))
-      )).sort(function(a, b) {
+      )).sort(function (a, b) {
         if (a < b) return -1;
         if (a > b) return 1;
         return 0;
@@ -822,10 +822,10 @@ xplat/**/*.ngsummary.json
       updates[`@${npmScope}/*`] = [`libs/*`];
       for (const t of platforms) {
         updates[`@${npmScope}/${t}${frameworkSuffix}`] = [
-          `xplat/${t}${frameworkSuffix}/index.ts`
+          `xplat/${t}${frameworkSuffix}/index.ts`,
         ];
         updates[`@${npmScope}/${t}${frameworkSuffix}/*`] = [
-          `xplat/${t}${frameworkSuffix}/*`
+          `xplat/${t}${frameworkSuffix}/*`,
         ];
       }
 
@@ -836,7 +836,7 @@ xplat/**/*.ngsummary.json
           }
           tsConfig.compilerOptions.paths = {
             ...(tsConfig.compilerOptions.paths || {}),
-            ...updates
+            ...updates,
           };
         }
       });
@@ -1127,7 +1127,7 @@ export namespace XplatFeatureHelpers {
       mergeWith(
         apply(url(`./${extra}_files`), [
           template(getTemplateOptions(options, target, framework)),
-          move(moveTo)
+          move(moveTo),
         ])
       )
     );
@@ -1154,7 +1154,7 @@ export namespace XplatFeatureHelpers {
           indexFilePath,
           `export * from './${options.name.toLowerCase()}';`,
           true
-        )
+        ),
       ]);
       return tree;
     };
@@ -1179,7 +1179,7 @@ export namespace XplatFeatureHelpers {
       ...getDefaultTemplateOptions(),
       name: options.name.toLowerCase(),
       endingDashName,
-      xplatFolderName
+      xplatFolderName,
     };
   }
 

@@ -10,9 +10,17 @@ import {
   SchematicContext,
   Rule,
   externalSchematic,
-  SchematicsException
+  SchematicsException,
 } from '@angular-devkit/schematics';
-import { PlatformModes, isTesting, getGroupByName, getFrontendFramework, supportedPlatformsWithNx, sanitizeCommaDelimitedArg, jsonParse } from '@nstudio/xplat-utils';
+import {
+  PlatformModes,
+  isTesting,
+  getGroupByName,
+  getFrontendFramework,
+  supportedPlatformsWithNx,
+  sanitizeCommaDelimitedArg,
+  jsonParse,
+} from '@nstudio/xplat-utils';
 import { join } from 'path';
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { serializeJson } from '@nrwl/workspace';
@@ -21,7 +29,7 @@ const xml2js = require('xml2js');
 export namespace FocusHelpers {
   export function updateIDESettings(
     options: {
-      platforms?: string
+      platforms?: string;
     },
     devMode?: PlatformModes,
     allApps?: string[],
@@ -91,7 +99,7 @@ export namespace FocusHelpers {
           allApps,
           focusOnApps,
           appWildcards,
-          isFullstack
+          isFullstack,
         });
 
         // WebStorm
@@ -100,7 +108,7 @@ export namespace FocusHelpers {
           allApps,
           focusOnApps,
           appWildcards,
-          isFullstack
+          isFullstack,
         });
 
         if (!devMode) {
@@ -113,13 +121,13 @@ export namespace FocusHelpers {
             '**/apps/nativescript-*/platforms': true,
             '**/apps/nativescript-*/report': true,
             '**/apps/nativescript-*/src/**/*.js': {
-              when: '$(basename).ts'
+              when: '$(basename).ts',
             },
             '**/apps/nativescript-*/src/**/*.d.ts': {
-              when: '$(basename).ts'
+              when: '$(basename).ts',
             },
             '**/apps/nativescript-*/src/**/*.css': {
-              when: '$(basename).scss'
+              when: '$(basename).scss',
             },
             // also add groupByName support
             // '**/apps/*-nativescript/src/package.json': false,
@@ -127,32 +135,32 @@ export namespace FocusHelpers {
             '**/apps/*-nativescript/platforms': true,
             '**/apps/*-nativescript/report': true,
             '**/apps/*-nativescript/app/**/*.js': {
-              when: '$(basename).ts'
+              when: '$(basename).ts',
             },
             '**/apps/*-nativescript/src/**/*.d.ts': {
-              when: '$(basename).ts'
+              when: '$(basename).ts',
             },
             '**/apps/*-nativescript/src/**/*.css': {
-              when: '$(basename).scss'
+              when: '$(basename).scss',
             },
             // libs/xplat
             '**/libs/**/*.js': {
-              when: '$(basename).ts'
+              when: '$(basename).ts',
             },
             '**/libs/**/*.d.ts': {
-              when: '$(basename).ts'
+              when: '$(basename).ts',
             },
             '**/xplat/**/*.js': {
-              when: '$(basename).ts'
+              when: '$(basename).ts',
             },
             '**/xplat/**/*.d.ts': {
-              when: '$(basename).ts'
-            }
+              when: '$(basename).ts',
+            },
           };
 
           if (isVsCode) {
             updateVSCode({
-              workspaceUpdates
+              workspaceUpdates,
             });
           }
 
@@ -397,23 +405,23 @@ export namespace FocusHelpers {
         component: [
           {
             $: {
-              name: 'ProjectViewSharedSettings'
+              name: 'ProjectViewSharedSettings',
             },
-            option: [webStormExcludedViewNode(isExcluding)]
-          }
-        ]
-      }
+            option: [webStormExcludedViewNode(isExcluding)],
+          },
+        ],
+      },
     };
     const builder = new xml2js.Builder({ headless: true });
     return builder.buildObject(projectViewObject);
   }
-  
+
   export function webStormExcludedViewNode(isExcluding: boolean) {
     return {
       $: {
         name: 'showExcludedFiles',
-        value: `${!isExcluding}`
-      }
+        value: `${!isExcluding}`,
+      },
     };
   }
 }

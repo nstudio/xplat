@@ -26,7 +26,7 @@ xdescribe('helpers schematic', () => {
       name: 'foo',
       prefix: 'tt',
       e2eTestRunner: 'cypress',
-      useXplat: false
+      useXplat: false,
     };
     // console.log('appTree:', appTree);
     appTree = await runSchematic('app', appOptions, appTree);
@@ -38,7 +38,7 @@ xdescribe('helpers schematic', () => {
 
     const options: IHelperSchema = {
       name: 'applitools',
-      target: 'web-foo'
+      target: 'web-foo',
     };
     // console.log('appTree:', appTree);
     const tree = await runSchematic('helpers', options, appTree);
@@ -92,7 +92,7 @@ xdescribe('helpers schematic', () => {
       name: 'foo',
       prefix: 'tt',
       e2eTestRunner: 'cypress',
-      useXplat: false
+      useXplat: false,
     };
     // console.log('appTree:', appTree);
     appTree = await runSchematic('app', appOptions, appTree);
@@ -103,10 +103,12 @@ xdescribe('helpers schematic', () => {
     expect(cypressJson.supportFile).toBe(false);
 
     const options: IHelperSchema = {
-      name: 'applitools'
+      name: 'applitools',
     };
     // console.log('appTree:', appTree);
 
-    await expect(runSchematic('helpers', options, appTree)).rejects.toThrow(`The helper "applitools" requires the --target flag.`);
+    await expect(runSchematic('helpers', options, appTree)).rejects.toThrow(
+      `The helper "applitools" requires the --target flag.`
+    );
   });
 });

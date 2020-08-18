@@ -3,7 +3,7 @@ import {
   SchematicContext,
   Rule,
   SchematicsException,
-  noop
+  noop,
 } from '@angular-devkit/schematics';
 import { PlatformTypes, supportedPlatforms } from '@nstudio/xplat-utils';
 import { helperMissingPlatforms, helperTargetError } from './errors';

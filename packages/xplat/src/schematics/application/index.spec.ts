@@ -1,5 +1,10 @@
 import { Tree } from '@angular-devkit/schematics';
-import { supportedPlatforms, setTest, jsonParse, supportedFrameworks } from '@nstudio/xplat-utils';
+import {
+  supportedPlatforms,
+  setTest,
+  jsonParse,
+  supportedFrameworks,
+} from '@nstudio/xplat-utils';
 import { createEmptyWorkspace } from '@nstudio/xplat/testing';
 import { runSchematic } from '../../utils/testing';
 import { XplatHelpers, stringUtils } from '../../utils';
@@ -12,7 +17,7 @@ describe('xplat schematic', () => {
   const defaultOptions: Schema = {
     name: 'sample',
     prefix: 'tt', // foo test
-    isTesting: true
+    isTesting: true,
   };
 
   beforeEach(() => {

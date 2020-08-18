@@ -2,14 +2,14 @@ import { Tree } from '@angular-devkit/schematics';
 import { Schema as GenerateOptions } from './schema';
 import {
   getFileContent,
-  createXplatWithNativeScriptWeb
+  createXplatWithNativeScriptWeb,
 } from '@nstudio/xplat/testing';
 import { runSchematic } from '../../utils/testing';
 
 describe('directive schematic', () => {
   let appTree: Tree;
   const defaultOptions: GenerateOptions = {
-    name: 'active-link'
+    name: 'active-link',
   };
 
   beforeEach(() => {
@@ -23,7 +23,7 @@ describe('directive schematic', () => {
       'feature',
       {
         name: 'foo',
-        platforms: 'nativescript,web'
+        platforms: 'nativescript,web',
       },
       appTree
     );
@@ -96,7 +96,7 @@ describe('directive schematic', () => {
       'feature',
       {
         name: 'foo',
-        platforms: 'nativescript,web'
+        platforms: 'nativescript,web',
       },
       appTree
     );
@@ -217,14 +217,14 @@ describe('directive schematic', () => {
       {
         name: 'foo',
         projects: 'nativescript-viewer,web-viewer',
-        onlyProject: true
+        onlyProject: true,
       },
       appTree
     );
     const options: GenerateOptions = {
       name: 'active-link',
       feature: 'foo',
-      projects: 'nativescript-viewer,web-viewer'
+      projects: 'nativescript-viewer,web-viewer',
     };
     tree = await runSchematic('directive', options, tree);
     const files = tree.files;

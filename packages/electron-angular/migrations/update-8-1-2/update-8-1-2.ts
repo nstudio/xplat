@@ -2,16 +2,13 @@ import {
   chain,
   Rule,
   SchematicContext,
-  Tree
+  Tree,
 } from '@angular-devkit/schematics';
 import { join } from 'path';
 import * as fs from 'fs';
 import { updateJsonInTree, createOrUpdate } from '@nrwl/workspace';
 import { output } from '@nstudio/xplat';
-import {
-  getJsonFromFile,
-  updateJsonFile,
-} from '@nstudio/xplat-utils';
+import { getJsonFromFile, updateJsonFile } from '@nstudio/xplat-utils';
 import {
   electronBuilderVersion,
   electronInstallerDmgVersion,
@@ -22,7 +19,7 @@ import {
   electronUpdaterVersion,
   electronVersion,
   npmRunAllVersion,
-  waitOnVersion
+  waitOnVersion,
 } from '@nstudio/electron';
 
 function updateElectronApps(tree: Tree, context: SchematicContext) {
@@ -69,15 +66,15 @@ function updateElectronApps(tree: Tree, context: SchematicContext) {
     output.log({
       title: 'Migration Note:',
       bodyLines: [
-        `The following Electron apps have been updated to 7: ${appsNames}.`
-      ]
+        `The following Electron apps have been updated to 7: ${appsNames}.`,
+      ],
     });
   }
   return tree;
 }
 
 function updateRootPackage(tree: Tree, context: SchematicContext) {
-  return updateJsonInTree('package.json', json => {
+  return updateJsonInTree('package.json', (json) => {
     json.devDependencies = json.devDependencies || {};
     json.devDependencies = {
       ...json.devDependencies,
@@ -90,13 +87,13 @@ function updateRootPackage(tree: Tree, context: SchematicContext) {
       'electron-store': electronStoreVersion,
       'electron-updater': electronUpdaterVersion,
       'npm-run-all': npmRunAllVersion,
-      'wait-on': waitOnVersion
+      'wait-on': waitOnVersion,
     };
 
     return json;
   })(tree, context);
 }
 
-export default function(): Rule {
+export default function (): Rule {
   return chain([updateElectronApps, updateRootPackage]);
 }

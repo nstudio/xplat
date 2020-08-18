@@ -1,7 +1,7 @@
 import { Tree } from '@angular-devkit/schematics';
 import {
   getFileContent,
-  createXplatWithNativeScriptWeb
+  createXplatWithNativeScriptWeb,
 } from '@nstudio/xplat/testing';
 import { runSchematic } from '../../utils/testing';
 import { XplatComponentHelpers } from '../../utils';
@@ -14,7 +14,7 @@ xdescribe('component', () => {
     platforms: 'nativescript,web',
     createBase: true,
     framework: 'angular',
-    isTesting: true
+    isTesting: true,
   };
 
   beforeEach(() => {
@@ -30,7 +30,7 @@ xdescribe('component', () => {
         name: 'foo',
         platforms: 'nativescript,web',
         framework: 'angular',
-        isTesting: true
+        isTesting: true,
       },
       appTree
     );
@@ -102,7 +102,7 @@ xdescribe('component', () => {
       {
         name: 'foo',
         platforms: 'nativescript,web',
-        isTesting: true
+        isTesting: true,
       },
       appTree
     );
@@ -146,7 +146,7 @@ xdescribe('component', () => {
         name: 'foo',
         platforms: 'nativescript,web',
         framework: 'angular',
-        isTesting: true
+        isTesting: true,
       },
       appTree
     );
@@ -240,7 +240,7 @@ xdescribe('component', () => {
         projects: 'nativescript-viewer,web-viewer',
         onlyProject: true,
         framework: 'angular',
-        isTesting: true
+        isTesting: true,
       },
       appTree
     );
@@ -248,7 +248,7 @@ xdescribe('component', () => {
       name: 'signup',
       feature: 'foo',
       projects: 'nativescript-viewer,web-viewer',
-      framework: 'angular'
+      framework: 'angular',
     };
     tree = await runSchematic('component', options, tree);
     const files = tree.files;
@@ -334,7 +334,7 @@ xdescribe('component', () => {
       name: 'signup',
       feature: 'foo',
       projects: 'nativescript-viewer,web-viewer',
-      framework: 'angular'
+      framework: 'angular',
     };
 
     await expect(runSchematic('component', options, appTree)).rejects.toThrow(

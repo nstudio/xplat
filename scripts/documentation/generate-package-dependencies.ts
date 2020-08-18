@@ -4,8 +4,8 @@ import { getPackageConfigurations } from './get-package-configurations';
 import { getXplatPackageDependencies } from './utils';
 
 getPackageConfigurations()
-  .filter(item => item.hasBuilders || item.hasSchematics)
-  .map(config => {
+  .filter((item) => item.hasBuilders || item.hasSchematics)
+  .map((config) => {
     const dependencies = getXplatPackageDependencies(
       path.join(config.root, 'package.json')
     );

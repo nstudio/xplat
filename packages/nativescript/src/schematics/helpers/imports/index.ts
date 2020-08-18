@@ -7,19 +7,19 @@ import {
   apply,
   url,
   template,
-  move
+  move,
 } from '@angular-devkit/schematics';
 import {
   updateTsConfig,
   IHelperSchema,
   IHelperConfig,
   getDefaultTemplateOptions,
-  XplatHelpers
+  XplatHelpers,
 } from '@nstudio/xplat';
 
 export const config: IHelperConfig = {
   addHelperFiles,
-  additionalSupport: imports
+  additionalSupport: imports,
 };
 
 function addHelperFiles(options: IHelperSchema): Rule {
@@ -30,9 +30,9 @@ function addHelperFiles(options: IHelperSchema): Rule {
       apply(url(`./imports/_files`), [
         template({
           ...(options as any),
-          ...getDefaultTemplateOptions()
+          ...getDefaultTemplateOptions(),
         }),
-        move(`xplat/${xplatFolderName}/utils`)
+        move(`xplat/${xplatFolderName}/utils`),
       ])
     )
   );
@@ -53,7 +53,7 @@ function imports(helperChains: Array<any>, options: IHelperSchema) {
           }
           tsConfig.compilerOptions.paths = {
             ...(tsConfig.compilerOptions.paths || {}),
-            ...updates
+            ...updates,
           };
         }
       })
@@ -86,7 +86,7 @@ function imports(helperChains: Array<any>, options: IHelperSchema) {
                 }
                 tsConfig.compilerOptions.paths = {
                   ...(tsConfig.compilerOptions.paths || {}),
-                  ...updates
+                  ...updates,
                 };
               }
             },

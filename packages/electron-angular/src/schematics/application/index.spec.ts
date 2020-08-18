@@ -4,7 +4,7 @@ import { jsonParse } from '@nstudio/xplat-utils';
 import {
   createXplatWithAppsForElectron,
   getFileContent,
-  createEmptyWorkspace
+  createEmptyWorkspace,
 } from '@nstudio/xplat/testing';
 import { runSchematic } from '../../utils/testing';
 
@@ -15,7 +15,7 @@ describe('app', () => {
     target: 'web-viewer',
     npmScope: 'testing',
     prefix: 'tt',
-    isTesting: true
+    isTesting: true,
   };
 
   beforeEach(() => {
@@ -140,18 +140,18 @@ describe('app', () => {
               architect: {
                 build: {
                   options: {
-                    assets: []
-                  }
+                    assets: [],
+                  },
                 },
                 serve: {
                   options: {},
                   configurations: {
-                    production: {}
-                  }
-                }
-              }
-            }
-          }
+                    production: {},
+                  },
+                },
+              },
+            },
+          },
         })
       );
       appTree.create(
@@ -159,7 +159,7 @@ describe('app', () => {
         JSON.stringify({
           dependencies: {},
           devDependencies: {},
-          xplat: {}
+          xplat: {},
         })
       );
       appTree.create(

@@ -1,12 +1,6 @@
 import { Tree, SchematicContext } from '@angular-devkit/schematics';
-import {
-  XplatHelpers,
-  IXplatSettings,
-} from '@nstudio/xplat';
-import {
-  getNpmScope,
-  getJsonFromFile
-} from '@nstudio/xplat-utils';
+import { XplatHelpers, IXplatSettings } from '@nstudio/xplat';
+import { getNpmScope, getJsonFromFile } from '@nstudio/xplat-utils';
 import {
   ionicAngularVersion,
   ionicAngularToolkitVersion,
@@ -28,7 +22,7 @@ import {
   karmaChromeVersion,
   karmaCoverageVersion,
   karmaJasmineVersion,
-  karmaJasmineHtmlVersion
+  karmaJasmineHtmlVersion,
 } from './versions';
 
 export namespace XplatIonicAngularHelpers {
@@ -80,7 +74,7 @@ export namespace XplatIonicAngularHelpers {
       return XplatHelpers.updatePackageForXplat(options, {
         dependencies: {
           ...dependencies,
-          '@ionic/angular': ionicAngularVersion
+          '@ionic/angular': ionicAngularVersion,
         },
         devDependencies: {
           ...devDependencies,
@@ -98,8 +92,8 @@ export namespace XplatIonicAngularHelpers {
           'karma-chrome-launcher': karmaChromeVersion,
           'karma-coverage-istanbul-reporter': karmaCoverageVersion,
           'karma-jasmine': karmaJasmineVersion,
-          'karma-jasmine-html-reporter': karmaJasmineHtmlVersion
-        }
+          'karma-jasmine-html-reporter': karmaJasmineHtmlVersion,
+        },
       })(tree, context);
     };
   }

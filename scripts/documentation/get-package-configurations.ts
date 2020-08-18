@@ -28,7 +28,7 @@ export function getPackageConfigurations(
   const documentationDir = path.resolve(
     path.join(__dirname, '../../', documentationsDirectory)
   );
-  return shelljs.ls(packagesDir).map(folderName => {
+  return shelljs.ls(packagesDir).map((folderName) => {
     const itemList = shelljs.ls(path.join(packagesDir, folderName));
     const output = path.join(documentationDir, `api-${folderName}`);
     return {
@@ -39,7 +39,7 @@ export function getPackageConfigurations(
       builderOutput: path.join(output, 'builders'),
       schematicOutput: path.join(output, 'schematics'),
       hasBuilders: itemList.includes('builders.json'),
-      hasSchematics: itemList.includes('collection.json')
+      hasSchematics: itemList.includes('collection.json'),
     };
   });
 }

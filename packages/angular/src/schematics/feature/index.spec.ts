@@ -4,7 +4,7 @@ import { XplatFeatureHelpers } from '@nstudio/xplat';
 import {
   isInModuleMetadata,
   getFileContent,
-  createXplatWithNativeScriptWeb
+  createXplatWithNativeScriptWeb,
 } from '@nstudio/xplat/testing';
 import { runSchematic } from '../../utils/testing';
 
@@ -13,7 +13,7 @@ describe('feature schematic', () => {
   const defaultOptions: XplatFeatureHelpers.Schema = {
     name: 'foo',
     projects: 'nativescript-viewer,web-viewer',
-    createBase: true
+    createBase: true,
   };
 
   beforeEach(() => {
@@ -353,7 +353,7 @@ describe('feature schematic', () => {
     // console.log('appTree:', appTree);
     const options: XplatFeatureHelpers.Schema = {
       name: 'foo',
-      platforms: 'web'
+      platforms: 'web',
     };
     let tree = await runSchematic('feature', options, appTree);
     const files = tree.files;
@@ -538,7 +538,9 @@ describe('feature schematic', () => {
     const options: XplatFeatureHelpers.Schema = { ...defaultOptions };
     // console.log('appTree:', appTree);
     options.routing = true;
-    await expect(() => runSchematic('feature', options, appTree)).rejects.toThrow(
+    await expect(() =>
+      runSchematic('feature', options, appTree)
+    ).rejects.toThrow(
       'When generating a feature with the --routing option, please also specify --onlyProject. Support for shared code routing is under development.'
     );
   });
@@ -667,7 +669,7 @@ describe('feature schematic', () => {
   it('should create feature module for specified project WITH Routing and adjustSandbox', async () => {
     const options: XplatFeatureHelpers.Schema = {
       ...defaultOptions,
-      projects: 'nativescript-viewer'
+      projects: 'nativescript-viewer',
     };
     appTree = Tree.empty();
     appTree = createXplatWithNativeScriptWeb(appTree, true);

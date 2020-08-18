@@ -12,7 +12,7 @@ import {
   // schematic,
   // Rule,
   noop,
-  externalSchematic
+  externalSchematic,
 } from '@angular-devkit/schematics';
 
 import {
@@ -22,7 +22,7 @@ import {
   generateOptionError,
   optionsMissingError,
   unsupportedPlatformError,
-  XplatComponentHelpers
+  XplatComponentHelpers,
 } from '@nstudio/xplat';
 import {
   prerun,
@@ -31,14 +31,14 @@ import {
   getJsonFromFile,
   updateJsonFile,
   supportedPlatforms,
-  ITargetPlatforms
- } from '@nstudio/xplat-utils';
+  ITargetPlatforms,
+} from '@nstudio/xplat-utils';
 import { formatFiles } from '@nrwl/workspace';
 import { addToFeature, adjustBarrelIndex } from '@nstudio/angular';
 import { ComponentHelpers } from '../../utils/xplat';
 
 let componentSettings;
-export default function(options: XplatComponentHelpers.Schema) {
+export default function (options: XplatComponentHelpers.Schema) {
   componentSettings = XplatComponentHelpers.prepare(options);
 
   const externalChains = [];
@@ -51,7 +51,7 @@ export default function(options: XplatComponentHelpers.Schema) {
           'component',
           options,
           {
-            interactive: false
+            interactive: false,
           }
         )
       );
@@ -70,10 +70,15 @@ export default function(options: XplatComponentHelpers.Schema) {
     // add component for base libs feature
     (tree: Tree, context: SchematicContext) =>
       !options.onlyProject && options.createBase
-        ? addToFeature('', 'component', options, 'libs', tree, '_base', true)(
+        ? addToFeature(
+            '',
+            'component',
+            options,
+            'libs',
             tree,
-            context
-          )
+            '_base',
+            true
+          )(tree, context)
         : noop()(tree, context),
     // adjust libs barrel for subFolder
     (tree: Tree, context: SchematicContext) =>
@@ -113,14 +118,18 @@ export default function(options: XplatComponentHelpers.Schema) {
     // add index barrel if needed
     (tree: Tree, context: SchematicContext) =>
       options.needsIndex
-        ? addToFeature('', 'component', options, 'libs', tree, '_base_index')(
+        ? addToFeature(
+            '',
+            'component',
+            options,
+            'libs',
             tree,
-            context
-          )
+            '_base_index'
+          )(tree, context)
         : noop()(tree, context),
 
     // add platform chains
     ...externalChains,
-    formatFiles({ skipFormat: options.skipFormat })
+    formatFiles({ skipFormat: options.skipFormat }),
   ]);
 }

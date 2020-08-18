@@ -3,7 +3,7 @@ import { Schema as GenerateOptions } from './schema';
 import {
   createXplatWithApps,
   getFileContent,
-  createXplatWithNativeScriptWeb
+  createXplatWithNativeScriptWeb,
 } from '@nstudio/xplat/testing';
 import { runSchematic } from '../../utils/testing';
 import { UnitTestTree } from '@angular-devkit/schematics/testing';
@@ -11,7 +11,7 @@ import { UnitTestTree } from '@angular-devkit/schematics/testing';
 describe('pipe schematic', () => {
   let appTree: Tree;
   const defaultOptions: GenerateOptions = {
-    name: 'truncate'
+    name: 'truncate',
   };
 
   beforeEach(() => {
@@ -25,7 +25,7 @@ describe('pipe schematic', () => {
       'feature',
       {
         name: 'foo',
-        platforms: 'nativescript,web'
+        platforms: 'nativescript,web',
       },
       appTree
     );
@@ -85,13 +85,13 @@ describe('pipe schematic', () => {
       'feature',
       {
         name: 'foo',
-        platforms: 'nativescript,web'
+        platforms: 'nativescript,web',
       },
       appTree
     );
     let options: GenerateOptions = {
       ...defaultOptions,
-      name: 'test-with-dashes'
+      name: 'test-with-dashes',
     };
     tree = await runSchematic('pipe', options, tree);
     const files = tree.files;
@@ -129,14 +129,14 @@ describe('pipe schematic', () => {
       {
         name: 'foo',
         projects: 'nativescript-viewer,web-viewer',
-        onlyProject: true
+        onlyProject: true,
       },
       appTree
     );
     const options: GenerateOptions = {
       name: 'truncate',
       feature: 'foo',
-      projects: 'nativescript-viewer,web-viewer'
+      projects: 'nativescript-viewer,web-viewer',
     };
     tree = await runSchematic('pipe', options, tree);
     const files = tree.files;
@@ -197,7 +197,7 @@ describe('pipe schematic', () => {
     const options: GenerateOptions = {
       name: 'truncate',
       feature: 'register',
-      platforms: 'nativescript,web'
+      platforms: 'nativescript,web',
     };
 
     await expect(runSchematic('pipe', options, appTree)).rejects.toThrow(
@@ -211,7 +211,7 @@ describe('pipe schematic', () => {
     const options: GenerateOptions = {
       name: 'truncate',
       feature: 'register',
-      projects: 'nativescript-viewer,web-viewer'
+      projects: 'nativescript-viewer,web-viewer',
     };
 
     await expect(runSchematic('pipe', options, appTree)).rejects.toThrow(

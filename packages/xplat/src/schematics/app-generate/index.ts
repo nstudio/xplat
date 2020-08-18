@@ -4,7 +4,7 @@ import { XplatHelpers } from '../../utils';
 import { prerun } from '@nstudio/xplat-utils';
 
 let packagesToRunXplat: Array<string> = [];
-export default function(options: Schema) {
+export default function (options: Schema) {
   const externalChains = XplatHelpers.getExternalChainsForGenerator(
     options,
     'app',

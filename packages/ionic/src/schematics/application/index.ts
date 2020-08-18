@@ -4,13 +4,9 @@ import {
   getDefaultTemplateOptions,
   updateWorkspace,
   updateNxProjects,
-  updatePackageScripts
+  updatePackageScripts,
 } from '@nstudio/xplat';
-import {
-  prerun,
-  getAppName,
-  getPrefix,
-} from '@nstudio/xplat-utils';
+import { prerun, getAppName, getPrefix } from '@nstudio/xplat-utils';
 import {
   chain,
   noop,
@@ -22,14 +18,14 @@ import {
   apply,
   url,
   template,
-  move
+  move,
 } from '@angular-devkit/schematics';
 import { Schema } from './schema';
 import { XplatIonicHelpers } from '../../utils';
 import { capacitorVersion } from '../../utils/versions';
 import { formatFiles } from '@nrwl/workspace';
 
-export default function(options: Schema) {
+export default function (options: Schema) {
   if (!options.name) {
     throw new SchematicsException(
       missingArgument(
@@ -95,18 +91,18 @@ export default function(options: Schema) {
         root: `apps/${directory}${options.name}/`,
         sourceRoot: `apps/${directory}${options.name}/src`,
         projectType: 'application',
-        prefix: getPrefix()
+        prefix: getPrefix(),
       };
       return updateWorkspace({ projects })(tree, context);
     },
     (tree: Tree) => {
       const projects = {};
       projects[`${options.name}`] = {
-        tags: []
+        tags: [],
       };
       return updateNxProjects(tree, projects);
     },
-    formatFiles({ skipFormat: options.skipFormat })
+    formatFiles({ skipFormat: options.skipFormat }),
   ]);
 }
 
@@ -122,9 +118,9 @@ function addAppFiles(options: Schema, appPath: string) {
           pathOffset: directory ? '../../../' : '../../',
           appname,
           xplatFolderName: XplatHelpers.getXplatFoldername('ionic'),
-          capacitorVersion
+          capacitorVersion,
         }),
-        move(`apps/${directory}${appPath}`)
+        move(`apps/${directory}${appPath}`),
       ])
     )
   );

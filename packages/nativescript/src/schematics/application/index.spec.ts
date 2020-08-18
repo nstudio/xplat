@@ -4,7 +4,7 @@ import { stringUtils, XplatFeatureHelpers } from '@nstudio/xplat';
 import {
   isInModuleMetadata,
   createEmptyWorkspace,
-  getFileContent
+  getFileContent,
 } from '@nstudio/xplat/testing';
 import { runSchematic } from '../../utils/testing';
 
@@ -13,7 +13,7 @@ describe('app', () => {
   const defaultOptions: Schema = {
     name: 'foo',
     npmScope: 'testing',
-    prefix: 'tt' // foo test
+    prefix: 'tt', // foo test
   };
 
   beforeEach(() => {

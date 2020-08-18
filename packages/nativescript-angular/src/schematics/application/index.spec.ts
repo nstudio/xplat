@@ -4,7 +4,7 @@ import { stringUtils, XplatFeatureHelpers } from '@nstudio/xplat';
 import {
   isInModuleMetadata,
   createEmptyWorkspace,
-  getFileContent
+  getFileContent,
 } from '@nstudio/xplat/testing';
 import { runSchematic } from '../../utils/testing';
 
@@ -14,7 +14,7 @@ describe('app', () => {
     name: 'foo',
     npmScope: 'testing',
     routing: true,
-    prefix: 'tt' // foo test
+    prefix: 'tt', // foo test
   };
 
   beforeEach(() => {
@@ -155,8 +155,8 @@ describe('app', () => {
         dependencies: {},
         devDependencies: {},
         xplat: {
-          prefix: 'tt'
-        }
+          prefix: 'tt',
+        },
       })
     );
     const tree = await runSchematic('app', options, appTree);
@@ -242,7 +242,7 @@ describe('app', () => {
     const featureOptions: XplatFeatureHelpers.Schema = {
       name: 'foo-with-dash',
       adjustSandbox: true,
-      projects: 'nativescript-foo'
+      projects: 'nativescript-foo',
     };
     tree = await runSchematic('feature', featureOptions, tree);
     fileContent = getFileContent(

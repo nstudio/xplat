@@ -10,7 +10,7 @@ export namespace XplatWebHelpers {
       dependencies[`@${getNpmScope()}/scss`] = 'file:libs/scss';
 
       return XplatHelpers.updatePackageForXplat(options, {
-        dependencies
+        dependencies,
       })(tree, context);
     };
   }

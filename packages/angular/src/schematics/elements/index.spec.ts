@@ -9,7 +9,7 @@ describe('elements schematic', () => {
   const defaultOptions: ElementsOptions = {
     name: 'ui-kit',
     barrel: '@mycompany/web',
-    components: 'menu,footer'
+    components: 'menu,footer',
   };
 
   beforeEach(() => {
@@ -22,7 +22,7 @@ describe('elements schematic', () => {
     // console.log('appTree:', appTree);
     const componentOptions: XplatComponentHelpers.Schema = {
       name: 'menu',
-      platforms: 'web'
+      platforms: 'web',
     };
     let tree = await runSchematic('component', componentOptions, appTree);
     componentOptions.name = 'footer';
@@ -84,7 +84,7 @@ describe('elements schematic', () => {
     // console.log('appTree:', appTree);
     const componentOptions: XplatComponentHelpers.Schema = {
       name: 'menu',
-      platforms: 'web'
+      platforms: 'web',
     };
     let tree = await runSchematic('component', componentOptions, appTree);
     componentOptions.name = 'footer';
@@ -141,7 +141,7 @@ describe('elements schematic', () => {
 
     const component2Options: XplatComponentHelpers.Schema = {
       name: 'dropdown',
-      platforms: 'web'
+      platforms: 'web',
     };
     tree = await runSchematic('component', component2Options, tree);
     component2Options.name = 'link';
@@ -170,7 +170,7 @@ describe('elements schematic', () => {
     const newElementOptions: ElementsOptions = {
       name: 'widgets',
       barrel: '@mycompany/web',
-      components: 'dropdown,link'
+      components: 'dropdown,link',
     };
     tree = await runSchematic('elements', newElementOptions, tree);
     files = tree.files;
@@ -200,7 +200,7 @@ describe('elements schematic', () => {
     );
 
     const builderOption: ElementsOptions = {
-      builderModule: 'ui-kit'
+      builderModule: 'ui-kit',
     };
     tree = await runSchematic('elements', builderOption, tree);
     files = tree.files;

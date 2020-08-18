@@ -3,18 +3,15 @@ import {
   buildHelperChain,
   missingArgument,
 } from '@nstudio/xplat';
-import {
-  prerun,
-  addInstallTask
- } from '@nstudio/xplat-utils';
+import { prerun, addInstallTask } from '@nstudio/xplat-utils';
 import { config as configApplitools } from './applitools';
 import { SchematicsException, chain, noop } from '@angular-devkit/schematics';
 
 const supportedHelpers = {
-  applitools: configApplitools
+  applitools: configApplitools,
 };
 
-export default function(options: IHelperSchema) {
+export default function (options: IHelperSchema) {
   if (!options.name) {
     throw new SchematicsException(
       missingArgument(

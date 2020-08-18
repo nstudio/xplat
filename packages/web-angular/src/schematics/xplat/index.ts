@@ -9,18 +9,13 @@ import {
   apply,
   url,
   template,
-  move
+  move,
 } from '@angular-devkit/schematics';
-import {
-  XplatHelpers,
-  getDefaultTemplateOptions
-} from '@nstudio/xplat';
-import {
-  prerun
-} from '@nstudio/xplat-utils';
+import { XplatHelpers, getDefaultTemplateOptions } from '@nstudio/xplat';
+import { prerun } from '@nstudio/xplat-utils';
 import { XplatWebAngularHelpers } from '../../utils/xplat';
 
-export default function(options: XplatHelpers.Schema) {
+export default function (options: XplatHelpers.Schema) {
   return chain([
     prerun(options, true),
     (tree: Tree, context: SchematicContext) => {
@@ -44,9 +39,9 @@ export default function(options: XplatHelpers.Schema) {
             apply(url(`./_scss_files`), [
               template({
                 ...(options as any),
-                ...getDefaultTemplateOptions()
+                ...getDefaultTemplateOptions(),
               }),
-              move(`xplat/${xplatFolderName}/scss`)
+              move(`xplat/${xplatFolderName}/scss`),
             ])
           )
         )(tree, context);
@@ -62,15 +57,15 @@ export default function(options: XplatHelpers.Schema) {
             apply(url(`./_lib_files`), [
               template({
                 ...(options as any),
-                ...getDefaultTemplateOptions()
+                ...getDefaultTemplateOptions(),
               }),
-              move('libs')
+              move('libs'),
             ])
           )
         )(tree, context);
       }
     },
     XplatHelpers.updateTsConfigPaths(options, { framework: 'angular' }),
-    XplatWebAngularHelpers.updateRootDeps(options)
+    XplatWebAngularHelpers.updateRootDeps(options),
   ]);
 }

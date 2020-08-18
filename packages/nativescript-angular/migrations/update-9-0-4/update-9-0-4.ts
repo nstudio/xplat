@@ -2,7 +2,7 @@ import {
   chain,
   Rule,
   SchematicContext,
-  Tree
+  Tree,
 } from '@angular-devkit/schematics';
 import { join } from 'path';
 import * as fs from 'fs';
@@ -16,7 +16,7 @@ import {
   ngxTranslateVersion,
   nsDevWebpackVersion,
   typescriptVersion,
-  angularVersion
+  angularVersion,
 } from '../../src/utils/versions';
 
 const ngDeps = {
@@ -27,7 +27,7 @@ const ngDeps = {
   '@angular/forms': angularVersion,
   '@angular/platform-browser': angularVersion,
   '@angular/platform-browser-dynamic': angularVersion,
-  '@angular/router': angularVersion
+  '@angular/router': angularVersion,
 };
 
 function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
@@ -66,7 +66,7 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
           ...ngDeps,
           '@nativescript/angular': nsNgScopedVersion,
           '@nativescript/core': nsCoreVersion,
-          '@ngx-translate/core': ngxTranslateVersion
+          '@ngx-translate/core': ngxTranslateVersion,
         };
         delete packageJson.dependencies['nativescript-angular'];
         delete packageJson.dependencies['tns-core-modules'];
@@ -77,7 +77,7 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
           '@ngtools/webpack': angularVersion,
           '@nativescript/types': nsCoreVersion,
           '@nativescript/webpack': nsDevWebpackVersion,
-          typescript: typescriptVersion
+          typescript: typescriptVersion,
         };
 
         // console.log('path:',path);
@@ -90,22 +90,22 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
       bodyLines: [
         `Please ensure you have the latest NativeScript cli installed: npm i -g nativescript`,
         `The following NativeScript apps have been updated to 9.0: ${appsNames}. The following files in those apps have been updated: webpack.config.js, src/package.json, ngcc.config.js and package.json. You may want to check the changeset to keep any customizations you may have made.`,
-        `Please note that you may still need to update your project imports to @nativescript/angular instead of nativescript-angular.`
-      ]
+        `Please note that you may still need to update your project imports to @nativescript/angular instead of nativescript-angular.`,
+      ],
     });
   }
   return tree;
 }
 
 function updateRootPackage(tree: Tree, context: SchematicContext) {
-  return updateJsonInTree('package.json', json => {
+  return updateJsonInTree('package.json', (json) => {
     json.scripts = json.scripts || {};
     json.dependencies = json.dependencies || {};
     json.dependencies = {
       ...json.dependencies,
       ...ngDeps,
       '@nativescript/angular': nsNgScopedVersion,
-      '@ngx-translate/core': ngxTranslateVersion
+      '@ngx-translate/core': ngxTranslateVersion,
     };
     delete json.dependencies['nativescript-angular'];
     delete json.dependencies['tns-core-modules'];
@@ -115,6 +115,6 @@ function updateRootPackage(tree: Tree, context: SchematicContext) {
   })(tree, context);
 }
 
-export default function(): Rule {
+export default function (): Rule {
   return chain([updateNativeScriptApps, updateRootPackage]);
 }

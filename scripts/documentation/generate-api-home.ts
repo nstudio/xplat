@@ -37,8 +37,8 @@ Here's a list of all available packages provided via xplat.
 // `;
 
 getPackageConfigurations()
-  .filter(item => item.hasBuilders || item.hasSchematics)
-  .map(item => {
+  .filter((item) => item.hasBuilders || item.hasSchematics)
+  .map((item) => {
     const dependencies = getXplatPackageDependencies(
       path.join(item.root, 'package.json')
     );
@@ -47,7 +47,7 @@ getPackageConfigurations()
       {},
       {
         hasBuilders: item.hasBuilders,
-        hasSchematics: item.hasSchematics
+        hasSchematics: item.hasSchematics,
       },
       dependencies
     );
@@ -55,11 +55,11 @@ getPackageConfigurations()
     template += dedent`| ${generateLinkForPackage(
       data.name
     )} | ${data.dependencies
-      .map(name =>
+      .map((name) =>
         name.indexOf('@nstudio') > -1 ? generateLinkForPackage(name) : name
       )
       .join(', ')} | ${data.peerDependencies
-      .map(name =>
+      .map((name) =>
         name.indexOf('@nstudio') > -1 ? generateLinkForPackage(name) : name
       )
       .join(', ')} |\n`;
@@ -74,6 +74,6 @@ function generateLinkForPackage(name: string) {
 
 generateFile(path.join(__dirname, '../../docs', 'api'), {
   name: 'home',
-  template
+  template,
 });
 console.log('Done generating API Home Documentation');

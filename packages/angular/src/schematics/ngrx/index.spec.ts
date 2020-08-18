@@ -3,14 +3,14 @@ import { Schema as GenerateOptions } from './schema';
 import {
   createXplatWithApps,
   getFileContent,
-  createXplatWithNativeScriptWeb
+  createXplatWithNativeScriptWeb,
 } from '@nstudio/xplat/testing';
 import { runSchematic } from '../../utils/testing';
 
 describe('ngrx schematic', () => {
   let appTree: Tree;
   const defaultOptions: GenerateOptions = {
-    name: 'auth'
+    name: 'auth',
   };
 
   beforeEach(() => {
@@ -25,7 +25,7 @@ describe('ngrx schematic', () => {
       'feature',
       {
         name: 'foo',
-        platforms: 'nativescript,web'
+        platforms: 'nativescript,web',
       },
       appTree
     );
@@ -85,14 +85,14 @@ describe('ngrx schematic', () => {
       {
         name: 'foo',
         projects: 'nativescript-viewer,web-viewer',
-        onlyProject: true
+        onlyProject: true,
       },
       appTree
     );
     const options: GenerateOptions = {
       name: 'auth',
       feature: 'foo',
-      projects: 'nativescript-viewer,web-viewer'
+      projects: 'nativescript-viewer,web-viewer',
     };
     tree = await runSchematic('ngrx', options, tree);
     const files = tree.files;

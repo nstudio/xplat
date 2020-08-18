@@ -3,7 +3,7 @@ import { createOrUpdate } from '@nrwl/workspace';
 import {
   isInModuleMetadata,
   getFileContent,
-  createXplatWithNativeScriptWeb
+  createXplatWithNativeScriptWeb,
 } from '../../utils/testing-utils';
 import { runSchematic } from '../../utils/testing';
 import { XplatFeatureHelpers } from '../../utils';
@@ -15,7 +15,7 @@ xdescribe('feature schematic', () => {
     projects: 'nativescript-viewer,web-viewer',
     createBase: true,
     framework: 'angular',
-    isTesting: true
+    isTesting: true,
   };
 
   beforeEach(() => {
@@ -356,7 +356,7 @@ xdescribe('feature schematic', () => {
     // console.log('appTree:', appTree);
     const options: XplatFeatureHelpers.Schema = {
       name: 'foo',
-      platforms: 'web'
+      platforms: 'web',
     };
     let tree = await runSchematic('feature', options, appTree);
     const files = tree.files;
@@ -670,7 +670,7 @@ xdescribe('feature schematic', () => {
   it('should create feature module for specified project WITH Routing and adjustSandbox', async () => {
     const options: XplatFeatureHelpers.Schema = {
       ...defaultOptions,
-      projects: 'nativescript-viewer'
+      projects: 'nativescript-viewer',
     };
     appTree = Tree.empty();
     appTree = createXplatWithNativeScriptWeb(appTree, true);

@@ -8,18 +8,12 @@ import {
   url,
   apply,
   branchAndMerge,
-  mergeWith
+  mergeWith,
 } from '@angular-devkit/schematics';
-import {
-  XplatFeatureHelpers,
-  XplatHelpers,
-} from '@nstudio/xplat';
-import {
-  prerun,
-  PlatformTypes,
-} from '@nstudio/xplat-utils';
+import { XplatFeatureHelpers, XplatHelpers } from '@nstudio/xplat';
+import { prerun, PlatformTypes } from '@nstudio/xplat-utils';
 
-export default function(options: XplatFeatureHelpers.Schema) {
+export default function (options: XplatFeatureHelpers.Schema) {
   const featureSettings = XplatFeatureHelpers.prepare(options);
   const chains = [];
 
@@ -36,17 +30,19 @@ export default function(options: XplatFeatureHelpers.Schema) {
         routingModulePathOptions.push(`${appDirectory}app-routing.module.ts`);
 
         chains.push((tree: Tree, context: SchematicContext) => {
-          return XplatFeatureHelpers.addFiles(options, platPrefix, projectName)(
-            tree,
-            context
-          );
+          return XplatFeatureHelpers.addFiles(
+            options,
+            platPrefix,
+            projectName
+          )(tree, context);
         });
         if (options.routing) {
           chains.push((tree: Tree, context: SchematicContext) => {
-            return adjustRouting(options, routingModulePathOptions, platPrefix)(
-              tree,
-              context
-            );
+            return adjustRouting(
+              options,
+              routingModulePathOptions,
+              platPrefix
+            )(tree, context);
           });
           if (options.adjustSandbox) {
             chains.push((tree: Tree, context: SchematicContext) => {

@@ -11,7 +11,7 @@ import {
   SchematicContext,
   SchematicsException,
   externalSchematic,
-  noop
+  noop,
 } from '@angular-devkit/schematics';
 import { updateJsonInTree, formatFiles } from '@nrwl/workspace';
 import {
@@ -20,7 +20,7 @@ import {
   missingArgument,
   updateWorkspace,
   getDefaultTemplateOptions,
-  XplatHelpers
+  XplatHelpers,
 } from '@nstudio/xplat';
 import {
   prerun,
@@ -29,8 +29,8 @@ import {
   getJsonFromFile,
   updateJsonFile,
   supportedPlatforms,
-  ITargetPlatforms
- } from '@nstudio/xplat-utils';
+  ITargetPlatforms,
+} from '@nstudio/xplat-utils';
 
 import { Schema as ElementsOptions } from './schema';
 
@@ -38,7 +38,7 @@ let customElementList: string;
 let componentSymbols: Array<{ symbol: string; selector: string }>;
 let componentSymbolList: string;
 let htmlElements: string;
-export default function(options: ElementsOptions) {
+export default function (options: ElementsOptions) {
   if (!options.builderModule) {
     const example = `nx g @nstudio/angular:elements menu --barrel=@mycompany/ui --components=menu,footer`;
     if (!options.name) {
@@ -95,11 +95,11 @@ export default function(options: ElementsOptions) {
             selector,
             symbol: `${stringUtils.classify(component)}${
               isShortName ? 'Component' : ''
-            }`
+            }`,
           });
           htmlElementList.push(`<${selector}></${selector}>`);
         }
-        componentSymbolList = componentSymbols.map(c => c.symbol).join(', ');
+        componentSymbolList = componentSymbols.map((c) => c.symbol).join(', ');
         htmlElements = htmlElementList.join('\n');
 
         customElementList = createCustomElementList(componentSymbols);
@@ -154,7 +154,7 @@ export default function(options: ElementsOptions) {
                     main: 'xplat/web/elements/builder/elements.ts',
                     polyfills: 'xplat/web/elements/builder/polyfills.ts',
                     tsConfig:
-                      'xplat/web/elements/builder/tsconfig.elements.json'
+                      'xplat/web/elements/builder/tsconfig.elements.json',
                   },
                   configurations: {
                     production: {
@@ -166,24 +166,24 @@ export default function(options: ElementsOptions) {
                       aot: true,
                       extractLicenses: true,
                       vendorChunk: false,
-                      buildOptimizer: true
-                    }
-                  }
+                      buildOptimizer: true,
+                    },
+                  },
                 },
                 serve: {
                   builder: 'ngx-build-plus:dev-server',
                   options: {
-                    browserTarget: 'web-elements:build'
+                    browserTarget: 'web-elements:build',
                   },
                   configurations: {
                     production: {
-                      browserTarget: 'web-elements:build:production'
-                    }
-                  }
-                }
-              }
-            }
-          }
+                      browserTarget: 'web-elements:build:production',
+                    },
+                  },
+                },
+              },
+            },
+          },
         })(tree, context);
       }
     },
@@ -200,7 +200,7 @@ export default function(options: ElementsOptions) {
         return noop();
       }
     },
-    formatFiles({ skipFormat: options.skipFormat })
+    formatFiles({ skipFormat: options.skipFormat }),
   ]);
 }
 
@@ -218,9 +218,9 @@ function addFiles(options: ElementsOptions, extra: string = ''): Rule {
           customElementList,
           componentSymbolList,
           componentSymbols,
-          htmlElements
+          htmlElements,
         }),
-        move(`xplat/${xplatFolderName}/elements`)
+        move(`xplat/${xplatFolderName}/elements`),
       ])
     )
   );
@@ -231,20 +231,20 @@ function updateWorkspaceSupport(
   tree: Tree,
   context: SchematicContext
 ) {
-  return updateJsonInTree('package.json', json => {
+  return updateJsonInTree('package.json', (json) => {
     json.scripts = json.scripts || {};
     json.dependencies = json.dependencies || {};
     const angularVersion = json.dependencies['@angular/core'];
     json.dependencies = {
       ...json.dependencies,
       '@angular/elements': angularVersion,
-      '@webcomponents/webcomponentsjs': '^2.4.1'
+      '@webcomponents/webcomponentsjs': '^2.4.1',
     };
     json.devDependencies = json.devDependencies || {};
     json.devDependencies = {
       ...json.devDependencies,
       'http-server': '^0.12.1',
-      'ngx-build-plus': '^9.0.6'
+      'ngx-build-plus': '^9.0.6',
     };
 
     return json;
@@ -273,10 +273,7 @@ function updateBuilder(tree: Tree, options: ElementsOptions) {
       selectorParts.splice(0, 1); // remove starting data
       const customElements = [];
       for (const part of selectorParts) {
-        let selector = part
-          .split(',')[0]
-          .replace(/'/gi, '')
-          .replace(/"/gi, '');
+        let selector = part.split(',')[0].replace(/'/gi, '').replace(/"/gi, '');
         customElements.push(`<${selector}></${selector}>`);
       }
       tree.overwrite(

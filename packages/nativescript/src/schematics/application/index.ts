@@ -12,7 +12,7 @@ import {
   SchematicsException,
   schematic,
   noop,
-  externalSchematic
+  externalSchematic,
 } from '@angular-devkit/schematics';
 import {
   updatePackageScripts,
@@ -21,7 +21,7 @@ import {
   missingArgument,
   getDefaultTemplateOptions,
   XplatHelpers,
-  updateTsConfig
+  updateTsConfig,
 } from '@nstudio/xplat';
 import {
   prerun,
@@ -32,7 +32,7 @@ import {
 import { Schema } from './schema';
 import { XplatNativeScriptHelpers } from '../../utils';
 
-export default function(options: Schema) {
+export default function (options: Schema) {
   if (!options.name) {
     throw new SchematicsException(
       missingArgument(
@@ -61,7 +61,7 @@ export default function(options: Schema) {
         '@nstudio/nativescript',
         'app-resources',
         {
-          path: `apps/${options.name}`
+          path: `apps/${options.name}`,
         },
         { interactive: false }
       )(tree, context),
@@ -130,38 +130,38 @@ export default function(options: Schema) {
             options: {
               commands: [
                 {
-                  command: `yarn start.${platformApp}.preview`
-                }
-              ]
+                  command: `yarn start.${platformApp}.preview`,
+                },
+              ],
             },
             configurations: {
               ios: {
                 commands: [
                   {
-                    command: `yarn start.${platformApp}.ios`
-                  }
-                ]
+                    command: `yarn start.${platformApp}.ios`,
+                  },
+                ],
               },
               android: {
                 commands: [
                   {
-                    command: `yarn start.${platformApp}.android`
-                  }
-                ]
-              }
-            }
-          }
-        }
+                    command: `yarn start.${platformApp}.android`,
+                  },
+                ],
+              },
+            },
+          },
+        },
       };
       return updateWorkspace({ projects })(tree, context);
     },
     (tree: Tree) => {
       const projects = {};
       projects[`${options.name}`] = {
-        tags: []
+        tags: [],
       };
       return updateNxProjects(tree, projects);
-    }
+    },
   ]);
 }
 
@@ -181,9 +181,9 @@ function addAppFiles(
           ...getDefaultTemplateOptions(),
           appname,
           pathOffset: directory ? '../../../' : '../../',
-          xplatFolderName: XplatHelpers.getXplatFoldername('nativescript')
+          xplatFolderName: XplatHelpers.getXplatFoldername('nativescript'),
         }),
-        move(`apps/${directory}${appPath}`)
+        move(`apps/${directory}${appPath}`),
       ])
     )
   );

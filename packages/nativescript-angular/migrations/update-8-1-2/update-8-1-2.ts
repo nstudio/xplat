@@ -2,7 +2,7 @@ import {
   chain,
   Rule,
   SchematicContext,
-  Tree
+  Tree,
 } from '@angular-devkit/schematics';
 import { join } from 'path';
 import * as fs from 'fs';
@@ -12,7 +12,7 @@ import { getJsonFromFile, updateJsonFile } from '@nstudio/xplat-utils';
 import {
   nsCoreVersion,
   terserWebpackVersion,
-  nsNgScopedVersion
+  nsNgScopedVersion,
 } from '../../src/utils/versions';
 
 function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
@@ -51,7 +51,7 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
           ...packageJson.devDependencies,
           '@angular/compiler-cli': '~8.2.0',
           '@ngtools/webpack': '~8.3.0',
-          'nativescript-dev-webpack': '~1.4.0'
+          'nativescript-dev-webpack': '~1.4.0',
         };
 
         // console.log('path:',path);
@@ -63,32 +63,32 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
       title: 'Migration Note:',
       bodyLines: [
         `Please ensure you have the latest NativeScript cli installed: npm i -g nativescript`,
-        `The following NativeScript apps have been updated to 6.3: ${appsNames}. The following files in those apps have been updated: webpack.config.js, src/package.json, and package.json. You may want to check the changeset to keep any customizations you may have made.`
-      ]
+        `The following NativeScript apps have been updated to 6.3: ${appsNames}. The following files in those apps have been updated: webpack.config.js, src/package.json, and package.json. You may want to check the changeset to keep any customizations you may have made.`,
+      ],
     });
   }
   return tree;
 }
 
 function updateRootPackage(tree: Tree, context: SchematicContext) {
-  return updateJsonInTree('package.json', json => {
+  return updateJsonInTree('package.json', (json) => {
     json.scripts = json.scripts || {};
     json.dependencies = json.dependencies || {};
     json.dependencies = {
       ...json.dependencies,
       '@nativescript/angular': nsNgScopedVersion,
-      '@nativescript/core': nsCoreVersion
+      '@nativescript/core': nsCoreVersion,
     };
     json.devDependencies = json.devDependencies || {};
     json.devDependencies = {
       ...json.devDependencies,
-      '@nativescript/types': nsCoreVersion
+      '@nativescript/types': nsCoreVersion,
     };
 
     return json;
   })(tree, context);
 }
 
-export default function(): Rule {
+export default function (): Rule {
   return chain([updateNativeScriptApps, updateRootPackage]);
 }

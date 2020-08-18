@@ -2,7 +2,7 @@ import {
   chain,
   Rule,
   SchematicContext,
-  Tree
+  Tree,
 } from '@angular-devkit/schematics';
 import { join } from 'path';
 import * as fs from 'fs';
@@ -45,7 +45,7 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
           '@ngtools/webpack': '~7.2.0',
           'nativescript-dev-webpack': '~0.20.0',
           'terser-webpack-plugin':
-            'file:../../node_modules/terser-webpack-plugin'
+            'file:../../node_modules/terser-webpack-plugin',
         };
 
         // console.log('path:',path);
@@ -58,25 +58,25 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
 }
 
 function updateRootPackage(tree: Tree, context: SchematicContext) {
-  return updateJsonInTree('package.json', json => {
+  return updateJsonInTree('package.json', (json) => {
     json.scripts = json.scripts || {};
     json.dependencies = json.dependencies || {};
     json.dependencies = {
       ...json.dependencies,
       'nativescript-angular': '~7.2.0',
-      'tns-core-modules': '~5.2.0'
+      'tns-core-modules': '~5.2.0',
     };
     json.devDependencies = json.devDependencies || {};
     json.devDependencies = {
       ...json.devDependencies,
       'terser-webpack-plugin': '~1.2.0',
-      'tns-platform-declarations': '~5.2.0'
+      'tns-platform-declarations': '~5.2.0',
     };
 
     return json;
   })(tree, context);
 }
 
-export default function(): Rule {
+export default function (): Rule {
   return chain([updateNativeScriptApps, updateRootPackage]);
 }

@@ -2,7 +2,7 @@ import {
   chain,
   Rule,
   SchematicContext,
-  Tree
+  Tree,
 } from '@angular-devkit/schematics';
 import { join } from 'path';
 import * as fs from 'fs';
@@ -64,6 +64,6 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
   return tree;
 }
 
-export default function(): Rule {
+export default function (): Rule {
   return chain([updateNativeScriptApps]);
 }

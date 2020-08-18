@@ -1,12 +1,10 @@
 import { chain, externalSchematic, noop } from '@angular-devkit/schematics';
 // import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 import { XplatHelpers } from '@nstudio/xplat';
-import {
-  prerun,
-} from '@nstudio/xplat-utils';
+import { prerun } from '@nstudio/xplat-utils';
 import { XplatIonicHelpers } from '../../utils';
 
-export default function(options: XplatHelpers.Schema) {
+export default function (options: XplatHelpers.Schema) {
   return chain([
     prerun(options),
     // TODO: add xplat files for vanilla ionic
@@ -14,6 +12,6 @@ export default function(options: XplatHelpers.Schema) {
     //   ? noop()
     //   : XplatHelpers.addPlatformFiles(options, 'ionic'),
     // XplatHelpers.updateTsConfigPaths(options),
-    XplatIonicHelpers.updateRootDeps(options)
+    XplatIonicHelpers.updateRootDeps(options),
   ]);
 }

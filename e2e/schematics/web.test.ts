@@ -5,7 +5,7 @@ import {
   EPlatform,
   generateApp,
   runE2e,
-  npmInstall
+  npmInstall,
 } from '../utils';
 
 describe('web e2e', () => {

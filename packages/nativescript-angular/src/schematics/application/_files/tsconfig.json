@@ -8,9 +8,7 @@
     "noEmitHelpers": true,
     "noEmitOnError": true,
     "skipLibCheck": true,
-    "lib": [
-      "es2018", "es2017", "dom", "webworker", "es6"
-    ],
+    "lib": ["es2018", "es2017", "dom", "webworker", "es6"],
     "baseUrl": ".",
     "paths": {
       "~/*": ["src/*"],

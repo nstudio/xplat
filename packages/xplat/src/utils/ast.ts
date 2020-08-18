@@ -11,7 +11,7 @@ import * as stripJsonComments from 'strip-json-comments';
 import {
   serializeJson,
   updateJsonInTree,
-  readJsonInTree
+  readJsonInTree,
 } from '@nrwl/workspace';
 import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 import { readWorkspaceJson } from './general';
@@ -33,9 +33,7 @@ function insertAfterLastOccurrence(
     throw new Error();
   }
   if (syntaxKind) {
-    lastItem = findNodes(lastItem, syntaxKind)
-      .sort(nodesByPosition)
-      .pop();
+    lastItem = findNodes(lastItem, syntaxKind).sort(nodesByPosition).pop();
   }
   if (!lastItem && fallbackPos == undefined) {
     throw new Error(
@@ -63,7 +61,7 @@ export function findNodes(
   }
   if (max > 0) {
     for (const child of node.getChildren()) {
-      findNodes(child, kind, max).forEach(node => {
+      findNodes(child, kind, max).forEach((node) => {
         if (max > 0) {
           arr.push(node);
         }
@@ -131,7 +129,7 @@ export class InsertChange implements Change {
   }
 
   apply(host: any) {
-    return host.read(this.path).then(content => {
+    return host.read(this.path).then((content) => {
       const prefix = content.substring(0, this.pos);
       const suffix = content.substring(this.pos);
 
@@ -158,7 +156,7 @@ export class RemoveChange implements Change {
   }
 
   apply(host: any): Promise<void> {
-    return host.read(this.path).then(content => {
+    return host.read(this.path).then((content) => {
       const prefix = content.substring(0, this.pos);
       const suffix = content.substring(this.pos + this.toRemove.length);
       return host.write(this.path, `${prefix}${suffix}`);
@@ -185,7 +183,7 @@ export class ReplaceChange implements Change {
   }
 
   apply(host: any): Promise<void> {
-    return host.read(this.path).then(content => {
+    return host.read(this.path).then((content) => {
       const prefix = content.substring(0, this.pos);
       const suffix = content.substring(this.pos + this.oldText.length);
       const text = content.substring(this.pos, this.pos + this.oldText.length);
@@ -206,7 +204,7 @@ export function addParameterToConstructor(
 ): Change[] {
   const clazz = findClass(source, opts.className);
   const constructor = clazz.members.filter(
-    m => m.kind === ts.SyntaxKind.Constructor
+    (m) => m.kind === ts.SyntaxKind.Constructor
   )[0];
   if (constructor) {
     throw new Error('Should be tested');
@@ -215,7 +213,7 @@ export function addParameterToConstructor(
     return addMethod(source, modulePath, {
       className: opts.className,
       methodHeader,
-      body: null
+      body: null,
     });
   }
 }
@@ -248,7 +246,7 @@ export function findClass(
 
   const clazz = <any>(
     nodes.filter(
-      n =>
+      (n) =>
         n.kind === ts.SyntaxKind.ClassDeclaration &&
         (<any>n).name.text === className
     )[0]
@@ -269,7 +267,7 @@ export function offset(
   const lines = text
     .trim()
     .split('\n')
-    .map(line => {
+    .map((line) => {
       let tabs = '';
       for (let c = 0; c < numberOfTabs; ++c) {
         tabs += '  ';
@@ -313,7 +311,7 @@ export function getImport(
       .replace('{', '')
       .replace('}', '')
       .split(',')
-      .map(q => q.trim());
+      .map((q) => q.trim());
     return { moduleSpec, bindings };
   });
 }
@@ -339,7 +337,7 @@ export function addGlobal(
     if (allImports.length > 0) {
       const lastImport = allImports[allImports.length - 1];
       return [
-        new InsertChange(modulePath, lastImport.end + 1, `\n${statement}\n`)
+        new InsertChange(modulePath, lastImport.end + 1, `\n${statement}\n`),
       ];
     } else {
       return [new InsertChange(modulePath, 0, `${statement}\n`)];
@@ -391,21 +389,21 @@ export function insertImport(
   const allImports = findNodes(rootNode, ts.SyntaxKind.ImportDeclaration);
 
   // get nodes that map to import statements from the file fileName
-  const relevantImports = allImports.filter(node => {
+  const relevantImports = allImports.filter((node) => {
     // StringLiteral of the ImportDeclaration is the import file (fileName in this case).
     const importFiles = node
       .getChildren()
-      .filter(child => child.kind === ts.SyntaxKind.StringLiteral)
-      .map(n => (n as ts.StringLiteral).text);
+      .filter((child) => child.kind === ts.SyntaxKind.StringLiteral)
+      .map((n) => (n as ts.StringLiteral).text);
 
-    return importFiles.filter(file => file === fileName).length === 1;
+    return importFiles.filter((file) => file === fileName).length === 1;
   });
 
   if (relevantImports.length > 0) {
     let importsAsterisk = false;
     // imports from import file
     const imports: ts.Node[] = [];
-    relevantImports.forEach(n => {
+    relevantImports.forEach((n) => {
       Array.prototype.push.apply(
         imports,
         findNodes(n, ts.SyntaxKind.Identifier)
@@ -421,7 +419,7 @@ export function insertImport(
     }
 
     const importTextNodes = imports.filter(
-      n => (n as ts.Identifier).text === symbolName
+      (n) => (n as ts.Identifier).text === symbolName
     );
 
     // insert import if it's not there
@@ -482,6 +480,6 @@ export function replaceNodeValue(
       node.getStart(node.getSourceFile()),
       node.getFullText(),
       content
-    )
+    ),
   ]);
 }

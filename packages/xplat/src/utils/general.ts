@@ -2,7 +2,7 @@ import * as stripJsonComments from 'strip-json-comments';
 import {
   SchematicsException,
   Tree,
-  SchematicContext
+  SchematicContext,
 } from '@angular-devkit/schematics';
 import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 import {
@@ -10,9 +10,9 @@ import {
   serializeJson,
   updateWorkspaceInTree,
   readJsonInTree,
-  getWorkspacePath
+  getWorkspacePath,
 } from '@nrwl/workspace';
-import { 
+import {
   supportedPlatforms,
   PlatformTypes,
   FrameworkTypes,
@@ -102,12 +102,12 @@ export function updatePackageForNgrx(
 
       packageJson.dependencies = {
         ...(packageJson.dependencies || {}),
-        ...dependencies
+        ...dependencies,
       };
 
       packageJson.devDependencies = {
         ...(packageJson.devDependencies || {}),
-        ...devDependencies
+        ...devDependencies,
       };
 
       return updateJsonFile(tree, packagePath, packageJson);
@@ -152,11 +152,11 @@ export function readWorkspaceJson(tree: Tree) {
 }
 
 export function updateWorkspace(updates: any) {
-  return updateWorkspaceInTree(json => {
+  return updateWorkspaceInTree((json) => {
     for (const key in updates) {
       json[key] = {
         ...(json[key] || {}),
-        ...updates[key]
+        ...updates[key],
       };
     }
     return json;
@@ -190,7 +190,7 @@ export function getDefaultTemplateOptions() {
     utils: stringUtils,
     npmScope: getNpmScope(),
     prefix: getPrefix(),
-    dot: '.'
+    dot: '.',
   };
 }
 
@@ -212,7 +212,7 @@ export function getDefaultTemplateOptions() {
 export const sanitize = (str: string): string =>
   str
     .split('')
-    .filter(char => /[a-zA-Z0-9]/.test(char))
+    .filter((char) => /[a-zA-Z0-9]/.test(char))
     .join('');
 
 export const stringUtils = { sanitize, ...nxStringUtils };

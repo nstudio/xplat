@@ -2,7 +2,7 @@ import {
   chain,
   Rule,
   SchematicContext,
-  Tree
+  Tree,
 } from '@angular-devkit/schematics';
 import { updateJsonInTree, createOrUpdate } from '@nrwl/workspace';
 import { getJsonFromFile, updateJsonFile } from '@nstudio/xplat-utils';
@@ -33,7 +33,7 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
 }
 
 function updateRootPackage(tree: Tree, context: SchematicContext) {
-  return updateJsonInTree('package.json', json => {
+  return updateJsonInTree('package.json', (json) => {
     json.scripts = json.scripts || {};
     json.dependencies = json.dependencies || {};
     json.devDependencies = json.devDependencies || {};
@@ -61,7 +61,7 @@ function updateRootPackage(tree: Tree, context: SchematicContext) {
   })(tree, context);
 }
 
-export default function(): Rule {
+export default function (): Rule {
   return chain([updateNativeScriptApps, updateRootPackage]);
 }
 

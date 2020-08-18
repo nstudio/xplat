@@ -6,6 +6,6 @@ interface Schema {
   skipInstall: boolean;
 }
 
-export default function(schema: Schema) {
+export default function (schema: Schema) {
   return externalSchematic('@nstudio/xplat', 'ng-add', schema);
 }

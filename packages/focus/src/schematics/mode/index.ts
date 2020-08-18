@@ -1,21 +1,19 @@
 import { chain, Tree, SchematicContext } from '@angular-devkit/schematics';
 
+import { updateTsConfig, XplatHelpers } from '@nstudio/xplat';
 import {
-  updateTsConfig,
-  XplatHelpers
-} from '@nstudio/xplat';
-import { 
   PlatformTypes,
   supportedPlatforms,
   prerun,
   getGroupByName,
-  PlatformModes, supportedPlatformsWithNx
+  PlatformModes,
+  supportedPlatformsWithNx,
 } from '@nstudio/xplat-utils';
 import { Schema } from './schema';
 import { FocusHelpers } from '../../utils';
 
 let name: PlatformModes;
-export default function(options: Schema) {
+export default function (options: Schema) {
   if (!options.name) {
     name = 'fullstack';
     console.warn(
@@ -67,13 +65,13 @@ export default function(options: Schema) {
       // targets and mode should be the same
       return FocusHelpers.updateIDESettings(
         {
-          platforms: name
+          platforms: name,
         },
         name,
         allApps,
         focusOnApps
       )(tree, context);
-    }
+    },
   ]);
 }
 
@@ -86,7 +84,9 @@ function updateExcludes(devMode: PlatformModes) {
         }
         const tnsRefs = 'references.d.ts';
         if (devMode === 'nativescript' || devMode === 'fullstack') {
-          const index = tsConfig.exclude.findIndex(entry => entry === tnsRefs);
+          const index = tsConfig.exclude.findIndex(
+            (entry) => entry === tnsRefs
+          );
           if (index > -1) {
             tsConfig.exclude.splice(index, 1);
           }

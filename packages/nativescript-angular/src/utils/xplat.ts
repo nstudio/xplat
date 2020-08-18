@@ -1,8 +1,5 @@
 import { Tree, SchematicContext } from '@angular-devkit/schematics';
-import {
-  XplatHelpers,
-  IXplatSettings,
-} from '@nstudio/xplat';
+import { XplatHelpers, IXplatSettings } from '@nstudio/xplat';
 import {
   updateFile,
   getJsonFromFile,
@@ -19,7 +16,7 @@ import {
   tslibVersion,
   codelyzerVersion,
   zonejsVersion,
-  nsIntlVersion
+  nsIntlVersion,
 } from './versions';
 
 export namespace XplatNativeScriptAngularHelpers {
@@ -57,12 +54,12 @@ export namespace XplatNativeScriptAngularHelpers {
           ...angularDeps,
           '@nativescript/angular': nsNgScopedVersion,
           '@nativescript/core': nsCoreVersion,
-          'nativescript-ngx-fonticon': nsNgFonticonVersion
+          'nativescript-ngx-fonticon': nsNgFonticonVersion,
         },
         devDependencies: {
           ...angularDevDeps,
-          'node-sass': nodeSassVersion
-        }
+          'node-sass': nodeSassVersion,
+        },
       })(tree, context);
     };
   }

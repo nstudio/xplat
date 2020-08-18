@@ -5,10 +5,10 @@ import {
   apply,
   url,
   template,
-  move
+  move,
 } from '@angular-devkit/schematics';
 
-export default function(options: any) {
+export default function (options: any) {
   return chain([addTools(options)]);
 }
 
@@ -17,9 +17,9 @@ function addTools(options: any) {
     mergeWith(
       apply(url(`./_files`), [
         template({
-          ...(options as any)
+          ...(options as any),
         }),
-        move(`tools`)
+        move(`tools`),
       ])
     )
   );

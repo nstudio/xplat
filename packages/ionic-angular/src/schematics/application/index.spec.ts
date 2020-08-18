@@ -8,7 +8,7 @@ describe('app.ionic schematic', () => {
   const defaultOptions: Schema = {
     name: 'foo',
     npmScope: 'testing',
-    prefix: 'tt'
+    prefix: 'tt',
   };
 
   beforeEach(() => {
