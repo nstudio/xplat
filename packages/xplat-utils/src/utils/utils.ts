@@ -13,7 +13,7 @@ import {
   SchematicsException,
 } from '@angular-devkit/schematics';
 import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
-import stripJsonComments = require('strip-json-comments');
+import * as stripJsonComments from 'strip-json-comments';
 import { serializeJson } from '@nrwl/workspace';
 
 export const supportedPlatforms: Array<PlatformTypes> = [
@@ -42,6 +42,7 @@ let frontendFramework: FrameworkTypes;
 // Group by app name (appname-platform) instead of the default (platform-appname)
 let groupByName = false;
 let isTest = false;
+let usingXplatWorkspace = false;
 
 export function getNpmScope() {
   return npmScope;
@@ -63,6 +64,10 @@ export function getAppName(options: any, platform: PlatformTypes) {
   return groupByName
     ? options.name.replace(`-${platform}`, '')
     : options.name.replace(`${platform}-`, '');
+}
+
+export function isXplatWorkspace() {
+  return usingXplatWorkspace;
 }
 
 export function setTest() {
@@ -166,6 +171,7 @@ export function prerun(options?: any, init?: boolean) {
     if (packageJson) {
       prefix = '';
       if (packageJson.xplat) {
+        usingXplatWorkspace = true;
         const xplatSettings = packageJson.xplat; //<IXplatSettings>packageJson.xplat;
         // use persisted xplat settings
         prefix = xplatSettings.prefix || npmScope; // (if not prefix, default to npmScope)

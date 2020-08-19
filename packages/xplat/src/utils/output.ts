@@ -1,4 +1,4 @@
-import chalk from 'chalk';
+// import chalk from 'chalk';
 
 export interface CLIErrorMessageConfig {
   title: string;
@@ -30,13 +30,14 @@ export interface CLISuccessMessageConfig {
  * Automatically disable styling applied by chalk if CI=true
  */
 if (process.env.CI === 'true') {
-  chalk.level = 0;
+  // chalk.level = 0;
 }
 
 class CLIOutput {
-  private readonly XPLAT_PREFIX = `${chalk.bold.bgKeyword('orange')(
-    '>'
-  )} ${chalk.bold.bgKeyword('orange')(' XPLAT ')}`;
+  // private readonly XPLAT_PREFIX = `${chalk.bgKeyword('orange')(
+  //   '>'
+  // )} ${chalk.reset.inverse.bold.bgKeyword('orange')(' NX ')}`;
+  private readonly XPLAT_PREFIX = `> XPLAT `;
   /**
    * Longer dash character which forms more of a continuous line when place side to side
    * with itself, unlike the standard dash character
@@ -49,11 +50,11 @@ class CLIOutput {
    * more fine-grained control of message bodies are still using a centralized
    * implementation.
    */
-  colors = {
-    gray: chalk.gray,
-  };
-  bold = chalk.bold;
-  underline = chalk.underline;
+  // colors = {
+  //   gray: chalk.gray,
+  // };
+  // bold = chalk.bold;
+  // underline = chalk.underline;
 
   private writeToStdOut(str: string) {
     process.stdout.write(str);
@@ -88,15 +89,16 @@ class CLIOutput {
   }
 
   addVerticalSeparator() {
-    this.writeToStdOut(`\n${chalk.gray(this.VERTICAL_SEPARATOR)}\n\n`);
+    // this.writeToStdOut(`\n${chalk.gray(this.VERTICAL_SEPARATOR)}\n\n`);
+    this.writeToStdOut(`\n${this.VERTICAL_SEPARATOR}\n\n`);
   }
 
   error({ title, slug, bodyLines }: CLIErrorMessageConfig) {
     this.addNewline();
 
     this.writeOutputTitle({
-      label: chalk.reset.inverse.bold.red(' ERROR '),
-      title: chalk.bold.red(title),
+      label: ' ERROR ',//chalk.reset.inverse.bold.red(' ERROR '),
+      title: title//chalk.bold.red(title),
     });
 
     this.writeOptionalOutputBody(bodyLines);
@@ -106,12 +108,12 @@ class CLIOutput {
      */
     if (slug && typeof slug === 'string') {
       this.addNewline();
-      this.writeToStdOut(
-        chalk.grey('  ' + 'Learn more about this error: ') +
-          'https://nstudio.io/xplat/errors' +
-          slug +
-          '\n'
-      );
+      // this.writeToStdOut(
+      //   chalk.grey('  ' + 'Learn more about this error: ') +
+      //     'https://nstudio.io/xplat/errors' +
+      //     slug +
+      //     '\n'
+      // );
     }
 
     this.addNewline();
@@ -121,8 +123,8 @@ class CLIOutput {
     this.addNewline();
 
     this.writeOutputTitle({
-      label: chalk.reset.inverse.bold.yellow(' WARNING '),
-      title: chalk.bold.yellow(title),
+      label: ' WARNING ',//chalk.reset.inverse.bold.yellow(' WARNING '),
+      title: title//chalk.bold.yellow(title),
     });
 
     this.writeOptionalOutputBody(bodyLines);
@@ -132,12 +134,12 @@ class CLIOutput {
      */
     if (slug && typeof slug === 'string') {
       this.addNewline();
-      this.writeToStdOut(
-        chalk.grey('  ' + 'Learn more about this warning: ') +
-          'https://nstudio.io/xplat/errors' +
-          slug +
-          '\n'
-      );
+      // this.writeToStdOut(
+      //   chalk.grey('  ' + 'Learn more about this warning: ') +
+      //     'https://nstudio.io/xplat/errors' +
+      //     slug +
+      //     '\n'
+      // );
     }
 
     this.addNewline();
@@ -147,8 +149,8 @@ class CLIOutput {
     this.addNewline();
 
     this.writeOutputTitle({
-      label: chalk.reset.inverse.bold.keyword('orange')(' NOTE '),
-      title: chalk.bold.keyword('orange')(title),
+      label: ' NOTE ',//chalk.reset.inverse.bold.keyword('orange')(' NOTE '),
+      title: title//chalk.bold.keyword('orange')(title),
     });
 
     this.writeOptionalOutputBody(bodyLines);
@@ -160,8 +162,8 @@ class CLIOutput {
     this.addNewline();
 
     this.writeOutputTitle({
-      label: chalk.reset.inverse.bold.green(' SUCCESS '),
-      title: chalk.bold.green(title),
+      label: ' SUCCESS ',//chalk.reset.inverse.bold.green(' SUCCESS '),
+      title: title//chalk.bold.green(title),
     });
 
     this.addNewline();
@@ -181,7 +183,7 @@ class CLIOutput {
     this.addNewline();
 
     this.writeOutputTitle({
-      title: chalk.white(title),
+      title: title//chalk.white(title),
     });
 
     this.writeOptionalOutputBody(bodyLines);

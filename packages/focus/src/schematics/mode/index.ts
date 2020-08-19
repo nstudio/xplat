@@ -1,4 +1,4 @@
-import { chain, Tree, SchematicContext } from '@angular-devkit/schematics';
+import { chain, Tree, SchematicContext, noop } from '@angular-devkit/schematics';
 
 import { updateTsConfig, XplatHelpers } from '@nstudio/xplat';
 import {
@@ -8,6 +8,8 @@ import {
   getGroupByName,
   PlatformModes,
   supportedPlatformsWithNx,
+  getJsonFromFile,
+  isXplatWorkspace,
 } from '@nstudio/xplat-utils';
 import { Schema } from './schema';
 import { FocusHelpers } from '../../utils';
@@ -27,38 +29,65 @@ export default function (options: Schema) {
     // init xplat settings
     prerun(),
     // update tsconfig based on mode
-    (tree: Tree) => updateExcludes(name)(tree),
+    (tree: Tree) => {
+      return isXplatWorkspace() ? updateExcludes(name)(tree) : noop()
+    },
     // update IDE settings
     (tree: Tree, context: SchematicContext) => {
+      // apps
       const appsDir = tree.getDir('apps');
-      const appFolders = appsDir.subdirs;
       const allApps = [];
-      for (const dir of appFolders) {
-        allApps.push(`**${appsDir.path}/${dir}`);
+      if (appsDir && appsDir.subdirs) {
+        const appFolders = appsDir.subdirs;
+        for (const dir of appFolders) {
+          allApps.push(`**${appsDir.path}/${dir}`);
+        }
+      }
+
+      // libs
+      const libsDir = tree.getDir('libs');
+      const allLibs = [];
+      if (libsDir && libsDir.subdirs) {
+        const libsFolders = libsDir.subdirs;
+        for (const dir of libsFolders) {
+          allLibs.push(`**${libsDir.path}/${dir}`);
+        }
+      }
+
+      // packages
+      const packagesDir = tree.getDir('packages');
+      const allPackages = [];
+      if (packagesDir && packagesDir.subdirs) {
+        const packagesFolders = packagesDir.subdirs;
+        for (const dir of packagesFolders) {
+          allPackages.push(`**${packagesDir.path}/${dir}`);
+        }
       }
 
       // project handling
       let focusOnApps: string[] = [];
       if (name !== 'fullstack' && options.projects) {
         focusOnApps = options.projects.split(',');
-        for (let i = 0; i < focusOnApps.length; i++) {
-          const projectName = focusOnApps[i];
-          const nameParts = <Array<PlatformTypes>>(
-            (<unknown>projectName.split('-'))
-          );
-          let containsPlatform = false;
-          for (const n of nameParts) {
-            if (supportedPlatformsWithNx.includes(n)) {
-              containsPlatform = true;
+        if (isXplatWorkspace()) {
+          // allows for shorthand project/app names omitting platform from the app name
+          // just add platform to the name to be specific
+          for (let i = 0; i < focusOnApps.length; i++) {
+            const projectName = focusOnApps[i];
+            const nameParts = <Array<PlatformTypes>>(
+              (<unknown>projectName.split('-'))
+            );
+            let containsPlatform = false;
+            for (const n of nameParts) {
+              if (supportedPlatformsWithNx.includes(n)) {
+                containsPlatform = true;
+              }
             }
-          }
-          if (!containsPlatform) {
-            // allows for shorthand project/app names omitting platform
-            // just add platform to the name
-            const appName = getGroupByName()
-              ? `${nameParts.join('-')}-${name}`
-              : `${name}-${nameParts.join('-')}`;
-            focusOnApps[i] = `**/apps/${appName}`;
+            if (!containsPlatform) {
+              const appName = getGroupByName()
+                ? `${nameParts.join('-')}-${name}`
+                : `${name}-${nameParts.join('-')}`;
+              focusOnApps[i] = `**/apps/${appName}`;
+            }
           }
         }
       }
@@ -66,10 +95,12 @@ export default function (options: Schema) {
       return FocusHelpers.updateIDESettings(
         {
           platforms: name,
+          devMode: name,
+          allApps,
+          focusOnApps,
+          allLibs,
+          allPackages
         },
-        name,
-        allApps,
-        focusOnApps
       )(tree, context);
     },
   ]);
