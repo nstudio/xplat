@@ -20,20 +20,23 @@ import {
   supportedPlatformsWithNx,
   sanitizeCommaDelimitedArg,
   jsonParse,
+  isXplatWorkspace,
 } from '@nstudio/xplat-utils';
 import { join } from 'path';
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { serializeJson } from '@nrwl/workspace';
-const xml2js = require('xml2js');
+import * as xml2js from 'xml2js';
 
 export namespace FocusHelpers {
   export function updateIDESettings(
     options: {
       platforms?: string;
-    },
-    devMode?: PlatformModes,
-    allApps?: string[],
-    focusOnApps?: string[]
+      devMode?: PlatformModes;
+      allApps?: string[];
+      focusOnApps?: string[];
+      allLibs?: string[];
+      allPackages?: string[];
+    }
   ) {
     return (tree: Tree, context: SchematicContext) => {
       if (isTesting()) {
@@ -52,40 +55,65 @@ export namespace FocusHelpers {
         let isExcluding = false;
         let appWildcards: Array<string> = [];
         const userUpdates: any = {};
-        if (!devMode || devMode === 'fullstack') {
+        if (!options.devMode || options.devMode === 'fullstack') {
           // show all
           isFullstack = true;
-          for (const p of supportedPlatformsWithNx) {
-            const appFilter = groupByName ? `*-${p}` : `${p}*`;
-            userUpdates[`**/apps/${appFilter}`] = false;
-            userUpdates[`**/xplat/${p}`] = false;
-            if (frameworkSuffix) {
-              userUpdates[`**/xplat/${p}${frameworkSuffix}`] = false;
+          if (isXplatWorkspace()) {
+            for (const p of supportedPlatformsWithNx) {
+              const appFilter = groupByName ? `*-${p}` : `${p}*`;
+              userUpdates[`**/apps/${appFilter}`] = false;
+              userUpdates[`**/xplat/${p}`] = false;
+              if (frameworkSuffix) {
+                userUpdates[`**/xplat/${p}${frameworkSuffix}`] = false;
+              }
+            }
+          } else {
+            for (const p of options.allApps) {
+              userUpdates[`**/apps/${p}`] = false;
+            }
+            for (const p of options.allLibs) {
+              userUpdates[`**/libs/${p}`] = false;
+            }
+            for (const p of options.allPackages) {
+              userUpdates[`**/packages/${p}`] = false;
             }
           }
         } else if (options.platforms) {
           const platforms = sanitizeCommaDelimitedArg(options.platforms);
-          // switch on/off platforms
-          for (const p of supportedPlatformsWithNx) {
-            const excluded = platforms.includes(p) ? false : true;
-            const appFilter = groupByName ? `*-${p}` : `${p}*`;
-            if (focusOnApps.length) {
-              // focusing on apps
-              // fill up wildcards to use below (we will clear all app wildcards when focusing on apps)
-              appWildcards.push(`**/apps/${appFilter}`);
-            } else {
-              // use wildcards for apps only if no project names were specified
-              userUpdates[`**/apps/${appFilter}`] = excluded;
+          if (isXplatWorkspace()) {
+            // switch on/off platforms
+            for (const p of supportedPlatformsWithNx) {
+              const excluded = platforms.includes(p) ? false : true;
+              const appFilter = groupByName ? `*-${p}` : `${p}*`;
+              if (options.focusOnApps && options.focusOnApps.length) {
+                // focusing on apps
+                // fill up wildcards to use below (we will clear all app wildcards when focusing on apps)
+                appWildcards.push(`**/apps/${appFilter}`);
+              } else {
+                // use wildcards for apps only if no project names were specified
+                userUpdates[`**/apps/${appFilter}`] = excluded;
+              }
+              userUpdates[`**/xplat/${p}`] = excluded;
+              if (frameworkSuffix) {
+                userUpdates[`**/xplat/${p}${frameworkSuffix}`] = excluded;
+              }
+  
+              if (excluded) {
+                // if excluding any platform at all, set the flag
+                // this is used for WebStorm support below
+                isExcluding = true;
+              }
             }
-            userUpdates[`**/xplat/${p}`] = excluded;
-            if (frameworkSuffix) {
-              userUpdates[`**/xplat/${p}${frameworkSuffix}`] = excluded;
+          } else {
+            // switch on/off apps/libs/packages
+            for (const p of options.allApps) {
+              userUpdates[`**/apps/${p}`] = options.focusOnApps && options.focusOnApps.length && options.focusOnApps.includes(p) ? false : true;
             }
-
-            if (excluded) {
-              // if excluding any platform at all, set the flag
-              // this is used for WebStorm support below
-              isExcluding = true;
+            for (const p of options.allLibs) {
+              userUpdates[`**/libs/${p}`] = platforms.includes(p) ? false : true;
+            }
+            for (const p of options.allPackages) {
+              userUpdates[`**/packages/${p}`] = platforms.includes(p) ? false : true;
             }
           }
         }
@@ -96,22 +124,26 @@ export namespace FocusHelpers {
         // VS Code
         const isVsCode = updateVSCode({
           userUpdates,
-          allApps,
-          focusOnApps,
+          allApps: options.allApps,
+          focusOnApps: options.focusOnApps,
           appWildcards,
+          allLibs: options.allLibs,
+          allPackages: options.allPackages,
           isFullstack,
         });
 
         // WebStorm
-        let isWebStorm = updateWebStorem({
+        let isWebStorm = updateWebStorm({
           userUpdates,
-          allApps,
-          focusOnApps,
+          allApps: options.allApps,
+          focusOnApps: options.focusOnApps,
           appWildcards,
+          allLibs: options.allLibs,
+          allPackages: options.allPackages,
           isFullstack,
         });
 
-        if (!devMode) {
+        if (!options.devMode) {
           // only when not specifying a dev mode
           const workspaceUpdates: any = {
             '**/node_modules': true,
@@ -180,6 +212,8 @@ export namespace FocusHelpers {
     allApps?: string[];
     focusOnApps?: string[];
     appWildcards?: string[];
+    allLibs?: string[];
+    allPackages?: string[];
     isFullstack?: boolean;
   }) {
     // VS Code support
@@ -307,12 +341,14 @@ export namespace FocusHelpers {
     return isVsCode;
   }
 
-  export function updateWebStorem(options: {
+  export function updateWebStorm(options: {
     userUpdates?: any;
     workspaceUpdates?: any;
     allApps?: string[];
     focusOnApps?: string[];
     appWildcards?: string[];
+    allLibs?: string[];
+    allPackages?: string[];
     isFullstack?: boolean;
     isExcluding?: boolean;
   }) {

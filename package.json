@@ -1,6 +1,6 @@
 {
   "name": "@nstudio/xplat-source",
-  "version": "10.0.0",
+  "version": "10.0.2",
   "description": "Cross-platform (xplat) tools for Nx workspaces.",
   "homepage": "https://nstudio.io/xplat",
   "private": true,
@@ -70,6 +70,7 @@
     "@types/react-dom": "~16.9.4",
     "@types/react-router-dom": "~5.1.3",
     "@types/webpack": "~4.41.21",
+    "@types/xml2js": "^0.4.5",
     "@types/yargs": "~15.0.5",
     "app-root-path": "~3.0.0",
     "circular-dependency-plugin": "~5.2.0",
