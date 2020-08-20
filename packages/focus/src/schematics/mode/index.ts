@@ -1,6 +1,11 @@
-import { chain, Tree, SchematicContext, noop } from '@angular-devkit/schematics';
+import {
+  chain,
+  Tree,
+  SchematicContext,
+  noop,
+} from '@angular-devkit/schematics';
 
-import { updateTsConfig, XplatHelpers } from '@nstudio/xplat';
+// import { updateTsConfig, XplatHelpers } from '@nstudio/xplat';
 import {
   PlatformTypes,
   supportedPlatforms,
@@ -18,8 +23,11 @@ let name: PlatformModes;
 export default function (options: Schema) {
   if (!options.name) {
     name = 'fullstack';
+    const extraNote = isXplatWorkspace()
+      ? ` Currently supported: fullstack,${supportedPlatformsWithNx}. Example: nx g mode nativescript`
+      : '';
     console.warn(
-      `Using 'fullstack' since no mode was specified. Currently supported: fullstack,${supportedPlatformsWithNx}. Example: nx g mode nativescript`
+      `Defaulting to 'fullstack' and showing everything since no focus was specified.${extraNote}`
     );
   } else {
     name = <PlatformModes>options.name;
@@ -29,9 +37,9 @@ export default function (options: Schema) {
     // init xplat settings
     prerun(),
     // update tsconfig based on mode
-    (tree: Tree) => {
-      return isXplatWorkspace() ? updateExcludes(name)(tree) : noop()
-    },
+    // (tree: Tree) => {
+    //   return isXplatWorkspace() ? updateExcludes(name)(tree) : noop();
+    // },
     // update IDE settings
     (tree: Tree, context: SchematicContext) => {
       // apps
@@ -67,7 +75,7 @@ export default function (options: Schema) {
       // project handling
       let focusOnApps: string[] = [];
       if (name !== 'fullstack' && options.projects) {
-        focusOnApps = options.projects.split(',');
+        focusOnApps = options.projects.split(',').map((p) => p.trim());
         if (isXplatWorkspace()) {
           // allows for shorthand project/app names omitting platform from the app name
           // just add platform to the name to be specific
@@ -92,42 +100,40 @@ export default function (options: Schema) {
         }
       }
       // targets and mode should be the same
-      return FocusHelpers.updateIDESettings(
-        {
-          platforms: name,
-          devMode: name,
-          allApps,
-          focusOnApps,
-          allLibs,
-          allPackages
-        },
-      )(tree, context);
+      return FocusHelpers.updateIDESettings({
+        platforms: name,
+        devMode: name,
+        allApps,
+        focusOnApps,
+        allLibs,
+        allPackages,
+      })(tree, context);
     },
   ]);
 }
 
-function updateExcludes(devMode: PlatformModes) {
-  return (tree: Tree) => {
-    return updateTsConfig(tree, (tsConfig: any) => {
-      if (tsConfig) {
-        if (!tsConfig.exclude) {
-          tsConfig.exclude = [];
-        }
-        const tnsRefs = 'references.d.ts';
-        if (devMode === 'nativescript' || devMode === 'fullstack') {
-          const index = tsConfig.exclude.findIndex(
-            (entry) => entry === tnsRefs
-          );
-          if (index > -1) {
-            tsConfig.exclude.splice(index, 1);
-          }
-        } else {
-          // when not doing {N} development, alleviate pressue on TS resolution
-          if (!tsConfig.exclude.includes(tnsRefs)) {
-            tsConfig.exclude.push('references.d.ts');
-          }
-        }
-      }
-    });
-  };
-}
+// function updateExcludes(devMode: PlatformModes) {
+//   return (tree: Tree) => {
+//     return updateTsConfig(tree, (tsConfig: any) => {
+//       if (tsConfig) {
+//         if (!tsConfig.exclude) {
+//           tsConfig.exclude = [];
+//         }
+//         const tnsRefs = 'references.d.ts';
+//         if (devMode === 'nativescript' || devMode === 'fullstack') {
+//           const index = tsConfig.exclude.findIndex(
+//             (entry) => entry === tnsRefs
+//           );
+//           if (index > -1) {
+//             tsConfig.exclude.splice(index, 1);
+//           }
+//         } else {
+//           // when not doing {N} development, alleviate pressue on TS resolution
+//           if (!tsConfig.exclude.includes(tnsRefs)) {
+//             tsConfig.exclude.push('references.d.ts');
+//           }
+//         }
+//       }
+//     });
+//   };
+// }

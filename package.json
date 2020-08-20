@@ -1,12 +1,12 @@
 {
   "name": "@nstudio/xplat-source",
-  "version": "10.0.2",
+  "version": "10.0.6",
   "description": "Cross-platform (xplat) tools for Nx workspaces.",
   "homepage": "https://nstudio.io/xplat",
   "private": true,
   "scripts": {
     "build": "./scripts/package.sh --local",
-    "clean": "npx rimraf -- package-lock.json node_modules",
+    "clean": "npx rimraf package-lock.json node_modules",
     "commit": "git-cz",
     "checkcommit": "node ./scripts/commit-lint.js",
     "e2e": "./scripts/e2e.sh",

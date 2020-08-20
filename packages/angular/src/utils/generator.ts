@@ -891,7 +891,7 @@ export function adjustRouting(
               path: '${featureName}',
               loadChildren: () => import('./features/${featureName}/${featureName}.module').then(m => m.${stringUtils.classify(
             featureName
-          )}Module)'
+          )}Module)
           }`
         )
       );
