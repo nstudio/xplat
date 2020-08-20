@@ -28,16 +28,14 @@ import { serializeJson } from '@nrwl/workspace';
 import * as xml2js from 'xml2js';
 
 export namespace FocusHelpers {
-  export function updateIDESettings(
-    options: {
-      platforms?: string;
-      devMode?: PlatformModes;
-      allApps?: string[];
-      focusOnApps?: string[];
-      allLibs?: string[];
-      allPackages?: string[];
-    }
-  ) {
+  export function updateIDESettings(options: {
+    platforms?: string;
+    devMode?: PlatformModes;
+    allApps?: string[];
+    focusOnApps?: string[];
+    allLibs?: string[];
+    allPackages?: string[];
+  }) {
     return (tree: Tree, context: SchematicContext) => {
       if (isTesting()) {
         // ignore node file modifications when just testing
@@ -69,13 +67,13 @@ export namespace FocusHelpers {
             }
           } else {
             for (const p of options.allApps) {
-              userUpdates[`**/apps/${p}`] = false;
+              userUpdates[p] = false;
             }
             for (const p of options.allLibs) {
-              userUpdates[`**/libs/${p}`] = false;
+              userUpdates[p] = false;
             }
             for (const p of options.allPackages) {
-              userUpdates[`**/packages/${p}`] = false;
+              userUpdates[p] = false;
             }
           }
         } else if (options.platforms) {
@@ -97,7 +95,7 @@ export namespace FocusHelpers {
               if (frameworkSuffix) {
                 userUpdates[`**/xplat/${p}${frameworkSuffix}`] = excluded;
               }
-  
+
               if (excluded) {
                 // if excluding any platform at all, set the flag
                 // this is used for WebStorm support below
@@ -105,21 +103,38 @@ export namespace FocusHelpers {
               }
             }
           } else {
-            // switch on/off apps/libs/packages
+            // switch on/off apps
             for (const p of options.allApps) {
-              userUpdates[`**/apps/${p}`] = options.focusOnApps && options.focusOnApps.length && options.focusOnApps.includes(p) ? false : true;
+              const appName = p.replace('**/apps/', '');
+              // first reset all in case no focusing
+              userUpdates[p] = false;
+              if (options.focusOnApps && options.focusOnApps.length) {
+                userUpdates[p] =
+                  options.focusOnApps &&
+                  options.focusOnApps.length &&
+                  options.focusOnApps.includes(appName)
+                    ? false
+                    : true;
+              }
             }
-            for (const p of options.allLibs) {
-              userUpdates[`**/libs/${p}`] = platforms.includes(p) ? false : true;
-            }
-            for (const p of options.allPackages) {
-              userUpdates[`**/packages/${p}`] = platforms.includes(p) ? false : true;
+            // switch on/off libs/packages
+            for (const target of platforms) {
+              for (const p of options.allLibs) {
+                const libName = p.replace('**/libs/', '');
+                userUpdates[p] = libName === target ? false : true;
+              }
+              for (const p of options.allPackages) {
+                const packageName = p.replace('**/packages/', '');
+                userUpdates[p] = packageName === target ? false : true;
+              }
             }
           }
         }
 
-        // always ensure hidden xplat files are hidden from view
-        userUpdates['**/xplat/*/.xplatframework'] = true;
+        if (isXplatWorkspace()) {
+          // always ensure hidden xplat files are hidden from view
+          userUpdates['**/xplat/*/.xplatframework'] = true;
+        }
 
         // VS Code
         const isVsCode = updateVSCode({
@@ -143,7 +158,7 @@ export namespace FocusHelpers {
           isFullstack,
         });
 
-        if (!options.devMode) {
+        if (isXplatWorkspace() && !options.devMode) {
           // only when not specifying a dev mode
           const workspaceUpdates: any = {
             '**/node_modules': true,
@@ -265,32 +280,34 @@ export namespace FocusHelpers {
             options.userUpdates
           );
 
-          if (options.allApps.length) {
-            // always reset specific app filters
-            for (const app of options.allApps) {
-              delete userSettingsJson['files.exclude'][app];
-              delete userSettingsJson['search.exclude'][app];
+          if (isXplatWorkspace()) {
+            if (options.allApps.length) {
+              // always reset specific app filters
+              for (const app of options.allApps) {
+                delete userSettingsJson['files.exclude'][app];
+                delete userSettingsJson['search.exclude'][app];
+              }
             }
-          }
-          if (
-            !options.isFullstack &&
-            options.focusOnApps.length &&
-            options.allApps.length
-          ) {
-            // when focusing on projects, clear all specific app wildcards first if they exist
-            for (const wildcard of options.appWildcards) {
-              delete userSettingsJson['files.exclude'][wildcard];
-              delete userSettingsJson['search.exclude'][wildcard];
-            }
-            for (const focusApp of options.focusOnApps) {
-              userSettingsJson['files.exclude'][focusApp] = false;
-              userSettingsJson['search.exclude'][focusApp] = false;
-            }
-            // ensure all other apps are excluded (except for the one that's being focused on)
-            for (const app of options.allApps) {
-              if (!options.focusOnApps.includes(app)) {
-                userSettingsJson['files.exclude'][app] = true;
-                userSettingsJson['search.exclude'][app] = true;
+            if (
+              !options.isFullstack &&
+              options.focusOnApps.length &&
+              options.allApps.length
+            ) {
+              // when focusing on projects, clear all specific app wildcards first if they exist
+              for (const wildcard of options.appWildcards) {
+                delete userSettingsJson['files.exclude'][wildcard];
+                delete userSettingsJson['search.exclude'][wildcard];
+              }
+              for (const focusApp of options.focusOnApps) {
+                userSettingsJson['files.exclude'][focusApp] = false;
+                userSettingsJson['search.exclude'][focusApp] = false;
+              }
+              // ensure all other apps are excluded (except for the one that's being focused on)
+              for (const app of options.allApps) {
+                if (!options.focusOnApps.includes(app)) {
+                  userSettingsJson['files.exclude'][app] = true;
+                  userSettingsJson['search.exclude'][app] = true;
+                }
               }
             }
           }
@@ -299,6 +316,26 @@ export namespace FocusHelpers {
             userSettingsVSCodePath,
             serializeJson(userSettingsJson)
           );
+
+          // TODO: print out the updates made
+          // Example of how the updates are represented
+          // true === hidden
+          // false === show
+          //  {
+          //     '**/apps/automated': false,
+          //     '**/apps/toolbox': false,
+          //     '**/apps/ui': false,
+          //     '**/packages/core': true,
+          //     '**/packages/core-compat': true,
+          //     '**/packages/types-android': true,
+          //     '**/packages/types-ios': true,
+          //     '**/packages/ui-mobile-base': true,
+          //     '**/packages/webpack': false
+          //   }
+
+          // console.log(
+          //   `VS Code Updated.`
+          // );
         } else {
           console.warn(
             `Warning: xplat could not read your VS Code settings.json file therefore development mode has not been set. ${vscodeCreateSettingsNote}`

@@ -97,8 +97,8 @@ class CLIOutput {
     this.addNewline();
 
     this.writeOutputTitle({
-      label: ' ERROR ',//chalk.reset.inverse.bold.red(' ERROR '),
-      title: title//chalk.bold.red(title),
+      label: ' ERROR ', //chalk.reset.inverse.bold.red(' ERROR '),
+      title: title, //chalk.bold.red(title),
     });
 
     this.writeOptionalOutputBody(bodyLines);
@@ -123,8 +123,8 @@ class CLIOutput {
     this.addNewline();
 
     this.writeOutputTitle({
-      label: ' WARNING ',//chalk.reset.inverse.bold.yellow(' WARNING '),
-      title: title//chalk.bold.yellow(title),
+      label: ' WARNING ', //chalk.reset.inverse.bold.yellow(' WARNING '),
+      title: title, //chalk.bold.yellow(title),
     });
 
     this.writeOptionalOutputBody(bodyLines);
@@ -149,8 +149,8 @@ class CLIOutput {
     this.addNewline();
 
     this.writeOutputTitle({
-      label: ' NOTE ',//chalk.reset.inverse.bold.keyword('orange')(' NOTE '),
-      title: title//chalk.bold.keyword('orange')(title),
+      label: ' NOTE ', //chalk.reset.inverse.bold.keyword('orange')(' NOTE '),
+      title: title, //chalk.bold.keyword('orange')(title),
     });
 
     this.writeOptionalOutputBody(bodyLines);
@@ -162,8 +162,8 @@ class CLIOutput {
     this.addNewline();
 
     this.writeOutputTitle({
-      label: ' SUCCESS ',//chalk.reset.inverse.bold.green(' SUCCESS '),
-      title: title//chalk.bold.green(title),
+      label: ' SUCCESS ', //chalk.reset.inverse.bold.green(' SUCCESS '),
+      title: title, //chalk.bold.green(title),
     });
 
     this.addNewline();
@@ -183,7 +183,7 @@ class CLIOutput {
     this.addNewline();
 
     this.writeOutputTitle({
-      title: title//chalk.white(title),
+      title: title, //chalk.white(title),
     });
 
     this.writeOptionalOutputBody(bodyLines);
