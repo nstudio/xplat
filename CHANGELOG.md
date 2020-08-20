@@ -1,3 +1,10 @@
+## [10.0.6](https://github.com/nstudio/xplat/compare/10.0.0...10.0.6) (2020-08-20)
+
+### Features
+
+- **core:** focus improvements ([38418ae](https://github.com/nstudio/xplat/commit/38418aed600636d15b638fbeb4efb7aadff27cee))
+- **focus:** flexibility with targeting for vs code ([6aedf1b](https://github.com/nstudio/xplat/commit/6aedf1bffc90f947388c2e4615b6a46e3cbb4f23))
+
 # [10.0.0](https://github.com/nstudio/xplat/compare/9.0.4...10.0.0) (2020-08-18)
 
 ### Features
