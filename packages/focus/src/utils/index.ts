@@ -119,7 +119,7 @@ export namespace FocusHelpers {
             }
             // switch on/off libs/packages
             // support multiple lib/package focus so track what is handled per loop to not reset one already set
-            const handledPlatforms: any = {}; 
+            const handledPlatforms: any = {};
             for (const target of platforms) {
               for (const p of options.allLibs) {
                 if (!handledPlatforms[target]) {

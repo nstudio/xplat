@@ -9,10 +9,7 @@ import * as fs from 'fs';
 import { updateJsonInTree, createOrUpdate } from '@nrwl/workspace';
 import { output } from '@nstudio/xplat';
 import { getJsonFromFile, updateJsonFile } from '@nstudio/xplat-utils';
-import {
-  nsCoreVersion,
-  nsNgScopedVersion,
-} from '../../src/utils/versions';
+import { nsCoreVersion, nsNgScopedVersion } from '../../src/utils/versions';
 
 function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
   const appsDir = tree.getDir('apps');

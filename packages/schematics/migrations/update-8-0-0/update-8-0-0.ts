@@ -67,13 +67,14 @@ function addDependencies() {
       context.logger.info(`Adding @nstudio/ionic as a dependency`);
     }
 
-    return chain([<any>addDepsToPackageJson(newDependencies, newDevDependencies)]);
+    return chain([
+      <any>addDepsToPackageJson(newDependencies, newDevDependencies),
+    ]);
   };
 }
 
-const removeOldDependencies = <any>updateJsonInTree(
-  'package.json',
-  (json, context: any) => {
+const removeOldDependencies = <any>(
+  updateJsonInTree('package.json', (json, context: any) => {
     json.dependencies = json.dependencies || {};
     json.devDependencies = json.devDependencies || {};
 
@@ -97,7 +98,7 @@ const removeOldDependencies = <any>updateJsonInTree(
     };
 
     return json;
-  }
+  })
 );
 
 const displayInformation = (host: Tree, context: SchematicContext) => {
