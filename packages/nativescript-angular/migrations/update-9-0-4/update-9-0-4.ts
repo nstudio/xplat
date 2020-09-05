@@ -33,12 +33,6 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
   const appsDir = tree.getDir('apps');
   const appFolders = appsDir.subdirs;
   const cwd = process.cwd();
-  const srcPackagePath = join(
-    cwd,
-    'node_modules/@nstudio/nativescript-angular/src/schematics/application/_files/src/package.json'
-  );
-  // console.log('webpackConfigPath:', webpackConfigPath);
-  const srcPackage = fs.readFileSync(srcPackagePath, 'UTF-8');
 
   const appsNames = [];
   // update {N} apps and configs
@@ -51,8 +45,6 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
       const appDir = `${appsDir.path}/${dir}`;
       // console.log('appDir:', appDir);
       appsNames.push(dir);
-
-      createOrUpdate(tree, `${appDir}/src/package.json`, srcPackage);
 
       // update {N} app deps
       const packagePath = `${appDir}/package.json`;

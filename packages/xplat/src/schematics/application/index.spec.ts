@@ -62,7 +62,7 @@ describe('xplat schematic', () => {
     const files = tree.files;
     // console.log('files:', files);
 
-    expect(tree.exists('/apps/nativescript-sample/nsconfig.json')).toBeTruthy();
+    expect(tree.exists('/apps/nativescript-sample/nativescript.config.ts')).toBeTruthy();
     expect(
       tree.exists('/apps/nativescript-sample/src/app.module.ts')
     ).toBeTruthy();
