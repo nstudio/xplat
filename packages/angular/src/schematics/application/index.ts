@@ -105,7 +105,7 @@ export default function (options: Schema) {
       scripts[`start.${platformApp}`] = `nx serve ${options.name}`;
       return updatePackageScripts(tree, scripts);
     },
-    formatFiles({ skipFormat: options.skipFormat }),
+    <any>formatFiles({ skipFormat: options.skipFormat }),
   ]);
 }
 
@@ -144,7 +144,7 @@ exports.config = defaultConfig;
     }
     return updateWorkspace({ projects: workspaceConfig.projects })(
       tree,
-      context
+      <any>context
     );
   };
 }
@@ -153,11 +153,11 @@ exports.config = defaultConfig;
  * Add headless options to e2e tests
  * @param options
  */
-function addHeadlessE2e(options: Schema) {
+function addHeadlessE2e(options: Schema): Rule {
   const framework: 'protractor' | 'cypress' | 'none' = options.e2eTestRunner;
   switch (framework) {
     case 'protractor':
-      return addProtractorCiConfig(options);
+      return <any>addProtractorCiConfig(options);
 
     default:
       return noop();
@@ -181,7 +181,7 @@ function addAppFiles(options: Schema, extra: string = ''): Rule {
   );
 }
 
-function adjustAppFiles(options: Schema, tree: Tree) {
+function adjustAppFiles(options: Schema, tree: Tree): Rule {
   const directory = options.directory ? `${options.directory}/` : '';
   tree.overwrite(
     `/apps/${directory}${options.name}/src/index.html`,
@@ -238,7 +238,7 @@ function adjustAppFiles(options: Schema, tree: Tree) {
       }
     }
   }
-  return updateWorkspace({ projects: workspaceConfig.projects });
+  return <any>updateWorkspace({ projects: workspaceConfig.projects });
 }
 
 function indexContent(name: string) {

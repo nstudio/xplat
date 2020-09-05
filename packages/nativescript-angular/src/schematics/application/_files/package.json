@@ -1,47 +1,36 @@
 {
   "name": "<%= utils.sanitize(appname) %>",
+  "main": "main.js",
   "license": "SEE LICENSE IN <your-license-filename>",
   "version": "0.0.0",
-  "nativescript": {
-    "id": "org.nativescript.<%= utils.sanitize(appname) %>"
-  },
   "scripts": {
-    "reset": "npx rimraf -- hooks node_modules platforms && npm run js.clean",
-    "clean": "npm run js.clean",
-    "js.clean": "npx rimraf -- app/**/*.js",
     "build.ios": "ns build ios --env.uglify --env.production --release",
     "build.android": "ns build android --env.uglify --env.production --release",
-    "debug.ios": "ns debug ios",
-    "debug.android": "ns debug android",
-    "postinstall": "node ./tools/xplat-postinstall.js && npm run ngcc",
-    "ngcc": "ngcc --properties es2015 module main --first-only"
+    "postinstall": "node ./tools/xplat-postinstall.js"
   },
   "dependencies": {
-    "@angular/animations": "<%= angularVersion %>",
-    "@angular/common": "<%= angularVersion %>",
-    "@angular/compiler": "<%= angularVersion %>",
-    "@angular/core": "<%= angularVersion %>",
-    "@angular/forms": "<%= angularVersion %>",
-    "@angular/platform-browser": "<%= angularVersion %>",
-    "@angular/platform-browser-dynamic": "<%= angularVersion %>",
-    "@angular/router": "<%= angularVersion %>",
-    "@nativescript/angular": "<%= nsNgScopedVersion %>",
-    "@nativescript/core": "<%= nsCoreVersion %>",
-    "@ngx-translate/core": "<%= ngxTranslateVersion %>",
+    "@angular/animations": "file:<%= pathOffset %>node_modules/@angular/animations",
+    "@angular/common": "file:<%= pathOffset %>node_modules/@angular/common",
+    "@angular/compiler": "file:<%= pathOffset %>node_modules/@angular/compiler",
+    "@angular/core": "file:<%= pathOffset %>node_modules/@angular/core",
+    "@angular/forms": "file:<%= pathOffset %>node_modules/@angular/forms",
+    "@angular/platform-browser": "file:<%= pathOffset %>node_modules/@angular/platform-browser",
+    "@angular/platform-browser-dynamic": "file:<%= pathOffset %>node_modules/@angular/platform-browser-dynamic",
+    "@angular/router": "file:<%= pathOffset %>node_modules/@angular/router",
+    "@nativescript/angular": "file:<%= pathOffset %>node_modules/@nativescript/angular",
+    "@nativescript/core": "file:<%= pathOffset %>node_modules/@nativescript/core",
+    "@ngx-translate/core": "file:<%= pathOffset %>node_modules/@ngx-translate/core",
     "@<%= npmScope %>/scss": "file:<%= pathOffset %>libs/scss",
     "@<%= npmScope %>/nativescript-scss": "file:<%= pathOffset %>xplat/<%= xplatFolderName %>/scss",
-    "nativescript-ngx-fonticon": "<%= nsNgFonticonVersion %>",
-    "nativescript-theme-core": "<%= nsThemeCoreVersion %>",
-    "rxjs": "<%= rxjsVersion %>",
-    "zone.js": "<%= zonejsVersion %>"
+    "nativescript-ngx-fonticon": "file:<%= pathOffset %>node_modules/nativescript-ngx-fonticon",
+    "nativescript-theme-core": "file:<%= pathOffset %>node_modules/nativescript-theme-core",
+    "rxjs": "file:<%= pathOffset %>node_modules/rxjs",
+    "zone.js": "file:<%= pathOffset %>node_modules/zone.js"
   },
   "devDependencies": {
-    "@angular/compiler-cli": "<%= angularVersion %>",
-    "@angular/language-service": "<%= angularVersion %>",
-    "@ngtools/webpack": "<%= angularVersion %>",
-    "codelyzer": "<%= codelyzerVersion %>",
-    "@nativescript/types": "<%= nsCoreVersion %>",
-    "@nativescript/webpack": "<%= nsDevWebpackVersion %>",
-    "typescript": "<%= typescriptVersion %>"
+    "@angular/compiler-cli": "file:<%= pathOffset %>node_modules/@angular/compiler-cli",
+    "@ngtools/webpack": "file:<%= pathOffset %>node_modules/@ngtools/webpack",
+    "@nativescript/webpack": "<%= nsWebpackVersion %>",
+    "typescript": "file:<%= pathOffset %>node_modules/typescript"
   }
 }

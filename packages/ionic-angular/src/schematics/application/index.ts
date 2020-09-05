@@ -281,7 +281,7 @@ export default function (options: ApplicationOptions) {
           },
         },
       };
-      return updateWorkspace({ projects })(tree, context);
+      return updateWorkspace({ projects })(tree, <any>context);
     },
     (tree: Tree) => {
       const projects = {};
@@ -290,7 +290,7 @@ export default function (options: ApplicationOptions) {
       };
       return updateNxProjects(tree, projects);
     },
-    formatFiles({ skipFormat: options.skipFormat }),
+    <any>formatFiles({ skipFormat: options.skipFormat }),
   ]);
 }
 

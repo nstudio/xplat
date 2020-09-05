@@ -10,7 +10,7 @@ import { updateJsonInTree, createOrUpdate } from '@nrwl/workspace';
 import { getJsonFromFile, updateJsonFile } from '@nstudio/xplat-utils';
 
 function updateRootPackage(tree: Tree, context: SchematicContext) {
-  return updateJsonInTree('package.json', (json) => {
+  return <any>updateJsonInTree('package.json', (json) => {
     json.dependencies = json.dependencies || {};
     if (json.dependencies['nativescript-angular']) {
       json.dependencies['nativescript-angular'] = '~6.1.0';
@@ -43,7 +43,7 @@ function updateRootPackage(tree: Tree, context: SchematicContext) {
     }
 
     return json;
-  })(tree, context);
+  })(tree, <any>context);
 }
 
 function updateNativeScriptApps(tree: Tree, context: SchematicContext) {

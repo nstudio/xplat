@@ -1,17 +1,11 @@
 {
-  "nativescript": {
-    "id": "org.nativescript.sample"
-  },
   "main": "app.js",
   "description": "NativeScript Application",
   "license": "SEE LICENSE IN <your-license-filename>",
   "repository": "<fill-your-repository-here>",
   "scripts": {
-    "reset": "npx rimraf -- hooks node_modules platforms",
     "build.ios": "ns build ios --env.uglify --env.production --release",
     "build.android": "ns build android --env.uglify --env.production --release",
-    "debug.ios": "ns debug ios",
-    "debug.android": "ns debug android",
     "postinstall": "node ./tools/xplat-postinstall.js"
   },
   "dependencies": {

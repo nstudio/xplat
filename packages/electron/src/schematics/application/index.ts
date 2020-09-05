@@ -125,7 +125,7 @@ export default function (options: XplatElectrontHelpers.SchemaApp) {
       delete projects[electronAppName].architect['extract-i18n'];
       delete projects[electronAppName].architect['test'];
       delete projects[electronAppName].architect['lint'];
-      return updateWorkspace({ projects })(tree, context);
+      return updateWorkspace({ projects })(tree, <any>context);
     },
     (tree: Tree) => {
       const projects = {};

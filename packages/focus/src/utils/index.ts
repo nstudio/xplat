@@ -118,15 +118,22 @@ export namespace FocusHelpers {
               }
             }
             // switch on/off libs/packages
+            // support multiple lib/package focus so track what is handled per loop to not reset one already set
+            const handledPlatforms: any = {}; 
             for (const target of platforms) {
               for (const p of options.allLibs) {
-                const libName = p.replace('**/libs/', '');
-                userUpdates[p] = libName === target ? false : true;
+                if (!handledPlatforms[target]) {
+                  const libName = p.replace('**/libs/', '');
+                  userUpdates[p] = libName === target ? false : true;
+                }
               }
               for (const p of options.allPackages) {
-                const packageName = p.replace('**/packages/', '');
-                userUpdates[p] = packageName === target ? false : true;
+                if (!handledPlatforms[target]) {
+                  const packageName = p.replace('**/packages/', '');
+                  userUpdates[p] = packageName === target ? false : true;
+                }
               }
+              handledPlatforms[target] = true;
             }
           }
         }

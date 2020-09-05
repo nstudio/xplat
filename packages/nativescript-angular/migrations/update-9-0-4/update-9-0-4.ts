@@ -11,10 +11,9 @@ import { output } from '@nstudio/xplat';
 import { getJsonFromFile, updateJsonFile } from '@nstudio/xplat-utils';
 import {
   nsCoreVersion,
-  terserWebpackVersion,
   nsNgScopedVersion,
   ngxTranslateVersion,
-  nsDevWebpackVersion,
+  nsWebpackVersion,
   typescriptVersion,
   angularVersion,
 } from '../../src/utils/versions';
@@ -76,7 +75,7 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
           '@angular/compiler-cli': angularVersion,
           '@ngtools/webpack': angularVersion,
           '@nativescript/types': nsCoreVersion,
-          '@nativescript/webpack': nsDevWebpackVersion,
+          '@nativescript/webpack': nsWebpackVersion,
           typescript: typescriptVersion,
         };
 
@@ -98,7 +97,7 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
 }
 
 function updateRootPackage(tree: Tree, context: SchematicContext) {
-  return updateJsonInTree('package.json', (json) => {
+  return <any>updateJsonInTree('package.json', (json) => {
     json.scripts = json.scripts || {};
     json.dependencies = json.dependencies || {};
     json.dependencies = {
@@ -112,7 +111,7 @@ function updateRootPackage(tree: Tree, context: SchematicContext) {
     json.devDependencies = json.devDependencies || {};
 
     return json;
-  })(tree, context);
+  })(tree, <any>context);
 }
 
 export default function (): Rule {

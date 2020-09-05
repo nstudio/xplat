@@ -222,7 +222,7 @@ function updateRootPackage(tree: Tree, context: SchematicContext) {
     };
 
     return json;
-  })(tree, context);
+  })(tree, <any>context);
 }
 
 function getPrefix(host: Tree) {
@@ -247,7 +247,7 @@ function getPrefix(host: Tree) {
 function updateLint(host: Tree, context: SchematicContext) {
   const prefix = getPrefix(host);
 
-  return updateJsonInTree('tslint.json', (json) => {
+  return <any>updateJsonInTree('tslint.json', (json) => {
     json.rules = json.rules || {};
     // remove forin rule as collides with LogService
     delete json.rules['forin'];
@@ -257,7 +257,7 @@ function updateLint(host: Tree, context: SchematicContext) {
     json.rules['component-selector'] = [true, 'element', prefix, 'kebab-case'];
 
     return json;
-  })(host, context);
+  })(host, <any>context);
 }
 
 export default function (): Rule {

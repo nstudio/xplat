@@ -153,7 +153,7 @@ export default function (options: Schema) {
           },
         },
       };
-      return updateWorkspace({ projects })(tree, context);
+      return updateWorkspace({ projects })(tree, <any>context);
     },
     (tree: Tree) => {
       const projects = {};

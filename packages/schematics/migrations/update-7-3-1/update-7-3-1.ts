@@ -34,7 +34,7 @@ function updateElectronApps(tree: Tree, context: SchematicContext) {
 }
 
 function updateRootPackage(tree: Tree, context: SchematicContext) {
-  return updateJsonInTree('package.json', (json) => {
+  return <any>updateJsonInTree('package.json', (json) => {
     json.scripts = json.scripts || {};
     json.dependencies = json.dependencies || {};
     const angularVersion = json.dependencies['@angular/core'];
@@ -67,7 +67,7 @@ function updateRootPackage(tree: Tree, context: SchematicContext) {
     }
 
     return json;
-  })(tree, context);
+  })(tree, <any>context);
 }
 
 export default function (): Rule {
