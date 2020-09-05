@@ -28,7 +28,7 @@ registry.addFormat(htmlSelectorFormat);
 function generateSchematicList(
   config: Configuration,
   registry: CoreSchemaRegistry
-): Promise<Schematic<any,any>>[] {
+): Promise<Schematic<any, any>>[] {
   const schematicCollectionFile = path.join(config.root, 'collection.json');
   fs.removeSync(config.schematicOutput);
   const schematicCollection = fs.readJsonSync(schematicCollectionFile)
