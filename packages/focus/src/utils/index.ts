@@ -122,14 +122,14 @@ export namespace FocusHelpers {
             const handledPlatforms: any = {};
             for (const target of platforms) {
               for (const p of options.allLibs) {
-                if (!handledPlatforms[target]) {
-                  const libName = p.replace('**/libs/', '');
+                const libName = p.replace('**/libs/', '');
+                if (!handledPlatforms[libName]) {
                   userUpdates[p] = libName === target ? false : true;
                 }
               }
               for (const p of options.allPackages) {
-                if (!handledPlatforms[target]) {
-                  const packageName = p.replace('**/packages/', '');
+                const packageName = p.replace('**/packages/', '');
+                if (!handledPlatforms[packageName]) {
                   userUpdates[p] = packageName === target ? false : true;
                 }
               }
