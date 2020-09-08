@@ -1,3 +1,13 @@
+## [10.1.1](https://github.com/nstudio/xplat/compare/10.1.0...10.1.1) (2020-09-08)
+
+### Bug Fixes
+
+- **nativescript:** tsconfig and dep adjustment ([f12b635](https://github.com/nstudio/xplat/commit/f12b63578385fcf308fb5e3d509d6a68a792d124))
+
+### Features
+
+- **focus:** allow multiple lib/package focus in OSS projects ([841ab5e](https://github.com/nstudio/xplat/commit/841ab5ec7db29e0930da134c86496024ef0f3699))
+
 # [10.1.0](https://github.com/nstudio/xplat/compare/10.0.6...10.1.0) (2020-09-08)
 
 ### Features
