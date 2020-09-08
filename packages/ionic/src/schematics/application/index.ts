@@ -93,7 +93,7 @@ export default function (options: Schema) {
         projectType: 'application',
         prefix: getPrefix(),
       };
-      return updateWorkspace({ projects })(tree, context);
+      return <any>updateWorkspace({ projects })(tree, <any>context);
     },
     (tree: Tree) => {
       const projects = {};
@@ -102,7 +102,7 @@ export default function (options: Schema) {
       };
       return updateNxProjects(tree, projects);
     },
-    formatFiles({ skipFormat: options.skipFormat }),
+    <any>formatFiles({ skipFormat: options.skipFormat }),
   ]);
 }
 

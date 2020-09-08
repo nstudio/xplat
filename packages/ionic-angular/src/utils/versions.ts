@@ -5,8 +5,8 @@ export const ionicNativeVersion = '~5.23.0';
 export const capacitorVersion = '~2.4.0';
 export const ngDevKitArchitect = '~0.1000.6';
 export const ngDevKitBuild = '~0.1000.6';
-export const ngDevKitCore = '~10.0.0';
-export const ngDevKitSchematics = '~10.0.0';
+export const ngDevKitCore = '~10.1.0';
+export const ngDevKitSchematics = '~10.1.0';
 
 export const jasmineCoreVersion = '~3.6.0';
 export const jasmineSpecVersion = '~5.0.2';
@@ -17,8 +17,8 @@ export const karmaJasmineVersion = '~4.0.1';
 export const karmaJasmineHtmlVersion = '^1.5.2';
 export const typescriptVersion = '~3.9.0';
 
-export const angularVersion = '~10.0.0';
-export const angularDevkitVersion = '~0.1000.6';
+export const angularVersion = '~10.1.0';
+export const angularDevkitVersion = '~0.1001.0';
 export const ngxTranslateVersion = '~13.0.0';
 export const ngxTranslateHttpVersion = '~6.0.0';
 export const coreJsVersion = '^3.6.5';

@@ -7,7 +7,7 @@ import {
 import { updateJsonInTree } from '@nrwl/workspace';
 
 function updateRootPackage(tree: Tree, context: SchematicContext) {
-  return updateJsonInTree('package.json', (json) => {
+  return <any>updateJsonInTree('package.json', (json) => {
     json.scripts = json.scripts || {};
     json.dependencies = json.dependencies || {};
     json.devDependencies = json.devDependencies || {};
@@ -34,7 +34,7 @@ function updateRootPackage(tree: Tree, context: SchematicContext) {
     }
 
     return json;
-  })(tree, context);
+  })(tree, <any>context);
 }
 
 export default function (): Rule {

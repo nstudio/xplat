@@ -36,16 +36,13 @@ import {
   nsCoreVersion,
   angularVersion,
   nsNgScopedVersion,
-  nsIntlVersion,
   nsNgFonticonVersion,
   ngxTranslateVersion,
   nsThemeCoreVersion,
   codelyzerVersion,
-  terserWebpackVersion,
-  tslibVersion,
   rxjsVersion,
   zonejsVersion,
-  nsDevWebpackVersion,
+  nsWebpackVersion,
   typescriptVersion,
 } from '../../utils/versions';
 import { XplatNativeScriptHelpers } from '@nstudio/nativescript/src/utils';
@@ -209,7 +206,7 @@ export default function (options: Schema) {
           },
         },
       };
-      return updateWorkspace({ projects })(tree, context);
+      return updateWorkspace({ projects })(tree, <any>context);
     },
     (tree: Tree) => {
       const projects = {};
@@ -239,14 +236,11 @@ function addAppFiles(
           pathOffset: directory ? '../../../' : '../../',
           angularVersion: angularVersion,
           nsNgScopedVersion: nsNgScopedVersion,
-          nsIntlVersion: nsIntlVersion,
           nsNgFonticonVersion: nsNgFonticonVersion,
-          nsDevWebpackVersion: nsDevWebpackVersion,
+          nsWebpackVersion: nsWebpackVersion,
           ngxTranslateVersion: ngxTranslateVersion,
           nsThemeCoreVersion: nsThemeCoreVersion,
           nsCoreVersion: nsCoreVersion,
-          terserWebpackVersion: terserWebpackVersion,
-          tslibVersion: tslibVersion,
           rxjsVersion: rxjsVersion,
           zonejsVersion: zonejsVersion,
           codelyzerVersion: codelyzerVersion,

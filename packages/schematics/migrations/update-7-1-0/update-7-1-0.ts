@@ -11,7 +11,7 @@ export default function (): Rule {
 }
 
 function updateRootPackage(tree: Tree, context: SchematicContext) {
-  return updateJsonInTree('package.json', (json) => {
+  return <any>updateJsonInTree('package.json', (json) => {
     json.scripts = json.scripts || {};
     json.dependencies = json.dependencies || {};
     json.dependencies = {
@@ -26,5 +26,5 @@ function updateRootPackage(tree: Tree, context: SchematicContext) {
     };
 
     return json;
-  })(tree, context);
+  })(tree, <any>context);
 }

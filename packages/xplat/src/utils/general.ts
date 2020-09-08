@@ -152,7 +152,7 @@ export function readWorkspaceJson(tree: Tree) {
 }
 
 export function updateWorkspace(updates: any) {
-  return updateWorkspaceInTree((json) => {
+  return <any>updateWorkspaceInTree((json) => {
     for (const key in updates) {
       json[key] = {
         ...(json[key] || {}),

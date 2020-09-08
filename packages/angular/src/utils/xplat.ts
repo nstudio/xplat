@@ -454,7 +454,7 @@ export namespace XplatAngularHelpers {
     return (tree: Tree, context: SchematicContext) => {
       const prefix = getPrefix();
 
-      return updateJsonInTree('tslint.json', (json) => {
+      return <any>updateJsonInTree('tslint.json', (json) => {
         json.rules = json.rules || {};
         // remove forin rule as collides with LogService
         delete json.rules['forin'];
@@ -474,7 +474,7 @@ export namespace XplatAngularHelpers {
         ];
 
         return json;
-      })(tree, context);
+      })(tree, <any>context);
     };
   }
 }

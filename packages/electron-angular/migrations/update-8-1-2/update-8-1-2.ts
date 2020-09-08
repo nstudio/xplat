@@ -91,9 +91,9 @@ function updateRootPackage(tree: Tree, context: SchematicContext) {
     };
 
     return json;
-  })(tree, context);
+  })(tree, <any>context);
 }
 
 export default function (): Rule {
-  return chain([updateElectronApps, updateRootPackage]);
+  return chain([updateElectronApps, <any>updateRootPackage]);
 }

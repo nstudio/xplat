@@ -85,9 +85,7 @@ describe('app', () => {
     expect(
       files.indexOf('/apps/nativescript-foo/src/main.ts')
     ).toBeGreaterThanOrEqual(0);
-    expect(
-      files.indexOf('/apps/nativescript-foo/src/package.json')
-    ).toBeGreaterThanOrEqual(0);
+    expect(files.indexOf('/apps/nativescript-foo/src/package.json')).toBe(-1);
 
     // xplat file defaults
     expect(tree.exists('/xplat/nativescript/index.ts')).toBeTruthy();

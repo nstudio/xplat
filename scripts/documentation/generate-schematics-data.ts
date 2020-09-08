@@ -2,7 +2,7 @@ import * as fs from 'fs-extra';
 import * as path from 'path';
 import { parseJsonSchemaToOptions } from '@angular/cli/utilities/json-schema';
 import { dedent } from 'tslint/lib/utils';
-import { Schematic } from '@angular-devkit/schematics/collection-schema';
+import { Schematic } from '@angular-devkit/schematics';
 import { CoreSchemaRegistry } from '@angular-devkit/core/src/json/schema';
 import {
   htmlSelectorFormat,
@@ -28,7 +28,7 @@ registry.addFormat(htmlSelectorFormat);
 function generateSchematicList(
   config: Configuration,
   registry: CoreSchemaRegistry
-): Promise<Schematic>[] {
+): Promise<Schematic<any, any>>[] {
   const schematicCollectionFile = path.join(config.root, 'collection.json');
   fs.removeSync(config.schematicOutput);
   const schematicCollection = fs.readJsonSync(schematicCollectionFile)

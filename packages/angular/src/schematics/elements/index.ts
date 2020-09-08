@@ -184,7 +184,7 @@ export default function (options: ElementsOptions) {
               },
             },
           },
-        })(tree, context);
+        })(tree, <any>context);
       }
     },
     // update dependencies
@@ -200,7 +200,7 @@ export default function (options: ElementsOptions) {
         return noop();
       }
     },
-    formatFiles({ skipFormat: options.skipFormat }),
+    <any>formatFiles({ skipFormat: options.skipFormat }),
   ]);
 }
 
@@ -248,7 +248,7 @@ function updateWorkspaceSupport(
     };
 
     return json;
-  })(tree, context);
+  })(tree, <any>context);
 }
 
 function createCustomElementList(componentSymbols) {

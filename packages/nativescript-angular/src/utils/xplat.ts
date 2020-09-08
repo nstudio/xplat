@@ -11,12 +11,11 @@ import {
   nodeSassVersion,
   nsCoreVersion,
   angularVersion,
+  ngToolsWebpack,
   ngxTranslateVersion,
   rxjsVersion,
-  tslibVersion,
   codelyzerVersion,
   zonejsVersion,
-  nsIntlVersion,
 } from './versions';
 
 export namespace XplatNativeScriptAngularHelpers {
@@ -42,7 +41,6 @@ export namespace XplatNativeScriptAngularHelpers {
         angularDeps['@angular/router'] = angularVersion;
         angularDeps['@ngx-translate/core'] = ngxTranslateVersion;
         angularDeps['rxjs'] = rxjsVersion;
-        angularDeps['tslib'] = tslibVersion;
         angularDeps['zone.js'] = zonejsVersion;
 
         angularDevDeps['@angular/compiler-cli'] = angularVersion;
@@ -58,6 +56,7 @@ export namespace XplatNativeScriptAngularHelpers {
         },
         devDependencies: {
           ...angularDevDeps,
+          '@ngtools/webpack': ngToolsWebpack,
           'node-sass': nodeSassVersion,
         },
       })(tree, context);
@@ -71,8 +70,7 @@ export namespace XplatNativeScriptAngularHelpers {
         // add references.d.ts
         tree.create(
           filename,
-          `/// <reference path="./node_modules/@nativescript/types/ios.d.ts" />
-/// <reference path="./node_modules/@nativescript/types/android.d.ts" />
+          `/// <reference path="../../node_modules/@nativescript/types/index.d.ts" />
       `
         );
       }
