@@ -1,3 +1,9 @@
+# [10.1.0](https://github.com/nstudio/xplat/compare/10.0.6...10.1.0) (2020-09-08)
+
+### Features
+
+- **nativescript:** {N} 7 and Angular 10.1 ([#211](https://github.com/nstudio/xplat/issues/211)) ([c43aa72](https://github.com/nstudio/xplat/commit/c43aa724871517175dba3a6be6d6f41d5769cbb7))
+
 ## [10.0.6](https://github.com/nstudio/xplat/compare/10.0.0...10.0.6) (2020-08-20)
 
 ### Features
