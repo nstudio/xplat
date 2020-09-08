@@ -110,6 +110,7 @@ The scope must be one of the following:
 
 - angular - anything Angular specific
 - core - anything xplat core specific
+- focus - anything related to focus tools
 - docs - anything related to docs infrastructure
 - electron - anything Electron specific
 - ionic - anything Ionic specific
