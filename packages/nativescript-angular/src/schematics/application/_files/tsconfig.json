@@ -24,7 +24,6 @@
   },
   "files": ["./references.d.ts", "./src/main.ts"],
   "include": [
-    "./src/**/*.module.ts",
     "<%= pathOffset %>xplat/**/*.{ios,android}.ts",
     "<%= pathOffset %>xplat/<%= xplatFolderName %>/workers/**/*.worker.ts"
   ],

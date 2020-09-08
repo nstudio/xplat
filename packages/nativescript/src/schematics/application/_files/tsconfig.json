@@ -18,8 +18,7 @@
       ],
       "@<%= npmScope %>/nativescript/*": [
         "<%= pathOffset %>xplat/<%= xplatFolderName %>/*"
-      ],
-      "*": ["./node_modules/*"]
+      ]
     }
   },
   "exclude": ["node_modules", "platforms"]
