@@ -1,3 +1,9 @@
+# [10.2.0](https://github.com/nstudio/xplat/compare/10.1.1...10.2.0) (2020-09-25)
+
+### Features
+
+- **core:** support Nx 10.2.x and tsconfig.base.json ([#215](https://github.com/nstudio/xplat/issues/215)) ([b336329](https://github.com/nstudio/xplat/commit/b33632907ff505bda257cfc71ae4eb909189ee4b))
+
 ## [10.1.1](https://github.com/nstudio/xplat/compare/10.1.0...10.1.1) (2020-09-08)
 
 ### Bug Fixes
