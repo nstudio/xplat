@@ -30,8 +30,8 @@ import {
   getPrefix,
   getJsonFromFile,
   updateJsonFile,
-  supportedPlatforms, 
-  checkRootTsConfig
+  supportedPlatforms,
+  checkRootTsConfig,
 } from '@nstudio/xplat-utils';
 import { Schema } from './schema';
 

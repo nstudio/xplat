@@ -157,9 +157,16 @@ export function checkRootTsConfig(tree: Tree) {
     // to support Nx 10.1+
     // NOTE: We may end up creating tsconfig's at libs and xplat levels in future
     // This allows ts resolution to work as normal
-    tree.create('/tsconfig.json', JSON.stringify({
-      extends: `.${getRootTsConfigPath()}`,
-    }, null, 2));
+    tree.create(
+      '/tsconfig.json',
+      JSON.stringify(
+        {
+          extends: `.${getRootTsConfigPath()}`,
+        },
+        null,
+        2
+      )
+    );
   }
   return tree;
 }

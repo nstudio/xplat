@@ -154,9 +154,7 @@ export default function (options: Schema) {
           ios: {
             builder: '@nrwl/workspace:run-commands',
             options: {
-              commands: [
-                'ns debug ios --no-hmr'
-              ],
+              commands: ['ns debug ios --no-hmr'],
               cwd: `apps/${directory}${options.name}`,
               parallel: false,
             },
@@ -164,9 +162,7 @@ export default function (options: Schema) {
           android: {
             builder: '@nrwl/workspace:run-commands',
             options: {
-              commands: [
-                'ns debug android --no-hmr'
-              ],
+              commands: ['ns debug android --no-hmr'],
               cwd: `apps/${directory}${options.name}`,
               parallel: false,
             },
@@ -177,7 +173,7 @@ export default function (options: Schema) {
               commands: [
                 'npx rimraf hooks node_modules platforms package-lock.json',
                 'npm i',
-                'npx rimraf package-lock.json'
+                'npx rimraf package-lock.json',
               ],
               cwd: `apps/${directory}${options.name}`,
               parallel: false,

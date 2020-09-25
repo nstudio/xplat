@@ -1,5 +1,10 @@
 import { Tree } from '@angular-devkit/schematics';
-import { supportedPlatforms, setTest, jsonParse, getRootTsConfigPath } from '@nstudio/xplat-utils';
+import {
+  supportedPlatforms,
+  setTest,
+  jsonParse,
+  getRootTsConfigPath,
+} from '@nstudio/xplat-utils';
 import { XplatHelpers } from '@nstudio/xplat';
 import { createEmptyWorkspace, getFileContent } from '@nstudio/xplat/testing';
 import { runSchematic } from '../../utils/testing';
