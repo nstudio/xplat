@@ -1,6 +1,6 @@
 import { Tree } from '@angular-devkit/schematics';
 import { Schema } from './schema';
-import { jsonParse } from '@nstudio/xplat-utils';
+import { getRootTsConfigPath, jsonParse } from '@nstudio/xplat-utils';
 import { createEmptyWorkspace, getFileContent } from '@nstudio/xplat/testing';
 import { runSchematic } from '../../utils/testing';
 
@@ -54,6 +54,15 @@ describe('app', () => {
 
     expect(files.indexOf('/apps/foo-web/tsconfig.json')).toBeGreaterThanOrEqual(
       0
+      );
+    let checkPath = getRootTsConfigPath();
+    let checkFile = getFileContent(tree, checkPath);
+    // console.log('tsconfig.base:', checkFile);
+    expect(files.indexOf(checkPath)).toBeGreaterThanOrEqual(
+      0
+    );
+    expect(files.indexOf('/tsconfig.json')).toBeGreaterThanOrEqual(
+      0
     );
     expect(files.indexOf('/apps/foo-web/src/main.ts')).toBeGreaterThanOrEqual(
       0
@@ -62,13 +71,13 @@ describe('app', () => {
       files.indexOf('/apps/foo-web/src/app/app.module.ts')
     ).toBeGreaterThanOrEqual(0);
 
-    let checkPath = '/apps/foo-web/src/app/app.component.html';
+    checkPath = '/apps/foo-web/src/app/app.component.html';
     expect(files.indexOf(checkPath)).toBeGreaterThanOrEqual(0);
 
     checkPath = '/package.json';
     expect(files.indexOf(checkPath)).toBeGreaterThanOrEqual(0);
 
-    let checkFile = getFileContent(tree, checkPath);
+    checkFile = getFileContent(tree, checkPath);
     // console.log(checkFile);
     const packageData: any = jsonParse(checkFile);
     expect(packageData.scripts['start.foo.web']).toBeDefined();

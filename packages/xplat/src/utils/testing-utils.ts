@@ -37,10 +37,6 @@ export function createEmptyWorkspace(
     JSON.stringify(<NxJson>{ npmScope: 'testing', projects: {} })
   );
   tree.create(
-    '/tsconfig.json',
-    JSON.stringify({ compilerOptions: { paths: {} } })
-  );
-  tree.create(
     '/tsconfig.base.json',
     JSON.stringify({ compilerOptions: { paths: {} } })
   );

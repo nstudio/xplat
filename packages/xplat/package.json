@@ -43,7 +43,7 @@
   "dependencies": {
     "@angular-devkit/core": "~10.1.0",
     "@angular-devkit/schematics": "~10.1.0",
-    "@nrwl/workspace": "~10.1.0",
+    "@nrwl/workspace": "~10.2.0",
     "@nstudio/focus": "*",
     "@nstudio/xplat-utils": "*",
     "cosmiconfig": "~6.0.0",

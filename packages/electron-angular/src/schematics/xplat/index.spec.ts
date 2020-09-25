@@ -1,6 +1,6 @@
 import { Tree } from '@angular-devkit/schematics';
 
-import { setTest, jsonParse } from '@nstudio/xplat-utils';
+import { setTest, jsonParse, getRootTsConfigPath } from '@nstudio/xplat-utils';
 import { XplatHelpers } from '@nstudio/xplat';
 import { createEmptyWorkspace, getFileContent } from '@nstudio/xplat/testing';
 import { runSchematic } from '../../utils/testing';
@@ -40,7 +40,7 @@ describe('xplat schematic', () => {
     expect(hasNativeScript).toBeUndefined();
     const hasElectron = packageFile.devDependencies[`electron`];
     expect(hasElectron).toBeDefined();
-    let filePath = '/tsconfig.json';
+    let filePath = '/tsconfig.base.json';
     let fileContent = jsonParse(getFileContent(tree, filePath));
     // console.log(fileContent);
     expect(fileContent.compilerOptions.paths['@testing/electron']).toBeTruthy();
@@ -60,7 +60,7 @@ describe('xplat schematic', () => {
 
     const tree = await runSchematic('xplat', options, appTree);
     expect(tree.exists('/xplat/electron-angular/index.ts')).toBeTruthy();
-    const filePath = '/tsconfig.json';
+    const filePath = getRootTsConfigPath();
     const fileContent = jsonParse(getFileContent(tree, filePath));
     // console.log(fileContent);
     expect(
@@ -79,7 +79,7 @@ describe('xplat schematic', () => {
 
     let tree = await runSchematic('xplat', options, appTree);
     expect(tree.exists('/xplat/electron/index.ts')).toBeTruthy();
-    let filePath = '/tsconfig.json';
+    let filePath = getRootTsConfigPath();
     let fileContent = jsonParse(getFileContent(tree, filePath));
     // console.log(fileContent);
     expect(fileContent.compilerOptions.paths['@testing/electron']).toBeTruthy();

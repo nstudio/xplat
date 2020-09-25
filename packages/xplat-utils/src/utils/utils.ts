@@ -14,7 +14,7 @@ import {
 } from '@angular-devkit/schematics';
 import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 import * as stripJsonComments from 'strip-json-comments';
-import { serializeJson } from '@nrwl/workspace';
+import { createOrUpdate, serializeJson } from '@nrwl/workspace';
 
 export const supportedPlatforms: Array<PlatformTypes> = [
   'web',
@@ -148,12 +148,29 @@ export const copy = (tree: Tree, from: string, to: string) => {
   tree.create(to, file.content);
 };
 
+export function getRootTsConfigPath() {
+  return '/tsconfig.base.json';
+}
+
+export function checkRootTsConfig(tree: Tree) {
+  if (!tree.exists('/tsconfig.json') && tree.exists('/tsconfig.base.json')) {
+    // to support Nx 10.1+
+    // NOTE: We may end up creating tsconfig's at libs and xplat levels in future
+    // This allows ts resolution to work as normal
+    tree.create('/tsconfig.json', JSON.stringify({
+      extends: `.${getRootTsConfigPath()}`,
+    }, null, 2));
+  }
+  return tree;
+}
+
 export function prerun(options?: any, init?: boolean) {
   return (tree: Tree) => {
     const nxJson = getNxWorkspaceConfig(tree);
     if (nxJson) {
       npmScope = nxJson.npmScope || 'workspace';
     }
+    tree = checkRootTsConfig(tree);
     // console.log('npmScope:', npmScope);
     const packageJson = getJsonFromFile(tree, 'package.json');
 
