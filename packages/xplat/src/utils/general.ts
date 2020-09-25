@@ -122,6 +122,10 @@ export function updateTsConfig(
   targetSuffix: string = '',
   prefixPath: string = ''
 ) {
+  if (!prefixPath && tree.exists('/tsconfig.base.json')) {
+    // when root tsconfig, always modify base if exists
+    targetSuffix = 'base';
+  }
   let tsConfigPath: string = `${prefixPath}tsconfig${
     targetSuffix ? '.' + targetSuffix : ''
   }.json`;

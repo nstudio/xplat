@@ -1,6 +1,6 @@
 import { Tree } from '@angular-devkit/schematics';
 import { Schema } from '../application/schema';
-import { setTest, jsonParse } from '@nstudio/xplat-utils';
+import { setTest, jsonParse, getRootTsConfigPath } from '@nstudio/xplat-utils';
 import { IHelperSchema, stringUtils } from '@nstudio/xplat';
 import {
   createXplatWithApps,
@@ -40,7 +40,7 @@ describe('helpers schematic', () => {
     ).toBeGreaterThanOrEqual(0);
 
     // should update tsconfig files
-    let filePath = '/tsconfig.json';
+    let filePath = getRootTsConfigPath();
     let fileContent = jsonParse(getFileContent(tree, filePath));
     // console.log(fileContent);
     expect(fileContent.compilerOptions.paths['@nativescript/*'][0]).toBe(

@@ -1,5 +1,10 @@
 import { Tree } from '@angular-devkit/schematics';
-import { supportedPlatforms, setTest, jsonParse } from '@nstudio/xplat-utils';
+import {
+  supportedPlatforms,
+  setTest,
+  jsonParse,
+  getRootTsConfigPath,
+} from '@nstudio/xplat-utils';
 import { XplatHelpers } from '@nstudio/xplat';
 import { createEmptyWorkspace, getFileContent } from '@nstudio/xplat/testing';
 import { runSchematic } from '../../utils/testing';
@@ -43,7 +48,7 @@ describe('xplat schematic', () => {
     expect(
       packageFile.devDependencies[`@nativescript/types`]
     ).not.toBeUndefined();
-    let filePath = '/tsconfig.json';
+    let filePath = getRootTsConfigPath();
     let fileContent = jsonParse(getFileContent(tree, filePath));
     // console.log(fileContent);
     expect(
@@ -68,7 +73,7 @@ describe('xplat schematic', () => {
     expect(tree.exists('/libs/core/index.ts')).toBeTruthy();
     expect(tree.exists('/libs/scss/_index.scss')).toBeTruthy();
     expect(tree.exists('/xplat/nativescript-angular/index.ts')).toBeTruthy();
-    const filePath = '/tsconfig.json';
+    const filePath = getRootTsConfigPath();
     const fileContent = jsonParse(getFileContent(tree, filePath));
     // console.log(fileContent);
     expect(
@@ -87,7 +92,7 @@ describe('xplat schematic', () => {
 
     let tree = await runSchematic('xplat', options, appTree);
     expect(tree.exists('/xplat/nativescript/index.ts')).toBeTruthy();
-    let filePath = '/tsconfig.json';
+    let filePath = getRootTsConfigPath();
     let fileContent = jsonParse(getFileContent(tree, filePath));
     // console.log(fileContent);
     expect(

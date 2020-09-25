@@ -151,24 +151,10 @@ export default function (options: Schema) {
           },
         },
         architect: {
-          serve: {
-            builder: '@nrwl/workspace:run-commands',
-            options: {
-              commands: [
-                {
-                  command: `yarn start.${platformApp}.preview`,
-                },
-              ],
-            },
-          },
           ios: {
             builder: '@nrwl/workspace:run-commands',
             options: {
-              commands: [
-                {
-                  command: 'ns debug ios --no-hmr',
-                },
-              ],
+              commands: ['ns debug ios --no-hmr'],
               cwd: `apps/${directory}${options.name}`,
               parallel: false,
             },
@@ -176,11 +162,7 @@ export default function (options: Schema) {
           android: {
             builder: '@nrwl/workspace:run-commands',
             options: {
-              commands: [
-                {
-                  command: 'ns debug android --no-hmr',
-                },
-              ],
+              commands: ['ns debug android --no-hmr'],
               cwd: `apps/${directory}${options.name}`,
               parallel: false,
             },
@@ -189,16 +171,9 @@ export default function (options: Schema) {
             builder: '@nrwl/workspace:run-commands',
             options: {
               commands: [
-                {
-                  command:
-                    'npx rimraf -- hooks node_modules platforms package-lock.json',
-                },
-                {
-                  command: 'npm i',
-                },
-                {
-                  command: 'npx rimraf -- package-lock.json',
-                },
+                'npx rimraf hooks node_modules platforms package-lock.json',
+                'npm i',
+                'npx rimraf package-lock.json',
               ],
               cwd: `apps/${directory}${options.name}`,
               parallel: false,

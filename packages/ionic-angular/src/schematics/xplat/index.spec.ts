@@ -1,5 +1,10 @@
 import { Tree } from '@angular-devkit/schematics';
-import { supportedPlatforms, setTest, jsonParse } from '@nstudio/xplat-utils';
+import {
+  supportedPlatforms,
+  setTest,
+  jsonParse,
+  getRootTsConfigPath,
+} from '@nstudio/xplat-utils';
 import { XplatHelpers } from '@nstudio/xplat';
 import { createEmptyWorkspace, getFileContent } from '@nstudio/xplat/testing';
 import { runSchematic } from '../../utils/testing';
@@ -37,7 +42,7 @@ describe('xplat ionic angular', () => {
     // should not include these root packages
     const hasNativeScript = packageFile.dependencies[`nativescript-angular`];
     expect(hasNativeScript).toBeUndefined();
-    let filePath = '/tsconfig.json';
+    let filePath = getRootTsConfigPath();
     let fileContent = jsonParse(getFileContent(tree, filePath));
     // console.log(fileContent);
     expect(fileContent.compilerOptions.paths['@testing/ionic']).toBeTruthy();
@@ -55,7 +60,7 @@ describe('xplat ionic angular', () => {
 
     const tree = await runSchematic('xplat', options, appTree);
     expect(tree.exists('/xplat/ionic-angular/index.ts')).toBeTruthy();
-    const filePath = '/tsconfig.json';
+    const filePath = getRootTsConfigPath();
     const fileContent = jsonParse(getFileContent(tree, filePath));
     // console.log(fileContent);
     expect(
@@ -74,7 +79,7 @@ describe('xplat ionic angular', () => {
 
     let tree = await runSchematic('xplat', options, appTree);
     expect(tree.exists('/xplat/ionic/index.ts')).toBeTruthy();
-    let filePath = '/tsconfig.json';
+    let filePath = getRootTsConfigPath();
     let fileContent = jsonParse(getFileContent(tree, filePath));
     // console.log(fileContent);
     expect(fileContent.compilerOptions.paths['@testing/ionic']).toBeTruthy();
