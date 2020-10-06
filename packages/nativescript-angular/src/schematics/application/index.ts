@@ -22,6 +22,7 @@ import {
   getDefaultTemplateOptions,
   XplatHelpers,
   updateTsConfig,
+  output,
 } from '@nstudio/xplat';
 import {
   prerun,
@@ -126,14 +127,8 @@ export default function (options: Schema) {
         `clean`
       ] = `npx rimraf -- hooks node_modules package-lock.json && npm i`;
       scripts[
-        `start.${platformApp}.ios`
-      ] = `cd apps/${directory}${options.name} && ns debug ios --no-hmr --emulator`;
-      scripts[
-        `start.${platformApp}.android`
-      ] = `cd apps/${directory}${options.name} && ns debug android --no-hmr --emulator`;
-      scripts[
         `clean.${platformApp}`
-      ] = `cd apps/${directory}${options.name} && npx rimraf -- hooks node_modules platforms package-lock.json && npm i && npx rimraf -- package-lock.json`;
+      ] = `cd apps/${directory}${options.name} && ns clean && npm i && npx rimraf -- package-lock.json`;
       return updatePackageScripts(tree, scripts);
     },
     (tree: Tree, context: SchematicContext) => {
@@ -150,11 +145,23 @@ export default function (options: Schema) {
             styleext: 'scss',
           },
         },
+        configurations: {
+          production: {
+            fileReplacements: [
+              {
+                replace: 'libs/core/environments/environment.ts',
+                with: 'libs/core/environments/environment.prod.ts',
+              },
+            ],
+          },
+        },
         architect: {
           ios: {
             builder: '@nrwl/workspace:run-commands',
             options: {
-              commands: ['ns debug ios --no-hmr'],
+              commands: [
+                `ns debug ios --no-hmr --env.configuration={args.configuration} --env.projectName=${options.name}`,
+              ],
               cwd: `apps/${directory}${options.name}`,
               parallel: false,
             },
@@ -162,7 +169,9 @@ export default function (options: Schema) {
           android: {
             builder: '@nrwl/workspace:run-commands',
             options: {
-              commands: ['ns debug android --no-hmr'],
+              commands: [
+                `ns debug android --no-hmr --env.configuration={args.configuration} --env.projectName=${options.name}`,
+              ],
               cwd: `apps/${directory}${options.name}`,
               parallel: false,
             },
@@ -170,11 +179,7 @@ export default function (options: Schema) {
           clean: {
             builder: '@nrwl/workspace:run-commands',
             options: {
-              commands: [
-                'npx rimraf hooks node_modules platforms package-lock.json',
-                'npm i',
-                'npx rimraf package-lock.json',
-              ],
+              commands: ['ns clean', 'npm i', 'npx rimraf package-lock.json'],
               cwd: `apps/${directory}${options.name}`,
               parallel: false,
             },
@@ -189,6 +194,16 @@ export default function (options: Schema) {
         tags: [],
       };
       return updateNxProjects(tree, projects);
+    },
+    (tree: Tree) => {
+      output.log({
+        title: 'You will be able to run your app with:',
+        bodyLines: [
+          `nx run ${options.name}:ios`,
+          `   `,
+          `nx run ${options.name}:android`,
+        ],
+      });
     },
   ]);
 }

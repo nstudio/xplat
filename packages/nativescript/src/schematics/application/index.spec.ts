@@ -90,9 +90,6 @@ describe('app', () => {
 
     const packageFile = getFileContent(tree, 'package.json');
     // console.log(packageFile)
-    expect(
-      packageFile.indexOf('start.foo.nativescript.ios')
-    ).toBeGreaterThanOrEqual(0);
   });
 
   it('should create all files for app in directory', async () => {
