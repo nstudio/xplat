@@ -1,3 +1,9 @@
+## [10.3.1](https://github.com/nstudio/xplat/compare/10.3.0...10.3.1) (2020-10-07)
+
+### Bug Fixes
+
+- **core:** 10.3.x migration for relative path ([c086655](https://github.com/nstudio/xplat/commit/c086655acf11634dcf94411703657866dedff346))
+
 # [10.3.0](https://github.com/nstudio/xplat/compare/10.2.0...10.3.0) (2020-10-07)
 
 ### Features
