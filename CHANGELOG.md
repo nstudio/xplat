@@ -1,3 +1,9 @@
+# [10.3.0](https://github.com/nstudio/xplat/compare/10.2.0...10.3.0) (2020-10-07)
+
+### Features
+
+- **nativescript:** support configuration for environment handling ([#216](https://github.com/nstudio/xplat/issues/216)) ([0ae270e](https://github.com/nstudio/xplat/commit/0ae270e5e096ab3904a62ab66c5d96d484245dcf))
+
 # [10.2.0](https://github.com/nstudio/xplat/compare/10.1.1...10.2.0) (2020-09-25)
 
 ### Features
