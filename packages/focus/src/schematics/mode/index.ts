@@ -15,6 +15,7 @@ import {
   supportedPlatformsWithNx,
   getJsonFromFile,
   isXplatWorkspace,
+  getAppPaths,
 } from '@nstudio/xplat-utils';
 import { Schema } from './schema';
 import { FocusHelpers } from '../../utils';
@@ -43,14 +44,12 @@ export default function (options: Schema) {
     // update IDE settings
     (tree: Tree, context: SchematicContext) => {
       // apps
-      const appsDir = tree.getDir('apps');
+      const appPaths = getAppPaths(tree);
       const allApps = [];
-      if (appsDir && appsDir.subdirs) {
-        const appFolders = appsDir.subdirs;
-        for (const dir of appFolders) {
-          allApps.push(`**${appsDir.path}/${dir}`);
-        }
+      for (const appPath of appPaths) {
+        allApps.push(`**${appPath}`);
       }
+      // console.log('allApps:', allApps);
 
       // libs
       const libsDir = tree.getDir('libs');
@@ -81,21 +80,7 @@ export default function (options: Schema) {
           // just add platform to the name to be specific
           for (let i = 0; i < focusOnApps.length; i++) {
             const projectName = focusOnApps[i];
-            const nameParts = <Array<PlatformTypes>>(
-              (<unknown>projectName.split('-'))
-            );
-            let containsPlatform = false;
-            for (const n of nameParts) {
-              if (supportedPlatformsWithNx.includes(n)) {
-                containsPlatform = true;
-              }
-            }
-            if (!containsPlatform) {
-              const appName = getGroupByName()
-                ? `${nameParts.join('-')}-${name}`
-                : `${name}-${nameParts.join('-')}`;
-              focusOnApps[i] = `**/apps/${appName}`;
-            }
+            focusOnApps[i] = `**/apps/${projectName}`;
           }
         }
       }

@@ -282,9 +282,6 @@ describe('app', () => {
 
     const packageFile = getFileContent(tree, 'package.json');
     // console.log(packageFile)
-    expect(
-      packageFile.indexOf('start.foo.nativescript.ios')
-    ).toBeGreaterThanOrEqual(0);
   });
 
   describe('useXplat false', () => {
