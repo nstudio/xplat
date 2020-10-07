@@ -4,6 +4,11 @@
       "version": "10.2.0",
       "description": "Migrate workspace to 10.2.0",
       "factory": "./migrations/update-10-2-0/update-10-2-0"
+    },
+    "update-to-10.3.0": {
+      "version": "10.3.0",
+      "description": "Migrate workspace to 10.3.0",
+      "factory": "./migrations/update-10-3-0/update-10-3-0"
     }
   }
 }

@@ -145,17 +145,20 @@ export default function (options: Schema) {
             styleext: 'scss',
           },
         },
-        configurations: {
-          production: {
-            fileReplacements: [
-              {
-                replace: 'libs/core/environments/environment.ts',
-                with: 'libs/core/environments/environment.prod.ts',
-              },
-            ],
-          },
-        },
         architect: {
+          default: {
+            builder: '@nrwl/workspace:run-commands',
+            configurations: {
+              production: {
+                fileReplacements: [
+                  {
+                    replace: 'libs/core/environments/environment.ts',
+                    with: 'libs/core/environments/environment.prod.ts',
+                  },
+                ],
+              },
+            },
+          },
           ios: {
             builder: '@nrwl/workspace:run-commands',
             options: {

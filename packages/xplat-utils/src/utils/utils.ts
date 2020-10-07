@@ -171,6 +171,80 @@ export function checkRootTsConfig(tree: Tree) {
   return tree;
 }
 
+export function getAppPaths(
+  tree: Tree,
+  type?: PlatformTypes // by default, will return all app paths (considering folder nesting)
+): Array<string> {
+  const appsDir = tree.getDir('apps');
+  const appPaths: Array<string> = [];
+
+  const checkIfPlatform = (dirPath: string) => {
+    let packagePath = `${dirPath}/package.json`;
+    // check for platform via it's package (web is only app type that doesn't have a package)
+    switch (type) {
+      case 'nativescript':
+        if (tree.exists(`${dirPath}/nativescript.config.ts`)) {
+          appPaths.push(dirPath);
+        }
+        break;
+      case 'ionic':
+        if (tree.exists(packagePath)) {
+          const packageData = getJsonFromFile(tree, packagePath);
+          if (
+            packageData.dependencies &&
+            packageData.dependencies['@capacitor/core']
+          ) {
+            appPaths.push(dirPath);
+          }
+        }
+        break;
+      case 'electron':
+        let embeddedPackage = `${dirPath}/src/package.json`;
+        if (tree.exists(embeddedPackage)) {
+          const packageData = getJsonFromFile(tree, embeddedPackage);
+          if (packageData.build && packageData.build.appId) {
+            appPaths.push(dirPath);
+          }
+        }
+        break;
+      case 'web':
+        if (!tree.exists(packagePath)) {
+          // web app when no package is present
+          appPaths.push(dirPath);
+        }
+        break;
+    }
+  };
+  for (const dir of appsDir.subdirs) {
+    let tsconfigPath = `${appsDir.path}/${dir}/tsconfig.json`;
+
+    if (tree.exists(tsconfigPath)) {
+      // this is an app directory
+      if (type) {
+        checkIfPlatform(`${appsDir.path}/${dir}`);
+      } else {
+        appPaths.push(`${appsDir.path}/${dir}`);
+      }
+    } else {
+      // apps in nested folders
+      const subDirs = tree.getDir(`${appsDir.path}/${dir}`).subdirs;
+      for (const subDir of subDirs) {
+        tsconfigPath = `${appsDir.path}/${dir}/${subDir}/tsconfig.json`;
+        if (tree.exists(tsconfigPath)) {
+          // this is an app directory
+          if (type) {
+            checkIfPlatform(`${appsDir.path}/${dir}/${subDir}`);
+          } else {
+            appPaths.push(`${appsDir.path}/${dir}/${subDir}`);
+          }
+        }
+      }
+    }
+  }
+
+  return appPaths;
+}
+
 export function prerun(options?: any, init?: boolean) {
   return (tree: Tree) => {
     const nxJson = getNxWorkspaceConfig(tree);
