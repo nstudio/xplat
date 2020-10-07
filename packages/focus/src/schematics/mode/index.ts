@@ -15,7 +15,7 @@ import {
   supportedPlatformsWithNx,
   getJsonFromFile,
   isXplatWorkspace,
-  getAppPaths
+  getAppPaths,
 } from '@nstudio/xplat-utils';
 import { Schema } from './schema';
 import { FocusHelpers } from '../../utils';

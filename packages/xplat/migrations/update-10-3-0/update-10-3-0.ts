@@ -5,7 +5,11 @@ import {
   Tree,
 } from '@angular-devkit/schematics';
 import { createOrUpdate } from '@nrwl/workspace';
-import { checkRootTsConfig, getJsonFromFile, getAppPaths } from '@nstudio/xplat-utils';
+import {
+  checkRootTsConfig,
+  getJsonFromFile,
+  getAppPaths,
+} from '@nstudio/xplat-utils';
 
 export default function (): Rule {
   return chain([
@@ -22,19 +26,29 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
   // update {N} apps and configs
   for (const dirPath of nativeScriptAppsPaths) {
     // console.log(dir);
-      // console.log('appDir:', appDir);
-      const relativePath = dirPath.split('/').map(p => '..').join('/');
+    // console.log('appDir:', appDir);
+    const relativePath = dirPath
+      .split('/')
+      .map((p) => '..')
+      .join('/');
 
-      createOrUpdate(tree, `${dirPath}/tsconfig.env.json`, `{
+    createOrUpdate(
+      tree,
+      `${dirPath}/tsconfig.env.json`,
+      `{
   "extends": "./tsconfig.json",
   "include": [
     "${relativePath}/libs/core/environments/*.ts"
   ]
 }
-`);
+`
+    );
   }
 
-  if (tree.exists('libs/core/environments/environment.ts') && !tree.exists(`libs/core/environments/environment.prod.ts`)) {
+  if (
+    tree.exists('libs/core/environments/environment.ts') &&
+    !tree.exists(`libs/core/environments/environment.prod.ts`)
+  ) {
     createOrUpdate(
       tree,
       `libs/core/environments/environment.prod.ts`,
