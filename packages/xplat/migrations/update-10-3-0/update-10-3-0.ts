@@ -29,6 +29,7 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
     // console.log('appDir:', appDir);
     const relativePath = dirPath
       .split('/')
+      .filter(p => !!p)
       .map((p) => '..')
       .join('/');
 
