@@ -1,3 +1,13 @@
+## [10.3.2](https://github.com/nstudio/xplat/compare/10.3.0...10.3.2) (2020-10-10)
+
+### Bug Fixes
+
+- **core:** 10.3.x migration for relative path ([c086655](https://github.com/nstudio/xplat/commit/c086655acf11634dcf94411703657866dedff346))
+
+### Features
+
+- **focus:** allow focus on app subfolder, fix service generation ([fae5821](https://github.com/nstudio/xplat/commit/fae5821b7e8c242025de9717a1bf64ef0baa28d7))
+
 ## [10.3.1](https://github.com/nstudio/xplat/compare/10.3.0...10.3.1) (2020-10-07)
 
 ### Bug Fixes
