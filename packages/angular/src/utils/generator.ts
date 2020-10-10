@@ -620,11 +620,7 @@ export function adjustFeatureModule(
           )
         );
 
-        if (type === 'service') {
-          changes.push(
-            ...addProviderToModule(moduleSourceFile, modulePath, symbolName)
-          );
-        } else {
+        if (type !== 'service') {
           changes.push(
             ...addDeclarationToModule(moduleSourceFile, modulePath, symbolName),
             ...addSymbolToNgModuleMetadata(

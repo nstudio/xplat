@@ -310,10 +310,29 @@ export namespace FocusHelpers {
                 userSettingsJson['search.exclude'][focusApp] = false;
               }
               // ensure all other apps are excluded (except for the one that's being focused on)
+              // also support focusing on apps/{subfolder}/*
+              // if focusing on specific apps but there's no direct match of the focus target in allApps listing, it's a subfolder
+              const isFocusingOnAppSubFolder =
+                options.focusOnApps.filter((a) => options.allApps.includes(a))
+                  .length === 0;
+
               for (const app of options.allApps) {
                 if (!options.focusOnApps.includes(app)) {
-                  userSettingsJson['files.exclude'][app] = true;
-                  userSettingsJson['search.exclude'][app] = true;
+                  let skipExcluding = false;
+                  if (isFocusingOnAppSubFolder) {
+                    // see if beginning path of app is in the focused subfolder
+                    for (const focus of options.focusOnApps) {
+                      if (app.indexOf(focus) === 0) {
+                        // console.log('found app in focused folder:', app)
+                        skipExcluding = true;
+                      }
+                    }
+                  }
+                  if (!skipExcluding) {
+                    // console.log('hiding app:', app)
+                    userSettingsJson['files.exclude'][app] = true;
+                    userSettingsJson['search.exclude'][app] = true;
+                  }
                 }
               }
             }
