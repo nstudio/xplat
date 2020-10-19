@@ -61,7 +61,7 @@ describe('ngrx schematic', () => {
     let content = getFileContent(tree, '/libs/core/state/auth.actions.ts');
     // console.log(content);
     expect(content.indexOf(`AuthActions`)).toBeGreaterThanOrEqual(0);
-    expect(content.indexOf(`[@testing/auth] Init'`)).toBeGreaterThanOrEqual(0);
+    expect(content.indexOf(`[@testing/auth] init'`)).toBeGreaterThanOrEqual(0);
 
     content = getFileContent(tree, '/libs/core/index.ts');
     // console.log('/libs/core/index.ts:', content);
@@ -142,6 +142,7 @@ describe('ngrx schematic', () => {
     expect(content.indexOf(`AuthActions`)).toBeGreaterThanOrEqual(0);
     modulePath = '/apps/web-viewer/src/app/features/foo/foo.module.ts';
     content = getFileContent(tree, modulePath);
+    // console.log('content:', content)
     expect(content.indexOf(`StoreModule.forFeature`)).toBeGreaterThanOrEqual(0);
   });
 });

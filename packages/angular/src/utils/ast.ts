@@ -257,7 +257,8 @@ export function addSymbolToNgModuleMetadata(
     return [];
   }
 
-  if (Array.isArray(node)) {
+  const isArray = Array.isArray(node);
+  if (isArray) {
     const nodeArray = (node as {}) as Array<ts.Node>;
     const symbolsArray = nodeArray.map((node) => node.getText());
     if (symbolsArray.includes(expression)) {
@@ -269,7 +270,7 @@ export function addSymbolToNgModuleMetadata(
 
   let toInsert: string;
   let position = node.getEnd();
-  if (node.kind == ts.SyntaxKind.ObjectLiteralExpression) {
+  if (!isArray && node.kind == ts.SyntaxKind.ObjectLiteralExpression) {
     // We haven't found the field in the metadata declaration. Insert a new
     // field.
     const expr = node as ts.ObjectLiteralExpression;
@@ -289,7 +290,7 @@ export function addSymbolToNgModuleMetadata(
         toInsert = `, ${metadataField}: [${expression}]`;
       }
     }
-  } else if (node.kind == ts.SyntaxKind.ArrayLiteralExpression) {
+  } else if (!isArray && node.kind == ts.SyntaxKind.ArrayLiteralExpression) {
     // We found the field but it's empty. Insert it just before the `]`.
     position--;
     toInsert = `${expression}`;

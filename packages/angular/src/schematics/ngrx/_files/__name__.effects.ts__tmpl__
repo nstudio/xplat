@@ -1,25 +1,19 @@
 import { Injectable } from '@angular/core';
-import { Actions, Effect } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { map } from 'rxjs/operators';
 import { <%= utils.classify(name) %>Actions } from './<%= name %>.actions';
-import { <%= utils.classify(name) %>State } from './<%= name %>.state';
-import { DataPersistence } from '@nrwl/angular';
 
 @Injectable()
 export class <%= utils.classify(name) %>Effects {
 
-  @Effect()
-  load$ = this.dataPersistence.fetch(<%= utils.classify(name) %>Actions.Types.LOAD, {
-    run: (action: <%= utils.classify(name) %>Actions.Load, state: <%= utils.classify(name) %>State.IState) => {
-      return new <%= utils.classify(name) %>Actions.Loaded(state);
-    },
-
-    onError: (action: <%= utils.classify(name) %>Actions.Load, error) => {
-      console.error('Error', error);
-    }
-  });
+  load$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(<%= utils.classify(name) %>Actions.load),
+      map(() => <%= utils.classify(name) %>Actions.loaded({}))
+    )
+  );
 
   constructor(
-    private actions$: Actions,
-    private dataPersistence: DataPersistence<<%= utils.classify(name) %>State.IState>
+    private actions$: Actions
   ) {}
 }
