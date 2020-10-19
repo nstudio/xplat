@@ -1,3 +1,12 @@
+## [10.3.4](https://github.com/nstudio/xplat/compare/10.3.2...10.3.4) (2020-10-19)
+
+
+### Features
+
+* **angular:** ngrx generator use factory methods ([#218](https://github.com/nstudio/xplat/issues/218)) ([82a9ddf](https://github.com/nstudio/xplat/commit/82a9ddf7a732a97c27f6116e5c138d8e35199cb1))
+
+
+
 ## [10.3.2](https://github.com/nstudio/xplat/compare/10.3.0...10.3.2) (2020-10-10)
 
 ### Bug Fixes
