@@ -748,15 +748,6 @@ export function adjustFeatureModuleForState(
           )
         );
       }
-      if (moduleSource.indexOf('ngrx-store-freeze') === -1) {
-        changes.push(
-          ...addGlobal(
-            moduleSourceFile,
-            modulePath,
-            `import { storeFreeze } from 'ngrx-store-freeze';`
-          )
-        );
-      }
 
       changes.push(
         ...addGlobal(
@@ -803,8 +794,7 @@ export function adjustFeatureModuleForState(
       {
         initialState: { ${name}: ${stringUtils.classify(
               name
-            )}State.initialState },
-        metaReducers: !environment.production ? [storeFreeze] : []
+            )}State.initialState }
       }
     )`
           ),

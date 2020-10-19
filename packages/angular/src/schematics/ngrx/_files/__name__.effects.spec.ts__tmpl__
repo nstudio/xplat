@@ -26,9 +26,9 @@ describe('<%= utils.classify(name) %>Effects', () => {
 
   describe('someEffect', () => {
     it('should work', () => {
-      actions$ = hot('-a-|', { a: new <%= utils.classify(name) %>Actions.Load({}) });
+      actions$ = hot('-a-|', { a: <%= utils.classify(name) %>Actions.load({}) });
       expect(effects$.load$).toBeObservable(
-        hot('-a-|', { a: new <%= utils.classify(name) %>Actions.Loaded({}) })
+        hot('-a-|', { a: <%= utils.classify(name) %>Actions.loaded({}) })
       );
     });
   });

@@ -90,16 +90,6 @@ export function updatePackageForNgrx(
       const dependencies = {};
       const devDependencies = {};
 
-      if (packagePath.indexOf('apps') === 0) {
-        // update project deps
-        dependencies['@ngrx/entity'] = 'file:../../node_modules/@ngrx/entity';
-        dependencies['ngrx-store-freeze'] =
-          'file:../../node_modules/ngrx-store-freeze';
-      } else {
-        // update root deps
-        dependencies['@ngrx/entity'] = rootNgrxVersion;
-      }
-
       packageJson.dependencies = {
         ...(packageJson.dependencies || {}),
         ...dependencies,

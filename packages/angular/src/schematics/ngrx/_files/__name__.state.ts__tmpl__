@@ -1,3 +1,5 @@
+import { createFeatureSelector, createSelector } from '@ngrx/store';
+
 export namespace <%= utils.classify(name) %>State {
 
   /**
@@ -10,4 +12,12 @@ export namespace <%= utils.classify(name) %>State {
    */
 
   export const initialState: IState = {};
+
+  /**
+   * Selectors
+   */
+  export const selectState = createFeatureSelector<IState>('<%= name %>');
+
+  // example:
+  // export const selectSomething = createSelector(selectState, (state: IState) => state.something);
 }

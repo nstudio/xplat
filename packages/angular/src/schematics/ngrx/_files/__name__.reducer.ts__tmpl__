@@ -1,17 +1,13 @@
-import { Action } from '@ngrx/store';
+import { createReducer, on, Action } from '@ngrx/store';
 import { <%= utils.classify(name) %>Actions } from './<%= name %>.actions';
 import { <%= utils.classify(name) %>State } from './<%= name %>.state';
 
-export function <%= name %>Reducer(state = <%= utils.classify(name) %>State.initialState, action: <%= utils.classify(name) %>Actions.Actions): <%= utils.classify(name) %>State.IState {
-  switch (action.type) {
-    case <%= utils.classify(name) %>Actions.Types.INIT:
-      return state;
+const reducer = createReducer(
+  <%= utils.classify(name) %>State.initialState,
+  on(<%= utils.classify(name) %>Actions.init, (state) => state),
+  on(<%= utils.classify(name) %>Actions.loaded, (state, { payload }) => ({ ...state, ...(payload || {}) }))
+);
 
-    case <%= utils.classify(name) %>Actions.Types.LOADED: {
-      return { ...state, ...action.payload };
-    }
-
-    default:
-      return state;
-  }
+export function <%= name %>Reducer(state: <%= utils.classify(name) %>State.IState | undefined, action: Action) {
+  return reducer(state, action);
 }
