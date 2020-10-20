@@ -135,7 +135,7 @@
     "webpack-merge": "~5.0.0",
     "webpack-node-externals": "~2.5.0",
     "webpack-sources": "~1.4.3",
-    "webpack-subresource-integrity": "~1.4.1",
+    "webpack-subresource-integrity": "~1.5.1",
     "worker-plugin": "~4.0.3",
     "xml2js": "~0.4.23",
     "yargs": "~15.4.0",
