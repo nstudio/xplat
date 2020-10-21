@@ -760,7 +760,9 @@ export function adjustFeatureModuleForState(
         ...addGlobal(
           moduleSourceFile,
           modulePath,
-          `import { ${name}Reducer } from './state/${name}.reducer';`
+          `import { ${stringUtils.camelize(
+            name
+          )}Reducer } from './state/${name}.reducer';`
         ),
         ...addGlobal(
           moduleSourceFile,
@@ -790,18 +792,13 @@ export function adjustFeatureModuleForState(
             moduleSourceFile,
             modulePath,
             `StoreModule.forRoot(
-      { ${name}: ${name}Reducer },
+      { ${stringUtils.camelize(name)}: ${stringUtils.camelize(name)}Reducer },
       {
-        initialState: { ${name}: ${stringUtils.classify(
+        initialState: { ${stringUtils.camelize(name)}: ${stringUtils.classify(
               name
             )}State.initialState }
       }
-    )`
-          ),
-          ...addImportToModule(
-            moduleSourceFile,
-            modulePath,
-            `EffectsModule.forRoot([${stringUtils.classify(name)}Effects])`
+    ), EffectsModule.forRoot([${stringUtils.classify(name)}Effects])`
           ),
           ...addProviderToModule(
             moduleSourceFile,
@@ -815,14 +812,15 @@ export function adjustFeatureModuleForState(
           ...addImportToModule(
             moduleSourceFile,
             modulePath,
-            `StoreModule.forFeature('${name}', ${name}Reducer, { initialState: ${stringUtils.classify(
+            `StoreModule.forFeature('${stringUtils.camelize(
               name
-            )}State.initialState })`
-          ),
-          ...addImportToModule(
-            moduleSourceFile,
-            modulePath,
-            `EffectsModule.forFeature([${stringUtils.classify(name)}Effects])`
+            )}', ${stringUtils.camelize(
+              name
+            )}Reducer, { initialState: ${stringUtils.classify(
+              name
+            )}State.initialState }), EffectsModule.forFeature([${stringUtils.classify(
+              name
+            )}Effects])`
           ),
           ...addProviderToModule(
             moduleSourceFile,

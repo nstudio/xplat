@@ -1093,7 +1093,7 @@ export namespace XplatFeatureHelpers {
       // building feature in shared code only
       platforms = sanitizeCommaDelimitedArg(options.platforms);
     }
-    if (platforms.length === 0) {
+    if (platforms.length === 0 && !options.onlyModule) {
       let error = projects
         ? platformAppPrefixError()
         : generatorError('feature');

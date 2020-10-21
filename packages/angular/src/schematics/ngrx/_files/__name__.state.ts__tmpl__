@@ -3,7 +3,7 @@ import { createFeatureSelector, createSelector } from '@ngrx/store';
 export namespace <%= utils.classify(name) %>State {
 
   /**
-   * Interface for '<%= name %>' state
+   * Interface for '<%= utils.camelize(name) %>' state
    */
   export interface IState {}
 
@@ -16,7 +16,7 @@ export namespace <%= utils.classify(name) %>State {
   /**
    * Selectors
    */
-  export const selectState = createFeatureSelector<IState>('<%= name %>');
+  export const selectState = createFeatureSelector<IState>('<%= utils.camelize(name) %>');
 
   // example:
   // export const selectSomething = createSelector(selectState, (state: IState) => state.something);
