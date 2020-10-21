@@ -1,3 +1,9 @@
+## [10.3.5](https://github.com/nstudio/xplat/compare/10.3.4...10.3.5) (2020-10-21)
+
+### Bug Fixes
+
+- **angular:** ngrx reducer name handling ([#220](https://github.com/nstudio/xplat/issues/220)) ([9eee98f](https://github.com/nstudio/xplat/commit/9eee98f6d65fe09f27526a1382d559252cf0b569))
+
 ## [10.3.4](https://github.com/nstudio/xplat/compare/10.3.2...10.3.4) (2020-10-19)
 
 ### Features
