@@ -760,7 +760,9 @@ export function adjustFeatureModuleForState(
         ...addGlobal(
           moduleSourceFile,
           modulePath,
-          `import { ${stringUtils.camelize(name)}Reducer } from './state/${name}.reducer';`
+          `import { ${stringUtils.camelize(
+            name
+          )}Reducer } from './state/${name}.reducer';`
         ),
         ...addGlobal(
           moduleSourceFile,
@@ -810,9 +812,15 @@ export function adjustFeatureModuleForState(
           ...addImportToModule(
             moduleSourceFile,
             modulePath,
-            `StoreModule.forFeature('${stringUtils.camelize(name)}', ${stringUtils.camelize(name)}Reducer, { initialState: ${stringUtils.classify(
+            `StoreModule.forFeature('${stringUtils.camelize(
               name
-            )}State.initialState }), EffectsModule.forFeature([${stringUtils.classify(name)}Effects])`
+            )}', ${stringUtils.camelize(
+              name
+            )}Reducer, { initialState: ${stringUtils.classify(
+              name
+            )}State.initialState }), EffectsModule.forFeature([${stringUtils.classify(
+              name
+            )}Effects])`
           ),
           ...addProviderToModule(
             moduleSourceFile,

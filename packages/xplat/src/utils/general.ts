@@ -89,7 +89,7 @@ export function updatePackageForNgrx(
 
       const dependencies = {};
       const devDependencies = {
-        "jasmine-marbles": "~0.6.0"
+        'jasmine-marbles': '~0.6.0',
       };
 
       packageJson.dependencies = {
