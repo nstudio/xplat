@@ -48,7 +48,7 @@ describe('service schematic', () => {
     let moduleContent = getFileContent(tree, modulePath);
     // console.log(modulePath + ':');
     // console.log(moduleContent);
-    expect(moduleContent.indexOf(`AuthService`)).toBeGreaterThanOrEqual(0);
+    expect(moduleContent.indexOf(`AuthService`)).toBe(-1);
   });
 
   it('should create service for specified projects only', async () => {
@@ -107,7 +107,7 @@ describe('service schematic', () => {
     let moduleContent = getFileContent(tree, modulePath);
     // console.log(modulePath + ':');
     // console.log(moduleContent);
-    expect(moduleContent.indexOf(`./services`)).toBeGreaterThanOrEqual(0);
+    expect(moduleContent.indexOf(`./services`)).toBe(-1);
 
     indexPath = '/apps/web-viewer/src/app/features/foo/services/index.ts';
     index = getFileContent(tree, indexPath);
@@ -164,7 +164,7 @@ describe('service schematic', () => {
     let moduleContent = getFileContent(tree, modulePath);
     // console.log(modulePath + ':');
     // console.log(moduleContent);
-    expect(moduleContent.indexOf(`AuthService`)).toBeGreaterThanOrEqual(0);
+    expect(moduleContent.indexOf(`AuthService`)).toBe(-1);
   });
 
   it('should create service for specified platform only and by default add to core for that platform', async () => {
@@ -203,6 +203,6 @@ describe('service schematic', () => {
     let moduleContent = getFileContent(tree, modulePath);
     // console.log(modulePath + ':');
     // console.log(moduleContent);
-    expect(moduleContent.indexOf(`AuthService`)).toBeGreaterThanOrEqual(0);
+    expect(moduleContent.indexOf(`AuthService`)).toBe(-1);
   });
 });

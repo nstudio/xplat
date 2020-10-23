@@ -5,24 +5,19 @@ import { RouterModule } from '@angular/router';
 
 // libs
 import { UISharedModule } from '@<%= npmScope %>/features';
-import { HeaderComponent } from './components';
+import { UI_COMPONENTS } from './components';
+
+const MODULES = [
+  CommonModule,
+  RouterModule,
+  FormsModule,
+  ReactiveFormsModule,
+  UISharedModule
+];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    RouterModule,
-    FormsModule,
-    ReactiveFormsModule,
-    UISharedModule
-  ],
-  declarations: [HeaderComponent],
-  exports: [
-    CommonModule,
-    RouterModule,
-    FormsModule,
-    ReactiveFormsModule,
-    UISharedModule,
-    HeaderComponent
-  ]
+  imports: [...MODULES],
+  declarations: [...UI_COMPONENTS],
+  exports: [...MODULES, ...UI_COMPONENTS]
 })
 export class UIModule {}

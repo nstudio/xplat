@@ -3,8 +3,10 @@ import { NgModule } from '@angular/core';
 // xplat
 import { UIModule } from '@<%= npmScope %>/<%= xplatFolderName %>';
 
+const MODULES = [UIModule];
+
 @NgModule({
-  imports: [UIModule],
-  exports: [UIModule]
+  imports: [...MODULES],
+  exports: [...MODULES]
 })
 export class SharedModule {}

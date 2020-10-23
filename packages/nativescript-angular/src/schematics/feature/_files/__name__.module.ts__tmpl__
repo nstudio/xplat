@@ -4,7 +4,7 @@ import { NativeScriptRouterModule } from '@nativescript/angular';<% } %>
 <% if (!onlyProject) { %>import { <%= utils.classify(name) %>Module as Shared<%= utils.classify(name) %>Module } from '@<%= npmScope %>/features';<% } if (onlyProject) { %>
 import { SharedModule } from '../shared/shared.module';<% } else { %>
 import { UIModule } from '../ui/ui.module';<% } if (!onlyModule) { %>
-import { <%= utils.classify(name) %>Component } from './components';
+import { <%= utils.sanitize(name).toUpperCase() %>_COMPONENTS<% if (onlyProject && routing) { %>, <%= utils.classify(name) %>Component<% } %> } from './components';
 <% if (onlyProject && routing) { %>
 export const routes: Routes = [
   {
@@ -19,10 +19,10 @@ export const routes: Routes = [
     NativeScriptRouterModule.forChild(routes)<% } } else { %>UIModule<% } %>
   ],<% if (!onlyModule) { %>
   declarations: [
-    <%= utils.classify(name) %>Component
+    ...<%= utils.sanitize(name).toUpperCase() %>_COMPONENTS
   ],
   exports: [
-    <%= utils.classify(name) %>Component
+    ...<%= utils.sanitize(name).toUpperCase() %>_COMPONENTS
   ],<% } %>
   schemas: [NO_ERRORS_SCHEMA]
 })

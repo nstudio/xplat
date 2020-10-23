@@ -161,12 +161,14 @@ export function createXplatLibs(tree: Tree) {
     '/libs/features/ui/ui.module.ts',
     `import { NgModule } from '@angular/core';
   import { TranslateModule } from '@ngx-translate/core';
-  import { DatePipe } from './pipes';
+  import { UI_PIPES } from './pipes';
+  
+  const MODULES = [TranslateModule];
   
   @NgModule({
-    imports: [TranslateModule],
-    declarations: [DatePipe],
-    exports: [TranslateModule]
+    imports: [...MODULES],
+    declarations: [...UI_PIPES],
+    exports: [...MODULES, ...UI_PIPES]
   })
   export class UISharedModule {}
   `
@@ -258,27 +260,20 @@ export function createXplatNativeScriptAngular(
   
   import { TNSFontIconModule } from 'nativescript-ngx-fonticon';
   import { UISharedModule } from '@<%= npmScope %>/features';
-  import { HeaderComponent } from './components';
+  import { UI_COMPONENTS } from './components';
+  
+  const MODULES = [
+    NativeScriptCommonModule,
+    NativeScriptFormsModule,
+    NativeScriptRouterModule,
+    TNSFontIconModule,
+    UISharedModule
+  ];
   
   @NgModule({
-    imports: [
-      NativeScriptCommonModule,
-      NativeScriptFormsModule,
-      NativeScriptRouterModule,
-      TNSFontIconModule,
-      UISharedModule
-    ],
-    declarations: [
-      HeaderComponent
-    ],
-    exports: [
-      NativeScriptCommonModule,
-      NativeScriptFormsModule,
-      NativeScriptRouterModule,
-      TNSFontIconModule,
-      UISharedModule,
-      HeaderComponent
-    ],
+    imports: [...MODULES],
+    declarations: [...UI_COMPONENTS],
+    exports: [...MODULES, ...UI_COMPONENTS],
     schemas: [NO_ERRORS_SCHEMA]
   })
   export class UIModule {}    
@@ -304,25 +299,20 @@ export function createXplatWebAngular(tree: Tree, framework?: FrameworkTypes) {
   
   // libs
   import { UISharedModule } from '@<%= npmScope %>/features';
-  import { HeaderComponent } from './components';
+  import { UI_COMPONENTS } from './components';
+  
+  const MODULES = [
+    CommonModule,
+    RouterModule,
+    FormsModule,
+    ReactiveFormsModule,
+    UISharedModule
+  ];
   
   @NgModule({
-    imports: [
-      CommonModule,
-      RouterModule,
-      FormsModule,
-      ReactiveFormsModule,
-      UISharedModule
-    ],
-    declarations: [HeaderComponent],
-    exports: [
-      CommonModule,
-      RouterModule,
-      FormsModule,
-      ReactiveFormsModule,
-      UISharedModule,
-      HeaderComponent
-    ]
+    imports: [...MODULES],
+    declarations: [...UI_COMPONENTS],
+    exports: [...MODULES, ...UI_COMPONENTS]
   })
   export class UIModule {}
   `
