@@ -55,9 +55,7 @@ describe('directive schematic', () => {
 
     // console.log(modulePath + ':');
     // console.log(moduleContent);
-    expect(moduleContent.indexOf(`...UI_DIRECTIVES`)).toBeGreaterThanOrEqual(
-      0
-    );
+    expect(moduleContent.indexOf(`...UI_DIRECTIVES`)).toBeGreaterThanOrEqual(0);
 
     // Directives added to the foo-feature
     options = { ...defaultOptions, feature: 'foo' };
@@ -145,15 +143,11 @@ describe('directive schematic', () => {
     let moduleContent = getFileContent(tree, modulePath);
     // console.log(modulePath + ':');
     // console.log(moduleContent);
-    expect(moduleContent.indexOf(`...UI_DIRECTIVES`)).toBeGreaterThanOrEqual(
-      0
-    );
+    expect(moduleContent.indexOf(`...UI_DIRECTIVES`)).toBeGreaterThanOrEqual(0);
 
     modulePath = '/xplat/nativescript/features/ui/ui.module.ts';
     moduleContent = getFileContent(tree, modulePath);
-    expect(moduleContent.indexOf(`...UI_DIRECTIVES`)).toBeGreaterThanOrEqual(
-      0
-    );
+    expect(moduleContent.indexOf(`...UI_DIRECTIVES`)).toBeGreaterThanOrEqual(0);
 
     // Directives added to the foo-feature
     options = { ...defaultOptions, feature: 'foo' };

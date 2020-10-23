@@ -643,7 +643,6 @@ export function adjustFeatureModule(
         // already handled
         return host;
       } else {
-
         if (type !== 'service') {
           // add to module
           changes.push(
