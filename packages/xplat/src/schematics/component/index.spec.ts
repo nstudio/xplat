@@ -80,6 +80,7 @@ xdescribe('component', () => {
     // console.log(barrelPath + ':');
     // console.log(barrelIndex);
     // component symbol should be at end of components collection
+    expect(barrelIndex.indexOf(`SignupComponent];`)).toBeGreaterThanOrEqual(0);
     expect(
       barrelIndex.indexOf(`./signup/signup.component`)
     ).toBeGreaterThanOrEqual(0);
@@ -88,6 +89,7 @@ xdescribe('component', () => {
     barrelIndex = getFileContent(tree, barrelPath);
     // console.log(barrelPath + ':');
     // console.log(barrelIndex);
+    expect(barrelIndex.indexOf(`SignupComponent];`)).toBeGreaterThanOrEqual(0);
     expect(
       barrelIndex.indexOf(`./signup/signup.component`)
     ).toBeGreaterThanOrEqual(0);
@@ -204,6 +206,7 @@ xdescribe('component', () => {
     // console.log(barrelPath + ':');
     // console.log(barrelIndex);
     // component symbol should be at end of components collection
+    expect(barrelIndex.indexOf(`SignupComponent];`)).toBeGreaterThanOrEqual(0);
     expect(
       barrelIndex.indexOf(`./signup/signup.component`)
     ).toBeGreaterThanOrEqual(0);
@@ -212,6 +215,7 @@ xdescribe('component', () => {
     barrelIndex = getFileContent(tree, barrelPath);
     // console.log(barrelPath + ':');
     // console.log(barrelIndex);
+    expect(barrelIndex.indexOf(`SignupComponent];`)).toBeGreaterThanOrEqual(0);
     expect(
       barrelIndex.indexOf(`./signup/signup.component`)
     ).toBeGreaterThanOrEqual(0);
@@ -222,13 +226,17 @@ xdescribe('component', () => {
     // console.log(barrelPath + ':');
     // console.log(barrelIndex);
     // component symbol should be at end of components collection
-    expect(barrelIndex.indexOf(`./registration`)).toBeGreaterThanOrEqual(0);
+    expect(
+      barrelIndex.indexOf(`REGISTRATION_COMPONENTS`)
+    ).toBeGreaterThanOrEqual(0);
 
     barrelPath = '/xplat/web/features/foo/components/index.ts';
     barrelIndex = getFileContent(tree, barrelPath);
     // console.log(barrelPath + ':');
     // console.log(barrelIndex);
-    expect(barrelIndex.indexOf(`./registration`)).toBeGreaterThanOrEqual(0);
+    expect(
+      barrelIndex.indexOf(`REGISTRATION_COMPONENTS`)
+    ).toBeGreaterThanOrEqual(0);
   });
 
   it('should create component for specified projects only', async () => {
@@ -308,6 +316,7 @@ xdescribe('component', () => {
     // console.log(barrelPath + ':');
     // console.log(barrelIndex);
     // component symbol should be at end of components collection
+    expect(barrelIndex.indexOf(`SignupComponent];`)).toBeGreaterThanOrEqual(0);
     expect(
       barrelIndex.indexOf(`./signup/signup.component`)
     ).toBeGreaterThanOrEqual(0);
@@ -323,6 +332,7 @@ xdescribe('component', () => {
     barrelIndex = getFileContent(tree, barrelPath);
     // console.log(barrelPath + ':');
     // console.log(barrelIndex);
+    expect(barrelIndex.indexOf(`SignupComponent];`)).toBeGreaterThanOrEqual(0);
     expect(
       barrelIndex.indexOf(`./signup/signup.component`)
     ).toBeGreaterThanOrEqual(0);

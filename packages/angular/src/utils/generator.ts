@@ -460,42 +460,42 @@ export function adjustBarrelIndex(
       const changes = [];
       const name = options.name.toLowerCase();
 
-      // if (!isBase) {
-      //   // add to barrel collection
-      //   if (importIfSubFolder && options.subFolder) {
-      //     // import collection from subfolder
-      //     const symbolName = `${stringUtils
-      //       .sanitize(options.subFolder)
-      //       .toUpperCase()}_${type.toUpperCase()}S`;
-      //     changes.push(
-      //       ...addGlobal(
-      //         indexSourceFile,
-      //         indexFilePath,
-      //         `import { ${symbolName} } from './${options.subFolder}';`
-      //       ),
-      //       ...addToCollection(
-      //         indexSourceFile,
-      //         indexFilePath,
-      //         `...${symbolName}`,
-      //         '  '
-      //       )
-      //     );
-      //   } else {
-      //     const symbolName = `${stringUtils.classify(
-      //       name
-      //     )}${stringUtils.capitalize(type)}`;
-      //     changes.push(
-      //       ...addGlobal(
-      //         indexSourceFile,
-      //         indexFilePath,
-      //         `import { ${symbolName} } from './${
-      //           inSubFolder ? `${name}/` : ''
-      //         }${name}.${type}';`
-      //       ),
-      //       ...addToCollection(indexSourceFile, indexFilePath, symbolName, '  ')
-      //     );
-      //   }
-      // }
+      if (!isBase) {
+        // add to barrel collection
+        if (importIfSubFolder && options.subFolder) {
+          // import collection from subfolder
+          const symbolName = `${stringUtils
+            .sanitize(options.subFolder)
+            .toUpperCase()}_${type.toUpperCase()}S`;
+          changes.push(
+            ...addGlobal(
+              indexSourceFile,
+              indexFilePath,
+              `import { ${symbolName} } from './${options.subFolder}';`
+            ),
+            ...addToCollection(
+              indexSourceFile,
+              indexFilePath,
+              `...${symbolName}`,
+              '  '
+            )
+          );
+        } else {
+          const symbolName = `${stringUtils.classify(
+            name
+          )}${stringUtils.capitalize(type)}`;
+          changes.push(
+            ...addGlobal(
+              indexSourceFile,
+              indexFilePath,
+              `import { ${symbolName} } from './${
+                inSubFolder ? `${name}/` : ''
+              }${name}.${type}';`
+            ),
+            ...addToCollection(indexSourceFile, indexFilePath, symbolName, '  ')
+          );
+        }
+      }
 
       if (type === 'component' || type === 'service' || type === 'pipe') {
         // export symbol from barrel
@@ -603,106 +603,70 @@ export function adjustFeatureModule(
       );
 
       const changes = [];
-      const name = options.name.toLowerCase();
-      const symbolName = `${stringUtils.classify(name)}${stringUtils.capitalize(
-        type
-      )}`;
-      if (moduleSource.indexOf(symbolName) > -1) {
+      let featureName: string;
+      if (options.feature) {
+        featureName = stringUtils.sanitize(options.feature).toUpperCase();
+      } else {
+        // default collections
+        if (type === 'service') {
+          featureName = 'CORE';
+        } else {
+          if (modulePath.indexOf('apps') > -1) {
+            // app specific shared
+            featureName = 'SHARED';
+          } else {
+            // workspace cross platform ui libraries
+            featureName = 'UI';
+          }
+        }
+      }
+      let collectionName: string;
+
+      switch (type) {
+        case 'component':
+          collectionName = `${featureName}_COMPONENTS`;
+          break;
+        case 'directive':
+          collectionName = `${featureName}_DIRECTIVES`;
+          break;
+        case 'pipe':
+          collectionName = `${featureName}_PIPES`;
+          break;
+        case 'service':
+          collectionName = `${featureName}_PROVIDERS`;
+          break;
+      }
+      // console.log('collectionName:', collectionName);
+      // console.log('moduleSource:', moduleSource);
+
+      if (moduleSource.indexOf(collectionName) > -1) {
         // already handled
         return host;
       } else {
-        // add to module
-        changes.push(
-          ...addGlobal(
-            moduleSourceFile,
-            modulePath,
-            `import { ${symbolName} } from './${type}s';`
-          )
-        );
 
         if (type !== 'service') {
+          // add to module
           changes.push(
-            ...addDeclarationToModule(moduleSourceFile, modulePath, symbolName),
+            ...addGlobal(
+              moduleSourceFile,
+              modulePath,
+              `import { ${collectionName} } from './${type}s';`
+            )
+          );
+          changes.push(
+            ...addDeclarationToModule(
+              moduleSourceFile,
+              modulePath,
+              `...${collectionName}`
+            ),
             ...addSymbolToNgModuleMetadata(
               moduleSourceFile,
               modulePath,
               'exports',
-              symbolName
+              `...${collectionName}`
             )
           );
         }
-        // let featureName: string;
-        // if (options.feature) {
-        //   featureName = stringUtils.sanitize(options.feature).toUpperCase();
-        // } else {
-        //   // default collections
-        //   if (type === 'service') {
-        //     featureName = 'CORE';
-        //   } else {
-        //     if (modulePath.indexOf('apps') > -1) {
-        //       // app specific shared
-        //       featureName = 'SHARED';
-        //     } else {
-        //       // workspace cross platform ui libraries
-        //       featureName = 'UI';
-        //     }
-        //   }
-        // }
-        // let collectionName: string;
-
-        // switch (type) {
-        //   case 'component':
-        //     collectionName = `${featureName}_COMPONENTS`;
-        //     break;
-        //   case 'directive':
-        //     collectionName = `${featureName}_DIRECTIVES`;
-        //     break;
-        //   case 'pipe':
-        //     collectionName = `${featureName}_PIPES`;
-        //     break;
-        //   case 'service':
-        //     collectionName = `${featureName}_PROVIDERS`;
-        //     break;
-        // }
-        // console.log('collectionName:', collectionName);
-        // console.log('moduleSource:', moduleSource);
-
-        // if (moduleSource.indexOf(collectionName) > -1) {
-        //   // already handled
-        //   return host;
-        // } else {
-        //   // add to module
-        //   changes.push(
-        //     ...addGlobal(
-        //       moduleSourceFile,
-        //       modulePath,
-        //       `import { ${collectionName} } from './${type}s';`
-        //     )
-        //   );
-
-        //   if (type === 'service') {
-        //     changes.push(
-        //       ...addProviderToModule(
-        //         moduleSourceFile,
-        //         modulePath,
-        //         `...${collectionName}`
-        //       )
-        //     );
-        //   } else {
-        //     changes.push(
-        //       ...addDeclarationToModule(
-        //         moduleSourceFile,
-        //         modulePath,
-        //         `...${collectionName}`
-        //       ),
-        //       ...addSymbolToNgModuleMetadata(
-        //         moduleSourceFile,
-        //         modulePath,
-        //         'exports',
-        //         `...${collectionName}`
-        //       )
-        //     );
-        //   }
 
         insert(host, modulePath, changes);
       }

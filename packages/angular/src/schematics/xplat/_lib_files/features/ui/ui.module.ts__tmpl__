@@ -1,10 +1,12 @@
 import { NgModule } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
-import { DateOrderPipe } from './pipes';
+import { UI_PIPES } from './pipes';
+
+const MODULES = [TranslateModule];
 
 @NgModule({
-  imports: [TranslateModule],
-  declarations: [DateOrderPipe],
-  exports: [TranslateModule, DateOrderPipe]
+  imports: [...MODULES],
+  declarations: [...UI_PIPES],
+  exports: [...MODULES, ...UI_PIPES]
 })
 export class UISharedModule {}

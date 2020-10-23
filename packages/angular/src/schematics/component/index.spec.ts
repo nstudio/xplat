@@ -77,7 +77,7 @@ describe('component schematic', () => {
     // console.log(barrelIndex);
     // component symbol should be at end of components collection
     expect(
-      barrelIndex.indexOf(`export * from './signup/signup.component';`)
+      barrelIndex.indexOf(`SignupComponent];`)
     ).toBeGreaterThanOrEqual(0);
     expect(
       barrelIndex.indexOf(`./signup/signup.component`)
@@ -88,7 +88,7 @@ describe('component schematic', () => {
     // console.log(barrelPath + ':');
     // console.log(barrelIndex);
     expect(
-      barrelIndex.indexOf(`export * from './signup/signup.component';`)
+      barrelIndex.indexOf(`SignupComponent];`)
     ).toBeGreaterThanOrEqual(0);
   });
 
@@ -200,7 +200,7 @@ describe('component schematic', () => {
     // console.log(barrelIndex);
     // component symbol should be at end of components collection
     expect(
-      barrelIndex.indexOf(`./signup/signup.component`)
+      barrelIndex.indexOf(`SignupComponent];`)
     ).toBeGreaterThanOrEqual(0);
 
     barrelPath = '/xplat/web/features/foo/components/registration/index.ts';
@@ -217,13 +217,13 @@ describe('component schematic', () => {
     // console.log(barrelPath + ':');
     // console.log(barrelIndex);
     // component symbol should be at end of components collection
-    expect(barrelIndex.indexOf(`./registration`)).toBeGreaterThanOrEqual(0);
+    expect(barrelIndex.indexOf(`REGISTRATION_COMPONENTS`)).toBeGreaterThanOrEqual(0);
 
     barrelPath = '/xplat/web/features/foo/components/index.ts';
     barrelIndex = getFileContent(tree, barrelPath);
     // console.log(barrelPath + ':');
     // console.log(barrelIndex);
-    expect(barrelIndex.indexOf(`./registration`)).toBeGreaterThanOrEqual(0);
+    expect(barrelIndex.indexOf(`REGISTRATION_COMPONENTS`)).toBeGreaterThanOrEqual(0);
   });
 
   it('should create component for specified projects only', async () => {
@@ -301,7 +301,7 @@ describe('component schematic', () => {
     // console.log(barrelIndex);
     // component symbol should be at end of components collection
     expect(
-      barrelIndex.indexOf(`./signup/signup.component`)
+      barrelIndex.indexOf(`SignupComponent];`)
     ).toBeGreaterThanOrEqual(0);
 
     // let modulePath = '/apps/nativescript-viewer/src/features/foo/foo.module.ts';
@@ -316,7 +316,7 @@ describe('component schematic', () => {
     // console.log(barrelPath + ':');
     // console.log(barrelIndex);
     expect(
-      barrelIndex.indexOf(`./signup/signup.component`)
+      barrelIndex.indexOf(`SignupComponent];`)
     ).toBeGreaterThanOrEqual(0);
   });
 
