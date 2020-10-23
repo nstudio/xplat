@@ -1,3 +1,9 @@
+## [10.3.7](https://github.com/nstudio/xplat/compare/10.3.5...10.3.7) (2020-10-23)
+
+### Bug Fixes
+
+- **angular:** use collections on generators ([#221](https://github.com/nstudio/xplat/issues/221)) ([769985c](https://github.com/nstudio/xplat/commit/769985ce9e8175123027dbc4ee55f3b6894a6d2f))
+
 ## [10.3.5](https://github.com/nstudio/xplat/compare/10.3.4...10.3.5) (2020-10-21)
 
 ### Bug Fixes
