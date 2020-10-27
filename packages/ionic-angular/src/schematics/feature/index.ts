@@ -9,7 +9,11 @@ export default function (options: XplatFeatureHelpers.Schema) {
 
   if (options.onlyProject) {
     for (const projectName of featureSettings.projectNames) {
-      const projectParts = projectName.split('-');
+      let name = projectName;
+      if (projectName.indexOf('/') > -1) {
+        name = projectName.split('/').pop();
+      }
+      const projectParts = name.split('-');
       const platPrefix = projectParts[0];
       const platSuffix = projectParts.pop();
       if (platPrefix === 'ionic' || platSuffix === 'ionic') {

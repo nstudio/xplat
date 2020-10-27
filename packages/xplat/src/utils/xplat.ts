@@ -1072,7 +1072,11 @@ export namespace XplatFeatureHelpers {
       // building feature in shared code and in projects
       projectNames = sanitizeCommaDelimitedArg(projects);
       for (const name of projectNames) {
-        const projectParts = name.split('-');
+        let projectName = name;
+        if (name.indexOf('/') > -1) {
+          projectName = name.split('/').pop();
+        }
+        const projectParts = projectName.split('-');
         const platPrefix = <PlatformTypes>projectParts[0];
         const platSuffix = <PlatformTypes>projectParts.pop();
         if (
