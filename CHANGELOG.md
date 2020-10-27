@@ -1,3 +1,9 @@
+## [10.3.8](https://github.com/nstudio/xplat/compare/10.3.7...10.3.8) (2020-10-27)
+
+### Features
+
+- **angular:** feature generator now supports apps in subfolders ([bbc9ed8](https://github.com/nstudio/xplat/commit/bbc9ed8a6ce5c16498ec94c9a535cb31fc8ae533))
+
 ## [10.3.7](https://github.com/nstudio/xplat/compare/10.3.5...10.3.7) (2020-10-23)
 
 ### Bug Fixes
