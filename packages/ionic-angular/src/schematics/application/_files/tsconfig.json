@@ -1,18 +1,16 @@
 {
-  "compileOnSave": false,
+  "extends": "<%= offsetFromRoot %>tsconfig.base.json",
+  "files": [],
+  "include": [],
+  "references": [
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.spec.json"
+    }]
+  ],
   "compilerOptions": {
-    "outDir": "./dist/out-tsc",
-    "sourceMap": true,
-    "declaration": false,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "importHelpers": true,
-    "target": "es2015",
-    "typeRoots": ["./node_modules/@types"],
-    "lib": ["es2018", "dom"],
-    "baseUrl": "./",
     "paths": {
       "@<%= npmScope %>/*": ["<%= pathOffset %>libs/*"],
       "@<%= npmScope %>/ionic": [
