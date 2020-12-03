@@ -22,6 +22,7 @@ import {
   getDefaultTemplateOptions,
   XplatHelpers,
   updateTsConfig,
+  output,
 } from '@nstudio/xplat';
 import {
   prerun,
@@ -101,9 +102,6 @@ export default function (options: Schema) {
       scripts[
         `clean`
       ] = `npx rimraf -- hooks node_modules package-lock.json && npm i`;
-      scripts[
-        `clean.${platformApp}`
-      ] = `cd apps/${directory}${options.name} && ns clean && npm i && npx rimraf -- package-lock.json`;
       return updatePackageScripts(tree, scripts);
     },
     (tree: Tree, context: SchematicContext) => {
@@ -116,30 +114,32 @@ export default function (options: Schema) {
         projectType: 'application',
         prefix: getPrefix(),
         architect: {
-          serve: {
+          ios: {
             builder: '@nrwl/workspace:run-commands',
             options: {
               commands: [
-                {
-                  command: `yarn start.${platformApp}.preview`,
-                },
+                `ns debug ios --no-hmr --env.configuration={args.configuration} --env.projectName=${options.name}`,
               ],
+              cwd: `apps/${directory}${options.name}`,
+              parallel: false,
             },
-            configurations: {
-              ios: {
-                commands: [
-                  {
-                    command: `yarn start.${platformApp}.ios`,
-                  },
-                ],
-              },
-              android: {
-                commands: [
-                  {
-                    command: `yarn start.${platformApp}.android`,
-                  },
-                ],
-              },
+          },
+          android: {
+            builder: '@nrwl/workspace:run-commands',
+            options: {
+              commands: [
+                `ns debug android --no-hmr --env.configuration={args.configuration} --env.projectName=${options.name}`,
+              ],
+              cwd: `apps/${directory}${options.name}`,
+              parallel: false,
+            },
+          },
+          clean: {
+            builder: '@nrwl/workspace:run-commands',
+            options: {
+              commands: ['ns clean', 'npm i', 'npx rimraf package-lock.json'],
+              cwd: `apps/${directory}${options.name}`,
+              parallel: false,
             },
           },
         },
@@ -152,6 +152,20 @@ export default function (options: Schema) {
         tags: [],
       };
       return updateNxProjects(tree, projects);
+    },
+    (tree: Tree) => {
+      output.log({
+        title: 'You will be able to run your app with:',
+        bodyLines: [
+          `nx run ${options.name}:ios`,
+          `   `,
+          `nx run ${options.name}:android`,
+          `   `,
+          `You can also clean/reset the app anytime with:`,
+          `   `,
+          `nx run ${options.name}:clean`,
+        ],
+      });
     },
   ]);
 }

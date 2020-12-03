@@ -1,5 +1,5 @@
 {
-  "extends": "<%= offsetFromRoot %>tsconfig.base.json",
+  "extends": "<%= pathOffset %>tsconfig.base.json",
   "files": [],
   "include": [],
   "references": [

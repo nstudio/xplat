@@ -126,9 +126,6 @@ export default function (options: Schema) {
       scripts[
         `clean`
       ] = `npx rimraf -- hooks node_modules package-lock.json && npm i`;
-      scripts[
-        `clean.${platformApp}`
-      ] = `cd apps/${directory}${options.name} && ns clean && npm i && npx rimraf -- package-lock.json`;
       return updatePackageScripts(tree, scripts);
     },
     (tree: Tree, context: SchematicContext) => {
@@ -205,6 +202,10 @@ export default function (options: Schema) {
           `nx run ${options.name}:ios`,
           `   `,
           `nx run ${options.name}:android`,
+          `   `,
+          `You can also clean/reset the app anytime with:`,
+          `   `,
+          `nx run ${options.name}:clean`,
         ],
       });
     },
