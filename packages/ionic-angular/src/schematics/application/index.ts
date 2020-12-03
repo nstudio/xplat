@@ -86,10 +86,10 @@ export default function (options: ApplicationOptions) {
       ] = `npm run clean && npm run clean.${platformApp} && npm run build.${platformApp}`;
       scripts[
         `prepare.${platformApp}.ios`
-      ] = `npm run prepare.${platformApp} && cd apps/${directory}${options.name} && npm run cap.add.ios`;
+      ] = `npm run prepare.${platformApp} && cd apps/${directory}${options.name} && npx rimraf -- ios && npm run cap.add.ios`;
       scripts[
         `prepare.${platformApp}.android`
-      ] = `npm run prepare.${platformApp} && cd apps/${directory}${options.name} && npm run cap.add.android`;
+      ] = `npm run prepare.${platformApp} && cd apps/${directory}${options.name} && npx rimraf -- android && npm run cap.add.android`;
       scripts[
         `open.${platformApp}.ios`
       ] = `cd apps/${directory}${options.name} && npm run cap.ios`;
@@ -101,7 +101,7 @@ export default function (options: ApplicationOptions) {
       ] = `cd apps/${directory}${options.name} && npm run cap.copy`;
       scripts[
         `clean.${platformApp}`
-      ] = `cd apps/${directory}${options.name} && npx rimraf -- hooks node_modules platforms www plugins ios android package-lock.json && npm i && rimraf -- package-lock.json`;
+      ] = `cd apps/${directory}${options.name} && npx rimraf -- hooks node_modules platforms www plugins package-lock.json && npm i && rimraf -- package-lock.json`;
       return updatePackageScripts(tree, scripts);
     },
     (tree: Tree, context: SchematicContext) => {
