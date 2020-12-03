@@ -1,3 +1,15 @@
+## [10.3.9](https://github.com/nstudio/xplat/compare/10.3.8...10.3.9) (2020-12-03)
+
+### Bug Fixes
+
+- **ionic:** angular-ionic serve in the browser missing dep ([#230](https://github.com/nstudio/xplat/issues/230)) ([1216762](https://github.com/nstudio/xplat/commit/12167625bb73170e37c9184807f2837c5141d775))
+- **nativescript:** sandbox home component ([3a166c1](https://github.com/nstudio/xplat/commit/3a166c1b1e669861a058e76ef5e6c7c0913e58b7))
+
+### Features
+
+- **ionic:** better clean handling ([#228](https://github.com/nstudio/xplat/issues/228)) ([17a1a2a](https://github.com/nstudio/xplat/commit/17a1a2a60b6541aa2342857fd9ec0977a9de1531))
+- **ionic:** update tsconfig.json ([#224](https://github.com/nstudio/xplat/issues/224)) ([74a0750](https://github.com/nstudio/xplat/commit/74a0750c3dd8139a0b20313c0a8a5c3ebc6fbece))
+
 ## [10.3.8](https://github.com/nstudio/xplat/compare/10.3.7...10.3.8) (2020-10-27)
 
 ### Features
