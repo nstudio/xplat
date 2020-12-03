@@ -10,7 +10,7 @@ import { BaseComponent } from '@<%= npmScope %>/core';
 export class HomeComponent extends BaseComponent {
 <% if (setupSandbox) { %>
   constructor(private _routerExt: RouterExtensions) {
-
+    super();
   }
 
   // for quick sandbox feature creation

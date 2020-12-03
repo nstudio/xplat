@@ -102,17 +102,8 @@ export default function (options: Schema) {
         `clean`
       ] = `npx rimraf -- hooks node_modules package-lock.json && npm i`;
       scripts[
-        `start.${platformApp}.ios`
-      ] = `cd apps/${directory}${options.name} && ns run ios --emulator`;
-      scripts[
-        `start.${platformApp}.android`
-      ] = `cd apps/${directory}${options.name} && ns run android --emulator`;
-      scripts[
-        `start.${platformApp}.preview`
-      ] = `cd apps/${directory}${options.name} && ns preview`;
-      scripts[
         `clean.${platformApp}`
-      ] = `cd apps/${directory}${options.name} && npx rimraf -- hooks node_modules platforms package-lock.json && npm i && npx rimraf -- package-lock.json`;
+      ] = `cd apps/${directory}${options.name} && ns clean && npm i && npx rimraf -- package-lock.json`;
       return updatePackageScripts(tree, scripts);
     },
     (tree: Tree, context: SchematicContext) => {
