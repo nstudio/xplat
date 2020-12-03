@@ -4,6 +4,7 @@ import { getNpmScope, getJsonFromFile } from '@nstudio/xplat-utils';
 import {
   ionicAngularVersion,
   ionicAngularToolkitVersion,
+  capacitorVersion,
   ngDevKitArchitect,
   ngDevKitBuild,
   ngDevKitCore,
@@ -66,6 +67,16 @@ export namespace XplatIonicAngularHelpers {
         devDependencies[`codelyzer`] = codelyzerVersion;
       }
 
+      const hasIonicAngularDeps = packageJson.dependencies['@ionic/angular'];
+      if (!hasIonicAngularDeps) {
+        dependencies[`@ionic/angular`] = ionicAngularVersion;
+      }
+      
+      const hasCapacitorDeps = packageJson.dependencies['@capacitor/core'];
+      if (!hasCapacitorDeps) {
+        dependencies[`@capacitor/core`] = capacitorVersion;
+      }
+      
       if (options.useXplat) {
         dependencies['@ngx-translate/core'] = ngxTranslateVersion;
         dependencies['@ngx-translate/http-loader'] = ngxTranslateHttpVersion;
@@ -73,8 +84,7 @@ export namespace XplatIonicAngularHelpers {
 
       return XplatHelpers.updatePackageForXplat(options, {
         dependencies: {
-          ...dependencies,
-          '@ionic/angular': ionicAngularVersion,
+          ...dependencies
         },
         devDependencies: {
           ...devDependencies,
