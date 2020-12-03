@@ -71,12 +71,10 @@ export namespace XplatIonicAngularHelpers {
       if (!hasIonicAngularDeps) {
         dependencies[`@ionic/angular`] = ionicAngularVersion;
       }
-
       const hasCapacitorDeps = packageJson.dependencies['@capacitor/core'];
       if (!hasCapacitorDeps) {
         dependencies[`@capacitor/core`] = capacitorVersion;
       }
-
       if (options.useXplat) {
         dependencies['@ngx-translate/core'] = ngxTranslateVersion;
         dependencies['@ngx-translate/http-loader'] = ngxTranslateHttpVersion;
