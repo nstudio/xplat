@@ -3,12 +3,20 @@
 <StackLayout class="w-full h-full">
   <ScrollView>
     <StackLayout class="p-20">
-      <Label text="Use feature generator to add pages" class="h3 text-center" textWrap="true"></Label>
+      <Label
+        text="Use feature generator to add pages"
+        class="h3 text-center"
+        textWrap="true"
+      ></Label>
     </StackLayout>
   </ScrollView>
 </StackLayout>
 <% } else { %>
 <StackLayout class="p-20">
-  <Label automationText="helloLabel" [text]="'hello' | translate" class="h1 p-10 text-center"></Label>
+  <Label
+    automationText="helloLabel"
+    [text]="'hello' | translate"
+    class="h1 p-10 text-center"
+  ></Label>
 </StackLayout>
 <% } %>

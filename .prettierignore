@@ -3,6 +3,7 @@ tmp
 /build
 node_modules
 /package.json
+packages/**/*.html
 packages/angular/src/schematics/**/_**files/**/*.json
 packages/electron/src/schematics/**/_**files/**/*.json
 packages/ionic/src/schematics/**/_**files/**/*.json
