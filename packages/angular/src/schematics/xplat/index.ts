@@ -11,7 +11,11 @@ import {
   SchematicContext,
 } from '@angular-devkit/schematics';
 import { formatFiles } from '@nrwl/workspace';
-import { XplatHelpers, getDefaultTemplateOptions, updateTsConfig } from '@nstudio/xplat';
+import {
+  XplatHelpers,
+  getDefaultTemplateOptions,
+  updateTsConfig,
+} from '@nstudio/xplat';
 import { prerun, addInstallTask, getNpmScope } from '@nstudio/xplat-utils';
 import { XplatAngularHelpers } from '../../utils/xplat';
 import { FocusHelpers } from '@nstudio/focus';
@@ -45,10 +49,14 @@ export default function (options: XplatHelpers.Schema) {
           if (!tsConfig.compilerOptions) {
             tsConfig.compilerOptions = {};
           }
-          if (!tsConfig.compilerOptions.paths[`@${getNpmScope()}/xplat/environments`]) {
-            tsConfig.compilerOptions.paths[`@${getNpmScope()}/xplat/environments`] = [
-              `libs/xplat/core/src/lib/environments/base/index.ts`
-            ];
+          if (
+            !tsConfig.compilerOptions.paths[
+              `@${getNpmScope()}/xplat/environments`
+            ]
+          ) {
+            tsConfig.compilerOptions.paths[
+              `@${getNpmScope()}/xplat/environments`
+            ] = [`libs/xplat/core/src/lib/environments/base/index.ts`];
           }
         }
       });

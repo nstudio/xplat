@@ -94,6 +94,5 @@ export default function (options: XplatHelpers.Schema) {
       }
     },
     XplatWebAngularHelpers.updateRootDeps(options),
-    
   ]);
 }

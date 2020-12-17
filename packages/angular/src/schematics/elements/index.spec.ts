@@ -35,7 +35,9 @@ describe('elements schematic', () => {
       )
     ).toBeGreaterThanOrEqual(0);
     expect(
-      files.indexOf('/libs/xplat/web/features/src/lib/ui/components/menu/menu.component.ts')
+      files.indexOf(
+        '/libs/xplat/web/features/src/lib/ui/components/menu/menu.component.ts'
+      )
     ).toBeGreaterThanOrEqual(0);
     expect(
       files.indexOf(
@@ -97,7 +99,9 @@ describe('elements schematic', () => {
       )
     ).toBeGreaterThanOrEqual(0);
     expect(
-      files.indexOf('/libs/xplat/web/features/src/lib/ui/components/menu/menu.component.ts')
+      files.indexOf(
+        '/libs/xplat/web/features/src/lib/ui/components/menu/menu.component.ts'
+      )
     ).toBeGreaterThanOrEqual(0);
     expect(
       files.indexOf(
@@ -118,9 +122,7 @@ describe('elements schematic', () => {
     let elementModule = getFileContent(tree, elementModulePath);
     // console.log(elementModule);
     expect(
-      elementModule.indexOf(
-        `'@mycompany/xplat/web/features';`
-      )
+      elementModule.indexOf(`'@mycompany/xplat/web/features';`)
     ).toBeGreaterThanOrEqual(0);
 
     let builderPath = '/libs/xplat/web/elements/builder/elements.ts';
@@ -164,7 +166,9 @@ describe('elements schematic', () => {
       )
     ).toBeGreaterThanOrEqual(0);
     expect(
-      files.indexOf('/libs/xplat/web/features/src/lib/ui/components/link/link.component.ts')
+      files.indexOf(
+        '/libs/xplat/web/features/src/lib/ui/components/link/link.component.ts'
+      )
     ).toBeGreaterThanOrEqual(0);
 
     const newElementOptions: ElementsOptions = {
@@ -180,9 +184,7 @@ describe('elements schematic', () => {
     elementModule = getFileContent(tree, elementModulePath);
     // console.log(elementModule);
     expect(
-      elementModule.indexOf(
-        `'@mycompany/xplat/web/features';`
-      )
+      elementModule.indexOf(`'@mycompany/xplat/web/features';`)
     ).toBeGreaterThanOrEqual(0);
 
     builderModule = getFileContent(tree, builderPath);

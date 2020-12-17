@@ -66,7 +66,10 @@ describe('pipe schematic', () => {
     ).toBeTruthy();
 
     // file content
-    content = getFileContent(tree, '/libs/xplat/features/src/lib/foo/pipes/truncate.pipe.ts');
+    content = getFileContent(
+      tree,
+      '/libs/xplat/features/src/lib/foo/pipes/truncate.pipe.ts'
+    );
     // console.log(content);
     expect(content.indexOf(`@Pipe({`)).toBeGreaterThanOrEqual(0);
     expect(content.indexOf(`name: 'truncate'`)).toBeGreaterThanOrEqual(0);
@@ -99,7 +102,9 @@ describe('pipe schematic', () => {
 
     // component
     expect(
-      tree.exists('/libs/xplat/features/src/lib/ui/pipes/test-with-dashes.pipe.ts')
+      tree.exists(
+        '/libs/xplat/features/src/lib/ui/pipes/test-with-dashes.pipe.ts'
+      )
     ).toBeTruthy();
 
     // file content
@@ -143,9 +148,13 @@ describe('pipe schematic', () => {
     // console.log(files. slice(91,files.length));
 
     // pipe should not be setup to share
-    expect(tree.exists('/libs/xplat/features/src/lib/ui/pipes/truncate.pipe.ts')).toBeFalsy();
     expect(
-      tree.exists('/libs/xplat/nativescript/features/src/lib/foo/pipes/truncate.pipe.ts')
+      tree.exists('/libs/xplat/features/src/lib/ui/pipes/truncate.pipe.ts')
+    ).toBeFalsy();
+    expect(
+      tree.exists(
+        '/libs/xplat/nativescript/features/src/lib/foo/pipes/truncate.pipe.ts'
+      )
     ).toBeFalsy();
     expect(
       tree.exists('/libs/xplat/web/features/src/lib/foo/pipes/truncate.pipe.ts')

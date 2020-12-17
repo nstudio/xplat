@@ -32,15 +32,23 @@ describe('service schematic', () => {
     tree = await runSchematic('service', options, tree);
     // console.log(files.slice(91,files.length));
 
-    expect(tree.exists('/libs/xplat/core/src/lib/services/auth.service.ts')).toBeTruthy();
+    expect(
+      tree.exists('/libs/xplat/core/src/lib/services/auth.service.ts')
+    ).toBeTruthy();
 
     // file content
-    let content = getFileContent(tree, '/libs/xplat/core/src/lib/services/auth.service.ts');
+    let content = getFileContent(
+      tree,
+      '/libs/xplat/core/src/lib/services/auth.service.ts'
+    );
     // console.log(content);
     expect(content.indexOf(`@Injectable({`)).toBeGreaterThanOrEqual(0);
     expect(content.indexOf(`AuthService`)).toBeGreaterThanOrEqual(0);
 
-    content = getFileContent(tree, '/libs/xplat/core/src/lib/services/index.ts');
+    content = getFileContent(
+      tree,
+      '/libs/xplat/core/src/lib/services/index.ts'
+    );
     // console.log(content);
     expect(content.indexOf(`./auth.service`)).toBeGreaterThanOrEqual(0);
 
@@ -72,14 +80,18 @@ describe('service schematic', () => {
     // console.log(files. slice(91,files.length));
 
     // service should not be setup to share
-    expect(files.indexOf('/libs/xplat/features/src/lib/foo/services/auth.service.ts')).toBe(
-      -1
-    );
     expect(
-      files.indexOf('/libs/xplat/nativescript/features/src/lib/foo/services/auth.service.ts')
+      files.indexOf('/libs/xplat/features/src/lib/foo/services/auth.service.ts')
     ).toBe(-1);
     expect(
-      files.indexOf('/libs/xplat/web/features/src/lib/foo/services/auth.service.ts')
+      files.indexOf(
+        '/libs/xplat/nativescript/features/src/lib/foo/services/auth.service.ts'
+      )
+    ).toBe(-1);
+    expect(
+      files.indexOf(
+        '/libs/xplat/web/features/src/lib/foo/services/auth.service.ts'
+      )
     ).toBe(-1);
 
     // service should be project specific
@@ -137,11 +149,15 @@ describe('service schematic', () => {
     // console.log(files.slice(91,files.length));
 
     expect(
-      files.indexOf('/libs/xplat/nativescript/features/src/lib/foo/services/auth.service.ts')
+      files.indexOf(
+        '/libs/xplat/nativescript/features/src/lib/foo/services/auth.service.ts'
+      )
     ).toBeGreaterThanOrEqual(0);
     // should NOT add for other platform
     expect(
-      files.indexOf('/libs/xplat/web/features/src/lib/foo/services/auth.service.ts')
+      files.indexOf(
+        '/libs/xplat/web/features/src/lib/foo/services/auth.service.ts'
+      )
     ).toBe(-1);
 
     // file content
@@ -160,7 +176,8 @@ describe('service schematic', () => {
     // console.log(content);
     expect(content.indexOf(`./auth.service`)).toBeGreaterThanOrEqual(0);
 
-    let modulePath = '/libs/xplat/nativescript/features/src/lib/foo/foo.module.ts';
+    let modulePath =
+      '/libs/xplat/nativescript/features/src/lib/foo/foo.module.ts';
     let moduleContent = getFileContent(tree, modulePath);
     // console.log(modulePath + ':');
     // console.log(moduleContent);
@@ -178,10 +195,14 @@ describe('service schematic', () => {
     // console.log(files.slice(91,files.length));
 
     expect(
-      files.indexOf('/libs/xplat/nativescript/core/src/lib/services/auth.service.ts')
+      files.indexOf(
+        '/libs/xplat/nativescript/core/src/lib/services/auth.service.ts'
+      )
     ).toBeGreaterThanOrEqual(0);
     // should NOT add for other platform
-    expect(files.indexOf('/libs/xplat/web/core/src/lib/services/auth.service.ts')).toBe(-1);
+    expect(
+      files.indexOf('/libs/xplat/web/core/src/lib/services/auth.service.ts')
+    ).toBe(-1);
 
     // file content
     let content = getFileContent(

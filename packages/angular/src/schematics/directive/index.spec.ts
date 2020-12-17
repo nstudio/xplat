@@ -36,7 +36,9 @@ describe('directive schematic', () => {
 
     // component
     expect(
-      files.indexOf('/libs/xplat/features/src/lib/ui/directives/active-link.directive.ts')
+      files.indexOf(
+        '/libs/xplat/features/src/lib/ui/directives/active-link.directive.ts'
+      )
     ).toBeGreaterThanOrEqual(0);
 
     // file content
@@ -64,7 +66,9 @@ describe('directive schematic', () => {
     // console.log(files.slice(91,files.length));
 
     expect(
-      files.indexOf('/libs/xplat/features/src/lib/foo/directives/active-link.directive.ts')
+      files.indexOf(
+        '/libs/xplat/features/src/lib/foo/directives/active-link.directive.ts'
+      )
     ).toBeGreaterThanOrEqual(0);
 
     // file content
@@ -107,10 +111,14 @@ describe('directive schematic', () => {
     // console.log(files.slice(91,files.length));
 
     expect(
-      tree.exists('/libs/xplat/features/src/lib/ui/directives/active-link.directive.ts')
+      tree.exists(
+        '/libs/xplat/features/src/lib/ui/directives/active-link.directive.ts'
+      )
     ).toBeFalsy();
     expect(
-      tree.exists('/libs/xplat/web/features/src/lib/ui/directives/active-link.directive.ts')
+      tree.exists(
+        '/libs/xplat/web/features/src/lib/ui/directives/active-link.directive.ts'
+      )
     ).toBeTruthy();
     expect(
       tree.exists(
@@ -157,7 +165,9 @@ describe('directive schematic', () => {
     // console.log(files.slice(91,files.length));
 
     expect(
-      tree.exists('/libs/xplat/web/features/src/lib/foo/directives/active-link.directive.ts')
+      tree.exists(
+        '/libs/xplat/web/features/src/lib/foo/directives/active-link.directive.ts'
+      )
     ).toBeTruthy();
     expect(
       tree.exists(
@@ -226,7 +236,9 @@ describe('directive schematic', () => {
 
     // directive should not be setup to share
     expect(
-      files.indexOf('/libs/xplat/features/src/lib/ui/directives/active-link.directive.ts')
+      files.indexOf(
+        '/libs/xplat/features/src/lib/ui/directives/active-link.directive.ts'
+      )
     ).toBe(-1);
     expect(
       files.indexOf(

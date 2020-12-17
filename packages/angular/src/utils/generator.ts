@@ -99,7 +99,6 @@ export function generate(type: IGenerateType, options) {
     );
   }
 
-
   const projectChains = [];
   if (options.projects) {
     for (const projectName of options.projects.split(',')) {

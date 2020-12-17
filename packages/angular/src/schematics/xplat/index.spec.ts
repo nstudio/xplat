@@ -43,7 +43,9 @@ describe('xplat schematic', () => {
     let filePath = '/tsconfig.base.json';
     let fileContent = jsonParse(getFileContent(tree, filePath));
     // console.log(fileContent);
-    expect(fileContent.compilerOptions.paths['@testing/xplat/environments']).toBeTruthy();
+    expect(
+      fileContent.compilerOptions.paths['@testing/xplat/environments']
+    ).toBeTruthy();
   });
 
   it('should create default xplat support for web,nativescript', async () => {

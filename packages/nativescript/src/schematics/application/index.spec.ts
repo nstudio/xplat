@@ -60,7 +60,9 @@ describe('app', () => {
     ).toBeGreaterThanOrEqual(0);
 
     // xplat file defaults
-    expect(files.indexOf('/libs/xplat/nativescript/core/src/lib/index.ts')).toBe(-1);
+    expect(
+      files.indexOf('/libs/xplat/nativescript/core/src/lib/index.ts')
+    ).toBe(-1);
   });
 
   it('should create all files of an app using groupByName', async () => {

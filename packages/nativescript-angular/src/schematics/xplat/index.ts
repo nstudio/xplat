@@ -24,33 +24,13 @@ export default function (options: XplatHelpers.Schema) {
         },
         { interactive: false }
       ),
-      XplatHelpers.generateLib(
-      options,
-      'core',
-      'xplat/nativescript',
-      'node'
-    ),
+    XplatHelpers.generateLib(options, 'core', 'xplat/nativescript', 'node'),
     XplatHelpers.cleanupLib(options, 'core', 'xplat/nativescript'),
-    XplatHelpers.generateLib(
-      options,
-      'features',
-      'xplat/nativescript',
-      'node'
-    ),
+    XplatHelpers.generateLib(options, 'features', 'xplat/nativescript', 'node'),
     XplatHelpers.cleanupLib(options, 'features', 'xplat/nativescript'),
-    XplatHelpers.generateLib(
-      options,
-      'scss',
-      'xplat/nativescript',
-      'node'
-    ),
+    XplatHelpers.generateLib(options, 'scss', 'xplat/nativescript', 'node'),
     XplatHelpers.cleanupLib(options, 'scss', 'xplat/nativescript'),
-    XplatHelpers.generateLib(
-      options,
-      'utils',
-      'xplat/nativescript',
-      'node'
-    ),
+    XplatHelpers.generateLib(options, 'utils', 'xplat/nativescript', 'node'),
     XplatHelpers.cleanupLib(options, 'utils', 'xplat/nativescript'),
     (tree: Tree, context: SchematicContext) => {
       const xplatFolderName = XplatHelpers.getXplatFoldername(

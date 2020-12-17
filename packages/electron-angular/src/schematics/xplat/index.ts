@@ -15,9 +15,7 @@ export default function (options: XplatHelpers.Schema) {
   return chain([
     prerun(options, true),
     (tree: Tree, context: SchematicContext) => {
-      if (
-        tree.exists(`/libs/xplat/web-angular/scss/src/_variables.scss`)
-      ) {
+      if (tree.exists(`/libs/xplat/web-angular/scss/src/_variables.scss`)) {
         return noop();
       } else {
         return externalSchematic('@nstudio/web-angular', 'xplat', options, {

@@ -130,15 +130,15 @@ export default function (options: Schema) {
                   {
                     replace:
                       'libs/xplat/core/src/lib/environments/environment.ts',
-                    with:
-                      `apps/${directory}${options.name}/src/environments/environment.dev.ts`,
+                    with: `apps/${directory}${options.name}/src/environments/environment.dev.ts`,
                   },
                 ],
               },
               production: {
                 fileReplacements: [
                   {
-                    replace: 'libs/xplat/core/src/lib/environments/environment.ts',
+                    replace:
+                      'libs/xplat/core/src/lib/environments/environment.ts',
                     with: `apps/${directory}${options.name}/src/environments/environment.prod.ts`,
                   },
                 ],

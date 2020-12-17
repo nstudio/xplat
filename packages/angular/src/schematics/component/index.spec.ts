@@ -37,7 +37,9 @@ describe('component schematic', () => {
 
     // component
     expect(
-      tree.exists('/libs/xplat/features/src/lib/foo/base/signup.base-component.ts')
+      tree.exists(
+        '/libs/xplat/features/src/lib/foo/base/signup.base-component.ts'
+      )
     ).toBeTruthy();
     expect(
       tree.exists(
@@ -71,7 +73,8 @@ describe('component schematic', () => {
     ).toBeGreaterThanOrEqual(0);
 
     // file content
-    barrelPath = '/libs/xplat/nativescript/features/src/lib/foo/components/index.ts';
+    barrelPath =
+      '/libs/xplat/nativescript/features/src/lib/foo/components/index.ts';
     barrelIndex = getFileContent(tree, barrelPath);
     // console.log(barrelPath + ':');
     // console.log(barrelIndex);
@@ -107,7 +110,9 @@ describe('component schematic', () => {
 
     // component
     expect(
-      tree.exists('/libs/xplat/features/src/lib/foo/base/signup.base-component.ts')
+      tree.exists(
+        '/libs/xplat/features/src/lib/foo/base/signup.base-component.ts'
+      )
     ).toBeTruthy();
     expect(
       tree.exists(
@@ -175,7 +180,8 @@ describe('component schematic', () => {
     ).toBeTruthy();
 
     // ensure base index was modified
-    let barrelPath = '/libs/xplat/features/src/lib/foo/base/registration/index.ts';
+    let barrelPath =
+      '/libs/xplat/features/src/lib/foo/base/registration/index.ts';
     let barrelIndex = getFileContent(tree, barrelPath);
     // console.log(barrelPath + ':');
     // console.log(barrelIndex);
@@ -197,7 +203,8 @@ describe('component schematic', () => {
     // component symbol should be at end of components collection
     expect(barrelIndex.indexOf(`SignupComponent];`)).toBeGreaterThanOrEqual(0);
 
-    barrelPath = '/libs/xplat/web/features/src/lib/foo/components/registration/index.ts';
+    barrelPath =
+      '/libs/xplat/web/features/src/lib/foo/components/registration/index.ts';
     barrelIndex = getFileContent(tree, barrelPath);
     // console.log(barrelPath + ':');
     // console.log(barrelIndex);
@@ -206,7 +213,8 @@ describe('component schematic', () => {
     ).toBeGreaterThanOrEqual(0);
 
     // file content
-    barrelPath = '/libs/xplat/nativescript/features/src/lib/foo/components/index.ts';
+    barrelPath =
+      '/libs/xplat/nativescript/features/src/lib/foo/components/index.ts';
     barrelIndex = getFileContent(tree, barrelPath);
     // console.log(barrelPath + ':');
     // console.log(barrelIndex);
@@ -246,7 +254,9 @@ describe('component schematic', () => {
 
     // component should not be setup to share
     expect(
-      tree.exists('/libs/xplat/features/src/lib/foo/base/signup.base-component.ts')
+      tree.exists(
+        '/libs/xplat/features/src/lib/foo/base/signup.base-component.ts'
+      )
     ).toBeFalsy();
     expect(
       tree.exists(

@@ -53,12 +53,15 @@ describe('ngrx schematic', () => {
     expect(
       files.indexOf('/libs/xplat/core/src/lib/state/auth.state.ts')
     ).toBeGreaterThanOrEqual(0);
-    expect(files.indexOf('/libs/xplat/core/src/lib/state/index.ts')).toBeGreaterThanOrEqual(
-      0
-    );
+    expect(
+      files.indexOf('/libs/xplat/core/src/lib/state/index.ts')
+    ).toBeGreaterThanOrEqual(0);
 
     // file content
-    let content = getFileContent(tree, '/libs/xplat/core/src/lib/state/auth.actions.ts');
+    let content = getFileContent(
+      tree,
+      '/libs/xplat/core/src/lib/state/auth.actions.ts'
+    );
     // console.log(content);
     expect(content.indexOf(`AuthActions`)).toBeGreaterThanOrEqual(0);
     expect(content.indexOf(`[@testing/auth] init'`)).toBeGreaterThanOrEqual(0);
@@ -99,13 +102,19 @@ describe('ngrx schematic', () => {
     // console.log(files. slice(91,files.length));
 
     // state should not be setup to share
-    expect(files.indexOf('/libs/xplat/core/src/lib/state/auth.actions.ts')).toBe(-1);
     expect(
-      files.indexOf('/libs/xplat/nativescript/features/src/lib/foo/state/auth.actions.ts')
+      files.indexOf('/libs/xplat/core/src/lib/state/auth.actions.ts')
     ).toBe(-1);
-    expect(files.indexOf('/libs/xplat/web/features/src/lib/foo/state/auth.actions.ts')).toBe(
-      -1
-    );
+    expect(
+      files.indexOf(
+        '/libs/xplat/nativescript/features/src/lib/foo/state/auth.actions.ts'
+      )
+    ).toBe(-1);
+    expect(
+      files.indexOf(
+        '/libs/xplat/web/features/src/lib/foo/state/auth.actions.ts'
+      )
+    ).toBe(-1);
 
     // state should be project specific
     expect(
