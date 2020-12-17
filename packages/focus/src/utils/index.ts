@@ -138,11 +138,6 @@ export namespace FocusHelpers {
           }
         }
 
-        if (isXplatWorkspace()) {
-          // always ensure hidden xplat files are hidden from view
-          userUpdates['**/xplat/*/.xplatframework'] = true;
-        }
-
         // VS Code
         const isVsCode = updateVSCode({
           userUpdates,

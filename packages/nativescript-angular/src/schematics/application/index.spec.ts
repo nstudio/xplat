@@ -48,7 +48,7 @@ describe('app', () => {
 
     // source dir
     expect(
-      files.indexOf('/xplat/nativescript/utils/font-awesome.ts')
+      files.indexOf('/libs/xplat/nativescript/utils/src/lib/font-awesome.ts')
     ).toBeGreaterThanOrEqual(0);
     expect(
       files.indexOf('/apps/nativescript-foo/src/core/core.module.ts')
@@ -88,8 +88,8 @@ describe('app', () => {
     expect(files.indexOf('/apps/nativescript-foo/src/package.json')).toBe(-1);
 
     // xplat file defaults
-    expect(tree.exists('/xplat/nativescript/index.ts')).toBeTruthy();
-    expect(tree.exists('/xplat/web/index.ts')).toBeFalsy();
+    expect(tree.exists('/libs/xplat/nativescript/core/src/lib/index.ts')).toBeTruthy();
+    expect(tree.exists('/libs/xplat/web/core/src/lib/index.ts')).toBeFalsy();
   });
 
   it('should create all files for app in directory', async () => {
@@ -102,14 +102,6 @@ describe('app', () => {
     expect(
       tree.exists('/apps/frontend/nativescript-foo/package.json')
     ).toBeTruthy();
-    const fileContent = getFileContent(
-      tree,
-      '/apps/frontend/nativescript-foo/tsconfig.json'
-    );
-    // console.log('tsconfig:', fileContent)
-    expect(
-      fileContent.indexOf('../../../xplat/nativescript/*')
-    ).toBeGreaterThanOrEqual(0);
   });
 
   it('should create all files for app in directory and ignore platform naming when directory is a platform', async () => {
@@ -141,7 +133,7 @@ describe('app', () => {
     expect(appModule).toMatch(
       `import { ${stringUtils.classify(options.prefix)}CoreModule } from \'@${
         options.npmScope
-      }/nativescript\'`
+      }/xplat/nativescript/core\'`
     );
   });
 
@@ -174,7 +166,7 @@ describe('app', () => {
     expect(appModule).toMatch(
       `import { ${stringUtils.classify(options.prefix)}CoreModule } from \'@${
         options.npmScope
-      }/nativescript-angular\'`
+      }/xplat/nativescript-angular/core\'`
     );
   });
 
@@ -302,7 +294,7 @@ describe('app', () => {
         tree.exists('/apps/nativescript-foo/src/app/app.component.ts')
       ).toBeTruthy();
 
-      expect(tree.exists('/xplat/nativescript/index.ts')).toBeFalsy();
+      expect(tree.exists('/libs/xplat/nativescript/core/src/lib/index.ts')).toBeFalsy();
     });
   });
 });

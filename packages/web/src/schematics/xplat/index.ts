@@ -19,32 +19,31 @@ export default function (options: XplatHelpers.Schema) {
   return chain([
     prerun(options),
     (tree: Tree, context: SchematicContext) => {
-      if (tree.exists('/libs/scss/_index.scss')) {
+      if (tree.exists('/libs/xplat/scss/src/_index.scss')) {
         // may have already generated support
         return noop()(tree, context);
       } else {
         return branchAndMerge(
           mergeWith(
-            apply(url(`./_lib_files`), [
+            apply(url(`./_files_lib_scss`), [
               template({
                 ...(options as any),
                 ...getDefaultTemplateOptions(),
               }),
-              move(`libs`),
+              move(`libs/xplat/scss/src`),
             ])
           )
         )(tree, context);
       }
     },
     (tree: Tree, context: SchematicContext) => {
-      if (tree.exists('/xplat/web/scss/_index.scss')) {
+      if (tree.exists('/libs/xplat/web/scss/src/_index.scss')) {
         // may have already generated support
         return noop()(tree, context);
       } else {
-        return XplatHelpers.addPlatformFiles(options, 'web')(tree, context);
+        return XplatHelpers.addPlatformFiles(options, 'web', 'scss')(tree, context);
       }
     },
-    XplatHelpers.updateTsConfigPaths(options),
     XplatWebHelpers.updateRootDeps(options),
   ]);
 }

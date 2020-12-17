@@ -112,7 +112,7 @@ export default function (options: ElementsOptions) {
     },
     // add builder files or update them
     (tree: Tree, context: SchematicContext) => {
-      if (tree.exists('xplat/web/elements/builder/index.html')) {
+      if (tree.exists('libs/xplat/web/elements/builder/index.html')) {
         return updateBuilder(tree, options);
       } else {
         return addFiles(options, 'builder')(tree, context);

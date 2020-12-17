@@ -24,6 +24,43 @@ export default function (options: XplatHelpers.Schema) {
         },
         { interactive: false }
       ),
+    XplatAngularHelpers.generateLib(options, 'core', 'xplat/nativescript', 'node'),
+    XplatAngularHelpers.cleanupLib(options, 'core', 'xplat/nativescript'),
+    XplatAngularHelpers.generateLib(options, 'features', 'xplat/nativescript', 'node'),
+    XplatAngularHelpers.cleanupLib(options, 'features', 'xplat/nativescript'),
+    XplatAngularHelpers.generateLib(options, 'scss', 'xplat/nativescript', 'node'),
+    XplatAngularHelpers.cleanupLib(options, 'scss', 'xplat/nativescript'),
+    XplatAngularHelpers.generateLib(options, 'utils', 'xplat/nativescript', 'node'),
+    XplatAngularHelpers.cleanupLib(options, 'utils', 'xplat/nativescript'),
+    (tree: Tree, context: SchematicContext) => {
+      const xplatFolderName = XplatHelpers.getXplatFoldername(
+        'nativescript',
+        'angular'
+      );
+      // console.log('xplatName:', xplatName);
+      return options.skipDependentPlatformFiles
+        ? noop()
+        : XplatHelpers.addPlatformFiles(
+            options,
+            xplatFolderName,
+            'core'
+          )(tree, context);
+    },
+    (tree: Tree, context: SchematicContext) => {
+      const xplatFolderName = XplatHelpers.getXplatFoldername(
+        'nativescript',
+        'angular'
+      );
+      // console.log('xplatName:', xplatName);
+      return options.skipDependentPlatformFiles
+        ? noop()
+        : XplatHelpers.addPlatformFiles(
+            options,
+            xplatFolderName,
+            'features'
+          )(tree, context);
+    },
+
     (tree: Tree, context: SchematicContext) => {
       const xplatFolderName = XplatHelpers.getXplatFoldername(
         'nativescript',
@@ -33,21 +70,48 @@ export default function (options: XplatHelpers.Schema) {
       // console.log('options:', options);
       return options.skipDependentPlatformFiles
         ? noop()
-        : XplatHelpers.addPlatformFiles(options, xplatFolderName)(
-            tree,
-            context
-          );
+        : XplatHelpers.addPlatformFiles(
+            options,
+            xplatFolderName,
+            'utils'
+          )(tree, context);
+    },
+    (tree: Tree, context: SchematicContext) => {
+      const xplatFolderName = XplatHelpers.getXplatFoldername(
+        'nativescript',
+        'angular'
+      );
+      // console.log('xplatName:', xplatName);
+      // console.log('options:', options);
+      return options.skipDependentPlatformFiles
+        ? noop()
+        : XplatHelpers.addPlatformFiles(
+            options,
+            xplatFolderName,
+            'scss'
+          )(tree, context);
     },
     // TODO: convert these @nstudio/angular api's to singular external schematics so could be called with externalSchematic api
     XplatAngularHelpers.addLibFiles(
       options,
-      `../../../../angular/src/schematics/xplat/`
+      `../../../../angular/src/schematics/xplat/`,
+      'core'
     ),
-    XplatAngularHelpers.addScssFiles(
+    XplatAngularHelpers.addLibFiles(
       options,
-      `../../../../angular/src/schematics/xplat/`
+      `../../../../angular/src/schematics/xplat/`,
+      'features'
     ),
-    XplatHelpers.updateTsConfigPaths(options, { framework: 'angular' }),
+    XplatAngularHelpers.addLibFiles(
+      options,
+      `../../../../angular/src/schematics/xplat/`,
+      'scss'
+    ),
+    XplatAngularHelpers.addLibFiles(
+      options,
+      `../../../../angular/src/schematics/xplat/`,
+      'utils'
+    ),
     XplatNativeScriptAngularHelpers.updateRootDeps(options),
   ]);
 }

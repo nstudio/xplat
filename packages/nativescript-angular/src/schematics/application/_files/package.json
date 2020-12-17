@@ -4,7 +4,7 @@
   "license": "SEE LICENSE IN <your-license-filename>",
   "version": "0.0.0",
   "scripts": {
-    "build.ios": "ns build ios --env.uglify --env.production --release",
+    "build.ios": "ns build ios --env.uglify --env.production --env.configuration null --env.projectName <%= name %> --release --for-device",
     "build.android": "ns build android --env.uglify --env.production --release",
     "postinstall": "node ./tools/xplat-postinstall.js"
   },
@@ -20,8 +20,8 @@
     "@nativescript/angular": "file:<%= pathOffset %>node_modules/@nativescript/angular",
     "@nativescript/core": "file:<%= pathOffset %>node_modules/@nativescript/core",
     "@ngx-translate/core": "file:<%= pathOffset %>node_modules/@ngx-translate/core",
-    "@<%= npmScope %>/scss": "file:<%= pathOffset %>libs/scss",
-    "@<%= npmScope %>/nativescript-scss": "file:<%= pathOffset %>xplat/<%= xplatFolderName %>/scss",
+    "@<%= npmScope %>/xplat-scss": "file:<%= pathOffset %>libs/xplat/scss/src",
+    "@<%= npmScope %>/xplat-nativescript-scss": "file:<%= pathOffset %>libs/xplat/<%= xplatFolderName %>/scss/src",
     "nativescript-ngx-fonticon": "file:<%= pathOffset %>node_modules/nativescript-ngx-fonticon",
     "nativescript-theme-core": "file:<%= pathOffset %>node_modules/nativescript-theme-core",
     "rxjs": "file:<%= pathOffset %>node_modules/rxjs",

@@ -103,7 +103,6 @@ export default function (options: Schema) {
       scripts[
         `clean`
       ] = `npx rimraf hooks node_modules package-lock.json && npm i`;
-      scripts[`start.${platformApp}`] = `nx serve ${options.name}`;
       return updatePackageScripts(tree, scripts);
     },
     (tree: Tree) => {

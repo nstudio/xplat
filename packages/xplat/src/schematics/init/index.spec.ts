@@ -23,7 +23,7 @@ describe('xplat init', () => {
     appTree = createEmptyWorkspace(Tree.empty());
   });
 
-  it('should init default xplat testing support', async () => {
+  it('should init default xplat deps', async () => {
     const options: XplatHelpers.Schema = { ...defaultOptions };
     options.platforms = 'web';
     options.framework = 'angular';
@@ -31,25 +31,6 @@ describe('xplat init', () => {
     const tree = await runSchematic('init', options, appTree);
     const files = tree.files;
     // console.log('files:', files);
-    expect(
-      files.indexOf('/testing/jest.libs.config.js')
-    ).toBeGreaterThanOrEqual(0);
-    expect(
-      files.indexOf('/testing/jest.xplat.config.js')
-    ).toBeGreaterThanOrEqual(0);
-    expect(files.indexOf('/testing/test-setup.ts')).toBeGreaterThanOrEqual(0);
-    expect(files.indexOf('/testing/tsconfig.json')).toBeGreaterThanOrEqual(0);
-    //expect(files.indexOf('/testing/karma.conf.js')).toBeGreaterThanOrEqual(0);
-    //expect(files.indexOf('/testing/test.libs.ts')).toBeGreaterThanOrEqual(0);
-    //expect(files.indexOf('/testing/test.xplat.ts')).toBeGreaterThanOrEqual(0);
-    //expect(files.indexOf('/testing/tsconfig.libs.json')).toBeGreaterThanOrEqual(0);
-    expect(
-      files.indexOf('/testing/tsconfig.libs.spec.json')
-    ).toBeGreaterThanOrEqual(0);
-    //expect(files.indexOf('/testing/tsconfig.xplat.json')).toBeGreaterThanOrEqual(0);
-    expect(
-      files.indexOf('/testing/tsconfig.xplat.spec.json')
-    ).toBeGreaterThanOrEqual(0);
 
     let packageJson = JSON.parse(getFileContent(tree, 'package.json'));
     // console.log(packageJson);
@@ -77,22 +58,11 @@ describe('xplat init', () => {
     const tree = await runSchematic('init', options, appTree);
     // const files = tree.files;
     // console.log('files:', files);
-    expect(tree.exists('/testing/jest.libs.config.js')).toBeTruthy();
-    expect(tree.exists('/testing/jest.xplat.config.js')).toBeTruthy();
-    expect(tree.exists('/testing/test-setup.ts')).toBeTruthy();
-    expect(tree.exists('/testing/tsconfig.json')).toBeTruthy();
-    //expect(tree.exists('/testing/karma.conf.js')).toBeTruthy();
-    //expect(tree.exists('/testing/test.libs.ts')).toBeTruthy();
-    //expect(tree.exists('/testing/test.xplat.ts')).toBeTruthy();
-    //expect(tree.exists('/testing/tsconfig.libs.json')).toBeTruthy();
-    expect(tree.exists('/testing/tsconfig.libs.spec.json')).toBeTruthy();
-    //expect(tree.exists('/testing/tsconfig.xplat.json')).toBeTruthy();
-    expect(tree.exists('/testing/tsconfig.xplat.spec.json')).toBeTruthy();
 
-    expect(tree.exists('/xplat/web/index.ts')).toBeTruthy();
-    expect(tree.exists('/xplat/nativescript/index.ts')).toBeTruthy();
-    expect(tree.exists('/xplat/web-angular/index.ts')).toBeFalsy();
-    expect(tree.exists('/xplat/nativescript-angular/index.ts')).toBeFalsy();
+    expect(tree.exists('/libs/xplat/web/core/src/lib/index.ts')).toBeTruthy();
+    expect(tree.exists('/libs/xplat/nativescript/core/src/lib/index.ts')).toBeTruthy();
+    expect(tree.exists('/libs/xplat/web-angular/core/src/lib/index.ts')).toBeFalsy();
+    expect(tree.exists('/libs/xplat/nativescript-angular/core/src/lib/index.ts')).toBeFalsy();
 
     let packageJson = JSON.parse(getFileContent(tree, 'package.json'));
     // console.log(packageJson);

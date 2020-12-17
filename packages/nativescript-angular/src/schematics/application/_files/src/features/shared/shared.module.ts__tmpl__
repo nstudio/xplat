@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 
 // xplat
-import { UIModule } from '@<%= npmScope %>/<%= xplatFolderName %>';
+import { UIModule } from '@<%= npmScope %>/xplat/<%= xplatFolderName %>/features';
 
 const MODULES = [UIModule];
 

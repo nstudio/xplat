@@ -23,6 +23,12 @@ export default function (options: XplatHelpers.Schema) {
         },
         { interactive: false }
       ),
+    XplatAngularHelpers.generateLib(options, 'core', 'xplat/ionic', 'node'),
+    XplatAngularHelpers.cleanupLib(options, 'core', 'xplat/ionic'),
+    XplatAngularHelpers.generateLib(options, 'features', 'xplat/ionic', 'node'),
+    XplatAngularHelpers.cleanupLib(options, 'features', 'xplat/ionic'),
+    XplatAngularHelpers.generateLib(options, 'scss', 'xplat/ionic', 'node'),
+    XplatAngularHelpers.cleanupLib(options, 'scss', 'xplat/ionic'),
     (tree: Tree, context: SchematicContext) => {
       const xplatFolderName = XplatHelpers.getXplatFoldername(
         'ionic',
@@ -31,21 +37,61 @@ export default function (options: XplatHelpers.Schema) {
       // console.log('xplatName:', xplatName);
       return options.skipDependentPlatformFiles
         ? noop()
-        : XplatHelpers.addPlatformFiles(options, xplatFolderName)(
-            tree,
-            context
-          );
+        : XplatHelpers.addPlatformFiles(
+            options,
+            xplatFolderName,
+            'core'
+          )(tree, context);
+    },
+    (tree: Tree, context: SchematicContext) => {
+      const xplatFolderName = XplatHelpers.getXplatFoldername(
+        'ionic',
+        'angular'
+      );
+      // console.log('xplatName:', xplatName);
+      return options.skipDependentPlatformFiles
+        ? noop()
+        : XplatHelpers.addPlatformFiles(
+            options,
+            xplatFolderName,
+            'features'
+          )(tree, context);
+    },
+    (tree: Tree, context: SchematicContext) => {
+      const xplatFolderName = XplatHelpers.getXplatFoldername(
+        'ionic',
+        'angular'
+      );
+      // console.log('xplatName:', xplatName);
+      return options.skipDependentPlatformFiles
+        ? noop()
+        : XplatHelpers.addPlatformFiles(
+            options,
+            xplatFolderName,
+            'scss'
+          )(tree, context);
     },
     // TODO: convert these @nstudio/angular api's to singular external schematics so could be called with externalSchematic api
     XplatAngularHelpers.addLibFiles(
       options,
-      `../../../../angular/src/schematics/xplat/`
+      `../../../../angular/src/schematics/xplat/`,
+      'core'
     ),
-    XplatAngularHelpers.addScssFiles(
+    XplatAngularHelpers.addLibFiles(
       options,
-      `../../../../angular/src/schematics/xplat/`
+      `../../../../angular/src/schematics/xplat/`,
+      'features'
     ),
-    XplatHelpers.updateTsConfigPaths(options, { framework: 'angular' }),
+    XplatAngularHelpers.addLibFiles(
+      options,
+      `../../../../angular/src/schematics/xplat/`,
+      'scss'
+    ),
+    XplatAngularHelpers.addLibFiles(
+      options,
+      `../../../../angular/src/schematics/xplat/`,
+      'utils'
+    ),
     XplatIonicAngularHelpers.updateRootDeps(options),
   ]);
 }

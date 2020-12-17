@@ -654,10 +654,10 @@ export namespace XplatHelpers {
     };
   }
 
-  export function addPlatformFiles(options: Schema, platform: string) {
+  export function addPlatformFiles(options: Schema, platform: string, libName: string) {
     return (tree: Tree, context: SchematicContext) => {
       let frontendFramework: FrameworkTypes = getFrontendFramework();
-      if (tree.exists(`xplat/${platform}/index.ts`)) {
+      if (tree.exists(`libs/xplat/${platform}/${libName}/src/lib/index.ts`)) {
         // check if framework had been set
         frontendFramework = getFrontendFramework();
         // console.log('addPlatformFiles frontendFramework:', frontendFramework)
@@ -681,15 +681,18 @@ export namespace XplatHelpers {
         <FrameworkTypes>options.framework
       );
 
+      // src should go into Nx library structure
+      const libFolder = `/${libName}/src${libName === 'scss' ? '' : '/lib'}`;
+
       return branchAndMerge(
         mergeWith(
-          apply(url(`./_files`), [
+          apply(url(`./_files_${libName}`), [
             template({
               ...(options as any),
               ...getDefaultTemplateOptions(),
               xplatFolderName,
             }),
-            move(`xplat/${xplatFolderName}`),
+            move(`libs/xplat/${xplatFolderName}${libFolder}`),
           ])
         )
       );
@@ -744,102 +747,6 @@ export namespace XplatHelpers {
         }
       }
       return tree;
-    };
-  }
-
-  export function updateGitIgnore() {
-    return (tree: Tree) => {
-      const gitIgnorePath = '.gitignore';
-      let gitIgnore = tree.get(gitIgnorePath).content.toString();
-      if (gitIgnore) {
-        if (gitIgnore.indexOf('libs/**/*.js') === -1) {
-          gitIgnore += `
-# libs
-libs/**/*.js
-libs/**/*.map
-libs/**/*.d.ts
-libs/**/*.metadata.json
-libs/**/*.ngfactory.ts
-libs/**/*.ngsummary.json
-      `;
-        }
-        if (gitIgnore.indexOf('xplat/**/*.js') === -1) {
-          gitIgnore += `
-# xplat
-xplat/**/*.js
-xplat/**/*.map
-xplat/**/*.d.ts
-xplat/**/*.metadata.json
-xplat/**/*.ngfactory.ts
-xplat/**/*.ngsummary.json
-      `;
-        }
-      }
-
-      return updateFile(tree, gitIgnorePath, gitIgnore);
-    };
-  }
-
-  export function updateTsConfigPaths(
-    options: Schema,
-    settings?: {
-      framework?: FrameworkTypes;
-      dependentPlatforms?: Array<PlatformTypes>;
-    }
-  ) {
-    return (tree: Tree) => {
-      const nxJson = getNxWorkspaceConfig(tree);
-      const npmScope = nxJson.npmScope;
-      const platformArg = options.platforms;
-      // sort for consistency
-      const platforms = (<Array<PlatformTypes>>(
-        (<unknown>sanitizeCommaDelimitedArg(platformArg))
-      )).sort(function (a, b) {
-        if (a < b) return -1;
-        if (a > b) return 1;
-        return 0;
-      });
-      const frontendFramework = getFrontendFramework();
-      let frameworkSuffix: string = '';
-
-      if (settings) {
-        if (settings.framework !== frontendFramework) {
-          // when users have a default framework set, generation allows name to not include the default framework of choice
-          frameworkSuffix = `-${settings.framework}`;
-        }
-        if (settings.dependentPlatforms) {
-          for (const dependentPlatform of settings.dependentPlatforms) {
-            if (!platforms.includes(dependentPlatform)) {
-              // ensure dependent platform is added since these platforms depend on it
-              platforms.push(dependentPlatform);
-            }
-          }
-        }
-      }
-
-      const updates: any = {};
-      // ensure default Nx libs path is in place
-      updates[`@${npmScope}/*`] = [`libs/*`];
-      for (const t of platforms) {
-        updates[`@${npmScope}/${t}${frameworkSuffix}`] = [
-          `xplat/${t}${frameworkSuffix}/index.ts`,
-        ];
-        updates[`@${npmScope}/${t}${frameworkSuffix}/*`] = [
-          `xplat/${t}${frameworkSuffix}/*`,
-        ];
-      }
-
-      return updateTsConfig(tree, (tsConfig: any) => {
-        if (tsConfig) {
-          if (!tsConfig.compilerOptions) {
-            tsConfig.compilerOptions = {};
-          }
-          tsConfig.compilerOptions.paths = {
-            ...(tsConfig.compilerOptions.paths || {}),
-            ...updates,
-          };
-        }
-      });
     };
   }
 
@@ -1118,7 +1025,7 @@ export namespace XplatFeatureHelpers {
       moveTo = getMoveTo(options, target, projectName, framework);
     } else {
       target = 'lib';
-      moveTo = `libs/features/${options.name.toLowerCase()}`;
+      moveTo = `libs/xplat/features/src/lib/${options.name.toLowerCase()}`;
     }
     if (!extra) {
       // make sure no `null` or `undefined` values get in the string path
@@ -1200,7 +1107,7 @@ export namespace XplatFeatureHelpers {
     );
     // console.log('getMoveTo xplatFolderName:', xplatFolderName);
     const featureName = options.name.toLowerCase();
-    let moveTo = `xplat/${xplatFolderName}/features/${featureName}`;
+    let moveTo = `libs/xplat/${xplatFolderName}/features/src/lib/${featureName}`;
     if (projectName) {
       let appDir = ['web', 'web-angular'].includes(xplatFolderName)
         ? '/app'

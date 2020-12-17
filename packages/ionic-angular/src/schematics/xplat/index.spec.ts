@@ -47,10 +47,6 @@ describe('xplat ionic angular', () => {
     // console.log(fileContent);
     expect(fileContent.compilerOptions.paths['@testing/ionic']).toBeTruthy();
     expect(fileContent.compilerOptions.paths['@testing/ionic/*']).toBeTruthy();
-    filePath = '/xplat/ionic/.xplatframework';
-    fileContent = getFileContent(tree, filePath);
-    // console.log(fileContent);
-    expect(fileContent.indexOf('angular')).toBeGreaterThanOrEqual(0);
   });
 
   it('should create default xplat support with framework suffix when not specifying default', async () => {

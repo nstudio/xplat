@@ -22,18 +22,21 @@ export default function (options: XplatHelpers.Schema) {
 
   return chain([
     prerun(options, true),
-    // update gitignore to support xplat
-    XplatHelpers.updateGitIgnore(),
     // libs
-    XplatAngularHelpers.addLibFiles(options),
-    XplatAngularHelpers.addScssFiles(options),
+    XplatAngularHelpers.generateLib(options, 'core', 'xplat', 'node'),
+    XplatAngularHelpers.cleanupLib(options, 'core', 'xplat'),
+    XplatAngularHelpers.addLibFiles(options, './', 'core'),
+    XplatAngularHelpers.generateLib(options, 'features', 'xplat', 'node'),
+    XplatAngularHelpers.cleanupLib(options, 'features', 'xplat'),
+    XplatAngularHelpers.addLibFiles(options, './', 'features'),
+    XplatAngularHelpers.generateLib(options, 'scss', 'xplat', 'jsdom'),
+    XplatAngularHelpers.cleanupLib(options, 'scss', 'xplat'),
+    XplatAngularHelpers.addLibFiles(options, './', 'scss'),
+    XplatAngularHelpers.generateLib(options, 'utils', 'xplat', 'node'),
+    XplatAngularHelpers.cleanupLib(options, 'utils', 'xplat'),
+    XplatAngularHelpers.addLibFiles(options, './', 'utils'),
     // cross platform support
     ...externalChains,
-    // testing
-    XplatAngularHelpers.addTestingFiles(options, '_testing'),
-    XplatAngularHelpers.addJestConfig(options, '_jest'),
-    XplatAngularHelpers.updateTestingConfig(options),
-    XplatAngularHelpers.updateLint(options),
     XplatAngularHelpers.updateRootDeps(options),
     formatFiles({ skipFormat: options.skipFormat }),
     // clean shared code script - don't believe need this anymore

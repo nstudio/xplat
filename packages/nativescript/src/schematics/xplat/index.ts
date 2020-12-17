@@ -8,7 +8,10 @@ export default function (options: XplatHelpers.Schema) {
     prerun(options),
     options.skipDependentPlatformFiles
       ? noop()
-      : XplatHelpers.addPlatformFiles(options, 'nativescript'),
+      : XplatHelpers.addPlatformFiles(options, 'nativescript', 'scss'),
+      options.skipDependentPlatformFiles
+      ? noop()
+      : XplatHelpers.addPlatformFiles(options, 'nativescript', 'utils'),
     XplatNativeScriptHelpers.updateRootDeps(options),
     XplatNativeScriptHelpers.updatePrettierIgnore(),
   ]);

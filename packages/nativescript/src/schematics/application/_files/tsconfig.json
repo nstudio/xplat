@@ -1,25 +1,16 @@
 {
-  "compilerOptions": {
-    "module": "ESNext",
-    "target": "es2017",
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "moduleResolution": "node",
-    "noEmitHelpers": true,
-    "noEmitOnError": true,
-    "skipLibCheck": true,
-    "lib": ["es2018", "es2017", "dom", "webworker", "es6"],
-    "baseUrl": ".",
-    "paths": {
-      "~/*": ["src/*"],
-      "@<%= npmScope %>/*": ["<%= pathOffset %>libs/*"],
-      "@<%= npmScope %>/nativescript": [
-        "<%= pathOffset %>xplat/<%= xplatFolderName %>/index.ts"
-      ],
-      "@<%= npmScope %>/nativescript/*": [
-        "<%= pathOffset %>xplat/<%= xplatFolderName %>/*"
-      ]
+  "extends": "<%= pathOffset %>tsconfig.base.json",
+  "files": [],
+  "include": [],
+  "references": [
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.spec.json"
+    },
+    {
+      "path": "./tsconfig.editor.json"
     }
-  },
-  "exclude": ["node_modules", "platforms"]
+  ]
 }

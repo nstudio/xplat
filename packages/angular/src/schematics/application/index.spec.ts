@@ -35,14 +35,11 @@ describe('app', () => {
 
     expect(tree.exists('/package.json')).toBeTruthy();
 
-    let checkFile = getFileContent(tree, '/package.json');
-    // console.log(checkFile);
-    const packageData: any = jsonParse(checkFile);
-    expect(packageData.scripts['start.web.foo']).toBeDefined();
-
     // should gen xplat structure by default
-    expect(tree.exists('/xplat/web/index.ts')).toBeTruthy();
-    expect(tree.exists('/xplat/web/core/index.ts')).toBeTruthy();
+    expect(tree.exists('/libs/xplat/web/core/src/lib/index.ts')).toBeTruthy();
+    expect(tree.exists('/libs/xplat/web/features/src/lib/index.ts')).toBeTruthy();
+    expect(tree.exists('/libs/xplat/web/scss/src/_index.scss')).toBeTruthy();
+    expect(tree.exists('/libs/xplat/web/scss/src/package.json')).toBeTruthy();
   });
 
   it('should create all files for web app using groupByName', async () => {
@@ -72,11 +69,6 @@ describe('app', () => {
 
     checkPath = '/package.json';
     expect(files.indexOf(checkPath)).toBeGreaterThanOrEqual(0);
-
-    checkFile = getFileContent(tree, checkPath);
-    // console.log(checkFile);
-    const packageData: any = jsonParse(checkFile);
-    expect(packageData.scripts['start.foo.web']).toBeDefined();
   });
 
   it('should create all files for web app in directory', async () => {
@@ -136,9 +128,6 @@ describe('app', () => {
     expect(files.indexOf(checkPath)).toBeGreaterThanOrEqual(0);
 
     let checkFile = getFileContent(tree, checkPath);
-    // console.log(checkFile);
-    const packageData: any = jsonParse(checkFile);
-    expect(packageData.scripts['start.web.foo']).toBeDefined();
 
     checkPath = '/angular.json';
     expect(files.indexOf(checkPath)).toBeGreaterThanOrEqual(0);
@@ -164,10 +153,6 @@ describe('app', () => {
   //   const checkPath = '/package.json';
   //   expect(files.indexOf(checkPath)).toBeGreaterThanOrEqual(0);
 
-  //   let checkFile = getFileContent(tree, checkPath);
-  //   // console.log(checkFile);
-  //   const packageData: any = jsonParse(checkFile);
-  //   expect(packageData.scripts['start.ionic.foo']).toBeDefined();
   // });
 
   // it('should create app with --framework flag for NativeScript', async () => {
@@ -184,10 +169,6 @@ describe('app', () => {
   //   const checkPath = '/package.json';
   //   expect(files.indexOf(checkPath)).toBeGreaterThanOrEqual(0);
 
-  //   let checkFile = getFileContent(tree, checkPath);
-  //   // console.log(checkFile);
-  //   const packageData: any = jsonParse(checkFile);
-  //   expect(packageData.scripts['start.nativescript.foo.ios']).toBeDefined();
   // });
 
   describe('useXplat false', () => {
@@ -204,7 +185,7 @@ describe('app', () => {
       expect(
         tree.exists('/apps/web-foo/src/app/core/core.module.ts')
       ).toBeFalsy();
-      expect(tree.exists('/xplat/web/index.ts')).toBeFalsy();
+      expect(tree.exists('/libs/xplat/web/src/lib/index.ts')).toBeFalsy();
     });
   });
 });

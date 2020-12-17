@@ -1,6 +1,6 @@
 import { platformNativeScriptDynamic } from '@nativescript/angular';
 import { enableProdMode } from '@angular/core';
-import { environment } from '@<%= npmScope %>/core';
+import { environment } from '@<%= npmScope %>/xplat/core';
 import { AppModule } from './app.module';
 
 if (environment.production) {

@@ -1,0 +1,4 @@
+{
+  "name": "@<%= npmScope %>/xplat-web-scss",
+  "version": "1.0.0"
+}

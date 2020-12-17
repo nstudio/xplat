@@ -47,10 +47,6 @@ describe('xplat schematic', () => {
     expect(
       fileContent.compilerOptions.paths['@testing/electron/*']
     ).toBeTruthy();
-    filePath = '/xplat/electron/.xplatframework';
-    fileContent = getFileContent(tree, filePath);
-    // console.log(fileContent);
-    expect(fileContent.indexOf('angular')).toBeGreaterThanOrEqual(0);
   });
 
   it('should create default xplat support with framework suffix when not specifying default', async () => {
