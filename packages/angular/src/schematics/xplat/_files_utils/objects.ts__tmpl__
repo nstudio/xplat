@@ -30,7 +30,3 @@ export function deepMerge<T1, T2>(target: T1, source: T2): T1 & T2 {
     });
   return result;
 }
-
-export type DeepPartial<T> = {
-  [P in keyof T]?: DeepPartial<T[P]>;
-};

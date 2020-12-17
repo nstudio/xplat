@@ -40,6 +40,10 @@ describe('xplat schematic', () => {
     expect(
       files.indexOf('/libs/xplat/nativescript/core/src/lib/index.ts')
     ).toBeGreaterThanOrEqual(0);
+    let filePath = '/tsconfig.base.json';
+    let fileContent = jsonParse(getFileContent(tree, filePath));
+    // console.log(fileContent);
+    expect(fileContent.compilerOptions.paths['@testing/xplat/environments']).toBeTruthy();
   });
 
   it('should create default xplat support for web,nativescript', async () => {

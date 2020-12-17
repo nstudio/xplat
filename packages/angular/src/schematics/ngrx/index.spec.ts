@@ -36,40 +36,40 @@ describe('ngrx schematic', () => {
     // console.log(files.slice(91,files.length));
 
     expect(
-      files.indexOf('/libs/core/state/auth.actions.ts')
+      files.indexOf('/libs/xplat/core/src/lib/state/auth.actions.ts')
     ).toBeGreaterThanOrEqual(0);
     expect(
-      files.indexOf('/libs/core/state/auth.effects.spec.ts')
+      files.indexOf('/libs/xplat/core/src/lib/state/auth.effects.spec.ts')
     ).toBeGreaterThanOrEqual(0);
     expect(
-      files.indexOf('/libs/core/state/auth.effects.ts')
+      files.indexOf('/libs/xplat/core/src/lib/state/auth.effects.ts')
     ).toBeGreaterThanOrEqual(0);
     expect(
-      files.indexOf('/libs/core/state/auth.reducer.spec.ts')
+      files.indexOf('/libs/xplat/core/src/lib/state/auth.reducer.spec.ts')
     ).toBeGreaterThanOrEqual(0);
     expect(
-      files.indexOf('/libs/core/state/auth.reducer.ts')
+      files.indexOf('/libs/xplat/core/src/lib/state/auth.reducer.ts')
     ).toBeGreaterThanOrEqual(0);
     expect(
-      files.indexOf('/libs/core/state/auth.state.ts')
+      files.indexOf('/libs/xplat/core/src/lib/state/auth.state.ts')
     ).toBeGreaterThanOrEqual(0);
-    expect(files.indexOf('/libs/core/state/index.ts')).toBeGreaterThanOrEqual(
+    expect(files.indexOf('/libs/xplat/core/src/lib/state/index.ts')).toBeGreaterThanOrEqual(
       0
     );
 
     // file content
-    let content = getFileContent(tree, '/libs/core/state/auth.actions.ts');
+    let content = getFileContent(tree, '/libs/xplat/core/src/lib/state/auth.actions.ts');
     // console.log(content);
     expect(content.indexOf(`AuthActions`)).toBeGreaterThanOrEqual(0);
     expect(content.indexOf(`[@testing/auth] init'`)).toBeGreaterThanOrEqual(0);
 
-    content = getFileContent(tree, '/libs/core/index.ts');
+    content = getFileContent(tree, '/libs/xplat/core/src/lib/index.ts');
     // console.log('/libs/core/index.ts:', content);
     expect(content.indexOf(`export * from './state';`)).toBeGreaterThanOrEqual(
       0
     );
 
-    let modulePath = '/libs/core/core.module.ts';
+    let modulePath = '/libs/xplat/core/src/lib/core.module.ts';
     let moduleContent = getFileContent(tree, modulePath);
     // console.log(modulePath + ':');
     // console.log(moduleContent);
@@ -99,11 +99,11 @@ describe('ngrx schematic', () => {
     // console.log(files. slice(91,files.length));
 
     // state should not be setup to share
-    expect(files.indexOf('/libs/core/state/auth.actions.ts')).toBe(-1);
+    expect(files.indexOf('/libs/xplat/core/src/lib/state/auth.actions.ts')).toBe(-1);
     expect(
-      files.indexOf('/xplat/nativescript/features/foo/state/auth.actions.ts')
+      files.indexOf('/libs/xplat/nativescript/features/src/lib/foo/state/auth.actions.ts')
     ).toBe(-1);
-    expect(files.indexOf('/xplat/web/features/foo/state/auth.actions.ts')).toBe(
+    expect(files.indexOf('/libs/xplat/web/features/src/lib/foo/state/auth.actions.ts')).toBe(
       -1
     );
 

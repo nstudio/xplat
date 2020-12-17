@@ -32,7 +32,7 @@ function addHelperFiles(options: IHelperSchema): Rule {
           ...(options as any),
           ...getDefaultTemplateOptions(),
         }),
-        move(`xplat/${xplatFolderName}/utils`),
+        move(`libs/xplat/${xplatFolderName}/utils/src/lib`),
       ])
     )
   );
@@ -41,7 +41,7 @@ function addHelperFiles(options: IHelperSchema): Rule {
 function imports(helperChains: Array<any>, options: IHelperSchema) {
   return (tree: Tree, context: SchematicContext) => {
     const xplatFolderName = XplatHelpers.getXplatFoldername('nativescript');
-    let pathRef = `xplat/${xplatFolderName}/utils/@nativescript/*`;
+    let pathRef = `libs/xplat/${xplatFolderName}/utils/src/lib/@nativescript/*`;
     // update root tsconfig
     helperChains.push(
       updateTsConfig(tree, (tsConfig: any) => {

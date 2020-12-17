@@ -24,10 +24,10 @@ describe('xplat schematic', () => {
 
     const tree = await runSchematic('xplat', options, appTree);
     const files = tree.files;
-    expect(files.indexOf('/xplat/web/index.ts')).toBeGreaterThanOrEqual(0);
-    expect(files.indexOf('/xplat/electron/index.ts')).toBeGreaterThanOrEqual(0);
+    expect(files.indexOf('/libs/xplat/web/core/src/lib/index.ts')).toBeGreaterThanOrEqual(0);
+    expect(files.indexOf('/libs/xplat/electron/core/src/lib/index.ts')).toBeGreaterThanOrEqual(0);
     expect(
-      files.indexOf('/xplat/nativescript/index.ts')
+      files.indexOf('/libs/xplat/nativescript/core/src/lib/index.ts')
     ).toBeGreaterThanOrEqual(-1);
     const packagePath = '/package.json';
     const packageFile = jsonParse(getFileContent(tree, packagePath));
@@ -43,10 +43,7 @@ describe('xplat schematic', () => {
     let filePath = '/tsconfig.base.json';
     let fileContent = jsonParse(getFileContent(tree, filePath));
     // console.log(fileContent);
-    expect(fileContent.compilerOptions.paths['@testing/electron']).toBeTruthy();
-    expect(
-      fileContent.compilerOptions.paths['@testing/electron/*']
-    ).toBeTruthy();
+    expect(fileContent.compilerOptions.paths['@testing/xplat/electron/core']).toBeTruthy();
   });
 
   it('should create default xplat support with framework suffix when not specifying default', async () => {
@@ -55,15 +52,12 @@ describe('xplat schematic', () => {
     const options: XplatHelpers.Schema = { ...defaultOptions };
 
     const tree = await runSchematic('xplat', options, appTree);
-    expect(tree.exists('/xplat/electron-angular/index.ts')).toBeTruthy();
+    expect(tree.exists('/libs/xplat/electron-angular/core/src/lib/index.ts')).toBeTruthy();
     const filePath = getRootTsConfigPath();
     const fileContent = jsonParse(getFileContent(tree, filePath));
     // console.log(fileContent);
     expect(
-      fileContent.compilerOptions.paths['@testing/electron-angular']
-    ).toBeTruthy();
-    expect(
-      fileContent.compilerOptions.paths['@testing/electron-angular/*']
+      fileContent.compilerOptions.paths['@testing/xplat/electron-angular/core']
     ).toBeTruthy();
   });
 
@@ -74,14 +68,11 @@ describe('xplat schematic', () => {
     options.framework = 'angular';
 
     let tree = await runSchematic('xplat', options, appTree);
-    expect(tree.exists('/xplat/electron/index.ts')).toBeTruthy();
+    expect(tree.exists('/libs/xplat/electron/core/src/lib/index.ts')).toBeTruthy();
     let filePath = getRootTsConfigPath();
     let fileContent = jsonParse(getFileContent(tree, filePath));
     // console.log(fileContent);
-    expect(fileContent.compilerOptions.paths['@testing/electron']).toBeTruthy();
-    expect(
-      fileContent.compilerOptions.paths['@testing/electron/*']
-    ).toBeTruthy();
+    expect(fileContent.compilerOptions.paths['@testing/xplat/electron/core']).toBeTruthy();
 
     await expect(runSchematic('xplat', defaultOptions, tree)).rejects.toThrow(
       `You currently have "angular" set as your default frontend framework and have already generated xplat support for "web". A command is coming soon to auto reconfigure your workspace to later add baseline platform support for those which have previously been generated prepaired with a frontend framework.`

@@ -11,8 +11,8 @@ import {
   SchematicContext,
 } from '@angular-devkit/schematics';
 import { formatFiles } from '@nrwl/workspace';
-import { XplatHelpers, getDefaultTemplateOptions } from '@nstudio/xplat';
-import { prerun, addInstallTask } from '@nstudio/xplat-utils';
+import { XplatHelpers, getDefaultTemplateOptions, updateTsConfig } from '@nstudio/xplat';
+import { prerun, addInstallTask, getNpmScope } from '@nstudio/xplat-utils';
 import { XplatAngularHelpers } from '../../utils/xplat';
 import { FocusHelpers } from '@nstudio/focus';
 
@@ -23,21 +23,36 @@ export default function (options: XplatHelpers.Schema) {
   return chain([
     prerun(options, true),
     // libs
-    XplatAngularHelpers.generateLib(options, 'core', 'xplat', 'node'),
-    XplatAngularHelpers.cleanupLib(options, 'core', 'xplat'),
+    XplatHelpers.generateLib(options, 'core', 'xplat', 'node'),
+    XplatHelpers.cleanupLib(options, 'core', 'xplat'),
     XplatAngularHelpers.addLibFiles(options, './', 'core'),
-    XplatAngularHelpers.generateLib(options, 'features', 'xplat', 'node'),
-    XplatAngularHelpers.cleanupLib(options, 'features', 'xplat'),
+    XplatHelpers.generateLib(options, 'features', 'xplat', 'node'),
+    XplatHelpers.cleanupLib(options, 'features', 'xplat'),
     XplatAngularHelpers.addLibFiles(options, './', 'features'),
-    XplatAngularHelpers.generateLib(options, 'scss', 'xplat', 'jsdom'),
-    XplatAngularHelpers.cleanupLib(options, 'scss', 'xplat'),
+    XplatHelpers.generateLib(options, 'scss', 'xplat', 'jsdom'),
+    XplatHelpers.cleanupLib(options, 'scss', 'xplat'),
     XplatAngularHelpers.addLibFiles(options, './', 'scss'),
-    XplatAngularHelpers.generateLib(options, 'utils', 'xplat', 'node'),
-    XplatAngularHelpers.cleanupLib(options, 'utils', 'xplat'),
+    XplatHelpers.generateLib(options, 'utils', 'xplat', 'node'),
+    XplatHelpers.cleanupLib(options, 'utils', 'xplat'),
     XplatAngularHelpers.addLibFiles(options, './', 'utils'),
     // cross platform support
     ...externalChains,
     XplatAngularHelpers.updateRootDeps(options),
+    // adjust root tsconfig
+    (tree: Tree, context: SchematicContext) => {
+      return updateTsConfig(tree, (tsConfig: any) => {
+        if (tsConfig) {
+          if (!tsConfig.compilerOptions) {
+            tsConfig.compilerOptions = {};
+          }
+          if (!tsConfig.compilerOptions.paths[`@${getNpmScope()}/xplat/environments`]) {
+            tsConfig.compilerOptions.paths[`@${getNpmScope()}/xplat/environments`] = [
+              `libs/xplat/core/src/lib/environments/base/index.ts`
+            ];
+          }
+        }
+      });
+    },
     formatFiles({ skipFormat: options.skipFormat }),
     // clean shared code script - don't believe need this anymore
     // (tree: Tree) => {

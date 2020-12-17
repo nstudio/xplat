@@ -19,12 +19,21 @@ import { XplatWebAngularHelpers } from '../../utils/xplat';
 export default function (options: XplatHelpers.Schema) {
   return chain([
     prerun(options, true),
-    XplatAngularHelpers.generateLib(options, 'core', 'xplat/web', 'jsdom'),
-    XplatAngularHelpers.cleanupLib(options, 'core', 'xplat/web'),
-    XplatAngularHelpers.generateLib(options, 'features', 'xplat/web', 'jsdom'),
-    XplatAngularHelpers.cleanupLib(options, 'features', 'xplat/web'),
-    XplatAngularHelpers.generateLib(options, 'scss', 'xplat/web', 'jsdom'),
-    XplatAngularHelpers.cleanupLib(options, 'scss', 'xplat/web'),
+    // (tree: Tree, context: SchematicContext) => {
+    //   if (tree.exists(`/libs/xplat/core/src/lib/index.ts`)) {
+    //     return noop();
+    //   } else {
+    //     return externalSchematic('@nstudio/angular', 'xplat', options, {
+    //       interactive: false,
+    //     })(tree, context);
+    //   }
+    // },
+    XplatHelpers.generateLib(options, 'core', 'xplat/web', 'jsdom'),
+    XplatHelpers.cleanupLib(options, 'core', 'xplat/web'),
+    XplatHelpers.generateLib(options, 'features', 'xplat/web', 'jsdom'),
+    XplatHelpers.cleanupLib(options, 'features', 'xplat/web'),
+    XplatHelpers.generateLib(options, 'scss', 'xplat/web', 'jsdom'),
+    XplatHelpers.cleanupLib(options, 'scss', 'xplat/web'),
     (tree: Tree, context: SchematicContext) => {
       const xplatFolderName = XplatHelpers.getXplatFoldername('web', 'angular');
       // console.log('xplatName:', xplatName);
@@ -85,5 +94,6 @@ export default function (options: XplatHelpers.Schema) {
       }
     },
     XplatWebAngularHelpers.updateRootDeps(options),
+    
   ]);
 }

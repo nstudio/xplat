@@ -1,7 +1,7 @@
 {
-  "extends": "../../../../tsconfig.json",
+  "extends": "../../../../../tsconfig.base.json",
   "compilerOptions": {
-    "outDir": "../../../../dist/out-tsc/xplat/web/elements",
+    "outDir": "../../../../../dist/out-tsc/libs/xplat/web/elements",
     "module": "es2015",
     "types": []
   },

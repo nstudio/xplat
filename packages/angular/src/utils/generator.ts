@@ -99,6 +99,7 @@ export function generate(type: IGenerateType, options) {
     );
   }
 
+
   const projectChains = [];
   if (options.projects) {
     for (const projectName of options.projects.split(',')) {
@@ -218,7 +219,7 @@ export function generate(type: IGenerateType, options) {
             xplatFolderName,
             type,
             options,
-            `xplat/${xplatFolderName}`,
+            `libs/xplat/${xplatFolderName}`,
             tree
           );
         });
@@ -228,7 +229,7 @@ export function generate(type: IGenerateType, options) {
             platform,
             'angular'
           );
-          return adjustBarrel(type, options, `xplat/${xplatFolderName}`);
+          return adjustBarrel(type, options, `libs/xplat/${xplatFolderName}`);
         });
         // add index barrel if needed
         externalChains.push((tree: Tree, context: SchematicContext) => {
@@ -241,7 +242,7 @@ export function generate(type: IGenerateType, options) {
                 xplatFolderName,
                 type,
                 options,
-                `xplat/${xplatFolderName}`,
+                `libs/xplat/${xplatFolderName}`,
                 tree,
                 '_index'
               )(tree, context)
@@ -335,14 +336,15 @@ export function addToFeature(
 
   options.needsIndex = false; // reset
 
+  const srcSubFolderPath = options.projects ? '' : '/src/lib';
   let featurePath: string;
   if (shouldTargetCoreBarrel(type, featureName)) {
     // services and/or state should never be generated in shared or ui features
     // therefore place in core (since they are service level)
     featureName = 'core';
-    featurePath = `${prefixPath}/${featureName}/src/lib`;
+    featurePath = `${prefixPath}/${featureName}${srcSubFolderPath}`;
   } else {
-    featurePath = `${prefixPath}/features/src/lib/${featureName}`;
+    featurePath = `${prefixPath}/features${srcSubFolderPath}/${featureName}`;
   }
 
   const featureModulePath = `${featurePath}/${featureName}.module.ts`;
@@ -358,7 +360,7 @@ export function addToFeature(
         // parse platform from prefix
         const parts = prefixPath.split('/');
         if (parts.length > 1) {
-          optionName = parts[1];
+          optionName = parts[2];
         }
       }
       throw new Error(
@@ -422,18 +424,19 @@ export function adjustBarrel(
   prefix: string
 ) {
   let featureName: string = getFeatureName(options);
+  const srcSubFolderPath = options.projects ? '' : '/src/lib';
   let barrelIndexPath: string;
   if (shouldTargetCoreBarrel(type, featureName)) {
     if (type === 'state') {
-      barrelIndexPath = `${prefix}/core/src/lib/index.ts`;
+      barrelIndexPath = `${prefix}/core${srcSubFolderPath}/index.ts`;
     } else {
-      barrelIndexPath = `${prefix}/core/src/lib/${type}s/index.ts`;
+      barrelIndexPath = `${prefix}/core${srcSubFolderPath}/${type}s/index.ts`;
     }
   } else {
     if (type === 'state') {
-      barrelIndexPath = `${prefix}/features/src/lib/${featureName}/index.ts`;
+      barrelIndexPath = `${prefix}/features${srcSubFolderPath}/${featureName}/index.ts`;
     } else {
-      barrelIndexPath = `${prefix}/features/src/lib/${featureName}/${type}s/index.ts`;
+      barrelIndexPath = `${prefix}/features${srcSubFolderPath}/${featureName}/${type}s/index.ts`;
     }
   }
 

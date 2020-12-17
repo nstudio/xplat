@@ -66,27 +66,6 @@ export default function (options: Schema) {
         },
         { interactive: false }
       )(tree, context),
-    // adjust root tsconfig
-    (tree: Tree, context: SchematicContext) => {
-      return updateTsConfig(tree, (tsConfig: any) => {
-        if (tsConfig) {
-          if (!tsConfig.exclude) {
-            tsConfig.exclude = [];
-          }
-          const excludeNSApps = 'apps/nativescript-*';
-          if (!tsConfig.exclude.includes(excludeNSApps)) {
-            tsConfig.exclude.push(excludeNSApps);
-          }
-          if (!tsConfig.includes) {
-            tsConfig.includes = [];
-          }
-          const platformFiles = 'xplat/**/*.{ios,android}.ts';
-          if (!tsConfig.includes.includes(platformFiles)) {
-            tsConfig.includes.push(platformFiles);
-          }
-        }
-      });
-    },
     // add root package dependencies
     XplatNativeScriptHelpers.updateRootDeps(options),
     XplatNativeScriptHelpers.updatePrettierIgnore(),

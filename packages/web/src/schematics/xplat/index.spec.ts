@@ -22,10 +22,10 @@ describe('xplat schematic', () => {
 
     const tree = await runSchematic('xplat', options, appTree);
     // console.log(tree.files);
-    expect(tree.exists('/xplat/web/scss/_index.scss')).toBeTruthy();
+    expect(tree.exists('/libs/xplat/web/scss/src/_index.scss')).toBeTruthy();
     const packagePath = '/package.json';
     const packageFile = jsonParse(getFileContent(tree, packagePath));
-    const hasScss = packageFile.dependencies[`@testing/scss`];
+    const hasScss = packageFile.dependencies[`@testing/xplat-scss`];
     expect(hasScss).toBeDefined();
   });
 });

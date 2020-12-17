@@ -23,12 +23,12 @@ export default function (options: XplatHelpers.Schema) {
         },
         { interactive: false }
       ),
-    XplatAngularHelpers.generateLib(options, 'core', 'xplat/ionic', 'node'),
-    XplatAngularHelpers.cleanupLib(options, 'core', 'xplat/ionic'),
-    XplatAngularHelpers.generateLib(options, 'features', 'xplat/ionic', 'node'),
-    XplatAngularHelpers.cleanupLib(options, 'features', 'xplat/ionic'),
-    XplatAngularHelpers.generateLib(options, 'scss', 'xplat/ionic', 'node'),
-    XplatAngularHelpers.cleanupLib(options, 'scss', 'xplat/ionic'),
+    XplatHelpers.generateLib(options, 'core', 'xplat/ionic', 'node'),
+    XplatHelpers.cleanupLib(options, 'core', 'xplat/ionic'),
+    XplatHelpers.generateLib(options, 'features', 'xplat/ionic', 'node'),
+    XplatHelpers.cleanupLib(options, 'features', 'xplat/ionic'),
+    XplatHelpers.generateLib(options, 'scss', 'xplat/ionic', 'node'),
+    XplatHelpers.cleanupLib(options, 'scss', 'xplat/ionic'),
     (tree: Tree, context: SchematicContext) => {
       const xplatFolderName = XplatHelpers.getXplatFoldername(
         'ionic',

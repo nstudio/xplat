@@ -15,7 +15,9 @@ export default function (options: XplatHelpers.Schema) {
   return chain([
     prerun(options, true),
     (tree: Tree, context: SchematicContext) => {
-      if (tree.exists('/libs/xplat/web-angular/scss/src/_variables.scss')) {
+      if (
+        tree.exists(`/libs/xplat/web-angular/scss/src/_variables.scss`)
+      ) {
         return noop();
       } else {
         return externalSchematic('@nstudio/web-angular', 'xplat', options, {
@@ -33,8 +35,8 @@ export default function (options: XplatHelpers.Schema) {
         },
         { interactive: false }
       ),
-    XplatAngularHelpers.generateLib(options, 'core', 'xplat/electron', 'node'),
-    XplatAngularHelpers.cleanupLib(options, 'core', 'xplat/electron'),
+    XplatHelpers.generateLib(options, 'core', 'xplat/electron', 'node'),
+    XplatHelpers.cleanupLib(options, 'core', 'xplat/electron'),
     (tree: Tree, context: SchematicContext) => {
       const xplatFolderName = XplatHelpers.getXplatFoldername(
         'electron',

@@ -1,0 +1,7 @@
+import { IEnvironment } from '@nar/xplat/core';
+import { deepMerge } from '@nar/xplat/utils';
+import { environmentBase } from './environment.base';
+
+export const environmentDev = deepMerge(environmentBase, <IEnvironment>{
+  // customizations here...
+});

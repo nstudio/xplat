@@ -44,7 +44,7 @@ describe('helpers schematic', () => {
     let fileContent = jsonParse(getFileContent(tree, filePath));
     // console.log(fileContent);
     expect(fileContent.compilerOptions.paths['@nativescript/*'][0]).toBe(
-      'xplat/nativescript/utils/@nativescript/*'
+      'libs/xplat/nativescript/utils/@nativescript/*'
     );
 
     filePath = '/apps/nativescript-viewer/tsconfig.json';

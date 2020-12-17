@@ -170,7 +170,7 @@ export namespace ComponentHelpers {
         return adjustBarrelIndex(
           'component',
           options,
-          `xplat/${xplatFolderName}/features/${componentSettings.featureName}/components/index.ts`,
+          `libs/xplat/${xplatFolderName}/features/src/lib/${componentSettings.featureName}/components/index.ts`,
           true,
           false,
           true
@@ -187,7 +187,7 @@ export namespace ComponentHelpers {
               xplatFolderName,
               'component',
               options,
-              `xplat/${xplatFolderName}`,
+              `libs/xplat/${xplatFolderName}`,
               tree,
               '_index'
             )(tree, context)
@@ -266,106 +266,6 @@ export namespace XplatAngularHelpers {
       );
     }
     return chains;
-  }
-
-  export function generateLib(
-    options: XplatHelpers.Schema,
-    libName: string,
-    directory: string = '',
-    testEnvironment: 'jsdom' | 'node' = 'jsdom',
-    framework = 'angular'
-  ): Rule {
-    return (tree: Tree, context: SchematicContext) => {
-      if (!getFrontendFramework()) {
-        directory = `${directory}-${framework}`;
-      }
-      if (
-        tree.exists(
-          `libs/${directory ? directory + '/' : ''}${libName}/tsconfig.json`
-        )
-      ) {
-        return noop()(tree, context);
-      }
-
-      return externalSchematic('@nrwl/workspace', 'lib', {
-        name: libName,
-        directory,
-        testEnvironment,
-        interactive: false,
-      });
-    };
-  }
-
-  export function cleanupLib(
-    options: XplatHelpers.Schema,
-    libName: string,
-    directory: string = '',
-    framework = 'angular'
-  ): Rule {
-    return (tree: Tree, context: SchematicContext) => {
-      if (!getFrontendFramework()) {
-        directory = `${directory}-${framework}`;
-      }
-      // adjust index files
-      const defaultLibIndexFile = `libs/${
-        directory ? directory + '/' : ''
-      }${libName}/src/lib/${directory.replace(/\//gi, '-')}-${libName}.ts`;
-      const defaultLibIndexSpecFile = `libs/${
-        directory ? directory + '/' : ''
-      }${libName}/src/lib/${directory.replace(/\//gi, '-')}-${libName}.spec.ts`;
-      // console.log('defaultIndexFile:', defaultLibIndexFile);
-      if (tree.exists(defaultLibIndexFile)) {
-        tree.delete(defaultLibIndexFile);
-      }
-      if (tree.exists(defaultLibIndexSpecFile)) {
-        tree.delete(defaultLibIndexSpecFile);
-      }
-      const defaultIndexFile = `libs/${
-        directory ? directory + '/' : ''
-      }${libName}/src/index.ts`;
-      if (libName === 'scss') {
-        if (tree.exists(defaultIndexFile)) {
-          tree.delete(defaultIndexFile);
-        }
-        // const libFolder = `libs/${
-        //   directory ? directory + '/' : ''
-        // }${libName}/src/lib`;
-        // tree.delete(libFolder);
-      } else {
-        if (tree.exists(defaultIndexFile)) {
-          tree.overwrite(defaultIndexFile, `export * from './lib';`);
-        }
-      }
-
-      // adjust tsconfig to support platform specific typings
-      const tsConfigPath = `libs/${
-        directory ? directory + '/' : ''
-      }${libName}/tsconfig.json`;
-      let tsConfig: any;
-      let needsTsConfigUpdate = false;
-      if (
-        directory &&
-        directory.indexOf('nativescript') > -1 &&
-        tree.exists(tsConfigPath)
-      ) {
-        tsConfig = JSON.parse(tree.read(tsConfigPath)!.toString('utf-8'));
-        const referenceTypings = `../../../../references.d.ts`;
-        if (!tsConfig.files.includes(referenceTypings)) {
-          needsTsConfigUpdate = true;
-          tsConfig.files.push(referenceTypings);
-        }
-        const includeTs = `**/*.ts`;
-        if (!tsConfig.include.includes(includeTs)) {
-          needsTsConfigUpdate = true;
-          tsConfig.include.push(includeTs);
-        }
-      }
-      if (needsTsConfigUpdate && tsConfig) {
-        updateJsonFile(tree, tsConfigPath, tsConfig);
-      }
-
-      return tree;
-    };
   }
 
   export function addLibFiles(

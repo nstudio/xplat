@@ -234,10 +234,10 @@ function adjustAppFiles(options: Schema, tree: Tree): Rule {
         workspaceConfig.projects[
           options.name
         ].architect.build.options.styles = [
-          `xplat/${XplatHelpers.getXplatFoldername(
+          `libs/xplat/${XplatHelpers.getXplatFoldername(
             'web',
             'angular'
-          )}/scss/_index.scss`,
+          )}/scss/src/_index.scss`,
           `apps/${directory}${options.name}/src/styles.scss`,
         ];
       }
