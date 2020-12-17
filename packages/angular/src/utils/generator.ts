@@ -277,7 +277,14 @@ export function generate(type: IGenerateType, options) {
     // add index barrel if needed
     (tree: Tree, context: SchematicContext) =>
       options.needsIndex
-        ? addToFeature('', type, options, 'libs/xplat', tree, '_index')(tree, context)
+        ? addToFeature(
+            '',
+            type,
+            options,
+            'libs/xplat',
+            tree,
+            '_index'
+          )(tree, context)
         : noop()(tree, context),
     // adjust feature module metadata if needed
     (tree: Tree, context: SchematicContext) =>

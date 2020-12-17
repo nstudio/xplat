@@ -41,7 +41,11 @@ export default function (options: XplatHelpers.Schema) {
         // may have already generated support
         return noop()(tree, context);
       } else {
-        return XplatHelpers.addPlatformFiles(options, 'web', 'scss')(tree, context);
+        return XplatHelpers.addPlatformFiles(
+          options,
+          'web',
+          'scss'
+        )(tree, context);
       }
     },
     XplatWebHelpers.updateRootDeps(options),

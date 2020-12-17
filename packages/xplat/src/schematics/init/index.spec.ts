@@ -60,9 +60,15 @@ describe('xplat init', () => {
     // console.log('files:', files);
 
     expect(tree.exists('/libs/xplat/web/core/src/lib/index.ts')).toBeTruthy();
-    expect(tree.exists('/libs/xplat/nativescript/core/src/lib/index.ts')).toBeTruthy();
-    expect(tree.exists('/libs/xplat/web-angular/core/src/lib/index.ts')).toBeFalsy();
-    expect(tree.exists('/libs/xplat/nativescript-angular/core/src/lib/index.ts')).toBeFalsy();
+    expect(
+      tree.exists('/libs/xplat/nativescript/core/src/lib/index.ts')
+    ).toBeTruthy();
+    expect(
+      tree.exists('/libs/xplat/web-angular/core/src/lib/index.ts')
+    ).toBeFalsy();
+    expect(
+      tree.exists('/libs/xplat/nativescript-angular/core/src/lib/index.ts')
+    ).toBeFalsy();
 
     let packageJson = JSON.parse(getFileContent(tree, 'package.json'));
     // console.log(packageJson);

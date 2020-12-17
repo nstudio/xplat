@@ -183,7 +183,10 @@ export function createXplatNativeScriptAngular(
   const frameworkSuffix = framework === 'angular' ? '' : '-angular';
   // tree.create(`/libs/xplat/nativescript${frameworkSuffix}/index.ts`, '');
   // tree.create(`/libs/xplat/nativescript${frameworkSuffix}/package.json`, '');
-  tree.create(`/libs/xplat/nativescript${frameworkSuffix}/core/src/lib/index.ts`, '');
+  tree.create(
+    `/libs/xplat/nativescript${frameworkSuffix}/core/src/lib/index.ts`,
+    ''
+  );
   tree.create(
     `/libs/xplat/nativescript${frameworkSuffix}/core/src/lib/core.module.ts`,
     `import { NgModule, Optional, SkipSelf } from '@angular/core';
@@ -251,7 +254,10 @@ export function createXplatNativeScriptAngular(
     `/libs/xplat/nativescript${frameworkSuffix}/core/src/lib/services/index.ts`,
     `export * from './app.service';`
   );
-  tree.create(`/libs/xplat/nativescript${frameworkSuffix}/features/src/lib/ui/index.ts`, '');
+  tree.create(
+    `/libs/xplat/nativescript${frameworkSuffix}/features/src/lib/ui/index.ts`,
+    ''
+  );
   tree.create(
     `/libs/xplat/nativescript${frameworkSuffix}/features/src/lib/ui/ui.module.ts`,
     `import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
@@ -279,9 +285,18 @@ export function createXplatNativeScriptAngular(
   export class UIModule {}    
   `
   );
-  tree.create(`/libs/xplat/nativescript${frameworkSuffix}/features/src/lib/index.ts`, '');
-  tree.create(`/libs/xplat/nativescript${frameworkSuffix}/scss/src/_variables.scss`, '');
-  tree.create(`/libs/xplat/nativescript${frameworkSuffix}/utils/src/lib/index.ts`, ``);
+  tree.create(
+    `/libs/xplat/nativescript${frameworkSuffix}/features/src/lib/index.ts`,
+    ''
+  );
+  tree.create(
+    `/libs/xplat/nativescript${frameworkSuffix}/scss/src/_variables.scss`,
+    ''
+  );
+  tree.create(
+    `/libs/xplat/nativescript${frameworkSuffix}/utils/src/lib/index.ts`,
+    ``
+  );
 }
 
 export function createXplatWebAngular(tree: Tree, framework?: FrameworkTypes) {
@@ -289,7 +304,10 @@ export function createXplatWebAngular(tree: Tree, framework?: FrameworkTypes) {
   // tree.create(`/libs/xplat/web${frameworkSuffix}/index.ts`, '');
   // tree.create(`/libs/xplat/web${frameworkSuffix}/package.json`, '');
   tree.create(`/libs/xplat/web${frameworkSuffix}/core/src/lib/index.ts`, '');
-  tree.create(`/libs/xplat/web${frameworkSuffix}/features/src/lib/ui/index.ts`, '');
+  tree.create(
+    `/libs/xplat/web${frameworkSuffix}/features/src/lib/ui/index.ts`,
+    ''
+  );
   tree.create(
     `/libs/xplat/web${frameworkSuffix}/features/src/lib/ui/ui.module.ts`,
     `import { NgModule } from '@angular/core';
@@ -317,7 +335,10 @@ export function createXplatWebAngular(tree: Tree, framework?: FrameworkTypes) {
   export class UIModule {}
   `
   );
-  tree.create(`/libs/xplat/web${frameworkSuffix}/features/src/lib/index.ts`, '');
+  tree.create(
+    `/libs/xplat/web${frameworkSuffix}/features/src/lib/index.ts`,
+    ''
+  );
   tree.create(`/libs/xplat/web${frameworkSuffix}/scss/src/_variables.scss`, '');
 }
 

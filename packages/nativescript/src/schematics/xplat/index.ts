@@ -9,7 +9,7 @@ export default function (options: XplatHelpers.Schema) {
     options.skipDependentPlatformFiles
       ? noop()
       : XplatHelpers.addPlatformFiles(options, 'nativescript', 'scss'),
-      options.skipDependentPlatformFiles
+    options.skipDependentPlatformFiles
       ? noop()
       : XplatHelpers.addPlatformFiles(options, 'nativescript', 'utils'),
     XplatNativeScriptHelpers.updateRootDeps(options),

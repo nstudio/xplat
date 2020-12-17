@@ -24,11 +24,19 @@ describe('xplat schematic', () => {
     const tree = await runSchematic('xplat', options, appTree);
     const files = tree.files;
     // console.log(files);
-    expect(files.indexOf('/libs/xplat/core/src/lib/index.ts')).toBeGreaterThanOrEqual(0);
-    expect(files.indexOf('/libs/xplat/features/src/lib/index.ts')).toBeGreaterThanOrEqual(0);
-    expect(files.indexOf('/libs/xplat/scss/src/package.json')).toBeGreaterThanOrEqual(0);
+    expect(
+      files.indexOf('/libs/xplat/core/src/lib/index.ts')
+    ).toBeGreaterThanOrEqual(0);
+    expect(
+      files.indexOf('/libs/xplat/features/src/lib/index.ts')
+    ).toBeGreaterThanOrEqual(0);
+    expect(
+      files.indexOf('/libs/xplat/scss/src/package.json')
+    ).toBeGreaterThanOrEqual(0);
 
-    expect(files.indexOf('/libs/xplat/web/core/src/lib/index.ts')).toBeGreaterThanOrEqual(0);
+    expect(
+      files.indexOf('/libs/xplat/web/core/src/lib/index.ts')
+    ).toBeGreaterThanOrEqual(0);
     expect(
       files.indexOf('/libs/xplat/nativescript/core/src/lib/index.ts')
     ).toBeGreaterThanOrEqual(0);
@@ -40,13 +48,19 @@ describe('xplat schematic', () => {
 
     const tree = await runSchematic('xplat', options, appTree);
     const files = tree.files;
-    expect(files.indexOf('/libs/xplat/web/features/src/lib/items/items.module.ts')).toBe(-1);
-    expect(files.indexOf('/libs/xplat/web/core/src/lib/index.ts')).toBeGreaterThanOrEqual(0);
+    expect(
+      files.indexOf('/libs/xplat/web/features/src/lib/items/items.module.ts')
+    ).toBe(-1);
+    expect(
+      files.indexOf('/libs/xplat/web/core/src/lib/index.ts')
+    ).toBeGreaterThanOrEqual(0);
     expect(
       files.indexOf('/libs/xplat/nativescript/core/src/lib/index.ts')
     ).toBeGreaterThanOrEqual(0);
     expect(
-      files.indexOf('/libs/xplat/nativescript/features/src/lib/items/items.module.ts')
+      files.indexOf(
+        '/libs/xplat/nativescript/features/src/lib/items/items.module.ts'
+      )
     ).toBe(-1);
   });
 
@@ -79,8 +93,12 @@ describe('xplat schematic', () => {
 
     const tree = await runSchematic('xplat', options, appTree);
     const files = tree.files;
-    expect(files.indexOf('/libs/xplat/web/core/src/lib/index.ts')).toBeGreaterThanOrEqual(0);
-    expect(files.indexOf('/libs/xplat/electron/core/src/lib/index.ts')).toBeGreaterThanOrEqual(0);
+    expect(
+      files.indexOf('/libs/xplat/web/core/src/lib/index.ts')
+    ).toBeGreaterThanOrEqual(0);
+    expect(
+      files.indexOf('/libs/xplat/electron/core/src/lib/index.ts')
+    ).toBeGreaterThanOrEqual(0);
     expect(
       files.indexOf('/libs/xplat/nativescript/core/src/lib/index.ts')
     ).toBeGreaterThanOrEqual(-1);
@@ -106,7 +124,9 @@ describe('xplat schematic', () => {
     // let files = tree.files;
     expect(tree.exists('/libs/xplat/web/core/src/lib/index.ts')).toBeTruthy();
     expect(tree.exists('/libs/xplat/ionic/core/src/lib/index.ts')).toBeTruthy();
-    expect(tree.exists('/libs/xplat/nativescript/core/src/lib/index.ts')).toBeFalsy();
+    expect(
+      tree.exists('/libs/xplat/nativescript/core/src/lib/index.ts')
+    ).toBeFalsy();
 
     options.platforms = 'nativescript';
     // let packageFile = jsonParse(getFileContent(tree, 'package.json'));
@@ -119,7 +139,9 @@ describe('xplat schematic', () => {
     // should be unchanged
     expect(tree.exists('/libs/xplat/web/core/src/lib/index.ts')).toBeTruthy();
     expect(tree.exists('/libs/xplat/ionic/core/src/lib/index.ts')).toBeTruthy();
-    expect(tree.exists('/libs/xplat/nativescript/core/src/lib/index.ts')).toBeTruthy();
+    expect(
+      tree.exists('/libs/xplat/nativescript/core/src/lib/index.ts')
+    ).toBeTruthy();
   });
 
   it('should NOT create xplat unless platforms are specified', async () => {

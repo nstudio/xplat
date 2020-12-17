@@ -37,7 +37,9 @@ describe('app', () => {
 
     // should gen xplat structure by default
     expect(tree.exists('/libs/xplat/web/core/src/lib/index.ts')).toBeTruthy();
-    expect(tree.exists('/libs/xplat/web/features/src/lib/index.ts')).toBeTruthy();
+    expect(
+      tree.exists('/libs/xplat/web/features/src/lib/index.ts')
+    ).toBeTruthy();
     expect(tree.exists('/libs/xplat/web/scss/src/_index.scss')).toBeTruthy();
     expect(tree.exists('/libs/xplat/web/scss/src/package.json')).toBeTruthy();
   });

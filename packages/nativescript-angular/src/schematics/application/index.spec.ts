@@ -88,7 +88,9 @@ describe('app', () => {
     expect(files.indexOf('/apps/nativescript-foo/src/package.json')).toBe(-1);
 
     // xplat file defaults
-    expect(tree.exists('/libs/xplat/nativescript/core/src/lib/index.ts')).toBeTruthy();
+    expect(
+      tree.exists('/libs/xplat/nativescript/core/src/lib/index.ts')
+    ).toBeTruthy();
     expect(tree.exists('/libs/xplat/web/core/src/lib/index.ts')).toBeFalsy();
   });
 
@@ -294,7 +296,9 @@ describe('app', () => {
         tree.exists('/apps/nativescript-foo/src/app/app.component.ts')
       ).toBeTruthy();
 
-      expect(tree.exists('/libs/xplat/nativescript/core/src/lib/index.ts')).toBeFalsy();
+      expect(
+        tree.exists('/libs/xplat/nativescript/core/src/lib/index.ts')
+      ).toBeFalsy();
     });
   });
 });

@@ -343,7 +343,11 @@ export namespace XplatAngularHelpers {
       }${libName}/tsconfig.json`;
       let tsConfig: any;
       let needsTsConfigUpdate = false;
-      if (directory && directory.indexOf('nativescript') > -1 && tree.exists(tsConfigPath)) {
+      if (
+        directory &&
+        directory.indexOf('nativescript') > -1 &&
+        tree.exists(tsConfigPath)
+      ) {
         tsConfig = JSON.parse(tree.read(tsConfigPath)!.toString('utf-8'));
         const referenceTypings = `../../../../references.d.ts`;
         if (!tsConfig.files.includes(referenceTypings)) {
@@ -370,11 +374,12 @@ export namespace XplatAngularHelpers {
     libName: string
   ): Rule {
     return (tree: Tree, context: SchematicContext) => {
-      if (libName === 'scss' && tree.exists(`libs/xplat/${libName}/src/package.json`)) {
-        return noop()(tree, context);
-      } else if (
-        tree.exists(`libs/xplat/${libName}/src/lib/index.ts`)
+      if (
+        libName === 'scss' &&
+        tree.exists(`libs/xplat/${libName}/src/package.json`)
       ) {
+        return noop()(tree, context);
+      } else if (tree.exists(`libs/xplat/${libName}/src/lib/index.ts`)) {
         return noop()(tree, context);
       }
 

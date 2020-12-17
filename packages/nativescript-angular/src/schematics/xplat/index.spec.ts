@@ -30,8 +30,12 @@ describe('xplat schematic', () => {
     // const files = tree.files;
     expect(tree.exists('/libs/xplat/core/src/lib/index.ts')).toBeTruthy();
     expect(tree.exists('/libs/xplat/web/src/lib/index.ts')).toBeFalsy();
-    expect(tree.exists('/libs/xplat/nativescript/core/src/lib/index.ts')).toBeTruthy();
-    expect(tree.exists('/libs/xplat/nativescript/features/src/lib/index.ts')).toBeTruthy();
+    expect(
+      tree.exists('/libs/xplat/nativescript/core/src/lib/index.ts')
+    ).toBeTruthy();
+    expect(
+      tree.exists('/libs/xplat/nativescript/features/src/lib/index.ts')
+    ).toBeTruthy();
     expect(
       tree.exists('/libs/xplat/nativescript/features/src/lib/ui/index.ts')
     ).toBeTruthy();
@@ -58,16 +62,13 @@ describe('xplat schematic', () => {
       fileContent.compilerOptions.paths['@testing/xplat/nativescript/features']
     ).toBeTruthy();
 
-    filePath = '/libs/xplat/nativescript/core/tsconfig.json'
+    filePath = '/libs/xplat/nativescript/core/tsconfig.json';
     fileContent = jsonParse(getFileContent(tree, filePath));
     // console.log(fileContent);
     expect(
       fileContent.files.includes('../../../../references.d.ts')
     ).toBeTruthy();
-    expect(
-      fileContent.include.includes('**/*.ts')
-    ).toBeTruthy();
-    
+    expect(fileContent.include.includes('**/*.ts')).toBeTruthy();
   });
 
   it('should create default xplat support with framework suffix when not specifying default', async () => {
@@ -79,12 +80,16 @@ describe('xplat schematic', () => {
     // console.log(tree.files);
     expect(tree.exists('/libs/xplat/core/src/lib/index.ts')).toBeTruthy();
     expect(tree.exists('/libs/xplat/scss/src/_index.scss')).toBeTruthy();
-    expect(tree.exists('/libs/xplat/nativescript-angular/core/src/lib/index.ts')).toBeTruthy();
+    expect(
+      tree.exists('/libs/xplat/nativescript-angular/core/src/lib/index.ts')
+    ).toBeTruthy();
     const filePath = getRootTsConfigPath();
     const fileContent = jsonParse(getFileContent(tree, filePath));
     // console.log(fileContent);
     expect(
-      fileContent.compilerOptions.paths['@testing/xplat/nativescript-angular/core']
+      fileContent.compilerOptions.paths[
+        '@testing/xplat/nativescript-angular/core'
+      ]
     ).toBeTruthy();
   });
 
@@ -95,7 +100,9 @@ describe('xplat schematic', () => {
     options.framework = 'angular';
 
     let tree = await runSchematic('xplat', options, appTree);
-    expect(tree.exists('/libs/xplat/nativescript/core/src/lib/index.ts')).toBeTruthy();
+    expect(
+      tree.exists('/libs/xplat/nativescript/core/src/lib/index.ts')
+    ).toBeTruthy();
     let filePath = getRootTsConfigPath();
     let fileContent = jsonParse(getFileContent(tree, filePath));
     // console.log(fileContent);

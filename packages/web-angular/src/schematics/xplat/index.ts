@@ -30,20 +30,22 @@ export default function (options: XplatHelpers.Schema) {
       // console.log('xplatName:', xplatName);
       return options.skipDependentPlatformFiles
         ? noop()
-        : XplatHelpers.addPlatformFiles(options, xplatFolderName, 'core')(
-            tree,
-            context
-          );
+        : XplatHelpers.addPlatformFiles(
+            options,
+            xplatFolderName,
+            'core'
+          )(tree, context);
     },
     (tree: Tree, context: SchematicContext) => {
       const xplatFolderName = XplatHelpers.getXplatFoldername('web', 'angular');
       // console.log('xplatName:', xplatName);
       return options.skipDependentPlatformFiles
         ? noop()
-        : XplatHelpers.addPlatformFiles(options, xplatFolderName, 'features')(
-            tree,
-            context
-          );
+        : XplatHelpers.addPlatformFiles(
+            options,
+            xplatFolderName,
+            'features'
+          )(tree, context);
     },
     (tree: Tree, context: SchematicContext) => {
       const xplatFolderName = XplatHelpers.getXplatFoldername('web', 'angular');

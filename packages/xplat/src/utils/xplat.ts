@@ -654,7 +654,11 @@ export namespace XplatHelpers {
     };
   }
 
-  export function addPlatformFiles(options: Schema, platform: string, libName: string) {
+  export function addPlatformFiles(
+    options: Schema,
+    platform: string,
+    libName: string
+  ) {
     return (tree: Tree, context: SchematicContext) => {
       let frontendFramework: FrameworkTypes = getFrontendFramework();
       if (tree.exists(`libs/xplat/${platform}/${libName}/src/lib/index.ts`)) {

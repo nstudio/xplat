@@ -4,8 +4,5 @@
     "outDir": "<%= pathOffset %>dist/out-tsc",
     "types": []
   },
-  "files": [
-    "./references.d.ts",
-    "./src/app.ts"
-  ]
+  "files": ["./references.d.ts", "./src/app.ts"]
 }
