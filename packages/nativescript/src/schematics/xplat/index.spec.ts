@@ -34,7 +34,7 @@ describe('xplat schematic', () => {
     const prettier = getFileContent(tree, '.prettierignore');
     // console.log('prettier:', prettier);
     expect(
-      prettier.indexOf('**/xplat/nativescript*/plugins/**/*')
+      prettier.indexOf('**/libs/xplat/nativescript*/plugins/**/*')
     ).toBeGreaterThan(0);
   });
 });

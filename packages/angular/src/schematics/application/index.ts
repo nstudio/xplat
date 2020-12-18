@@ -31,7 +31,6 @@ import {
   getJsonFromFile,
   updateJsonFile,
   supportedPlatforms,
-  checkRootTsConfig,
 } from '@nstudio/xplat-utils';
 import { Schema } from './schema';
 
@@ -104,11 +103,6 @@ export default function (options: Schema) {
         `clean`
       ] = `npx rimraf hooks node_modules package-lock.json && npm i`;
       return updatePackageScripts(tree, scripts);
-    },
-    (tree: Tree) => {
-      // make sure tsconfig exists at root
-      // we do this here because Nrwl with 10.1 was actually removing it
-      checkRootTsConfig(tree);
     },
     <any>formatFiles({ skipFormat: options.skipFormat }),
   ]);

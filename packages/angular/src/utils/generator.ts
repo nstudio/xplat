@@ -469,7 +469,7 @@ export function adjustBarrelIndex(
       const changes = [];
       const name = options.name.toLowerCase();
 
-      if (!isBase) {
+      if (!isBase && type !== 'service') {
         // add to barrel collection
         if (importIfSubFolder && options.subFolder) {
           // import collection from subfolder

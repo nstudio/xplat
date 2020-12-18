@@ -41,7 +41,7 @@
     "postinstall": "node src/utils/postinstall.js"
   },
   "dependencies": {
-    "@nrwl/workspace": "~10.3.0",
+    "@nrwl/workspace": "~11.0.0",
     "@nstudio/focus": "*",
     "@nstudio/xplat-utils": "*",
     "cosmiconfig": "~7.0.0",

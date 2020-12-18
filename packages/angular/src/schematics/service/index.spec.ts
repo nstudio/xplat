@@ -217,7 +217,7 @@ describe('service schematic', () => {
       tree,
       '/libs/xplat/nativescript/core/src/lib/services/index.ts'
     );
-    console.log(content);
+    // console.log(content);
     expect(content.indexOf(`./auth.service`)).toBeGreaterThanOrEqual(0);
 
     let modulePath = '/libs/xplat/nativescript/core/src/lib/core.module.ts';

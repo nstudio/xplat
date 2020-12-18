@@ -52,6 +52,7 @@ export default function (options: Schema) {
     prerun(options),
     // adjust naming convention
     XplatHelpers.applyAppNamingConvention(options, 'nativescript'),
+    XplatNativeScriptHelpers.addReferences(),
     // create app files
     (tree: Tree, context: SchematicContext) =>
       addAppFiles(options, options.name),
@@ -140,7 +141,7 @@ export default function (options: Schema) {
           `   `,
           `nx run ${options.name}:android`,
           `   `,
-          `You can also clean/reset the app anytime with:`,
+          `You can also:`,
           `   `,
           `nx run ${options.name}:clean`,
         ],

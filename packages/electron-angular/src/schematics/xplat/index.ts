@@ -5,8 +5,6 @@ import {
   SchematicContext,
   noop,
 } from '@angular-devkit/schematics';
-import { XplatAngularHelpers } from '@nstudio/angular';
-// import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 import { XplatHelpers } from '@nstudio/xplat';
 import { prerun } from '@nstudio/xplat-utils';
 import { XplatElectronAngularHelpers } from '../../utils';

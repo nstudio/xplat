@@ -192,7 +192,7 @@ export default function (options: Schema) {
           `   `,
           `nx run ${options.name}:android`,
           `   `,
-          `You can also clean/reset the app anytime with:`,
+          `You can also:`,
           `   `,
           `nx run ${options.name}:clean`,
         ],

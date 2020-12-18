@@ -58,7 +58,7 @@ describe('app', () => {
     let checkFile = getFileContent(tree, checkPath);
     // console.log('tsconfig.base:', checkFile);
     expect(files.indexOf(checkPath)).toBeGreaterThanOrEqual(0);
-    expect(files.indexOf('/tsconfig.json')).toBeGreaterThanOrEqual(0);
+    expect(files.indexOf('/tsconfig.base.json')).toBeGreaterThanOrEqual(0);
     expect(files.indexOf('/apps/foo-web/src/main.ts')).toBeGreaterThanOrEqual(
       0
     );

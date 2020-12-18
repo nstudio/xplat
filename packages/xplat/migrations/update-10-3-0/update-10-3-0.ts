@@ -6,7 +6,6 @@ import {
 } from '@angular-devkit/schematics';
 import { createOrUpdate } from '@nrwl/workspace';
 import {
-  checkRootTsConfig,
   getJsonFromFile,
   getAppPaths,
 } from '@nstudio/xplat-utils';
@@ -14,9 +13,6 @@ import {
 export default function (): Rule {
   return chain([
     updateNativeScriptApps,
-    (tree: Tree, context: SchematicContext) => {
-      return checkRootTsConfig(tree);
-    },
   ]);
 }
 

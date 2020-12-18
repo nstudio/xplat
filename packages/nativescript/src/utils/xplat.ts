@@ -1,7 +1,7 @@
 import { Tree, SchematicContext } from '@angular-devkit/schematics';
 import { XplatHelpers } from '@nstudio/xplat';
 import { updateFile } from '@nstudio/xplat-utils';
-import { nsCoreVersion, nsThemeCoreVersion, nodeSassVersion } from './versions';
+import { nsCoreVersion, nsThemeCoreVersion, sassVersion } from './versions';
 
 export namespace XplatNativeScriptHelpers {
   export function updateRootDeps(options: XplatHelpers.Schema) {
@@ -12,10 +12,26 @@ export namespace XplatNativeScriptHelpers {
           'nativescript-theme-core': nsThemeCoreVersion,
         },
         devDependencies: {
-          'node-sass': nodeSassVersion,
+          'sass': sassVersion,
           '@nativescript/types': nsCoreVersion,
         },
       })(tree, context);
+    };
+  }
+
+  export function addReferences() {
+    return (tree: Tree) => {
+      const filename = 'references.d.ts';
+      if (!tree.exists(filename)) {
+        // add references.d.ts
+        tree.create(
+          filename,
+          `/// <reference path="./node_modules/@nativescript/types-ios/index.d.ts" />
+/// <reference path="./node_modules/@nativescript/types-android/lib/android-29.d.ts" />
+`
+        );
+      }
+      return tree;
     };
   }
 
@@ -32,9 +48,9 @@ export namespace XplatNativeScriptHelpers {
 **/apps/*nativescript/hooks/**/*
 **/apps/*nativescript/tools/**/*
 **/apps/*nativescript/src/assets/*.css
-**/xplat/nativescript/scss/fonticons/*.css
-**/xplat/nativescript*/plugins/**/*`,
-      '**/xplat/nativescript/scss/fonticons/*.css'
+**/libs/xplat/nativescript/scss/src/lib/fonticons/*.css
+**/libs/xplat/nativescript*/plugins/**/*`,
+      '**/libs/xplat/nativescript/scss/src/lib/fonticons/*.css'
     );
   }
 

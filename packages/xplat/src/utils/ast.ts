@@ -7,13 +7,6 @@
  */
 import { Rule, Tree, SchematicContext } from '@angular-devkit/schematics';
 import * as ts from 'typescript';
-import * as stripJsonComments from 'strip-json-comments';
-import {
-  serializeJson,
-  updateJsonInTree,
-  readJsonInTree,
-} from '@nrwl/workspace';
-import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 import { readWorkspaceJson } from './general';
 
 function nodesByPosition(first: ts.Node, second: ts.Node): number {

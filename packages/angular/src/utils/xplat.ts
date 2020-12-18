@@ -298,28 +298,4 @@ export namespace XplatAngularHelpers {
       )(tree, context);
     };
   }
-
-  export function addJestConfig(
-    options: any,
-    relativePath: string = './'
-  ): void | Tree | Rule | Promise<void> | Promise<Rule> {
-    return (tree: Tree, context: SchematicContext) => {
-      if (tree.exists('jest.config.js')) {
-        // user may have generated support already
-        return noop()(tree, context);
-      } else {
-        return branchAndMerge(
-          mergeWith(
-            apply(url(`${relativePath}_files`), [
-              template({
-                ...(options as any),
-                ...getDefaultTemplateOptions(),
-              }),
-              move('/'),
-            ])
-          )
-        )(tree, context);
-      }
-    };
-  }
 }

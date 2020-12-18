@@ -6,7 +6,6 @@ import {
   SchematicsException,
   noop,
 } from '@angular-devkit/schematics';
-// import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 import { unsupportedPlatformError, noPlatformError } from '@nstudio/xplat';
 import {
   prerun,

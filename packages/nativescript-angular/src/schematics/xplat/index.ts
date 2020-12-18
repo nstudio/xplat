@@ -9,11 +9,12 @@ import { XplatHelpers } from '@nstudio/xplat';
 import { prerun } from '@nstudio/xplat-utils';
 import { XplatAngularHelpers } from '@nstudio/angular';
 import { XplatNativeScriptAngularHelpers } from '../../utils/xplat';
+import { XplatNativeScriptHelpers } from '@nstudio/nativescript';
 
 export default function (options: XplatHelpers.Schema) {
   return chain([
     prerun(options, true),
-    XplatNativeScriptAngularHelpers.addReferences(),
+    XplatNativeScriptHelpers.addReferences(),
     (tree: Tree, context: SchematicContext) =>
       externalSchematic(
         '@nstudio/nativescript',
