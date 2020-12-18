@@ -2,13 +2,12 @@
 import { Injectable, Inject, NgZone } from '@angular/core';
 
 // nativescript
-import { Device, isIOS, Application } from '@nativescript/core';
-import { DeviceOrientation } from '@nativescript/core/ui/enums';
+import { Device, isIOS, Application, Enums } from '@nativescript/core';
 
 // libs
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
-import { LogService, PlatformLanguageToken } from '@<%= npmScope %>/core';
+import { LogService, PlatformLanguageToken } from '@<%= npmScope %>/xplat/core';
 
 /**
  * This service can be used for low level app wiring
@@ -108,7 +107,7 @@ export class AppService {
 
     // set initial orientation
     let orientation = getOrientation();
-    this.orientation = orientation ? orientation : DeviceOrientation.portrait;
+    this.orientation = orientation ? orientation : Enums.DeviceOrientation.portrait;
     this._log.debug('current orientation:', this.orientation);
 
     // handle orientation changes
@@ -134,12 +133,12 @@ const getOrientation = function() {
       deviceOrientation === UIDeviceOrientation.LandscapeLeft ||
       deviceOrientation === UIDeviceOrientation.LandscapeRight
     ) {
-      return DeviceOrientation.landscape;
+      return Enums.DeviceOrientation.landscape;
     } else if (
       deviceOrientation === UIDeviceOrientation.Portrait ||
       deviceOrientation == UIDeviceOrientation.PortraitUpsideDown
     ) {
-      return DeviceOrientation.portrait;
+      return Enums.DeviceOrientation.portrait;
     } else {
       return '';
     }
@@ -149,12 +148,12 @@ const getOrientation = function() {
       .getConfiguration().orientation;
     switch (orientation) {
       case 1 /* ORIENTATION_PORTRAIT (0x00000001) */:
-        return DeviceOrientation.portrait;
+        return Enums.DeviceOrientation.portrait;
       case 2 /* ORIENTATION_LANDSCAPE (0x00000002) */:
-        return DeviceOrientation.landscape;
+        return Enums.DeviceOrientation.landscape;
       default:
         /* ORIENTATION_UNDEFINED (0x00000000) */
-        return DeviceOrientation.portrait;
+        return Enums.DeviceOrientation.portrait;
     }
   }
 };

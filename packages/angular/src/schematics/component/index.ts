@@ -86,7 +86,7 @@ export default function (options: XplatComponentHelpers.Schema) {
         ? adjustBarrelIndex(
             'component',
             options,
-            `libs/xplat/features/${componentSettings.featureName}/src/lib/base/${options.subFolder}/index.ts`,
+            `libs/xplat/features/src/lib/${componentSettings.featureName}/base/${options.subFolder}/index.ts`,
             false,
             true
           )(tree, context)
@@ -110,7 +110,7 @@ export default function (options: XplatComponentHelpers.Schema) {
         ? adjustBarrelIndex(
             'component',
             options,
-            `libs/xplat/features/${componentSettings.featureName}/src/lib/base/index.ts`,
+            `libs/xplat/features/src/lib/${componentSettings.featureName}/base/index.ts`,
             false,
             true
           )(tree, context)

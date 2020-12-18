@@ -4,12 +4,12 @@ import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { NativeScriptModule, NativeScriptHttpClientModule } from '@nativescript/angular';
 import { Device } from '@nativescript/core';
 import { TNSFontIconModule, USE_STORE } from 'nativescript-ngx-fonticon';
-import { fontAwesomeIcons } from '../utils';
+import { fontAwesomeIcons } from '@<%= npmScope %>/xplat/nativescript/utils';
 
 // libs
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { CoreModule, PlatformLanguageToken, PlatformWindowToken } from '@<%= npmScope %>/core';
-import { throwIfAlreadyLoaded } from '@<%= npmScope %>/utils';
+import { CoreModule, PlatformLanguageToken, PlatformWindowToken } from '@<%= npmScope %>/xplat/core';
+import { throwIfAlreadyLoaded } from '@<%= npmScope %>/xplat/utils';
 
 // app
 import { TNSWindowService } from './services/tns-window.service';

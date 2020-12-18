@@ -262,7 +262,7 @@ function mainContent() {
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 // libs
-import { environment } from '@${getNpmScope()}/core';
+import { environment } from '@${getNpmScope()}/xplat/core';
 
 // app
 import { AppModule } from './app/app.module';
@@ -301,10 +301,10 @@ function appCmpContent() {
   return `import { Component } from '@angular/core';
 
 // xplat
-import { AppBaseComponent } from '@${getNpmScope()}/${XplatHelpers.getXplatFoldername(
+import { AppBaseComponent } from '@${getNpmScope()}/xplat/${XplatHelpers.getXplatFoldername(
     'web',
     'angular'
-  )}';
+  )}/core';
 
 @Component({
     selector: '${getPrefix()}-root',
@@ -405,7 +405,7 @@ function appModuleContent(options) {
   return `import { NgModule } from '@angular/core';
 
 // libs
-import { environment } from '@${getNpmScope()}/core';
+import { environment } from '@${getNpmScope()}/xplat/core';
 
 // app
 import { CoreModule } from './core/core.module';

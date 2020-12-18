@@ -1,8 +1,8 @@
 import { Directive } from '@angular/core';
 
 // libs
-import { BaseComponent } from '@<%= npmScope %>/core';
-import { AppService } from '@<%= npmScope %>/nativescript/core';
+import { BaseComponent } from '@<%= npmScope %>/xplat/core';
+import { AppService } from '@<%= npmScope %>/xplat/nativescript/core';
 
 @Directive()
 export abstract class AppBaseComponent extends BaseComponent {

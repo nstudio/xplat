@@ -25,6 +25,7 @@
     "framework": {
       "type": "string",
       "description": "Frontend framework.",
+      "default": "angular",
       "x-prompt": {
         "message": "Which frontend framework should it use?",
         "type": "list",

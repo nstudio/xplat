@@ -1,4 +1,4 @@
 {
-  "name": "@<%= npmScope %>/nativescript-scss",
+  "name": "@<%= npmScope %>/xplat-nativescript-scss",
   "version": "1.0.0"
 }

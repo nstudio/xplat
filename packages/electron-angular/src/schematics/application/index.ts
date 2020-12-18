@@ -217,7 +217,7 @@ function electronMain() {
   import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
   
   // libs
-  import { environment } from '@${getNpmScope()}/core';
+  import { environment } from '@${getNpmScope()}/xplat/core';
   
   // app
   import { AppElectronModule } from './app/app.electron.module';

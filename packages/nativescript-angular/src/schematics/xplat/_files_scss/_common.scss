@@ -1,5 +1,5 @@
 // shared across all platforms and apps
-@import '~@<%= npmScope %>/scss/index';
+@import '~@<%= npmScope %>/xplat-scss/index';
 
 /**
  * The following are common styles for both iOS and Android (used with any {N} app targets)

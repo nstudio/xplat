@@ -699,7 +699,7 @@ export function adjustFeatureModuleForState(
       );
       // console.log('moduleSource:', moduleSource);
 
-      const isInLibs = modulePath.indexOf('libs') === 0;
+      const isInLibs = modulePath.indexOf('libs/xplat/core') === 0;
       const name = options.name.toLowerCase();
       const changes = [];
       if (moduleSource.indexOf('StoreModule') === -1) {
