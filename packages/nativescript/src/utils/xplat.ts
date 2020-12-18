@@ -12,7 +12,7 @@ export namespace XplatNativeScriptHelpers {
           'nativescript-theme-core': nsThemeCoreVersion,
         },
         devDependencies: {
-          'sass': sassVersion,
+          sass: sassVersion,
           '@nativescript/types': nsCoreVersion,
         },
       })(tree, context);

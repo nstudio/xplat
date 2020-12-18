@@ -8,7 +8,13 @@ export default function (options: XplatHelpers.Schema) {
     prerun(options),
     XplatHelpers.generateLib(options, 'scss', 'xplat/nativescript', 'node', ''),
     XplatHelpers.cleanupLib(options, 'scss', 'xplat/nativescript', ''),
-    XplatHelpers.generateLib(options, 'utils', 'xplat/nativescript', 'node', ''),
+    XplatHelpers.generateLib(
+      options,
+      'utils',
+      'xplat/nativescript',
+      'node',
+      ''
+    ),
     XplatHelpers.cleanupLib(options, 'utils', 'xplat/nativescript', ''),
     options.skipDependentPlatformFiles
       ? noop()

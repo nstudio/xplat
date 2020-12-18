@@ -5,15 +5,10 @@ import {
   Tree,
 } from '@angular-devkit/schematics';
 import { createOrUpdate } from '@nrwl/workspace';
-import {
-  getJsonFromFile,
-  getAppPaths,
-} from '@nstudio/xplat-utils';
+import { getJsonFromFile, getAppPaths } from '@nstudio/xplat-utils';
 
 export default function (): Rule {
-  return chain([
-    updateNativeScriptApps,
-  ]);
+  return chain([updateNativeScriptApps]);
 }
 
 function updateNativeScriptApps(tree: Tree, context: SchematicContext) {

@@ -57,7 +57,7 @@ export namespace XplatNativeScriptAngularHelpers {
         devDependencies: {
           ...angularDevDeps,
           '@ngtools/webpack': ngToolsWebpack,
-          'sass': sassVersion,
+          sass: sassVersion,
         },
       })(tree, context);
     };
