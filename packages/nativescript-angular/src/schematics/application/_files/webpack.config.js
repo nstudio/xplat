@@ -95,33 +95,32 @@ module.exports = env => {
   
   if (isXplatWorkspace) {
     // add environment to tsconfig to avoid warning
-    const hasConfig = configuration !== 'undefined';
+    const hasConfig = configuration !== 'undefined' && !!configuration;
     // default to dev environment
     let envConfig = hasConfig ? configuration : 'dev';
     const envFileBasePath = `src/environments/environment.`;
     const envConfigPath = `${envFileBasePath}${envConfig}.ts`;
-    if (!hasConfig) {
-      // ensure default environment is handled
-      const rootPath = '<%= pathOffset %>';
-      fileReplacements[resolve(__dirname, rootPath, `libs/xplat/core/src/lib/environments/environment.ts`)] = resolve(
-        __dirname,
-        envConfigPath
-      );
-    }
-    const tsConfigData = require(tsConfigPath);
-    if (!tsConfigData.files) {
-      tsConfigData.files = [];
-    }
-    const envFilePath = `./${envConfigPath}`;
-    const envFileIndex = tsConfigData.files.findIndex((f) => f.indexOf(envFileBasePath) > -1 && f !== envFilePath);
-    if (envFileIndex > -1) {
-      // remove any existing environment entries
-      tsConfigData.files.splice(envFileIndex, 1);
-    }
-    if (!tsConfigData.files.includes(envFilePath)) {
-      // add environment
-      tsConfigData.files.push(envFilePath);
-      fs.writeFileSync(tsConfigPath, JSON.stringify(tsConfigData, null, 2));
+    const appEnvConfigPath = resolve(projectRoot, envConfigPath);
+    if (fs.existsSync(appEnvConfigPath)) {
+      if (!hasConfig) {
+        // ensure default environment is handled
+        fileReplacements[resolve(projectRoot, '<%= pathOffset %>', `libs/xplat/core/src/lib/environments/environment.ts`)] = appEnvConfigPath;
+      }
+      const tsConfigData = require(tsConfigPath);
+      if (!tsConfigData.files) {
+        tsConfigData.files = [];
+      }
+      const envFilePath = `./${envConfigPath}`;
+      const envFileIndex = tsConfigData.files.findIndex((f) => f.indexOf(envFileBasePath) > -1 && f !== envFilePath);
+      if (envFileIndex > -1) {
+        // remove any existing environment entries
+        tsConfigData.files.splice(envFileIndex, 1);
+      }
+      if (!tsConfigData.files.includes(envFilePath)) {
+        // add environment
+        tsConfigData.files.push(envFilePath);
+        fs.writeFileSync(tsConfigPath, JSON.stringify(tsConfigData, null, 2));
+      }
     }
   }
 
@@ -132,7 +131,7 @@ module.exports = env => {
     Array.isArray(env.externals) &&
     env.externals.some(e => e.indexOf('@nativescript') > -1);
   if (platform === 'ios' && !areCoreModulesExternal && !testing) {
-    entries['tns_modules/@nativescript/core/inspector_modules'] =
+    entries['tns_modules/inspector_modules'] =
       'inspector_modules';
   }
 

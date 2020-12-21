@@ -40,7 +40,7 @@ function insertAfterLastOccurrence(
 
 export function findNodes(
   node: ts.Node,
-  kind: ts.SyntaxKind,
+  kind: ts.SyntaxKind | ts.SyntaxKind[],
   max = Infinity
 ): ts.Node[] {
   if (!node || max == 0) {
@@ -48,7 +48,10 @@ export function findNodes(
   }
 
   const arr: ts.Node[] = [];
-  if (node.kind === kind) {
+  const hasMatch = Array.isArray(kind)
+    ? kind.includes(node.kind)
+    : node.kind === kind;
+  if (hasMatch) {
     arr.push(node);
     max--;
   }
@@ -164,9 +167,9 @@ export class ReplaceChange implements Change {
 
   constructor(
     public path: string,
-    private pos: number,
-    private oldText: string,
-    private newText: string
+    public pos: number,
+    public oldText: string,
+    public newText: string
   ) {
     if (pos < 0) {
       throw new Error('Negative positions are invalid');
@@ -338,22 +341,25 @@ export function addGlobal(
   }
 }
 
-export function insert(host: Tree, modulePath: string, changes: any[]) {
+export function insert(host: Tree, modulePath: string, changes: Change[]) {
   if (changes.length < 1) {
     return;
   }
+
+  // sort changes so that the highest pos goes first
+  const orderedChanges = changes.sort((a, b) => b.order - a.order) as any;
+
   const recorder = host.beginUpdate(modulePath);
-  for (const change of changes) {
-    if (change.type === 'insert') {
+  for (const change of orderedChanges) {
+    if (change.type == 'insert') {
       recorder.insertLeft(change.pos, change.toAdd);
-    } else if (change.type === 'remove') {
-      recorder.remove((<any>change).pos - 1, (<any>change).toRemove.length + 1);
+    } else if (change.type == 'remove') {
+      recorder.remove(change.pos - 1, change.toRemove.length + 1);
+    } else if (change.type == 'replace') {
+      recorder.remove(change.pos, change.oldText.length);
+      recorder.insertLeft(change.pos, change.newText);
     } else if (change.type === 'noop') {
       // do nothing
-    } else if (change.type === 'replace') {
-      const action = <any>change;
-      recorder.remove(action.pos, action.oldText.length);
-      recorder.insertLeft(action.pos, action.newText);
     } else {
       throw new Error(`Unexpected Change '${change.constructor.name}'`);
     }

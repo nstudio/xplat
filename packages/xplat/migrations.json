@@ -5,10 +5,10 @@
       "description": "Migrate workspace to 10.2.0",
       "factory": "./migrations/update-10-2-0/update-10-2-0"
     },
-    "update-to-10.3.0": {
-      "version": "10.3.0",
-      "description": "Migrate workspace to 10.3.0",
-      "factory": "./migrations/update-10-3-0/update-10-3-0"
+    "update-to-11.0.1": {
+      "version": "11.0.1",
+      "description": "Migrate workspace to 11.0.1",
+      "factory": "./migrations/update-11-0-1/update-11-0-1"
     }
   }
 }
