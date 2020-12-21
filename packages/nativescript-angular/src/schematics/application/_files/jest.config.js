@@ -7,15 +7,15 @@ module.exports = {
       stringifyContentPathRegex: '\\.(html|svg)$',
       astTransformers: [
         'jest-preset-angular/build/InlineFilesTransformer',
-        'jest-preset-angular/build/StripStylesTransformer'
-      ]
-    }
+        'jest-preset-angular/build/StripStylesTransformer',
+      ],
+    },
   },
   coverageDirectory: '<%= pathOffset %>coverage/apps/<%= directoryAppPath %>',
   snapshotSerializers: [
     'jest-preset-angular/build/AngularNoNgAttributesSnapshotSerializer.js',
     'jest-preset-angular/build/AngularSnapshotSerializer.js',
-    'jest-preset-angular/build/HTMLCommentSerializer.js'
+    'jest-preset-angular/build/HTMLCommentSerializer.js',
   ],
-  displayName: '<%= utils.sanitize(appname) %>'
+  displayName: '<%= utils.sanitize(appname) %>',
 };
