@@ -380,13 +380,23 @@ function updateNativeScriptApps() {
       }
 
       if (tree.exists(`${dirPath}/src/app.android.scss`)) {
-        let scssUpdate = tree.read(`${dirPath}/src/app.android.scss`)!.toString('utf-8');
-        scssUpdate = scssUpdate.replace('/nativescript-scss', '/xplat-nativescript-scss');
+        let scssUpdate = tree
+          .read(`${dirPath}/src/app.android.scss`)!
+          .toString('utf-8');
+        scssUpdate = scssUpdate.replace(
+          '/nativescript-scss',
+          '/xplat-nativescript-scss'
+        );
         createOrUpdate(tree, `${dirPath}/src/app.android.scss`, scssUpdate);
       }
       if (tree.exists(`${dirPath}/src/app.ios.scss`)) {
-        let scssUpdate = tree.read(`${dirPath}/src/app.ios.scss`)!.toString('utf-8');
-        scssUpdate = scssUpdate.replace('/nativescript-scss', '/xplat-nativescript-scss');
+        let scssUpdate = tree
+          .read(`${dirPath}/src/app.ios.scss`)!
+          .toString('utf-8');
+        scssUpdate = scssUpdate.replace(
+          '/nativescript-scss',
+          '/xplat-nativescript-scss'
+        );
         createOrUpdate(tree, `${dirPath}/src/app.ios.scss`, scssUpdate);
       }
 
@@ -558,7 +568,9 @@ function getCurrentlyUsedPlatforms(tree: Tree) {
   ) {
     const npmScope = getNpmScope();
     importsToUpdateMapping[`@${npmScope}/core`] = `@${npmScope}/xplat/core`;
-    importsToUpdateMapping[`@${npmScope}/core/base`] = `@${npmScope}/xplat/core`;
+    importsToUpdateMapping[
+      `@${npmScope}/core/base`
+    ] = `@${npmScope}/xplat/core`;
     importsToUpdateMapping[
       `@${npmScope}/features`
     ] = `@${npmScope}/xplat/features`;
@@ -576,10 +588,14 @@ function getCurrentlyUsedPlatforms(tree: Tree) {
     if (!newDirectoriesToEmpty.includes('/libs/xplat/scss/src')) {
       newDirectoriesToEmpty.push('/libs/xplat/scss/src');
       oldDirectoriesToMove.push('/libs/scss');
-      createOrUpdate(tree, `/libs/scss/package.json`, `{
+      createOrUpdate(
+        tree,
+        `/libs/scss/package.json`,
+        `{
         "name": "@${npmScope}/xplat-scss",
         "version": "1.0.0"
-      }`);
+      }`
+      );
     }
     if (!newDirectoriesToEmpty.includes('/libs/xplat/utils/src/lib')) {
       newDirectoriesToEmpty.push('/libs/xplat/utils/src/lib');
@@ -622,13 +638,22 @@ function getCurrentlyUsedPlatforms(tree: Tree) {
       if (!newDirectoriesToEmpty.includes('/libs/xplat/ionic/scss/src')) {
         newDirectoriesToEmpty.push('/libs/xplat/ionic/scss/src');
         oldDirectoriesToMove.push('/xplat/ionic/scss');
-        createOrUpdate(tree, `/xplat/ionic/scss/package.json`, `{
+        createOrUpdate(
+          tree,
+          `/xplat/ionic/scss/package.json`,
+          `{
           "name": "@${npmScope}/xplat-ionic-scss",
           "version": "1.0.0"
-        }`);
+        }`
+        );
         if (tree.exists(`/xplat/ionic/scss/_index.scss`)) {
-          let scssUpdate = tree.read(`/xplat/ionic/scss/_index.scss`)!.toString('utf-8');
-          scssUpdate = scssUpdate.replace(`@${npmScope}/scss/index`, `@${npmScope}/xplat-scss/index`);
+          let scssUpdate = tree
+            .read(`/xplat/ionic/scss/_index.scss`)!
+            .toString('utf-8');
+          scssUpdate = scssUpdate.replace(
+            `@${npmScope}/scss/index`,
+            `@${npmScope}/xplat-scss/index`
+          );
           createOrUpdate(tree, `/xplat/ionic/scss/_index.scss`, scssUpdate);
         }
       }
@@ -668,14 +693,27 @@ function getCurrentlyUsedPlatforms(tree: Tree) {
       ) {
         newDirectoriesToEmpty.push('/libs/xplat/nativescript/scss/src');
         oldDirectoriesToMove.push('/xplat/nativescript/scss');
-        createOrUpdate(tree, `/xplat/nativescript/scss/package.json`, `{
+        createOrUpdate(
+          tree,
+          `/xplat/nativescript/scss/package.json`,
+          `{
           "name": "@${npmScope}/xplat-nativescript-scss",
           "version": "1.0.0"
-        }`);
+        }`
+        );
         if (tree.exists(`/xplat/nativescript/scss/_common.scss`)) {
-          let scssUpdate = tree.read(`/xplat/nativescript/scss/_common.scss`)!.toString('utf-8');
-          scssUpdate = scssUpdate.replace(`@${npmScope}/scss/index`, `@${npmScope}/xplat-scss/index`);
-          createOrUpdate(tree, `/xplat/nativescript/scss/_common.scss`, scssUpdate);
+          let scssUpdate = tree
+            .read(`/xplat/nativescript/scss/_common.scss`)!
+            .toString('utf-8');
+          scssUpdate = scssUpdate.replace(
+            `@${npmScope}/scss/index`,
+            `@${npmScope}/xplat-scss/index`
+          );
+          createOrUpdate(
+            tree,
+            `/xplat/nativescript/scss/_common.scss`,
+            scssUpdate
+          );
         }
       }
       if (
@@ -689,7 +727,9 @@ function getCurrentlyUsedPlatforms(tree: Tree) {
       importsToUpdateMapping[
         `@${npmScope}/nativescript`
       ] = `@${npmScope}/xplat/nativescript/core`;
-      importsToUpdateMapping[`@${npmScope}/nativescript/core`] = `@${npmScope}/xplat/nativescript/core`;
+      importsToUpdateMapping[
+        `@${npmScope}/nativescript/core`
+      ] = `@${npmScope}/xplat/nativescript/core`;
       importsToUpdateMapping[
         `@${npmScope}/nativescript/features`
       ] = `@${npmScope}/xplat/nativescript/features`;
@@ -715,20 +755,31 @@ function getCurrentlyUsedPlatforms(tree: Tree) {
       if (!newDirectoriesToEmpty.includes('/libs/xplat/web/scss/src')) {
         newDirectoriesToEmpty.push('/libs/xplat/web/scss/src');
         oldDirectoriesToMove.push('/xplat/web/scss');
-        createOrUpdate(tree, `/xplat/web/scss/package.json`, `{
+        createOrUpdate(
+          tree,
+          `/xplat/web/scss/package.json`,
+          `{
           "name": "@${npmScope}/xplat-web-scss",
           "version": "1.0.0"
-        }`);
+        }`
+        );
         if (tree.exists(`/xplat/web/scss/_index.scss`)) {
-          let scssUpdate = tree.read(`/xplat/web/scss/_index.scss`)!.toString('utf-8');
-          scssUpdate = scssUpdate.replace(`@${npmScope}/scss/index`, `@${npmScope}/xplat-scss/index`);
+          let scssUpdate = tree
+            .read(`/xplat/web/scss/_index.scss`)!
+            .toString('utf-8');
+          scssUpdate = scssUpdate.replace(
+            `@${npmScope}/scss/index`,
+            `@${npmScope}/xplat-scss/index`
+          );
           createOrUpdate(tree, `/xplat/web/scss/_index.scss`, scssUpdate);
         }
       }
       importsToUpdateMapping[
         `@${npmScope}/web`
       ] = `@${npmScope}/xplat/web/core`;
-      importsToUpdateMapping[`@${npmScope}/web/core`] = `@${npmScope}/xplat/web/core`;
+      importsToUpdateMapping[
+        `@${npmScope}/web/core`
+      ] = `@${npmScope}/xplat/web/core`;
       importsToUpdateMapping[
         `@${npmScope}/web/features`
       ] = `@${npmScope}/xplat/web/features`;
