@@ -7,7 +7,11 @@ import {
   SchematicContext,
   Tree,
 } from '@angular-devkit/schematics';
-import { createOrUpdate, getWorkspace } from '@nrwl/workspace';
+import {
+  createOrUpdate,
+  getWorkspace,
+  getWorkspacePath,
+} from '@nrwl/workspace';
 import {
   getJsonFromFile,
   getAppPaths,
@@ -17,9 +21,15 @@ import {
   getGroupByName,
   updateJsonFile,
 } from '@nstudio/xplat-utils';
-import { XplatHelpers, findNodes, ReplaceChange, insert } from '@nstudio/xplat';
+import {
+  XplatHelpers,
+  findNodes,
+  ReplaceChange,
+  insert,
+  updateTsConfig,
+} from '@nstudio/xplat';
+// import xplatAngular from '@nstudio/angular/src/schematics/xplat/index';
 import * as ts from 'typescript';
-import { updateTsConfig } from '@nstudio/xplat/src/utils';
 import { join } from 'path';
 import * as fs from 'fs';
 
@@ -35,42 +45,68 @@ const newDirectoriesToEmpty: Array<string> = [];
 let platforms: Array<string>;
 export default function (): Rule {
   return chain([
-    prerun(),
+    prerun(
+      {
+        framework: 'angular',
+      },
+      true
+    ),
     // generate new xplat libs
-    (tree: Tree, context: SchematicContext) => {
-      platforms = getCurrentlyUsedPlatforms(tree);
-      console.log('generating libs for platforms:', platforms);
-      if (platforms.length) {
-        return externalSchematic(
-          '@nstudio/angular',
-          'xplat',
-          {
-            platforms,
-            framework: 'angular',
-            npmScope: getNpmScope(),
-            prefix: getPrefix(),
-            skipFormat: true,
-            useXplat: true,
-            groupByName: getGroupByName(),
-          },
-          { interactive: false }
-        )(tree, context);
-      } else {
-        return noop()(tree, context);
-      }
-    },
+    // NOTE: this did not work with Nx 11 -
+    // calling externalSchematic's from outside collections do not seem to work (not sure if expected or not from running Nx migrations)
+    // (tree: Tree, context: SchematicContext) => {
+    //   platforms = getCurrentlyUsedPlatforms(tree);
+    //   console.log('generating libs for platforms:', platforms);
+    //   if (platforms.length) {
+    //     return xplatAngular({
+    //       platforms: platforms.join(','),
+    //       framework: 'angular',
+    //       npmScope: getNpmScope(),
+    //       prefix: getPrefix(),
+    //       skipFormat: true,
+    //       useXplat: true,
+    //       groupByName: getGroupByName(),
+    //     });
+    //   } else {
+    //     return noop()(tree, context);
+    //   }
+    // },
     // clear the new libs and prepare to move existing into it
-    emptyNewStructure,
+    emptyNewStructure(),
     // update imports throughout old lib architecture and apps
     updateImports(),
     // move old structure into new
-    moveOldStructureToNew,
+    moveOldStructureToNew(),
     // update apps
-    updateNativeScriptApps,
+    updateNativeScriptApps(),
     // update root deps
-    updateRootDeps,
+    updateRootDeps(),
     // remove old testing
-    deleteTestingDir,
+    deleteTestingDir(),
+    // remove old nx projects
+    (tree: Tree) => {
+      const path = 'nx.json';
+      const nxJson = getJsonFromFile(tree, path);
+      if (nxJson && nxJson.projects) {
+        delete nxJson.projects['libs'];
+        delete nxJson.projects['xplat'];
+        return updateJsonFile(tree, path, nxJson);
+      } else {
+        return noop();
+      }
+    },
+    // remove old workspace projects
+    (tree: Tree) => {
+      const workspacePath = getWorkspacePath(tree);
+      const workspaceJson = getJsonFromFile(tree, workspacePath);
+      if (workspaceJson && workspaceJson.projects) {
+        delete workspaceJson.projects['libs'];
+        delete workspaceJson.projects['xplat'];
+        return updateJsonFile(tree, workspacePath, workspaceJson);
+      } else {
+        return noop();
+      }
+    },
     // remove old tsconfig settings
     (tree: Tree, context: SchematicContext) => {
       return updateTsConfig(tree, (tsConfig: any) => {
@@ -112,85 +148,107 @@ export default function (): Rule {
   ]);
 }
 
-function emptyNewStructure(tree: Tree, context: SchematicContext) {
-  newDirectoriesToEmpty
-    .map((dir) => tree.getDir(dir))
-    .forEach((projectDir) => {
-      projectDir.visit((file) => {
-        console.log('emptyNewStructure', ' DELETE ', file);
-        tree.delete(file);
+function emptyNewStructure() {
+  return (tree: Tree, context: SchematicContext) => {
+    platforms = getCurrentlyUsedPlatforms(tree);
+    newDirectoriesToEmpty
+      .map((dir) => tree.getDir(dir))
+      .forEach((projectDir) => {
+        projectDir.visit((file) => {
+          // console.log('emptyNewStructure', ' DELETE ', file);
+          tree.delete(file);
+        });
       });
-    });
 
-  return tree;
+    return tree;
+  };
 }
 
-function deleteTestingDir(tree: Tree, context: SchematicContext) {
-  ['testing']
-    .map((dir) => tree.getDir(dir))
-    .forEach((projectDir) => {
-      projectDir.visit((file) => {
-        tree.delete(file);
+function deleteTestingDir() {
+  return (tree: Tree, context: SchematicContext) => {
+    ['testing']
+      .map((dir) => tree.getDir(dir))
+      .forEach((projectDir) => {
+        projectDir.visit((file) => {
+          tree.delete(file);
+        });
       });
-    });
 
-  return tree;
+    return tree;
+  };
 }
 
-function moveOldStructureToNew(tree: Tree, context: SchematicContext) {
-  return tree;
+function moveOldStructureToNew() {
+  return (tree: Tree, context: SchematicContext) => {
+    oldDirectoriesToMove
+      .map((dir) => tree.getDir(dir))
+      .forEach((projectDir) => {
+        projectDir.visit((file) => {
+          let moveTo: string;
+          let srcTarget = '/src';
+          if (file.indexOf('scss') === -1) {
+            srcTarget += '/lib';
+          }
+          if (file.indexOf('/libs') === 0) {
+            const pathTarget = projectDir.path.split('/').pop();
+            moveTo = file.replace(
+              projectDir.path,
+              `/libs/xplat/${pathTarget}${srcTarget}`
+            );
+          } else if (file.indexOf('/xplat') === 0) {
+            moveTo = file.replace(
+              projectDir.path,
+              `/libs${projectDir.path}${srcTarget}`
+            );
+          }
+          // console.log('moveOldStructureToNew', ' rename ', file);
+          // console.log('moveOldStructureToNew', ' moveTo ', moveTo);
+          tree.rename(file, moveTo);
+        });
+      });
+
+    return tree;
+  };
 }
 
-function updateRootDeps(tree: Tree, context: SchematicContext) {
-  tree.delete('tsconfig.json');
-  const dependencies = {};
-  const devDependencies = {};
-  const packageJson = getJsonFromFile(tree, 'package.json');
-  const npmScope = getNpmScope();
-  delete packageJson.dependencies[`@${npmScope}/scss`];
-  dependencies[`@${npmScope}/xplat-scss`] = 'file:libs/xplat/scss/src';
-  delete packageJson.devDependencies[`node-sass`];
-  devDependencies['sass'] = '~1.30.0';
+function updateRootDeps() {
+  return (tree: Tree, context: SchematicContext) => {
+    tree.delete('tsconfig.json');
+    const packagePath = 'package.json';
+    const packageJson = getJsonFromFile(tree, packagePath);
 
-  for (const key of Object.keys(packageJson.devDependencies)) {
-    if (key.indexOf('@nstudio') > -1) {
-      devDependencies[key] = '11.0.0';
+    const npmScope = getNpmScope();
+    delete packageJson.dependencies[`@${npmScope}/scss`];
+    packageJson.dependencies[`@${npmScope}/xplat-scss`] =
+      'file:libs/xplat/scss/src';
+    delete packageJson.devDependencies[`node-sass`];
+    packageJson.devDependencies['sass'] = '~1.30.0';
+
+    for (const key of Object.keys(packageJson.devDependencies)) {
+      if (key.indexOf('@nstudio') > -1) {
+        packageJson.devDependencies[key] = '11.0.0';
+      }
     }
-  }
 
-  return XplatHelpers.updatePackageForXplat(options, {
-    dependencies: {
-      ...dependencies,
-    },
-    devDependencies: {
-      ...devDependencies,
-    },
-  })(tree, context);
+    return updateJsonFile(tree, packagePath, packageJson);
+  };
 }
 
 export function updateImports() {
-  return async (tree: Tree, _context: SchematicContext): Promise<void> => {
-    const workspace = await getWorkspace(tree);
-    // collect application directories
-    for (const projectName of Object.keys(workspace.projects)) {
-      if (
-        workspace.projects[projectName] &&
-        workspace.projects[projectName].projectType === 'application'
-      ) {
-        directoriesToUpdateImports.push(workspace.projects[projectName].root);
-      }
-    }
-    console.log(
-      'updateImports',
-      'directoriesToUpdateImports:',
-      directoriesToUpdateImports
-    );
+  return (tree: Tree, _context: SchematicContext) => {
+    // console.log(
+    //   'updateImports',
+    //   'directoriesToUpdateImports:',
+    //   directoriesToUpdateImports
+    // );
+    const npmScope = getNpmScope();
+    directoriesToUpdateImports.push('/apps');
     directoriesToUpdateImports
       .map((dir) => tree.getDir(dir))
       .forEach((projectDir) => {
         projectDir.visit((file) => {
           // only look at .(j|t)s(x) files
-          if (!/(j|t)sx?$/.test(file)) {
+          if (!/ts?$/.test(file)) {
             return;
           }
           // if it doesn't contain at least 1 reference to the packages to be renamed bail out
@@ -202,7 +260,7 @@ export function updateImports() {
           ) {
             return;
           }
-          console.log('updateImports', 'found old import in:', file);
+          // console.log('updateImports', 'found old import in:', file);
 
           const astSource = ts.createSourceFile(
             file,
@@ -212,6 +270,30 @@ export function updateImports() {
           );
           const changes = Object.entries(importsToUpdateMapping)
             .map(([packageName, newPackageName]) => {
+              if (file.indexOf('apps/') > -1) {
+                // ensure core vs. shared is handled
+                if (file.indexOf('core.module') > -1) {
+                  if (file.indexOf('electron') > -1) {
+                    newPackageName = `@${npmScope}/xplat/electron/core`;
+                  } else if (file.indexOf('ionic') > -1) {
+                    newPackageName = `@${npmScope}/xplat/ionic/core`;
+                  } else if (file.indexOf('nativescript') > -1) {
+                    newPackageName = `@${npmScope}/xplat/nativescript/core`;
+                  } else if (file.indexOf('web') > -1) {
+                    newPackageName = `@${npmScope}/xplat/web/core`;
+                  }
+                } else if (file.indexOf('shared.module') > -1) {
+                  if (file.indexOf('electron') > -1) {
+                    newPackageName = `@${npmScope}/xplat/electron/features`;
+                  } else if (file.indexOf('ionic') > -1) {
+                    newPackageName = `@${npmScope}/xplat/ionic/features`;
+                  } else if (file.indexOf('nativescript') > -1) {
+                    newPackageName = `@${npmScope}/xplat/nativescript/features`;
+                  } else if (file.indexOf('web') > -1) {
+                    newPackageName = `@${npmScope}/xplat/web/features`;
+                  }
+                }
+              }
               const nodes = findNodes(
                 astSource,
                 ts.SyntaxKind.ImportDeclaration
@@ -248,58 +330,71 @@ export function updateImports() {
   };
 }
 
-function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
-  const nativeScriptAppsPaths = getAppPaths(tree, 'nativescript');
-  const npmScope = getNpmScope();
-  // update {N} apps and configs
-  for (const dirPath of nativeScriptAppsPaths) {
-    // console.log(dir);
-    console.log('{N} appDir:', dirPath);
-    const relativePath = dirPath
-      .split('/')
-      .filter((p) => !!p)
-      .map((p) => '..')
-      .join('/');
+function updateNativeScriptApps() {
+  return (tree: Tree, context: SchematicContext) => {
+    const nativeScriptAppsPaths = getAppPaths(tree, 'nativescript');
+    const npmScope = getNpmScope();
+    // update {N} apps and configs
+    for (const dirPath of nativeScriptAppsPaths) {
+      // console.log(dir);
+      // console.log('{N} appDir:', dirPath);
+      const relativePath = dirPath
+        .split('/')
+        .filter((p) => !!p)
+        .map((p) => '..')
+        .join('/');
 
-    const cwd = process.cwd();
-    const webpackConfigPath = join(
-      cwd,
-      'node_modules/@nstudio/nativescript-angular/src/schematics/application/_files/webpack.config.js'
-    );
-    // console.log('webpackConfigPath:', webpackConfigPath);
-    const webpackConfig = fs.readFileSync(webpackConfigPath, 'UTF-8');
-    createOrUpdate(tree, `${dirPath}/webpack.config.js`, webpackConfig);
+      const cwd = process.cwd();
+      const webpackConfigPath = join(
+        cwd,
+        'node_modules/@nstudio/nativescript-angular/src/schematics/application/_files/webpack.config.js'
+      );
+      // console.log('webpackConfigPath:', webpackConfigPath);
+      const webpackConfig = fs.readFileSync(webpackConfigPath, 'UTF-8');
+      createOrUpdate(tree, `${dirPath}/webpack.config.js`, webpackConfig);
 
-    // update {N} app deps
-    const packagePath = `${dirPath}/package.json`;
-    const packageJson = getJsonFromFile(tree, packagePath);
+      // update {N} app deps
+      const packagePath = `${dirPath}/package.json`;
+      const packageJson = getJsonFromFile(tree, packagePath);
 
-    if (packageJson) {
-      packageJson.dependencies = packageJson.dependencies || {};
-      delete packageJson.dependencies[`@${npmScope}/scss`];
-      delete packageJson.dependencies[`@${npmScope}/nativescript`];
-      const updatedDeps: any = {};
-      updatedDeps[
-        `@${npmScope}/xplat-nativescript-scss`
-      ] = `file:${relativePath}/libs/xplat/nativescript/scss/src`;
-      updatedDeps[
-        `@${npmScope}/xplat-scss`
-      ] = `file:${relativePath}/libs/xplat/scss/src`;
-      packageJson.dependencies = {
-        ...packageJson.dependencies,
-        ...updatedDeps,
-      };
+      if (packageJson) {
+        packageJson.dependencies = packageJson.dependencies || {};
+        delete packageJson.dependencies[`@${npmScope}/scss`];
+        delete packageJson.dependencies[`@${npmScope}/nativescript-scss`];
+        delete packageJson.dependencies[`@${npmScope}/nativescript`];
+        const updatedDeps: any = {};
+        updatedDeps[
+          `@${npmScope}/xplat-nativescript-scss`
+        ] = `file:${relativePath}/libs/xplat/nativescript/scss/src`;
+        updatedDeps[
+          `@${npmScope}/xplat-scss`
+        ] = `file:${relativePath}/libs/xplat/scss/src`;
+        packageJson.dependencies = {
+          ...packageJson.dependencies,
+          ...updatedDeps,
+        };
 
-      // console.log('path:',path);
-      // console.log('packageJson overwrite:', JSON.stringify(packageJson));
-      tree = updateJsonFile(tree, packagePath, packageJson);
-    }
+        // console.log('path:',path);
+        // console.log('packageJson overwrite:', JSON.stringify(packageJson));
+        tree = updateJsonFile(tree, packagePath, packageJson);
+      }
 
-    tree.delete(`${dirPath}/tsconfig.env.json`);
-    createOrUpdate(
-      tree,
-      `${dirPath}/tsconfig.app.json`,
-      `{
+      if (tree.exists(`${dirPath}/src/app.android.scss`)) {
+        let scssUpdate = tree.read(`${dirPath}/src/app.android.scss`)!.toString('utf-8');
+        scssUpdate = scssUpdate.replace('/nativescript-scss', '/xplat-nativescript-scss');
+        createOrUpdate(tree, `${dirPath}/src/app.android.scss`, scssUpdate);
+      }
+      if (tree.exists(`${dirPath}/src/app.ios.scss`)) {
+        let scssUpdate = tree.read(`${dirPath}/src/app.ios.scss`)!.toString('utf-8');
+        scssUpdate = scssUpdate.replace('/nativescript-scss', '/xplat-nativescript-scss');
+        createOrUpdate(tree, `${dirPath}/src/app.ios.scss`, scssUpdate);
+      }
+
+      tree.delete(`${dirPath}/tsconfig.env.json`);
+      createOrUpdate(
+        tree,
+        `${dirPath}/tsconfig.app.json`,
+        `{
         "extends": "./tsconfig.json",
         "compilerOptions": {
           "outDir": "${relativePath}/dist/out-tsc",
@@ -310,11 +405,11 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
           "./src/main.ts"
         ]
       }`
-    );
-    createOrUpdate(
-      tree,
-      `${dirPath}/tsconfig.editor.json`,
-      `{
+      );
+      createOrUpdate(
+        tree,
+        `${dirPath}/tsconfig.editor.json`,
+        `{
         "extends": "./tsconfig.json",
         "include": ["**/*.ts"],
         "compilerOptions": {
@@ -322,11 +417,11 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
         }
       }
       `
-    );
-    createOrUpdate(
-      tree,
-      `${dirPath}/tsconfig.json`,
-      `{
+      );
+      createOrUpdate(
+        tree,
+        `${dirPath}/tsconfig.json`,
+        `{
         "extends": "${relativePath}/tsconfig.base.json",
         "files": [],
         "include": [],
@@ -343,11 +438,11 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
         ]
       }      
       `
-    );
-    createOrUpdate(
-      tree,
-      `${dirPath}/tsconfig.spec.json`,
-      `{
+      );
+      createOrUpdate(
+        tree,
+        `${dirPath}/tsconfig.spec.json`,
+        `{
         "extends": "./tsconfig.json",
         "compilerOptions": {
           "outDir": "${relativePath}/dist/out-tsc",
@@ -358,21 +453,21 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
         "include": ["**/*.spec.ts", "**/*.d.ts"]
       }      
       `
-    );
-    createOrUpdate(
-      tree,
-      `${dirPath}/src/test-setup.ts`,
-      `import 'jest-preset-angular';`
-    );
-    createOrUpdate(
-      tree,
-      `${dirPath}/references.d.ts`,
-      `/// <reference path="${relativePath}/references.d.ts" />`
-    );
-    createOrUpdate(
-      tree,
-      `${dirPath}/jest.config.js`,
-      `module.exports = {
+      );
+      createOrUpdate(
+        tree,
+        `${dirPath}/src/test-setup.ts`,
+        `import 'jest-preset-angular';`
+      );
+      createOrUpdate(
+        tree,
+        `${dirPath}/references.d.ts`,
+        `/// <reference path="${relativePath}/references.d.ts" />`
+      );
+      createOrUpdate(
+        tree,
+        `${dirPath}/jest.config.js`,
+        `module.exports = {
         preset: '${relativePath}/jest.preset.js',
         setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
         globals: {
@@ -394,11 +489,11 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
         displayName: '${dirPath.split('/').pop()}'
       };
       `
-    );
-    createOrUpdate(
-      tree,
-      `${dirPath}/.eslintrc.json`,
-      `{
+      );
+      createOrUpdate(
+        tree,
+        `${dirPath}/.eslintrc.json`,
+        `{
         "extends": "${relativePath}/.eslintrc.json",
         "ignorePatterns": [
           "!**/*"
@@ -448,10 +543,11 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
         ]
       }
       `
-    );
-  }
+      );
+    }
 
-  return tree;
+    return tree;
+  };
 }
 
 function getCurrentlyUsedPlatforms(tree: Tree) {
@@ -462,6 +558,7 @@ function getCurrentlyUsedPlatforms(tree: Tree) {
   ) {
     const npmScope = getNpmScope();
     importsToUpdateMapping[`@${npmScope}/core`] = `@${npmScope}/xplat/core`;
+    importsToUpdateMapping[`@${npmScope}/core/base`] = `@${npmScope}/xplat/core`;
     importsToUpdateMapping[
       `@${npmScope}/features`
     ] = `@${npmScope}/xplat/features`;
@@ -479,6 +576,10 @@ function getCurrentlyUsedPlatforms(tree: Tree) {
     if (!newDirectoriesToEmpty.includes('/libs/xplat/scss/src')) {
       newDirectoriesToEmpty.push('/libs/xplat/scss/src');
       oldDirectoriesToMove.push('/libs/scss');
+      createOrUpdate(tree, `/libs/scss/package.json`, `{
+        "name": "@${npmScope}/xplat-scss",
+        "version": "1.0.0"
+      }`);
     }
     if (!newDirectoriesToEmpty.includes('/libs/xplat/utils/src/lib')) {
       newDirectoriesToEmpty.push('/libs/xplat/utils/src/lib');
@@ -486,7 +587,9 @@ function getCurrentlyUsedPlatforms(tree: Tree) {
     }
     // collect which platforms were currently used
     if (tree.exists('/xplat/electron/index.ts')) {
-      platforms.push('electron');
+      if (!platforms.includes('electron')) {
+        platforms.push('electron');
+      }
       newDirectoriesToEmpty.push('/libs/xplat/electron/core/src/lib');
       importsToUpdateMapping[
         `@${npmScope}/electron`
@@ -503,7 +606,9 @@ function getCurrentlyUsedPlatforms(tree: Tree) {
       }
     }
     if (tree.exists('/xplat/ionic/index.ts')) {
-      platforms.push('ionic');
+      if (!platforms.includes('ionic')) {
+        platforms.push('ionic');
+      }
       if (!newDirectoriesToEmpty.includes('/libs/xplat/ionic/core/src/lib')) {
         newDirectoriesToEmpty.push('/libs/xplat/ionic/core/src/lib');
         oldDirectoriesToMove.push('/xplat/ionic/core');
@@ -517,6 +622,15 @@ function getCurrentlyUsedPlatforms(tree: Tree) {
       if (!newDirectoriesToEmpty.includes('/libs/xplat/ionic/scss/src')) {
         newDirectoriesToEmpty.push('/libs/xplat/ionic/scss/src');
         oldDirectoriesToMove.push('/xplat/ionic/scss');
+        createOrUpdate(tree, `/xplat/ionic/scss/package.json`, `{
+          "name": "@${npmScope}/xplat-ionic-scss",
+          "version": "1.0.0"
+        }`);
+        if (tree.exists(`/xplat/ionic/scss/_index.scss`)) {
+          let scssUpdate = tree.read(`/xplat/ionic/scss/_index.scss`)!.toString('utf-8');
+          scssUpdate = scssUpdate.replace(`@${npmScope}/scss/index`, `@${npmScope}/xplat-scss/index`);
+          createOrUpdate(tree, `/xplat/ionic/scss/_index.scss`, scssUpdate);
+        }
       }
       importsToUpdateMapping[
         `@${npmScope}/ionic`
@@ -532,7 +646,9 @@ function getCurrentlyUsedPlatforms(tree: Tree) {
       }
     }
     if (tree.exists('/xplat/nativescript/index.ts')) {
-      platforms.push('nativescript');
+      if (!platforms.includes('nativescript')) {
+        platforms.push('nativescript');
+      }
       if (
         !newDirectoriesToEmpty.includes('/libs/xplat/nativescript/core/src/lib')
       ) {
@@ -552,6 +668,15 @@ function getCurrentlyUsedPlatforms(tree: Tree) {
       ) {
         newDirectoriesToEmpty.push('/libs/xplat/nativescript/scss/src');
         oldDirectoriesToMove.push('/xplat/nativescript/scss');
+        createOrUpdate(tree, `/xplat/nativescript/scss/package.json`, `{
+          "name": "@${npmScope}/xplat-nativescript-scss",
+          "version": "1.0.0"
+        }`);
+        if (tree.exists(`/xplat/nativescript/scss/_common.scss`)) {
+          let scssUpdate = tree.read(`/xplat/nativescript/scss/_common.scss`)!.toString('utf-8');
+          scssUpdate = scssUpdate.replace(`@${npmScope}/scss/index`, `@${npmScope}/xplat-scss/index`);
+          createOrUpdate(tree, `/xplat/nativescript/scss/_common.scss`, scssUpdate);
+        }
       }
       if (
         !newDirectoriesToEmpty.includes(
@@ -564,6 +689,7 @@ function getCurrentlyUsedPlatforms(tree: Tree) {
       importsToUpdateMapping[
         `@${npmScope}/nativescript`
       ] = `@${npmScope}/xplat/nativescript/core`;
+      importsToUpdateMapping[`@${npmScope}/nativescript/core`] = `@${npmScope}/xplat/nativescript/core`;
       importsToUpdateMapping[
         `@${npmScope}/nativescript/features`
       ] = `@${npmScope}/xplat/nativescript/features`;
@@ -575,7 +701,9 @@ function getCurrentlyUsedPlatforms(tree: Tree) {
       }
     }
     if (tree.exists('/xplat/web/index.ts')) {
-      platforms.push('web');
+      if (!platforms.includes('web')) {
+        platforms.push('web');
+      }
       if (!newDirectoriesToEmpty.includes('/libs/xplat/web/core/src/lib')) {
         newDirectoriesToEmpty.push('/libs/xplat/web/core/src/lib');
         oldDirectoriesToMove.push('/xplat/web/core');
@@ -587,10 +715,20 @@ function getCurrentlyUsedPlatforms(tree: Tree) {
       if (!newDirectoriesToEmpty.includes('/libs/xplat/web/scss/src')) {
         newDirectoriesToEmpty.push('/libs/xplat/web/scss/src');
         oldDirectoriesToMove.push('/xplat/web/scss');
+        createOrUpdate(tree, `/xplat/web/scss/package.json`, `{
+          "name": "@${npmScope}/xplat-web-scss",
+          "version": "1.0.0"
+        }`);
+        if (tree.exists(`/xplat/web/scss/_index.scss`)) {
+          let scssUpdate = tree.read(`/xplat/web/scss/_index.scss`)!.toString('utf-8');
+          scssUpdate = scssUpdate.replace(`@${npmScope}/scss/index`, `@${npmScope}/xplat-scss/index`);
+          createOrUpdate(tree, `/xplat/web/scss/_index.scss`, scssUpdate);
+        }
       }
       importsToUpdateMapping[
         `@${npmScope}/web`
       ] = `@${npmScope}/xplat/web/core`;
+      importsToUpdateMapping[`@${npmScope}/web/core`] = `@${npmScope}/xplat/web/core`;
       importsToUpdateMapping[
         `@${npmScope}/web/features`
       ] = `@${npmScope}/xplat/web/features`;
