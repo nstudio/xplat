@@ -166,15 +166,19 @@ function emptyNewStructure() {
 
 function deleteTestingDir() {
   return (tree: Tree, context: SchematicContext) => {
-    ['testing']
-      .map((dir) => tree.getDir(dir))
-      .forEach((projectDir) => {
-        projectDir.visit((file) => {
-          tree.delete(file);
+    if (tree.exists('/testing/test.libs.ts')) {
+      ['testing']
+        .map((dir) => tree.getDir(dir))
+        .forEach((projectDir) => {
+          projectDir.visit((file) => {
+            tree.delete(file);
+          });
         });
-      });
 
-    return tree;
+      return tree;
+    } else {
+      return noop();
+    }
   };
 }
 
@@ -213,7 +217,9 @@ function moveOldStructureToNew() {
 
 function updateRootDeps() {
   return (tree: Tree, context: SchematicContext) => {
-    tree.delete('tsconfig.json');
+    if (tree.exists('tsconfig.json')) {
+      tree.delete('tsconfig.json');
+    }
     const packagePath = 'package.json';
     const packageJson = getJsonFromFile(tree, packagePath);
 
@@ -247,8 +253,14 @@ export function updateImports() {
       .map((dir) => tree.getDir(dir))
       .forEach((projectDir) => {
         projectDir.visit((file) => {
-          // only look at .(j|t)s(x) files
-          if (!/ts?$/.test(file)) {
+          // only look at .ts files
+          // ignore some directories in various apps
+          if (
+            !/^.*\.ts$/.test(file) ||
+            file.indexOf('/node_modules/') === -1 ||
+            file.indexOf('/platforms/ios') === -1 ||
+            file.indexOf('/platforms/android') === -1
+          ) {
             return;
           }
           // if it doesn't contain at least 1 reference to the packages to be renamed bail out
@@ -400,7 +412,9 @@ function updateNativeScriptApps() {
         createOrUpdate(tree, `${dirPath}/src/app.ios.scss`, scssUpdate);
       }
 
-      tree.delete(`${dirPath}/tsconfig.env.json`);
+      if (tree.exists(`${dirPath}/tsconfig.env.json`)) {
+        tree.delete(`${dirPath}/tsconfig.env.json`);
+      }
       createOrUpdate(
         tree,
         `${dirPath}/tsconfig.app.json`,
