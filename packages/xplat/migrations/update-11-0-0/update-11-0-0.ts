@@ -53,6 +53,7 @@ export default function (): Rule {
     // generate new xplat libs
     // NOTE: this did not work with Nx 11 -
     // calling externalSchematic's from outside collections do not seem to work (not sure if expected or not from running Nx migrations)
+    // This may have worked better being split into a migration by itself with no other rules in the chain
     // (tree: Tree, context: SchematicContext) => {
     //   platforms = getCurrentlyUsedPlatforms(tree);
     //   console.log('generating libs for platforms:', platforms);
@@ -75,7 +76,7 @@ export default function (): Rule {
     // move old structure into new
     moveOldStructureToNew(),
     // update apps
-    updateNativeScriptApps(),
+    updateAppConfigs(),
     // update root deps
     updateRootDeps(),
     // remove old testing
@@ -165,7 +166,10 @@ function emptyNewStructure() {
 
 function deleteTestingDir() {
   return (tree: Tree, context: SchematicContext) => {
-    if (tree.exists('/testing/test.libs.ts')) {
+    if (
+      tree.exists('/testing/test.libs.ts') ||
+      tree.exists('/testing/jest.libs.config.js')
+    ) {
       ['testing']
         .map((dir) => tree.getDir(dir))
         .forEach((projectDir) => {
@@ -233,8 +237,59 @@ function updateRootDeps() {
   };
 }
 
-function updateNativeScriptApps() {
+function updateAppConfigs() {
   return (tree: Tree, context: SchematicContext) => {
+    const webAppsPaths = getAppPaths(tree, 'web');
+    for (const dirPath of webAppsPaths) {
+      const relativePath = dirPath
+        .split('/')
+        .filter((p) => !!p)
+        .map((p) => '..')
+        .join('/');
+
+      createOrUpdate(
+        tree,
+        `${dirPath}/tsconfig.json`,
+        `{
+        "extends": "${relativePath}/tsconfig.base.json",
+        "compilerOptions": {
+    "types": [
+      "node",
+      "jest"
+    ]
+  },
+  "include": [
+    "**/*.ts"
+  ]
+      }      
+      `
+      );
+
+      createOrUpdate(
+        tree,
+        `${dirPath}/tsconfig.app.json`,
+        `{
+          "extends": "./tsconfig.json",
+          "compilerOptions": {
+            "outDir": "${relativePath}/dist/out-tsc",
+            "types": []
+          },
+          "files": [
+            "src/main.ts",
+            "src/polyfills.ts"
+          ],
+          "include": [
+            "src/test.ts"
+          ],
+          "exclude": [
+            "src/test-setup.ts",
+            "**/*.spec.ts"
+          ]
+        }  
+      `
+      );
+    }
+
     const nativeScriptAppsPaths = getAppPaths(tree, 'nativescript');
     const npmScope = getNpmScope();
     // update {N} apps and configs
@@ -402,7 +457,7 @@ function updateNativeScriptApps() {
             ]
           }
         },
-        coverageDirectory: '${relativePath}/coverage/${dirPath}',
+        coverageDirectory: '${relativePath}/coverage${dirPath}',
         snapshotSerializers: [
           'jest-preset-angular/build/AngularNoNgAttributesSnapshotSerializer.js',
           'jest-preset-angular/build/AngularSnapshotSerializer.js',

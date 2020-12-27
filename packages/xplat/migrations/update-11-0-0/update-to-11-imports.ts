@@ -57,33 +57,59 @@ export function updateImports() {
   return (tree: Tree, _context: SchematicContext) => {
     const npmScope = getNpmScope();
     importsToUpdateMapping[`@${npmScope}/core`] = `@${npmScope}/xplat/core`;
-    importsToUpdateMapping[
-      `@${npmScope}/core/base`
-    ] = `@${npmScope}/xplat/core`;
+    importsToUpdateMapping[`@${npmScope}/core/*`] = `@${npmScope}/xplat/core`;
     importsToUpdateMapping[
       `@${npmScope}/features`
     ] = `@${npmScope}/xplat/features`;
+    importsToUpdateMapping[
+      `@${npmScope}/features/*`
+    ] = `@${npmScope}/xplat/features`;
     importsToUpdateMapping[`@${npmScope}/utils`] = `@${npmScope}/xplat/utils`;
+    importsToUpdateMapping[`@${npmScope}/utils/*`] = `@${npmScope}/xplat/utils`;
     // collect which platforms were currently used
 
     importsToUpdateMapping[
       `@${npmScope}/electron`
     ] = `@${npmScope}/xplat/electron/core`;
     importsToUpdateMapping[
+      `@${npmScope}/electron/core`
+    ] = `@${npmScope}/xplat/electron/core`;
+    importsToUpdateMapping[
+      `@${npmScope}/electron/core/*`
+    ] = `@${npmScope}/xplat/electron/core`;
+    importsToUpdateMapping[
       `@${npmScope}/electron/features`
     ] = `@${npmScope}/xplat/electron/features`;
     importsToUpdateMapping[
+      `@${npmScope}/electron/features/*`
+    ] = `@${npmScope}/xplat/electron/features`;
+    importsToUpdateMapping[
       `@${npmScope}/electron/utils`
+    ] = `@${npmScope}/xplat/electron/utils`;
+    importsToUpdateMapping[
+      `@${npmScope}/electron/utils/*`
     ] = `@${npmScope}/xplat/electron/utils`;
 
     importsToUpdateMapping[
       `@${npmScope}/ionic`
     ] = `@${npmScope}/xplat/ionic/core`;
     importsToUpdateMapping[
+      `@${npmScope}/ionic/core`
+    ] = `@${npmScope}/xplat/ionic/core`;
+    importsToUpdateMapping[
+      `@${npmScope}/ionic/core/*`
+    ] = `@${npmScope}/xplat/ionic/core`;
+    importsToUpdateMapping[
       `@${npmScope}/ionic/features`
     ] = `@${npmScope}/xplat/ionic/features`;
     importsToUpdateMapping[
+      `@${npmScope}/ionic/features/*`
+    ] = `@${npmScope}/xplat/ionic/features`;
+    importsToUpdateMapping[
       `@${npmScope}/ionic/utils`
+    ] = `@${npmScope}/xplat/ionic/utils`;
+    importsToUpdateMapping[
+      `@${npmScope}/ionic/utils/*`
     ] = `@${npmScope}/xplat/ionic/utils`;
 
     importsToUpdateMapping[
@@ -93,10 +119,19 @@ export function updateImports() {
       `@${npmScope}/nativescript/core`
     ] = `@${npmScope}/xplat/nativescript/core`;
     importsToUpdateMapping[
+      `@${npmScope}/nativescript/core/*`
+    ] = `@${npmScope}/xplat/nativescript/core`;
+    importsToUpdateMapping[
       `@${npmScope}/nativescript/features`
     ] = `@${npmScope}/xplat/nativescript/features`;
     importsToUpdateMapping[
+      `@${npmScope}/nativescript/features/*`
+    ] = `@${npmScope}/xplat/nativescript/features`;
+    importsToUpdateMapping[
       `@${npmScope}/nativescript/utils`
+    ] = `@${npmScope}/xplat/nativescript/utils`;
+    importsToUpdateMapping[
+      `@${npmScope}/nativescript/utils/*`
     ] = `@${npmScope}/xplat/nativescript/utils`;
 
     importsToUpdateMapping[`@${npmScope}/web`] = `@${npmScope}/xplat/web/core`;
@@ -104,10 +139,19 @@ export function updateImports() {
       `@${npmScope}/web/core`
     ] = `@${npmScope}/xplat/web/core`;
     importsToUpdateMapping[
+      `@${npmScope}/web/core/*`
+    ] = `@${npmScope}/xplat/web/core`;
+    importsToUpdateMapping[
       `@${npmScope}/web/features`
     ] = `@${npmScope}/xplat/web/features`;
     importsToUpdateMapping[
+      `@${npmScope}/web/features/*`
+    ] = `@${npmScope}/xplat/web/features`;
+    importsToUpdateMapping[
       `@${npmScope}/web/utils`
+    ] = `@${npmScope}/xplat/web/utils`;
+    importsToUpdateMapping[
+      `@${npmScope}/web/utils/*`
     ] = `@${npmScope}/xplat/web/utils`;
     // console.log(
     //   'updateImports',
@@ -136,6 +180,7 @@ export function updateImports() {
               contents.includes(packageName)
             )
           ) {
+            // also check some relative paths which are common
             return;
           }
           // console.log('updateImports', 'found old import in:', file);
@@ -179,11 +224,22 @@ export function updateImports() {
 
               return nodes
                 .filter((node) => {
-                  return (
-                    // remove quotes from module name
-                    node.moduleSpecifier.getText().slice(1).slice(0, -1) ===
-                    packageName
-                  );
+                  // remove quotes from module name
+                  const rawImportModuleText = node.moduleSpecifier
+                    .getText()
+                    .slice(1)
+                    .slice(0, -1);
+                  if (packageName.indexOf('*') > -1) {
+                    // replace deep imports
+                    return (
+                      rawImportModuleText.indexOf(
+                        packageName.replace('*', '')
+                      ) === 0
+                    );
+                  } else {
+                    // replace exact matches
+                    return rawImportModuleText === packageName;
+                  }
                 })
                 .map(
                   (node) =>

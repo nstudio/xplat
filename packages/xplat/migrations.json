@@ -6,54 +6,59 @@
       "factory": "./migrations/update-10-2-0/update-10-2-0"
     },
     "update-to-11.0.0": {
-      "version": "11.0.3-rc.6",
+      "version": "11.0.3-rc.7",
       "description": "Migrate workspace to 11.0.0",
       "factory": "./migrations/update-11-0-0/update-11-0-0"
     },
     "update-to-11-imports": {
-      "version": "11.0.3-rc.6",
+      "version": "11.0.3-rc.7",
       "description": "Migrate workspace to use v11 import barrels",
       "factory": "./migrations/update-11-0-0/update-to-11-imports"
+    },
+    "update-to-11-env-base": {
+      "version": "11.0.3-rc.7",
+      "description": "Migrate workspace to use v11 env base option",
+      "factory": "./migrations/update-11-0-0/update-to-11-env-base"
     }
   },
   "packageJsonUpdates": {
-    "11.0.3-rc.6": {
-      "version": "11.0.3-rc.6",
+    "11.0.3-rc.7": {
+      "version": "11.0.3-rc.7",
       "packages": {
         "@nstudio/angular": {
-          "version": "11.0.3-rc.6",
+          "version": "11.0.3-rc.7",
           "alwaysAddToPackageJson": false
         },
         "@nstudio/electron": {
-          "version": "11.0.3-rc.6",
+          "version": "11.0.3-rc.7",
           "alwaysAddToPackageJson": false
         },
         "@nstudio/electron-angular": {
-          "version": "11.0.3-rc.6",
+          "version": "11.0.3-rc.7",
           "alwaysAddToPackageJson": false
         },
         "@nstudio/ionic": {
-          "version": "11.0.3-rc.6",
+          "version": "11.0.3-rc.7",
           "alwaysAddToPackageJson": false
         },
         "@nstudio/ionic-angular": {
-          "version": "11.0.3-rc.6",
+          "version": "11.0.3-rc.7",
           "alwaysAddToPackageJson": false
         },
         "@nstudio/nativescript": {
-          "version": "11.0.3-rc.6",
+          "version": "11.0.3-rc.7",
           "alwaysAddToPackageJson": false
         },
         "@nstudio/nativescript-angular": {
-          "version": "11.0.3-rc.6",
+          "version": "11.0.3-rc.7",
           "alwaysAddToPackageJson": false
         },
         "@nstudio/web": {
-          "version": "11.0.3-rc.6",
+          "version": "11.0.3-rc.7",
           "alwaysAddToPackageJson": false
         },
         "@nstudio/web-angular": {
-          "version": "11.0.3-rc.6",
+          "version": "11.0.3-rc.7",
           "alwaysAddToPackageJson": false
         }
       }
