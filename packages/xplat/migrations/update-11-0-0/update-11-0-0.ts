@@ -20,6 +20,7 @@ import {
   getPrefix,
   getGroupByName,
   updateJsonFile,
+  updateFile,
 } from '@nstudio/xplat-utils';
 import {
   XplatHelpers,
@@ -38,8 +39,6 @@ export interface PackageNameMapping {
 }
 
 const options: XplatHelpers.Schema = {};
-const importsToUpdateMapping: PackageNameMapping = {};
-const directoriesToUpdateImports: Array<string> = [];
 const oldDirectoriesToMove: Array<string> = [];
 const newDirectoriesToEmpty: Array<string> = [];
 let platforms: Array<string>;
@@ -73,8 +72,6 @@ export default function (): Rule {
     // },
     // clear the new libs and prepare to move existing into it
     emptyNewStructure(),
-    // update imports throughout old lib architecture and apps
-    updateImports(),
     // move old structure into new
     moveOldStructureToNew(),
     // update apps
@@ -83,6 +80,8 @@ export default function (): Rule {
     updateRootDeps(),
     // remove old testing
     deleteTestingDir(),
+    // cleanup gitignore
+    cleanupGitIgnore(),
     // remove old nx projects
     (tree: Tree) => {
       const path = 'nx.json';
@@ -230,115 +229,7 @@ function updateRootDeps() {
     delete packageJson.devDependencies[`node-sass`];
     packageJson.devDependencies['sass'] = '~1.30.0';
 
-    for (const key of Object.keys(packageJson.devDependencies)) {
-      if (key.indexOf('@nstudio') > -1) {
-        packageJson.devDependencies[key] = '11.0.0';
-      }
-    }
-
     return updateJsonFile(tree, packagePath, packageJson);
-  };
-}
-
-export function updateImports() {
-  return (tree: Tree, _context: SchematicContext) => {
-    // console.log(
-    //   'updateImports',
-    //   'directoriesToUpdateImports:',
-    //   directoriesToUpdateImports
-    // );
-    const npmScope = getNpmScope();
-    directoriesToUpdateImports.push('/apps');
-    directoriesToUpdateImports
-      .map((dir) => tree.getDir(dir))
-      .forEach((projectDir) => {
-        projectDir.visit((file) => {
-          // only look at .ts files
-          // ignore some directories in various apps
-          if (
-            !/^.*\.ts$/.test(file) ||
-            file.indexOf('/node_modules/') === -1 ||
-            file.indexOf('/platforms/ios') === -1 ||
-            file.indexOf('/platforms/android') === -1
-          ) {
-            return;
-          }
-          // if it doesn't contain at least 1 reference to the packages to be renamed bail out
-          const contents = tree.read(file).toString('utf-8');
-          if (
-            !Object.keys(importsToUpdateMapping).some((packageName) =>
-              contents.includes(packageName)
-            )
-          ) {
-            return;
-          }
-          // console.log('updateImports', 'found old import in:', file);
-
-          const astSource = ts.createSourceFile(
-            file,
-            contents,
-            ts.ScriptTarget.Latest,
-            true
-          );
-          const changes = Object.entries(importsToUpdateMapping)
-            .map(([packageName, newPackageName]) => {
-              if (file.indexOf('apps/') > -1) {
-                // ensure core vs. shared is handled
-                if (file.indexOf('core.module') > -1) {
-                  if (file.indexOf('electron') > -1) {
-                    newPackageName = `@${npmScope}/xplat/electron/core`;
-                  } else if (file.indexOf('ionic') > -1) {
-                    newPackageName = `@${npmScope}/xplat/ionic/core`;
-                  } else if (file.indexOf('nativescript') > -1) {
-                    newPackageName = `@${npmScope}/xplat/nativescript/core`;
-                  } else if (file.indexOf('web') > -1) {
-                    newPackageName = `@${npmScope}/xplat/web/core`;
-                  }
-                } else if (file.indexOf('shared.module') > -1) {
-                  if (file.indexOf('electron') > -1) {
-                    newPackageName = `@${npmScope}/xplat/electron/features`;
-                  } else if (file.indexOf('ionic') > -1) {
-                    newPackageName = `@${npmScope}/xplat/ionic/features`;
-                  } else if (file.indexOf('nativescript') > -1) {
-                    newPackageName = `@${npmScope}/xplat/nativescript/features`;
-                  } else if (file.indexOf('web') > -1) {
-                    newPackageName = `@${npmScope}/xplat/web/features`;
-                  }
-                }
-              }
-              const nodes = findNodes(
-                astSource,
-                ts.SyntaxKind.ImportDeclaration
-              ) as ts.ImportDeclaration[];
-
-              return nodes
-                .filter((node) => {
-                  return (
-                    // remove quotes from module name
-                    node.moduleSpecifier.getText().slice(1).slice(0, -1) ===
-                    packageName
-                  );
-                })
-                .map(
-                  (node) =>
-                    new ReplaceChange(
-                      file,
-                      node.moduleSpecifier.getStart(),
-                      node.moduleSpecifier.getText(),
-                      `'${newPackageName}'`
-                    )
-                );
-            })
-            // .flatMap()/.flat() is not available? So, here's a flat poly
-            .reduce((acc, val) => acc.concat(val), []);
-
-          // if the reference to packageName was in fact an import statement
-          if (changes.length > 0) {
-            // update the file in the tree
-            insert(tree, file, changes);
-          }
-        });
-      });
   };
 }
 
@@ -389,6 +280,13 @@ function updateNativeScriptApps() {
         // console.log('path:',path);
         // console.log('packageJson overwrite:', JSON.stringify(packageJson));
         tree = updateJsonFile(tree, packagePath, packageJson);
+      }
+
+      const gitIgnorePath = `${dirPath}/.gitignore`;
+      let gitIgnore = tree.get(gitIgnorePath).content.toString();
+      if (gitIgnore) {
+        gitIgnore = gitIgnore.replace('*.js', '*.js\n!jest.config.js');
+        tree.overwrite(gitIgnorePath, gitIgnore);
       }
 
       if (tree.exists(`${dirPath}/src/app.android.scss`)) {
@@ -574,6 +472,32 @@ function updateNativeScriptApps() {
   };
 }
 
+function cleanupGitIgnore() {
+  return (tree: Tree) => {
+    const gitIgnorePath = '.gitignore';
+    let gitIgnore = tree.get(gitIgnorePath).content.toString();
+    if (gitIgnore) {
+      gitIgnore = gitIgnore.replace('# libs', '');
+      gitIgnore = gitIgnore.replace('libs/**/*.js', '');
+      gitIgnore = gitIgnore.replace('libs/**/*.map', '');
+      gitIgnore = gitIgnore.replace('libs/**/*.d.ts', '');
+      gitIgnore = gitIgnore.replace('libs/**/*.metadata.json', '');
+      gitIgnore = gitIgnore.replace('libs/**/*.ngfactory.ts', '');
+      gitIgnore = gitIgnore.replace('libs/**/*.ngsummary.json', '');
+
+      gitIgnore = gitIgnore.replace('xplat/**/*.js', '');
+      gitIgnore = gitIgnore.replace('xplat/**/*.map', '');
+      gitIgnore = gitIgnore.replace('xplat/**/*.d.ts', '');
+      gitIgnore = gitIgnore.replace('xplat/**/*.metadata.json', '');
+      gitIgnore = gitIgnore.replace('xplat/**/*.ngfactory.ts', '');
+      gitIgnore = gitIgnore.replace('xplat/**/*.ngsummary.json', '');
+    }
+
+    return updateFile(tree, gitIgnorePath, gitIgnore);
+  };
+  
+}
+
 function getCurrentlyUsedPlatforms(tree: Tree) {
   const platforms = [];
   if (
@@ -581,27 +505,17 @@ function getCurrentlyUsedPlatforms(tree: Tree) {
     tree.exists('/libs/features/index.ts')
   ) {
     const npmScope = getNpmScope();
-    importsToUpdateMapping[`@${npmScope}/core`] = `@${npmScope}/xplat/core`;
-    importsToUpdateMapping[
-      `@${npmScope}/core/base`
-    ] = `@${npmScope}/xplat/core`;
-    importsToUpdateMapping[
-      `@${npmScope}/features`
-    ] = `@${npmScope}/xplat/features`;
-    importsToUpdateMapping[`@${npmScope}/utils`] = `@${npmScope}/xplat/utils`;
-    if (!directoriesToUpdateImports.includes('/libs/core')) {
-      directoriesToUpdateImports.push('/libs/core');
+    if (!oldDirectoriesToMove.includes('/libs/core')) {
       oldDirectoriesToMove.push('/libs/core');
       newDirectoriesToEmpty.push('/libs/xplat/core/src/lib');
     }
-    if (!directoriesToUpdateImports.includes('/libs/features')) {
-      directoriesToUpdateImports.push('/libs/features');
+    if (!oldDirectoriesToMove.includes('/libs/features')) {
       oldDirectoriesToMove.push('/libs/features');
       newDirectoriesToEmpty.push('/libs/xplat/features/src/lib');
     }
-    if (!newDirectoriesToEmpty.includes('/libs/xplat/scss/src')) {
-      newDirectoriesToEmpty.push('/libs/xplat/scss/src');
+    if (!oldDirectoriesToMove.includes('/libs/scss')) {
       oldDirectoriesToMove.push('/libs/scss');
+      newDirectoriesToEmpty.push('/libs/xplat/scss/src');
       createOrUpdate(
         tree,
         `/libs/scss/package.json`,
@@ -611,47 +525,37 @@ function getCurrentlyUsedPlatforms(tree: Tree) {
       }`
       );
     }
-    if (!newDirectoriesToEmpty.includes('/libs/xplat/utils/src/lib')) {
-      newDirectoriesToEmpty.push('/libs/xplat/utils/src/lib');
+    if (!oldDirectoriesToMove.includes('/libs/utils')) {
       oldDirectoriesToMove.push('/libs/utils');
+      newDirectoriesToEmpty.push('/libs/xplat/utils/src/lib');
     }
     // collect which platforms were currently used
     if (tree.exists('/xplat/electron/index.ts')) {
       if (!platforms.includes('electron')) {
         platforms.push('electron');
       }
-      newDirectoriesToEmpty.push('/libs/xplat/electron/core/src/lib');
-      importsToUpdateMapping[
-        `@${npmScope}/electron`
-      ] = `@${npmScope}/xplat/electron/core`;
-      importsToUpdateMapping[
-        `@${npmScope}/electron/features`
-      ] = `@${npmScope}/xplat/electron/features`;
-      importsToUpdateMapping[
-        `@${npmScope}/electron/utils`
-      ] = `@${npmScope}/xplat/electron/utils`;
-      if (!directoriesToUpdateImports.includes('/xplat/electron')) {
-        directoriesToUpdateImports.push('/xplat/electron');
+      if (!oldDirectoriesToMove.includes('/xplat/electron')) {
         oldDirectoriesToMove.push('/xplat/electron');
+        newDirectoriesToEmpty.push('/libs/xplat/electron/core/src/lib');
       }
     }
     if (tree.exists('/xplat/ionic/index.ts')) {
       if (!platforms.includes('ionic')) {
         platforms.push('ionic');
       }
-      if (!newDirectoriesToEmpty.includes('/libs/xplat/ionic/core/src/lib')) {
-        newDirectoriesToEmpty.push('/libs/xplat/ionic/core/src/lib');
+      if (!oldDirectoriesToMove.includes('/xplat/ionic/core')) {
         oldDirectoriesToMove.push('/xplat/ionic/core');
+        newDirectoriesToEmpty.push('/libs/xplat/ionic/core/src/lib');
       }
       if (
-        !newDirectoriesToEmpty.includes('/libs/xplat/ionic/features/src/lib')
+        !oldDirectoriesToMove.includes('/xplat/ionic/features')
       ) {
-        newDirectoriesToEmpty.push('/libs/xplat/ionic/features/src/lib');
         oldDirectoriesToMove.push('/xplat/ionic/features');
+        newDirectoriesToEmpty.push('/libs/xplat/ionic/features/src/lib');
       }
-      if (!newDirectoriesToEmpty.includes('/libs/xplat/ionic/scss/src')) {
-        newDirectoriesToEmpty.push('/libs/xplat/ionic/scss/src');
+      if (!oldDirectoriesToMove.includes('/xplat/ionic/scss')) {
         oldDirectoriesToMove.push('/xplat/ionic/scss');
+        newDirectoriesToEmpty.push('/libs/xplat/ionic/scss/src');
         createOrUpdate(
           tree,
           `/xplat/ionic/scss/package.json`,
@@ -671,42 +575,30 @@ function getCurrentlyUsedPlatforms(tree: Tree) {
           createOrUpdate(tree, `/xplat/ionic/scss/_index.scss`, scssUpdate);
         }
       }
-      importsToUpdateMapping[
-        `@${npmScope}/ionic`
-      ] = `@${npmScope}/xplat/ionic/core`;
-      importsToUpdateMapping[
-        `@${npmScope}/ionic/features`
-      ] = `@${npmScope}/xplat/ionic/features`;
-      importsToUpdateMapping[
-        `@${npmScope}/ionic/utils`
-      ] = `@${npmScope}/xplat/ionic/utils`;
-      if (!directoriesToUpdateImports.includes('/xplat/ionic')) {
-        directoriesToUpdateImports.push('/xplat/ionic');
-      }
     }
     if (tree.exists('/xplat/nativescript/index.ts')) {
       if (!platforms.includes('nativescript')) {
         platforms.push('nativescript');
       }
       if (
-        !newDirectoriesToEmpty.includes('/libs/xplat/nativescript/core/src/lib')
+        !oldDirectoriesToMove.includes('/xplat/nativescript/core')
       ) {
-        newDirectoriesToEmpty.push('/libs/xplat/nativescript/core/src/lib');
         oldDirectoriesToMove.push('/xplat/nativescript/core');
+        newDirectoriesToEmpty.push('/libs/xplat/nativescript/core/src/lib');
       }
       if (
-        !newDirectoriesToEmpty.includes(
-          '/libs/xplat/nativescript/features/src/lib'
+        !oldDirectoriesToMove.includes(
+          '/xplat/nativescript/features'
         )
       ) {
-        newDirectoriesToEmpty.push('/libs/xplat/nativescript/features/src/lib');
         oldDirectoriesToMove.push('/xplat/nativescript/features');
+        newDirectoriesToEmpty.push('/libs/xplat/nativescript/features/src/lib');
       }
       if (
-        !newDirectoriesToEmpty.includes('/libs/xplat/nativescript/scss/src')
+        !oldDirectoriesToMove.includes('/xplat/nativescript/scss')
       ) {
-        newDirectoriesToEmpty.push('/libs/xplat/nativescript/scss/src');
         oldDirectoriesToMove.push('/xplat/nativescript/scss');
+        newDirectoriesToEmpty.push('/libs/xplat/nativescript/scss/src');
         createOrUpdate(
           tree,
           `/xplat/nativescript/scss/package.json`,
@@ -731,44 +623,29 @@ function getCurrentlyUsedPlatforms(tree: Tree) {
         }
       }
       if (
-        !newDirectoriesToEmpty.includes(
-          '/libs/xplat/nativescript/utils/src/lib'
+        !oldDirectoriesToMove.includes(
+          '/xplat/nativescript/utils'
         )
       ) {
-        newDirectoriesToEmpty.push('/libs/xplat/nativescript/utils/src/lib');
         oldDirectoriesToMove.push('/xplat/nativescript/utils');
-      }
-      importsToUpdateMapping[
-        `@${npmScope}/nativescript`
-      ] = `@${npmScope}/xplat/nativescript/core`;
-      importsToUpdateMapping[
-        `@${npmScope}/nativescript/core`
-      ] = `@${npmScope}/xplat/nativescript/core`;
-      importsToUpdateMapping[
-        `@${npmScope}/nativescript/features`
-      ] = `@${npmScope}/xplat/nativescript/features`;
-      importsToUpdateMapping[
-        `@${npmScope}/nativescript/utils`
-      ] = `@${npmScope}/xplat/nativescript/utils`;
-      if (!directoriesToUpdateImports.includes('/xplat/nativescript')) {
-        directoriesToUpdateImports.push('/xplat/nativescript');
+        newDirectoriesToEmpty.push('/libs/xplat/nativescript/utils/src/lib');
       }
     }
     if (tree.exists('/xplat/web/index.ts')) {
       if (!platforms.includes('web')) {
         platforms.push('web');
       }
-      if (!newDirectoriesToEmpty.includes('/libs/xplat/web/core/src/lib')) {
-        newDirectoriesToEmpty.push('/libs/xplat/web/core/src/lib');
+      if (!oldDirectoriesToMove.includes('/xplat/web/core')) {
         oldDirectoriesToMove.push('/xplat/web/core');
+        newDirectoriesToEmpty.push('/libs/xplat/web/core/src/lib');
       }
-      if (!newDirectoriesToEmpty.includes('/libs/xplat/web/features/src/lib')) {
-        newDirectoriesToEmpty.push('/libs/xplat/web/features/src/lib');
+      if (!oldDirectoriesToMove.includes('/xplat/web/features')) {
         oldDirectoriesToMove.push('/xplat/web/features');
+        newDirectoriesToEmpty.push('/libs/xplat/web/features/src/lib');
       }
-      if (!newDirectoriesToEmpty.includes('/libs/xplat/web/scss/src')) {
-        newDirectoriesToEmpty.push('/libs/xplat/web/scss/src');
+      if (!oldDirectoriesToMove.includes('/xplat/web/scss')) {
         oldDirectoriesToMove.push('/xplat/web/scss');
+        newDirectoriesToEmpty.push('/libs/xplat/web/scss/src');
         createOrUpdate(
           tree,
           `/xplat/web/scss/package.json`,
@@ -787,21 +664,6 @@ function getCurrentlyUsedPlatforms(tree: Tree) {
           );
           createOrUpdate(tree, `/xplat/web/scss/_index.scss`, scssUpdate);
         }
-      }
-      importsToUpdateMapping[
-        `@${npmScope}/web`
-      ] = `@${npmScope}/xplat/web/core`;
-      importsToUpdateMapping[
-        `@${npmScope}/web/core`
-      ] = `@${npmScope}/xplat/web/core`;
-      importsToUpdateMapping[
-        `@${npmScope}/web/features`
-      ] = `@${npmScope}/xplat/web/features`;
-      importsToUpdateMapping[
-        `@${npmScope}/web/utils`
-      ] = `@${npmScope}/xplat/web/utils`;
-      if (!directoriesToUpdateImports.includes('/xplat/web')) {
-        directoriesToUpdateImports.push('/xplat/web');
       }
     }
     return platforms;
