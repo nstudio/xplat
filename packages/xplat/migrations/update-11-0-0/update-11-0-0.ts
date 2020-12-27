@@ -495,7 +495,6 @@ function cleanupGitIgnore() {
 
     return updateFile(tree, gitIgnorePath, gitIgnore);
   };
-  
 }
 
 function getCurrentlyUsedPlatforms(tree: Tree) {
@@ -547,9 +546,7 @@ function getCurrentlyUsedPlatforms(tree: Tree) {
         oldDirectoriesToMove.push('/xplat/ionic/core');
         newDirectoriesToEmpty.push('/libs/xplat/ionic/core/src/lib');
       }
-      if (
-        !oldDirectoriesToMove.includes('/xplat/ionic/features')
-      ) {
+      if (!oldDirectoriesToMove.includes('/xplat/ionic/features')) {
         oldDirectoriesToMove.push('/xplat/ionic/features');
         newDirectoriesToEmpty.push('/libs/xplat/ionic/features/src/lib');
       }
@@ -580,23 +577,15 @@ function getCurrentlyUsedPlatforms(tree: Tree) {
       if (!platforms.includes('nativescript')) {
         platforms.push('nativescript');
       }
-      if (
-        !oldDirectoriesToMove.includes('/xplat/nativescript/core')
-      ) {
+      if (!oldDirectoriesToMove.includes('/xplat/nativescript/core')) {
         oldDirectoriesToMove.push('/xplat/nativescript/core');
         newDirectoriesToEmpty.push('/libs/xplat/nativescript/core/src/lib');
       }
-      if (
-        !oldDirectoriesToMove.includes(
-          '/xplat/nativescript/features'
-        )
-      ) {
+      if (!oldDirectoriesToMove.includes('/xplat/nativescript/features')) {
         oldDirectoriesToMove.push('/xplat/nativescript/features');
         newDirectoriesToEmpty.push('/libs/xplat/nativescript/features/src/lib');
       }
-      if (
-        !oldDirectoriesToMove.includes('/xplat/nativescript/scss')
-      ) {
+      if (!oldDirectoriesToMove.includes('/xplat/nativescript/scss')) {
         oldDirectoriesToMove.push('/xplat/nativescript/scss');
         newDirectoriesToEmpty.push('/libs/xplat/nativescript/scss/src');
         createOrUpdate(
@@ -622,11 +611,7 @@ function getCurrentlyUsedPlatforms(tree: Tree) {
           );
         }
       }
-      if (
-        !oldDirectoriesToMove.includes(
-          '/xplat/nativescript/utils'
-        )
-      ) {
+      if (!oldDirectoriesToMove.includes('/xplat/nativescript/utils')) {
         oldDirectoriesToMove.push('/xplat/nativescript/utils');
         newDirectoriesToEmpty.push('/libs/xplat/nativescript/utils/src/lib');
       }

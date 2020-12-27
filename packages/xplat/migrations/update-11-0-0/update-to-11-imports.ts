@@ -114,7 +114,7 @@ export function updateImports() {
     //   'directoriesToUpdateImports:',
     //   directoriesToUpdateImports
     // );
-    
+
     ['/libs', '/apps']
       .map((dir) => tree.getDir(dir))
       .forEach((projectDir) => {
