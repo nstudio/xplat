@@ -12,24 +12,24 @@ export default function (): Rule {
     // cleanup old dirs
     (tree: Tree, context: SchematicContext) => {
       try {
-        if (tree.exists('xplat')) {
+        // if (tree.exists('xplat')) {
           tree.delete('xplat');
-        }
-        if (tree.exists('testing')) {
+        // }
+        // if (tree.exists('testing')) {
           tree.delete('testing');
-        }
-        if (tree.exists('libs/core')) {
+        // }
+        // if (tree.exists('libs/core')) {
           tree.delete('libs/core');
-        }
-        if (tree.exists('libs/features')) {
+        // }
+        // if (tree.exists('libs/features')) {
           tree.delete('libs/features');
-        }
-        if (tree.exists('libs/scss')) {
+        // }
+        // if (tree.exists('libs/scss')) {
           tree.delete('libs/scss');
-        }
-        if (tree.exists('libs/utils')) {
+        // }
+        // if (tree.exists('libs/utils')) {
           tree.delete('libs/utils');
-        }
+        // }
       } catch (err) {}
 
       return tree;
