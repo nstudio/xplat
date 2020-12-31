@@ -1,0 +1,9 @@
+<ActionBar class="action-bar" [title]="title">
+  <ActionItem
+    (tap)="tappedRight.next(true)"
+    ios.position="right"
+    *ngIf="rightButton"
+  >
+    <Button [text]="rightButton" class="action-item"></Button>
+  </ActionItem>
+</ActionBar>

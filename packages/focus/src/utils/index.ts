@@ -60,9 +60,9 @@ export namespace FocusHelpers {
             for (const p of supportedPlatformsWithNx) {
               const appFilter = groupByName ? `*-${p}` : `${p}*`;
               userUpdates[`**/apps/${appFilter}`] = false;
-              userUpdates[`**/xplat/${p}`] = false;
+              userUpdates[`**/libs/xplat/${p}`] = false;
               if (frameworkSuffix) {
-                userUpdates[`**/xplat/${p}${frameworkSuffix}`] = false;
+                userUpdates[`**/libs/xplat/${p}${frameworkSuffix}`] = false;
               }
             }
           } else {
@@ -91,9 +91,9 @@ export namespace FocusHelpers {
                 // use wildcards for apps only if no project names were specified
                 userUpdates[`**/apps/${appFilter}`] = excluded;
               }
-              userUpdates[`**/xplat/${p}`] = excluded;
+              userUpdates[`**/libs/xplat/${p}`] = excluded;
               if (frameworkSuffix) {
-                userUpdates[`**/xplat/${p}${frameworkSuffix}`] = excluded;
+                userUpdates[`**/libs/xplat/${p}${frameworkSuffix}`] = excluded;
               }
 
               if (excluded) {
@@ -136,11 +136,6 @@ export namespace FocusHelpers {
               handledPlatforms[target] = true;
             }
           }
-        }
-
-        if (isXplatWorkspace()) {
-          // always ensure hidden xplat files are hidden from view
-          userUpdates['**/xplat/*/.xplatframework'] = true;
         }
 
         // VS Code
@@ -198,18 +193,12 @@ export namespace FocusHelpers {
               when: '$(basename).scss',
             },
             // libs/xplat
-            '**/libs/**/*.js': {
-              when: '$(basename).ts',
-            },
-            '**/libs/**/*.d.ts': {
-              when: '$(basename).ts',
-            },
-            '**/xplat/**/*.js': {
-              when: '$(basename).ts',
-            },
-            '**/xplat/**/*.d.ts': {
-              when: '$(basename).ts',
-            },
+            // '**/libs/xplat/**/*.js': {
+            //   when: '$(basename).ts',
+            // },
+            // '**/libs/xplat/**/*.d.ts': {
+            //   when: '$(basename).ts',
+            // },
           };
 
           if (isVsCode) {

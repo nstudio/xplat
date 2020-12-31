@@ -11,8 +11,12 @@ import {
   SchematicContext,
 } from '@angular-devkit/schematics';
 import { formatFiles } from '@nrwl/workspace';
-import { XplatHelpers, getDefaultTemplateOptions } from '@nstudio/xplat';
-import { prerun, addInstallTask } from '@nstudio/xplat-utils';
+import {
+  XplatHelpers,
+  getDefaultTemplateOptions,
+  updateTsConfig,
+} from '@nstudio/xplat';
+import { prerun, addInstallTask, getNpmScope } from '@nstudio/xplat-utils';
 import { XplatAngularHelpers } from '../../utils/xplat';
 import { FocusHelpers } from '@nstudio/focus';
 
@@ -22,19 +26,41 @@ export default function (options: XplatHelpers.Schema) {
 
   return chain([
     prerun(options, true),
-    // update gitignore to support xplat
-    XplatHelpers.updateGitIgnore(),
     // libs
-    XplatAngularHelpers.addLibFiles(options),
-    XplatAngularHelpers.addScssFiles(options),
+    XplatHelpers.generateLib(options, 'core', 'xplat', 'node'),
+    XplatHelpers.cleanupLib(options, 'core', 'xplat'),
+    XplatAngularHelpers.addLibFiles(options, './', 'core'),
+    XplatHelpers.generateLib(options, 'features', 'xplat', 'node'),
+    XplatHelpers.cleanupLib(options, 'features', 'xplat'),
+    XplatAngularHelpers.addLibFiles(options, './', 'features'),
+    XplatHelpers.generateLib(options, 'scss', 'xplat', 'jsdom'),
+    XplatHelpers.cleanupLib(options, 'scss', 'xplat'),
+    XplatAngularHelpers.addLibFiles(options, './', 'scss'),
+    XplatHelpers.generateLib(options, 'utils', 'xplat', 'node'),
+    XplatHelpers.cleanupLib(options, 'utils', 'xplat'),
+    XplatAngularHelpers.addLibFiles(options, './', 'utils'),
     // cross platform support
     ...externalChains,
-    // testing
-    XplatAngularHelpers.addTestingFiles(options, '_testing'),
-    XplatAngularHelpers.addJestConfig(options, '_jest'),
-    XplatAngularHelpers.updateTestingConfig(options),
-    XplatAngularHelpers.updateLint(options),
     XplatAngularHelpers.updateRootDeps(options),
+    // adjust root tsconfig
+    (tree: Tree, context: SchematicContext) => {
+      return updateTsConfig(tree, (tsConfig: any) => {
+        if (tsConfig) {
+          if (!tsConfig.compilerOptions) {
+            tsConfig.compilerOptions = {};
+          }
+          if (
+            !tsConfig.compilerOptions.paths[
+              `@${getNpmScope()}/xplat/environments`
+            ]
+          ) {
+            tsConfig.compilerOptions.paths[
+              `@${getNpmScope()}/xplat/environments`
+            ] = [`libs/xplat/core/src/lib/environments/base/index.ts`];
+          }
+        }
+      });
+    },
     formatFiles({ skipFormat: options.skipFormat }),
     // clean shared code script - don't believe need this anymore
     // (tree: Tree) => {

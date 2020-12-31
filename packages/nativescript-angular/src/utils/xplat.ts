@@ -8,7 +8,7 @@ import {
 import {
   nsNgScopedVersion,
   nsNgFonticonVersion,
-  nodeSassVersion,
+  sassVersion,
   nsCoreVersion,
   angularVersion,
   ngToolsWebpack,
@@ -57,24 +57,9 @@ export namespace XplatNativeScriptAngularHelpers {
         devDependencies: {
           ...angularDevDeps,
           '@ngtools/webpack': ngToolsWebpack,
-          'node-sass': nodeSassVersion,
+          sass: sassVersion,
         },
       })(tree, context);
-    };
-  }
-
-  export function addReferences() {
-    return (tree: Tree) => {
-      const filename = 'references.d.ts';
-      if (!tree.exists(filename)) {
-        // add references.d.ts
-        tree.create(
-          filename,
-          `/// <reference path="../../node_modules/@nativescript/types/index.d.ts" />
-      `
-        );
-      }
-      return tree;
     };
   }
 }

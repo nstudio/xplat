@@ -27,13 +27,19 @@ describe('xplat schematic', () => {
     const options: XplatHelpers.Schema = { ...defaultOptions };
 
     const tree = await runSchematic('xplat', options, appTree);
-    expect(tree.exists('/xplat/web/index.ts')).toBeTruthy();
-    expect(tree.exists('/xplat/nativescript/index.ts')).toBeFalsy();
+    expect(tree.exists('/libs/xplat/web/core/src/lib/index.ts')).toBeTruthy();
+    expect(
+      tree.exists('/libs/xplat/nativescript/core/src/lib/index.ts')
+    ).toBeFalsy();
     let filePath = getRootTsConfigPath();
     let fileContent = jsonParse(getFileContent(tree, filePath));
     // console.log(fileContent);
-    expect(fileContent.compilerOptions.paths['@testing/web']).toBeTruthy();
-    expect(fileContent.compilerOptions.paths['@testing/web/*']).toBeTruthy();
+    expect(
+      fileContent.compilerOptions.paths['@testing/xplat/web/core']
+    ).toBeTruthy();
+    expect(
+      fileContent.compilerOptions.paths['@testing/xplat/web/features']
+    ).toBeTruthy();
     filePath = '/package.json';
     fileContent = jsonParse(getFileContent(tree, filePath));
     // const hasScss = packageFile.dependencies[`@testing/scss`];
@@ -41,10 +47,6 @@ describe('xplat schematic', () => {
     // should not include these root packages
     const hasNativeScript = fileContent.dependencies[`nativescript-angular`];
     expect(hasNativeScript).toBeUndefined();
-    filePath = '/xplat/web/.xplatframework';
-    fileContent = getFileContent(tree, filePath);
-    // console.log(fileContent);
-    expect(fileContent.indexOf('angular')).toBeGreaterThanOrEqual(0);
   });
 
   it('should create default xplat support with framework suffix when not specifying default', async () => {
@@ -53,15 +55,17 @@ describe('xplat schematic', () => {
     const options: XplatHelpers.Schema = { ...defaultOptions };
 
     const tree = await runSchematic('xplat', options, appTree);
-    expect(tree.exists('/xplat/web-angular/index.ts')).toBeTruthy();
+    expect(
+      tree.exists('/libs/xplat/web-angular/core/src/lib/index.ts')
+    ).toBeTruthy();
     const filePath = getRootTsConfigPath();
     const fileContent = jsonParse(getFileContent(tree, filePath));
     // console.log(fileContent);
     expect(
-      fileContent.compilerOptions.paths['@testing/web-angular']
+      fileContent.compilerOptions.paths['@testing/xplat/web-angular/core']
     ).toBeTruthy();
     expect(
-      fileContent.compilerOptions.paths['@testing/web-angular/*']
+      fileContent.compilerOptions.paths['@testing/xplat/web-angular/features']
     ).toBeTruthy();
   });
 });

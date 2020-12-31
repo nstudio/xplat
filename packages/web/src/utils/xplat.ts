@@ -7,7 +7,7 @@ export namespace XplatWebHelpers {
     // nothing extra needed at moment
     return (tree: Tree, context: SchematicContext) => {
       const dependencies = {};
-      dependencies[`@${getNpmScope()}/scss`] = 'file:libs/scss';
+      dependencies[`@${getNpmScope()}/xplat-scss`] = 'file:libs/xplat/scss/src';
 
       return XplatHelpers.updatePackageForXplat(options, {
         dependencies,

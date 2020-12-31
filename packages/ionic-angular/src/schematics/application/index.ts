@@ -29,6 +29,7 @@ import {
   getNpmScope,
   getPrefix,
   getAppName,
+  addInstallTask,
 } from '@nstudio/xplat-utils';
 import { Schema as ApplicationOptions } from './schema';
 import { XplatIonicAngularHelpers } from '../../utils';
@@ -69,7 +70,8 @@ export default function (options: ApplicationOptions) {
       )(tree, context),
     // add root package dependencies
     XplatIonicAngularHelpers.updateRootDeps(options),
-    XplatHelpers.addPackageInstallTask(options),
+    addInstallTask(options),
+    // XplatHelpers.addPackageInstallTask(options),
     // add start/clean scripts
     (tree: Tree) => {
       const scripts = {};

@@ -36,13 +36,15 @@ describe('directive schematic', () => {
 
     // component
     expect(
-      files.indexOf('/libs/features/ui/directives/active-link.directive.ts')
+      files.indexOf(
+        '/libs/xplat/features/src/lib/ui/directives/active-link.directive.ts'
+      )
     ).toBeGreaterThanOrEqual(0);
 
     // file content
     let content = getFileContent(
       tree,
-      '/libs/features/ui/directives/active-link.directive.ts'
+      '/libs/xplat/features/src/lib/ui/directives/active-link.directive.ts'
     );
     // console.log(content);
     expect(content.indexOf(`@Directive({`)).toBeGreaterThanOrEqual(0);
@@ -50,7 +52,7 @@ describe('directive schematic', () => {
       0
     );
 
-    let modulePath = '/libs/features/ui/ui.module.ts';
+    let modulePath = '/libs/xplat/features/src/lib/ui/ui.module.ts';
     let moduleContent = getFileContent(tree, modulePath);
 
     // console.log(modulePath + ':');
@@ -64,13 +66,15 @@ describe('directive schematic', () => {
     // console.log(files.slice(91,files.length));
 
     expect(
-      files.indexOf('/libs/features/foo/directives/active-link.directive.ts')
+      files.indexOf(
+        '/libs/xplat/features/src/lib/foo/directives/active-link.directive.ts'
+      )
     ).toBeGreaterThanOrEqual(0);
 
     // file content
     content = getFileContent(
       tree,
-      '/libs/features/foo/directives/active-link.directive.ts'
+      '/libs/xplat/features/src/lib/foo/directives/active-link.directive.ts'
     );
     // console.log(content);
     expect(content.indexOf(`@Directive({`)).toBeGreaterThanOrEqual(0);
@@ -78,7 +82,7 @@ describe('directive schematic', () => {
       0
     );
 
-    modulePath = '/libs/features/foo/foo.module.ts';
+    modulePath = '/libs/xplat/features/src/lib/foo/foo.module.ts';
     moduleContent = getFileContent(tree, modulePath);
 
     // console.log(modulePath + ':');
@@ -107,21 +111,25 @@ describe('directive schematic', () => {
     // console.log(files.slice(91,files.length));
 
     expect(
-      tree.exists('/libs/features/ui/directives/active-link.directive.ts')
+      tree.exists(
+        '/libs/xplat/features/src/lib/ui/directives/active-link.directive.ts'
+      )
     ).toBeFalsy();
     expect(
-      tree.exists('/xplat/web/features/ui/directives/active-link.directive.ts')
+      tree.exists(
+        '/libs/xplat/web/features/src/lib/ui/directives/active-link.directive.ts'
+      )
     ).toBeTruthy();
     expect(
       tree.exists(
-        '/xplat/nativescript/features/ui/directives/active-link.directive.ts'
+        '/libs/xplat/nativescript/features/src/lib/ui/directives/active-link.directive.ts'
       )
     ).toBeTruthy();
 
     // file content
     let content = getFileContent(
       tree,
-      '/xplat/web/features/ui/directives/active-link.directive.ts'
+      '/libs/xplat/web/features/src/lib/ui/directives/active-link.directive.ts'
     );
     // console.log(content);
     expect(content.indexOf(`@Directive({`)).toBeGreaterThanOrEqual(0);
@@ -131,7 +139,7 @@ describe('directive schematic', () => {
 
     content = getFileContent(
       tree,
-      '/xplat/nativescript/features/ui/directives/active-link.directive.ts'
+      '/libs/xplat/nativescript/features/src/lib/ui/directives/active-link.directive.ts'
     );
     // console.log(content);
     expect(content.indexOf(`@Directive({`)).toBeGreaterThanOrEqual(0);
@@ -139,13 +147,13 @@ describe('directive schematic', () => {
       0
     );
 
-    let modulePath = '/xplat/web/features/ui/ui.module.ts';
+    let modulePath = '/libs/xplat/web/features/src/lib/ui/ui.module.ts';
     let moduleContent = getFileContent(tree, modulePath);
     // console.log(modulePath + ':');
     // console.log(moduleContent);
     expect(moduleContent.indexOf(`...UI_DIRECTIVES`)).toBeGreaterThanOrEqual(0);
 
-    modulePath = '/xplat/nativescript/features/ui/ui.module.ts';
+    modulePath = '/libs/xplat/nativescript/features/src/lib/ui/ui.module.ts';
     moduleContent = getFileContent(tree, modulePath);
     expect(moduleContent.indexOf(`...UI_DIRECTIVES`)).toBeGreaterThanOrEqual(0);
 
@@ -157,18 +165,20 @@ describe('directive schematic', () => {
     // console.log(files.slice(91,files.length));
 
     expect(
-      tree.exists('/xplat/web/features/foo/directives/active-link.directive.ts')
+      tree.exists(
+        '/libs/xplat/web/features/src/lib/foo/directives/active-link.directive.ts'
+      )
     ).toBeTruthy();
     expect(
       tree.exists(
-        '/xplat/nativescript/features/foo/directives/active-link.directive.ts'
+        '/libs/xplat/nativescript/features/src/lib/foo/directives/active-link.directive.ts'
       )
     ).toBeTruthy();
 
     // file content
     content = getFileContent(
       tree,
-      '/xplat/web/features/foo/directives/active-link.directive.ts'
+      '/libs/xplat/web/features/src/lib/foo/directives/active-link.directive.ts'
     );
     // console.log(content);
     expect(content.indexOf(`@Directive({`)).toBeGreaterThanOrEqual(0);
@@ -177,7 +187,7 @@ describe('directive schematic', () => {
     );
     content = getFileContent(
       tree,
-      '/xplat/nativescript/features/foo/directives/active-link.directive.ts'
+      '/libs/xplat/nativescript/features/src/lib/foo/directives/active-link.directive.ts'
     );
     // console.log(content);
     expect(content.indexOf(`@Directive({`)).toBeGreaterThanOrEqual(0);
@@ -185,7 +195,7 @@ describe('directive schematic', () => {
       0
     );
 
-    modulePath = '/xplat/web/features/foo/foo.module.ts';
+    modulePath = '/libs/xplat/web/features/src/lib/foo/foo.module.ts';
     moduleContent = getFileContent(tree, modulePath);
 
     // console.log(modulePath + ':');
@@ -193,7 +203,7 @@ describe('directive schematic', () => {
     expect(moduleContent.indexOf(`...FOO_DIRECTIVES`)).toBeGreaterThanOrEqual(
       0
     );
-    modulePath = '/xplat/nativescript/features/foo/foo.module.ts';
+    modulePath = '/libs/xplat/nativescript/features/src/lib/foo/foo.module.ts';
     moduleContent = getFileContent(tree, modulePath);
 
     // console.log(modulePath + ':');
@@ -226,16 +236,18 @@ describe('directive schematic', () => {
 
     // directive should not be setup to share
     expect(
-      files.indexOf('/libs/features/ui/directives/active-link.directive.ts')
-    ).toBe(-1);
-    expect(
       files.indexOf(
-        '/xplat/nativescript/features/foo/directives/active-link.directive.ts'
+        '/libs/xplat/features/src/lib/ui/directives/active-link.directive.ts'
       )
     ).toBe(-1);
     expect(
       files.indexOf(
-        '/xplat/web/features/foo/directives/active-link.directive.ts'
+        '/libs/xplat/nativescript/features/src/lib/foo/directives/active-link.directive.ts'
+      )
+    ).toBe(-1);
+    expect(
+      files.indexOf(
+        '/libs/xplat/web/features/src/lib/foo/directives/active-link.directive.ts'
       )
     ).toBe(-1);
 

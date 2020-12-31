@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "<%= pathOffset %>dist/out-tsc",
+    "types": []
+  },
+  "files": [
+    "./references.d.ts",
+    "./src/main.ts",
+    "./src/environments/environment.dev.ts"
+  ]
+}

@@ -31,7 +31,6 @@ import {
   getJsonFromFile,
   updateJsonFile,
   supportedPlatforms,
-  checkRootTsConfig,
 } from '@nstudio/xplat-utils';
 import { Schema } from './schema';
 
@@ -103,13 +102,7 @@ export default function (options: Schema) {
       scripts[
         `clean`
       ] = `npx rimraf hooks node_modules package-lock.json && npm i`;
-      scripts[`start.${platformApp}`] = `nx serve ${options.name}`;
       return updatePackageScripts(tree, scripts);
-    },
-    (tree: Tree) => {
-      // make sure tsconfig exists at root
-      // we do this here because Nrwl with 10.1 was actually removing it
-      checkRootTsConfig(tree);
     },
     <any>formatFiles({ skipFormat: options.skipFormat }),
   ]);
@@ -235,10 +228,10 @@ function adjustAppFiles(options: Schema, tree: Tree): Rule {
         workspaceConfig.projects[
           options.name
         ].architect.build.options.styles = [
-          `xplat/${XplatHelpers.getXplatFoldername(
+          `libs/xplat/${XplatHelpers.getXplatFoldername(
             'web',
             'angular'
-          )}/scss/_index.scss`,
+          )}/scss/src/_index.scss`,
           `apps/${directory}${options.name}/src/styles.scss`,
         ];
       }
@@ -269,7 +262,7 @@ function mainContent() {
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 // libs
-import { environment } from '@${getNpmScope()}/core';
+import { environment } from '@${getNpmScope()}/xplat/core';
 
 // app
 import { AppModule } from './app/app.module';
@@ -308,10 +301,10 @@ function appCmpContent() {
   return `import { Component } from '@angular/core';
 
 // xplat
-import { AppBaseComponent } from '@${getNpmScope()}/${XplatHelpers.getXplatFoldername(
+import { AppBaseComponent } from '@${getNpmScope()}/xplat/${XplatHelpers.getXplatFoldername(
     'web',
     'angular'
-  )}';
+  )}/core';
 
 @Component({
     selector: '${getPrefix()}-root',
@@ -412,7 +405,7 @@ function appModuleContent(options) {
   return `import { NgModule } from '@angular/core';
 
 // libs
-import { environment } from '@${getNpmScope()}/core';
+import { environment } from '@${getNpmScope()}/xplat/core';
 
 // app
 import { CoreModule } from './core/core.module';

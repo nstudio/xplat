@@ -77,7 +77,7 @@ export default function (options: XplatFeatureHelpers.Schema) {
       const xplatFolderName = XplatHelpers.getXplatFoldername('web', 'angular');
       return XplatFeatureHelpers.adjustBarrelIndex(
         options,
-        `xplat/${xplatFolderName}/features/index.ts`
+        `libs/xplat/${xplatFolderName}/features/src/lib/index.ts`
       )(tree, context);
     });
     // add starting component unless onlyModule

@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
-
-// libs
-import { AppBaseComponent, AppService } from '@<%= npmScope %>/<%= xplatFolderName %>';
+import { AppService } from '@<%= npmScope %>/xplat/<%= xplatFolderName %>/core';
+import { AppBaseComponent } from '@<%= npmScope %>/xplat/<%= xplatFolderName %>/features';
 
 @Component({
   selector: '<%= prefix %>-root',

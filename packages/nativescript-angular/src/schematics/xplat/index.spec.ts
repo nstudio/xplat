@@ -28,12 +28,16 @@ describe('xplat schematic', () => {
 
     const tree = await runSchematic('xplat', options, appTree);
     // const files = tree.files;
-    expect(tree.exists('/libs/core/index.ts')).toBeTruthy();
-    expect(tree.exists('/xplat/web/index.ts')).toBeFalsy();
-    expect(tree.exists('/xplat/nativescript/index.ts')).toBeTruthy();
-    expect(tree.exists('/xplat/nativescript/core/index.ts')).toBeTruthy();
+    expect(tree.exists('/libs/xplat/core/src/lib/index.ts')).toBeTruthy();
+    expect(tree.exists('/libs/xplat/web/src/lib/index.ts')).toBeFalsy();
     expect(
-      tree.exists('/xplat/nativescript/features/ui/index.ts')
+      tree.exists('/libs/xplat/nativescript/core/src/lib/index.ts')
+    ).toBeTruthy();
+    expect(
+      tree.exists('/libs/xplat/nativescript/features/src/lib/index.ts')
+    ).toBeTruthy();
+    expect(
+      tree.exists('/libs/xplat/nativescript/features/src/lib/ui/index.ts')
     ).toBeTruthy();
     const packagePath = '/package.json';
     const packageFile = jsonParse(getFileContent(tree, packagePath));
@@ -52,15 +56,19 @@ describe('xplat schematic', () => {
     let fileContent = jsonParse(getFileContent(tree, filePath));
     // console.log(fileContent);
     expect(
-      fileContent.compilerOptions.paths['@testing/nativescript']
+      fileContent.compilerOptions.paths['@testing/xplat/nativescript/core']
     ).toBeTruthy();
     expect(
-      fileContent.compilerOptions.paths['@testing/nativescript/*']
+      fileContent.compilerOptions.paths['@testing/xplat/nativescript/features']
     ).toBeTruthy();
-    filePath = '/xplat/nativescript/.xplatframework';
-    fileContent = getFileContent(tree, filePath);
+
+    filePath = '/libs/xplat/nativescript/core/tsconfig.json';
+    fileContent = jsonParse(getFileContent(tree, filePath));
     // console.log(fileContent);
-    expect(fileContent.indexOf('angular')).toBeGreaterThanOrEqual(0);
+    expect(
+      fileContent.files.includes('../../../../references.d.ts')
+    ).toBeTruthy();
+    expect(fileContent.include.includes('**/*.ts')).toBeTruthy();
   });
 
   it('should create default xplat support with framework suffix when not specifying default', async () => {
@@ -70,17 +78,18 @@ describe('xplat schematic', () => {
 
     const tree = await runSchematic('xplat', options, appTree);
     // console.log(tree.files);
-    expect(tree.exists('/libs/core/index.ts')).toBeTruthy();
-    expect(tree.exists('/libs/scss/_index.scss')).toBeTruthy();
-    expect(tree.exists('/xplat/nativescript-angular/index.ts')).toBeTruthy();
+    expect(tree.exists('/libs/xplat/core/src/lib/index.ts')).toBeTruthy();
+    expect(tree.exists('/libs/xplat/scss/src/_index.scss')).toBeTruthy();
+    expect(
+      tree.exists('/libs/xplat/nativescript-angular/core/src/lib/index.ts')
+    ).toBeTruthy();
     const filePath = getRootTsConfigPath();
     const fileContent = jsonParse(getFileContent(tree, filePath));
     // console.log(fileContent);
     expect(
-      fileContent.compilerOptions.paths['@testing/nativescript-angular']
-    ).toBeTruthy();
-    expect(
-      fileContent.compilerOptions.paths['@testing/nativescript-angular/*']
+      fileContent.compilerOptions.paths[
+        '@testing/xplat/nativescript-angular/core'
+      ]
     ).toBeTruthy();
   });
 
@@ -91,15 +100,14 @@ describe('xplat schematic', () => {
     options.framework = 'angular';
 
     let tree = await runSchematic('xplat', options, appTree);
-    expect(tree.exists('/xplat/nativescript/index.ts')).toBeTruthy();
+    expect(
+      tree.exists('/libs/xplat/nativescript/core/src/lib/index.ts')
+    ).toBeTruthy();
     let filePath = getRootTsConfigPath();
     let fileContent = jsonParse(getFileContent(tree, filePath));
     // console.log(fileContent);
     expect(
-      fileContent.compilerOptions.paths['@testing/nativescript']
-    ).toBeTruthy();
-    expect(
-      fileContent.compilerOptions.paths['@testing/nativescript/*']
+      fileContent.compilerOptions.paths['@testing/xplat/nativescript/core']
     ).toBeTruthy();
 
     await expect(runSchematic('xplat', defaultOptions, tree)).rejects.toThrow(

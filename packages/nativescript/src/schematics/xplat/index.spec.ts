@@ -22,8 +22,10 @@ describe('xplat schematic', () => {
 
     appTree.create('.prettierignore', '# sample');
     const tree = await runSchematic('xplat', options, appTree);
-    expect(tree.exists('/xplat/web/index.ts')).toBeFalsy();
-    expect(tree.exists('/xplat/nativescript/index.ts')).toBeTruthy();
+    expect(tree.exists('/libs/xplat/web/core/src/lib/index.ts')).toBeFalsy();
+    expect(
+      tree.exists('/libs/xplat/nativescript/utils/src/lib/index.ts')
+    ).toBeTruthy();
     const packagePath = '/package.json';
     const packageFile = jsonParse(getFileContent(tree, packagePath));
     const hasNativeScript = packageFile.dependencies[`@nativescript/core`];
@@ -32,7 +34,7 @@ describe('xplat schematic', () => {
     const prettier = getFileContent(tree, '.prettierignore');
     // console.log('prettier:', prettier);
     expect(
-      prettier.indexOf('**/xplat/nativescript*/plugins/**/*')
+      prettier.indexOf('**/libs/xplat/nativescript*/plugins/**/*')
     ).toBeGreaterThan(0);
   });
 });

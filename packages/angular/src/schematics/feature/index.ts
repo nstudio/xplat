@@ -80,7 +80,7 @@ export default function (options: XplatFeatureHelpers.Schema) {
         ? noop()(tree, context)
         : XplatFeatureHelpers.adjustBarrelIndex(
             options,
-            'libs/features/index.ts'
+            'libs/xplat/features/src/lib/index.ts'
           )(tree, context),
     // external schematic handling
     ...externalChains,

@@ -37,31 +37,33 @@ describe('component schematic', () => {
 
     // component
     expect(
-      tree.exists('/libs/features/foo/base/signup.base-component.ts')
-    ).toBeTruthy();
-    expect(
       tree.exists(
-        '/xplat/nativescript/features/foo/components/signup/signup.component.html'
+        '/libs/xplat/features/src/lib/foo/base/signup.base-component.ts'
       )
     ).toBeTruthy();
     expect(
       tree.exists(
-        '/xplat/nativescript/features/foo/components/signup/signup.component.ts'
+        '/libs/xplat/nativescript/features/src/lib/foo/components/signup/signup.component.html'
       )
     ).toBeTruthy();
     expect(
       tree.exists(
-        '/xplat/web/features/foo/components/signup/signup.component.html'
+        '/libs/xplat/nativescript/features/src/lib/foo/components/signup/signup.component.ts'
       )
     ).toBeTruthy();
     expect(
       tree.exists(
-        '/xplat/web/features/foo/components/signup/signup.component.ts'
+        '/libs/xplat/web/features/src/lib/foo/components/signup/signup.component.html'
+      )
+    ).toBeTruthy();
+    expect(
+      tree.exists(
+        '/libs/xplat/web/features/src/lib/foo/components/signup/signup.component.ts'
       )
     ).toBeTruthy();
 
     // ensure base index was modified
-    let barrelPath = '/libs/features/foo/base/index.ts';
+    let barrelPath = '/libs/xplat/features/src/lib/foo/base/index.ts';
     let barrelIndex = getFileContent(tree, barrelPath);
     // console.log(barrelPath + ':');
     // console.log(barrelIndex);
@@ -71,7 +73,8 @@ describe('component schematic', () => {
     ).toBeGreaterThanOrEqual(0);
 
     // file content
-    barrelPath = '/xplat/nativescript/features/foo/components/index.ts';
+    barrelPath =
+      '/libs/xplat/nativescript/features/src/lib/foo/components/index.ts';
     barrelIndex = getFileContent(tree, barrelPath);
     // console.log(barrelPath + ':');
     // console.log(barrelIndex);
@@ -81,7 +84,7 @@ describe('component schematic', () => {
       barrelIndex.indexOf(`./signup/signup.component`)
     ).toBeGreaterThanOrEqual(0);
 
-    barrelPath = '/xplat/web/features/foo/components/index.ts';
+    barrelPath = '/libs/xplat/web/features/src/lib/foo/components/index.ts';
     barrelIndex = getFileContent(tree, barrelPath);
     // console.log(barrelPath + ':');
     // console.log(barrelIndex);
@@ -107,26 +110,28 @@ describe('component schematic', () => {
 
     // component
     expect(
-      tree.exists('/libs/features/foo/base/signup.base-component.ts')
-    ).toBeTruthy();
-    expect(
       tree.exists(
-        '/xplat/nativescript-angular/features/foo/components/signup/signup.component.html'
+        '/libs/xplat/features/src/lib/foo/base/signup.base-component.ts'
       )
     ).toBeTruthy();
     expect(
       tree.exists(
-        '/xplat/nativescript-angular/features/foo/components/signup/signup.component.ts'
+        '/libs/xplat/nativescript-angular/features/src/lib/foo/components/signup/signup.component.html'
       )
     ).toBeTruthy();
     expect(
       tree.exists(
-        '/xplat/web-angular/features/foo/components/signup/signup.component.html'
+        '/libs/xplat/nativescript-angular/features/src/lib/foo/components/signup/signup.component.ts'
       )
     ).toBeTruthy();
     expect(
       tree.exists(
-        '/xplat/web-angular/features/foo/components/signup/signup.component.ts'
+        '/libs/xplat/web-angular/features/src/lib/foo/components/signup/signup.component.html'
+      )
+    ).toBeTruthy();
+    expect(
+      tree.exists(
+        '/libs/xplat/web-angular/features/src/lib/foo/components/signup/signup.component.ts'
       )
     ).toBeTruthy();
   });
@@ -150,38 +155,39 @@ describe('component schematic', () => {
     // component
     expect(
       tree.exists(
-        '/libs/features/foo/base/registration/signup.base-component.ts'
+        '/libs/xplat/features/src/lib/foo/base/registration/signup.base-component.ts'
       )
     ).toBeTruthy();
     expect(
       tree.exists(
-        '/xplat/nativescript/features/foo/components/registration/signup/signup.component.html'
+        '/libs/xplat/nativescript/features/src/lib/foo/components/registration/signup/signup.component.html'
       )
     ).toBeTruthy();
     expect(
       tree.exists(
-        '/xplat/nativescript/features/foo/components/registration/signup/signup.component.ts'
+        '/libs/xplat/nativescript/features/src/lib/foo/components/registration/signup/signup.component.ts'
       )
     ).toBeTruthy();
     expect(
       tree.exists(
-        '/xplat/web/features/foo/components/registration/signup/signup.component.html'
+        '/libs/xplat/web/features/src/lib/foo/components/registration/signup/signup.component.html'
       )
     ).toBeTruthy();
     expect(
       tree.exists(
-        '/xplat/web/features/foo/components/registration/signup/signup.component.ts'
+        '/libs/xplat/web/features/src/lib/foo/components/registration/signup/signup.component.ts'
       )
     ).toBeTruthy();
 
     // ensure base index was modified
-    let barrelPath = '/libs/features/foo/base/registration/index.ts';
+    let barrelPath =
+      '/libs/xplat/features/src/lib/foo/base/registration/index.ts';
     let barrelIndex = getFileContent(tree, barrelPath);
     // console.log(barrelPath + ':');
     // console.log(barrelIndex);
     expect(barrelIndex.indexOf(`./signup.base-component`)).toBeTruthy();
 
-    barrelPath = '/libs/features/foo/base/index.ts';
+    barrelPath = '/libs/xplat/features/src/lib/foo/base/index.ts';
     barrelIndex = getFileContent(tree, barrelPath);
     // console.log(barrelPath + ':');
     // console.log(barrelIndex);
@@ -190,14 +196,15 @@ describe('component schematic', () => {
 
     // file content
     barrelPath =
-      '/xplat/nativescript/features/foo/components/registration/index.ts';
+      '/libs/xplat/nativescript/features/src/lib/foo/components/registration/index.ts';
     barrelIndex = getFileContent(tree, barrelPath);
     // console.log(barrelPath + ':');
     // console.log(barrelIndex);
     // component symbol should be at end of components collection
     expect(barrelIndex.indexOf(`SignupComponent];`)).toBeGreaterThanOrEqual(0);
 
-    barrelPath = '/xplat/web/features/foo/components/registration/index.ts';
+    barrelPath =
+      '/libs/xplat/web/features/src/lib/foo/components/registration/index.ts';
     barrelIndex = getFileContent(tree, barrelPath);
     // console.log(barrelPath + ':');
     // console.log(barrelIndex);
@@ -206,7 +213,8 @@ describe('component schematic', () => {
     ).toBeGreaterThanOrEqual(0);
 
     // file content
-    barrelPath = '/xplat/nativescript/features/foo/components/index.ts';
+    barrelPath =
+      '/libs/xplat/nativescript/features/src/lib/foo/components/index.ts';
     barrelIndex = getFileContent(tree, barrelPath);
     // console.log(barrelPath + ':');
     // console.log(barrelIndex);
@@ -215,7 +223,7 @@ describe('component schematic', () => {
       barrelIndex.indexOf(`REGISTRATION_COMPONENTS`)
     ).toBeGreaterThanOrEqual(0);
 
-    barrelPath = '/xplat/web/features/foo/components/index.ts';
+    barrelPath = '/libs/xplat/web/features/src/lib/foo/components/index.ts';
     barrelIndex = getFileContent(tree, barrelPath);
     // console.log(barrelPath + ':');
     // console.log(barrelIndex);
@@ -246,26 +254,28 @@ describe('component schematic', () => {
 
     // component should not be setup to share
     expect(
-      tree.exists('/libs/features/foo/base/signup.base-component.ts')
-    ).toBeFalsy();
-    expect(
       tree.exists(
-        '/xplat/nativescript/features/foo/components/signup/signup.component.html'
+        '/libs/xplat/features/src/lib/foo/base/signup.base-component.ts'
       )
     ).toBeFalsy();
     expect(
       tree.exists(
-        '/xplat/nativescript/features/foo/components/signup/signup.component.ts'
+        '/libs/xplat/nativescript/features/src/lib/foo/components/signup/signup.component.html'
       )
     ).toBeFalsy();
     expect(
       tree.exists(
-        '/xplat/web/features/foo/components/signup/signup.component.html'
+        '/libs/xplat/nativescript/features/src/lib/foo/components/signup/signup.component.ts'
       )
     ).toBeFalsy();
     expect(
       tree.exists(
-        '/xplat/web/features/foo/components/signup/signup.component.ts'
+        '/libs/xplat/web/features/src/lib/foo/components/signup/signup.component.html'
+      )
+    ).toBeFalsy();
+    expect(
+      tree.exists(
+        '/libs/xplat/web/features/src/lib/foo/components/signup/signup.component.ts'
       )
     ).toBeFalsy();
 

@@ -36,19 +36,19 @@ describe('pipe schematic', () => {
 
     // component
     expect(
-      tree.exists('/libs/features/ui/pipes/truncate.pipe.ts')
+      tree.exists('/libs/xplat/features/src/lib/ui/pipes/truncate.pipe.ts')
     ).toBeTruthy();
 
     // file content
     let content = getFileContent(
       tree,
-      '/libs/features/ui/pipes/truncate.pipe.ts'
+      '/libs/xplat/features/src/lib/ui/pipes/truncate.pipe.ts'
     );
     // console.log(content);
     expect(content.indexOf(`@Pipe({`)).toBeGreaterThanOrEqual(0);
     expect(content.indexOf(`name: 'truncate'`)).toBeGreaterThanOrEqual(0);
 
-    let modulePath = '/libs/features/ui/ui.module.ts';
+    let modulePath = '/libs/xplat/features/src/lib/ui/ui.module.ts';
     let moduleContent = getFileContent(tree, modulePath);
 
     // console.log(modulePath + ':');
@@ -62,16 +62,19 @@ describe('pipe schematic', () => {
 
     // component
     expect(
-      tree.exists('/libs/features/foo/pipes/truncate.pipe.ts')
+      tree.exists('/libs/xplat/features/src/lib/foo/pipes/truncate.pipe.ts')
     ).toBeTruthy();
 
     // file content
-    content = getFileContent(tree, '/libs/features/foo/pipes/truncate.pipe.ts');
+    content = getFileContent(
+      tree,
+      '/libs/xplat/features/src/lib/foo/pipes/truncate.pipe.ts'
+    );
     // console.log(content);
     expect(content.indexOf(`@Pipe({`)).toBeGreaterThanOrEqual(0);
     expect(content.indexOf(`name: 'truncate'`)).toBeGreaterThanOrEqual(0);
 
-    modulePath = '/libs/features/foo/foo.module.ts';
+    modulePath = '/libs/xplat/features/src/lib/foo/foo.module.ts';
     moduleContent = getFileContent(tree, modulePath);
 
     // console.log(modulePath + ':');
@@ -99,13 +102,15 @@ describe('pipe schematic', () => {
 
     // component
     expect(
-      tree.exists('/libs/features/ui/pipes/test-with-dashes.pipe.ts')
+      tree.exists(
+        '/libs/xplat/features/src/lib/ui/pipes/test-with-dashes.pipe.ts'
+      )
     ).toBeTruthy();
 
     // file content
     let content = getFileContent(
       tree,
-      '/libs/features/ui/pipes/test-with-dashes.pipe.ts'
+      '/libs/xplat/features/src/lib/ui/pipes/test-with-dashes.pipe.ts'
     );
     // console.log(content);
     expect(content.indexOf(`@Pipe({`)).toBeGreaterThanOrEqual(0);
@@ -118,7 +123,7 @@ describe('pipe schematic', () => {
     const options: GenerateOptions = { ...defaultOptions };
     options.feature = 'register';
     await expect(runSchematic('pipe', options, appTree)).rejects.toThrow(
-      `libs/features/register/register.module.ts does not exist. Create the feature module first. For example: nx g @nstudio/angular:feature register`
+      `libs/xplat/features/src/lib/register/register.module.ts does not exist. Create the feature module first. For example: nx g @nstudio/angular:feature register`
     );
   });
 
@@ -143,12 +148,16 @@ describe('pipe schematic', () => {
     // console.log(files. slice(91,files.length));
 
     // pipe should not be setup to share
-    expect(tree.exists('/libs/features/ui/pipes/truncate.pipe.ts')).toBeFalsy();
     expect(
-      tree.exists('/xplat/nativescript/features/foo/pipes/truncate.pipe.ts')
+      tree.exists('/libs/xplat/features/src/lib/ui/pipes/truncate.pipe.ts')
     ).toBeFalsy();
     expect(
-      tree.exists('/xplat/web/features/foo/pipes/truncate.pipe.ts')
+      tree.exists(
+        '/libs/xplat/nativescript/features/src/lib/foo/pipes/truncate.pipe.ts'
+      )
+    ).toBeFalsy();
+    expect(
+      tree.exists('/libs/xplat/web/features/src/lib/foo/pipes/truncate.pipe.ts')
     ).toBeFalsy();
 
     // pipe should be project specific
@@ -201,7 +210,7 @@ describe('pipe schematic', () => {
     };
 
     await expect(runSchematic('pipe', options, appTree)).rejects.toThrow(
-      `xplat/nativescript/features/register/register.module.ts does not exist. Create the feature module first. For example: nx g @nstudio/angular:feature register --platforms=nativescript --onlyModule`
+      `libs/xplat/nativescript/features/src/lib/register/register.module.ts does not exist. Create the feature module first. For example: nx g @nstudio/angular:feature register --platforms=nativescript --onlyModule`
     );
   });
 

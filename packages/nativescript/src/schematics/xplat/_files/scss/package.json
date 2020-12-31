@@ -1,4 +1,0 @@
-{
-  "name": "@<%= npmScope %>/nativescript-scss",
-  "version": "1.0.0"
-}

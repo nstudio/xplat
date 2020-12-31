@@ -112,7 +112,7 @@ export default function (options: ElementsOptions) {
     },
     // add builder files or update them
     (tree: Tree, context: SchematicContext) => {
-      if (tree.exists('xplat/web/elements/builder/index.html')) {
+      if (tree.exists('libs/xplat/web/elements/builder/index.html')) {
         return updateBuilder(tree, options);
       } else {
         return addFiles(options, 'builder')(tree, context);
@@ -141,7 +141,7 @@ export default function (options: ElementsOptions) {
           projects: {
             'web-elements': {
               root: '',
-              sourceRoot: 'xplat/web/elements/builder',
+              sourceRoot: 'libs/xplat/web/elements/builder',
               projectType: 'application',
               prefix: 'web-elements',
               schematics: {},
@@ -150,11 +150,11 @@ export default function (options: ElementsOptions) {
                   builder: 'ngx-build-plus:build',
                   options: {
                     outputPath: 'dist/ngelements',
-                    index: 'xplat/web/elements/builder/index.html',
-                    main: 'xplat/web/elements/builder/elements.ts',
-                    polyfills: 'xplat/web/elements/builder/polyfills.ts',
+                    index: 'libs/xplat/web/elements/builder/index.html',
+                    main: 'libs/xplat/web/elements/builder/elements.ts',
+                    polyfills: 'libs/xplat/web/elements/builder/polyfills.ts',
                     tsConfig:
-                      'xplat/web/elements/builder/tsconfig.elements.json',
+                      'libs/xplat/web/elements/builder/tsconfig.elements.json',
                   },
                   configurations: {
                     production: {
@@ -220,7 +220,7 @@ function addFiles(options: ElementsOptions, extra: string = ''): Rule {
           componentSymbols,
           htmlElements,
         }),
-        move(`xplat/${xplatFolderName}/elements`),
+        move(`libs/xplat/${xplatFolderName}/elements`),
       ])
     )
   );
@@ -263,10 +263,10 @@ function createCustomElementList(componentSymbols) {
 function updateBuilder(tree: Tree, options: ElementsOptions) {
   if (options.builderModule) {
     tree.overwrite(
-      `xplat/web/elements/builder/elements.ts`,
+      `libs/xplat/web/elements/builder/elements.ts`,
       builderElementsContent(options.builderModule)
     );
-    const moduleFilePath = `xplat/web/elements/${options.builderModule}.module.ts`;
+    const moduleFilePath = `libs/xplat/web/elements/${options.builderModule}.module.ts`;
     if (tree.exists(moduleFilePath)) {
       const moduleFile = tree.get(moduleFilePath).content.toString();
       const selectorParts = moduleFile.split('.define(');
@@ -277,7 +277,7 @@ function updateBuilder(tree: Tree, options: ElementsOptions) {
         customElements.push(`<${selector}></${selector}>`);
       }
       tree.overwrite(
-        `xplat/web/elements/builder/index.html`,
+        `libs/xplat/web/elements/builder/index.html`,
         buildIndexContent(customElements.join('\n'))
       );
     } else {
@@ -285,11 +285,11 @@ function updateBuilder(tree: Tree, options: ElementsOptions) {
     }
   } else {
     tree.overwrite(
-      `xplat/web/elements/builder/elements.ts`,
+      `libs/xplat/web/elements/builder/elements.ts`,
       builderElementsContent(options.name)
     );
     tree.overwrite(
-      `xplat/web/elements/builder/index.html`,
+      `libs/xplat/web/elements/builder/index.html`,
       buildIndexContent(htmlElements)
     );
   }

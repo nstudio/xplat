@@ -60,7 +60,9 @@ describe('app', () => {
     ).toBeGreaterThanOrEqual(0);
 
     // xplat file defaults
-    expect(files.indexOf('/xplat/nativescript/index.ts')).toBe(-1);
+    expect(
+      files.indexOf('/libs/xplat/nativescript/core/src/lib/index.ts')
+    ).toBe(-1);
   });
 
   it('should create all files of an app using groupByName', async () => {
@@ -102,14 +104,6 @@ describe('app', () => {
     expect(
       tree.exists('/apps/frontend/nativescript-foo/package.json')
     ).toBeTruthy();
-    const fileContent = getFileContent(
-      tree,
-      '/apps/frontend/nativescript-foo/tsconfig.json'
-    );
-    // console.log('tsconfig:', fileContent)
-    expect(
-      fileContent.indexOf('../../../xplat/nativescript/*')
-    ).toBeGreaterThanOrEqual(0);
   });
 
   it('should create all files for app in directory and ignore platform naming when directory is a platform', async () => {

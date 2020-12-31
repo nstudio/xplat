@@ -134,28 +134,12 @@ const updateDefaultCollection = (tree: Tree, context: SchematicContext) => {
   });
 };
 
-// const addXplatFrameworkIdentifier = (tree: Tree, context: SchematicContext) => {
-//   if (tree.exists('/xplat/web/index.ts') && !tree.exists('/xplat/web/.xplatframework')) {
-//     tree.create('.xplatframework', 'angular');
-//   }
-//   if (tree.exists('/xplat/nativescript/index.ts') && !tree.exists('/xplat/nativescript/.xplatframework')) {
-//     tree.create('.xplatframework', 'angular');
-//   }
-//   if (tree.exists('/xplat/ionic/index.ts') && !tree.exists('/xplat/ionic/.xplatframework')) {
-//     tree.create('.xplatframework', 'angular');
-//   }
-//   if (tree.exists('/xplat/electron/index.ts') && !tree.exists('/xplat/electron/.xplatframework')) {
-//     tree.create('.xplatframework', 'angular');
-//   }
-// };
-
 export default function (): Rule {
   return chain([
     displayInformation,
     removeOldDependencies,
     addDependencies(),
     updateDefaultCollection,
-    // addXplatFrameworkIdentifier,
     addInstallTask(),
     formatFiles(),
   ]);

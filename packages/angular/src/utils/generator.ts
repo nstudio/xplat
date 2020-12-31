@@ -218,7 +218,7 @@ export function generate(type: IGenerateType, options) {
             xplatFolderName,
             type,
             options,
-            `xplat/${xplatFolderName}`,
+            `libs/xplat/${xplatFolderName}`,
             tree
           );
         });
@@ -228,7 +228,7 @@ export function generate(type: IGenerateType, options) {
             platform,
             'angular'
           );
-          return adjustBarrel(type, options, `xplat/${xplatFolderName}`);
+          return adjustBarrel(type, options, `libs/xplat/${xplatFolderName}`);
         });
         // add index barrel if needed
         externalChains.push((tree: Tree, context: SchematicContext) => {
@@ -241,7 +241,7 @@ export function generate(type: IGenerateType, options) {
                 xplatFolderName,
                 type,
                 options,
-                `xplat/${xplatFolderName}`,
+                `libs/xplat/${xplatFolderName}`,
                 tree,
                 '_index'
               )(tree, context)
@@ -253,7 +253,7 @@ export function generate(type: IGenerateType, options) {
             platform,
             'angular'
           );
-          return adjustModule(type, options, `xplat/${xplatFolderName}`);
+          return adjustModule(type, options, `libs/xplat/${xplatFolderName}`);
         });
       } else {
         throw new Error(unsupportedPlatformError(platform));
@@ -267,22 +267,29 @@ export function generate(type: IGenerateType, options) {
       // for entire workspace usage
       // no projects and no specific platforms specified
       !options.projects && platforms.length === 0
-        ? addToFeature('', type, options, 'libs', tree)(tree, context)
+        ? addToFeature('', type, options, 'libs/xplat', tree)(tree, context)
         : noop()(tree, context),
     // adjust libs barrel
     (tree: Tree, context: SchematicContext) =>
       !options.projects && platforms.length === 0
-        ? adjustBarrel(type, options, 'libs')(tree, context)
+        ? adjustBarrel(type, options, 'libs/xplat')(tree, context)
         : noop()(tree, context),
     // add index barrel if needed
     (tree: Tree, context: SchematicContext) =>
       options.needsIndex
-        ? addToFeature('', type, options, 'libs', tree, '_index')(tree, context)
+        ? addToFeature(
+            '',
+            type,
+            options,
+            'libs/xplat',
+            tree,
+            '_index'
+          )(tree, context)
         : noop()(tree, context),
     // adjust feature module metadata if needed
     (tree: Tree, context: SchematicContext) =>
       !options.projects && platforms.length === 0
-        ? adjustModule(type, options, 'libs')(tree, context)
+        ? adjustModule(type, options, 'libs/xplat')(tree, context)
         : noop()(tree, context),
 
     // project handling
@@ -328,21 +335,22 @@ export function addToFeature(
 
   options.needsIndex = false; // reset
 
+  const srcSubFolderPath = options.projects ? '' : '/src/lib';
   let featurePath: string;
   if (shouldTargetCoreBarrel(type, featureName)) {
     // services and/or state should never be generated in shared or ui features
     // therefore place in core (since they are service level)
     featureName = 'core';
-    featurePath = `${prefixPath}/${featureName}`;
+    featurePath = `${prefixPath}/${featureName}${srcSubFolderPath}`;
   } else {
-    featurePath = `${prefixPath}/features/${featureName}`;
+    featurePath = `${prefixPath}/features${srcSubFolderPath}/${featureName}`;
   }
 
   const featureModulePath = `${featurePath}/${featureName}.module.ts`;
   let moveTo: string;
   if (extra === '_base' || extra === '_base_index') {
     // always in libs
-    moveTo = `libs/features/${featureName}/base`;
+    moveTo = `libs/xplat/features/src/lib/${featureName}/base`;
   } else {
     moveTo = `${featurePath}/${type}${type === 'state' ? '' : 's'}`;
     if (!tree.exists(featureModulePath)) {
@@ -351,7 +359,7 @@ export function addToFeature(
         // parse platform from prefix
         const parts = prefixPath.split('/');
         if (parts.length > 1) {
-          optionName = parts[1];
+          optionName = parts[2];
         }
       }
       throw new Error(
@@ -415,18 +423,19 @@ export function adjustBarrel(
   prefix: string
 ) {
   let featureName: string = getFeatureName(options);
+  const srcSubFolderPath = options.projects ? '' : '/src/lib';
   let barrelIndexPath: string;
   if (shouldTargetCoreBarrel(type, featureName)) {
     if (type === 'state') {
-      barrelIndexPath = `${prefix}/core/index.ts`;
+      barrelIndexPath = `${prefix}/core${srcSubFolderPath}/index.ts`;
     } else {
-      barrelIndexPath = `${prefix}/core/${type}s/index.ts`;
+      barrelIndexPath = `${prefix}/core${srcSubFolderPath}/${type}s/index.ts`;
     }
   } else {
     if (type === 'state') {
-      barrelIndexPath = `${prefix}/features/${featureName}/index.ts`;
+      barrelIndexPath = `${prefix}/features${srcSubFolderPath}/${featureName}/index.ts`;
     } else {
-      barrelIndexPath = `${prefix}/features/${featureName}/${type}s/index.ts`;
+      barrelIndexPath = `${prefix}/features${srcSubFolderPath}/${featureName}/${type}s/index.ts`;
     }
   }
 
@@ -460,7 +469,7 @@ export function adjustBarrelIndex(
       const changes = [];
       const name = options.name.toLowerCase();
 
-      if (!isBase) {
+      if (!isBase && type !== 'service') {
         // add to barrel collection
         if (importIfSubFolder && options.subFolder) {
           // import collection from subfolder
@@ -573,9 +582,9 @@ export function adjustModule(
   let featurePath: string;
   if (shouldTargetCoreBarrel(type, featureName)) {
     featureName = 'core';
-    featurePath = `${prefixPath}/${featureName}`;
+    featurePath = `${prefixPath}/${featureName}/src/lib`;
   } else {
-    featurePath = `${prefixPath}/features/${featureName}`;
+    featurePath = `${prefixPath}/features/src/lib/${featureName}`;
   }
 
   const featureModulePath = `${featurePath}/${featureName}.module.ts`;
@@ -690,7 +699,7 @@ export function adjustFeatureModuleForState(
       );
       // console.log('moduleSource:', moduleSource);
 
-      const isInLibs = modulePath.indexOf('libs') === 0;
+      const isInLibs = modulePath.indexOf('libs/xplat/core') === 0;
       const name = options.name.toLowerCase();
       const changes = [];
       if (moduleSource.indexOf('StoreModule') === -1) {
@@ -740,7 +749,7 @@ export function adjustFeatureModuleForState(
         if (moduleSource.indexOf('environments/environment') === -1) {
           const envFrom = isInLibs
             ? './environments/environment'
-            : `@${getNpmScope()}/core`;
+            : `@${getNpmScope()}/xplat/core`;
           changes.push(
             ...addGlobal(
               moduleSourceFile,
@@ -828,7 +837,6 @@ export function adjustRouting(
 
       const changes = [];
 
-      const loadPrefix = platform === 'nativescript' ? '~' : '.';
       // add component to route config
       changes.push(
         ...addToCollection(

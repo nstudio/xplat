@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { BaseComponent } from '@<%= npmScope %>/core';
+import { BaseComponent } from '@<%= npmScope %>/xplat/core';
 
 @Component({
   selector: '<%= prefix %>-home',

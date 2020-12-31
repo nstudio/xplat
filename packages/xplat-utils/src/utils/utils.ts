@@ -152,25 +152,6 @@ export function getRootTsConfigPath() {
   return '/tsconfig.base.json';
 }
 
-export function checkRootTsConfig(tree: Tree) {
-  if (!tree.exists('/tsconfig.json') && tree.exists('/tsconfig.base.json')) {
-    // to support Nx 10.1+
-    // NOTE: We may end up creating tsconfig's at libs and xplat levels in future
-    // This allows ts resolution to work as normal
-    tree.create(
-      '/tsconfig.json',
-      JSON.stringify(
-        {
-          extends: `.${getRootTsConfigPath()}`,
-        },
-        null,
-        2
-      )
-    );
-  }
-  return tree;
-}
-
 export function getAppPaths(
   tree: Tree,
   type?: PlatformTypes // by default, will return all app paths (considering folder nesting)
@@ -251,7 +232,6 @@ export function prerun(options?: any, init?: boolean) {
     if (nxJson) {
       npmScope = nxJson.npmScope || 'workspace';
     }
-    tree = checkRootTsConfig(tree);
     // console.log('npmScope:', npmScope);
     const packageJson = getJsonFromFile(tree, 'package.json');
 

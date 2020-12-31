@@ -3,6 +3,7 @@ tmp
 /build
 node_modules
 /package.json
+packages/**/*.html
 packages/angular/src/schematics/**/_**files/**/*.json
 packages/electron/src/schematics/**/_**files/**/*.json
 packages/ionic/src/schematics/**/_**files/**/*.json
@@ -11,6 +12,7 @@ packages/nativescript/src/schematics/**/App_Resources/**/*
 packages/nativescript/src/schematics/**/hooks/**/*
 packages/nativescript/src/schematics/**/tools/**/*
 packages/nativescript/src/schematics/xplat/_files/scss/fonticons/*.css
+packages/nativescript-angular/src/schematics/application/_files/webpack.config.js
 packages/nativescript-angular/src/schematics/xplat/_files/scss/fonticons/*.css
 packages/web/src/schematics/**/_*/**/*.json
 packages/xplat/src/schematics/**/_*/**/*.json

@@ -80,7 +80,7 @@ export default function (options: XplatFeatureHelpers.Schema) {
       );
       return XplatFeatureHelpers.adjustBarrelIndex(
         options,
-        `xplat/${xplatFolderName}/features/index.ts`
+        `libs/xplat/${xplatFolderName}/features/src/lib/index.ts`
       )(tree, context);
     });
     // add starting component unless onlyModule

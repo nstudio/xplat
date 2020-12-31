@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 <% if (setupSandbox) { %>import { RouterExtensions } from '@nativescript/angular';<% } %>
-import { BaseComponent } from '@<%= npmScope %>/core';
+import { BaseComponent } from '@<%= npmScope %>/xplat/core';
 
 @Component({
   moduleId: module.id,

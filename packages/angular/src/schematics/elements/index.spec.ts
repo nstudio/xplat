@@ -8,7 +8,7 @@ describe('elements schematic', () => {
   let appTree: Tree;
   const defaultOptions: ElementsOptions = {
     name: 'ui-kit',
-    barrel: '@mycompany/web',
+    barrel: '@mycompany/xplat/web/features',
     components: 'menu,footer',
   };
 
@@ -31,33 +31,35 @@ describe('elements schematic', () => {
     // console.log(files.slice(85,files.length));
     expect(
       files.indexOf(
-        '/xplat/web/features/ui/components/menu/menu.component.html'
-      )
-    ).toBeGreaterThanOrEqual(0);
-    expect(
-      files.indexOf('/xplat/web/features/ui/components/menu/menu.component.ts')
-    ).toBeGreaterThanOrEqual(0);
-    expect(
-      files.indexOf(
-        '/xplat/web/features/ui/components/footer/footer.component.html'
+        '/libs/xplat/web/features/src/lib/ui/components/menu/menu.component.html'
       )
     ).toBeGreaterThanOrEqual(0);
     expect(
       files.indexOf(
-        '/xplat/web/features/ui/components/footer/footer.component.ts'
+        '/libs/xplat/web/features/src/lib/ui/components/menu/menu.component.ts'
+      )
+    ).toBeGreaterThanOrEqual(0);
+    expect(
+      files.indexOf(
+        '/libs/xplat/web/features/src/lib/ui/components/footer/footer.component.html'
+      )
+    ).toBeGreaterThanOrEqual(0);
+    expect(
+      files.indexOf(
+        '/libs/xplat/web/features/src/lib/ui/components/footer/footer.component.ts'
       )
     ).toBeGreaterThanOrEqual(0);
 
     tree = await runSchematic('elements', options, tree);
     files = tree.files;
 
-    const elementModulePath = '/xplat/web/elements/ui-kit.module.ts';
+    const elementModulePath = '/libs/xplat/web/elements/ui-kit.module.ts';
     expect(files.indexOf(elementModulePath)).toBeGreaterThanOrEqual(0);
     const elementModule = getFileContent(tree, elementModulePath);
     // console.log(elementModule);
     expect(
       elementModule.indexOf(
-        `import { MenuComponent, FooterComponent } from '@mycompany/web';`
+        `import { MenuComponent, FooterComponent } from '@mycompany/xplat/web/features';`
       )
     ).toBeGreaterThanOrEqual(0);
     expect(
@@ -93,42 +95,42 @@ describe('elements schematic', () => {
     // console.log(files.slice(85,files.length));
     expect(
       files.indexOf(
-        '/xplat/web/features/ui/components/menu/menu.component.html'
-      )
-    ).toBeGreaterThanOrEqual(0);
-    expect(
-      files.indexOf('/xplat/web/features/ui/components/menu/menu.component.ts')
-    ).toBeGreaterThanOrEqual(0);
-    expect(
-      files.indexOf(
-        '/xplat/web/features/ui/components/footer/footer.component.html'
+        '/libs/xplat/web/features/src/lib/ui/components/menu/menu.component.html'
       )
     ).toBeGreaterThanOrEqual(0);
     expect(
       files.indexOf(
-        '/xplat/web/features/ui/components/footer/footer.component.ts'
+        '/libs/xplat/web/features/src/lib/ui/components/menu/menu.component.ts'
+      )
+    ).toBeGreaterThanOrEqual(0);
+    expect(
+      files.indexOf(
+        '/libs/xplat/web/features/src/lib/ui/components/footer/footer.component.html'
+      )
+    ).toBeGreaterThanOrEqual(0);
+    expect(
+      files.indexOf(
+        '/libs/xplat/web/features/src/lib/ui/components/footer/footer.component.ts'
       )
     ).toBeGreaterThanOrEqual(0);
 
     tree = await runSchematic('elements', options, tree);
     files = tree.files;
 
-    let elementModulePath = '/xplat/web/elements/ui-kit.module.ts';
+    let elementModulePath = '/libs/xplat/web/elements/ui-kit.module.ts';
     expect(files.indexOf(elementModulePath)).toBeGreaterThanOrEqual(0);
     let elementModule = getFileContent(tree, elementModulePath);
     // console.log(elementModule);
     expect(
-      elementModule.indexOf(
-        `import { MenuComponent, FooterComponent } from '@mycompany/web';`
-      )
+      elementModule.indexOf(`'@mycompany/xplat/web/features';`)
     ).toBeGreaterThanOrEqual(0);
 
-    let builderPath = '/xplat/web/elements/builder/elements.ts';
+    let builderPath = '/libs/xplat/web/elements/builder/elements.ts';
     expect(files.indexOf(builderPath)).toBeGreaterThanOrEqual(0);
     let builderModule = getFileContent(tree, builderPath);
     // console.log(builderModule);
     expect(builderModule.indexOf(`../ui-kit.module`)).toBeGreaterThanOrEqual(0);
-    let builderIndexPath = '/xplat/web/elements/builder/index.html';
+    let builderIndexPath = '/libs/xplat/web/elements/builder/index.html';
     expect(files.indexOf(builderPath)).toBeGreaterThanOrEqual(0);
     let builderIndex = getFileContent(tree, builderIndexPath);
     // console.log(builderIndex);
@@ -150,39 +152,39 @@ describe('elements schematic', () => {
     // console.log(files.slice(85,files.length));
     expect(
       files.indexOf(
-        '/xplat/web/features/ui/components/dropdown/dropdown.component.html'
+        '/libs/xplat/web/features/src/lib/ui/components/dropdown/dropdown.component.html'
       )
     ).toBeGreaterThanOrEqual(0);
     expect(
       files.indexOf(
-        '/xplat/web/features/ui/components/dropdown/dropdown.component.ts'
+        '/libs/xplat/web/features/src/lib/ui/components/dropdown/dropdown.component.ts'
       )
     ).toBeGreaterThanOrEqual(0);
     expect(
       files.indexOf(
-        '/xplat/web/features/ui/components/link/link.component.html'
+        '/libs/xplat/web/features/src/lib/ui/components/link/link.component.html'
       )
     ).toBeGreaterThanOrEqual(0);
     expect(
-      files.indexOf('/xplat/web/features/ui/components/link/link.component.ts')
+      files.indexOf(
+        '/libs/xplat/web/features/src/lib/ui/components/link/link.component.ts'
+      )
     ).toBeGreaterThanOrEqual(0);
 
     const newElementOptions: ElementsOptions = {
       name: 'widgets',
-      barrel: '@mycompany/web',
+      barrel: '@mycompany/xplat/web/features',
       components: 'dropdown,link',
     };
     tree = await runSchematic('elements', newElementOptions, tree);
     files = tree.files;
 
-    elementModulePath = '/xplat/web/elements/widgets.module.ts';
+    elementModulePath = '/libs/xplat/web/elements/widgets.module.ts';
     expect(files.indexOf(elementModulePath)).toBeGreaterThanOrEqual(0);
     elementModule = getFileContent(tree, elementModulePath);
     // console.log(elementModule);
     expect(
-      elementModule.indexOf(
-        `import { DropdownComponent, LinkComponent } from '@mycompany/web';`
-      )
+      elementModule.indexOf(`'@mycompany/xplat/web/features';`)
     ).toBeGreaterThanOrEqual(0);
 
     builderModule = getFileContent(tree, builderPath);

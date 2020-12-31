@@ -92,27 +92,6 @@ export default function (options: Schema) {
         { interactive: false }
       )(tree, context);
     },
-    // adjust root tsconfig
-    (tree: Tree, context: SchematicContext) => {
-      return updateTsConfig(tree, (tsConfig: any) => {
-        if (tsConfig) {
-          if (!tsConfig.exclude) {
-            tsConfig.exclude = [];
-          }
-          const excludeNSApps = 'apps/nativescript-*';
-          if (!tsConfig.exclude.includes(excludeNSApps)) {
-            tsConfig.exclude.push(excludeNSApps);
-          }
-          if (!tsConfig.includes) {
-            tsConfig.includes = [];
-          }
-          const platformFiles = 'xplat/**/*.{ios,android}.ts';
-          if (!tsConfig.includes.includes(platformFiles)) {
-            tsConfig.includes.push(platformFiles);
-          }
-        }
-      });
-    },
     // add root package dependencies
     XplatNativeScriptAngularHelpers.updateRootDeps(options),
     XplatNativeScriptHelpers.updatePrettierIgnore(),
@@ -146,11 +125,21 @@ export default function (options: Schema) {
           default: {
             builder: '@nrwl/workspace:run-commands',
             configurations: {
+              dev: {
+                fileReplacements: [
+                  {
+                    replace:
+                      'libs/xplat/core/src/lib/environments/environment.ts',
+                    with: `apps/${directory}${options.name}/src/environments/environment.dev.ts`,
+                  },
+                ],
+              },
               production: {
                 fileReplacements: [
                   {
-                    replace: 'libs/core/environments/environment.ts',
-                    with: 'libs/core/environments/environment.prod.ts',
+                    replace:
+                      'libs/xplat/core/src/lib/environments/environment.ts',
+                    with: `apps/${directory}${options.name}/src/environments/environment.prod.ts`,
                   },
                 ],
               },
@@ -159,21 +148,15 @@ export default function (options: Schema) {
           ios: {
             builder: '@nrwl/workspace:run-commands',
             options: {
-              commands: [
-                `ns debug ios --no-hmr --env.configuration={args.configuration} --env.projectName=${options.name}`,
-              ],
+              command: `ns debug ios --no-hmr --env.projectName=${options.name}`,
               cwd: `apps/${directory}${options.name}`,
-              parallel: false,
             },
           },
           android: {
             builder: '@nrwl/workspace:run-commands',
             options: {
-              commands: [
-                `ns debug android --no-hmr --env.configuration={args.configuration} --env.projectName=${options.name}`,
-              ],
+              command: `ns debug android --no-hmr --env.projectName=${options.name}`,
               cwd: `apps/${directory}${options.name}`,
-              parallel: false,
             },
           },
           clean: {
@@ -183,6 +166,25 @@ export default function (options: Schema) {
               cwd: `apps/${directory}${options.name}`,
               parallel: false,
             },
+          },
+          lint: {
+            builder: '@nrwl/linter:eslint',
+            options: {
+              lintFilePatterns: [
+                `apps/${directory}${options.name}/**/*.ts`,
+                `apps/${directory}${options.name}/src/**/*.html`,
+              ],
+            },
+          },
+          test: {
+            builder: '@nrwl/jest:jest',
+            options: {
+              jestConfig: `apps/${directory}${options.name}/jest.config.js`,
+              tsConfig: `apps/${directory}${options.name}/tsconfig.spec.json`,
+              passWithNoTests: true,
+              setupFile: `apps/${directory}${options.name}/src/test-setup.ts`,
+            },
+            outputs: [`coverage/apps/${directory}${options.name}/`],
           },
         },
       };
@@ -203,7 +205,7 @@ export default function (options: Schema) {
           `   `,
           `nx run ${options.name}:android`,
           `   `,
-          `You can also clean/reset the app anytime with:`,
+          `You can also:`,
           `   `,
           `nx run ${options.name}:clean`,
         ],
@@ -227,6 +229,7 @@ function addAppFiles(
           ...(options as any),
           ...getDefaultTemplateOptions(),
           appname,
+          directoryAppPath: `${directory}${appPath}`,
           pathOffset: directory ? '../../../' : '../../',
           angularVersion: angularVersion,
           nsNgScopedVersion: nsNgScopedVersion,
