@@ -144,7 +144,7 @@ export default function (): Rule {
           }
         }
       });
-    },
+    }
   ]);
 }
 
@@ -193,7 +193,7 @@ function moveOldStructureToNew() {
         projectDir.visit((file) => {
           let moveTo: string;
           let srcTarget = '/src';
-          if (file.indexOf('scss') === -1) {
+          if (file.indexOf('/scss') === -1) {
             srcTarget += '/lib';
           }
           if (file.indexOf('/libs') === 0) {
@@ -203,10 +203,17 @@ function moveOldStructureToNew() {
               `/libs/xplat/${pathTarget}${srcTarget}`
             );
           } else if (file.indexOf('/xplat') === 0) {
-            moveTo = file.replace(
-              projectDir.path,
-              `/libs${projectDir.path}${srcTarget}`
-            );
+            if (file.indexOf('/plugins') > -1) {
+              moveTo = file.replace(
+                projectDir.path,
+                `/libs${projectDir.path}`
+              );
+            } else {
+              moveTo = file.replace(
+                projectDir.path,
+                `/libs${projectDir.path}${srcTarget}`
+              );
+            }
           }
           // console.log('moveOldStructureToNew', ' rename ', file);
           // console.log('moveOldStructureToNew', ' moveTo ', moveTo);
@@ -232,6 +239,14 @@ function updateRootDeps() {
       'file:libs/xplat/scss/src';
     delete packageJson.devDependencies[`node-sass`];
     packageJson.devDependencies['sass'] = '~1.30.0';
+
+    // look for file ref'd plugins from xplat and update path
+    for (const packageName of Object.keys(packageJson.dependencies)) {
+      const packageVersion = packageJson.dependencies[packageName];
+      if (packageVersion && packageVersion.indexOf('file:xplat') > -1) {
+        packageJson.dependencies[packageName] = packageVersion.replace('file:xplat', 'file:libs/xplat')
+      }
+    }
 
     return updateJsonFile(tree, packagePath, packageJson);
   };
@@ -331,6 +346,14 @@ function updateAppConfigs() {
           ...packageJson.dependencies,
           ...updatedDeps,
         };
+
+        // look for file ref'd plugins from xplat and update path
+        for (const packageName of Object.keys(packageJson.dependencies)) {
+          const packageVersion = packageJson.dependencies[packageName];
+          if (packageVersion && packageVersion.indexOf('../xplat') > -1) {
+            packageJson.dependencies[packageName] = packageVersion.replace('../xplat', '../libs/xplat')
+          }
+        }
 
         // console.log('path:',path);
         // console.log('packageJson overwrite:', JSON.stringify(packageJson));
@@ -640,6 +663,9 @@ function getCurrentlyUsedPlatforms(tree: Tree) {
         oldDirectoriesToMove.push('/xplat/nativescript/features');
         newDirectoriesToEmpty.push('/libs/xplat/nativescript/features/src/lib');
       }
+      if (!oldDirectoriesToMove.includes('/xplat/nativescript/plugins')) {
+        oldDirectoriesToMove.push('/xplat/nativescript/plugins');
+      }
       if (!oldDirectoriesToMove.includes('/xplat/nativescript/scss')) {
         oldDirectoriesToMove.push('/xplat/nativescript/scss');
         newDirectoriesToEmpty.push('/libs/xplat/nativescript/scss/src');
@@ -682,6 +708,9 @@ function getCurrentlyUsedPlatforms(tree: Tree) {
       if (!oldDirectoriesToMove.includes('/xplat/web/features')) {
         oldDirectoriesToMove.push('/xplat/web/features');
         newDirectoriesToEmpty.push('/libs/xplat/web/features/src/lib');
+      }
+      if (!oldDirectoriesToMove.includes('/xplat/web/plugins')) {
+        oldDirectoriesToMove.push('/xplat/web/plugins');
       }
       if (!oldDirectoriesToMove.includes('/xplat/web/scss')) {
         oldDirectoriesToMove.push('/xplat/web/scss');

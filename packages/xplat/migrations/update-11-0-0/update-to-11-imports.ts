@@ -40,6 +40,7 @@ export interface PackageNameMapping {
 
 const options: XplatHelpers.Schema = {};
 const importsToUpdateMapping: PackageNameMapping = {};
+const importsScssToUpdateMapping: PackageNameMapping = {};
 export default function (): Rule {
   return chain([
     prerun(
@@ -159,14 +160,28 @@ export function updateImports() {
     //   directoriesToUpdateImports
     // );
 
+    // scss imports
+    importsScssToUpdateMapping[
+      `@${npmScope}/scss`
+    ] = `@${npmScope}/xplat-scss`;
+    importsScssToUpdateMapping[
+      `@${npmScope}/ionic-scss`
+    ] = `@${npmScope}/xplat-ionic-scss`;
+    importsScssToUpdateMapping[
+      `@${npmScope}/web-scss`
+    ] = `@${npmScope}/xplat-web-scss`;
+    importsScssToUpdateMapping[
+      `@${npmScope}/nativescript-scss`
+    ] = `@${npmScope}/xplat-nativescript-scss`;
+
     ['/libs', '/apps']
       .map((dir) => tree.getDir(dir))
       .forEach((projectDir) => {
         projectDir.visit((file) => {
-          // only look at .ts files
+          // only look at .ts and .scss files
           // ignore some directories in various apps
           if (
-            !/^.*\.ts$/.test(file) ||
+            !/^.*\.(ts|scss)$/.test(file) ||
             file.indexOf('/node_modules/') > -1 ||
             file.indexOf('/platforms/ios') > -1 ||
             file.indexOf('/platforms/android') > -1
@@ -175,89 +190,105 @@ export function updateImports() {
           }
           // if it doesn't contain at least 1 reference to the packages to be renamed bail out
           const contents = tree.read(file).toString('utf-8');
-          if (
-            !Object.keys(importsToUpdateMapping).some((packageName) =>
-              contents.includes(packageName)
-            )
-          ) {
-            // also check some relative paths which are common
-            return;
-          }
-          // console.log('updateImports', 'found old import in:', file);
 
-          const astSource = ts.createSourceFile(
-            file,
-            contents,
-            ts.ScriptTarget.Latest,
-            true
-          );
-          const changes = Object.entries(importsToUpdateMapping)
-            .map(([packageName, newPackageName]) => {
-              if (file.indexOf('apps/') > -1) {
-                // ensure core vs. shared is handled
-                if (file.indexOf('core.module') > -1) {
-                  if (file.indexOf('electron') > -1) {
-                    newPackageName = `@${npmScope}/xplat/electron/core`;
-                  } else if (file.indexOf('ionic') > -1) {
-                    newPackageName = `@${npmScope}/xplat/ionic/core`;
-                  } else if (file.indexOf('nativescript') > -1) {
-                    newPackageName = `@${npmScope}/xplat/nativescript/core`;
-                  } else if (file.indexOf('web') > -1) {
-                    newPackageName = `@${npmScope}/xplat/web/core`;
-                  }
-                } else if (file.indexOf('shared.module') > -1) {
-                  if (file.indexOf('electron') > -1) {
-                    newPackageName = `@${npmScope}/xplat/electron/features`;
-                  } else if (file.indexOf('ionic') > -1) {
-                    newPackageName = `@${npmScope}/xplat/ionic/features`;
-                  } else if (file.indexOf('nativescript') > -1) {
-                    newPackageName = `@${npmScope}/xplat/nativescript/features`;
-                  } else if (file.indexOf('web') > -1) {
-                    newPackageName = `@${npmScope}/xplat/web/features`;
+          if (/^.*\.scss$/.test(file)) {
+            if (
+              !Object.keys(importsScssToUpdateMapping).some((packageName) =>
+                contents.includes(packageName)
+              )
+            ) {
+              return;
+            }
+            Object.entries(importsScssToUpdateMapping)
+              .forEach(([packageName, newPackageName]) => {
+                if (contents.indexOf(packageName) > -1) {
+                  const regEx = new RegExp(packageName, 'ig');
+                  tree.overwrite(file, contents.replace(regEx, newPackageName));
+                }
+              });
+          } else {
+            if (
+              !Object.keys(importsToUpdateMapping).some((packageName) =>
+                contents.includes(packageName)
+              )
+            ) {
+              return;
+            }
+            // console.log('updateImports', 'found old import in:', file);
+  
+            const astSource = ts.createSourceFile(
+              file,
+              contents,
+              ts.ScriptTarget.Latest,
+              true
+            );
+            const changes = Object.entries(importsToUpdateMapping)
+              .map(([packageName, newPackageName]) => {
+                if (file.indexOf('apps/') > -1) {
+                  // ensure core vs. shared is handled
+                  if (file.indexOf('core.module') > -1) {
+                    if (file.indexOf('electron') > -1) {
+                      newPackageName = `@${npmScope}/xplat/electron/core`;
+                    } else if (file.indexOf('ionic') > -1) {
+                      newPackageName = `@${npmScope}/xplat/ionic/core`;
+                    } else if (file.indexOf('nativescript') > -1) {
+                      newPackageName = `@${npmScope}/xplat/nativescript/core`;
+                    } else if (file.indexOf('web') > -1) {
+                      newPackageName = `@${npmScope}/xplat/web/core`;
+                    }
+                  } else if (file.indexOf('shared.module') > -1) {
+                    if (file.indexOf('electron') > -1) {
+                      newPackageName = `@${npmScope}/xplat/electron/features`;
+                    } else if (file.indexOf('ionic') > -1) {
+                      newPackageName = `@${npmScope}/xplat/ionic/features`;
+                    } else if (file.indexOf('nativescript') > -1) {
+                      newPackageName = `@${npmScope}/xplat/nativescript/features`;
+                    } else if (file.indexOf('web') > -1) {
+                      newPackageName = `@${npmScope}/xplat/web/features`;
+                    }
                   }
                 }
+                const nodes = findNodes(
+                  astSource,
+                  ts.SyntaxKind.ImportDeclaration
+                ) as ts.ImportDeclaration[];
+  
+                return nodes
+                  .filter((node) => {
+                    // remove quotes from module name
+                    const rawImportModuleText = node.moduleSpecifier
+                      .getText()
+                      .slice(1)
+                      .slice(0, -1);
+                    if (packageName.indexOf('*') > -1) {
+                      // replace deep imports
+                      return (
+                        rawImportModuleText.indexOf(
+                          packageName.replace('*', '')
+                        ) === 0
+                      );
+                    } else {
+                      // replace exact matches
+                      return rawImportModuleText === packageName;
+                    }
+                  })
+                  .map(
+                    (node) =>
+                      new ReplaceChange(
+                        file,
+                        node.moduleSpecifier.getStart(),
+                        node.moduleSpecifier.getText(),
+                        `'${newPackageName}'`
+                      )
+                  );
+              })
+              // .flatMap()/.flat() is not available? So, here's a flat poly
+              .reduce((acc, val) => acc.concat(val), []);
+              // if the reference to packageName was in fact an import statement
+              if (changes.length > 0) {
+                // update the file in the tree
+                insert(tree, file, changes);
               }
-              const nodes = findNodes(
-                astSource,
-                ts.SyntaxKind.ImportDeclaration
-              ) as ts.ImportDeclaration[];
-
-              return nodes
-                .filter((node) => {
-                  // remove quotes from module name
-                  const rawImportModuleText = node.moduleSpecifier
-                    .getText()
-                    .slice(1)
-                    .slice(0, -1);
-                  if (packageName.indexOf('*') > -1) {
-                    // replace deep imports
-                    return (
-                      rawImportModuleText.indexOf(
-                        packageName.replace('*', '')
-                      ) === 0
-                    );
-                  } else {
-                    // replace exact matches
-                    return rawImportModuleText === packageName;
-                  }
-                })
-                .map(
-                  (node) =>
-                    new ReplaceChange(
-                      file,
-                      node.moduleSpecifier.getStart(),
-                      node.moduleSpecifier.getText(),
-                      `'${newPackageName}'`
-                    )
-                );
-            })
-            // .flatMap()/.flat() is not available? So, here's a flat poly
-            .reduce((acc, val) => acc.concat(val), []);
-
-          // if the reference to packageName was in fact an import statement
-          if (changes.length > 0) {
-            // update the file in the tree
-            insert(tree, file, changes);
           }
         });
       });
