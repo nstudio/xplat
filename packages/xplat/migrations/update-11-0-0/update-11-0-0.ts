@@ -144,7 +144,7 @@ export default function (): Rule {
           }
         }
       });
-    }
+    },
   ]);
 }
 
@@ -204,10 +204,7 @@ function moveOldStructureToNew() {
             );
           } else if (file.indexOf('/xplat') === 0) {
             if (file.indexOf('/plugins') > -1) {
-              moveTo = file.replace(
-                projectDir.path,
-                `/libs${projectDir.path}`
-              );
+              moveTo = file.replace(projectDir.path, `/libs${projectDir.path}`);
             } else {
               moveTo = file.replace(
                 projectDir.path,
@@ -244,7 +241,10 @@ function updateRootDeps() {
     for (const packageName of Object.keys(packageJson.dependencies)) {
       const packageVersion = packageJson.dependencies[packageName];
       if (packageVersion && packageVersion.indexOf('file:xplat') > -1) {
-        packageJson.dependencies[packageName] = packageVersion.replace('file:xplat', 'file:libs/xplat')
+        packageJson.dependencies[packageName] = packageVersion.replace(
+          'file:xplat',
+          'file:libs/xplat'
+        );
       }
     }
 
@@ -351,7 +351,10 @@ function updateAppConfigs() {
         for (const packageName of Object.keys(packageJson.dependencies)) {
           const packageVersion = packageJson.dependencies[packageName];
           if (packageVersion && packageVersion.indexOf('../xplat') > -1) {
-            packageJson.dependencies[packageName] = packageVersion.replace('../xplat', '../libs/xplat')
+            packageJson.dependencies[packageName] = packageVersion.replace(
+              '../xplat',
+              '../libs/xplat'
+            );
           }
         }
 

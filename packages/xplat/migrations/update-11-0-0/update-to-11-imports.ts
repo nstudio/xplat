@@ -161,9 +161,7 @@ export function updateImports() {
     // );
 
     // scss imports
-    importsScssToUpdateMapping[
-      `@${npmScope}/scss`
-    ] = `@${npmScope}/xplat-scss`;
+    importsScssToUpdateMapping[`@${npmScope}/scss`] = `@${npmScope}/xplat-scss`;
     importsScssToUpdateMapping[
       `@${npmScope}/ionic-scss`
     ] = `@${npmScope}/xplat-ionic-scss`;
@@ -199,13 +197,14 @@ export function updateImports() {
             ) {
               return;
             }
-            Object.entries(importsScssToUpdateMapping)
-              .forEach(([packageName, newPackageName]) => {
+            Object.entries(importsScssToUpdateMapping).forEach(
+              ([packageName, newPackageName]) => {
                 if (contents.indexOf(packageName) > -1) {
                   const regEx = new RegExp(packageName, 'ig');
                   tree.overwrite(file, contents.replace(regEx, newPackageName));
                 }
-              });
+              }
+            );
           } else {
             if (
               !Object.keys(importsToUpdateMapping).some((packageName) =>
@@ -215,7 +214,7 @@ export function updateImports() {
               return;
             }
             // console.log('updateImports', 'found old import in:', file);
-  
+
             const astSource = ts.createSourceFile(
               file,
               contents,
@@ -252,7 +251,7 @@ export function updateImports() {
                   astSource,
                   ts.SyntaxKind.ImportDeclaration
                 ) as ts.ImportDeclaration[];
-  
+
                 return nodes
                   .filter((node) => {
                     // remove quotes from module name
@@ -284,11 +283,11 @@ export function updateImports() {
               })
               // .flatMap()/.flat() is not available? So, here's a flat poly
               .reduce((acc, val) => acc.concat(val), []);
-              // if the reference to packageName was in fact an import statement
-              if (changes.length > 0) {
-                // update the file in the tree
-                insert(tree, file, changes);
-              }
+            // if the reference to packageName was in fact an import statement
+            if (changes.length > 0) {
+              // update the file in the tree
+              insert(tree, file, changes);
+            }
           }
         });
       });

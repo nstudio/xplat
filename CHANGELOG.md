@@ -1,3 +1,15 @@
+## [11.0.7](https://github.com/nstudio/xplat/compare/11.0.0...11.0.7) (2020-12-31)
+
+### Features
+
+- **core:** Migration handling
+
+## [11.0.0](https://github.com/nstudio/xplat/compare/10.3.9...11.0.0) (2020-12-31)
+
+### Features
+
+- **core:** Nx 11 compatibility with new lib separation for xplat ([#232](https://github.com/nstudio/xplat/issues/232)) ([50f3a40](https://github.com/nstudio/xplat/commit/50f3a402d5568d20392f4fd40e404709edc107e4))
+
 ## [10.3.9](https://github.com/nstudio/xplat/compare/10.3.8...10.3.9) (2020-12-03)
 
 ### Bug Fixes
