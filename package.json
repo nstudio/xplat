@@ -139,23 +139,6 @@
     "yargs-parser": "20.0.0",
     "zone.js": "~0.11.1"
   },
-  "jest": {
-    "modulePathIgnorePatterns": [
-      "tmp",
-      "<rootDir>/test",
-      "<rootDir>/packages",
-      "collection/.*/files"
-    ],
-    "testPathIgnorePatterns": [
-      "node_modules",
-      "<rootDir>/build/packages/angular/spec",
-      "webpack-configs"
-    ],
-    "coverageReporters": [
-      "html"
-    ],
-    "coverageDirectory": "coverage"
-  },
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-customizable"
