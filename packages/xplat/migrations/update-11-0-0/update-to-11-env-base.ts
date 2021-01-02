@@ -259,6 +259,7 @@ export function updateWorkspaceFileReplacements() {
                     i
                   ];
                 if (
+                  typeof styleEntry === 'string' &&
                   styleEntry.indexOf('xplat/web/scss') > -1 &&
                   styleEntry.indexOf('libs/xplat/web') === -1
                 ) {
@@ -268,6 +269,20 @@ export function updateWorkspaceFileReplacements() {
                     'xplat/web/scss',
                     'libs/xplat/web/scss/src'
                   );
+                } else if (styleEntry && typeof styleEntry === 'object') {
+                  if (
+                    styleEntry.input &&
+                    typeof styleEntry.input === 'string' &&
+                    styleEntry.input.indexOf('xplat/web/scss') > -1 &&
+                    styleEntry.input.indexOf('libs/xplat/web') === -1
+                  ) {
+                    workspaceJson.projects[name].architect.build.options.styles[
+                      i
+                    ].input = styleEntry.input.replace(
+                      'xplat/web/scss',
+                      'libs/xplat/web/scss/src'
+                    );
+                  }
                 }
               }
             }

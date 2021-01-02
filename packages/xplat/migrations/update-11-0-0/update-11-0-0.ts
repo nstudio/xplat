@@ -262,46 +262,88 @@ function updateAppConfigs() {
         .map((p) => '..')
         .join('/');
 
+      let customOptionsAppend = '';
+      if (tree.exists(`${dirPath}/tsconfig.json`)) {
+        const tsConfig = getJsonFromFile(tree, `${dirPath}/tsconfig.json`);
+        if (tsConfig.angularCompilerOptions) {
+          customOptionsAppend = `,\n"angularCompilerOptions": ${JSON.stringify(
+            tsConfig.angularCompilerOptions
+          )}`;
+        }
+      }
+
       createOrUpdate(
         tree,
         `${dirPath}/tsconfig.json`,
         `{
-        "extends": "${relativePath}/tsconfig.base.json",
-        "compilerOptions": {
-    "types": [
-      "node",
-      "jest"
-    ]
-  },
-  "include": [
-    "**/*.ts"
+  "extends": "${relativePath}/tsconfig.base.json",
+  "files": [],
+  "include": [],
+  "references": [
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.spec.json"
+    },
+    {
+      "path": "./tsconfig.editor.json"
+    }
   ]
-      }      
-      `
+}`
       );
 
       createOrUpdate(
         tree,
         `${dirPath}/tsconfig.app.json`,
         `{
-          "extends": "./tsconfig.json",
-          "compilerOptions": {
-            "outDir": "${relativePath}/dist/out-tsc",
-            "types": []
-          },
-          "files": [
-            "src/main.ts",
-            "src/polyfills.ts"
-          ],
-          "include": [
-            "src/test.ts"
-          ],
-          "exclude": [
-            "src/test-setup.ts",
-            "**/*.spec.ts"
-          ]
-        }  
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "${relativePath}/dist/out-tsc",
+    "types": []
+  },
+  "files": [
+    "src/main.ts",
+    "src/polyfills.ts"
+  ],
+  "include": [
+    "src/test.ts"
+  ],
+  "exclude": [
+    "src/test-setup.ts",
+    "**/*.spec.ts"
+  ]${customOptionsAppend}
+}  
       `
+      );
+
+      createOrUpdate(
+        tree,
+        `${dirPath}/tsconfig.editor.json`,
+        `{
+  "extends": "./tsconfig.json",
+  "include": ["**/*.ts"],
+  "compilerOptions": {
+    "types": ["jest", "node"]
+  }
+}
+        `
+      );
+
+      createOrUpdate(
+        tree,
+        `${dirPath}/tsconfig.spec.json`,
+        `{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "${relativePath}/dist/out-tsc",
+    "module": "commonjs",
+    "types": ["jest", "node"]
+  },
+  "files": ["src/test-setup.ts"],
+  "include": ["**/*.spec.ts", "**/*.d.ts"]
+}        
+        `
       );
     }
 
