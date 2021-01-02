@@ -1,4 +1,4 @@
-## [11.0.7](https://github.com/nstudio/xplat/compare/11.0.0...11.0.7) (2020-12-31)
+## [11.0.8](https://github.com/nstudio/xplat/compare/11.0.0...11.0.8) (2021-01-02)
 
 ### Features
 
