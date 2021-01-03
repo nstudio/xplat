@@ -49,13 +49,6 @@ describe('app', () => {
     // console.log(checkFile);
     expect(checkFile.indexOf(`"name": "foo"`)).toBeGreaterThanOrEqual(0);
 
-    // expect(
-    //   files.indexOf('/tools/electron/postinstall.js')
-    // ).toBeGreaterThanOrEqual(0);
-    // expect(files.indexOf('/tools/web/postinstall.js')).toBeGreaterThanOrEqual(
-    //   0
-    // );
-
     checkPath = '/package.json';
     expect(files.indexOf(checkPath)).toBeGreaterThanOrEqual(0);
 
@@ -63,8 +56,6 @@ describe('app', () => {
     // console.log(checkFile);
     const packageData: any = jsonParse(checkFile);
     expect(packageData.scripts['postinstall']).toBeDefined();
-    expect(packageData.scripts['postinstall.electron']).toBeDefined();
-    expect(packageData.scripts['postinstall.web']).toBeDefined();
     expect(packageData.scripts['build.electron.foo']).toBeDefined();
     expect(packageData.scripts['build.electron.foo.local']).toBeDefined();
     expect(packageData.scripts['build.electron.foo.linux']).toBeDefined();

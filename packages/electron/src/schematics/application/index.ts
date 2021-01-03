@@ -55,33 +55,12 @@ export default function (options: XplatElectrontHelpers.SchemaApp) {
     );
   }
 
-  const packageHandling = [];
-  if (options.isTesting) {
-    packageHandling.push(
-      externalSchematic('@nstudio/electron', 'tools', {
-        ...options,
-      })
-    );
-  } else {
-    // TODO: find a way to unit test schematictask runners with install tasks
-    packageHandling.push((tree: Tree, context: SchematicContext) => {
-      const installPackageTask = context.addTask(new NodePackageInstallTask());
-
-      // console.log('packagesToRunXplat:', packagesToRunXplat);
-      context.addTask(
-        new RunSchematicTask('@nstudio/electron', 'tools', options),
-        [installPackageTask]
-      );
-    });
-  }
-
   return chain([
     prerun(options),
     XplatHelpers.applyAppNamingConvention(options, 'electron'),
     (tree: Tree, context: SchematicContext) =>
       addAppFiles(options, options.name)(tree, context),
     XplatElectrontHelpers.updateRootDeps(options),
-    ...packageHandling,
     XplatElectrontHelpers.addNpmScripts(options),
     (tree: Tree, context: SchematicContext) => {
       // grab the target app configuration

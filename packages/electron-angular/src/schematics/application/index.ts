@@ -60,26 +60,6 @@ export default function (options: XplatElectrontHelpers.SchemaApp) {
     );
   }
 
-  const packageHandling = [];
-  if (options.isTesting) {
-    packageHandling.push(
-      externalSchematic('@nstudio/electron', 'tools', {
-        ...options,
-      })
-    );
-  } else {
-    // TODO: find a way to unit test schematictask runners with install tasks
-    packageHandling.push((tree: Tree, context: SchematicContext) => {
-      const installPackageTask = context.addTask(new NodePackageInstallTask());
-
-      // console.log('packagesToRunXplat:', packagesToRunXplat);
-      context.addTask(
-        new RunSchematicTask('@nstudio/electron', 'tools', options),
-        [installPackageTask]
-      );
-    });
-  }
-
   return chain([
     prerun(options),
     XplatHelpers.applyAppNamingConvention(options, 'electron'),
@@ -95,7 +75,6 @@ export default function (options: XplatElectrontHelpers.SchemaApp) {
     (tree: Tree, context: SchematicContext) =>
       addAppFiles(options, options.name)(tree, context),
     XplatElectronAngularHelpers.updateRootDeps(options),
-    ...packageHandling,
     XplatElectrontHelpers.addNpmScripts(options),
     (tree: Tree, context: SchematicContext) => {
       // grab the target app configuration
@@ -124,6 +103,9 @@ export default function (options: XplatElectrontHelpers.SchemaApp) {
         projects[
           electronAppName
         ].architect.build.options.main = `apps/${fullTargetAppName}/src/main.electron.ts`;
+        projects[
+          electronAppName
+        ].architect.build.options.tsConfig = `apps/${fullTargetAppName}/tsconfig.electron.json`;
       }
       projects[electronAppName].architect.build.options.assets.push({
         glob: '**/*',
@@ -191,6 +173,10 @@ function adjustAppFiles(options: XplatElectrontHelpers.SchemaApp, tree: Tree) {
   if (!tree.exists(electronMainPath)) {
     tree.create(electronMainPath, electronMain());
   }
+  const electronTsConfigPath = `/apps/${fullTargetAppName}/tsconfig.electron.json`;
+  if (!tree.exists(electronTsConfigPath)) {
+    tree.create(electronTsConfigPath, electronTsConfig());
+  }
   return tree;
 }
 
@@ -198,10 +184,10 @@ function electronModule() {
   return `import { NgModule } from '@angular/core';
 import { ${stringUtils.classify(
     getPrefix()
-  )}ElectronCoreModule } from '@${getNpmScope()}/${XplatHelpers.getXplatFoldername(
+  )}ElectronCoreModule } from '@${getNpmScope()}/xplat/${XplatHelpers.getXplatFoldername(
     'electron',
     'angular'
-  )}';
+  )}/core';
 import { AppModule } from './app.module';
 import { AppComponent } from './app.component';
 
@@ -230,4 +216,17 @@ function electronMain() {
     .bootstrapModule(AppElectronModule)
     .catch(err => console.log(err));
   `;
+}
+
+function electronTsConfig() {
+  return `{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../dist/out-tsc",
+    "types": []
+  },
+  "files": ["src/main.electron.ts", "src/polyfills.ts"],
+  "include": ["src/**/*.d.ts"],
+  "exclude": ["src/test-setup.ts", "**/*.spec.ts"]
+}`;
 }

@@ -93,8 +93,6 @@ export namespace XplatElectrontHelpers {
       } else {
         scripts['postinstall'] = postinstall;
       }
-      scripts['postinstall.electron'] = 'node tools/electron/postinstall';
-      scripts['postinstall.web'] = 'node tools/web/postinstall';
       scripts[
         `build.${platformApp}`
       ] = `npm run prepare.${platformApp} && ng build ${options.name} --prod --base-href ./`;
@@ -112,7 +110,7 @@ export namespace XplatElectrontHelpers {
       ] = `npm run build.${platformApp} && cd dist/apps/${options.name} && npx electron-builder build --mac`;
       scripts[
         `prepare.${platformApp}`
-      ] = `npm run postinstall.electron && tsc -p apps/${options.name}/tsconfig.json`;
+      ] = `tsc -p apps/${options.name}/tsconfig.json`;
       scripts[`serve.${platformApp}.target`] = `nx serve ${options.name}`;
       scripts[
         `serve.${platformApp}`
@@ -120,58 +118,6 @@ export namespace XplatElectrontHelpers {
       scripts[
         `start.${platformApp}`
       ] = `npm run prepare.${platformApp} && npm-run-all -p serve.${platformApp}.target serve.${platformApp}`;
-
-      // adjust web related scripts to account for postinstall hooks
-      const startWeb = scripts[`start.${targetAppScript}`];
-      const postinstallWeb = 'npm run postinstall.web';
-
-      if (startWeb) {
-        // prefix it
-        scripts[
-          `start.${targetAppScript}`
-        ] = `${postinstallWeb} && ${startWeb}`;
-      } else {
-        // create to be consistent
-        scripts[
-          `start.${targetAppScript}`
-        ] = `${postinstallWeb} && nx serve ${fullTargetAppName}`;
-      }
-      let startDefault = scripts[`start`];
-      if (startDefault) {
-        // prefix it
-        if (startDefault.indexOf(fullTargetAppName) === -1) {
-          // set target app as default
-          startDefault = `${startDefault} ${fullTargetAppName}`;
-        }
-        scripts[`start`] = `${postinstallWeb} && ${startDefault}`;
-      } else {
-        scripts[`start`] = `${postinstallWeb} && nx serve ${fullTargetAppName}`;
-      }
-      let buildDefault = scripts[`build`];
-      if (buildDefault) {
-        // prefix it
-        if (buildDefault.indexOf(fullTargetAppName) === -1) {
-          // set target app as default
-          buildDefault = `${buildDefault} ${fullTargetAppName}`;
-        }
-        scripts[`build`] = `${postinstallWeb} && ${buildDefault}`;
-      } else {
-        scripts[`build`] = `${postinstallWeb} && nx build ${fullTargetAppName}`;
-      }
-      let testDefault = scripts[`test`];
-      if (testDefault) {
-        // prefix it
-        scripts[`test`] = `${postinstallWeb} && ${testDefault}`;
-      } else {
-        scripts[`test`] = `${postinstallWeb} && nx test`;
-      }
-      let e2eDefault = scripts[`e2e`];
-      if (e2eDefault) {
-        // prefix it
-        scripts[`e2e`] = `${postinstallWeb} && ${e2eDefault}`;
-      } else {
-        scripts[`e2e`] = `${postinstallWeb} && nx e2e`;
-      }
 
       return updatePackageScripts(tree, scripts);
     };
