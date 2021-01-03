@@ -304,7 +304,7 @@ function appCmpContent() {
 import { AppBaseComponent } from '@${getNpmScope()}/xplat/${XplatHelpers.getXplatFoldername(
     'web',
     'angular'
-  )}/core';
+  )}/features';
 
 @Component({
     selector: '${getPrefix()}-root',

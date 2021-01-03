@@ -49,7 +49,12 @@ export default function (): Rule {
             });
           }
         }
-        tree.delete('testing');
+        if (
+          tree.exists('/testing/test.libs.ts') ||
+          tree.exists('/testing/jest.libs.config.js')
+        ) {
+          tree.delete('testing');
+        }
         tree.delete('libs/core');
         tree.delete('libs/features');
         tree.delete('libs/scss');

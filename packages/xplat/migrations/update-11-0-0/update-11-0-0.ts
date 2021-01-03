@@ -79,8 +79,6 @@ export default function (): Rule {
     updateAppConfigs(),
     // update root deps
     updateRootDeps(),
-    // remove old testing
-    deleteTestingDir(),
     // cleanup gitignore
     cleanupGitIgnore(),
     // remove old nx projects
@@ -161,27 +159,6 @@ function emptyNewStructure() {
       });
 
     return tree;
-  };
-}
-
-function deleteTestingDir() {
-  return (tree: Tree, context: SchematicContext) => {
-    if (
-      tree.exists('/testing/test.libs.ts') ||
-      tree.exists('/testing/jest.libs.config.js')
-    ) {
-      ['testing']
-        .map((dir) => tree.getDir(dir))
-        .forEach((projectDir) => {
-          projectDir.visit((file) => {
-            tree.delete(file);
-          });
-        });
-
-      return tree;
-    } else {
-      return noop();
-    }
   };
 }
 

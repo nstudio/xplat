@@ -1,18 +1,16 @@
 module.exports = {
   modulePathIgnorePatterns: [
-    "tmp",
-    "<rootDir>/test",
-    "<rootDir>/packages",
-    "collection/.*/files"
+    'tmp',
+    '<rootDir>/test',
+    '<rootDir>/packages',
+    'collection/.*/files',
   ],
   testPathIgnorePatterns: [
-    "node_modules",
-    "<rootDir>/build/packages/angular/spec",
-    "webpack-configs"
+    'node_modules',
+    '<rootDir>/build/packages/angular/spec',
+    'webpack-configs',
   ],
-  coverageReporters: [
-    "html"
-  ],
-  coverageDirectory: "coverage",
-  testTimeout: 30000
-}
+  coverageReporters: ['html'],
+  coverageDirectory: 'coverage',
+  testTimeout: 30000,
+};

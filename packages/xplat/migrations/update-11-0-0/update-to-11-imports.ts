@@ -235,7 +235,7 @@ export function updateImports() {
                     } else if (file.indexOf('web') > -1) {
                       newPackageName = `@${npmScope}/xplat/web/core`;
                     }
-                  } else if (file.indexOf('shared.module') > -1) {
+                  } else if (file.indexOf('.module') > -1) {
                     if (file.indexOf('electron') > -1) {
                       newPackageName = `@${npmScope}/xplat/electron/features`;
                     } else if (file.indexOf('ionic') > -1) {
