@@ -1,3 +1,9 @@
+## [11.0.11](https://github.com/nstudio/xplat/compare/11.0.0...11.0.11) (2021-01-03)
+
+### Features
+
+- **electron:** update to v11.1.0 and bump other dependencies ([a0d71dc](https://github.com/nstudio/xplat/commit/a0d71dc30afa8f69e601d4c0d803a150773d70d9))
+
 ## [11.0.8](https://github.com/nstudio/xplat/compare/11.0.0...11.0.8) (2021-01-02)
 
 ### Features
