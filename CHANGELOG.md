@@ -1,3 +1,9 @@
+## [11.0.12](https://github.com/nstudio/xplat/compare/11.0.11...11.0.12) (2021-01-04)
+
+### Features
+
+- **ionic:** update to 5.30.0, stencil 2.3.0, ionic core 5.5.2 ([753b93e](https://github.com/nstudio/xplat/commit/753b93eae6fcab90720b679983cbe8248e5e0405))
+
 ## [11.0.11](https://github.com/nstudio/xplat/compare/11.0.0...11.0.11) (2021-01-03)
 
 ### Features
