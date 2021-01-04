@@ -1,3 +1,9 @@
+## [11.0.13](https://github.com/nstudio/xplat/compare/11.0.12...11.0.13) (2021-01-04)
+
+### Bug Fixes
+
+- **core:** include directory option for app generation ([3a00d9c](https://github.com/nstudio/xplat/commit/3a00d9c6e8ae0dfec410102de9d20df71c10d6d6))
+
 ## [11.0.12](https://github.com/nstudio/xplat/compare/11.0.11...11.0.12) (2021-01-04)
 
 ### Features
