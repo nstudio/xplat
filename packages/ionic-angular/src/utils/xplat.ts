@@ -35,15 +35,15 @@ export namespace XplatIonicAngularHelpers {
 
       if (options.useXplat) {
         dependencies[
-          `@${getNpmScope()}/web-scss`
-        ] = `file:xplat/${xplatFoldername}/scss`;
+          `@${getNpmScope()}/xplat-web-scss`
+        ] = `file:libs/xplat/${xplatFoldername}/scss/src`;
         const ionicXplatFoldername = XplatHelpers.getXplatFoldername(
           'ionic',
           'angular'
         );
         dependencies[
-          `@${getNpmScope()}/ionic-scss`
-        ] = `file:xplat/${ionicXplatFoldername}/scss`;
+          `@${getNpmScope()}/xplat-ionic-scss`
+        ] = `file:libs/xplat/${ionicXplatFoldername}/scss/src`;
       }
 
       const packageJson = getJsonFromFile(tree, 'package.json');
@@ -91,7 +91,7 @@ export namespace XplatIonicAngularHelpers {
           '@angular-devkit/core': ngDevKitCore,
           '@angular-devkit/schematics': ngDevKitSchematics,
           '@ionic/angular-toolkit': ionicAngularToolkitVersion,
-          '@types/jasmine': '~3.5.9',
+          '@types/jasmine': '~3.6.2',
           '@types/jasminewd2': '~2.0.3',
           codelyzer: codelyzerVersion,
           'jasmine-core': jasmineCoreVersion,

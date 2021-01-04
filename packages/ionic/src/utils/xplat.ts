@@ -17,7 +17,9 @@ export namespace XplatIonicHelpers {
       const dependencies = {};
       if (options.skipDependentPlatformFiles) {
         if (options.useXplat) {
-          dependencies[`@${getNpmScope()}/web-scss`] = `file:xplat/web/scss`;
+          dependencies[
+            `@${getNpmScope()}/xplat-web-scss`
+          ] = `file:libs/xplat/web/scss/src`;
         }
         dependencies['@ionic-native/core'] = ionicNativeCoreVersion;
         dependencies[
