@@ -19,6 +19,7 @@ export interface Schema {
    * The prefix to apply to generated selectors.
    */
   prefix?: string;
+  directory?: string;
   /**
    * Group by app name (appname-platform) instead of the default (platform-appname)
    */
