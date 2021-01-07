@@ -1,3 +1,9 @@
+## [11.0.14](https://github.com/nstudio/xplat/compare/11.0.13...11.0.14) (2021-01-07)
+
+### Bug Fixes
+
+- **web:** index barrel adjustment for base ([6486196](https://github.com/nstudio/xplat/commit/6486196e302d436273e63a36cb78499025808985))
+
 ## [11.0.13](https://github.com/nstudio/xplat/compare/11.0.12...11.0.13) (2021-01-04)
 
 ### Bug Fixes
