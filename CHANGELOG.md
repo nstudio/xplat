@@ -1,3 +1,9 @@
+## [11.0.15](https://github.com/nstudio/xplat/compare/11.0.14...11.0.15) (2021-01-07)
+
+### Features
+
+- **ionic:** capacitor ~2.4.5 ([6cb0d2f](https://github.com/nstudio/xplat/commit/6cb0d2f9605780510ad5994c2084dcc35a942dba))
+
 ## [11.0.14](https://github.com/nstudio/xplat/compare/11.0.13...11.0.14) (2021-01-07)
 
 ### Bug Fixes
