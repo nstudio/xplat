@@ -1,3 +1,9 @@
+## [11.0.16](https://github.com/nstudio/xplat/compare/11.0.15...11.0.16) (2021-01-07)
+
+### Features
+
+- **nativescript:** core 7.1.0 ([524626c](https://github.com/nstudio/xplat/commit/524626c1f71b264a30bd29c6250a057ca1ddc78f))
+
 ## [11.0.15](https://github.com/nstudio/xplat/compare/11.0.14...11.0.15) (2021-01-07)
 
 ### Features
