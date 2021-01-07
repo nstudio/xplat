@@ -1,5 +1,5 @@
 export const xplatVersion = '*';
-export const nsCoreVersion = '~7.0.0';
+export const nsCoreVersion = '~7.1.0';
 export const nsNgScopedVersion = '~11.0.0';
 export const nsNgFonticonVersion = '~7.0.0';
 export const nsWebpackVersion = '~3.0.0';
