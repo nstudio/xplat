@@ -216,20 +216,20 @@ function adjustAppFiles(options: Schema, tree: Tree): Rule {
   );
   // update cli config for shared web specific scss
   return updateWorkspace((workspace) => {
-      const projectDef = workspace.projects.get(options.name);
-      if (projectDef && projectDef.targets) {
-        const buildDef = projectDef.targets.get('build')
-        if (buildDef) {
-          buildDef.options.styles = [
-            `libs/xplat/${XplatHelpers.getXplatFoldername(
-              'web',
-              'angular'
-              )}/scss/src/_index.scss`,
-              `apps/${directory}${options.name}/src/styles.scss`,
-            ];
-            projectDef.targets.set('build', buildDef);
-        }
+    const projectDef = workspace.projects.get(options.name);
+    if (projectDef && projectDef.targets) {
+      const buildDef = projectDef.targets.get('build');
+      if (buildDef) {
+        buildDef.options.styles = [
+          `libs/xplat/${XplatHelpers.getXplatFoldername(
+            'web',
+            'angular'
+          )}/scss/src/_index.scss`,
+          `apps/${directory}${options.name}/src/styles.scss`,
+        ];
+        projectDef.targets.set('build', buildDef);
       }
+    }
   });
 }
 

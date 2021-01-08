@@ -11,6 +11,5 @@ export default function (options: Schema) {
     packagesToRun
   );
 
-  return chain([prerun(options, true), (tree: Tree) =>
-    chain(externalChains)]);
+  return chain([prerun(options, true), (tree: Tree) => chain(externalChains)]);
 }

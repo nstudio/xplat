@@ -10,6 +10,5 @@ export default function (options: XplatComponentHelpers.Schema) {
     packagesToRunXplat
   );
 
-  return chain([prerun(options, true), (tree: Tree) =>
-    chain(externalChains)]);
+  return chain([prerun(options, true), (tree: Tree) => chain(externalChains)]);
 }

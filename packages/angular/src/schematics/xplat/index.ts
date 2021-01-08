@@ -40,8 +40,7 @@ export default function (options: XplatHelpers.Schema) {
     XplatHelpers.cleanupLib(options, 'utils', 'xplat'),
     XplatAngularHelpers.addLibFiles(options, './', 'utils'),
     // cross platform support
-    (tree: Tree, context: SchematicContext) =>
-      chain(externalChains),
+    (tree: Tree, context: SchematicContext) => chain(externalChains),
     XplatAngularHelpers.updateRootDeps(options),
     // adjust root tsconfig
     (tree: Tree, context: SchematicContext) => {

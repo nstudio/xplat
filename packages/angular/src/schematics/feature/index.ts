@@ -83,8 +83,7 @@ export default function (options: XplatFeatureHelpers.Schema) {
             'libs/xplat/features/src/lib/index.ts'
           )(tree, context),
     // external schematic handling
-    (tree: Tree, context: SchematicContext) =>
-      chain(externalChains),
+    (tree: Tree, context: SchematicContext) => chain(externalChains),
     formatFiles({ skipFormat: options.skipFormat }),
   ]);
 }

@@ -205,8 +205,7 @@ export default function (options: XplatHelpers.Schema) {
 
   return chain([
     prerun(options, true),
-    (tree: Tree) =>
-      chain(externalChains),
+    (tree: Tree) => chain(externalChains),
     addInstallTask(options),
     FocusHelpers.updateIDESettings(options),
     // after initializing new platforms always reset dev mode to fullstack to ensure user sees it

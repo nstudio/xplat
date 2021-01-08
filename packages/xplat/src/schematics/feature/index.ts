@@ -10,6 +10,8 @@ export default function (options: XplatFeatureHelpers.Schema) {
     packagesToRunXplat
   );
 
-  return chain([prerun(options, true), (tree: Tree, context: SchematicContext) =>
-    chain(externalChains)]);
+  return chain([
+    prerun(options, true),
+    (tree: Tree, context: SchematicContext) => chain(externalChains),
+  ]);
 }

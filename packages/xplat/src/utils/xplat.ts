@@ -579,7 +579,7 @@ export namespace XplatHelpers {
       if (xplatPlatforms) {
         externalChains.push(
           externalSchematic('@nstudio/xplat', 'app-generate', options, {
-            interactive: true
+            interactive: true,
           })
         );
       }
@@ -798,7 +798,12 @@ export namespace XplatHelpers {
       // src should go into Nx library structure
       const libFolder = `/${libName}/src${libName === 'scss' ? '' : '/lib'}`;
 
-      if (checkExistingFile && tree.exists(`libs/xplat/${xplatFolderName}/${libFolder}/${checkExistingFile}`)) {
+      if (
+        checkExistingFile &&
+        tree.exists(
+          `libs/xplat/${xplatFolderName}/${libFolder}/${checkExistingFile}`
+        )
+      ) {
         return noop();
       } else {
         return branchAndMerge(
@@ -814,7 +819,6 @@ export namespace XplatHelpers {
           )
         );
       }
-
     };
   }
 

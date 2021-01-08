@@ -184,10 +184,10 @@ export default function (options: Schema) {
                 tsConfig: `apps/${directory}${options.name}/tsconfig.spec.json`,
                 passWithNoTests: true,
                 setupFile: `apps/${directory}${options.name}/src/test-setup.ts`,
-              }
+              },
             },
           },
-        })
+        });
       });
     },
     (tree: Tree) => {

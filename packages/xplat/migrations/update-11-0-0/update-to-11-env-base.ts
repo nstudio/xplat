@@ -238,7 +238,10 @@ export function updateWorkspaceFileReplacements() {
       const projectNames = Object.keys(workspaceJson.projects);
       for (const name of projectNames) {
         let targetProp = 'architect';
-        if (workspaceJson.projects[name] && !workspaceJson.projects[name].architect) {
+        if (
+          workspaceJson.projects[name] &&
+          !workspaceJson.projects[name].architect
+        ) {
           targetProp = 'targets';
         }
         if (
@@ -280,9 +283,9 @@ export function updateWorkspaceFileReplacements() {
                     styleEntry.input.indexOf('xplat/web/scss') > -1 &&
                     styleEntry.input.indexOf('libs/xplat/web') === -1
                   ) {
-                    workspaceJson.projects[name][targetProp].build.options.styles[
-                      i
-                    ].input = styleEntry.input.replace(
+                    workspaceJson.projects[name][
+                      targetProp
+                    ].build.options.styles[i].input = styleEntry.input.replace(
                       'xplat/web/scss',
                       'libs/xplat/web/scss/src'
                     );
@@ -306,9 +309,8 @@ export function updateWorkspaceFileReplacements() {
                   for (
                     let i = 0;
                     i <
-                    workspaceJson.projects[name][targetProp].build.configurations[
-                      configKey
-                    ].fileReplacements.length;
+                    workspaceJson.projects[name][targetProp].build
+                      .configurations[configKey].fileReplacements.length;
                     i++
                   ) {
                     const replaceOption =
@@ -341,11 +343,11 @@ export function updateWorkspaceFileReplacements() {
                     }
 
                     if (updatedFileReplace) {
-                      workspaceJson.projects[
-                        name
-                      ][targetProp].build.configurations[
-                        configKey
-                      ].fileReplacements[i] = updatedFileReplace;
+                      workspaceJson.projects[name][
+                        targetProp
+                      ].build.configurations[configKey].fileReplacements[
+                        i
+                      ] = updatedFileReplace;
                     }
                   }
                 }
@@ -371,9 +373,8 @@ export function updateWorkspaceFileReplacements() {
                 for (
                   let i = 0;
                   i <
-                  workspaceJson.projects[name][targetProp].default.configurations[
-                    configKey
-                  ].fileReplacements.length;
+                  workspaceJson.projects[name][targetProp].default
+                    .configurations[configKey].fileReplacements.length;
                   i++
                 ) {
                   const replaceOption =
@@ -406,11 +407,11 @@ export function updateWorkspaceFileReplacements() {
                   }
 
                   if (updatedFileReplace) {
-                    workspaceJson.projects[
-                      name
-                    ][targetProp].default.configurations[
-                      configKey
-                    ].fileReplacements[i] = updatedFileReplace;
+                    workspaceJson.projects[name][
+                      targetProp
+                    ].default.configurations[configKey].fileReplacements[
+                      i
+                    ] = updatedFileReplace;
                   }
                 }
               }

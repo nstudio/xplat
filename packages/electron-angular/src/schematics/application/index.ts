@@ -91,17 +91,23 @@ export default function (options: XplatElectrontHelpers.SchemaApp) {
       }
 
       const electronAppName = options.name;
-      let targetProp = 'architect'; 
+      let targetProp = 'architect';
       if (!targetConfig[targetProp]) {
         targetProp = 'targets'; // nx 11 moved to 'targets'
       }
       if (targetConfig[targetProp]) {
         // update to use electron module
-        targetConfig[targetProp].build.options.outputPath = `dist/apps/${electronAppName}`;
+        targetConfig[
+          targetProp
+        ].build.options.outputPath = `dist/apps/${electronAppName}`;
 
         if (options.useXplat) {
-          targetConfig[targetProp].build.options.main = `apps/${fullTargetAppName}/src/main.electron.ts`;
-          targetConfig[targetProp].build.options.tsConfig = `apps/${fullTargetAppName}/tsconfig.electron.json`;
+          targetConfig[
+            targetProp
+          ].build.options.main = `apps/${fullTargetAppName}/src/main.electron.ts`;
+          targetConfig[
+            targetProp
+          ].build.options.tsConfig = `apps/${fullTargetAppName}/tsconfig.electron.json`;
         }
         targetConfig[targetProp].build.options.assets.push({
           glob: '**/*',
@@ -109,8 +115,12 @@ export default function (options: XplatElectrontHelpers.SchemaApp) {
           ignore: ['**/*.ts'],
           output: '',
         });
-        targetConfig[targetProp].serve.options.browserTarget = `${electronAppName}:build`;
-        targetConfig[targetProp].serve.configurations.production.browserTarget = `${electronAppName}:build:production`;
+        targetConfig[
+          targetProp
+        ].serve.options.browserTarget = `${electronAppName}:build`;
+        targetConfig[
+          targetProp
+        ].serve.configurations.production.browserTarget = `${electronAppName}:build:production`;
         // clear other settings (TODO: may need these in future), for now keep electron options minimal
         delete targetConfig[targetProp]['extract-i18n'];
         delete targetConfig[targetProp]['test'];
@@ -119,7 +129,7 @@ export default function (options: XplatElectrontHelpers.SchemaApp) {
       return updateWorkspace((workspace) => {
         workspace.projects.add({
           name: electronAppName,
-          ...targetConfig
+          ...targetConfig,
         });
       });
     },

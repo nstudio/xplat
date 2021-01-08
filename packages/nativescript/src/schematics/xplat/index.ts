@@ -18,10 +18,20 @@ export default function (options: XplatHelpers.Schema) {
     XplatHelpers.cleanupLib(options, 'utils', 'xplat/nativescript', ''),
     options.skipDependentPlatformFiles
       ? noop()
-      : XplatHelpers.addPlatformFiles(options, 'nativescript', 'scss', '_common.scss'),
+      : XplatHelpers.addPlatformFiles(
+          options,
+          'nativescript',
+          'scss',
+          '_common.scss'
+        ),
     options.skipDependentPlatformFiles
       ? noop()
-      : XplatHelpers.addPlatformFiles(options, 'nativescript', 'utils', 'index.ts'),
+      : XplatHelpers.addPlatformFiles(
+          options,
+          'nativescript',
+          'utils',
+          'index.ts'
+        ),
     XplatNativeScriptHelpers.updateRootDeps(options),
     XplatNativeScriptHelpers.updatePrettierIgnore(),
   ]);
