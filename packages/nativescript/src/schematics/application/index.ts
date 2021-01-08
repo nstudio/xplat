@@ -16,7 +16,6 @@ import {
 } from '@angular-devkit/schematics';
 import {
   updatePackageScripts,
-  updateWorkspace,
   updateNxProjects,
   missingArgument,
   getDefaultTemplateOptions,
@@ -32,6 +31,7 @@ import {
 } from '@nstudio/xplat-utils';
 import { Schema } from './schema';
 import { XplatNativeScriptHelpers } from '../../utils';
+import { updateWorkspace } from '@nrwl/workspace';
 
 export default function (options: Schema) {
   if (!options.name) {
@@ -87,44 +87,45 @@ export default function (options: Schema) {
     (tree: Tree, context: SchematicContext) => {
       const platformApp = options.name.replace('-', '.');
       const directory = options.directory ? `${options.directory}/` : '';
-      const projects = {};
-      projects[`${options.name}`] = {
-        root: `apps/${directory}${options.name}/`,
-        sourceRoot: `apps/${directory}${options.name}/src`,
-        projectType: 'application',
-        prefix: getPrefix(),
-        architect: {
-          ios: {
-            builder: '@nrwl/workspace:run-commands',
-            options: {
-              commands: [
-                `ns debug ios --no-hmr --env.configuration={args.configuration} --env.projectName=${options.name}`,
-              ],
-              cwd: `apps/${directory}${options.name}`,
-              parallel: false,
+      return updateWorkspace((workspace) => {
+        workspace.projects.add({
+          name: options.name,
+          root: `apps/${directory}${options.name}/`,
+          sourceRoot: `apps/${directory}${options.name}/src`,
+          projectType: 'application',
+          prefix: getPrefix(),
+          targets: {
+            ios: {
+              builder: '@nrwl/workspace:run-commands',
+              options: {
+                commands: [
+                  `ns debug ios --no-hmr --env.configuration={args.configuration} --env.projectName=${options.name}`,
+                ],
+                cwd: `apps/${directory}${options.name}`,
+                parallel: false,
+              },
+            },
+            android: {
+              builder: '@nrwl/workspace:run-commands',
+              options: {
+                commands: [
+                  `ns debug android --no-hmr --env.configuration={args.configuration} --env.projectName=${options.name}`,
+                ],
+                cwd: `apps/${directory}${options.name}`,
+                parallel: false,
+              },
+            },
+            clean: {
+              builder: '@nrwl/workspace:run-commands',
+              options: {
+                commands: ['ns clean', 'npm i', 'npx rimraf package-lock.json'],
+                cwd: `apps/${directory}${options.name}`,
+                parallel: false,
+              },
             },
           },
-          android: {
-            builder: '@nrwl/workspace:run-commands',
-            options: {
-              commands: [
-                `ns debug android --no-hmr --env.configuration={args.configuration} --env.projectName=${options.name}`,
-              ],
-              cwd: `apps/${directory}${options.name}`,
-              parallel: false,
-            },
-          },
-          clean: {
-            builder: '@nrwl/workspace:run-commands',
-            options: {
-              commands: ['ns clean', 'npm i', 'npx rimraf package-lock.json'],
-              cwd: `apps/${directory}${options.name}`,
-              parallel: false,
-            },
-          },
-        },
-      };
-      return updateWorkspace({ projects })(tree, <any>context);
+        });
+      });
     },
     (tree: Tree) => {
       const projects = {};

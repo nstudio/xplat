@@ -136,10 +136,10 @@ describe('app', () => {
 
     checkFile = getFileContent(tree, checkPath);
     // console.log(checkFile);
-    const angularJson: any = jsonParse(checkFile);
-    expect(
-      angularJson.projects[`${appName}-e2e`].architect.e2e.configurations.ci
-    ).toBeDefined();
+    // const angularJson: any = jsonParse(checkFile);
+    // expect(
+    //   angularJson.projects[`${appName}-e2e`].architect.e2e.configurations.ci
+    // ).toBeDefined();
   });
 
   // it('should create app with --framework flag Ionic', async () => {

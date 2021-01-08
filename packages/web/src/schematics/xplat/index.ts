@@ -44,7 +44,8 @@ export default function (options: XplatHelpers.Schema) {
         return XplatHelpers.addPlatformFiles(
           options,
           'web',
-          'scss'
+          'scss',
+          '_index.scss'
         )(tree, context);
       }
     },

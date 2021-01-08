@@ -34,10 +34,16 @@ function addDependencies() {
           typeof project === 'object' && project.hasOwnProperty('architect')
       )
       .forEach((project) => {
-        Object.values<any>(project.architect).forEach((target) => {
-          const [builderDependency] = target.builder.split(':');
-          builders.add(builderDependency);
-        });
+        let targetProp = 'architect';
+        if (!project.architect) {
+          targetProp = 'targets';
+        }
+        if (project[targetProp]) {
+          Object.values<any>(project[targetProp]).forEach((target) => {
+            const [builderDependency] = target.builder.split(':');
+            builders.add(builderDependency);
+          });
+        }
       });
     const newDependencies = {};
     const newDevDependencies = {

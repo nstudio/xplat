@@ -12,8 +12,8 @@ import { CoreModule, PlatformLanguageToken, PlatformWindowToken } from '@<%= npm
 import { throwIfAlreadyLoaded } from '@<%= npmScope %>/xplat/utils';
 
 // app
-import { TNSWindowService } from './services/tns-window.service';
-import { TNSTranslateLoader } from './services/tns-translate.loader';
+import { MobileWindowService } from './services/mobile-window.service';
+import { MobileTranslateLoader } from './services/mobile-translate.loader';
 
 // factories
 export function platformLangFactory() {
@@ -21,7 +21,7 @@ export function platformLangFactory() {
 }
 
 export function createTranslateLoader() {
-  return new TNSTranslateLoader('/assets/i18n/');
+  return new MobileTranslateLoader('/assets/i18n/');
 }
 
 @NgModule({
@@ -36,7 +36,7 @@ export function createTranslateLoader() {
       },
       {
         provide: PlatformWindowToken,
-        useClass: TNSWindowService
+        useClass: MobileWindowService
       }
     ]),
     TranslateModule.forRoot({

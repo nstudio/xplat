@@ -13,10 +13,9 @@ import {
   noop,
   externalSchematic,
 } from '@angular-devkit/schematics';
-import { formatFiles } from '@nrwl/workspace';
+import { formatFiles, updateWorkspace } from '@nrwl/workspace';
 import {
   stringUtils,
-  updateWorkspace,
   updateNxProjects,
   updatePackageScripts,
   missingArgument,
@@ -91,39 +90,38 @@ export default function (options: XplatElectrontHelpers.SchemaApp) {
         );
       }
 
-      const projects = {};
       const electronAppName = options.name;
-      projects[electronAppName] = targetConfig;
-      // update to use electron module
-      projects[
-        electronAppName
-      ].architect.build.options.outputPath = `dist/apps/${electronAppName}`;
-
-      if (options.useXplat) {
-        projects[
-          electronAppName
-        ].architect.build.options.main = `apps/${fullTargetAppName}/src/main.electron.ts`;
-        projects[
-          electronAppName
-        ].architect.build.options.tsConfig = `apps/${fullTargetAppName}/tsconfig.electron.json`;
+      let targetProp = 'architect'; 
+      if (!targetConfig[targetProp]) {
+        targetProp = 'targets'; // nx 11 moved to 'targets'
       }
-      projects[electronAppName].architect.build.options.assets.push({
-        glob: '**/*',
-        input: `apps/${electronAppName}/src/`,
-        ignore: ['**/*.ts'],
-        output: '',
+      if (targetConfig[targetProp]) {
+        // update to use electron module
+        targetConfig[targetProp].build.options.outputPath = `dist/apps/${electronAppName}`;
+
+        if (options.useXplat) {
+          targetConfig[targetProp].build.options.main = `apps/${fullTargetAppName}/src/main.electron.ts`;
+          targetConfig[targetProp].build.options.tsConfig = `apps/${fullTargetAppName}/tsconfig.electron.json`;
+        }
+        targetConfig[targetProp].build.options.assets.push({
+          glob: '**/*',
+          input: `apps/${electronAppName}/src/`,
+          ignore: ['**/*.ts'],
+          output: '',
+        });
+        targetConfig[targetProp].serve.options.browserTarget = `${electronAppName}:build`;
+        targetConfig[targetProp].serve.configurations.production.browserTarget = `${electronAppName}:build:production`;
+        // clear other settings (TODO: may need these in future), for now keep electron options minimal
+        delete targetConfig[targetProp]['extract-i18n'];
+        delete targetConfig[targetProp]['test'];
+        delete targetConfig[targetProp]['lint'];
+      }
+      return updateWorkspace((workspace) => {
+        workspace.projects.add({
+          name: electronAppName,
+          ...targetConfig
+        });
       });
-      projects[
-        electronAppName
-      ].architect.serve.options.browserTarget = `${electronAppName}:build`;
-      projects[
-        electronAppName
-      ].architect.serve.configurations.production.browserTarget = `${electronAppName}:build:production`;
-      // clear other settings (TODO: may need these in future), for now keep electron options minimal
-      delete projects[electronAppName].architect['extract-i18n'];
-      delete projects[electronAppName].architect['test'];
-      delete projects[electronAppName].architect['lint'];
-      return updateWorkspace({ projects })(tree, <any>context);
     },
     (tree: Tree) => {
       const projects = {};

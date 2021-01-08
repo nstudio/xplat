@@ -11,6 +11,7 @@ import {
   Rule,
   externalSchematic,
   SchematicsException,
+  chain,
 } from '@angular-devkit/schematics';
 import { createSourceFile, ScriptTarget } from 'typescript';
 import {
@@ -577,7 +578,9 @@ export namespace XplatHelpers {
     } else {
       if (xplatPlatforms) {
         externalChains.push(
-          externalSchematic('@nstudio/xplat', 'app-generate', options)
+          externalSchematic('@nstudio/xplat', 'app-generate', options, {
+            interactive: true
+          })
         );
       }
       if (packagesToRun.length) {
@@ -670,6 +673,7 @@ export namespace XplatHelpers {
           `libs/${directory ? directory + '/' : ''}${libName}/tsconfig.json`
         )
       ) {
+        // console.log(`externalSchematic('@nrwl/workspace', 'lib') ALREADY EXISTS for:`, `libs/${directory ? directory + '/' : ''}${libName}`)
         return noop()(tree, context);
       }
 
@@ -682,7 +686,8 @@ export namespace XplatHelpers {
       if (libName === 'scss') {
         libOptions.skipTsConfig = true;
       }
-      return externalSchematic('@nrwl/workspace', 'lib', libOptions);
+      // console.log(`CALLING externalSchematic('@nrwl/workspace', 'lib') for:`, `libs/${directory ? directory + '/' : ''}${libName}`)
+      return chain([externalSchematic('@nrwl/workspace', 'lib', libOptions)]);
     };
   }
 
@@ -761,7 +766,8 @@ export namespace XplatHelpers {
   export function addPlatformFiles(
     options: Schema,
     platform: string,
-    libName: string
+    libName: string,
+    checkExistingFile?: string
   ) {
     return (tree: Tree, context: SchematicContext) => {
       let frontendFramework: FrameworkTypes = getFrontendFramework();
@@ -792,18 +798,23 @@ export namespace XplatHelpers {
       // src should go into Nx library structure
       const libFolder = `/${libName}/src${libName === 'scss' ? '' : '/lib'}`;
 
-      return branchAndMerge(
-        mergeWith(
-          apply(url(`./_files_${libName}`), [
-            template({
-              ...(options as any),
-              ...getDefaultTemplateOptions(),
-              xplatFolderName,
-            }),
-            move(`libs/xplat/${xplatFolderName}${libFolder}`),
-          ])
-        )
-      );
+      if (checkExistingFile && tree.exists(`libs/xplat/${xplatFolderName}/${libFolder}/${checkExistingFile}`)) {
+        return noop();
+      } else {
+        return branchAndMerge(
+          mergeWith(
+            apply(url(`./_files_${libName}`), [
+              template({
+                ...(options as any),
+                ...getDefaultTemplateOptions(),
+                xplatFolderName,
+              }),
+              move(`libs/xplat/${xplatFolderName}${libFolder}`),
+            ])
+          )
+        );
+      }
+
     };
   }
 

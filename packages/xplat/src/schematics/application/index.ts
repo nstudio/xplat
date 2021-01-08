@@ -1,5 +1,5 @@
 import { Schema } from './schema';
-import { chain } from '@angular-devkit/schematics';
+import { chain, Tree } from '@angular-devkit/schematics';
 import { prerun } from '@nstudio/xplat-utils';
 import { XplatHelpers } from '../../utils';
 
@@ -11,5 +11,6 @@ export default function (options: Schema) {
     packagesToRun
   );
 
-  return chain([prerun(options, true), ...externalChains]);
+  return chain([prerun(options, true), (tree: Tree) =>
+    chain(externalChains)]);
 }

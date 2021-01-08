@@ -1,4 +1,4 @@
-import { chain } from '@angular-devkit/schematics';
+import { chain, SchematicContext, Tree } from '@angular-devkit/schematics';
 import { prerun } from '@nstudio/xplat-utils';
 import { XplatHelpers, XplatFeatureHelpers } from '../../utils';
 
@@ -10,5 +10,6 @@ export default function (options: XplatFeatureHelpers.Schema) {
     packagesToRunXplat
   );
 
-  return chain([prerun(options, true), ...externalChains]);
+  return chain([prerun(options, true), (tree: Tree, context: SchematicContext) =>
+    chain(externalChains)]);
 }

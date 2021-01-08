@@ -237,25 +237,29 @@ export function updateWorkspaceFileReplacements() {
     if (workspaceJson && workspaceJson.projects) {
       const projectNames = Object.keys(workspaceJson.projects);
       for (const name of projectNames) {
+        let targetProp = 'architect';
+        if (workspaceJson.projects[name] && !workspaceJson.projects[name].architect) {
+          targetProp = 'targets';
+        }
         if (
           workspaceJson.projects[name] &&
-          workspaceJson.projects[name].architect
+          workspaceJson.projects[name][targetProp]
         ) {
-          if (workspaceJson.projects[name].architect.build) {
+          if (workspaceJson.projects[name][targetProp].build) {
             // update style references
             if (
-              workspaceJson.projects[name].architect.build.options &&
-              workspaceJson.projects[name].architect.build.options.styles
+              workspaceJson.projects[name][targetProp].build.options &&
+              workspaceJson.projects[name][targetProp].build.options.styles
             ) {
               for (
                 let i = 0;
                 i <
-                workspaceJson.projects[name].architect.build.options.styles
+                workspaceJson.projects[name][targetProp].build.options.styles
                   .length;
                 i++
               ) {
                 const styleEntry =
-                  workspaceJson.projects[name].architect.build.options.styles[
+                  workspaceJson.projects[name][targetProp].build.options.styles[
                     i
                   ];
                 if (
@@ -263,7 +267,7 @@ export function updateWorkspaceFileReplacements() {
                   styleEntry.indexOf('xplat/web/scss') > -1 &&
                   styleEntry.indexOf('libs/xplat/web') === -1
                 ) {
-                  workspaceJson.projects[name].architect.build.options.styles[
+                  workspaceJson.projects[name][targetProp].build.options.styles[
                     i
                   ] = styleEntry.replace(
                     'xplat/web/scss',
@@ -276,7 +280,7 @@ export function updateWorkspaceFileReplacements() {
                     styleEntry.input.indexOf('xplat/web/scss') > -1 &&
                     styleEntry.input.indexOf('libs/xplat/web') === -1
                   ) {
-                    workspaceJson.projects[name].architect.build.options.styles[
+                    workspaceJson.projects[name][targetProp].build.options.styles[
                       i
                     ].input = styleEntry.input.replace(
                       'xplat/web/scss',
@@ -288,13 +292,13 @@ export function updateWorkspaceFileReplacements() {
             }
 
             // update configuration fileReplacements
-            if (workspaceJson.projects[name].architect.build.configurations) {
+            if (workspaceJson.projects[name][targetProp].build.configurations) {
               const configKeys = Object.keys(
-                workspaceJson.projects[name].architect.build.configurations
+                workspaceJson.projects[name][targetProp].build.configurations
               );
               for (const configKey of configKeys) {
                 if (
-                  workspaceJson.projects[name].architect.build.configurations[
+                  workspaceJson.projects[name][targetProp].build.configurations[
                     configKey
                   ].fileReplacements
                 ) {
@@ -302,13 +306,13 @@ export function updateWorkspaceFileReplacements() {
                   for (
                     let i = 0;
                     i <
-                    workspaceJson.projects[name].architect.build.configurations[
+                    workspaceJson.projects[name][targetProp].build.configurations[
                       configKey
                     ].fileReplacements.length;
                     i++
                   ) {
                     const replaceOption =
-                      workspaceJson.projects[name].architect.build
+                      workspaceJson.projects[name][targetProp].build
                         .configurations[configKey].fileReplacements[i];
                     if (
                       replaceOption.replace &&
@@ -339,7 +343,7 @@ export function updateWorkspaceFileReplacements() {
                     if (updatedFileReplace) {
                       workspaceJson.projects[
                         name
-                      ].architect.build.configurations[
+                      ][targetProp].build.configurations[
                         configKey
                       ].fileReplacements[i] = updatedFileReplace;
                     }
@@ -351,15 +355,15 @@ export function updateWorkspaceFileReplacements() {
 
           // {N}: update configuration fileReplacements
           if (
-            workspaceJson.projects[name].architect.default &&
-            workspaceJson.projects[name].architect.default.configurations
+            workspaceJson.projects[name][targetProp].default &&
+            workspaceJson.projects[name][targetProp].default.configurations
           ) {
             const configKeys = Object.keys(
-              workspaceJson.projects[name].architect.default.configurations
+              workspaceJson.projects[name][targetProp].default.configurations
             );
             for (const configKey of configKeys) {
               if (
-                workspaceJson.projects[name].architect.default.configurations[
+                workspaceJson.projects[name][targetProp].default.configurations[
                   configKey
                 ].fileReplacements
               ) {
@@ -367,13 +371,13 @@ export function updateWorkspaceFileReplacements() {
                 for (
                   let i = 0;
                   i <
-                  workspaceJson.projects[name].architect.default.configurations[
+                  workspaceJson.projects[name][targetProp].default.configurations[
                     configKey
                   ].fileReplacements.length;
                   i++
                 ) {
                   const replaceOption =
-                    workspaceJson.projects[name].architect.default
+                    workspaceJson.projects[name][targetProp].default
                       .configurations[configKey].fileReplacements[i];
                   if (
                     replaceOption.replace &&
@@ -404,7 +408,7 @@ export function updateWorkspaceFileReplacements() {
                   if (updatedFileReplace) {
                     workspaceJson.projects[
                       name
-                    ].architect.default.configurations[
+                    ][targetProp].default.configurations[
                       configKey
                     ].fileReplacements[i] = updatedFileReplace;
                   }

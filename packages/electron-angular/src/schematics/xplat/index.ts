@@ -44,7 +44,8 @@ export default function (options: XplatHelpers.Schema) {
         : XplatHelpers.addPlatformFiles(
             options,
             xplatFolderName,
-            'core'
+            'core',
+            'index.ts'
           )(tree, context);
     },
     XplatElectronAngularHelpers.updateRootDeps(options),

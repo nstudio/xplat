@@ -129,7 +129,8 @@ export default function (options: XplatComponentHelpers.Schema) {
         : noop()(tree, context),
 
     // add platform chains
-    ...externalChains,
+    (tree: Tree, context: SchematicContext) =>
+      chain(externalChains),
     formatFiles({ skipFormat: options.skipFormat }),
   ]);
 }

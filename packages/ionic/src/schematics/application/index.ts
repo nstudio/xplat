@@ -2,7 +2,6 @@ import {
   XplatHelpers,
   missingArgument,
   getDefaultTemplateOptions,
-  updateWorkspace,
   updateNxProjects,
   updatePackageScripts,
 } from '@nstudio/xplat';
@@ -23,7 +22,7 @@ import {
 import { Schema } from './schema';
 import { XplatIonicHelpers } from '../../utils';
 import { capacitorVersion } from '../../utils/versions';
-import { formatFiles } from '@nrwl/workspace';
+import { formatFiles, updateWorkspace } from '@nrwl/workspace';
 
 export default function (options: Schema) {
   if (!options.name) {
@@ -86,14 +85,15 @@ export default function (options: Schema) {
     },
     (tree: Tree, context: SchematicContext) => {
       const directory = options.directory ? `${options.directory}/` : '';
-      const projects = {};
-      projects[`${options.name}`] = {
-        root: `apps/${directory}${options.name}/`,
-        sourceRoot: `apps/${directory}${options.name}/src`,
-        projectType: 'application',
-        prefix: getPrefix(),
-      };
-      return <any>updateWorkspace({ projects })(tree, <any>context);
+      return updateWorkspace((workspace) => {
+        workspace.projects.add({
+          name: options.name,
+          root: `apps/${directory}${options.name}/`,
+          sourceRoot: `apps/${directory}${options.name}/src`,
+          projectType: 'application',
+          prefix: getPrefix(),
+        });
+      });
     },
     (tree: Tree) => {
       const projects = {};

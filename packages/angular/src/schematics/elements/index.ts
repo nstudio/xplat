@@ -13,12 +13,15 @@ import {
   externalSchematic,
   noop,
 } from '@angular-devkit/schematics';
-import { updateJsonInTree, formatFiles } from '@nrwl/workspace';
+import {
+  updateJsonInTree,
+  formatFiles,
+  updateWorkspace,
+} from '@nrwl/workspace';
 import {
   stringUtils,
   updatePackageScripts,
   missingArgument,
-  updateWorkspace,
   getDefaultTemplateOptions,
   XplatHelpers,
 } from '@nstudio/xplat';
@@ -137,54 +140,60 @@ export default function (options: ElementsOptions) {
       if (options.builderModule) {
         return noop()(tree, context);
       } else {
-        return updateWorkspace({
-          projects: {
-            'web-elements': {
-              root: '',
-              sourceRoot: 'libs/xplat/web/elements/builder',
-              projectType: 'application',
-              prefix: 'web-elements',
-              schematics: {},
-              architect: {
-                build: {
-                  builder: 'ngx-build-plus:build',
-                  options: {
-                    outputPath: 'dist/ngelements',
-                    index: 'libs/xplat/web/elements/builder/index.html',
-                    main: 'libs/xplat/web/elements/builder/elements.ts',
-                    polyfills: 'libs/xplat/web/elements/builder/polyfills.ts',
-                    tsConfig:
-                      'libs/xplat/web/elements/builder/tsconfig.elements.json',
-                  },
-                  configurations: {
-                    production: {
-                      optimization: true,
-                      outputHashing: 'all',
-                      sourceMap: false,
-                      extractCss: true,
-                      namedChunks: false,
-                      aot: true,
-                      extractLicenses: true,
-                      vendorChunk: false,
-                      buildOptimizer: true,
-                    },
+        return updateWorkspace((workspace) => {
+          const projectDef: any = {
+            root: '',
+            sourceRoot: 'libs/xplat/web/elements/builder',
+            projectType: 'application',
+            prefix: 'web-elements',
+            schematics: {},
+            targets: {
+              build: {
+                builder: 'ngx-build-plus:build',
+                options: {
+                  outputPath: 'dist/ngelements',
+                  index: 'libs/xplat/web/elements/builder/index.html',
+                  main: 'libs/xplat/web/elements/builder/elements.ts',
+                  polyfills: 'libs/xplat/web/elements/builder/polyfills.ts',
+                  tsConfig:
+                    'libs/xplat/web/elements/builder/tsconfig.elements.json',
+                },
+                configurations: {
+                  production: {
+                    optimization: true,
+                    outputHashing: 'all',
+                    sourceMap: false,
+                    extractCss: true,
+                    namedChunks: false,
+                    aot: true,
+                    extractLicenses: true,
+                    vendorChunk: false,
+                    buildOptimizer: true,
                   },
                 },
-                serve: {
-                  builder: 'ngx-build-plus:dev-server',
-                  options: {
-                    browserTarget: 'web-elements:build',
-                  },
-                  configurations: {
-                    production: {
-                      browserTarget: 'web-elements:build:production',
-                    },
+              },
+              serve: {
+                builder: 'ngx-build-plus:dev-server',
+                options: {
+                  browserTarget: 'web-elements:build',
+                },
+                configurations: {
+                  production: {
+                    browserTarget: 'web-elements:build:production',
                   },
                 },
               },
             },
-          },
-        })(tree, <any>context);
+          };
+          if (workspace.projects.has('web-elements')) {
+            workspace.projects.set('web-elements', projectDef);
+          } else {
+            workspace.projects.add({
+              name: `web-elements`,
+              ...projectDef,
+            });
+          }
+        });
       }
     },
     // update dependencies

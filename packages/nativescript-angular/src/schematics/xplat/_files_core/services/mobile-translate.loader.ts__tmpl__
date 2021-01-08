@@ -3,21 +3,33 @@ import { Observable, Observer } from 'rxjs';
 // nativescript
 import { knownFolders, File, Folder, path } from '@nativescript/core';
 
-export class TNSTranslateLoader {
+export class MobileTranslateLoader {
   constructor(private _path: string) {}
 
   public getTranslation(lang: string) {
-    const filePath = `${this._path || '/assets/i18n/'}${lang}.json`;
-    // console.log('TNSTranslateLoader getTranslation:', filePath);
-    return this.requestLocalFile(filePath);
+    const filePath = this._getFilePath(lang);
+    // console.log('MobileTranslateLoader getTranslation:', filePath);
+    return this.requestLocalFile(filePath, lang);
   }
 
-  private requestLocalFile(url: string): Observable<any> {
+  private requestLocalFile(url: string, lang: string): Observable<any> {
     url = this._getAbsolutePath(url);
+    let hasLocaleFile = this._fileExists(url);
+    if (!hasLocaleFile) {
+      // if not found, try without the region suffix (some may be using json files named with just the lang and no region, ie: en.json vs. en-US.json)
+      if (lang && lang.indexOf('-') > -1) {
+        const langOnly = lang.split('-')[0];
+        if (langOnly) {
+          const fallbackPath = this._getFilePath(langOnly);
+          url = this._getAbsolutePath(fallbackPath);
+          hasLocaleFile = this._fileExists(url);
+        }
+      }
+    }
 
     // request from local app resources
     return new Observable((observer: Observer<any>) => {
-      if (this._fileExists(url)) {
+      if (hasLocaleFile) {
         const localFile = this._fileFromPath(url);
         localFile.readText().then(
           (data: string) => {
@@ -63,6 +75,10 @@ export class TNSTranslateLoader {
 
   private _fileExists(filePath: string): boolean {
     return File.exists(filePath);
+  }
+
+  private _getFilePath(lang: string) {
+    return `${this._path || '/assets/i18n/'}${lang}.json`;
   }
 
   private _getAbsolutePath(url: string): string {

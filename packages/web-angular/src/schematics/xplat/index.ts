@@ -42,7 +42,8 @@ export default function (options: XplatHelpers.Schema) {
         : XplatHelpers.addPlatformFiles(
             options,
             xplatFolderName,
-            'core'
+            'core',
+            'index.ts'
           )(tree, context);
     },
     (tree: Tree, context: SchematicContext) => {
@@ -53,7 +54,8 @@ export default function (options: XplatHelpers.Schema) {
         : XplatHelpers.addPlatformFiles(
             options,
             xplatFolderName,
-            'features'
+            'features',
+            'index.ts'
           )(tree, context);
     },
     (tree: Tree, context: SchematicContext) => {

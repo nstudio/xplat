@@ -14,7 +14,7 @@ import {
   noop,
   ExecutionOptions,
 } from '@angular-devkit/schematics';
-import { formatFiles } from '@nrwl/workspace';
+import { formatFiles, updateWorkspace } from '@nrwl/workspace';
 import {
   stringUtils,
   updatePackageScripts,
@@ -22,7 +22,6 @@ import {
   getDefaultTemplateOptions,
   XplatHelpers,
   readWorkspaceJson,
-  updateWorkspace,
 } from '@nstudio/xplat';
 import {
   prerun,
@@ -129,22 +128,18 @@ exports.config = defaultConfig;
     const confFile = 'protractor.headless.js';
     tree.create(`/apps/${directory}${e2eProjectName}/${confFile}`, config);
 
-    const workspaceConfig = readWorkspaceJson(tree);
-    if (workspaceConfig && workspaceConfig.projects) {
-      if (workspaceConfig.projects[e2eProjectName]) {
-        if (workspaceConfig.projects[e2eProjectName].architect) {
-          workspaceConfig.projects[
-            e2eProjectName
-          ].architect.e2e.configurations.ci = {
+    return updateWorkspace((workspace) => {
+      if (workspace.projects.has(e2eProjectName)) {
+        const projectDef = workspace.projects.get(e2eProjectName);
+        const e2eDef = projectDef.targets.get('e2e');
+        if (e2eDef) {
+          e2eDef.configurations.ci = {
             protractorConfig: `apps/${directory}${e2eProjectName}/${confFile}`,
           };
+          projectDef.targets.set('e2e', e2eDef);
         }
       }
-    }
-    return updateWorkspace({ projects: workspaceConfig.projects })(
-      tree,
-      <any>context
-    );
+    });
   };
 }
 
@@ -220,24 +215,22 @@ function adjustAppFiles(options: Schema, tree: Tree): Rule {
     appModuleContent(options)
   );
   // update cli config for shared web specific scss
-  const workspaceConfig = readWorkspaceJson(tree);
-  // find app
-  if (workspaceConfig && workspaceConfig.projects) {
-    if (workspaceConfig.projects[options.name]) {
-      if (workspaceConfig.projects[options.name].architect) {
-        workspaceConfig.projects[
-          options.name
-        ].architect.build.options.styles = [
-          `libs/xplat/${XplatHelpers.getXplatFoldername(
-            'web',
-            'angular'
-          )}/scss/src/_index.scss`,
-          `apps/${directory}${options.name}/src/styles.scss`,
-        ];
+  return updateWorkspace((workspace) => {
+      const projectDef = workspace.projects.get(options.name);
+      if (projectDef && projectDef.targets) {
+        const buildDef = projectDef.targets.get('build')
+        if (buildDef) {
+          buildDef.options.styles = [
+            `libs/xplat/${XplatHelpers.getXplatFoldername(
+              'web',
+              'angular'
+              )}/scss/src/_index.scss`,
+              `apps/${directory}${options.name}/src/styles.scss`,
+            ];
+            projectDef.targets.set('build', buildDef);
+        }
       }
-    }
-  }
-  return <any>updateWorkspace({ projects: workspaceConfig.projects });
+  });
 }
 
 function indexContent(name: string) {

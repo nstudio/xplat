@@ -5,7 +5,7 @@ import * as timer from '@nativescript/core/timer';
 @Injectable({
   providedIn: 'root'
 })
-export class TNSWindowService {
+export class MobileWindowService {
   private _dialogOpened = false;
 
   get navigator(): any {

@@ -14,11 +14,10 @@ import {
   noop,
   externalSchematic,
 } from '@angular-devkit/schematics';
-import { formatFiles } from '@nrwl/workspace';
+import { formatFiles, updateWorkspace } from '@nrwl/workspace';
 import {
   stringUtils,
   updatePackageScripts,
-  updateWorkspace,
   updateNxProjects,
   missingArgument,
   getDefaultTemplateOptions,
@@ -109,181 +108,182 @@ export default function (options: ApplicationOptions) {
     (tree: Tree, context: SchematicContext) => {
       const directory = options.directory ? `${options.directory}/` : '';
       const appFolder = `apps/${directory}${options.name}/`;
-      const projects = {};
-      projects[`${options.name}`] = {
-        root: appFolder,
-        sourceRoot: `${appFolder}src`,
-        projectType: 'application',
-        prefix: getPrefix(),
-        schematics: {
-          '@schematics/angular:component': {
-            styleext: 'scss',
-          },
-        },
-        architect: {
-          build: {
-            builder: '@angular-devkit/build-angular:browser',
-            options: {
-              outputPath: `${appFolder}www`,
-              index: `${appFolder}src/index.html`,
-              main: `${appFolder}src/main.ts`,
-              polyfills: `${appFolder}src/polyfills.ts`,
-              tsConfig: `${appFolder}tsconfig.app.json`,
-              assets: [
-                {
-                  glob: '**/*',
-                  input: `${appFolder}src/assets`,
-                  output: 'assets',
-                },
-                {
-                  glob: '**/*.svg',
-                  input: 'node_modules/ionicons/dist/ionicons/svg',
-                  output: './svg',
-                },
-              ],
-              styles: [
-                {
-                  input: `${appFolder}src/theme/variables.scss`,
-                },
-                {
-                  input: `${appFolder}src/global.scss`,
-                },
-              ],
-              scripts: [],
+      return updateWorkspace((workspace) => {
+        workspace.projects.add({
+          name: options.name,
+          root: appFolder,
+          sourceRoot: `${appFolder}src`,
+          projectType: 'application',
+          prefix: getPrefix(),
+          schematics: {
+            '@schematics/angular:component': {
+              styleext: 'scss',
             },
-            configurations: {
-              production: {
-                fileReplacements: [
+          },
+          targets: {
+            build: {
+              builder: '@angular-devkit/build-angular:browser',
+              options: {
+                outputPath: `${appFolder}www`,
+                index: `${appFolder}src/index.html`,
+                main: `${appFolder}src/main.ts`,
+                polyfills: `${appFolder}src/polyfills.ts`,
+                tsConfig: `${appFolder}tsconfig.app.json`,
+                assets: [
                   {
-                    replace: `${appFolder}src/environments/environment.ts`,
-                    with: `${appFolder}src/environments/environment.prod.ts`,
+                    glob: '**/*',
+                    input: `${appFolder}src/assets`,
+                    output: 'assets',
+                  },
+                  {
+                    glob: '**/*.svg',
+                    input: 'node_modules/ionicons/dist/ionicons/svg',
+                    output: './svg',
                   },
                 ],
-                optimization: true,
-                outputHashing: 'all',
-                sourceMap: false,
-                extractCss: true,
-                namedChunks: false,
-                aot: true,
-                extractLicenses: true,
-                vendorChunk: false,
-                buildOptimizer: true,
-                budgets: [
+                styles: [
                   {
-                    type: 'initial',
-                    maximumWarning: '2mb',
-                    maximumError: '5mb',
+                    input: `${appFolder}src/theme/variables.scss`,
+                  },
+                  {
+                    input: `${appFolder}src/global.scss`,
+                  },
+                ],
+                scripts: [],
+              },
+              configurations: {
+                production: {
+                  fileReplacements: [
+                    {
+                      replace: `${appFolder}src/environments/environment.ts`,
+                      with: `${appFolder}src/environments/environment.prod.ts`,
+                    },
+                  ],
+                  optimization: true,
+                  outputHashing: 'all',
+                  sourceMap: false,
+                  extractCss: true,
+                  namedChunks: false,
+                  aot: true,
+                  extractLicenses: true,
+                  vendorChunk: false,
+                  buildOptimizer: true,
+                  budgets: [
+                    {
+                      type: 'initial',
+                      maximumWarning: '2mb',
+                      maximumError: '5mb',
+                    },
+                  ],
+                },
+                ci: {
+                  progress: false,
+                },
+              },
+            },
+            serve: {
+              builder: '@angular-devkit/build-angular:dev-server',
+              options: {
+                browserTarget: `${options.name}:build`,
+              },
+              configurations: {
+                production: {
+                  browserTarget: `${options.name}:build:production`,
+                },
+                ci: {
+                  progress: false,
+                },
+              },
+            },
+            'extract-i18n': {
+              builder: '@angular-devkit/build-angular:extract-i18n',
+              options: {
+                browserTarget: `${options.name}:build`,
+              },
+            },
+            test: {
+              builder: '@angular-devkit/build-angular:karma',
+              options: {
+                main: `${appFolder}src/test.ts`,
+                polyfills: `${appFolder}src/polyfills.ts`,
+                tsConfig: `${appFolder}tsconfig.spec.json`,
+                karmaConfig: `${appFolder}karma.conf.js`,
+                styles: [],
+                scripts: [],
+                assets: [
+                  {
+                    glob: 'favicon.ico',
+                    input: `${appFolder}src/`,
+                    output: '/',
+                  },
+                  {
+                    glob: '**/*',
+                    input: `${appFolder}src/assets`,
+                    output: '/assets',
                   },
                 ],
               },
-              ci: {
-                progress: false,
-              },
-            },
-          },
-          serve: {
-            builder: '@angular-devkit/build-angular:dev-server',
-            options: {
-              browserTarget: `${options.name}:build`,
-            },
-            configurations: {
-              production: {
-                browserTarget: `${options.name}:build:production`,
-              },
-              ci: {
-                progress: false,
-              },
-            },
-          },
-          'extract-i18n': {
-            builder: '@angular-devkit/build-angular:extract-i18n',
-            options: {
-              browserTarget: `${options.name}:build`,
-            },
-          },
-          test: {
-            builder: '@angular-devkit/build-angular:karma',
-            options: {
-              main: `${appFolder}src/test.ts`,
-              polyfills: `${appFolder}src/polyfills.ts`,
-              tsConfig: `${appFolder}tsconfig.spec.json`,
-              karmaConfig: `${appFolder}karma.conf.js`,
-              styles: [],
-              scripts: [],
-              assets: [
-                {
-                  glob: 'favicon.ico',
-                  input: `${appFolder}src/`,
-                  output: '/',
+              configurations: {
+                ci: {
+                  progress: false,
+                  watch: false,
                 },
-                {
-                  glob: '**/*',
-                  input: `${appFolder}src/assets`,
-                  output: '/assets',
+              },
+            },
+            lint: {
+              builder: '@angular-devkit/build-angular:tslint',
+              options: {
+                tsConfig: [
+                  `${appFolder}tsconfig.app.json`,
+                  `${appFolder}tsconfig.spec.json`,
+                  `${appFolder}e2e/tsconfig.json`,
+                ],
+                exclude: ['**/node_modules/**'],
+              },
+            },
+            // TODO: add jest e2e configuration for ionic
+            // e2e: {
+            //   builder: '@angular-devkit/build-angular:protractor',
+            //   options: {
+            //     protractorConfig: `${appFolder}e2e/protractor.conf.js`,
+            //     devServerTarget: `${options.name}:serve`
+            //   },
+            //   configurations: {
+            //     production: {
+            //       devServerTarget: `${options.name}:serve:production`
+            //     },
+            //     ci: {
+            //       devServerTarget: `${options.name}:serve:ci`
+            //     }
+            //   }
+            // },
+            'ionic-cordova-build': {
+              builder: '@ionic/angular-toolkit:cordova-build',
+              options: {
+                browserTarget: `${options.name}:build`,
+              },
+              configurations: {
+                production: {
+                  browserTarget: `${options.name}:build:production`,
                 },
-              ],
+              },
             },
-            configurations: {
-              ci: {
-                progress: false,
-                watch: false,
+            'ionic-cordova-serve': {
+              builder: '@ionic/angular-toolkit:cordova-serve',
+              options: {
+                cordovaBuildTarget: `${options.name}:ionic-cordova-build`,
+                devServerTarget: `${options.name}:serve`,
+              },
+              configurations: {
+                production: {
+                  cordovaBuildTarget: `${options.name}:ionic-cordova-build:production`,
+                  devServerTarget: `${options.name}:serve:production`,
+                },
               },
             },
           },
-          lint: {
-            builder: '@angular-devkit/build-angular:tslint',
-            options: {
-              tsConfig: [
-                `${appFolder}tsconfig.app.json`,
-                `${appFolder}tsconfig.spec.json`,
-                `${appFolder}e2e/tsconfig.json`,
-              ],
-              exclude: ['**/node_modules/**'],
-            },
-          },
-          // TODO: add jest e2e configuration for ionic
-          // e2e: {
-          //   builder: '@angular-devkit/build-angular:protractor',
-          //   options: {
-          //     protractorConfig: `${appFolder}e2e/protractor.conf.js`,
-          //     devServerTarget: `${options.name}:serve`
-          //   },
-          //   configurations: {
-          //     production: {
-          //       devServerTarget: `${options.name}:serve:production`
-          //     },
-          //     ci: {
-          //       devServerTarget: `${options.name}:serve:ci`
-          //     }
-          //   }
-          // },
-          'ionic-cordova-build': {
-            builder: '@ionic/angular-toolkit:cordova-build',
-            options: {
-              browserTarget: `${options.name}:build`,
-            },
-            configurations: {
-              production: {
-                browserTarget: `${options.name}:build:production`,
-              },
-            },
-          },
-          'ionic-cordova-serve': {
-            builder: '@ionic/angular-toolkit:cordova-serve',
-            options: {
-              cordovaBuildTarget: `${options.name}:ionic-cordova-build`,
-              devServerTarget: `${options.name}:serve`,
-            },
-            configurations: {
-              production: {
-                cordovaBuildTarget: `${options.name}:ionic-cordova-build:production`,
-                devServerTarget: `${options.name}:serve:production`,
-              },
-            },
-          },
-        },
-      };
-      return updateWorkspace({ projects })(tree, <any>context);
+        });
+      });
     },
     (tree: Tree) => {
       const projects = {};

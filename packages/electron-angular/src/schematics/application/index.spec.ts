@@ -131,7 +131,7 @@ describe('app', () => {
           version: 1,
           projects: {
             'web-viewer': {
-              architect: {
+              targets: {
                 build: {
                   options: {
                     assets: [],

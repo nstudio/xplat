@@ -16,7 +16,6 @@ import {
 } from '@angular-devkit/schematics';
 import {
   updatePackageScripts,
-  updateWorkspace,
   updateNxProjects,
   missingArgument,
   getDefaultTemplateOptions,
@@ -47,6 +46,7 @@ import {
   typescriptVersion,
 } from '../../utils/versions';
 import { XplatNativeScriptHelpers } from '@nstudio/nativescript/src/utils';
+import { updateWorkspace } from '@nrwl/workspace';
 
 export default function (options: Schema) {
   if (!options.name) {
@@ -110,85 +110,85 @@ export default function (options: Schema) {
     (tree: Tree, context: SchematicContext) => {
       const platformApp = options.name.replace('-', '.');
       const directory = options.directory ? `${options.directory}/` : '';
-      const projects = {};
-      projects[`${options.name}`] = {
-        root: `apps/${directory}${options.name}/`,
-        sourceRoot: `apps/${directory}${options.name}/src`,
-        projectType: 'application',
-        prefix: getPrefix(),
-        schematics: {
-          '@schematics/angular:component': {
-            styleext: 'scss',
+      return updateWorkspace((workspace) => {
+        workspace.projects.add({
+          name: `${options.name}`,
+          root: `apps/${directory}${options.name}/`,
+          sourceRoot: `apps/${directory}${options.name}/src`,
+          projectType: 'application',
+          prefix: getPrefix(),
+          schematics: {
+            '@schematics/angular:component': {
+              styleext: 'scss',
+            },
           },
-        },
-        architect: {
-          default: {
-            builder: '@nrwl/workspace:run-commands',
-            configurations: {
-              dev: {
-                fileReplacements: [
-                  {
-                    replace:
-                      'libs/xplat/core/src/lib/environments/environment.ts',
-                    with: `apps/${directory}${options.name}/src/environments/environment.dev.ts`,
-                  },
+          targets: {
+            default: {
+              builder: '@nrwl/workspace:run-commands',
+              configurations: {
+                dev: {
+                  fileReplacements: [
+                    {
+                      replace:
+                        'libs/xplat/core/src/lib/environments/environment.ts',
+                      with: `apps/${directory}${options.name}/src/environments/environment.dev.ts`,
+                    },
+                  ],
+                },
+                production: {
+                  fileReplacements: [
+                    {
+                      replace:
+                        'libs/xplat/core/src/lib/environments/environment.ts',
+                      with: `apps/${directory}${options.name}/src/environments/environment.prod.ts`,
+                    },
+                  ],
+                },
+              },
+            },
+            ios: {
+              builder: '@nrwl/workspace:run-commands',
+              options: {
+                command: `ns debug ios --no-hmr --env.projectName=${options.name}`,
+                cwd: `apps/${directory}${options.name}`,
+              },
+            },
+            android: {
+              builder: '@nrwl/workspace:run-commands',
+              options: {
+                command: `ns debug android --no-hmr --env.projectName=${options.name}`,
+                cwd: `apps/${directory}${options.name}`,
+              },
+            },
+            clean: {
+              builder: '@nrwl/workspace:run-commands',
+              options: {
+                commands: ['ns clean', 'npm i', 'npx rimraf package-lock.json'],
+                cwd: `apps/${directory}${options.name}`,
+                parallel: false,
+              },
+            },
+            lint: {
+              builder: '@nrwl/linter:eslint',
+              options: {
+                lintFilePatterns: [
+                  `apps/${directory}${options.name}/**/*.ts`,
+                  `apps/${directory}${options.name}/src/**/*.html`,
                 ],
               },
-              production: {
-                fileReplacements: [
-                  {
-                    replace:
-                      'libs/xplat/core/src/lib/environments/environment.ts',
-                    with: `apps/${directory}${options.name}/src/environments/environment.prod.ts`,
-                  },
-                ],
-              },
+            },
+            test: {
+              builder: '@nrwl/jest:jest',
+              options: {
+                jestConfig: `apps/${directory}${options.name}/jest.config.js`,
+                tsConfig: `apps/${directory}${options.name}/tsconfig.spec.json`,
+                passWithNoTests: true,
+                setupFile: `apps/${directory}${options.name}/src/test-setup.ts`,
+              }
             },
           },
-          ios: {
-            builder: '@nrwl/workspace:run-commands',
-            options: {
-              command: `ns debug ios --no-hmr --env.projectName=${options.name}`,
-              cwd: `apps/${directory}${options.name}`,
-            },
-          },
-          android: {
-            builder: '@nrwl/workspace:run-commands',
-            options: {
-              command: `ns debug android --no-hmr --env.projectName=${options.name}`,
-              cwd: `apps/${directory}${options.name}`,
-            },
-          },
-          clean: {
-            builder: '@nrwl/workspace:run-commands',
-            options: {
-              commands: ['ns clean', 'npm i', 'npx rimraf package-lock.json'],
-              cwd: `apps/${directory}${options.name}`,
-              parallel: false,
-            },
-          },
-          lint: {
-            builder: '@nrwl/linter:eslint',
-            options: {
-              lintFilePatterns: [
-                `apps/${directory}${options.name}/**/*.ts`,
-                `apps/${directory}${options.name}/src/**/*.html`,
-              ],
-            },
-          },
-          test: {
-            builder: '@nrwl/jest:jest',
-            options: {
-              jestConfig: `apps/${directory}${options.name}/jest.config.js`,
-              tsConfig: `apps/${directory}${options.name}/tsconfig.spec.json`,
-              passWithNoTests: true,
-              setupFile: `apps/${directory}${options.name}/src/test-setup.ts`,
-            },
-            outputs: [`coverage/apps/${directory}${options.name}/`],
-          },
-        },
-      };
-      return updateWorkspace({ projects })(tree, <any>context);
+        })
+      });
     },
     (tree: Tree) => {
       const projects = {};

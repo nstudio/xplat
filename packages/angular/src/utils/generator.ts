@@ -293,8 +293,10 @@ export function generate(type: IGenerateType, options) {
         : noop()(tree, context),
 
     // project handling
-    ...projectChains,
-    ...externalChains,
+    (tree: Tree, context: SchematicContext) =>
+      chain(projectChains),
+    (tree: Tree, context: SchematicContext) =>
+      chain(externalChains),
     // dependency updates
     (tree: Tree, context: SchematicContext) =>
       !options.projects && type === 'state'

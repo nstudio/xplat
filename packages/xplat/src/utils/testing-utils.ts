@@ -66,7 +66,7 @@ export function createXplatWithAppsForElectron(tree: Tree): Tree {
       version: 1,
       projects: {
         'web-viewer': {
-          architect: {
+          targets: {
             build: {
               options: {
                 assets: [],
@@ -202,8 +202,8 @@ export function createXplatNativeScriptAngular(
     import { throwIfAlreadyLoaded } from '@<%= npmScope %>/xplat/utils';
     
     // app
-    import { TNSWindowService } from './services/tns-window.service';
-    import { TNSTranslateLoader } from './services/tns-translate.loader';
+    import { MobileWindowService } from './services/mobile-window.service';
+    import { MobileTranslateLoader } from './services/mobile-translate.loader';
     
     // factories
     export function platformLangFactory() {
@@ -211,7 +211,7 @@ export function createXplatNativeScriptAngular(
     }
     
     export function createTranslateLoader() {
-      return new TNSTranslateLoader('/assets/i18n/');
+      return new MobileTranslateLoader('/assets/i18n/');
     }
     
     @NgModule({
@@ -228,7 +228,7 @@ export function createXplatNativeScriptAngular(
           },
           {
             provide: PlatformWindowToken,
-            useClass: TNSWindowService
+            useClass: MobileWindowService
           }
         ]),
         TranslateModule.forRoot({
