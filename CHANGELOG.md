@@ -1,3 +1,10 @@
+## [11.0.21](https://github.com/nstudio/xplat/compare/11.0.16...11.0.21) (2021-01-09)
+
+### Bug Fixes
+
+- **core:** workspace update handling on generation ([33cfe7f](https://github.com/nstudio/xplat/commit/33cfe7f590fb9c90706d5e41ccc4de5c34cbc1ce))
+- **core:** workspace update handling on generation ([4059d50](https://github.com/nstudio/xplat/commit/4059d5006ce26663b87849c99c74be4e0131195e))
+
 ## [11.0.16](https://github.com/nstudio/xplat/compare/11.0.15...11.0.16) (2021-01-07)
 
 ### Features

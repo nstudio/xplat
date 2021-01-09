@@ -178,7 +178,11 @@ export function updateEnvsForNativeScript() {
         'if (isXplatWorkspace) {',
         `// opt in when ready to use in your workspace\n  const xplatEnvBaseEnabled = false;\n  if (xplatEnvBaseEnabled && isXplatWorkspace) {`
       );
-      createOrUpdate(tree, `${dirPath}/webpack.config.js`, webpackConfig.replace('<%= pathOffset %>', relativePath));
+      createOrUpdate(
+        tree,
+        `${dirPath}/webpack.config.js`,
+        webpackConfig.replace('<%= pathOffset %>', relativePath)
+      );
 
       createOrUpdate(
         tree,

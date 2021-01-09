@@ -343,7 +343,11 @@ function updateAppConfigs() {
       );
       // console.log('webpackConfigPath:', webpackConfigPath);
       const webpackConfig = fs.readFileSync(webpackConfigPath, 'UTF-8');
-      createOrUpdate(tree, `${dirPath}/webpack.config.js`, webpackConfig.replace('<%= pathOffset %>', relativePath));
+      createOrUpdate(
+        tree,
+        `${dirPath}/webpack.config.js`,
+        webpackConfig.replace('<%= pathOffset %>', relativePath)
+      );
 
       // update {N} app deps
       const packagePath = `${dirPath}/package.json`;

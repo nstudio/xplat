@@ -225,7 +225,10 @@ export function updateImports() {
               .map(([packageName, newPackageName]) => {
                 if (file.indexOf('apps/') > -1) {
                   // ensure core vs. shared is handled
-                  if (file.indexOf('core.module') > -1 || file.indexOf('app.module') > -1) {
+                  if (
+                    file.indexOf('core.module') > -1 ||
+                    file.indexOf('app.module') > -1
+                  ) {
                     if (packageName.indexOf(`@${npmScope}/core`) > -1) {
                       newPackageName = `@${npmScope}/xplat/core`;
                     } else if (file.indexOf(`@${npmScope}/features`) > -1) {
