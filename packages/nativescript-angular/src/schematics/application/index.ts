@@ -135,7 +135,7 @@ export default function (options: Schema) {
                     },
                   ],
                 },
-                production: {
+                prod: {
                   fileReplacements: [
                     {
                       replace:
