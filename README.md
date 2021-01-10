@@ -20,6 +20,108 @@
 - [NativeScript](https://www.nativescript.org/)
   > Open source framework for building truly native mobile apps with Angular, Vue.js, TypeScript, or JavaScript.
 
+## Quickstart
+
+```
+npx create-nx-workspace@latest
+```
+At the prompts:
+
+> provide a name
+
+> choose `empty`
+
+```
+npm i @nstudio/xplat -D
+```
+
+You are now ready to create apps:
+```
+nx g app
+```
+
+## App generation examples
+
+The additional app generators can be used as follows:
+
+### Electron
+
+Electron app generator can use any web app in the workspace as it's target.
+
+If you don't have a web app yet, create one first:
+
+```
+nx g app sample
+```
+> choose `web`
+
+You can now use the web app as the Electron target:
+
+```
+nx g app desktop --target=web-sample
+```
+> choose `electron`
+
+Develop with:
+```
+npm run start.electron.desktop
+```
+
+### Ionic
+
+```
+nx g app sample
+```
+> choose `ionic`
+
+Develop in browser with:
+```
+nx run ionic-sample:serve
+```
+
+A. **Capacitor iOS** - Prepare for development
+
+```
+npm run prepare.ionic.sample.ios
+```
+
+You can now open in Xcode for further development:
+
+```
+npm run open.ionic.sample.ios
+```
+
+B. **Capacitor Android** - Prepare for development
+
+```
+npm run prepare.ionic.sample.android
+```
+
+You can now open in Android Studio for further development:
+
+```
+npm run open.ionic.sample.android
+```
+
+### NativeScript
+
+```
+nx g app mobile
+```
+> choose `nativescript`
+
+A. **iOS**
+
+```
+nx run nativescript-mobile:ios
+```
+
+B. **Android**
+
+```
+nx run nativescript-mobile:android
+```
+
 ## Documentation
 
 - [Getting Started](https://nstudio.io/xplat/getting-started)
