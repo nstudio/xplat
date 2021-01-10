@@ -18,7 +18,7 @@
 - [Ionic](https://ionicframework.com/)
   > Build amazing apps in one codebase, for any platform, with the web.
 - [NativeScript](https://www.nativescript.org/)
-  > Open source framework for building truly native mobile apps with Angular, Vue.js, TypeScript, or JavaScript.
+  > Build rich iOS and Android apps with direct access to native api's from JavaScript directly.
 
 ## Quickstart
 
