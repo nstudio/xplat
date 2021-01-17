@@ -130,5 +130,5 @@ export default function (options: XplatFeatureHelpers.Schema) {
 //     // adjust feature module metadata if needed
 //     (tree: Tree, context: SchematicContext) =>
 //       !options.projects && targetPlatforms.nativescript
-//         ? adjustModule(type, options, 'xplat/nativescript')(tree, context)
+//         ? adjustModule(tree, type, options, 'xplat/nativescript')(tree, context)
 //         : noop()(tree, context),

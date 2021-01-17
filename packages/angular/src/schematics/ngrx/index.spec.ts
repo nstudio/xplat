@@ -154,4 +154,45 @@ describe('ngrx schematic', () => {
     // console.log('content:', content)
     expect(content.indexOf(`StoreModule.forFeature`)).toBeGreaterThanOrEqual(0);
   });
+
+  it('should create ngrx state for Nx lib only', async () => {
+    // console.log('appTree:', appTree);
+    appTree = Tree.empty();
+    appTree = createXplatWithNativeScriptWeb(appTree, null, 'angular', 'sample');
+    const options: GenerateOptions = {
+      name: 'auth',
+      feature: '@testing/sample',
+    };
+    let tree = await runSchematic('ngrx', options, appTree);
+    const files = tree.files;
+    // console.log(files. slice(91,files.length));
+
+    // state should not be setup in xplat architecture
+    expect(
+      files.indexOf(`/libs/xplat/core/src/lib/state/auth.actions.ts`)
+    ).toBe(-1);
+
+    // state should be lib specific
+    expect(
+      files.indexOf(
+        `/libs/sample/src/lib/state/auth.actions.ts`
+      )
+    ).toBeGreaterThanOrEqual(0);
+
+    // file content
+    let indexPath =
+    `/libs/sample/src/lib/state/auth.actions.ts`;
+    let content = getFileContent(tree, indexPath);
+    // console.log(barrelPath + ':');
+    // console.log(barrelIndex);
+    // symbol should be at end of collection
+    expect(content.indexOf(`AuthActions`)).toBeGreaterThanOrEqual(0);
+
+    let modulePath = '/libs/sample/src/lib/sample.module.ts';
+    content = getFileContent(tree, modulePath);
+    // console.log(modulePath + ':');
+    // console.log(content);
+    // symbol should be at end of collection
+    expect(content.indexOf(`StoreModule.forFeature`)).toBeGreaterThanOrEqual(0);
+  });
 });

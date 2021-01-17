@@ -117,7 +117,8 @@ export function createXplatWithApps(
 export function createXplatWithNativeScriptWeb(
   tree: Tree,
   withRouting?: boolean,
-  framework?: FrameworkTypes
+  framework?: FrameworkTypes,
+  withNxLibName?: string
 ): Tree {
   tree = createEmptyWorkspace(tree, framework);
   createXplatLibs(tree);
@@ -125,7 +126,34 @@ export function createXplatWithNativeScriptWeb(
   createXplatWebAngular(tree, framework);
   createNativeScriptAngularApp(tree, withRouting);
   createWebAngularApp(tree, withRouting);
+  if (withNxLibName) {
+    // also create a standard Nx library
+    createNxLib(tree, withNxLibName);
+  }
   return tree;
+}
+
+export function createNxLib(tree: Tree, name: string) {
+  tree.create(`/libs/${name}/src/lib/index.ts`, '');
+  tree.create(
+    `/libs/${name}/src/lib/${name}.module.ts`,
+    `import {
+    NgModule
+  } from '@angular/core';
+  import { APP_BASE_HREF, CommonModule } from '@angular/common';
+  
+  @NgModule({
+    imports: [CommonModule]
+  })
+  export class ${name}Module {}`
+  );
+  const configPaths = {};
+  configPaths[`@testing/${name}`] = [`libs/${name}/src/index.ts`]
+  tree.overwrite(
+    '/tsconfig.base.json',
+    JSON.stringify({ compilerOptions: { paths: configPaths } })
+  );
+  
 }
 
 export function createXplatLibs(tree: Tree) {

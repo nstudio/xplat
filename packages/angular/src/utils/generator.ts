@@ -13,7 +13,7 @@ import {
   SchematicsException,
   externalSchematic,
 } from '@angular-devkit/schematics';
-import { formatFiles, createOrUpdate } from '@nrwl/workspace';
+import { formatFiles, createOrUpdate, readJsonInTree } from '@nrwl/workspace';
 import {
   addGlobal,
   insert,
@@ -253,7 +253,7 @@ export function generate(type: IGenerateType, options) {
             platform,
             'angular'
           );
-          return adjustModule(type, options, `libs/xplat/${xplatFolderName}`);
+          return adjustModule(tree, type, options, `libs/xplat/${xplatFolderName}`);
         });
       } else {
         throw new Error(unsupportedPlatformError(platform));
@@ -289,7 +289,7 @@ export function generate(type: IGenerateType, options) {
     // adjust feature module metadata if needed
     (tree: Tree, context: SchematicContext) =>
       !options.projects && platforms.length === 0
-        ? adjustModule(type, options, 'libs/xplat')(tree, context)
+        ? adjustModule(tree, type, options, 'libs/xplat')(tree, context)
         : noop()(tree, context),
 
     // project handling
@@ -322,6 +322,31 @@ export function getFeatureName(options: IGenerateOptions) {
   return featureName;
 }
 
+export function isFeatureNxLib(featureName: string) {
+  return featureName && featureName.indexOf('@') === 0;
+}
+
+export function getNxFeaturePath(tree: Tree, featureName: string) {
+  const tsConfig = readJsonInTree(tree, 'tsconfig.base.json');
+  if (tsConfig) {
+    if (
+      tsConfig.compilerOptions &&
+      tsConfig.compilerOptions.paths &&
+      tsConfig.compilerOptions.paths[featureName]
+    ) {
+      let libPath = tsConfig.compilerOptions.paths[featureName][0];
+      return libPath.replace('index.ts', 'lib');
+    } else {
+      throw new Error(
+        `No lib barrel path found in tsconfig.base.json matching "${featureName}"`
+      );
+    }
+  } else {
+    throw new Error('Workspace must have tsconfig.base.json.');
+  }
+  return null;
+}
+
 export function addToFeature(
   xplatFolderName: string,
   type: IGenerateType,
@@ -332,12 +357,16 @@ export function addToFeature(
   forSubFolder?: boolean
 ) {
   let featureName: string = getFeatureName(options);
+  const isNxLib = isFeatureNxLib(featureName);
 
   options.needsIndex = false; // reset
 
   const srcSubFolderPath = options.projects ? '' : '/src/lib';
   let featurePath: string;
-  if (shouldTargetCoreBarrel(type, featureName)) {
+  // support targeting Nx libs with feature argument using the lib barrel (ie, @scope/mylib)
+  if (isNxLib) {
+    featurePath = getNxFeaturePath(tree, featureName);
+  } else if (shouldTargetCoreBarrel(type, featureName)) {
     // services and/or state should never be generated in shared or ui features
     // therefore place in core (since they are service level)
     featureName = 'core';
@@ -353,7 +382,7 @@ export function addToFeature(
     moveTo = `libs/xplat/features/src/lib/${featureName}/base`;
   } else {
     moveTo = `${featurePath}/${type}${type === 'state' ? '' : 's'}`;
-    if (!tree.exists(featureModulePath)) {
+    if (!isNxLib && !tree.exists(featureModulePath)) {
       let optionName: string;
       if (prefixPath !== 'libs') {
         // parse platform from prefix
@@ -574,13 +603,18 @@ export function adjustBarrelIndexForType(
 }
 
 export function adjustModule(
+  tree: Tree, 
   type: IGenerateType,
   options: IGenerateOptions,
   prefixPath: string
 ) {
   let featureName: string = getFeatureName(options);
+  const isNxLib = isFeatureNxLib(featureName);
   let featurePath: string;
-  if (shouldTargetCoreBarrel(type, featureName)) {
+  if (isNxLib) {
+    featurePath = getNxFeaturePath(tree, featureName);
+    featureName = featureName.split('/').pop();
+  } else if (shouldTargetCoreBarrel(type, featureName)) {
     featureName = 'core';
     featurePath = `${prefixPath}/${featureName}/src/lib`;
   } else {
