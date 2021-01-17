@@ -1,3 +1,9 @@
+## [11.0.22](https://github.com/nstudio/xplat/compare/11.0.21...11.0.22) (2021-01-17)
+
+### Features
+
+- **core:** support Nx lib barrels as feature targets ([99b9ac5](https://github.com/nstudio/xplat/commit/99b9ac503bb39e6e9c76d9efab930ce64326ee66))
+
 ## [11.0.21](https://github.com/nstudio/xplat/compare/11.0.16...11.0.21) (2021-01-09)
 
 ### Bug Fixes

@@ -25,6 +25,7 @@
 ```
 npx create-nx-workspace@latest
 ```
+
 At the prompts:
 
 > provide a name
@@ -36,6 +37,7 @@ npm i @nstudio/xplat -D
 ```
 
 You are now ready to create apps:
+
 ```
 nx g app
 ```
@@ -53,6 +55,7 @@ If you don't have a web app yet, create one first:
 ```
 nx g app sample
 ```
+
 > choose `web`
 
 You can now use the web app as the Electron target:
@@ -60,9 +63,11 @@ You can now use the web app as the Electron target:
 ```
 nx g app desktop --target=web-sample
 ```
+
 > choose `electron`
 
 Develop with:
+
 ```
 npm run start.electron.desktop
 ```
@@ -72,9 +77,11 @@ npm run start.electron.desktop
 ```
 nx g app sample
 ```
+
 > choose `ionic`
 
 Develop in browser with:
+
 ```
 nx run ionic-sample:serve
 ```
@@ -108,6 +115,7 @@ npm run open.ionic.sample.android
 ```
 nx g app mobile
 ```
+
 > choose `nativescript`
 
 A. **iOS**

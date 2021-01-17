@@ -253,7 +253,12 @@ export function generate(type: IGenerateType, options) {
             platform,
             'angular'
           );
-          return adjustModule(tree, type, options, `libs/xplat/${xplatFolderName}`);
+          return adjustModule(
+            tree,
+            type,
+            options,
+            `libs/xplat/${xplatFolderName}`
+          );
         });
       } else {
         throw new Error(unsupportedPlatformError(platform));
@@ -603,7 +608,7 @@ export function adjustBarrelIndexForType(
 }
 
 export function adjustModule(
-  tree: Tree, 
+  tree: Tree,
   type: IGenerateType,
   options: IGenerateOptions,
   prefixPath: string

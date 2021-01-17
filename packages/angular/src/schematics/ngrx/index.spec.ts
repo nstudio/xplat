@@ -158,7 +158,12 @@ describe('ngrx schematic', () => {
   it('should create ngrx state for Nx lib only', async () => {
     // console.log('appTree:', appTree);
     appTree = Tree.empty();
-    appTree = createXplatWithNativeScriptWeb(appTree, null, 'angular', 'sample');
+    appTree = createXplatWithNativeScriptWeb(
+      appTree,
+      null,
+      'angular',
+      'sample'
+    );
     const options: GenerateOptions = {
       name: 'auth',
       feature: '@testing/sample',
@@ -174,14 +179,11 @@ describe('ngrx schematic', () => {
 
     // state should be lib specific
     expect(
-      files.indexOf(
-        `/libs/sample/src/lib/state/auth.actions.ts`
-      )
+      files.indexOf(`/libs/sample/src/lib/state/auth.actions.ts`)
     ).toBeGreaterThanOrEqual(0);
 
     // file content
-    let indexPath =
-    `/libs/sample/src/lib/state/auth.actions.ts`;
+    let indexPath = `/libs/sample/src/lib/state/auth.actions.ts`;
     let content = getFileContent(tree, indexPath);
     // console.log(barrelPath + ':');
     // console.log(barrelIndex);

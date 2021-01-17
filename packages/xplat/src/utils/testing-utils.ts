@@ -148,12 +148,11 @@ export function createNxLib(tree: Tree, name: string) {
   export class ${name}Module {}`
   );
   const configPaths = {};
-  configPaths[`@testing/${name}`] = [`libs/${name}/src/index.ts`]
+  configPaths[`@testing/${name}`] = [`libs/${name}/src/index.ts`];
   tree.overwrite(
     '/tsconfig.base.json',
     JSON.stringify({ compilerOptions: { paths: configPaths } })
   );
-  
 }
 
 export function createXplatLibs(tree: Tree) {
