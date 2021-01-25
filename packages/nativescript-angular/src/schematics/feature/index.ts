@@ -11,33 +11,32 @@ import {
   mergeWith,
 } from '@angular-devkit/schematics';
 import { XplatFeatureHelpers, XplatHelpers } from '@nstudio/xplat';
-import { prerun, PlatformTypes } from '@nstudio/xplat-utils';
+import { prerun, PlatformTypes, parseProjectNameFromPath, supportedPlatforms } from '@nstudio/xplat-utils';
 
 export default function (options: XplatFeatureHelpers.Schema) {
   const featureSettings = XplatFeatureHelpers.prepare(options);
   const chains = [];
 
   if (options.onlyProject) {
-    for (const projectName of featureSettings.projectNames) {
-      let name = projectName;
-      if (projectName.indexOf('/') > -1) {
-        name = projectName.split('/').pop();
-      }
-      const projectParts = name.split('-');
+    for (const fullProjectPath of featureSettings.projectNames) {
+      const projectName = parseProjectNameFromPath(fullProjectPath);
+      const projectParts = projectName.split('-');
+
       const platPrefix = projectParts[0];
       const platSuffix = projectParts.pop();
-      if (platPrefix === 'nativescript' || platSuffix === 'nativescript') {
+      const platform = supportedPlatforms.includes(<PlatformTypes>platPrefix) ? platPrefix : platSuffix;
+      if (platform === 'nativescript') {
         // check for 2 different naming conventions on routing modules
         const routingModulePathOptions = [];
-        const appDirectory = `apps/${projectName}/src/`;
+        const appDirectory = `apps/${fullProjectPath}/src/`;
         routingModulePathOptions.push(`${appDirectory}app.routing.ts`);
         routingModulePathOptions.push(`${appDirectory}app-routing.module.ts`);
 
         chains.push((tree: Tree, context: SchematicContext) => {
           return XplatFeatureHelpers.addFiles(
             options,
-            platPrefix,
-            projectName
+            platform,
+            fullProjectPath
           )(tree, context);
         });
         if (options.routing) {
@@ -45,14 +44,14 @@ export default function (options: XplatFeatureHelpers.Schema) {
             return adjustRouting(
               options,
               routingModulePathOptions,
-              platPrefix
+              platform
             )(tree, context);
           });
           if (options.adjustSandbox) {
             chains.push((tree: Tree, context: SchematicContext) => {
               return adjustSandbox(
                 options,
-                <PlatformTypes>platPrefix,
+                <PlatformTypes>platform,
                 appDirectory
               )(tree, context);
             });
@@ -62,8 +61,8 @@ export default function (options: XplatFeatureHelpers.Schema) {
           chains.push((tree: Tree, context: SchematicContext) => {
             return XplatFeatureHelpers.addFiles(
               options,
-              platPrefix,
-              projectName,
+              platform,
+              fullProjectPath,
               '_component'
             )(tree, context);
           });

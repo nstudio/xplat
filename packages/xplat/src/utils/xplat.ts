@@ -977,22 +977,18 @@ export namespace XplatComponentHelpers {
       }
       // building feature in shared code and in projects
       projectNames = sanitizeCommaDelimitedArg(projects);
-      for (const name of projectNames) {
-        let projectName = parseProjectNameFromPath(name);
+      for (const fullProjectPath of projectNames) {
+        const projectName = parseProjectNameFromPath(fullProjectPath);
         const projectParts = projectName.split('-');
         const platPrefix = <PlatformTypes>projectParts[0];
         const platSuffix = <PlatformTypes>projectParts.pop();
+        const platform = supportedPlatforms.includes(<PlatformTypes>platPrefix) ? platPrefix : platSuffix;
         if (
-          supportedPlatforms.includes(platPrefix) &&
-          !platforms.includes(platPrefix)
+          supportedPlatforms.includes(platform) &&
+          !platforms.includes(platform)
         ) {
           // if project name is prefixed with supported platform and not already added
-          platforms.push(platPrefix);
-        } else if (
-          supportedPlatforms.includes(platSuffix) &&
-          !platforms.includes(platSuffix)
-        ) {
-          platforms.push(platSuffix);
+          platforms.push(platform);
         }
       }
     } else if (options.platforms) {
