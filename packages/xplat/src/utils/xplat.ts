@@ -41,6 +41,7 @@ import {
   supportedNxExtraPlatforms,
   PlatformNxExtraTypes,
   supportedPlatformsWithNx,
+  parseProjectNameFromPath,
 } from '@nstudio/xplat-utils';
 import {
   updateJsonInTree,
@@ -977,9 +978,10 @@ export namespace XplatComponentHelpers {
       // building feature in shared code and in projects
       projectNames = sanitizeCommaDelimitedArg(projects);
       for (const name of projectNames) {
-        const projectParts = name.split('-');
-        const platPrefix = projectParts[0];
-        const platSuffix = projectParts.pop();
+        let projectName = parseProjectNameFromPath(name);
+        const projectParts = projectName.split('-');
+        const platPrefix = <PlatformTypes>projectParts[0];
+        const platSuffix = <PlatformTypes>projectParts.pop();
         if (
           supportedPlatforms.includes(platPrefix) &&
           !platforms.includes(platPrefix)
@@ -1102,10 +1104,7 @@ export namespace XplatFeatureHelpers {
       // building feature in shared code and in projects
       projectNames = sanitizeCommaDelimitedArg(projects);
       for (const name of projectNames) {
-        let projectName = name;
-        if (name.indexOf('/') > -1) {
-          projectName = name.split('/').pop();
-        }
+        let projectName = parseProjectNameFromPath(name);
         const projectParts = projectName.split('-');
         const platPrefix = <PlatformTypes>projectParts[0];
         const platSuffix = <PlatformTypes>projectParts.pop();

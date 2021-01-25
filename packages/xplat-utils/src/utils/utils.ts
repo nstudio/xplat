@@ -317,3 +317,10 @@ export function sanitizeCommaDelimitedArg(input: string): Array<string> {
   }
   return [];
 }
+
+export function parseProjectNameFromPath(input: string): string {
+  if (input && input.indexOf('/') > -1) {
+    input = input.split('/').pop();
+  }
+  return input;
+}
