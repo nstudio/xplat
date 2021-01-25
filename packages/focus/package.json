@@ -30,8 +30,8 @@
     "migrations": "./migrations.json"
   },
   "dependencies": {
-    "@angular-devkit/core": "~11.0.0",
-    "@angular-devkit/schematics": "~11.0.0",
+    "@angular-devkit/core": "~11.1.0",
+    "@angular-devkit/schematics": "~11.1.0",
     "@nstudio/xplat-utils": "*",
     "xml2js": "~0.4.23"
   }

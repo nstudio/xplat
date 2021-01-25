@@ -253,7 +253,7 @@ function updateWorkspaceSupport(
     json.devDependencies = {
       ...json.devDependencies,
       'http-server': '^0.12.1',
-      'ngx-build-plus': '^11.0.0',
+      'ngx-build-plus': '^11.1.0',
     };
 
     return json;
