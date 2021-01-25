@@ -319,9 +319,8 @@ export function sanitizeCommaDelimitedArg(input: string): Array<string> {
 }
 
 export function parseProjectNameFromPath(input: string): string {
-  let projectName;
   if (input && input.indexOf('/') > -1) {
-    projectName = input.split('/').pop();
+    input = input.split('/').pop();
   }
-  return projectName;
+  return input;
 }
