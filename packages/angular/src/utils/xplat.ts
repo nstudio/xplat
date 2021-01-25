@@ -34,6 +34,7 @@ import {
   sanitizeCommaDelimitedArg,
   getNpmScope,
   getFrontendFramework,
+  parseProjectNameFromPath,
 } from '@nstudio/xplat-utils';
 import { addToFeature, adjustBarrelIndex } from './generator';
 import { updateJsonInTree, getWorkspacePath } from '@nrwl/workspace';
@@ -62,13 +63,15 @@ export namespace ComponentHelpers {
     const componentSettings = XplatComponentHelpers.prepare(options);
 
     if (options.onlyProject) {
-      for (const projectName of componentSettings.projectNames) {
+      for (const fullProjectPath of componentSettings.projectNames) {
+        const projectName = parseProjectNameFromPath(fullProjectPath);
         const projectParts = projectName.split('-');
-        const platPrefix = projectParts[0];
-        const platSuffix = projectParts.pop();
+        const platPrefix = <PlatformTypes>projectParts[0];
+        const platSuffix = <PlatformTypes>projectParts.pop();
+  
         if (platPrefix === platform || platSuffix === platform) {
           const appDir = platform === 'web' ? '/app' : '';
-          const prefixPath = `apps/${projectName}/src${appDir}`;
+          const prefixPath = `apps/${fullProjectPath}/src${appDir}`;
           const featurePath = `${prefixPath}/features/${componentSettings.featureName}`;
           const featureModulePath = `${featurePath}/${componentSettings.featureName}.module.ts`;
           const barrelIndex = `${featurePath}/components/index.ts`;
@@ -79,7 +82,7 @@ export namespace ComponentHelpers {
                 needFeatureModuleError(
                   featureModulePath,
                   componentSettings.featureName,
-                  projectName,
+                  fullProjectPath,
                   true
                 )
               );

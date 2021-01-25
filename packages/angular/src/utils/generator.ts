@@ -34,6 +34,7 @@ import {
   getPrefix,
   sanitizeCommaDelimitedArg,
   PlatformTypes,
+  parseProjectNameFromPath,
 } from '@nstudio/xplat-utils';
 import {
   addImportToModule,
@@ -101,15 +102,17 @@ export function generate(type: IGenerateType, options) {
 
   const projectChains = [];
   if (options.projects) {
-    for (const projectName of options.projects.split(',')) {
-      const projectNameParts = projectName.split('-');
-      const platPrefix = supportedPlatforms.includes(projectNameParts[0])
-        ? projectNameParts[0]
-        : projectNameParts.length > 1
-        ? projectNameParts[1]
-        : projectNameParts[0];
-      let appDir = platPrefix === 'web' ? '/app' : '';
-      const prefixPath = `apps/${projectName}/src${appDir}`;
+    for (const fullProjectPath of options.projects.split(',')) {
+      const projectName = parseProjectNameFromPath(fullProjectPath);
+      const projectParts = projectName.split('-');
+
+      const platform = supportedPlatforms.includes(<PlatformTypes>projectParts[0])
+        ? projectParts[0]
+        : projectParts.length > 1
+        ? projectParts[1]
+        : projectParts[0];
+      let appDir = platform === 'web' ? '/app' : '';
+      const prefixPath = `apps/${fullProjectPath}/src${appDir}`;
 
       let featurePath: string;
       if (shouldTargetCoreBarrel(type, featureName)) {
@@ -142,7 +145,7 @@ export function generate(type: IGenerateType, options) {
           );
         }
         return addToFeature(
-          platPrefix,
+          platform,
           type,
           options,
           prefixPath,
@@ -161,7 +164,7 @@ export function generate(type: IGenerateType, options) {
         });
         projectChains.push((tree: Tree, context: SchematicContext) => {
           return addToFeature(
-            platPrefix,
+            platform,
             type,
             options,
             prefixPath,
@@ -176,7 +179,7 @@ export function generate(type: IGenerateType, options) {
           );
         });
         projectChains.push((tree: Tree, context: SchematicContext) => {
-          return updatePackageForNgrx(tree, `apps/${projectName}/package.json`);
+          return updatePackageForNgrx(tree, `apps/${fullProjectPath}/package.json`);
         });
       } else {
         projectChains.push((tree: Tree, context: SchematicContext) => {
@@ -184,7 +187,7 @@ export function generate(type: IGenerateType, options) {
         });
         projectChains.push((tree: Tree, context: SchematicContext) => {
           return addToFeature(
-            platPrefix,
+            platform,
             type,
             options,
             prefixPath,
