@@ -35,9 +35,9 @@
   "devDependencies": {
     "@angular-devkit/architect": "~0.1100.1",
     "@angular-devkit/build-angular": "~0.1100.1",
+    "@angular-devkit/build-ng-packagr": "~0.1002.0",
     "@angular-devkit/build-optimizer": "~0.1100.1",
     "@angular-devkit/build-webpack": "~0.1100.1",
-    "@angular-devkit/build-ng-packagr": "~0.1002.0",
     "@angular-devkit/core": "~11.0.1",
     "@angular-devkit/schematics": "~11.0.1",
     "@angular/cli": "~11.0.1",
@@ -104,6 +104,7 @@
     "karma-jasmine-html-reporter": "~1.5.4",
     "karma-webpack": "~4.0.2",
     "license-webpack-plugin": "~2.3.0",
+    "lint-staged": "^10.5.3",
     "ng-packagr": "~11.0.0",
     "npm-run-all": "~4.1.5",
     "open": "~6.0.0",
@@ -146,7 +147,13 @@
   },
   "husky": {
     "hooks": {
-      "pre-push": "yarn checkcommit && pretty-quick --check"
+      "pre-push": "yarn checkcommit && lint-staged"
     }
+  },
+  "lint-staged": {
+    "**/*.{ts,js,json,css,scss,md}": [
+      "prettier --write",
+      "git add"
+    ]
   }
 }
