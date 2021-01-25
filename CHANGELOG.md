@@ -1,3 +1,14 @@
+## [11.1.0](https://github.com/nstudio/xplat/compare/11.0.22...11.1.0) (2021-01-25)
+
+### Features
+
+- **core:** Support Nx 11.1.0 and Angular 11.1.0
+
+### Bug Fixes
+
+- **core:** generator fix for projects grouped under folders ([d1451d3](https://github.com/nstudio/xplat/commit/d1451d3dbf0ac9c1d0e248453c38776f7d0f6112))
+- **core:** workspace update handling on generation ([e63c524](https://github.com/nstudio/xplat/commit/e63c52424b5ee135574a129e9fa2201fe4eb8807))
+
 ## [11.0.22](https://github.com/nstudio/xplat/compare/11.0.21...11.0.22) (2021-01-17)
 
 ### Features
