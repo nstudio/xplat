@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
-<% if (onlyProject || !createBase) { %>import { BaseComponent } from '@<%= npmScope %>/core';<%
-} else { %>import { <%= utils.classify(name) %>BaseComponent } from '@<%= npmScope %>/features';<% } %>
+<% if (onlyProject || !createBase) { %>import { BaseComponent } from '@<%= npmScope %>/xplat/core';<%
+} else { %>import { <%= utils.classify(name) %>BaseComponent } from '@<%= npmScope %>/xplat/features';<% } %>
 
 @Component({
   moduleId: module.id,
