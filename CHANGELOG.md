@@ -1,3 +1,9 @@
+## [11.1.1](https://github.com/nstudio/xplat/compare/11.1.0...11.1.1) (2021-02-24)
+
+### Bug Fixes
+
+- **nativescript:** feature component path adjustment ([4746f9b](https://github.com/nstudio/xplat/commit/4746f9bb0190044fabc434531ad9266921083862))
+
 ## [11.1.0](https://github.com/nstudio/xplat/compare/11.0.22...11.1.0) (2021-01-25)
 
 ### Features
