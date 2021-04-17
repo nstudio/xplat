@@ -2,7 +2,7 @@ matrix:
   include:
     - os: linux
       language: node_js
-      node_js: 12
+      node_js: 15
       dist: trusty
       sudo: required
       addons:
@@ -18,7 +18,6 @@ before_install:
 install:
   - yarn install --network-timeout 1000000 # Timeout needed for Windows (really slow)
 script:
-  - 'if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then yarn checkformat --head=$TRAVIS_PULL_REQUEST_SHA --base=$(git merge-base HEAD $TRAVIS_BRANCH); fi'
   - yarn test
   # - yarn e2e
   # - yarn checkcommit
