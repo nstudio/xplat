@@ -1,7 +1,12 @@
 import { adjustSandbox, adjustRouting } from '@nstudio/angular';
 import { chain, Tree, SchematicContext } from '@angular-devkit/schematics';
 import { XplatFeatureHelpers, XplatHelpers } from '@nstudio/xplat';
-import { parseProjectNameFromPath, PlatformTypes, prerun, supportedPlatforms } from '@nstudio/xplat-utils';
+import {
+  parseProjectNameFromPath,
+  PlatformTypes,
+  prerun,
+  supportedPlatforms,
+} from '@nstudio/xplat-utils';
 
 export default function (options: XplatFeatureHelpers.Schema) {
   const featureSettings = XplatFeatureHelpers.prepare(options);
@@ -13,7 +18,9 @@ export default function (options: XplatFeatureHelpers.Schema) {
       const projectParts = projectName.split('-');
       const platPrefix = projectParts[0];
       const platSuffix = projectParts.pop();
-      const platform = supportedPlatforms.includes(<PlatformTypes>platPrefix) ? platPrefix : platSuffix;
+      const platform = supportedPlatforms.includes(<PlatformTypes>platPrefix)
+        ? platPrefix
+        : platSuffix;
       if (platform === 'web') {
         // check for 2 different naming conventions on routing modules
         const routingModulePathOptions = [];

@@ -11,7 +11,12 @@ import {
   mergeWith,
 } from '@angular-devkit/schematics';
 import { XplatFeatureHelpers, XplatHelpers } from '@nstudio/xplat';
-import { prerun, PlatformTypes, parseProjectNameFromPath, supportedPlatforms } from '@nstudio/xplat-utils';
+import {
+  prerun,
+  PlatformTypes,
+  parseProjectNameFromPath,
+  supportedPlatforms,
+} from '@nstudio/xplat-utils';
 
 export default function (options: XplatFeatureHelpers.Schema) {
   const featureSettings = XplatFeatureHelpers.prepare(options);
@@ -24,7 +29,9 @@ export default function (options: XplatFeatureHelpers.Schema) {
 
       const platPrefix = projectParts[0];
       const platSuffix = projectParts.pop();
-      const platform = supportedPlatforms.includes(<PlatformTypes>platPrefix) ? platPrefix : platSuffix;
+      const platform = supportedPlatforms.includes(<PlatformTypes>platPrefix)
+        ? platPrefix
+        : platSuffix;
       if (platform === 'nativescript') {
         // check for 2 different naming conventions on routing modules
         const routingModulePathOptions = [];

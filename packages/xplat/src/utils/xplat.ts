@@ -982,7 +982,9 @@ export namespace XplatComponentHelpers {
         const projectParts = projectName.split('-');
         const platPrefix = <PlatformTypes>projectParts[0];
         const platSuffix = <PlatformTypes>projectParts.pop();
-        const platform = supportedPlatforms.includes(<PlatformTypes>platPrefix) ? platPrefix : platSuffix;
+        const platform = supportedPlatforms.includes(<PlatformTypes>platPrefix)
+          ? platPrefix
+          : platSuffix;
         if (
           supportedPlatforms.includes(platform) &&
           !platforms.includes(platform)
