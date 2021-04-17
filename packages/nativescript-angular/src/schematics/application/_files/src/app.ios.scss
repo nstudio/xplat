@@ -1,2 +1,2 @@
-@import '~@<%= npmScope %>/xplat-nativescript-scss/index.ios';
+@import '@<%= npmScope %>/xplat-nativescript-scss/index.ios';
 @import 'scss/index';

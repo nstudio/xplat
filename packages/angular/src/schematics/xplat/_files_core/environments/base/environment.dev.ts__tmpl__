@@ -1,7 +1,0 @@
-import { IEnvironment } from '@<%= npmScope %>/xplat/core';
-import { deepMerge } from '@<%= npmScope %>/xplat/utils';
-import { environmentBase } from './environment.base';
-
-export const environmentDev = deepMerge(environmentBase, <IEnvironment>{
-  // customizations here...
-});

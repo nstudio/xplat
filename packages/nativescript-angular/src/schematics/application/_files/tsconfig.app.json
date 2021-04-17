@@ -4,9 +4,9 @@
     "outDir": "<%= pathOffset %>dist/out-tsc",
     "types": []
   },
-  "files": [
-    "./references.d.ts",
-    "./src/main.ts",
-    "./src/environments/environment.dev.ts"
-  ]
+  "include": [
+    "<%= pathOffset %>libs/xplat/core/src/lib/environments/base/*.ts",
+    "./src/environments/environment.*.ts"
+  ],
+  "files": ["./references.d.ts", "./src/main.ts"]
 }

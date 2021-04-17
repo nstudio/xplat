@@ -32,6 +32,7 @@ import {
 import { Schema } from './schema';
 import { XplatNativeScriptHelpers } from '../../utils';
 import { updateWorkspace } from '@nrwl/workspace';
+import { nsCoreVersion } from '../../utils/versions';
 
 export default function (options: Schema) {
   if (!options.name) {
@@ -81,7 +82,7 @@ export default function (options: Schema) {
       // however, sandbox setup due to its simplicity uses hmr by default
       scripts[
         `clean`
-      ] = `npx rimraf -- hooks node_modules package-lock.json && npm i`;
+      ] = `npx rimraf hooks node_modules package-lock.json && npm i --legacy-peer-deps`;
       return updatePackageScripts(tree, scripts);
     },
     (tree: Tree, context: SchematicContext) => {
@@ -95,32 +96,32 @@ export default function (options: Schema) {
           projectType: 'application',
           prefix: getPrefix(),
           targets: {
-            ios: {
-              builder: '@nrwl/workspace:run-commands',
+            build: {
+              builder: '@nativescript/nx:build',
               options: {
-                commands: [
-                  `ns debug ios --no-hmr --env.configuration={args.configuration} --env.projectName=${options.name}`,
-                ],
-                cwd: `apps/${directory}${options.name}`,
-                parallel: false,
+                noHmr: true,
+                production: true,
+                uglify: true,
+                release: true,
+                forDevice: true,
+              },
+            },
+            ios: {
+              builder: '@nativescript/nx:build',
+              options: {
+                platform: 'ios',
               },
             },
             android: {
-              builder: '@nrwl/workspace:run-commands',
+              builder: '@nativescript/nx:build',
               options: {
-                commands: [
-                  `ns debug android --no-hmr --env.configuration={args.configuration} --env.projectName=${options.name}`,
-                ],
-                cwd: `apps/${directory}${options.name}`,
-                parallel: false,
+                platform: 'android',
               },
             },
             clean: {
-              builder: '@nrwl/workspace:run-commands',
+              builder: '@nativescript/nx:build',
               options: {
-                commands: ['ns clean', 'npm i', 'npx rimraf package-lock.json'],
-                cwd: `apps/${directory}${options.name}`,
-                parallel: false,
+                clean: true,
               },
             },
           },
@@ -168,6 +169,7 @@ function addAppFiles(
           appname,
           pathOffset: directory ? '../../../' : '../../',
           xplatFolderName: XplatHelpers.getXplatFoldername('nativescript'),
+          nsCoreVersion: nsCoreVersion,
         }),
         move(`apps/${directory}${appPath}`),
       ])

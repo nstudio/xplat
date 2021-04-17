@@ -133,24 +133,5 @@ describe('xplat schematic', () => {
         fileContent.indexOf(`console.log('Hello World!')`)
       ).toBeGreaterThanOrEqual(0);
     });
-
-    it('should create Nx react', async () => {
-      appTree = Tree.empty();
-      appTree = createEmptyWorkspace(appTree);
-      const options: XplatHelpers.Schema = { ...defaultOptions };
-      options.platforms = 'react';
-
-      const tree = await runSchematic('app', options, appTree);
-      const files = tree.files;
-      // console.log('files:', files);
-      expect(tree.exists('/apps/react-sample/src/app/app.tsx')).toBeTruthy();
-
-      let fileContent = getFileContent(
-        tree,
-        '/apps/react-sample/src/app/app.tsx'
-      );
-      // console.log(fileContent);
-      expect(fileContent.indexOf(`from 'react'`)).toBeGreaterThan(0);
-    });
   });
 });

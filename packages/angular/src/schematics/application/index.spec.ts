@@ -42,6 +42,10 @@ describe('app', () => {
     ).toBeTruthy();
     expect(tree.exists('/libs/xplat/web/scss/src/_index.scss')).toBeTruthy();
     expect(tree.exists('/libs/xplat/web/scss/src/package.json')).toBeTruthy();
+
+    // let checkPath = 'angular.json'
+    // let checkFile = getFileContent(tree, checkPath);
+    // console.log(checkPath, checkFile)
   });
 
   it('should create all files for web app using groupByName', async () => {

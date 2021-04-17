@@ -53,7 +53,7 @@ export default function (options: Schema) {
       // ensure convenient clean script is added for workspace
       scripts[
         `clean`
-      ] = `npx rimraf -- hooks node_modules package-lock.json && npm i`;
+      ] = `npx rimraf hooks node_modules package-lock.json && npm i --legacy-peer-deps`;
       scripts[
         `start.${platformApp}`
       ] = `cd apps/${directory}${options.name} && npm start`;
@@ -80,7 +80,7 @@ export default function (options: Schema) {
       ] = `cd apps/${directory}${options.name} && npm run cap.copy`;
       scripts[
         `clean.${platformApp}`
-      ] = `cd apps/${directory}${options.name} && npx rimraf -- hooks node_modules platforms www plugins ios android package-lock.json && npm i && rimraf -- package-lock.json`;
+      ] = `cd apps/${directory}${options.name} && npx rimraf hooks node_modules platforms www plugins ios android package-lock.json && npm i --legacy-peer-deps && npx rimraf package-lock.json`;
       return updatePackageScripts(tree, scripts);
     },
     (tree: Tree, context: SchematicContext) => {

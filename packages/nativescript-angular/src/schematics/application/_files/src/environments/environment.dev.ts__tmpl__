@@ -1,7 +1,0 @@
-import { environmentBase } from './environment.base';
-import { IEnvironment } from '@<%= npmScope %>/xplat/core';
-import { environmentDev } from '@<%= npmScope %>/xplat/environments';
-
-export const environment: IEnvironment = environmentBase(environmentDev, {
-  // app level customizations here...
-});

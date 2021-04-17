@@ -1,20 +1,17 @@
 {
-  "main": "app.js",
+  "main": "src/app.ts",
   "description": "NativeScript Application",
   "license": "SEE LICENSE IN <your-license-filename>",
   "repository": "<fill-your-repository-here>",
   "scripts": {
-    "build.ios": "ns build ios --env.uglify --env.production --release",
-    "build.android": "ns build android --env.uglify --env.production --release",
     "postinstall": "node ./tools/xplat-postinstall.js"
   },
   "dependencies": {
     "nativescript-theme-core": "file:<%= pathOffset %>node_modules/nativescript-theme-core",
-    "@nativescript/core": "file:<%= pathOffset %>node_modules/@nativescript/core"
+    "@nativescript/core": "<%= nsCoreVersion %>"
   },
   "devDependencies": {
-    "@nativescript/webpack": "~3.0.0",
-    "@nativescript/types": "file:<%= pathOffset %>node_modules/@nativescript/types",
+    "@nativescript/webpack": "beta",
     "typescript": "file:<%= pathOffset %>node_modules/typescript"
   }
 }
