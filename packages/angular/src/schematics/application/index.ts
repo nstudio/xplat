@@ -14,7 +14,7 @@ import {
   noop,
   ExecutionOptions,
 } from '@angular-devkit/schematics';
-import { formatFiles, updateWorkspace } from '@nrwl/workspace';
+import { formatFiles, updateWorkspace, getWorkspace } from '@nrwl/workspace';
 import {
   stringUtils,
   updatePackageScripts,
@@ -100,7 +100,7 @@ export default function (options: Schema) {
       const scripts = {};
       scripts[
         `clean`
-      ] = `npx rimraf hooks node_modules package-lock.json && npm i`;
+      ] = `npx rimraf hooks node_modules package-lock.json && npm i --legacy-peer-deps`;
       return updatePackageScripts(tree, scripts);
     },
     <any>formatFiles({ skipFormat: options.skipFormat }),
@@ -175,7 +175,7 @@ function addAppFiles(options: Schema, extra: string = ''): Rule {
   );
 }
 
-function adjustAppFiles(options: Schema, tree: Tree): Rule {
+async function adjustAppFiles(options: Schema, tree: Tree): Promise<Rule> {
   const directory = options.directory ? `${options.directory}/` : '';
   tree.overwrite(
     `/apps/${directory}${options.name}/src/index.html`,
@@ -215,22 +215,23 @@ function adjustAppFiles(options: Schema, tree: Tree): Rule {
     appModuleContent(options)
   );
   // update cli config for shared web specific scss
-  return updateWorkspace((workspace) => {
-    const projectDef = workspace.projects.get(options.name);
-    if (projectDef && projectDef.targets) {
-      const buildDef = projectDef.targets.get('build');
-      if (buildDef) {
-        buildDef.options.styles = [
-          `libs/xplat/${XplatHelpers.getXplatFoldername(
-            'web',
-            'angular'
-          )}/scss/src/_index.scss`,
-          `apps/${directory}${options.name}/src/styles.scss`,
-        ];
-        projectDef.targets.set('build', buildDef);
-      }
+
+  const workspace = await getWorkspace(tree);
+  const project = workspace.projects.get(options.name);
+  if (project && project.targets) {
+    const buildOptions = project.targets.get('build').options;
+    if (buildOptions) {
+      project.targets.get('build').options.styles = [
+        `libs/xplat/${XplatHelpers.getXplatFoldername(
+          'web',
+          'angular'
+        )}/scss/src/_index.scss`,
+        `apps/${directory}${options.name}/src/styles.scss`,
+      ];
     }
-  });
+  }
+
+  return updateWorkspace(workspace);
 }
 
 function indexContent(name: string) {
@@ -396,9 +397,6 @@ describe('AppComponent', () => {
 
 function appModuleContent(options) {
   return `import { NgModule } from '@angular/core';
-
-// libs
-import { environment } from '@${getNpmScope()}/xplat/core';
 
 // app
 import { CoreModule } from './core/core.module';

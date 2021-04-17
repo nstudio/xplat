@@ -104,7 +104,7 @@ export default function (options: Schema) {
       const directory = options.directory ? `${options.directory}/` : '';
       scripts[
         `clean`
-      ] = `npx rimraf -- hooks node_modules package-lock.json && npm i`;
+      ] = `npx rimraf hooks node_modules package-lock.json && npm i --legacy-peer-deps`;
       return updatePackageScripts(tree, scripts);
     },
     (tree: Tree, context: SchematicContext) => {
@@ -117,55 +117,55 @@ export default function (options: Schema) {
           sourceRoot: `apps/${directory}${options.name}/src`,
           projectType: 'application',
           prefix: getPrefix(),
-          schematics: {
-            '@schematics/angular:component': {
-              styleext: 'scss',
-            },
-          },
           targets: {
-            default: {
-              builder: '@nrwl/workspace:run-commands',
+            build: {
+              builder: '@nativescript/nx:build',
+              options: {
+                noHmr: true,
+                production: true,
+                uglify: true,
+                release: true,
+                forDevice: true,
+              },
               configurations: {
-                dev: {
-                  fileReplacements: [
-                    {
-                      replace:
-                        'libs/xplat/core/src/lib/environments/environment.ts',
-                      with: `apps/${directory}${options.name}/src/environments/environment.dev.ts`,
-                    },
-                  ],
-                },
                 prod: {
                   fileReplacements: [
                     {
-                      replace:
-                        'libs/xplat/core/src/lib/environments/environment.ts',
-                      with: `apps/${directory}${options.name}/src/environments/environment.prod.ts`,
+                      replace: `${
+                        directory ? '../../../' : '../../'
+                      }libs/xplat/core/src/lib/environments/environment.ts`,
+                      with: `./src/environments/environment.prod.ts`,
                     },
                   ],
                 },
               },
             },
             ios: {
-              builder: '@nrwl/workspace:run-commands',
+              builder: '@nativescript/nx:build',
               options: {
-                command: `ns debug ios --no-hmr --env.projectName=${options.name}`,
-                cwd: `apps/${directory}${options.name}`,
+                platform: 'ios',
+              },
+              configurations: {
+                prod: {
+                  combineWithConfig: 'build:prod',
+                },
               },
             },
             android: {
-              builder: '@nrwl/workspace:run-commands',
+              builder: '@nativescript/nx:build',
               options: {
-                command: `ns debug android --no-hmr --env.projectName=${options.name}`,
-                cwd: `apps/${directory}${options.name}`,
+                platform: 'android',
+              },
+              configurations: {
+                prod: {
+                  combineWithConfig: 'build:prod',
+                },
               },
             },
             clean: {
-              builder: '@nrwl/workspace:run-commands',
+              builder: '@nativescript/nx:build',
               options: {
-                commands: ['ns clean', 'npm i', 'npx rimraf package-lock.json'],
-                cwd: `apps/${directory}${options.name}`,
-                parallel: false,
+                clean: true,
               },
             },
             lint: {

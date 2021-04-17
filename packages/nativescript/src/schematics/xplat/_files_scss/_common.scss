@@ -1,5 +1,5 @@
 // shared across all platforms and apps
-@import '~@<%= npmScope %>/xplat-scss/index';
+@import '@<%= npmScope %>/xplat-scss/index';
 
 /**
  * The following are common styles for both iOS and Android (used with any {N} app targets)
@@ -14,20 +14,20 @@
 @import 'mixins';
 
 // {N} core theme rulesets (mix/match these or only use what you need)
-@import '~nativescript-theme-core/scss/action-bar';
-@import '~nativescript-theme-core/scss/activity-indicator';
-@import '~nativescript-theme-core/scss/buttons';
-@import '~nativescript-theme-core/scss/icons';
-@import '~nativescript-theme-core/scss/forms';
-@import '~nativescript-theme-core/scss/labels';
-@import '~nativescript-theme-core/scss/list-view';
-@import '~nativescript-theme-core/scss/page';
-@import '~nativescript-theme-core/scss/progress';
-@import '~nativescript-theme-core/scss/segmented-bar';
-@import '~nativescript-theme-core/scss/side-drawer';
-@import '~nativescript-theme-core/scss/slider';
-@import '~nativescript-theme-core/scss/switch';
-@import '~nativescript-theme-core/scss/tabs';
+@import 'nativescript-theme-core/scss/action-bar';
+@import 'nativescript-theme-core/scss/activity-indicator';
+@import 'nativescript-theme-core/scss/buttons';
+@import 'nativescript-theme-core/scss/icons';
+@import 'nativescript-theme-core/scss/forms';
+@import 'nativescript-theme-core/scss/labels';
+@import 'nativescript-theme-core/scss/list-view';
+@import 'nativescript-theme-core/scss/page';
+@import 'nativescript-theme-core/scss/progress';
+@import 'nativescript-theme-core/scss/segmented-bar';
+@import 'nativescript-theme-core/scss/side-drawer';
+@import 'nativescript-theme-core/scss/slider';
+@import 'nativescript-theme-core/scss/switch';
+@import 'nativescript-theme-core/scss/tabs';
 
 // {N} styles (create/import other scss files or define as needed)
 @import 'fonts';
@@ -35,4 +35,4 @@
 
 // since {N} core theme utilities are additive to any above class, these should always be last
 // includes (color, spacing, and text helpers): https://github.com/NativeScript/theme/tree/master/app/scss/utilities
-@import '~nativescript-theme-core/scss/utilities/index';
+@import 'nativescript-theme-core/scss/utilities/index';

@@ -28,6 +28,9 @@
     "requirements": {},
     "migrations": "./migrations.json"
   },
+  "dependencies": {
+    "@nativescript/nx": "^1.0.0"
+  },
   "peerDependencies": {
     "@nstudio/xplat": "*"
   }
