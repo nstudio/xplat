@@ -106,7 +106,9 @@ export function generate(type: IGenerateType, options) {
       const projectName = parseProjectNameFromPath(fullProjectPath);
       const projectParts = projectName.split('-');
 
-      const platform = supportedPlatforms.includes(<PlatformTypes>projectParts[0])
+      const platform = supportedPlatforms.includes(
+        <PlatformTypes>projectParts[0]
+      )
         ? projectParts[0]
         : projectParts.length > 1
         ? projectParts[1]
@@ -179,7 +181,10 @@ export function generate(type: IGenerateType, options) {
           );
         });
         projectChains.push((tree: Tree, context: SchematicContext) => {
-          return updatePackageForNgrx(tree, `apps/${fullProjectPath}/package.json`);
+          return updatePackageForNgrx(
+            tree,
+            `apps/${fullProjectPath}/package.json`
+          );
         });
       } else {
         projectChains.push((tree: Tree, context: SchematicContext) => {

@@ -68,7 +68,7 @@ export namespace ComponentHelpers {
         const projectParts = projectName.split('-');
         const platPrefix = <PlatformTypes>projectParts[0];
         const platSuffix = <PlatformTypes>projectParts.pop();
-  
+
         if (platPrefix === platform || platSuffix === platform) {
           const appDir = platform === 'web' ? '/app' : '';
           const prefixPath = `apps/${fullProjectPath}/src${appDir}`;
