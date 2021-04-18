@@ -1,11 +1,11 @@
 export const xplatVersion = '*';
-export const electronVersion = '^11.1.0';
-export const electronBuilderVersion = '^22.9.1';
+export const electronVersion = '^12.0.0';
+export const electronBuilderVersion = '^22.10.0';
 export const electronRebuildVersion = '~2.3.4';
 export const electronInstallerDmgVersion = '~3.0.0';
 export const electronPackagerVersion = '~15.2.0';
 export const electronReloadVersion = '~1.5.0';
-export const electronStoreVersion = '~6.0.1';
+export const electronStoreVersion = '~7.0.0';
 export const electronUpdaterVersion = '~4.3.5';
 export const npmRunAllVersion = '^4.1.5';
 export const waitOnVersion = '~5.2.1';
