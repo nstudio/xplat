@@ -1,3 +1,12 @@
+## [12.0.1](https://github.com/nstudio/xplat/compare/11.1.1...12.0.1) (2021-04-18)
+
+### Features
+
+- **core:** Electron 12 and Ionic dependency updates ([ce00322](https://github.com/nstudio/xplat/commit/ce00322771b202d542c2d2cf1c69e35da547ea93))
+- **core:** Nx 12 compat + dep updates + {N} 8 compat ([d83a9eb](https://github.com/nstudio/xplat/commit/d83a9eb6f172e290f862c5bdbe23dad4f77cb51d))
+- **nativescript:** updated app resources ([8283992](https://github.com/nstudio/xplat/commit/8283992864384c65634a1ab0c96b0f195b12a610))
+- **nativescript:** webpack config ([e1ab3d4](https://github.com/nstudio/xplat/commit/e1ab3d4615763a73db257c890f0d043d5e7adcd9))
+
 ## [11.1.1](https://github.com/nstudio/xplat/compare/11.1.0...11.1.1) (2021-02-24)
 
 ### Bug Fixes
