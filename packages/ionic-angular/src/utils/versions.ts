@@ -4,7 +4,7 @@ export const ionicAngularToolkitVersion = '^3.1.0';
 export const ionicNativeVersion = '~5.30.0';
 export const capacitorVersion = '~2.4.5';
 export const ngDevKitArchitect = '~0.1102.0';
-export const ngDevKitBuild = '~0.1101.0';
+export const ngDevKitBuild = '~0.1102.0';
 export const ngDevKitCore = '~11.2.0';
 export const ngDevKitSchematics = '~11.2.0';
 
