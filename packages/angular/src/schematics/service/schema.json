@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "id": "service",
+  "$id": "service",
   "title": "Create a service in xplat.",
   "type": "object",
   "properties": {

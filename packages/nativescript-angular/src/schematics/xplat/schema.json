@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "id": "xplat-nativescript-angular",
+  "$id": "xplat-nativescript-angular",
   "title": "xplat nativescript angular schema",
   "type": "object",
   "properties": {

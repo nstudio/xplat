@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "id": "xplat-nativescript-helpers",
+  "$id": "xplat-nativescript-helpers",
   "title": "xplat nativescript helpers",
   "type": "object",
   "properties": {

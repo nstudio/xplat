@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "id": "xplatfeature",
+  "$id": "xplatfeature",
   "title": "Create a feature in xplat.",
   "type": "object",
   "properties": {

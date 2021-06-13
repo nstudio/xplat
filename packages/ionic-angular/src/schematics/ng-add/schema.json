@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "id": "ng-add-ionic-angular",
+  "$id": "ng-add-ionic-angular",
   "title": "Add xplat ionic-angular to Workspace",
   "description": "NOTE: Does not work in the --dry-run mode",
   "type": "object",

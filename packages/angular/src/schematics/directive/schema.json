@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "id": "directive",
+  "$id": "directive",
   "title": "Create a directive in xplat.",
   "type": "object",
   "properties": {

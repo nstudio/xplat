@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "id": "ng-add-nativescript",
+  "$id": "ng-add-nativescript",
   "title": "Add xplat nativescript to Workspace",
   "description": "NOTE: Does not work in the --dry-run mode",
   "type": "object",

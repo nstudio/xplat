@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "id": "xplatElectron",
+  "$id": "xplatElectron",
   "title": "xplat electron schema",
   "type": "object",
   "properties": {

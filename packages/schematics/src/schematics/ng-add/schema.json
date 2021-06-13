@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "id": "ng-add-schematics",
+  "$id": "ng-add-schematics",
   "title": "Add xplat via old schematics",
   "description": "NOTE: Does not work in the --dry-run mode",
   "type": "object",

@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "id": "xplat-ionic-angular",
+  "$id": "xplat-ionic-angular",
   "title": "xplat ionic angular schema",
   "type": "object",
   "properties": {

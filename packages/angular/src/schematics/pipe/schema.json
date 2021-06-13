@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "id": "pipe",
+  "$id": "pipe",
   "title": "Create a pipe in xplat.",
   "type": "object",
   "properties": {

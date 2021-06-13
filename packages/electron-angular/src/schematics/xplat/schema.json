@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "id": "xplatElectronAngularApp",
+  "$id": "xplatElectronAngularApp",
   "title": "xplat electron angular schema",
   "type": "object",
   "properties": {

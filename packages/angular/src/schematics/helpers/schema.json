@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "id": "xplat-angular-helpers",
+  "$id": "xplat-angular-helpers",
   "title": "xplat angular helpers",
   "type": "object",
   "properties": {

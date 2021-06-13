@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "id": "angularcomponent",
+  "$id": "angularcomponent",
   "title": "Create an angular component in xplat.",
   "type": "object",
   "properties": {
