@@ -5,7 +5,7 @@ import { Subject } from 'rxjs';
 
 @Directive()
 export abstract class BaseComponent implements OnDestroy {
-  private _destroy$: Subject<any>;
+  private _destroy$?: Subject<any>;
 
   get destroy$() {
     if (!this._destroy$) {
