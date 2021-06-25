@@ -20,6 +20,7 @@ import {
   nsEsLintVersion,
   tsEsLintParserVersion,
   esLintVersion,
+  nsWebpackVersion,
 } from './versions';
 
 export namespace XplatNativeScriptAngularHelpers {
@@ -68,6 +69,7 @@ export namespace XplatNativeScriptAngularHelpers {
         devDependencies: {
           ...angularDevDeps,
           '@nativescript/eslint-plugin': nsEsLintVersion,
+          '@nativescript/webpack': nsWebpackVersion,
           '@ngtools/webpack': ngToolsWebpack,
           eslint: esLintVersion,
           sass: sassVersion,

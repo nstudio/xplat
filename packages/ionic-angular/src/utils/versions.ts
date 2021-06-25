@@ -15,7 +15,7 @@ export const karmaChromeVersion = '~3.1.0';
 export const karmaCoverageVersion = '~3.0.3';
 export const karmaJasmineVersion = '~4.0.1';
 export const karmaJasmineHtmlVersion = '^1.5.2';
-export const typescriptVersion = '~4.1.0';
+export const typescriptVersion = '~4.2.0';
 
 export const angularVersion = '~11.2.0';
 export const angularDevkitVersion = '~0.1102.0';

@@ -1,4 +1,3 @@
-import * as stripJsonComments from 'strip-json-comments';
 import {
   SchematicsException,
   Tree,
