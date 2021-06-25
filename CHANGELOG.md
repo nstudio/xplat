@@ -1,3 +1,12 @@
+# [12.4.0](https://github.com/nstudio/xplat/compare/12.0.0...12.4.0) (2021-06-25)
+
+
+### Features
+
+* Nx 12.4 compat with Angular 12 + NativeScript 8 and improved webpack + dep handling ([#271](https://github.com/nstudio/xplat/issues/271)) ([5d75252](https://github.com/nstudio/xplat/commit/5d75252c569641538163f1b37f0f454ed913a20d))
+
+
+
 ## [12.0.1](https://github.com/nstudio/xplat/compare/11.1.1...12.0.1) (2021-04-18)
 
 ### Features
