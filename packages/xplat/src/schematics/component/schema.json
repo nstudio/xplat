@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "id": "xplatcomponent",
+  "$id": "xplatcomponent",
   "title": "Create a component in xplat.",
   "type": "object",
   "properties": {

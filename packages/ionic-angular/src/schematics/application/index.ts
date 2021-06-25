@@ -14,7 +14,7 @@ import {
   noop,
   externalSchematic,
 } from '@angular-devkit/schematics';
-import { formatFiles, updateWorkspace } from '@nrwl/workspace';
+import { addInstallTask, formatFiles, updateWorkspace } from '@nrwl/workspace';
 import {
   stringUtils,
   updatePackageScripts,
@@ -28,7 +28,6 @@ import {
   getNpmScope,
   getPrefix,
   getAppName,
-  addInstallTask,
 } from '@nstudio/xplat-utils';
 import { Schema as ApplicationOptions } from './schema';
 import { XplatIonicAngularHelpers } from '../../utils';
@@ -69,7 +68,7 @@ export default function (options: ApplicationOptions) {
       )(tree, context),
     // add root package dependencies
     XplatIonicAngularHelpers.updateRootDeps(options),
-    addInstallTask(options),
+    // addInstallTask(),
     // XplatHelpers.addPackageInstallTask(options),
     // add start/clean scripts
     (tree: Tree) => {
@@ -79,7 +78,7 @@ export default function (options: ApplicationOptions) {
       // ensure convenient clean script is added for workspace
       scripts[
         `clean`
-      ] = `npx rimraf hooks node_modules package-lock.json && npm i --legacy-peer-deps`;
+      ] = `npx rimraf hooks node_modules package-lock.json && yarn config set ignore-engines true && yarn`;
       // add convenient ionic scripts
       scripts[`build.${platformApp}`] = `nx build ${options.name}`;
       scripts[
@@ -102,7 +101,7 @@ export default function (options: ApplicationOptions) {
       ] = `cd apps/${directory}${options.name} && npm run cap.copy`;
       scripts[
         `clean.${platformApp}`
-      ] = `cd apps/${directory}${options.name} && npx rimraf hooks node_modules platforms www plugins package-lock.json && npm i --legacy-peer-deps && npx rimraf -- package-lock.json`;
+      ] = `cd apps/${directory}${options.name} && npx rimraf hooks node_modules platforms www plugins package-lock.json && yarn config set ignore-engines true && yarn`;
       return updatePackageScripts(tree, scripts);
     },
     (tree: Tree, context: SchematicContext) => {

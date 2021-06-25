@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "id": "nativescript-app-resources",
+  "$id": "nativescript-app-resources",
   "title": "NativeScript App Resources Options Schema",
   "type": "object",
   "properties": {

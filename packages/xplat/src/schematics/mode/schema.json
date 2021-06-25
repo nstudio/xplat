@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "id": "mode",
+  "$id": "mode",
   "title": "mode schema",
   "type": "object",
   "properties": {

@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "id": "xplatIonicApp",
+  "$id": "xplatIonicApp",
   "title": "Create an Ionic App",
   "type": "object",
   "properties": {

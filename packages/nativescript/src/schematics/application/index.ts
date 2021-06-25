@@ -31,7 +31,7 @@ import {
 } from '@nstudio/xplat-utils';
 import { Schema } from './schema';
 import { XplatNativeScriptHelpers } from '../../utils';
-import { updateWorkspace } from '@nrwl/workspace';
+import { addInstallTask, updateWorkspace } from '@nrwl/workspace';
 import { nsCoreVersion } from '../../utils/versions';
 
 export default function (options: Schema) {
@@ -71,18 +71,13 @@ export default function (options: Schema) {
     // add root package dependencies
     XplatNativeScriptHelpers.updateRootDeps(options),
     XplatNativeScriptHelpers.updatePrettierIgnore(),
-    XplatHelpers.addPackageInstallTask(options),
-    // add start/clean scripts
+    // addInstallTask(),
+    // add clean scripts
     (tree: Tree) => {
       const scripts = {};
-      const platformApp = options.name.replace('-', '.');
-      const directory = options.directory ? `${options.directory}/` : '';
-      // standard apps don't have hmr on by default since results can vary
-      // more reliable to leave off by default for now
-      // however, sandbox setup due to its simplicity uses hmr by default
       scripts[
         `clean`
-      ] = `npx rimraf hooks node_modules package-lock.json && npm i --legacy-peer-deps`;
+      ] = `npx rimraf hooks node_modules package-lock.json && yarn config set ignore-engines true && ns package-manager set npm && yarn`;
       return updatePackageScripts(tree, scripts);
     },
     (tree: Tree, context: SchematicContext) => {
@@ -111,12 +106,22 @@ export default function (options: Schema) {
               options: {
                 platform: 'ios',
               },
+              configurations: {
+                build: {
+                  copyTo: './dist/build.ipa',
+                }
+              },
             },
             android: {
               builder: '@nativescript/nx:build',
               options: {
                 platform: 'android',
               },
+              configurations: {
+                build: {
+                  copyTo: './dist/build.apk',
+                }
+              }
             },
             clean: {
               builder: '@nativescript/nx:build',

@@ -46,7 +46,7 @@ import {
   typescriptVersion,
 } from '../../utils/versions';
 import { XplatNativeScriptHelpers } from '@nstudio/nativescript/src/utils';
-import { updateWorkspace } from '@nrwl/workspace';
+import { addInstallTask, updateWorkspace } from '@nrwl/workspace';
 
 export default function (options: Schema) {
   if (!options.name) {
@@ -95,16 +95,14 @@ export default function (options: Schema) {
     // add root package dependencies
     XplatNativeScriptAngularHelpers.updateRootDeps(options),
     XplatNativeScriptHelpers.updatePrettierIgnore(),
-    XplatHelpers.addPackageInstallTask(options),
+    // addInstallTask(),
     addNsCli(options.addCliDependency),
     // add start/clean scripts
     (tree: Tree) => {
       const scripts = {};
-      const platformApp = options.name.replace('-', '.');
-      const directory = options.directory ? `${options.directory}/` : '';
       scripts[
         `clean`
-      ] = `npx rimraf hooks node_modules package-lock.json && npm i --legacy-peer-deps`;
+      ] = `npx rimraf hooks node_modules package-lock.json && yarn config set ignore-engines true && ns package-manager set npm && yarn`;
       return updatePackageScripts(tree, scripts);
     },
     (tree: Tree, context: SchematicContext) => {
@@ -146,6 +144,9 @@ export default function (options: Schema) {
                 platform: 'ios',
               },
               configurations: {
+                build: {
+                  copyTo: './dist/build.ipa',
+                },
                 prod: {
                   combineWithConfig: 'build:prod',
                 },
@@ -157,6 +158,9 @@ export default function (options: Schema) {
                 platform: 'android',
               },
               configurations: {
+                build: {
+                  copyTo: './dist/build.apk',
+                },
                 prod: {
                   combineWithConfig: 'build:prod',
                 },
@@ -231,6 +235,7 @@ function addAppFiles(
           appname,
           directoryAppPath: `${directory}${appPath}`,
           pathOffset: directory ? '../../../' : '../../',
+          pathOffsetWindows: directory ? '..\\..\\..\\' : '..\\..\\',
           angularVersion: angularVersion,
           nsNgScopedVersion: nsNgScopedVersion,
           nsNgFonticonVersion: nsNgFonticonVersion,

@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "id": "xplatElectronApp",
+  "$id": "xplatElectronApp",
   "title": "Create an Electron App",
   "type": "object",
   "properties": {

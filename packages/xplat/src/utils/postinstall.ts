@@ -32,7 +32,7 @@ export async function updateConfig() {
   // console.log(workspaceConfigPath);
   try {
     let ngCli: any;
-    let config = fs.readFileSync(workspaceConfigPath, 'UTF-8');
+    let config = fs.readFileSync(workspaceConfigPath, { encoding: 'utf-8' });
     if (config) {
       ngCli = JSON.parse(config);
       // update default

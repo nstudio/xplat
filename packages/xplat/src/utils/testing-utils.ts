@@ -4,7 +4,6 @@ import {
   externalSchematic,
   SchematicsException,
 } from '@angular-devkit/schematics';
-import { NxJson } from '@nrwl/workspace';
 import { FrameworkTypes } from '@nstudio/xplat-utils';
 
 export { getFileContent } from '@nrwl/workspace/testing';
@@ -34,7 +33,7 @@ export function createEmptyWorkspace(
   );
   tree.create(
     '/nx.json',
-    JSON.stringify(<NxJson>{ npmScope: 'testing', projects: {} })
+    JSON.stringify(<any>{ npmScope: 'testing', projects: {} })
   );
   tree.create(
     '/tsconfig.base.json',

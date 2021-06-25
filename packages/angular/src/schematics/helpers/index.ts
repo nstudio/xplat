@@ -3,9 +3,10 @@ import {
   buildHelperChain,
   missingArgument,
 } from '@nstudio/xplat';
-import { prerun, addInstallTask } from '@nstudio/xplat-utils';
+import { prerun } from '@nstudio/xplat-utils';
 import { config as configApplitools } from './applitools';
 import { SchematicsException, chain, noop } from '@angular-devkit/schematics';
+import { addInstallTask } from '@nrwl/workspace';
 
 const supportedHelpers = {
   applitools: configApplitools,
@@ -33,5 +34,5 @@ export default function (options: IHelperSchema) {
     }
   }
 
-  return chain([prerun(<any>options), ...helperChain, addInstallTask(options)]);
+  return chain([prerun(<any>options), ...helperChain, addInstallTask()]);
 }

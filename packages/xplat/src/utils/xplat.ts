@@ -896,18 +896,6 @@ export namespace XplatHelpers {
       return tree;
     };
   }
-
-  export function addPackageInstallTask(options: Schema) {
-    return (tree: Tree, context: SchematicContext) => {
-      // let packageTask;
-      if (!options.skipInstall) {
-        // packageTask = context.addTask(
-        //   new NodePackageInstallTask() //options.directory)
-        // );
-        context.addTask(new NodePackageInstallTask());
-      }
-    };
-  }
 }
 
 export namespace XplatComponentHelpers {

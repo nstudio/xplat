@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "id": "xplat-nativescript-angular-feature",
+  "$id": "xplat-nativescript-angular-feature",
   "title": "Create a NativeScript Angular feature in xplat.",
   "type": "object",
   "properties": {

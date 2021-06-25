@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "id": "xplatAppGen",
+  "$id": "xplatAppGen",
   "title": "Generate an xplat app",
   "type": "object",
   "properties": {

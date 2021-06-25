@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "id": "NativeScriptApp",
+  "$id": "NativeScriptApp",
   "title": "Create a NativeScript app",
   "type": "object",
   "properties": {

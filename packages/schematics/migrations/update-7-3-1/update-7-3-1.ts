@@ -17,7 +17,7 @@ function updateElectronApps(tree: Tree, context: SchematicContext) {
     'node_modules/@nstudio/schematics/src/app.electron/_files/tsconfig.json'
   );
   // console.log('tsConfigPath:', tsConfigPath);
-  const tsConfig = fs.readFileSync(tsConfigPath, 'UTF-8');
+  const tsConfig = fs.readFileSync(tsConfigPath, { encoding: 'utf-8' });
   // console.log('tsConfig:',tsConfig);
 
   // update electron apps

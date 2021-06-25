@@ -1,10 +1,8 @@
-import * as stripJsonComments from 'strip-json-comments';
 import {
   SchematicsException,
   Tree,
   SchematicContext,
 } from '@angular-devkit/schematics';
-import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 import {
   stringUtils as nxStringUtils,
   serializeJson,

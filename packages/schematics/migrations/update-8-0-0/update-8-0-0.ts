@@ -13,11 +13,11 @@ import {
   addDepsToPackageJson,
   formatFiles,
   createOrUpdate,
+  addInstallTask,
 } from '@nrwl/workspace';
 import {
   getJsonFromFile,
   updateJsonFile,
-  addInstallTask,
 } from '@nstudio/xplat-utils';
 import { stripIndents } from '@angular-devkit/core/src/utils/literals';
 
@@ -146,7 +146,7 @@ export default function (): Rule {
     removeOldDependencies,
     addDependencies(),
     updateDefaultCollection,
-    addInstallTask(),
+    // addInstallTask(),
     formatFiles(),
   ]);
 }

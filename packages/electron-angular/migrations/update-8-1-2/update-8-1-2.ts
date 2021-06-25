@@ -35,13 +35,13 @@ function updateElectronApps(tree: Tree, context: SchematicContext) {
     'node_modules/@nstudio/electron-angular/src/schematics/application/_files/src/index.ts__tmpl__'
   );
   // console.log('webpackConfigPath:', webpackConfigPath);
-  const indexContent = fs.readFileSync(indexPath, 'UTF-8');
+  const indexContent = fs.readFileSync(indexPath, { encoding: 'utf-8' });
   const servicePath = join(
     cwd,
     'node_modules/@nstudio/electron-angular/src/schematics/xplat/_files/core/services/electron.service.ts__tmpl__'
   );
   // console.log('webpackConfigPath:', webpackConfigPath);
-  let electronService = fs.readFileSync(servicePath, 'UTF-8');
+  let electronService = fs.readFileSync(servicePath, { encoding: 'utf-8' });
   electronService = electronService.replace(/<%= npmScope %>/gi, npmScope);
 
   const appsNames = [];

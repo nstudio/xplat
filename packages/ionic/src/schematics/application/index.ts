@@ -22,7 +22,7 @@ import {
 import { Schema } from './schema';
 import { XplatIonicHelpers } from '../../utils';
 import { capacitorVersion } from '../../utils/versions';
-import { formatFiles, updateWorkspace } from '@nrwl/workspace';
+import { addInstallTask, formatFiles, updateWorkspace } from '@nrwl/workspace';
 
 export default function (options: Schema) {
   if (!options.name) {
@@ -44,16 +44,12 @@ export default function (options: Schema) {
       addAppFiles(options, options.name)(tree, context),
     // add root package dependencies
     XplatIonicHelpers.updateRootDeps(options),
-    XplatHelpers.addPackageInstallTask(options),
+    // addInstallTask(),
     // add start/clean scripts
     (tree: Tree) => {
       const scripts = {};
       const platformApp = options.name.replace('-', '.');
       const directory = options.directory ? `${options.directory}/` : '';
-      // ensure convenient clean script is added for workspace
-      scripts[
-        `clean`
-      ] = `npx rimraf hooks node_modules package-lock.json && npm i --legacy-peer-deps`;
       scripts[
         `start.${platformApp}`
       ] = `cd apps/${directory}${options.name} && npm start`;
@@ -80,7 +76,7 @@ export default function (options: Schema) {
       ] = `cd apps/${directory}${options.name} && npm run cap.copy`;
       scripts[
         `clean.${platformApp}`
-      ] = `cd apps/${directory}${options.name} && npx rimraf hooks node_modules platforms www plugins ios android package-lock.json && npm i --legacy-peer-deps && npx rimraf package-lock.json`;
+      ] = `cd apps/${directory}${options.name} && npx rimraf hooks node_modules platforms www plugins ios android package-lock.json && yarn config set ignore-engines true && yarn`;
       return updatePackageScripts(tree, scripts);
     },
     (tree: Tree, context: SchematicContext) => {

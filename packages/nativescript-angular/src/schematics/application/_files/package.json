@@ -1,35 +1,16 @@
 {
   "name": "<%= utils.sanitize(appname) %>",
-  "main": "src/main.ts",
+  "main": "./src/main.ts",
   "license": "SEE LICENSE IN <your-license-filename>",
   "version": "0.0.0",
   "scripts": {
-    "postinstall": "node ./tools/xplat-postinstall.js && npm run ngcc",
-    "ngcc": "ngcc --tsconfig tsconfig.app.json --properties es2015 module main --first-only"
+    "postinstall": "node ./tools/xplat-postinstall.js"
   },
   "dependencies": {
-    "@angular/animations": "<%= angularVersion %>",
-    "@angular/common": "<%= angularVersion %>",
-    "@angular/compiler": "<%= angularVersion %>",
-    "@angular/core": "<%= angularVersion %>",
-    "@angular/forms": "<%= angularVersion %>",
-    "@angular/platform-browser": "<%= angularVersion %>",
-    "@angular/platform-browser-dynamic": "<%= angularVersion %>",
-    "@angular/router": "<%= angularVersion %>",
-    "@nativescript/angular": "<%= nsNgScopedVersion %>",
-    "@nativescript/core": "<%= nsCoreVersion %>",
-    "@ngx-translate/core": "<%= ngxTranslateVersion %>",
-    "@<%= npmScope %>/xplat-scss": "file:<%= pathOffset %>libs/xplat/scss/src",
-    "@<%= npmScope %>/xplat-nativescript-scss": "file:<%= pathOffset %>libs/xplat/<%= xplatFolderName %>/scss/src",
-    "nativescript-ngx-fonticon": "<%= nsNgFonticonVersion %>",
-    "nativescript-theme-core": "file:<%= pathOffset %>node_modules/nativescript-theme-core",
-    "rxjs": "<%= rxjsVersion %>",
-    "zone.js": "<%= zonejsVersion %>"
+    "@nativescript/core": "*"
   },
   "devDependencies": {
-    "@angular/compiler-cli": "<%= angularVersion %>",
-    "@ngtools/webpack": "<%= angularVersion %>",
-    "@nativescript/webpack": "<%= nsWebpackVersion %>",
-    "typescript": "<%= typescriptVersion %>"
+    "@nativescript/android": "8.0.0",
+    "@nativescript/ios": "8.0.0"
   }
 }

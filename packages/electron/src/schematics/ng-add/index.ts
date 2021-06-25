@@ -5,8 +5,9 @@ import {
   SchematicContext,
   noop,
 } from '@angular-devkit/schematics';
+import { addInstallTask } from '@nrwl/workspace';
 import { XplatHelpers } from '@nstudio/xplat';
-import { prerun, addInstallTask } from '@nstudio/xplat-utils';
+import { prerun } from '@nstudio/xplat-utils';
 import { XplatElectrontHelpers } from '../../utils';
 
 export default function (options: XplatHelpers.NgAddSchema) {
@@ -20,7 +21,7 @@ export default function (options: XplatHelpers.NgAddSchema) {
   } else {
     // running directly with @nstudio/electron, just add deps
     chains.push(XplatElectrontHelpers.updateRootDeps(options));
-    chains.push(addInstallTask(options));
+    // chains.push(addInstallTask());
   }
   return chain([prerun(options, true), ...chains]);
 }

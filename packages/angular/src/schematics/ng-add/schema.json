@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "id": "ng-add-angular",
+  "$id": "ng-add-angular",
   "title": "Add xplat angular to Workspace",
   "description": "NOTE: Does not work in the --dry-run mode",
   "type": "object",

@@ -94,15 +94,6 @@ export default function (options: Schema) {
     options.useXplat
       ? (tree: Tree, context: SchematicContext) => adjustAppFiles(options, tree)
       : noop(),
-    // add start/clean scripts
-    (tree: Tree) => {
-      const platformApp = options.name.replace('-', '.');
-      const scripts = {};
-      scripts[
-        `clean`
-      ] = `npx rimraf hooks node_modules package-lock.json && npm i --legacy-peer-deps`;
-      return updatePackageScripts(tree, scripts);
-    },
     <any>formatFiles({ skipFormat: options.skipFormat }),
   ]);
 }
@@ -277,12 +268,9 @@ function appCmpHtml(name: string) {
 
   <h2>Nx</h2>
 
-  An open source toolkit for enterprise Angular applications. Nx is designed to help you create and build enterprise grade
-  Angular applications. It provides an opinionated approach to application project structure and patterns.
+  Nx is a smart and extensible build framework to help you architect, test, and build at any scale — integrating seamlessly with modern technologies and libraries while providing a robust CLI, caching, dependency management, and more.
 
-  <h3>Quick Start & Documentation</h3>
-
-  <a href="https://nrwl.io/nx">Watch a 5-minute video on how to get started with Nx.</a>
+  <a href="https://nx.dev">Learn more about Nx.</a>
 
   <h1>{{'welcome' | translate}}!</h1>
   <h3>Try things out</h3>

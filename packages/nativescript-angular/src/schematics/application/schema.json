@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "id": "xplatNativeScriptAngularApp",
+  "$id": "xplatNativeScriptAngularApp",
   "title": "Create a NativeScript Angular app",
   "type": "object",
   "properties": {

@@ -12,8 +12,7 @@ import {
   SchematicContext,
   SchematicsException,
 } from '@angular-devkit/schematics';
-import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
-import * as stripJsonComments from 'strip-json-comments';
+import { parseJson } from '@nrwl/devkit';
 import { createOrUpdate, serializeJson } from '@nrwl/workspace';
 
 export const supportedPlatforms: Array<PlatformTypes> = [
@@ -78,19 +77,10 @@ export function isTesting() {
   return isTest;
 }
 
-export function addInstallTask(options?: any) {
-  return (host: Tree, context: SchematicContext) => {
-    if (!options || (options && !options.skipInstall)) {
-      context.addTask(new NodePackageInstallTask());
-    }
-    return host;
-  };
-}
-
 export function jsonParse(content: string) {
   if (content) {
     // ensure comments are stripped when parsing (otherwise will fail)
-    return JSON.parse(stripJsonComments(content));
+    return parseJson(content);
   }
   return {};
 }
