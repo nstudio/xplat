@@ -173,7 +173,7 @@ export function updateEnvsForNativeScript() {
         'node_modules/@nstudio/nativescript-angular/src/schematics/application/_files/webpack.config.js'
       );
       // console.log('webpackConfigPath:', webpackConfigPath);
-      let webpackConfig = fs.readFileSync(webpackConfigPath, 'UTF-8');
+      let webpackConfig = fs.readFileSync(webpackConfigPath, { encoding: 'utf-8' });
       webpackConfig = webpackConfig.replace(
         'if (isXplatWorkspace) {',
         `// opt in when ready to use in your workspace\n  const xplatEnvBaseEnabled = false;\n  if (xplatEnvBaseEnabled && isXplatWorkspace) {`

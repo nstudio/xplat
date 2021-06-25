@@ -32,10 +32,6 @@ import {
   getAppName,
 } from '@nstudio/xplat-utils';
 import { XplatElectrontHelpers } from '../../utils';
-import {
-  NodePackageInstallTask,
-  RunSchematicTask,
-} from '@angular-devkit/schematics/tasks';
 import { workspaceFileName } from '@nrwl/workspace/src/core/file-utils';
 
 export default function (options: XplatElectrontHelpers.SchemaApp) {

@@ -22,7 +22,7 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
     'node_modules/@nstudio/schematics/src/app.nativescript/_files/app/main.ts'
   );
   // console.log('webpackConfigPath:', webpackConfigPath);
-  let mainFile = fs.readFileSync(mainPath, 'UTF-8');
+  let mainFile = fs.readFileSync(mainPath, { encoding: 'utf-8' });
   mainFile = mainFile
     .replace('<% if (routing) { %>', '')
     .replace('<%= npmScope %>', npmScope)
@@ -32,7 +32,7 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
     cwd,
     'node_modules/@nstudio/schematics/src/xplat/_nativescript_files/utils/livesync-navigation.ts'
   );
-  let hmrNavigation = fs.readFileSync(hmrNavigationPath, 'UTF-8');
+  let hmrNavigation = fs.readFileSync(hmrNavigationPath, { encoding: 'utf-8' });
 
   // update {N} apps and configs
   for (const dir of appFolders) {
@@ -56,7 +56,7 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
     const utilsFullPath = join(cwd, utilsTreePath);
     let utilsIndex;
     if (fs.existsSync(utilsFullPath)) {
-      utilsIndex = fs.readFileSync(utilsFullPath, 'UTF-8');
+      utilsIndex = fs.readFileSync(utilsFullPath, { encoding: 'utf-8' });
       utilsIndex += `\nexport * from './livesync-navigation';`;
       createOrUpdate(tree, utilsTreePath, utilsIndex);
     }

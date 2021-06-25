@@ -19,7 +19,7 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
     'node_modules/@nstudio/schematics/src/app.nativescript/_files/app/app.module.ngfactory.d.ts'
   );
   // console.log('webpackConfigPath:', webpackConfigPath);
-  const ngAppFactory = fs.readFileSync(ngAppFactoryPath, 'UTF-8');
+  const ngAppFactory = fs.readFileSync(ngAppFactoryPath, { encoding: 'utf-8' });
 
   // update {N} apps and configs
   for (const dir of appFolders) {

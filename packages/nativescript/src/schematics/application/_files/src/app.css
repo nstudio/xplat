@@ -10,7 +10,7 @@ of writing your own CSS rules. For a full list of class names in the theme
 refer to http://docs.nativescript.org/ui/theme. 
 The imported CSS rules must precede all other types of rules.
 */
-@import '~nativescript-theme-core/css/core.light.css';
+@import 'nativescript-theme-core/css/core.light.css';
 
 /*
 The following CSS rule changes the font size of all UI

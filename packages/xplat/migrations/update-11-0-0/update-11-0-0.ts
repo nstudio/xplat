@@ -342,7 +342,7 @@ function updateAppConfigs() {
         'node_modules/@nstudio/nativescript-angular/src/schematics/application/_files/webpack.config.js'
       );
       // console.log('webpackConfigPath:', webpackConfigPath);
-      const webpackConfig = fs.readFileSync(webpackConfigPath, 'UTF-8');
+      const webpackConfig = fs.readFileSync(webpackConfigPath, { encoding: 'utf-8' });
       createOrUpdate(
         tree,
         `${dirPath}/webpack.config.js`,

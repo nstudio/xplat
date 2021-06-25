@@ -10,13 +10,13 @@ import {
   template,
   SchematicContext,
 } from '@angular-devkit/schematics';
-import { formatFiles } from '@nrwl/workspace';
+import { addInstallTask, formatFiles } from '@nrwl/workspace';
 import {
   XplatHelpers,
   getDefaultTemplateOptions,
   updateTsConfig,
 } from '@nstudio/xplat';
-import { prerun, addInstallTask, getNpmScope } from '@nstudio/xplat-utils';
+import { prerun, getNpmScope } from '@nstudio/xplat-utils';
 import { XplatAngularHelpers } from '../../utils/xplat';
 import { FocusHelpers } from '@nstudio/focus';
 
@@ -72,6 +72,6 @@ export default function (options: XplatHelpers.Schema) {
     // },
     // update IDE settings
     FocusHelpers.updateIDESettings(options),
-    addInstallTask(options),
+    // addInstallTask(),
   ]);
 }

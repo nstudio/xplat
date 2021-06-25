@@ -94,15 +94,6 @@ export default function (options: Schema) {
     options.useXplat
       ? (tree: Tree, context: SchematicContext) => adjustAppFiles(options, tree)
       : noop(),
-    // add start/clean scripts
-    (tree: Tree) => {
-      const platformApp = options.name.replace('-', '.');
-      const scripts = {};
-      scripts[
-        `clean`
-      ] = `npx rimraf hooks node_modules package-lock.json && npm i --legacy-peer-deps`;
-      return updatePackageScripts(tree, scripts);
-    },
     <any>formatFiles({ skipFormat: options.skipFormat }),
   ]);
 }

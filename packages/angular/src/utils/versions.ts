@@ -1,5 +1,5 @@
 export const xplatVersion = '*';
-export const nxVersion = '^12.0.0';
+export const nxVersion = '^12.4.0';
 export const angularVersion = '^12.0.0';
 export const angularDevkitVersion = '^0.1200.0';
 export const ngxTranslateVersion = '~13.0.0';

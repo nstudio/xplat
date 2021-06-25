@@ -3,7 +3,6 @@ import {
   Tree,
   SchematicContext,
 } from '@angular-devkit/schematics';
-import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 import {
   stringUtils as nxStringUtils,
   serializeJson,
