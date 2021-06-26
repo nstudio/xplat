@@ -111,12 +111,27 @@ export default function (options: XplatElectrontHelpers.SchemaApp) {
           ignore: ['**/*.ts'],
           output: '',
         });
-        targetConfig[
+        if (targetConfig[
           targetProp
-        ].serve.options.browserTarget = `${electronAppName}:build`;
-        targetConfig[
+        ].serve.options) {
+          targetConfig[
+            targetProp
+          ].serve.options.browserTarget = `${electronAppName}:build`;
+        }
+        if (targetConfig[
           targetProp
-        ].serve.configurations.production.browserTarget = `${electronAppName}:build:production`;
+        ].serve.configurations.production) {
+          targetConfig[
+            targetProp
+          ].serve.configurations.production.browserTarget = `${electronAppName}:build:production`;
+        }
+        if (targetConfig[
+          targetProp
+        ].serve.configurations.development) {
+          targetConfig[
+            targetProp
+          ].serve.configurations.development.browserTarget = `${electronAppName}:build:development`;
+        }
         // clear other settings (TODO: may need these in future), for now keep electron options minimal
         delete targetConfig[targetProp]['extract-i18n'];
         delete targetConfig[targetProp]['test'];

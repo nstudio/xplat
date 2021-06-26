@@ -9,8 +9,8 @@ import IpcRendererEvent = Electron.IpcRendererEvent;
   providedIn: 'root'
 })
 export class ElectronService {
-  private readonly _ipc: typeof ipcRenderer;
-  private _childProcess: typeof childProcess;
+  private readonly _ipc?: typeof ipcRenderer;
+  private _childProcess?: typeof childProcess;
 
   constructor(private _log: LogService, private _win: WindowService) {
     // Conditional imports
@@ -29,7 +29,7 @@ export class ElectronService {
     this._ipc.on(channel, listener);
   }
 
-  send(channel: string, ...args): void {
+  send(channel: string, ...args: any): void {
     if (!this._ipc) {
       return;
     }
@@ -37,7 +37,7 @@ export class ElectronService {
     this._ipc.send(channel, ...args);
   }
 
-  sendSync(channel: string, ...args): void {
+  sendSync(channel: string, ...args: any): void {
     if (!this._ipc) {
       return;
     }
