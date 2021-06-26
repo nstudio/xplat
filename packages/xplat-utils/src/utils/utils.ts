@@ -154,7 +154,7 @@ export function getAppPaths(
     // check for platform via it's package (web is only app type that doesn't have a package)
     switch (type) {
       case 'nativescript':
-        if (tree.exists(`${dirPath}/nativescript.config.ts`)) {
+        if (tree.exists(`${dirPath}/nativescript.config.ts`) || tree.exists(`${dirPath}/nsconfig.json`)) {
           appPaths.push(dirPath);
         }
         break;

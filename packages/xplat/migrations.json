@@ -24,6 +24,11 @@
       "version": "11.0.21",
       "description": "Remove old dirs",
       "factory": "./migrations/update-11-0-0/clean-old-dirs"
+    },
+    "update-to-12.4.2": {
+      "version": "12.4.2",
+      "description": "Migrate workspace to 12.4.2",
+      "factory": "./migrations/update-12-4-2/update-12-4-2"
     }
   },
   "packageJsonUpdates": {
@@ -64,6 +69,47 @@
         },
         "@nstudio/web-angular": {
           "version": "11.0.21",
+          "alwaysAddToPackageJson": false
+        }
+      }
+    },
+    "12.4.2": {
+      "version": "12.4.2",
+      "packages": {
+        "@nstudio/angular": {
+          "version": "12.4.2",
+          "alwaysAddToPackageJson": false
+        },
+        "@nstudio/electron": {
+          "version": "12.4.2",
+          "alwaysAddToPackageJson": false
+        },
+        "@nstudio/electron-angular": {
+          "version": "12.4.2",
+          "alwaysAddToPackageJson": false
+        },
+        "@nstudio/ionic": {
+          "version": "12.4.2",
+          "alwaysAddToPackageJson": false
+        },
+        "@nstudio/ionic-angular": {
+          "version": "12.4.2",
+          "alwaysAddToPackageJson": false
+        },
+        "@nstudio/nativescript": {
+          "version": "12.4.2",
+          "alwaysAddToPackageJson": false
+        },
+        "@nstudio/nativescript-angular": {
+          "version": "12.4.2",
+          "alwaysAddToPackageJson": false
+        },
+        "@nstudio/web": {
+          "version": "12.4.2",
+          "alwaysAddToPackageJson": false
+        },
+        "@nstudio/web-angular": {
+          "version": "12.4.2",
           "alwaysAddToPackageJson": false
         }
       }
