@@ -24,6 +24,7 @@ import {
   karmaCoverageVersion,
   karmaJasmineVersion,
   karmaJasmineHtmlVersion,
+  capacitorPluginsVersion,
 } from './versions';
 
 export namespace XplatIonicAngularHelpers {
@@ -74,6 +75,26 @@ export namespace XplatIonicAngularHelpers {
       const hasCapacitorDeps = packageJson.dependencies['@capacitor/core'];
       if (!hasCapacitorDeps) {
         dependencies[`@capacitor/core`] = capacitorVersion;
+      }
+      let hasCapacitorAppDeps = packageJson.dependencies['@capacitor/app'];
+      if (!hasCapacitorAppDeps) {
+        dependencies[`@capacitor/app`] = capacitorPluginsVersion;
+      }
+      hasCapacitorAppDeps = packageJson.dependencies['@capacitor/haptics'];
+      if (!hasCapacitorAppDeps) {
+        dependencies[`@capacitor/haptics`] = capacitorPluginsVersion;
+      }
+      hasCapacitorAppDeps = packageJson.dependencies['@capacitor/keyboard'];
+      if (!hasCapacitorAppDeps) {
+        dependencies[`@capacitor/keyboard`] = capacitorPluginsVersion;
+      }
+      hasCapacitorAppDeps = packageJson.dependencies['@capacitor/status-bar'];
+      if (!hasCapacitorAppDeps) {
+        dependencies[`@capacitor/status-bar`] = capacitorPluginsVersion;
+      }
+      const hasCapacitorCli = packageJson.dependencies['@capacitor/cli'] || packageJson.devDependencies['@capacitor/cli'];
+      if (!hasCapacitorCli) {
+        devDependencies[`@capacitor/cli`] = capacitorVersion;
       }
       if (options.useXplat) {
         dependencies['@ngx-translate/core'] = ngxTranslateVersion;

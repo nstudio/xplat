@@ -3,17 +3,20 @@
   "license": "SEE LICENSE IN <your-license-filename>",
   "version": "0.0.0",
   "scripts": {
-    "cap.add.ios": "npx ionic capacitor add ios",
-    "cap.add.android": "npx ionic capacitor add android",
-    "cap.ios": "npx ionic capacitor open ios",
-    "cap.android": "npx ionic capacitor open android",
-    "cap.copy": "npx ionic capacitor copy",
-    "cap.update": "npx ionic capacitor update"
+    "cap.add.ios": "npx ionic cap add ios",
+    "cap.add.android": "npx ionic cap add android",
+    "cap.ios": "npx ionic cap open ios",
+    "cap.android": "npx ionic cap open android",
+    "cap.sync": "npx ionic cap sync"
   },
   "dependencies": {
+    "@capacitor/app": "<%= capacitorPluginsVersion %>",
     "@capacitor/android": "<%= capacitorVersion %>",
     "@capacitor/core": "<%= capacitorVersion %>",
-    "@capacitor/ios": "<%= capacitorVersion %>"
+    "@capacitor/haptics": "<%= capacitorPluginsVersion %>",
+    "@capacitor/ios": "<%= capacitorVersion %>",
+    "@capacitor/keyboard": "<%= capacitorPluginsVersion %>",
+    "@capacitor/status-bar": "<%= capacitorPluginsVersion %>"
   },
   "devDependencies": {
     "@capacitor/cli": "<%= capacitorVersion %>"

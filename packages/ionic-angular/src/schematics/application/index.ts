@@ -31,7 +31,10 @@ import {
 } from '@nstudio/xplat-utils';
 import { Schema as ApplicationOptions } from './schema';
 import { XplatIonicAngularHelpers } from '../../utils';
-import { capacitorVersion } from '../../utils/versions';
+import {
+  capacitorVersion,
+  capacitorPluginsVersion,
+} from '../../utils/versions';
 
 export default function (options: ApplicationOptions) {
   if (!options.name) {
@@ -80,16 +83,12 @@ export default function (options: ApplicationOptions) {
         `clean`
       ] = `npx rimraf hooks node_modules package-lock.json && yarn config set ignore-engines true && yarn`;
       // add convenient ionic scripts
-      scripts[`build.${platformApp}`] = `nx build ${options.name}`;
-      scripts[
-        `prepare.${platformApp}`
-      ] = `npm run clean && npm run clean.${platformApp} && npm run build.${platformApp}`;
       scripts[
         `prepare.${platformApp}.ios`
-      ] = `npm run prepare.${platformApp} && cd apps/${directory}${options.name} && npx rimraf -- ios && npm run cap.add.ios`;
+      ] = `cd apps/${directory}${options.name} && npm run cap.add.ios`;
       scripts[
         `prepare.${platformApp}.android`
-      ] = `npm run prepare.${platformApp} && cd apps/${directory}${options.name} && npx rimraf -- android && npm run cap.add.android`;
+      ] = `cd apps/${directory}${options.name} && npm run cap.add.android`;
       scripts[
         `open.${platformApp}.ios`
       ] = `cd apps/${directory}${options.name} && npm run cap.ios`;
@@ -98,7 +97,7 @@ export default function (options: ApplicationOptions) {
       ] = `cd apps/${directory}${options.name} && npm run cap.android`;
       scripts[
         `sync.${platformApp}`
-      ] = `cd apps/${directory}${options.name} && npm run cap.copy`;
+      ] = `cd apps/${directory}${options.name} && npm run cap.sync`;
       scripts[
         `clean.${platformApp}`
       ] = `cd apps/${directory}${options.name} && npx rimraf hooks node_modules platforms www plugins package-lock.json && yarn config set ignore-engines true && yarn`;
@@ -149,6 +148,13 @@ export default function (options: ApplicationOptions) {
                   },
                 ],
                 scripts: [],
+                aot: false,
+                vendorChunk: true,
+                extractLicenses: false,
+                buildOptimizer: false,
+                sourceMap: true,
+                optimization: false,
+                namedChunks: true,
               },
               configurations: {
                 production: {
@@ -161,7 +167,6 @@ export default function (options: ApplicationOptions) {
                   optimization: true,
                   outputHashing: 'all',
                   sourceMap: false,
-                  extractCss: true,
                   namedChunks: false,
                   aot: true,
                   extractLicenses: true,
@@ -230,15 +235,18 @@ export default function (options: ApplicationOptions) {
               },
             },
             lint: {
-              builder: '@angular-devkit/build-angular:tslint',
-              options: {
-                tsConfig: [
+              "builder": "@angular-eslint/builder:lint",
+              "options": {
+                "tsConfig": [
                   `${appFolder}tsconfig.app.json`,
                   `${appFolder}tsconfig.spec.json`,
-                  `${appFolder}e2e/tsconfig.json`,
+                  `${appFolder}e2e/tsconfig.json`
                 ],
-                exclude: ['**/node_modules/**'],
-              },
+                "lintFilePatterns": [
+                  "src/**/*.ts",
+                  "src/**/*.html"
+                ]
+              }
             },
             // TODO: add jest e2e configuration for ionic
             // e2e: {
@@ -313,6 +321,7 @@ function addAppFiles(
           appname,
           xplatFolderName: XplatHelpers.getXplatFoldername('ionic', 'angular'),
           capacitorVersion,
+          capacitorPluginsVersion,
         }),
         move(`apps/${directory}${appPath}`),
       ])

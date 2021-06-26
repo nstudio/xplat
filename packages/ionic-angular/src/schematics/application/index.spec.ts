@@ -26,7 +26,7 @@ describe('app.ionic schematic', () => {
       0
     );
     expect(
-      files.indexOf('/apps/ionic-foo/capacitor.config.json')
+      files.indexOf('/apps/ionic-foo/capacitor.config.ts')
     ).toBeGreaterThanOrEqual(0);
     expect(
       files.indexOf('/apps/ionic-foo/ionic.config.json')

@@ -83,7 +83,13 @@ nx g app sample
 Develop in browser with:
 
 ```
-nx run ionic-sample:serve
+nx serve ionic-sample
+```
+
+Build Ionic app:
+
+```
+nx build ionic-sample
 ```
 
 A. **Capacitor iOS** - Prepare for development
