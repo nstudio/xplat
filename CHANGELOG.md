@@ -1,3 +1,12 @@
+## [12.4.2](https://github.com/nstudio/xplat/compare/12.4.1...12.4.2) (2021-06-26)
+
+
+### Features
+
+* **core:** migration to 12.4.2 ([7c3dc16](https://github.com/nstudio/xplat/commit/7c3dc1636fa33abc40898c9080a70829fccdf985))
+
+
+
 ## [12.4.1](https://github.com/nstudio/xplat/compare/12.4.0...12.4.1) (2021-06-26)
 
 
