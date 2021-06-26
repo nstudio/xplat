@@ -1,3 +1,17 @@
+## [12.4.1](https://github.com/nstudio/xplat/compare/12.4.0...12.4.1) (2021-06-26)
+
+
+### Bug Fixes
+
+* **electron:** api updates for TS 4.2.x ([976c709](https://github.com/nstudio/xplat/commit/976c709fd3f487c3ed34b44adc2d7e7450f782bd))
+
+
+### Features
+
+* **ionic:** update deps for angular 12 and cap 3 ([1140acf](https://github.com/nstudio/xplat/commit/1140acf14d86166a94a956c4a4c2eb2b8a9ed90a))
+
+
+
 # [12.4.0](https://github.com/nstudio/xplat/compare/12.0.0...12.4.0) (2021-06-25)
 
 
