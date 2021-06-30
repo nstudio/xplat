@@ -1,3 +1,12 @@
+# [12.5.0](https://github.com/nstudio/xplat/compare/12.4.2...12.5.0) (2021-06-30)
+
+
+### Features
+
+* support Nx 12.5 ([615dbf6](https://github.com/nstudio/xplat/commit/615dbf6acc72c8ab0b59aa3c6e7890451d2ff702))
+
+
+
 ## [12.4.2](https://github.com/nstudio/xplat/compare/12.4.1...12.4.2) (2021-06-26)
 
 
