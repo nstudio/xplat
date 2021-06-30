@@ -141,95 +141,95 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
       `${dirPath}/tools/xplat-postinstall.js`,
       `//#!/usr/bin/env node
 
-      const fs = require('fs-extra');
-      const path = require('path');
-      const childProcess = require('child_process');
-      
-      // Copy potential hooks from root dependencies to app
-      const hooksSrc = '${relativePath}/hooks';
-      const hooksDest = 'hooks';
-      try {
-        fs.copySync(hooksSrc, hooksDest);
-      } catch (err) {
-        // ignore
-      }
-      
-      // Helpful to trigger ngcc after an install to ensure all has processed properly
-      const child = childProcess.spawn(/^win/.test(process.platform) ? '${relativePathWindows}\\node_modules\\.bin\\ngcc' : '${relativePath}/node_modules/.bin/ngcc', ['--tsconfig', 'tsconfig.app.json', '--properties', 'es2015', 'module', 'main', '--first-only'], {
-        cwd: process.cwd(),
-        stdio: 'inherit',
-      });
-      child.on('close', (code) => {
-      
-      });
+const fs = require('fs-extra');
+const path = require('path');
+const childProcess = require('child_process');
+
+// Copy potential hooks from root dependencies to app
+const hooksSrc = '${relativePath}/hooks';
+const hooksDest = 'hooks';
+try {
+  fs.copySync(hooksSrc, hooksDest);
+} catch (err) {
+  // ignore
+}
+
+// Helpful to trigger ngcc after an install to ensure all has processed properly
+const child = childProcess.spawn(/^win/.test(process.platform) ? '${relativePathWindows}\\node_modules\\.bin\\ngcc' : '${relativePath}/node_modules/.bin/ngcc', ['--tsconfig', 'tsconfig.app.json', '--properties', 'es2015', 'module', 'main', '--first-only'], {
+  cwd: process.cwd(),
+  stdio: 'inherit',
+});
+child.on('close', (code) => {
+
+});
       `
     );
     createOrUpdate(
       tree,
       `${dirPath}/tsconfig.app.json`,
       `{
-        "extends": "./tsconfig.json",
-        "compilerOptions": {
-          "outDir": "${relativePath}/dist/out-tsc",
-          "types": []
-        },
-        "include": [
-          "${relativePath}/libs/xplat/core/src/lib/environments/base/*.ts",
-          "./src/environments/environment.*.ts"
-        ],
-        "files": [
-          "./references.d.ts",
-          "./src/main.ts",
-          "./src/polyfills.ts"
-        ]
-      }`
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "${relativePath}/dist/out-tsc",
+    "types": []
+  },
+  "include": [
+    "${relativePath}/libs/xplat/core/src/lib/environments/base/*.ts",
+    "./src/environments/environment.*.ts"
+  ],
+  "files": [
+    "./references.d.ts",
+    "./src/main.ts",
+    "./src/polyfills.ts"
+  ]
+}`
     );
     createOrUpdate(
       tree,
       `${dirPath}/tsconfig.editor.json`,
       `{
-        "extends": "./tsconfig.json",
-        "include": ["**/*.ts"],
-        "compilerOptions": {
-          "types": ["jest", "node"]
-        }
-      }
+  "extends": "./tsconfig.json",
+  "include": ["**/*.ts"],
+  "compilerOptions": {
+    "types": ["jest", "node"]
+  }
+}
       `
     );
     createOrUpdate(
       tree,
       `${dirPath}/tsconfig.json`,
       `{
-        "extends": "${relativePath}/tsconfig.base.json",
-        "files": [],
-        "include": [],
-        "references": [
-          {
-            "path": "./tsconfig.app.json"
-          },
-          {
-            "path": "./tsconfig.spec.json"
-          },
-          {
-            "path": "./tsconfig.editor.json"
-          }
-        ]
-      }      
+  "extends": "${relativePath}/tsconfig.base.json",
+  "files": [],
+  "include": [],
+  "references": [
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.spec.json"
+    },
+    {
+      "path": "./tsconfig.editor.json"
+    }
+  ]
+}      
       `
     );
     createOrUpdate(
       tree,
       `${dirPath}/tsconfig.spec.json`,
       `{
-        "extends": "./tsconfig.json",
-        "compilerOptions": {
-          "outDir": "${relativePath}/dist/out-tsc",
-          "module": "commonjs",
-          "types": ["jest", "node"]
-        },
-        "files": ["src/test-setup.ts"],
-        "include": ["**/*.spec.ts", "**/*.d.ts"]
-      }      
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "${relativePath}/dist/out-tsc",
+    "module": "commonjs",
+    "types": ["jest", "node"]
+  },
+  "files": ["src/test-setup.ts"],
+  "include": ["**/*.spec.ts", "**/*.d.ts"]
+}      
       `
     );
     createOrUpdate(
@@ -241,79 +241,79 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
       tree,
       `${dirPath}/src/polyfills.ts`,
       `/**
-        * NativeScript Polyfills
-        */
-       
-       // Install @nativescript/core polyfills (XHR, setTimeout, requestAnimationFrame)
-       import '@nativescript/core/globals';
-       // Install @nativescript/angular specific polyfills
-       import '@nativescript/angular/polyfills';
-       
-       /**
-        * Zone.js and patches
-        */
-       // Add pre-zone.js patches needed for the NativeScript platform
-       import '@nativescript/zone-js/dist/pre-zone-polyfills';
-       
-       // Zone JS is required by default for Angular itself
-       import 'zone.js';
-       
-       // Add NativeScript specific Zone JS patches
-       import '@nativescript/zone-js';
+* NativeScript Polyfills
+*/
+
+// Install @nativescript/core polyfills (XHR, setTimeout, requestAnimationFrame)
+import '@nativescript/core/globals';
+// Install @nativescript/angular specific polyfills
+import '@nativescript/angular/polyfills';
+
+/**
+* Zone.js and patches
+*/
+// Add pre-zone.js patches needed for the NativeScript platform
+import '@nativescript/zone-js/dist/pre-zone-polyfills';
+
+// Zone JS is required by default for Angular itself
+import 'zone.js';
+
+// Add NativeScript specific Zone JS patches
+import '@nativescript/zone-js';
        `
     );
     createOrUpdate(
       tree,
       `${dirPath}/.eslintrc.json`,
       `{
-        "extends": "${relativePath}/.eslintrc.json",
-        "ignorePatterns": [
-          "!**/*"
+  "extends": "${relativePath}/.eslintrc.json",
+  "ignorePatterns": [
+    "!**/*"
+  ],
+  "overrides": [
+    {
+      "files": [
+        "*.ts"
+      ],
+      "extends": [
+        "plugin:@nrwl/nx/angular",
+        "plugin:@angular-eslint/template/process-inline-templates"
+      ],
+      "parserOptions": {
+        "project": [
+          "${dirPath}/tsconfig.*?.json"
+        ]
+      },
+      "rules": {
+        "@angular-eslint/directive-selector": [
+          "error",
+          {
+            "type": "attribute",
+            "prefix": "${getPrefix()}",
+            "style": "camelCase"
+          }
         ],
-        "overrides": [
+        "@angular-eslint/component-selector": [
+          "error",
           {
-            "files": [
-              "*.ts"
-            ],
-            "extends": [
-              "plugin:@nrwl/nx/angular",
-              "plugin:@angular-eslint/template/process-inline-templates"
-            ],
-            "parserOptions": {
-              "project": [
-                "${dirPath}/tsconfig.*?.json"
-              ]
-            },
-            "rules": {
-              "@angular-eslint/directive-selector": [
-                "error",
-                {
-                  "type": "attribute",
-                  "prefix": "${getPrefix()}",
-                  "style": "camelCase"
-                }
-              ],
-              "@angular-eslint/component-selector": [
-                "error",
-                {
-                  "type": "element",
-                  "prefix": "${getPrefix()}",
-                  "style": "kebab-case"
-                }
-              ]
-            }
-          },
-          {
-            "files": [
-              "*.html"
-            ],
-            "extends": [
-              "plugin:@nrwl/nx/angular-template"
-            ],
-            "rules": {}
+            "type": "element",
+            "prefix": "${getPrefix()}",
+            "style": "kebab-case"
           }
         ]
       }
+    },
+    {
+      "files": [
+        "*.html"
+      ],
+      "extends": [
+        "plugin:@nrwl/nx/angular-template"
+      ],
+      "rules": {}
+    }
+  ]
+}
       `
     );
   }
@@ -325,7 +325,7 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
         `Please ensure you have the latest NativeScript cli installed: npm i -g nativescript`,
         `The following NativeScript apps have been updated to 8: ${appsNames}.`,
         `Please note that you may still need to update some project imports. Build your app and work through any TypeScript errors one at a time to clear the remaining.`,
-        `Be sure to check your git changeset to retain any changes to webpack.config.js or other files that were updated before committing. There may be some changes you want to keep that had been replaced in the update.`
+        `Be sure to check your git changeset to retain any changes to webpack.config.js or other files that were updated before committing. There may be some changes you want to keep that had been replaced in the update.`,
       ],
     });
   }
@@ -343,8 +343,9 @@ function updateRootPackage(tree: Tree, context: SchematicContext) {
       '@nativescript/types': nsCoreVersion,
       '@nativescript/webpack': nsWebpackVersion,
     };
-    
-    json.scripts.clean = 'npx rimraf hooks node_modules package-lock.json && yarn config set ignore-engines true && yarn';
+
+    json.scripts.clean =
+      'npx rimraf hooks node_modules package-lock.json && yarn config set ignore-engines true && yarn';
     json.dependencies = json.dependencies || {};
     json.dependencies = {
       ...json.dependencies,
