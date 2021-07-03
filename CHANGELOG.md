@@ -1,3 +1,12 @@
+## [12.5.1](https://github.com/nstudio/xplat/compare/12.5.0...12.5.1) (2021-07-03)
+
+
+### Bug Fixes
+
+* **nativescript:** postinstall ([a573d3a](https://github.com/nstudio/xplat/commit/a573d3a15bc7a09d267c320d696625c676784984))
+
+
+
 # [12.5.0](https://github.com/nstudio/xplat/compare/12.4.2...12.5.0) (2021-06-30)
 
 
