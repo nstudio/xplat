@@ -235,7 +235,6 @@ function addAppFiles(
           appname,
           directoryAppPath: `${directory}${appPath}`,
           pathOffset: directory ? '../../../' : '../../',
-          pathOffsetWindows: directory ? '..\\..\\..\\' : '..\\..\\',
           angularVersion: angularVersion,
           nsNgScopedVersion: nsNgScopedVersion,
           nsNgFonticonVersion: nsNgFonticonVersion,
