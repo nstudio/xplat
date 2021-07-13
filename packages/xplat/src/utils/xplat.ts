@@ -1036,6 +1036,10 @@ export namespace XplatFeatureHelpers {
      */
     skipFormat?: boolean;
     /**
+     * The directory of the new feature
+     */
+    directory?: string;
+    /**
      * testing helper
      */
     isTesting?: boolean;
@@ -1128,12 +1132,22 @@ export namespace XplatFeatureHelpers {
     extra: string = '',
     framework?: FrameworkTypes
   ) {
+    //Handle "/" in name
+    options.directory = options.directory || '';
+    const folderParts = options.name.split('/');
+    if (folderParts.length > 1) {
+      options.name = folderParts[folderParts.length - 1];
+      folderParts.pop();
+      options.directory = folderParts.join('/') + '/';
+    }
     let moveTo: string;
     if (target) {
       moveTo = getMoveTo(options, target, projectName, framework);
     } else {
       target = 'lib';
-      moveTo = `libs/xplat/features/src/lib/${options.name.toLowerCase()}`;
+      moveTo = `libs/xplat/features/src/lib/${
+        options.directory
+      }${options.name.toLowerCase()}`;
     }
     if (!extra) {
       // make sure no `null` or `undefined` values get in the string path
@@ -1193,13 +1207,7 @@ export namespace XplatFeatureHelpers {
       <PlatformTypes>platform,
       framework
     );
-    
-    //Handle "/"
-    const folderParts = options.name.split('/');
-    if (folderParts.length > 1) {
-      options.name = stringUtils.capitalize(folderParts[folderParts.length - 1]);
-    }
-    
+
     return {
       ...(options as any),
       ...getDefaultTemplateOptions(),
@@ -1222,12 +1230,12 @@ export namespace XplatFeatureHelpers {
     );
     // console.log('getMoveTo xplatFolderName:', xplatFolderName);
     const featureName = options.name.toLowerCase();
-    let moveTo = `libs/xplat/${xplatFolderName}/features/src/lib/${featureName}`;
+    let moveTo = `libs/xplat/${xplatFolderName}/features/src/lib/${options.directory}${featureName}`;
     if (projectName) {
       let appDir = ['web', 'web-angular'].includes(xplatFolderName)
         ? '/app'
         : '';
-      moveTo = `apps/${projectName}/src${appDir}/features/${featureName}`;
+      moveTo = `apps/${projectName}/src${appDir}/features/${options.directory}${featureName}`;
       // console.log('moveTo:', moveTo);
     }
     return moveTo;
