@@ -1197,7 +1197,7 @@ export namespace XplatFeatureHelpers {
     //Handle "/"
     const folderParts = options.name.split('/');
     if (folderParts.length > 1) {
-      options.name = general_1.stringUtils.capitalize(folderParts[folderParts.length - 1]);
+      options.name = stringUtils.capitalize(folderParts[folderParts.length - 1]);
     }
     
     return {
