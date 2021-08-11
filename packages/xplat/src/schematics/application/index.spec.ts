@@ -99,7 +99,7 @@ describe('xplat schematic', () => {
       expect(fileContent.indexOf(`from 'express'`)).toBeGreaterThan(0);
     });
 
-    it('should create Nx nest', async () => {
+    xit('should create Nx nest', async () => {
       appTree = Tree.empty();
       appTree = createEmptyWorkspace(appTree);
       const options: XplatHelpers.Schema = { ...defaultOptions };
@@ -117,7 +117,7 @@ describe('xplat schematic', () => {
       expect(fileContent.indexOf(`from '@nestjs/core'`)).toBeGreaterThan(0);
     });
 
-    it('should create Nx node', async () => {
+    xit('should create Nx node', async () => {
       appTree = Tree.empty();
       appTree = createEmptyWorkspace(appTree);
       const options: XplatHelpers.Schema = { ...defaultOptions };

@@ -320,8 +320,18 @@ export function generate(type: IGenerateType, options) {
 
 export function getFeatureName(options: IGenerateOptions) {
   let featureName: string;
+  const isNxLib = XplatHelpers.isFeatureNxLib(options.feature);
   if (options.feature) {
-    featureName = options.feature.toLowerCase();
+    if (isNxLib) {
+      // use lib name "as-is"
+      featureName = options.feature.toLowerCase();
+    } else {
+      // otherwise, user is wanting to target a feature nested in a folder (within features)
+      const dirParts = options.feature.split('/');
+      if (dirParts.length) {
+        featureName = dirParts.pop().toLowerCase();
+      }
+    }
   }
   if (!featureName) {
     if (options.projects) {
@@ -333,10 +343,6 @@ export function getFeatureName(options: IGenerateOptions) {
     }
   }
   return featureName;
-}
-
-export function isFeatureNxLib(featureName: string) {
-  return featureName && featureName.indexOf('@') === 0;
 }
 
 export function getNxFeaturePath(tree: Tree, featureName: string) {
@@ -370,7 +376,20 @@ export function addToFeature(
   forSubFolder?: boolean
 ) {
   let featureName: string = getFeatureName(options);
-  const isNxLib = isFeatureNxLib(featureName);
+  const isNxLib = XplatHelpers.isFeatureNxLib(featureName);
+
+  let directory = '';
+  let relativeDirectory = '';
+  if (!isNxLib && options.feature) {
+    const dirParts = options.feature.split('/');
+    if (dirParts.length) {
+      dirParts.pop();
+      directory = dirParts.join('/');
+      const relative = [];
+      dirParts.forEach(() => relative.push('..'));
+      relativeDirectory = relative.join('/') + '/';
+    }
+  }
 
   options.needsIndex = false; // reset
 
@@ -385,7 +404,7 @@ export function addToFeature(
     featureName = 'core';
     featurePath = `${prefixPath}/${featureName}${srcSubFolderPath}`;
   } else {
-    featurePath = `${prefixPath}/features${srcSubFolderPath}/${featureName}`;
+    featurePath = `${prefixPath}/features${srcSubFolderPath}/${directory ? directory + '/' : ''}${featureName}`;
   }
 
   const featureModulePath = `${featurePath}/${featureName}.module.ts`;
@@ -429,6 +448,7 @@ export function addToFeature(
             ...(options as any),
             ...getDefaultTemplateOptions(),
             name: options.name.toLowerCase(),
+            relativeDirectory,
             xplatFolderName,
             // feature: featureName,
             forSubFolder,
@@ -622,7 +642,7 @@ export function adjustModule(
   prefixPath: string
 ) {
   let featureName: string = getFeatureName(options);
-  const isNxLib = isFeatureNxLib(featureName);
+  const isNxLib = XplatHelpers.isFeatureNxLib(featureName);
   let featurePath: string;
   if (isNxLib) {
     featurePath = getNxFeaturePath(tree, featureName);
@@ -891,7 +911,7 @@ export function adjustRouting(
           routingModulePath,
           `{ 
               path: '${featureName}',
-              loadChildren: () => import('./features/${featureName}/${featureName}.module').then(m => m.${stringUtils.classify(
+              loadChildren: () => import('./features/${options.directory ? options.directory + '/' : ''}${featureName}/${featureName}.module').then(m => m.${stringUtils.classify(
             featureName
           )}Module)
           }`
