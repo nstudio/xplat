@@ -1,3 +1,19 @@
+# [12.7.0](https://github.com/nstudio/xplat/compare/12.5.1...12.7.0) (2021-08-11)
+
+
+### Bug Fixes
+
+* **core:** ensure feature generator components honor createBase option ([1c2bcc8](https://github.com/nstudio/xplat/commit/1c2bcc8d69f0a9589ee0c513dad876f0dc8ef672))
+
+
+### Features
+
+* **core:** allow directory option for feature generator ([c635f98](https://github.com/nstudio/xplat/commit/c635f98f9ae53ab14c9771a44bf438912432bfbf))
+* **core:** handling sub directory with feature generation ([#276](https://github.com/nstudio/xplat/issues/276)) ([959d3d8](https://github.com/nstudio/xplat/commit/959d3d820907dc0899edce6fddedd3f832701974)), closes [/github.com/nstudio/xplat/issues/275#issuecomment-878208786](https://github.com//github.com/nstudio/xplat/issues/275/issues/issuecomment-878208786)
+* **core:** Nx 12.6 ([b433835](https://github.com/nstudio/xplat/commit/b433835e11f5c49b607db2d9f24bbb061edba75d))
+
+
+
 ## [12.5.1](https://github.com/nstudio/xplat/compare/12.5.0...12.5.1) (2021-07-03)
 
 
