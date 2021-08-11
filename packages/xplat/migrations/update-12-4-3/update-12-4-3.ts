@@ -18,7 +18,7 @@ import {
 } from '@nstudio/xplat-utils';
 
 const angularVersion = '^12.0.0';
-const typescriptVersion = '~4.2.4';
+const typescriptVersion = '~4.3.5';
 const nsWebpackVersion = 'beta';
 const ngxTranslateVersion = '~13.0.0';
 const nsNgScopedVersion = '^12.0.0';

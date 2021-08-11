@@ -17,7 +17,7 @@ export const karmaCoverageVersion = '~2.0.3';
 export const karmaCoverageInstanbulVersion = '~3.0.2';
 export const karmaJasmineVersion = '~4.0.0';
 export const karmaJasmineHtmlVersion = '^1.5.0';
-export const typescriptVersion = '~4.2.0';
+export const typescriptVersion = '~4.3.5';
 
 export const angularVersion = '^12.0.0';
 export const angularDevkitVersion = '^12.0.0';
