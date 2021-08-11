@@ -21,11 +21,6 @@
   ],
   "main": "index.js",
   "types": "index.d.ts",
-  "dependencies": {
-    "chalk": "4.1.0",
-    "jsonc-parser": "3.0.0",
-    "@nrwl/devkit": "^12.5.0"
-  },
   "author": "Nathan Walker",
   "license": "MIT",
   "bugs": {

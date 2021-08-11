@@ -104,6 +104,8 @@ describe('xplat schematic', () => {
       appTree = createEmptyWorkspace(appTree);
       const options: XplatHelpers.Schema = { ...defaultOptions };
       options.platforms = 'nest';
+      delete options.prefix;
+      delete options.isTesting;
 
       const tree = await runSchematic('app', options, appTree);
       const files = tree.files;
@@ -120,6 +122,8 @@ describe('xplat schematic', () => {
       appTree = createEmptyWorkspace(appTree);
       const options: XplatHelpers.Schema = { ...defaultOptions };
       options.platforms = 'node';
+      delete options.prefix;
+      delete options.isTesting;
 
       const tree = await runSchematic('app', options, appTree);
       const files = tree.files;
