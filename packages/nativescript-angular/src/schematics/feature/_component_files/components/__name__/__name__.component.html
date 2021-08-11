@@ -7,6 +7,6 @@
 </StackLayout>
 <% } else { %>
 <StackLayout class="p-20">
-    <Label <% if (onlyProject) { %>text="<%= utils.classify(name) %>"<% } else { %>[text]="text"<% } %> class="text-center"></Label>
+    <Label <% if (onlyProject || !createBase) { %>text="<%= utils.classify(name) %>"<% } else { %>[text]="text"<% } %> class="text-center"></Label>
 </StackLayout>
 <% } %>

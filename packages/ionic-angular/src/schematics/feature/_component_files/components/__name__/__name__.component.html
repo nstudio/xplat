@@ -1,1 +1,1 @@
-<div><% if (onlyProject) { %><%= utils.classify(name) %><% } else { %>{{text}}<% } %></div>
+<div><% if (onlyProject || !createBase) { %><%= utils.classify(name) %><% } else { %>{{text}}<% } %></div>
