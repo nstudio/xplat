@@ -23,6 +23,7 @@ import {
   optionsMissingError,
   unsupportedPlatformError,
   XplatComponentHelpers,
+  XplatHelpers,
 } from '@nstudio/xplat';
 import {
   prerun,
@@ -32,19 +33,20 @@ import {
   updateJsonFile,
   supportedPlatforms,
   ITargetPlatforms,
+  PlatformTypes,
 } from '@nstudio/xplat-utils';
 import { formatFiles } from '@nrwl/workspace';
 import { addToFeature, adjustBarrelIndex } from '@nstudio/angular';
 import { ComponentHelpers } from '../../utils/xplat';
 
-let componentSettings;
+let componentSettings: XplatHelpers.IXplatGeneratorOptions;
 export default function (options: XplatComponentHelpers.Schema) {
   componentSettings = XplatComponentHelpers.prepare(options);
 
   const externalChains = [];
 
   for (const platform of componentSettings.platforms) {
-    if (supportedPlatforms.includes(platform)) {
+    if (supportedPlatforms.includes(<PlatformTypes>platform)) {
       externalChains.push((tree: Tree, context: SchematicContext) =>
         externalSchematic(
           `@nstudio/${platform}-angular`,

@@ -72,7 +72,7 @@ export namespace ComponentHelpers {
         if (platPrefix === platform || platSuffix === platform) {
           const appDir = platform === 'web' ? '/app' : '';
           const prefixPath = `apps/${fullProjectPath}/src${appDir}`;
-          const featurePath = `${prefixPath}/features/${componentSettings.featureName}`;
+          const featurePath = `${prefixPath}/features/${componentSettings.directory ? componentSettings.directory + '/' : ''}${componentSettings.featureName}`;
           const featureModulePath = `${featurePath}/${componentSettings.featureName}.module.ts`;
           const barrelIndex = `${featurePath}/components/index.ts`;
           // console.log('will adjustProject:', projectName);
@@ -142,7 +142,7 @@ export namespace ComponentHelpers {
           return adjustBarrelIndex(
             'component',
             options,
-            `libs/xplat/${xplatFolderName}/features/src/lib/${componentSettings.featureName}/components/${options.subFolder}/index.ts`,
+            `libs/xplat/${xplatFolderName}/features/src/lib/${componentSettings.directory ? componentSettings.directory + '/' : ''}${componentSettings.featureName}/components/${options.subFolder}/index.ts`,
             true
           )(tree, context);
         });
@@ -173,7 +173,7 @@ export namespace ComponentHelpers {
         return adjustBarrelIndex(
           'component',
           options,
-          `libs/xplat/${xplatFolderName}/features/src/lib/${componentSettings.featureName}/components/index.ts`,
+          `libs/xplat/${xplatFolderName}/features/src/lib/${componentSettings.directory ? componentSettings.directory + '/' : ''}${componentSettings.featureName}/components/index.ts`,
           true,
           false,
           true

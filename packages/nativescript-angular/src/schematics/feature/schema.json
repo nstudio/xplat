@@ -12,6 +12,10 @@
         "index": 0
       }
     },
+    "directory": {
+      "type": "string",
+      "description": "Create this feature within a directory inside the features area."
+    },
     "projects": {
       "type": "string",
       "description": "Project names"

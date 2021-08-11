@@ -146,9 +146,14 @@ export namespace XplatHelpers {
   }
 
   export interface IXplatGeneratorOptions {
+    directory?: string;
     featureName?: string;
     projectNames?: Array<string>;
     platforms: Array<PlatformWithNxTypes>;
+  }
+
+  export function isFeatureNxLib(featureName: string) {
+    return featureName && featureName.indexOf('@') === 0;
   }
 
   /**
@@ -950,11 +955,19 @@ export namespace XplatComponentHelpers {
     // reset module globals
     options.needsIndex = false;
     let featureName: string;
+    let directory = '';
     let projectNames = null;
     let platforms = [];
+    const isNxLib = XplatHelpers.isFeatureNxLib(featureName);
 
     if (options.feature) {
-      featureName = options.feature.toLowerCase();
+      const dirParts = options.feature.split('/');
+      if (dirParts.length) {
+        featureName = dirParts.pop().toLowerCase();
+        if (!isNxLib) {
+          directory = dirParts.join('/');
+        }
+      }
     }
     const projects = options.projects;
     if (projects) {
@@ -995,7 +1008,7 @@ export namespace XplatComponentHelpers {
         : generatorError('component');
       throw new Error(optionsMissingError(error));
     }
-    return { featureName, projectNames, platforms };
+    return { directory, featureName, projectNames, platforms };
   }
 }
 
@@ -1132,21 +1145,13 @@ export namespace XplatFeatureHelpers {
     extra: string = '',
     framework?: FrameworkTypes
   ) {
-    //Handle "/" in name
-    options.directory = options.directory || '';
-    const folderParts = options.name.split('/');
-    if (folderParts.length > 1) {
-      options.name = folderParts[folderParts.length - 1];
-      folderParts.pop();
-      options.directory = folderParts.join('/') + '/';
-    }
     let moveTo: string;
     if (target) {
       moveTo = getMoveTo(options, target, projectName, framework);
     } else {
       target = 'lib';
       moveTo = `libs/xplat/features/src/lib/${
-        options.directory
+        options.directory ? options.directory + '/' : ''
       }${options.name.toLowerCase()}`;
     }
     if (!extra) {
@@ -1185,7 +1190,7 @@ export namespace XplatFeatureHelpers {
         ...addGlobal(
           indexSourceFile,
           indexFilePath,
-          `export * from './${options.name.toLowerCase()}';`,
+          `export * from './${options.directory ? options.directory + '/' : ''}${options.name.toLowerCase()}';`,
           true
         ),
       ]);
@@ -1208,10 +1213,19 @@ export namespace XplatFeatureHelpers {
       framework
     );
 
+    let relativeDirectory = '';
+    if (options.directory) {
+      const parts = options.directory.split('/');
+      const relative = [];
+      parts.forEach(() => relative.push('..'));
+      relativeDirectory = relative.join('/') + '/';
+    }
+
     return {
       ...(options as any),
       ...getDefaultTemplateOptions(),
       name: options.name.toLowerCase(),
+      relativeDirectory,
       endingDashName,
       xplatFolderName,
     };
@@ -1230,12 +1244,12 @@ export namespace XplatFeatureHelpers {
     );
     // console.log('getMoveTo xplatFolderName:', xplatFolderName);
     const featureName = options.name.toLowerCase();
-    let moveTo = `libs/xplat/${xplatFolderName}/features/src/lib/${options.directory}${featureName}`;
+    let moveTo = `libs/xplat/${xplatFolderName}/features/src/lib/${options.directory ? options.directory + '/' : ''}${featureName}`;
     if (projectName) {
       let appDir = ['web', 'web-angular'].includes(xplatFolderName)
         ? '/app'
         : '';
-      moveTo = `apps/${projectName}/src${appDir}/features/${options.directory}${featureName}`;
+      moveTo = `apps/${projectName}/src${appDir}/features/${options.directory ? options.directory + '/' : ''}${featureName}`;
       // console.log('moveTo:', moveTo);
     }
     return moveTo;
