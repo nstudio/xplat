@@ -109,7 +109,7 @@ export default function (options: Schema) {
               configurations: {
                 build: {
                   copyTo: './dist/build.ipa',
-                }
+                },
               },
             },
             android: {
@@ -120,8 +120,8 @@ export default function (options: Schema) {
               configurations: {
                 build: {
                   copyTo: './dist/build.apk',
-                }
-              }
+                },
+              },
             },
             clean: {
               builder: '@nativescript/nx:build',

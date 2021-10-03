@@ -27,9 +27,8 @@ export const supportedNxExtraPlatforms: Array<PlatformNxExtraTypes> = [
   'node',
   'react',
 ];
-export const supportedPlatformsWithNx: Array<PlatformWithNxTypes> = supportedPlatforms.concat(
-  <any>supportedNxExtraPlatforms
-);
+export const supportedPlatformsWithNx: Array<PlatformWithNxTypes> =
+  supportedPlatforms.concat(<any>supportedNxExtraPlatforms);
 
 export const supportedFrameworks: Array<FrameworkTypes> = ['angular']; //, 'react', 'vue'];
 
@@ -154,7 +153,10 @@ export function getAppPaths(
     // check for platform via it's package (web is only app type that doesn't have a package)
     switch (type) {
       case 'nativescript':
-        if (tree.exists(`${dirPath}/nativescript.config.ts`) || tree.exists(`${dirPath}/nsconfig.json`)) {
+        if (
+          tree.exists(`${dirPath}/nativescript.config.ts`) ||
+          tree.exists(`${dirPath}/nsconfig.json`)
+        ) {
           appPaths.push(dirPath);
         }
         break;

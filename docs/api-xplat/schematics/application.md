@@ -11,6 +11,12 @@ nx generate application ...
 
 ## Options
 
+### --directory
+
+Type: `string`
+
+The directory of the new app.
+
 ### --framework
 
 Type: `string`

@@ -173,7 +173,9 @@ export function updateEnvsForNativeScript() {
         'node_modules/@nstudio/nativescript-angular/src/schematics/application/_files/webpack.config.js'
       );
       // console.log('webpackConfigPath:', webpackConfigPath);
-      let webpackConfig = fs.readFileSync(webpackConfigPath, { encoding: 'utf-8' });
+      let webpackConfig = fs.readFileSync(webpackConfigPath, {
+        encoding: 'utf-8',
+      });
       webpackConfig = webpackConfig.replace(
         'if (isXplatWorkspace) {',
         `// opt in when ready to use in your workspace\n  const xplatEnvBaseEnabled = false;\n  if (xplatEnvBaseEnabled && isXplatWorkspace) {`
@@ -327,10 +329,11 @@ export function updateWorkspaceFileReplacements() {
                       if (!updatedFileReplace) {
                         updatedFileReplace = replaceOption;
                       }
-                      updatedFileReplace.replace = updatedFileReplace.replace.replace(
-                        'libs/core',
-                        'libs/xplat/core/src/lib'
-                      );
+                      updatedFileReplace.replace =
+                        updatedFileReplace.replace.replace(
+                          'libs/core',
+                          'libs/xplat/core/src/lib'
+                        );
                     }
 
                     if (
@@ -349,9 +352,8 @@ export function updateWorkspaceFileReplacements() {
                     if (updatedFileReplace) {
                       workspaceJson.projects[name][
                         targetProp
-                      ].build.configurations[configKey].fileReplacements[
-                        i
-                      ] = updatedFileReplace;
+                      ].build.configurations[configKey].fileReplacements[i] =
+                        updatedFileReplace;
                     }
                   }
                 }
@@ -391,10 +393,11 @@ export function updateWorkspaceFileReplacements() {
                     if (!updatedFileReplace) {
                       updatedFileReplace = replaceOption;
                     }
-                    updatedFileReplace.replace = updatedFileReplace.replace.replace(
-                      'libs/core',
-                      'libs/xplat/core/src/lib'
-                    );
+                    updatedFileReplace.replace =
+                      updatedFileReplace.replace.replace(
+                        'libs/core',
+                        'libs/xplat/core/src/lib'
+                      );
                   }
 
                   if (
@@ -413,9 +416,8 @@ export function updateWorkspaceFileReplacements() {
                   if (updatedFileReplace) {
                     workspaceJson.projects[name][
                       targetProp
-                    ].default.configurations[configKey].fileReplacements[
-                      i
-                    ] = updatedFileReplace;
+                    ].default.configurations[configKey].fileReplacements[i] =
+                      updatedFileReplace;
                   }
                 }
               }

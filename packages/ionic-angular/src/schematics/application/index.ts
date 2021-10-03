@@ -235,18 +235,15 @@ export default function (options: ApplicationOptions) {
               },
             },
             lint: {
-              "builder": "@angular-eslint/builder:lint",
-              "options": {
-                "tsConfig": [
+              builder: '@angular-eslint/builder:lint',
+              options: {
+                tsConfig: [
                   `${appFolder}tsconfig.app.json`,
                   `${appFolder}tsconfig.spec.json`,
-                  `${appFolder}e2e/tsconfig.json`
+                  `${appFolder}e2e/tsconfig.json`,
                 ],
-                "lintFilePatterns": [
-                  "src/**/*.ts",
-                  "src/**/*.html"
-                ]
-              }
+                lintFilePatterns: ['src/**/*.ts', 'src/**/*.html'],
+              },
             },
             // TODO: add jest e2e configuration for ionic
             // e2e: {

@@ -152,9 +152,8 @@ export default function (options: XplatHelpers.Schema) {
           if (
             !tsConfig.compilerOptions.paths[`@${getNpmScope()}/xplat/features`]
           ) {
-            tsConfig.compilerOptions.paths[
-              `@${getNpmScope()}/xplat/features`
-            ] = [`libs/xplat/features/src/index.ts`];
+            tsConfig.compilerOptions.paths[`@${getNpmScope()}/xplat/features`] =
+              [`libs/xplat/features/src/index.ts`];
           }
           if (
             !tsConfig.compilerOptions.paths[`@${getNpmScope()}/xplat/utils`]

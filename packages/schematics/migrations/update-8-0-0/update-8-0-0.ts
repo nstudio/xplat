@@ -15,10 +15,7 @@ import {
   createOrUpdate,
   addInstallTask,
 } from '@nrwl/workspace';
-import {
-  getJsonFromFile,
-  updateJsonFile,
-} from '@nstudio/xplat-utils';
+import { getJsonFromFile, updateJsonFile } from '@nstudio/xplat-utils';
 import { stripIndents } from '@angular-devkit/core/src/utils/literals';
 
 function addDependencies() {

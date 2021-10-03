@@ -49,12 +49,10 @@ export namespace XplatNativeScriptAngularHelpers {
         angularDeps['zone.js'] = zonejsVersion;
 
         angularDevDeps['@angular-eslint/eslint-plugin'] = angularEsLintVersion;
-        angularDevDeps[
-          '@angular-eslint/eslint-plugin-template'
-        ] = angularEsLintVersion;
-        angularDevDeps[
-          '@angular-eslint/template-parser'
-        ] = angularEsLintVersion;
+        angularDevDeps['@angular-eslint/eslint-plugin-template'] =
+          angularEsLintVersion;
+        angularDevDeps['@angular-eslint/template-parser'] =
+          angularEsLintVersion;
         angularDevDeps['@angular/compiler-cli'] = angularVersion;
         angularDevDeps['@angular/language-service'] = angularVersion;
         angularDevDeps['codelyzer'] = codelyzerVersion;

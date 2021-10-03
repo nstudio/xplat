@@ -6,9 +6,10 @@ const gitMessage = require('child_process')
   .toString()
   .trim();
 
-const matchCommit = /(chore|feat|fix|cleanup|docs)\((angular|core|docs|focus|electron|ionic|nativescript|node|platform|web|utils|testing|repo|misc)\):\s(([a-z0-9:\-\s])+)/g.test(
-  gitMessage
-);
+const matchCommit =
+  /(chore|feat|fix|cleanup|docs)\((angular|core|docs|focus|electron|ionic|nativescript|node|platform|web|utils|testing|repo|misc)\):\s(([a-z0-9:\-\s])+)/g.test(
+    gitMessage
+  );
 const matchRevert = /Revert/gi.test(gitMessage);
 const matchRelease = /Release/gi.test(gitMessage);
 const exitCode = +!(matchRelease || matchRevert || matchCommit);

@@ -95,9 +95,8 @@ export default function (options: XplatHelpers.Schema) {
           // when framework initiates xplat, ensure any platform packages are installed
           for (const platform of platforms) {
             if (supportedPlatforms.includes(<PlatformTypes>platform)) {
-              devDependencies[
-                `@nstudio/${platform}-${framework}`
-              ] = xplatVersion;
+              devDependencies[`@nstudio/${platform}-${framework}`] =
+                xplatVersion;
             } else if (
               supportedPlatformsWithNx.includes(<PlatformWithNxTypes>platform)
             ) {

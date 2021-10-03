@@ -404,7 +404,9 @@ export function addToFeature(
     featureName = 'core';
     featurePath = `${prefixPath}/${featureName}${srcSubFolderPath}`;
   } else {
-    featurePath = `${prefixPath}/features${srcSubFolderPath}/${directory ? directory + '/' : ''}${featureName}`;
+    featurePath = `${prefixPath}/features${srcSubFolderPath}/${
+      directory ? directory + '/' : ''
+    }${featureName}`;
   }
 
   const featureModulePath = `${featurePath}/${featureName}.module.ts`;
@@ -911,7 +913,9 @@ export function adjustRouting(
           routingModulePath,
           `{ 
               path: '${featureName}',
-              loadChildren: () => import('./features/${options.directory ? options.directory + '/' : ''}${featureName}/${featureName}.module').then(m => m.${stringUtils.classify(
+              loadChildren: () => import('./features/${
+                options.directory ? options.directory + '/' : ''
+              }${featureName}/${featureName}.module').then(m => m.${stringUtils.classify(
             featureName
           )}Module)
           }`
@@ -957,9 +961,8 @@ export function adjustSandbox(
               buttonEndIndex = homeTemplate.lastIndexOf(`</label>`);
             }
           } else {
-            const buttonClassStartIndex = homeTemplate.lastIndexOf(
-              'class="btn '
-            );
+            const buttonClassStartIndex =
+              homeTemplate.lastIndexOf('class="btn ');
             if (buttonClassStartIndex > -1) {
               // using custom button class
               customBtnClass =

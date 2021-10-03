@@ -22,9 +22,8 @@ export namespace XplatIonicHelpers {
           ] = `file:libs/xplat/web/scss/src`;
         }
         dependencies['@ionic-native/core'] = ionicNativeCoreVersion;
-        dependencies[
-          '@ionic-native/splash-screen'
-        ] = ionicNativeSplashScreenVersion;
+        dependencies['@ionic-native/splash-screen'] =
+          ionicNativeSplashScreenVersion;
         dependencies['@ionic-native/status-bar'] = ionicNativeStatusbarVersion;
       } else {
         dependencies['@ionic/core'] = ionicCore;

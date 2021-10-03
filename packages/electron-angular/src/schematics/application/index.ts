@@ -111,23 +111,17 @@ export default function (options: XplatElectrontHelpers.SchemaApp) {
           ignore: ['**/*.ts'],
           output: '',
         });
-        if (targetConfig[
-          targetProp
-        ].serve.options) {
+        if (targetConfig[targetProp].serve.options) {
           targetConfig[
             targetProp
           ].serve.options.browserTarget = `${electronAppName}:build`;
         }
-        if (targetConfig[
-          targetProp
-        ].serve.configurations.production) {
+        if (targetConfig[targetProp].serve.configurations.production) {
           targetConfig[
             targetProp
           ].serve.configurations.production.browserTarget = `${electronAppName}:build:production`;
         }
-        if (targetConfig[
-          targetProp
-        ].serve.configurations.development) {
+        if (targetConfig[targetProp].serve.configurations.development) {
           targetConfig[
             targetProp
           ].serve.configurations.development.browserTarget = `${electronAppName}:build:development`;

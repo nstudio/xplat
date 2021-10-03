@@ -1190,7 +1190,9 @@ export namespace XplatFeatureHelpers {
         ...addGlobal(
           indexSourceFile,
           indexFilePath,
-          `export * from './${options.directory ? options.directory + '/' : ''}${options.name.toLowerCase()}';`,
+          `export * from './${
+            options.directory ? options.directory + '/' : ''
+          }${options.name.toLowerCase()}';`,
           true
         ),
       ]);
@@ -1244,12 +1246,16 @@ export namespace XplatFeatureHelpers {
     );
     // console.log('getMoveTo xplatFolderName:', xplatFolderName);
     const featureName = options.name.toLowerCase();
-    let moveTo = `libs/xplat/${xplatFolderName}/features/src/lib/${options.directory ? options.directory + '/' : ''}${featureName}`;
+    let moveTo = `libs/xplat/${xplatFolderName}/features/src/lib/${
+      options.directory ? options.directory + '/' : ''
+    }${featureName}`;
     if (projectName) {
       let appDir = ['web', 'web-angular'].includes(xplatFolderName)
         ? '/app'
         : '';
-      moveTo = `apps/${projectName}/src${appDir}/features/${options.directory ? options.directory + '/' : ''}${featureName}`;
+      moveTo = `apps/${projectName}/src${appDir}/features/${
+        options.directory ? options.directory + '/' : ''
+      }${featureName}`;
       // console.log('moveTo:', moveTo);
     }
     return moveTo;

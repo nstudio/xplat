@@ -92,7 +92,9 @@ export namespace XplatIonicAngularHelpers {
       if (!hasCapacitorAppDeps) {
         dependencies[`@capacitor/status-bar`] = capacitorPluginsVersion;
       }
-      const hasCapacitorCli = packageJson.dependencies['@capacitor/cli'] || packageJson.devDependencies['@capacitor/cli'];
+      const hasCapacitorCli =
+        packageJson.dependencies['@capacitor/cli'] ||
+        packageJson.devDependencies['@capacitor/cli'];
       if (!hasCapacitorCli) {
         devDependencies[`@capacitor/cli`] = capacitorVersion;
       }

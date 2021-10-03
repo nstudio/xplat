@@ -13,6 +13,8 @@ nx generate app-generate ...
 
 ### --framework
 
+Default: `angular`
+
 Type: `string`
 
 Frontend framework.

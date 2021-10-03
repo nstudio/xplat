@@ -27,6 +27,12 @@ Type: `boolean`
 
 Create base component for maximum code sharing.
 
+### --directory
+
+Type: `string`
+
+Create this feature within a directory inside the features area.
+
 ### --name
 
 Type: `string`

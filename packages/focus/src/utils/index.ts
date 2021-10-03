@@ -255,7 +255,9 @@ export namespace FocusHelpers {
       let vscodeCreateSettingsNote = `It's possible you don't have a user settings.json yet. If so, open VS Code User settings and save any kind of setting to have it created.`;
       // console.log('isVsCode:',isVsCode);
       if (isVsCode) {
-        const userSettings = readFileSync(userSettingsVSCodePath, { encoding: 'utf-8' });
+        const userSettings = readFileSync(userSettingsVSCodePath, {
+          encoding: 'utf-8',
+        });
         if (userSettings) {
           const userSettingsJson = jsonParse(userSettings);
           let exclude = userSettingsJson['files.exclude'];
@@ -373,7 +375,9 @@ export namespace FocusHelpers {
       // console.log('workspaceSettingsPath:',workspaceSettingsPath);
       let workspaceSettingsJson: any = {};
       if (existsSync(workspaceSettingsPath)) {
-        const workspaceSettings = readFileSync(workspaceSettingsPath, { encoding: 'utf-8' });
+        const workspaceSettings = readFileSync(workspaceSettingsPath, {
+          encoding: 'utf-8',
+        });
         workspaceSettingsJson = jsonParse(workspaceSettings);
         const exclude = workspaceSettingsJson['files.exclude'];
         workspaceSettingsJson['files.exclude'] = Object.assign(

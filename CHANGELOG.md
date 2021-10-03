@@ -1,68 +1,48 @@
 # [12.7.0](https://github.com/nstudio/xplat/compare/12.5.1...12.7.0) (2021-08-11)
 
-
 ### Bug Fixes
 
-* **core:** ensure feature generator components honor createBase option ([1c2bcc8](https://github.com/nstudio/xplat/commit/1c2bcc8d69f0a9589ee0c513dad876f0dc8ef672))
-
+- **core:** ensure feature generator components honor createBase option ([1c2bcc8](https://github.com/nstudio/xplat/commit/1c2bcc8d69f0a9589ee0c513dad876f0dc8ef672))
 
 ### Features
 
-* **core:** allow directory option for feature generator ([c635f98](https://github.com/nstudio/xplat/commit/c635f98f9ae53ab14c9771a44bf438912432bfbf))
-* **core:** handling sub directory with feature generation ([#276](https://github.com/nstudio/xplat/issues/276)) ([959d3d8](https://github.com/nstudio/xplat/commit/959d3d820907dc0899edce6fddedd3f832701974)), closes [/github.com/nstudio/xplat/issues/275#issuecomment-878208786](https://github.com//github.com/nstudio/xplat/issues/275/issues/issuecomment-878208786)
-* **core:** Nx 12.6 ([b433835](https://github.com/nstudio/xplat/commit/b433835e11f5c49b607db2d9f24bbb061edba75d))
-
-
+- **core:** allow directory option for feature generator ([c635f98](https://github.com/nstudio/xplat/commit/c635f98f9ae53ab14c9771a44bf438912432bfbf))
+- **core:** handling sub directory with feature generation ([#276](https://github.com/nstudio/xplat/issues/276)) ([959d3d8](https://github.com/nstudio/xplat/commit/959d3d820907dc0899edce6fddedd3f832701974)), closes [/github.com/nstudio/xplat/issues/275#issuecomment-878208786](https://github.com//github.com/nstudio/xplat/issues/275/issues/issuecomment-878208786)
+- **core:** Nx 12.6 ([b433835](https://github.com/nstudio/xplat/commit/b433835e11f5c49b607db2d9f24bbb061edba75d))
 
 ## [12.5.1](https://github.com/nstudio/xplat/compare/12.5.0...12.5.1) (2021-07-03)
 
-
 ### Bug Fixes
 
-* **nativescript:** postinstall ([a573d3a](https://github.com/nstudio/xplat/commit/a573d3a15bc7a09d267c320d696625c676784984))
-
-
+- **nativescript:** postinstall ([a573d3a](https://github.com/nstudio/xplat/commit/a573d3a15bc7a09d267c320d696625c676784984))
 
 # [12.5.0](https://github.com/nstudio/xplat/compare/12.4.2...12.5.0) (2021-06-30)
 
-
 ### Features
 
-* support Nx 12.5 ([615dbf6](https://github.com/nstudio/xplat/commit/615dbf6acc72c8ab0b59aa3c6e7890451d2ff702))
-
-
+- support Nx 12.5 ([615dbf6](https://github.com/nstudio/xplat/commit/615dbf6acc72c8ab0b59aa3c6e7890451d2ff702))
 
 ## [12.4.2](https://github.com/nstudio/xplat/compare/12.4.1...12.4.2) (2021-06-26)
 
-
 ### Features
 
-* **core:** migration to 12.4.2 ([7c3dc16](https://github.com/nstudio/xplat/commit/7c3dc1636fa33abc40898c9080a70829fccdf985))
-
-
+- **core:** migration to 12.4.2 ([7c3dc16](https://github.com/nstudio/xplat/commit/7c3dc1636fa33abc40898c9080a70829fccdf985))
 
 ## [12.4.1](https://github.com/nstudio/xplat/compare/12.4.0...12.4.1) (2021-06-26)
 
-
 ### Bug Fixes
 
-* **electron:** api updates for TS 4.2.x ([976c709](https://github.com/nstudio/xplat/commit/976c709fd3f487c3ed34b44adc2d7e7450f782bd))
-
+- **electron:** api updates for TS 4.2.x ([976c709](https://github.com/nstudio/xplat/commit/976c709fd3f487c3ed34b44adc2d7e7450f782bd))
 
 ### Features
 
-* **ionic:** update deps for angular 12 and cap 3 ([1140acf](https://github.com/nstudio/xplat/commit/1140acf14d86166a94a956c4a4c2eb2b8a9ed90a))
-
-
+- **ionic:** update deps for angular 12 and cap 3 ([1140acf](https://github.com/nstudio/xplat/commit/1140acf14d86166a94a956c4a4c2eb2b8a9ed90a))
 
 # [12.4.0](https://github.com/nstudio/xplat/compare/12.0.0...12.4.0) (2021-06-25)
 
-
 ### Features
 
-* Nx 12.4 compat with Angular 12 + NativeScript 8 and improved webpack + dep handling ([#271](https://github.com/nstudio/xplat/issues/271)) ([5d75252](https://github.com/nstudio/xplat/commit/5d75252c569641538163f1b37f0f454ed913a20d))
-
-
+- Nx 12.4 compat with Angular 12 + NativeScript 8 and improved webpack + dep handling ([#271](https://github.com/nstudio/xplat/issues/271)) ([5d75252](https://github.com/nstudio/xplat/commit/5d75252c569641538163f1b37f0f454ed913a20d))
 
 ## [12.0.1](https://github.com/nstudio/xplat/compare/11.1.1...12.0.1) (2021-04-18)
 

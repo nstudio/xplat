@@ -31,8 +31,9 @@ function generateSchematicList(
 ): Promise<Schematic<any, any>>[] {
   const schematicCollectionFile = path.join(config.root, 'collection.json');
   fs.removeSync(config.schematicOutput);
-  const schematicCollection = fs.readJsonSync(schematicCollectionFile)
-    .schematics;
+  const schematicCollection = fs.readJsonSync(
+    schematicCollectionFile
+  ).schematics;
   return Object.keys(schematicCollection).map((schematicName) => {
     const schematic = {
       name: schematicName,
@@ -56,48 +57,50 @@ function generateSchematicList(
 }
 
 function generateTemplate(schematic): { name: string; template: string } {
-  let template = dedent`
-    # ${schematic.name} ${schematic.hidden ? '[hidden]' : ''}
-    ${schematic.description}
-  
-    ## Usage
-    \`\`\`bash
-    nx generate ${schematic.name} ...
-    ${schematic.alias ? `nx g ${schematic.name} ... # Same` : ''}
-    \`\`\`
-    \n`;
+  if (schematic) {
+    let template = dedent`
+      # ${schematic.name} ${schematic.hidden ? '[hidden]' : ''}
+      ${schematic.description}
+    
+      ## Usage
+      \`\`\`bash
+      nx generate ${schematic.name} ...
+      ${schematic.alias ? `nx g ${schematic.name} ... # Same` : ''}
+      \`\`\`
+      \n`;
 
-  if (Array.isArray(schematic.options) && !!schematic.options.length) {
-    template += '## Options';
+    if (Array.isArray(schematic.options) && !!schematic.options.length) {
+      template += '## Options';
 
-    schematic.options
-      .sort((a, b) => sortAlphabeticallyFunction(a.name, b.name))
-      .forEach(
-        (option) =>
-          (template += dedent`
-          ### --${option.name} ${option.required ? '(*__required__*)' : ''} ${
-            option.hidden ? '(__hidden__)' : ''
-          }
-          
-          ${
-            !!option.aliases.length
-              ? `Alias(es): ${option.aliases.join(',')}\n`
-              : ''
-          }
-          ${
-            option.default === undefined || option.default === ''
-              ? ''
-              : `Default: \`${option.default}\`\n`
-          }
-          Type: \`${option.type}\` \n 
-          
-          
-          ${option.description}
-        `)
-      );
+      schematic.options
+        .sort((a, b) => sortAlphabeticallyFunction(a.name, b.name))
+        .forEach(
+          (option) =>
+            (template += dedent`
+            ### --${option.name} ${option.required ? '(*__required__*)' : ''} ${
+              option.hidden ? '(__hidden__)' : ''
+            }
+            
+            ${
+              !!option.aliases.length
+                ? `Alias(es): ${option.aliases.join(',')}\n`
+                : ''
+            }
+            ${
+              option.default === undefined || option.default === ''
+                ? ''
+                : `Default: \`${option.default}\`\n`
+            }
+            Type: \`${option.type}\` \n 
+            
+            
+            ${option.description}
+          `)
+        );
+    }
+    return { name: schematic.name, template };
   }
-
-  return { name: schematic.name, template };
+  return null;
 }
 
 Promise.all(

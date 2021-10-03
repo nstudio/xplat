@@ -18,15 +18,19 @@ export function generateFile(
   outputDirectory: string,
   templateObject: { name: string; template: string }
 ): void {
-  fs.outputFileSync(
-    path.join(outputDirectory, `${templateObject.name}.md`),
-    templateObject.template
-  );
+  if (templateObject) {
+    fs.outputFileSync(
+      path.join(outputDirectory, `${templateObject.name}.md`),
+      templateObject.template
+    );
+  }
 }
 
-export function getXplatPackageDependencies(
-  packageJsonPath: string
-): { name: string; dependencies: string[]; peerDependencies: string[] } {
+export function getXplatPackageDependencies(packageJsonPath: string): {
+  name: string;
+  dependencies: string[];
+  peerDependencies: string[];
+} {
   const packageJson = fs.readJsonSync(packageJsonPath);
   if (!packageJson) {
     console.log(`No package.json found at: ${packageJsonPath}`);

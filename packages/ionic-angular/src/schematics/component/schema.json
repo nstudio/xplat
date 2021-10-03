@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "$id": "component",
+  "$id": "componentIonic",
   "title": "Create an ionic-angular component in xplat.",
   "type": "object",
   "properties": {

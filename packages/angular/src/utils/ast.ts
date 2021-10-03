@@ -185,7 +185,9 @@ export function addSymbolToNgModuleMetadata(
     return [];
   }
   // Get all the children property assignment of object literals.
-  const matchingProperties: ts.ObjectLiteralElement[] = (node as ts.ObjectLiteralExpression).properties
+  const matchingProperties: ts.ObjectLiteralElement[] = (
+    node as ts.ObjectLiteralExpression
+  ).properties
     .filter((prop) => prop.kind == ts.SyntaxKind.PropertyAssignment)
     // Filter out every fields that's not "metadataField". Also handles string literals
     // (but not expressions).
@@ -259,7 +261,7 @@ export function addSymbolToNgModuleMetadata(
 
   const isArray = Array.isArray(node);
   if (isArray) {
-    const nodeArray = (node as {}) as Array<ts.Node>;
+    const nodeArray = node as {} as Array<ts.Node>;
     const symbolsArray = nodeArray.map((node) => node.getText());
     if (symbolsArray.includes(expression)) {
       return [];
