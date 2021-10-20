@@ -2,7 +2,6 @@ import {
   XplatHelpers,
   missingArgument,
   getDefaultTemplateOptions,
-  updateNxProjects,
   updatePackageScripts,
 } from '@nstudio/xplat';
 import { prerun, getAppName, getPrefix } from '@nstudio/xplat-utils';
@@ -18,6 +17,7 @@ import {
   url,
   template,
   move,
+  externalSchematic,
 } from '@angular-devkit/schematics';
 import { Schema } from './schema';
 import { XplatIonicHelpers } from '../../utils';
@@ -92,11 +92,9 @@ export default function (options: Schema) {
       });
     },
     (tree: Tree) => {
-      const projects = {};
-      projects[`${options.name}`] = {
-        tags: [],
-      };
-      return updateNxProjects(tree, projects);
+      return externalSchematic('@nrwl/workspace', 'convert-to-nx-project', {
+        project: options.name
+      });
     },
     <any>formatFiles({ skipFormat: options.skipFormat }),
   ]);

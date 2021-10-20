@@ -19,20 +19,20 @@ export async function updateConfig() {
   }
 
   // console.log(process.cwd());
-  let configFilename = 'workspace.json';
-  let workspaceConfigPath = path.join(
+  let configFilename = 'nx.json';
+  let nxConfigPath = path.join(
     process.cwd(),
     '/../../..',
     configFilename
   );
-  if (!fs.existsSync(workspaceConfigPath)) {
+  if (!fs.existsSync(nxConfigPath)) {
     configFilename = 'angular.json';
-    workspaceConfigPath = path.join(process.cwd(), '/../../..', configFilename);
+    nxConfigPath = path.join(process.cwd(), '/../../..', configFilename);
   }
   // console.log(workspaceConfigPath);
   try {
     let ngCli: any;
-    let config = fs.readFileSync(workspaceConfigPath, { encoding: 'utf-8' });
+    let config = fs.readFileSync(nxConfigPath, { encoding: 'utf-8' });
     if (config) {
       ngCli = JSON.parse(config);
       // update default
@@ -48,7 +48,7 @@ export async function updateConfig() {
         },
       };
     }
-    fs.writeFileSync(workspaceConfigPath, JSON.stringify(ngCli, null, 2));
+    fs.writeFileSync(nxConfigPath, JSON.stringify(ngCli, null, 2));
   } catch (err) {
     console.warn(
       `An issue was detected during installation: ${configFilename} does not exist.`

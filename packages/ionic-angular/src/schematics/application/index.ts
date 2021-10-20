@@ -18,7 +18,6 @@ import { addInstallTask, formatFiles, updateWorkspace } from '@nrwl/workspace';
 import {
   stringUtils,
   updatePackageScripts,
-  updateNxProjects,
   missingArgument,
   getDefaultTemplateOptions,
   XplatHelpers,
@@ -290,11 +289,9 @@ export default function (options: ApplicationOptions) {
       });
     },
     (tree: Tree) => {
-      const projects = {};
-      projects[`${options.name}`] = {
-        tags: [],
-      };
-      return updateNxProjects(tree, projects);
+      return externalSchematic('@nrwl/workspace', 'convert-to-nx-project', {
+        project: options.name
+      });
     },
     <any>formatFiles({ skipFormat: options.skipFormat }),
   ]);

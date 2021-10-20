@@ -16,7 +16,6 @@ import {
 import { formatFiles, updateWorkspace } from '@nrwl/workspace';
 import {
   stringUtils,
-  updateNxProjects,
   updatePackageScripts,
   missingArgument,
   getDefaultTemplateOptions,
@@ -138,14 +137,12 @@ export default function (options: XplatElectrontHelpers.SchemaApp) {
         });
       });
     },
-    (tree: Tree) => {
-      const projects = {};
-      projects[`${options.name}`] = {
-        tags: [],
-      };
-      return updateNxProjects(tree, projects);
-    },
     options.useXplat ? (tree: Tree) => adjustAppFiles(options, tree) : noop(),
+    (tree: Tree) => {
+      return externalSchematic('@nrwl/workspace', 'convert-to-nx-project', {
+        project: options.name
+      });
+    },
 
     formatFiles({ skipFormat: options.skipFormat }),
     XplatElectrontHelpers.noteAppCommands(options),

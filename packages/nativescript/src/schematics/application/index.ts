@@ -16,7 +16,6 @@ import {
 } from '@angular-devkit/schematics';
 import {
   updatePackageScripts,
-  updateNxProjects,
   missingArgument,
   getDefaultTemplateOptions,
   XplatHelpers,
@@ -134,11 +133,9 @@ export default function (options: Schema) {
       });
     },
     (tree: Tree) => {
-      const projects = {};
-      projects[`${options.name}`] = {
-        tags: [],
-      };
-      return updateNxProjects(tree, projects);
+      return externalSchematic('@nrwl/workspace', 'convert-to-nx-project', {
+        project: options.name
+      });
     },
     (tree: Tree) => {
       output.log({

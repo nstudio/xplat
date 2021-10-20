@@ -16,7 +16,6 @@ import {
 } from '@angular-devkit/schematics';
 import {
   updatePackageScripts,
-  updateNxProjects,
   missingArgument,
   getDefaultTemplateOptions,
   XplatHelpers,
@@ -39,7 +38,6 @@ import {
   nsNgFonticonVersion,
   ngxTranslateVersion,
   nsThemeCoreVersion,
-  codelyzerVersion,
   rxjsVersion,
   zonejsVersion,
   nsWebpackVersion,
@@ -195,11 +193,9 @@ export default function (options: Schema) {
       });
     },
     (tree: Tree) => {
-      const projects = {};
-      projects[`${options.name}`] = {
-        tags: [],
-      };
-      return updateNxProjects(tree, projects);
+      return externalSchematic('@nrwl/workspace', 'convert-to-nx-project', {
+        project: options.name
+      });
     },
     (tree: Tree) => {
       output.log({
@@ -244,7 +240,6 @@ function addAppFiles(
           nsCoreVersion: nsCoreVersion,
           rxjsVersion: rxjsVersion,
           zonejsVersion: zonejsVersion,
-          codelyzerVersion: codelyzerVersion,
           typescriptVersion: typescriptVersion,
           xplatFolderName: XplatHelpers.getXplatFoldername(
             'nativescript',

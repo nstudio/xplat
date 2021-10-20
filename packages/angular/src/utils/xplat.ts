@@ -47,9 +47,7 @@ import {
   rxjsVersion,
   zonejsVersion,
   angularDevkitVersion,
-  codelyzerVersion,
   xplatVersion,
-  jestJasmine2,
   jestPresetAngular,
   typesJest,
 } from './versions';
@@ -235,7 +233,6 @@ export namespace XplatAngularHelpers {
         devDependencies[`@angular/compiler-cli`] = angularVersion;
         devDependencies[`@angular/language-service`] = angularVersion;
         devDependencies[`@angular-devkit/build-angular`] = angularDevkitVersion;
-        devDependencies[`codelyzer`] = codelyzerVersion;
       }
 
       if (!packageJson.devDependencies['@nrwl/angular']) {
@@ -259,7 +256,6 @@ export namespace XplatAngularHelpers {
         devDependencies: {
           ...devDependencies,
           '@types/jest': typesJest,
-          'jest-jasmine2': jestJasmine2,
           'jest-preset-angular': jestPresetAngular,
         },
       })(tree, context);
