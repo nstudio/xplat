@@ -157,14 +157,6 @@ export function updateWorkspace(updates: any) {
   });
 }
 
-export function updateNxProjects(tree: Tree, projects: any) {
-  const path = 'nx.json';
-  const nxJson = getJsonFromFile(tree, path);
-  const projectsMap = Object.assign({}, nxJson.projects);
-  nxJson.projects = Object.assign(projectsMap, projects);
-  return updateJsonFile(tree, path, nxJson);
-}
-
 // export function persistPrefix(prefix: string) {
 //   return (tree: Tree) => {
 //     const nxConfig = getNxWorkspaceConfig(tree);

@@ -14,7 +14,6 @@ import {
   ngToolsWebpack,
   ngxTranslateVersion,
   rxjsVersion,
-  codelyzerVersion,
   zonejsVersion,
   angularEsLintVersion,
   nsEsLintVersion,
@@ -55,7 +54,6 @@ export namespace XplatNativeScriptAngularHelpers {
           angularEsLintVersion;
         angularDevDeps['@angular/compiler-cli'] = angularVersion;
         angularDevDeps['@angular/language-service'] = angularVersion;
-        angularDevDeps['codelyzer'] = codelyzerVersion;
       }
       return XplatHelpers.updatePackageForXplat(options, {
         dependencies: {

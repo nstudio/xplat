@@ -103,49 +103,6 @@ describe('app', () => {
     expect(tree.exists('/apps/web/foo/src/app/app.module.ts')).toBeTruthy();
   });
 
-  it('should create all files for web app using addHeadlessE2e', async () => {
-    const options: Schema = {
-      ...defaultOptions,
-      addHeadlessE2e: true,
-    };
-    options.e2eTestRunner = 'protractor';
-    const tree = await runSchematic('app', options, appTree);
-    const files = tree.files;
-    const appName = 'web-foo';
-    // console.log(files);
-
-    expect(
-      files.indexOf(`/apps/${appName}/tsconfig.json`)
-    ).toBeGreaterThanOrEqual(0);
-    expect(
-      files.indexOf(`/apps/${appName}/src/main.ts`)
-    ).toBeGreaterThanOrEqual(0);
-    expect(
-      files.indexOf(`/apps/${appName}/src/app/app.module.ts`)
-    ).toBeGreaterThanOrEqual(0);
-    expect(
-      files.indexOf(`/apps/${appName}-e2e/protractor.headless.js`)
-    ).toBeGreaterThanOrEqual(0);
-
-    let checkPath = `/apps/${appName}/src/app/app.component.html`;
-    expect(files.indexOf(checkPath)).toBeGreaterThanOrEqual(0);
-
-    checkPath = '/package.json';
-    expect(files.indexOf(checkPath)).toBeGreaterThanOrEqual(0);
-
-    let checkFile = getFileContent(tree, checkPath);
-
-    checkPath = '/angular.json';
-    expect(files.indexOf(checkPath)).toBeGreaterThanOrEqual(0);
-
-    checkFile = getFileContent(tree, checkPath);
-    // console.log(checkFile);
-    // const angularJson: any = jsonParse(checkFile);
-    // expect(
-    //   angularJson.projects[`${appName}-e2e`].architect.e2e.configurations.ci
-    // ).toBeDefined();
-  });
-
   // it('should create app with --framework flag Ionic', async () => {
   //   const options: Schema = { ...defaultOptions };
   //   const tree = await runSchematic('app', options, appTree);

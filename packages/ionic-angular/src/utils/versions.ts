@@ -19,11 +19,10 @@ export const karmaJasmineVersion = '~4.0.0';
 export const karmaJasmineHtmlVersion = '^1.5.0';
 export const typescriptVersion = '~4.3.5';
 
-export const angularVersion = '^12.0.0';
-export const angularDevkitVersion = '^12.0.0';
+export const angularVersion = '^12.2.0';
+export const angularDevkitVersion = '~12.2.0';
 export const ngxTranslateVersion = '~13.0.0';
 export const ngxTranslateHttpVersion = '~6.0.0';
 export const coreJsVersion = '^3.6.5';
-export const rxjsVersion = '^6.6.0';
+export const rxjsVersion = '^7.4.0';
 export const zonejsVersion = '~0.11.4';
-export const codelyzerVersion = '~6.0.0';

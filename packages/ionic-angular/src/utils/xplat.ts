@@ -13,7 +13,6 @@ import {
   coreJsVersion,
   rxjsVersion,
   zonejsVersion,
-  codelyzerVersion,
   ngxTranslateVersion,
   ngxTranslateHttpVersion,
   xplatVersion,
@@ -65,7 +64,6 @@ export namespace XplatIonicAngularHelpers {
         devDependencies[`@angular/cli`] = angularVersion;
         devDependencies[`@angular/compiler-cli`] = angularVersion;
         devDependencies[`@angular/language-service`] = angularVersion;
-        devDependencies[`codelyzer`] = codelyzerVersion;
       }
 
       const hasIonicAngularDeps = packageJson.dependencies['@ionic/angular'];
@@ -116,7 +114,6 @@ export namespace XplatIonicAngularHelpers {
           '@ionic/angular-toolkit': ionicAngularToolkitVersion,
           '@types/jasmine': '~3.6.2',
           '@types/jasminewd2': '~2.0.3',
-          codelyzer: codelyzerVersion,
           'jasmine-core': jasmineCoreVersion,
           'jasmine-spec-reporter': jasmineSpecVersion,
           karma: karmaVersion,

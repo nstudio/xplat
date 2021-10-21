@@ -7,11 +7,10 @@
     "postinstall": "node ./tools/xplat-postinstall.js"
   },
   "dependencies": {
-    "nativescript-theme-core": "file:<%= pathOffset %>node_modules/nativescript-theme-core",
-    "@nativescript/core": "<%= nsCoreVersion %>"
+    "@nativescript/core": "*"
   },
   "devDependencies": {
-    "@nativescript/webpack": "beta",
-    "typescript": "file:<%= pathOffset %>node_modules/typescript"
+    "@nativescript/android": "~8.1.1",
+    "@nativescript/ios": "~8.1.0"
   }
 }
