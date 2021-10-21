@@ -30,9 +30,9 @@
       "description": "Migrate workspace to 12.4.3",
       "factory": "./migrations/update-12-4-3/update-12-4-3"
     },
-    "update-to-13.0.0": {
-      "version": "13.0.0",
-      "description": "Migrate workspace to 13.0.0",
+    "update-to-13.0.1": {
+      "version": "13.0.1",
+      "description": "Migrate workspace to 13.0.1",
       "factory": "./migrations/update-13-0-0/update-13-0-0"
     }
   },
@@ -119,47 +119,46 @@
         }
       }
     },
-    "13.0.0": {
-      "version": "13.0.0",
+    "13.0.1": {
+      "version": "13.0.1",
       "packages": {
         "@nstudio/angular": {
-          "version": "13.0.0",
+          "version": "13.0.1",
           "alwaysAddToPackageJson": false
         },
         "@nstudio/electron": {
-          "version": "13.0.0",
+          "version": "13.0.1",
           "alwaysAddToPackageJson": false
         },
         "@nstudio/electron-angular": {
-          "version": "13.0.0",
+          "version": "13.0.1",
           "alwaysAddToPackageJson": false
         },
         "@nstudio/ionic": {
-          "version": "13.0.0",
+          "version": "13.0.1",
           "alwaysAddToPackageJson": false
         },
         "@nstudio/ionic-angular": {
-          "version": "13.0.0",
+          "version": "13.0.1",
           "alwaysAddToPackageJson": false
         },
         "@nstudio/nativescript": {
-          "version": "13.0.0",
+          "version": "13.0.1",
           "alwaysAddToPackageJson": false
         },
         "@nstudio/nativescript-angular": {
-          "version": "13.0.0",
+          "version": "13.0.1",
           "alwaysAddToPackageJson": false
         },
         "@nstudio/web": {
-          "version": "13.0.0",
+          "version": "13.0.1",
           "alwaysAddToPackageJson": false
         },
         "@nstudio/web-angular": {
-          "version": "13.0.0",
+          "version": "13.0.1",
           "alwaysAddToPackageJson": false
         }
       }
     }
-  }
   }
 }
