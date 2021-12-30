@@ -46,11 +46,6 @@
       "enum": ["Emulated", "Native", "None"],
       "type": "string"
     },
-    "enableIvy": {
-      "description": "Use the Ivy rendering engine.",
-      "type": "boolean",
-      "default": false
-    },
     "prefix": {
       "type": "string",
       "format": "html-selector",

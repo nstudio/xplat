@@ -28,9 +28,9 @@ npx create-nx-workspace@latest
 
 At the prompts:
 
-> provide a name
+> What to create in the new workspace
 
-> choose `empty`
+> choose `apps`
 
 ```
 npm i @nstudio/xplat -D

@@ -5,7 +5,6 @@ import {
 } from '@angular-devkit/schematics';
 import {
   stringUtils as nxStringUtils,
-  serializeJson,
   updateWorkspaceInTree,
   readJsonInTree,
   getWorkspacePath,

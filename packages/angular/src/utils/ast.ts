@@ -10,7 +10,7 @@ import {
 } from '@nrwl/workspace/src/utils/ast-utils';
 import { Tree } from '@angular-devkit/schematics';
 import * as path from 'path';
-import { toFileName } from '@nrwl/workspace';
+import { toFileName } from '@nstudio/xplat-utils';
 
 export function addToCollection(
   source: ts.SourceFile,

@@ -64,6 +64,16 @@ export default function (options: Schema) {
         ...options,
         skipInstall: true,
       };
+      // remove non schema validated properties
+      delete nrwlWebOptions.groupByName;
+      delete nrwlWebOptions.useXplat;
+      delete nrwlWebOptions.skipInstall;
+      delete (<any>nrwlWebOptions).platforms;
+      delete (<any>nrwlWebOptions).framework;
+      delete (<any>nrwlWebOptions).isTesting;
+      delete (<any>nrwlWebOptions).target;
+      delete (<any>nrwlWebOptions).npmScope;
+      delete (<any>nrwlWebOptions).setupSandbox;
       let executionOptions: Partial<ExecutionOptions>;
       if (options.useXplat) {
         // when generating xplat architecture, ensure:

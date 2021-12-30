@@ -12,8 +12,7 @@ import {
   SchematicContext,
   SchematicsException,
 } from '@angular-devkit/schematics';
-import { parseJson } from '@nrwl/devkit';
-import { createOrUpdate, serializeJson } from '@nrwl/workspace';
+import { parseJson, serializeJson } from '@nrwl/devkit';
 
 export const supportedPlatforms: Array<PlatformTypes> = [
   'web',
@@ -315,4 +314,11 @@ export function parseProjectNameFromPath(input: string): string {
     input = input.split('/').pop();
   }
   return input;
+}
+
+export function toFileName(s: string): string {
+  return s
+    .replace(/([a-z\d])([A-Z])/g, '$1_$2')
+    .toLowerCase()
+    .replace(/[ _]/g, '-');
 }

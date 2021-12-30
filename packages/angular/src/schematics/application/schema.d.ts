@@ -11,7 +11,6 @@ export interface Schema {
   inlineTemplate?: boolean;
   viewEncapsulation?: 'Emulated' | 'Native' | 'None';
   routing?: boolean;
-  enableIvy?: boolean;
   prefix?: string;
   style?: string;
   skipTests?: boolean;

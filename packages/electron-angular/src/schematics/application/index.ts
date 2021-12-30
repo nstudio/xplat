@@ -86,6 +86,9 @@ export default function (options: XplatElectrontHelpers.SchemaApp) {
       }
 
       const electronAppName = options.name;
+      if (!targetConfig.root) {
+        targetConfig.root = `apps/${electronAppName}`;
+      }
       let targetProp = 'architect';
       if (!targetConfig[targetProp]) {
         targetProp = 'targets'; // nx 11 moved to 'targets'
