@@ -50,7 +50,7 @@ describe('app', () => {
       files.indexOf('/apps/nativescript-foo/src/app-root.xml')
     ).toBeGreaterThanOrEqual(0);
     expect(
-      files.indexOf('/apps/nativescript-foo/src/app.css')
+      files.indexOf('/apps/nativescript-foo/src/app.scss')
     ).toBeGreaterThanOrEqual(0);
     expect(
       files.indexOf('/apps/nativescript-foo/src/app.ts')

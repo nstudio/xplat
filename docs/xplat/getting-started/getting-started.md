@@ -8,8 +8,8 @@ npx create-nx-workspace myworkspace
 
 **Note:** We recommend the following options when creating your Nx workspace:
 
-- Choose `Empty`
-- Choose `Nx` cli
+- Choose `Apps` preset
+- Use `Nx` cli
 
 We find this provides opportunities for broader use cases while also allowing you to setup your workspace the way you want which may include using `xplat` app generators (which we'll install in a moment) which leverage those from Nx however enhances a few to work best for xplat tooling.
 

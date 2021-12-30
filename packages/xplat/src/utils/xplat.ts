@@ -42,11 +42,10 @@ import {
   PlatformNxExtraTypes,
   supportedPlatformsWithNx,
   parseProjectNameFromPath,
+  toFileName,
 } from '@nstudio/xplat-utils';
 import {
-  updateJsonInTree,
-  toFileName,
-  serializeJson,
+  updateJsonInTree, 
   readJsonInTree,
 } from '@nrwl/workspace';
 import { insert, addGlobal } from './ast';
