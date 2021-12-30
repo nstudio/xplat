@@ -1,3 +1,12 @@
+## [13.4.1](https://github.com/nstudio/xplat/compare/13.0.0...13.4.1) (2021-12-30)
+
+
+### Features
+
+* Nx 13.4.x compatibility ([#288](https://github.com/nstudio/xplat/issues/288)) ([9716c64](https://github.com/nstudio/xplat/commit/9716c6448a58b6b943115104d1edc2fdd0189694))
+
+
+
 # [13.0.0](https://github.com/nstudio/xplat/compare/12.7.0...13.0.0) (2021-10-21)
 
 
