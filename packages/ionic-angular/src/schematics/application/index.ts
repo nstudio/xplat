@@ -80,7 +80,7 @@ export default function (options: ApplicationOptions) {
       // ensure convenient clean script is added for workspace
       scripts[
         `clean`
-      ] = `npx rimraf hooks node_modules package-lock.json && yarn config set ignore-engines true && yarn`;
+      ] = `npx rimraf hooks node_modules package-lock.json yarn.lock && yarn`;
       // add convenient ionic scripts
       scripts[
         `prepare.${platformApp}.ios`
@@ -99,7 +99,7 @@ export default function (options: ApplicationOptions) {
       ] = `cd apps/${directory}${options.name} && npm run cap.sync`;
       scripts[
         `clean.${platformApp}`
-      ] = `cd apps/${directory}${options.name} && npx rimraf hooks node_modules platforms www plugins package-lock.json && yarn config set ignore-engines true && yarn`;
+      ] = `cd apps/${directory}${options.name} && npx rimraf hooks node_modules platforms www plugins package-lock.json yarn.lock && yarn`;
       return updatePackageScripts(tree, scripts);
     },
     (tree: Tree, context: SchematicContext) => {

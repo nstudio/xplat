@@ -30,31 +30,46 @@ export namespace XplatNativeScriptAngularHelpers {
 
       const angularDeps = {};
       const angularDevDeps = {};
-      if (
-        packageJson.dependencies &&
-        !packageJson.dependencies['@angular/core']
-      ) {
-        // ensure angular deps are present
-        angularDeps['@angular/animations'] = angularVersion;
-        angularDeps['@angular/common'] = angularVersion;
-        angularDeps['@angular/compiler'] = angularVersion;
-        angularDeps['@angular/core'] = angularVersion;
-        angularDeps['@angular/forms'] = angularVersion;
-        angularDeps['@angular/platform-browser'] = angularVersion;
-        angularDeps['@angular/platform-browser-dynamic'] = angularVersion;
-        angularDeps['@angular/router'] = angularVersion;
+      let ngVersion: string;
+      if (packageJson.dependencies) {
+        if (packageJson.dependencies['@angular/core']) {
+          // use existing
+          ngVersion = packageJson.dependencies['@angular/core'];
+        } else {
+          ngVersion = angularVersion;
+        }
+        // ensure angular deps are present and versions are in sync
+        angularDeps['@angular/animations'] = ngVersion;
+        angularDeps['@angular/common'] = ngVersion;
+        angularDeps['@angular/compiler'] = ngVersion;
+        angularDeps['@angular/core'] = ngVersion;
+        angularDeps['@angular/forms'] = ngVersion;
+        angularDeps['@angular/platform-browser'] = ngVersion;
+        angularDeps['@angular/platform-browser-dynamic'] = ngVersion;
+        angularDeps['@angular/router'] = ngVersion;
         angularDeps['@ngx-translate/core'] = ngxTranslateVersion;
         angularDeps['rxjs'] = rxjsVersion;
         angularDeps['zone.js'] = zonejsVersion;
 
-        angularDevDeps['@angular-eslint/eslint-plugin'] = angularEsLintVersion;
-        angularDevDeps['@angular-eslint/eslint-plugin-template'] =
-          angularEsLintVersion;
-        angularDevDeps['@angular-eslint/template-parser'] =
-          angularEsLintVersion;
-        angularDevDeps['@angular/compiler-cli'] = angularVersion;
-        angularDevDeps['@angular/language-service'] = angularVersion;
+        // devDeps
+        angularDevDeps[`@angular-devkit/build-angular`] = ngVersion;
+        angularDevDeps['@angular/compiler-cli'] = ngVersion;
+        angularDevDeps['@angular/language-service'] = ngVersion;
+
+        if (!angularDevDeps['@angular-eslint/eslint-plugin']) {
+          angularDevDeps['@angular-eslint/eslint-plugin'] =
+            angularEsLintVersion;
+        }
+        if (!angularDevDeps['@angular-eslint/eslint-plugin-template']) {
+          angularDevDeps['@angular-eslint/eslint-plugin-template'] =
+            angularEsLintVersion;
+        }
+        if (!angularDevDeps['@angular-eslint/template-parser']) {
+          angularDevDeps['@angular-eslint/template-parser'] =
+            angularEsLintVersion;
+        }
       }
+
       return XplatHelpers.updatePackageForXplat(options, {
         dependencies: {
           ...angularDeps,

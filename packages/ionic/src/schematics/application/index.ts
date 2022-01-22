@@ -76,7 +76,7 @@ export default function (options: Schema) {
       ] = `cd apps/${directory}${options.name} && npm run cap.copy`;
       scripts[
         `clean.${platformApp}`
-      ] = `cd apps/${directory}${options.name} && npx rimraf hooks node_modules platforms www plugins ios android package-lock.json && yarn config set ignore-engines true && yarn`;
+      ] = `cd apps/${directory}${options.name} && npx rimraf hooks node_modules platforms www plugins ios android package-lock.json yarn.lock && yarn`;
       return updatePackageScripts(tree, scripts);
     },
     (tree: Tree, context: SchematicContext) => {

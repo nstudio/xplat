@@ -216,23 +216,28 @@ export namespace XplatAngularHelpers {
       const dependencies = {};
       const devDependencies = {};
       const packageJson = getJsonFromFile(tree, 'package.json');
-      const hasAngularDeps = packageJson.dependencies['@angular/core'];
-      if (!hasAngularDeps) {
-        dependencies[`@angular/animations`] = angularVersion;
-        dependencies[`@angular/common`] = angularVersion;
-        dependencies[`@angular/compiler`] = angularVersion;
-        dependencies[`@angular/core`] = angularVersion;
-        dependencies[`@angular/forms`] = angularVersion;
-        dependencies[`@angular/platform-browser`] = angularVersion;
-        dependencies[`@angular/platform-browser-dynamic`] = angularVersion;
-        dependencies[`@angular/router`] = angularVersion;
+      let ngVersion: string;
+      if (packageJson.dependencies) {
+        if (packageJson.dependencies['@angular/core']) {
+          // use existing
+          ngVersion = packageJson.dependencies['@angular/core'];
+        } else {
+          ngVersion = angularVersion;
+        }
+        dependencies[`@angular/animations`] = ngVersion;
+        dependencies[`@angular/common`] = ngVersion;
+        dependencies[`@angular/compiler`] = ngVersion;
+        dependencies[`@angular/core`] = ngVersion;
+        dependencies[`@angular/forms`] = ngVersion;
+        dependencies[`@angular/platform-browser`] = ngVersion;
+        dependencies[`@angular/platform-browser-dynamic`] = ngVersion;
+        dependencies[`@angular/router`] = ngVersion;
         dependencies[`core-js`] = coreJsVersion;
         dependencies[`rxjs`] = rxjsVersion;
         dependencies[`zone.js`] = zonejsVersion;
 
-        devDependencies[`@angular/compiler-cli`] = angularVersion;
-        devDependencies[`@angular/language-service`] = angularVersion;
-        devDependencies[`@angular-devkit/build-angular`] = angularDevkitVersion;
+        devDependencies[`@angular/compiler-cli`] = ngVersion;
+        devDependencies[`@angular/language-service`] = ngVersion;
       }
 
       if (!packageJson.devDependencies['@nrwl/angular']) {

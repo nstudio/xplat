@@ -76,7 +76,7 @@ export default function (options: Schema) {
       const scripts = {};
       scripts[
         `clean`
-      ] = `npx rimraf hooks node_modules package-lock.json && yarn config set ignore-engines true && ns package-manager set npm && yarn`;
+      ] = `npx rimraf hooks node_modules package-lock.json yarn.lock && yarn`;
       return updatePackageScripts(tree, scripts);
     },
     (tree: Tree, context: SchematicContext) => {
