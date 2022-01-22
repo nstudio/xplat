@@ -1,3 +1,12 @@
+## [13.4.2](https://github.com/nstudio/xplat/compare/13.4.1...13.4.2) (2022-01-22)
+
+
+### Features
+
+* **core:** various angular 13 build improvements ([04ed928](https://github.com/nstudio/xplat/commit/04ed9289cf243e997b786f4c79dc2b1c02b6e334))
+
+
+
 ## [13.4.1](https://github.com/nstudio/xplat/compare/13.0.0...13.4.1) (2021-12-30)
 
 
