@@ -1,3 +1,17 @@
+## [13.4.3](https://github.com/nstudio/xplat/compare/13.4.2...13.4.3) (2022-01-27)
+
+
+### Bug Fixes
+
+* **focus:** transient deps ([050df2d](https://github.com/nstudio/xplat/commit/050df2d6f477fe54db650962f3656a7a6f70ff9f))
+
+
+### Features
+
+* **nativescript:** ensure singleTask for Android and exported activity ([a421254](https://github.com/nstudio/xplat/commit/a42125483cd377169387ebe9f7f51f2d18769d59))
+
+
+
 ## [13.4.2](https://github.com/nstudio/xplat/compare/13.4.1...13.4.2) (2022-01-22)
 
 
