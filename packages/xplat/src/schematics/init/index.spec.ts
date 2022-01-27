@@ -42,7 +42,6 @@ describe('xplat init', () => {
       '@nstudio/xplat',
       '@angular/compiler-cli',
       '@angular/language-service',
-      '@angular-devkit/build-angular',
     ];
     for (const dep of devDeps) {
       expect(packageJson.devDependencies[dep]).toBeDefined();
