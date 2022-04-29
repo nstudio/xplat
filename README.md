@@ -42,6 +42,12 @@ You are now ready to create apps:
 nx g app
 ```
 
+**NOTE:** If you encounter any issue, you can try creating an Nx workspace with version specified, for example:
+
+```
+npx create-nx-workspace@13.9.5
+```
+
 ## App generation examples
 
 The additional app generators can be used as follows:
@@ -159,42 +165,7 @@ nx run nativescript-mobile:android
 - Ionic + Web: https://github.com/nstudio/xplat-sample-ionic-web
 - Electron + Web with routing: https://github.com/nstudio/xplat-sample-electron-routing
 
-## Real world apps built with xplat
-
-### Portable North Pole
-
-- Web: https://www.portablenorthpole.com/en/home
-- iOS: https://itunes.apple.com/us/app/id902026228?mt=8
-- Android: https://play.google.com/store/apps/details?id=com.ugroupmedia.pnp14&hl=en
-
-### My PreSonus
-
-- Web: http://my.presonus.com/
-- iOS: https://apps.apple.com/us/app/mypresonus/id1282534772
-- Android: https://play.google.com/store/apps/details?id=com.presonus.mypresonus&hl=en_US
-
-### Sweet
-
-- Web: https://sweet.io/
-- iOS: https://apps.apple.com/us/app/sweet/id1452120535
-- Android: https://play.google.com/store/apps/details?id=io.sweet.app&hl=en_US
-
 ## Context
 
 - [Why it's Hard to Decide on Technologies](https://medium.com/@adamklein_66511/why-its-hard-to-decide-on-technologies-9d67b6adf157) by [Adam Klein](https://github.com/adamkleingit)
 
-## Contributing
-
-Please see our [guidelines for contributing](https://github.com/nstudio/xplat/blob/master/CONTRIBUTING.md).
-
-| [<img alt="NathanWalker" src="https://avatars.githubusercontent.com/u/457187?v=4&s=117" width="117">](https://github.com/NathanWalker) | [<img alt="pegaltier" src="https://avatars.githubusercontent.com/u/2479323?v=4&s=117" width="117">](https://github.com/pegaltier) | [<img alt="m-abs" src="https://avatars.githubusercontent.com/u/1348705?v=4&s=117" width="117">](https://github.com/m-abs) | [<img alt="sr3dna" src="https://avatars.githubusercontent.com/u/15936818?v=4&s=117" width="117">](https://github.com/sr3dna) | [<img alt="mbaljeetsingh" src="https://avatars.githubusercontent.com/u/872762?v=4&s=117" width="117">](https://github.com/mbaljeetsingh) |
-| :------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------------------: |
-|                                            [NathanWalker](https://github.com/NathanWalker)                                             |                                             [pegaltier](https://github.com/pegaltier)                                             |                                             [m-abs](https://github.com/m-abs)                                             |                                             [sr3dna](https://github.com/sr3dna)                                              |                                            [mbaljeetsingh](https://github.com/mbaljeetsingh)                                             |
-
-| [<img alt="dopsonbr" src="https://avatars.githubusercontent.com/u/5340660?v=4&s=117" width="117">](https://github.com/dopsonbr) | [<img alt="AgentEnder" src="https://avatars.githubusercontent.com/u/6933928?v=4&s=117" width="117">](https://github.com/AgentEnder) | [<img alt="davecoffin" src="https://avatars.githubusercontent.com/u/1245462?v=4&s=117" width="117">](https://github.com/davecoffin) | [<img alt="dmitryr117" src="https://avatars.githubusercontent.com/u/5959314?v=4&s=117" width="117">](https://github.com/dmitryr117) | [<img alt="kamilmysliwiec" src="https://avatars.githubusercontent.com/u/23244943?v=4&s=117" width="117">](https://github.com/kamilmysliwiec) | [<img alt="madmath03" src="https://avatars.githubusercontent.com/u/6967675?v=4&s=117" width="117">](https://github.com/madmath03) |
-| :-----------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------: |
-|                                             [dopsonbr](https://github.com/dopsonbr)                                             |                                             [AgentEnder](https://github.com/AgentEnder)                                             |                                             [davecoffin](https://github.com/davecoffin)                                             |                                             [dmitryr117](https://github.com/dmitryr117)                                             |                                             [kamilmysliwiec](https://github.com/kamilmysliwiec)                                              |                                             [madmath03](https://github.com/madmath03)                                             |
-
-| [<img alt="miguelramos" src="https://avatars.githubusercontent.com/u/495720?v=4&s=117" width="117">](https://github.com/miguelramos) | [<img alt="n0mer" src="https://avatars.githubusercontent.com/u/1862997?v=4&s=117" width="117">](https://github.com/n0mer) |
-| :----------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------: |
-|                                            [miguelramos](https://github.com/miguelramos)                                             |                                             [n0mer](https://github.com/n0mer)                                             |
