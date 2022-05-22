@@ -45,7 +45,7 @@ nx g app
 **NOTE:** If you encounter any issue, you can try creating an Nx workspace with version specified, for example:
 
 ```
-npx create-nx-workspace@13.9.5
+npx create-nx-workspace@14.1.7
 ```
 
 ## App generation examples

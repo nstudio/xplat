@@ -1,3 +1,12 @@
+## [14.0.1](https://github.com/nstudio/xplat/compare/13.4.3...14.0.1) (2022-05-22)
+
+
+### Features
+
+* Nx 14.1, {N} 8.2 + latest angular 13.3 ([#309](https://github.com/nstudio/xplat/issues/309)) ([d3797ce](https://github.com/nstudio/xplat/commit/d3797ce108fb90c3d22b309ed70f6381364968e8))
+
+
+
 ## [13.4.3](https://github.com/nstudio/xplat/compare/13.4.2...13.4.3) (2022-01-27)
 
 
