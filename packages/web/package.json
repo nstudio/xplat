@@ -30,7 +30,7 @@
     "migrations": "./migrations.json"
   },
   "dependencies": {
-    "@nrwl/web": "^13.0.0"
+    "@nrwl/web": "^14.0.0"
   },
   "peerDependencies": {
     "@nstudio/xplat": "*"
