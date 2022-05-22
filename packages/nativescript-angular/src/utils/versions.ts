@@ -1,11 +1,11 @@
 export const xplatVersion = '*';
-export const nsCoreVersion = '~8.1.0';
+export const nsCoreVersion = '~8.2.0';
 export const nsNgScopedVersion = '^13.0.0';
 export const nsNgFonticonVersion = '~7.0.0';
 export const nsWebpackVersion = '~5.0.0';
 export const sassVersion = '^1.30.0';
 export const nsThemeCoreVersion = '^1.0.4';
-export const typescriptVersion = '~4.5.4';
+export const typescriptVersion = '~4.6.2';
 
 // in case workspace had not added angular yet
 // TODO: move deps to nstudio/xplat to ref from everywhere for all supported framework versions
