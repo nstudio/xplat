@@ -17,7 +17,6 @@ import {
   zonejsVersion,
   angularEsLintVersion,
   nsEsLintVersion,
-  tsEsLintParserVersion,
   esLintVersion,
   nsWebpackVersion,
 } from './versions';
@@ -83,8 +82,7 @@ export namespace XplatNativeScriptAngularHelpers {
           '@nativescript/webpack': nsWebpackVersion,
           '@ngtools/webpack': ngToolsWebpack,
           eslint: esLintVersion,
-          sass: sassVersion,
-          '@typescript-eslint/parser': tsEsLintParserVersion,
+          sass: sassVersion
         },
       })(tree, context);
     };
