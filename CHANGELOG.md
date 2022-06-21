@@ -1,3 +1,12 @@
+# [14.3.0](https://github.com/nstudio/xplat/compare/14.0.1...14.3.0) (2022-06-21)
+
+
+### Features
+
+* Angular 14 updates and Nx 14.3.x compat ([#311](https://github.com/nstudio/xplat/issues/311)) ([09fb3a8](https://github.com/nstudio/xplat/commit/09fb3a85a8dc61c7544096c87ba065c6c7e39de0))
+
+
+
 ## [14.0.1](https://github.com/nstudio/xplat/compare/13.4.3...14.0.1) (2022-05-22)
 
 
