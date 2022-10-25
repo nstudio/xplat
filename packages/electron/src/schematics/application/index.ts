@@ -112,11 +112,6 @@ export default function (options: XplatElectrontHelpers.SchemaApp) {
         });
       });
     },
-    (tree: Tree) => {
-      return externalSchematic('@nrwl/workspace', 'convert-to-nx-project', {
-        project: options.name
-      });
-    },
 
     formatFiles({ skipFormat: options.skipFormat }),
   ]);

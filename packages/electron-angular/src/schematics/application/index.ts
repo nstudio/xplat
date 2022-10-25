@@ -141,11 +141,6 @@ export default function (options: XplatElectrontHelpers.SchemaApp) {
       });
     },
     options.useXplat ? (tree: Tree) => adjustAppFiles(options, tree) : noop(),
-    (tree: Tree) => {
-      return externalSchematic('@nrwl/workspace', 'convert-to-nx-project', {
-        project: options.name
-      });
-    },
 
     formatFiles({ skipFormat: options.skipFormat }),
     XplatElectrontHelpers.noteAppCommands(options),
