@@ -193,11 +193,6 @@ export default function (options: Schema) {
       });
     },
     (tree: Tree) => {
-      return externalSchematic('@nrwl/workspace', 'convert-to-nx-project', {
-        project: options.name
-      });
-    },
-    (tree: Tree) => {
       output.log({
         title: 'You will be able to run your app with:',
         bodyLines: [

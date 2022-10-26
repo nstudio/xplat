@@ -91,11 +91,6 @@ export default function (options: Schema) {
         });
       });
     },
-    (tree: Tree) => {
-      return externalSchematic('@nrwl/workspace', 'convert-to-nx-project', {
-        project: options.name
-      });
-    },
     <any>formatFiles({ skipFormat: options.skipFormat }),
   ]);
 }
