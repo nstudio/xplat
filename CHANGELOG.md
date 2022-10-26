@@ -1,3 +1,12 @@
+## [15.0.2](https://github.com/nstudio/xplat/compare/14.3.0...15.0.2) (2022-10-26)
+
+
+### Features
+
+* nx 15 support ([#314](https://github.com/nstudio/xplat/issues/314)) ([b32435b](https://github.com/nstudio/xplat/commit/b32435be9a240fb7fb2bb674b6878e321303af20))
+
+
+
 # [14.3.0](https://github.com/nstudio/xplat/compare/14.0.1...14.3.0) (2022-06-21)
 
 
