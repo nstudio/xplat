@@ -1,3 +1,12 @@
+## [15.0.3](https://github.com/nstudio/xplat/compare/15.0.2...15.0.3) (2023-02-26)
+
+
+### Features
+
+* {N} 8.4 and Nx latest updates ([#318](https://github.com/nstudio/xplat/issues/318)) ([5038008](https://github.com/nstudio/xplat/commit/50380088b2eac7c97c2d6df2d34ddde8c1cb6869))
+
+
+
 ## [15.0.2](https://github.com/nstudio/xplat/compare/14.3.0...15.0.2) (2022-10-26)
 
 
