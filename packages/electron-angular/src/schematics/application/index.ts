@@ -32,7 +32,6 @@ import {
 } from '@nstudio/xplat-utils';
 import { XplatElectronAngularHelpers } from '../../utils';
 import { XplatElectrontHelpers } from '@nstudio/electron';
-import { workspaceFileName } from '@nrwl/workspace/src/core/file-utils';
 
 export default function (options: XplatElectrontHelpers.SchemaApp) {
   if (!options.name) {
@@ -81,7 +80,7 @@ export default function (options: XplatElectrontHelpers.SchemaApp) {
       }
       if (!targetConfig) {
         throw new SchematicsException(
-          `The target app name "${fullTargetAppName}" does not appear to be in ${workspaceFileName()}. You may need to generate the app first or perhaps check the spelling.`
+          `The target app name "${fullTargetAppName}" does not appear to be in the workspace. You may need to generate the app first or perhaps check the spelling.`
         );
       }
 
