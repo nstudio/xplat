@@ -24,8 +24,8 @@ import {
 } from '@nstudio/xplat-utils';
 import { join } from 'path';
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
-import { serializeJson } from '@nrwl/devkit';
 import * as xml2js from 'xml2js';
+import { serializeJson } from '@nrwl/devkit';
 
 export namespace FocusHelpers {
   export function updateIDESettings(options: {
