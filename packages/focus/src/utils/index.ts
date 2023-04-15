@@ -140,7 +140,7 @@ export namespace FocusHelpers {
 
         // VS Code
         const isVsCode = updateVSCode({
-          userUpdates,
+          workspaceUpdates: userUpdates,
           allApps: options.allApps,
           focusOnApps: options.focusOnApps,
           appWildcards,
@@ -216,6 +216,85 @@ export namespace FocusHelpers {
       return tree;
     };
   }
+  function generateVSCodeUpdatedSettings(
+    currentSettings: Readonly<any>,
+    updates: JSON,
+    options: {
+      allApps?: string[];
+      focusOnApps?: string[];
+      appWildcards?: string[];
+      allLibs?: string[];
+      allPackages?: string[];
+      isFullstack?: boolean;
+    }
+  ) {
+    const newSettings: {
+      'files.exclude': Record<string, boolean>;
+      'search.exclude': Record<string, boolean>;
+    } = {
+      'files.exclude': {},
+      'search.exclude': {},
+    };
+    let exclude = currentSettings['files.exclude'] || {};
+    let searchExclude = currentSettings['search.exclude'] || {};
+    newSettings['files.exclude'] = { ...exclude, ...updates };
+    newSettings['search.exclude'] = { ...searchExclude, ...updates };
+
+    if (isXplatWorkspace()) {
+      if (options.allApps.length) {
+        // always reset specific app filters
+        for (const app of options.allApps) {
+          delete newSettings['files.exclude'][app];
+          delete newSettings['search.exclude'][app];
+        }
+      }
+      if (
+        !options.isFullstack &&
+        options.focusOnApps.length &&
+        options.allApps.length
+      ) {
+        // when focusing on projects, clear all specific app wildcards first if they exist
+        for (const wildcard of options.appWildcards) {
+          delete newSettings['files.exclude'][wildcard];
+          delete newSettings['search.exclude'][wildcard];
+        }
+        for (const focusApp of options.focusOnApps) {
+          newSettings['files.exclude'][focusApp] = false;
+          newSettings['search.exclude'][focusApp] = false;
+        }
+        // ensure all other apps are excluded (except for the one that's being focused on)
+        // also support focusing on apps/{subfolder}/*
+        // if focusing on specific apps but there's no direct match of the focus target in allApps listing, it's a subfolder
+        const isFocusingOnAppSubFolder =
+          options.focusOnApps.filter((a) => options.allApps.includes(a))
+            .length === 0;
+
+        for (const app of options.allApps) {
+          if (!options.focusOnApps.includes(app)) {
+            let skipExcluding = false;
+            if (isFocusingOnAppSubFolder) {
+              // see if beginning path of app is in the focused subfolder
+              for (const focus of options.focusOnApps) {
+                if (app.indexOf(focus) === 0) {
+                  // console.log('found app in focused folder:', app)
+                  skipExcluding = true;
+                }
+              }
+            }
+            if (!skipExcluding) {
+              // console.log('hiding app:', app)
+              newSettings['files.exclude'][app] = true;
+              newSettings['search.exclude'][app] = true;
+            }
+          }
+        }
+      }
+    }
+    return {
+      ...currentSettings,
+      ...newSettings,
+    };
+  }
 
   export function updateVSCode(options: {
     userUpdates?: any;
@@ -260,79 +339,13 @@ export namespace FocusHelpers {
         });
         if (userSettings) {
           const userSettingsJson = jsonParse(userSettings);
-          let exclude = userSettingsJson['files.exclude'];
-          if (!exclude) {
-            exclude = {};
-          }
-          let searchExclude = userSettingsJson['search.exclude'];
-          if (!searchExclude) {
-            searchExclude = {};
-          }
-
-          userSettingsJson['files.exclude'] = Object.assign(
-            exclude,
-            options.userUpdates
-          );
-          userSettingsJson['search.exclude'] = Object.assign(
-            searchExclude,
-            options.userUpdates
+          const newSettings = generateVSCodeUpdatedSettings(
+            userSettingsJson,
+            options.userUpdates,
+            options
           );
 
-          if (isXplatWorkspace()) {
-            if (options.allApps.length) {
-              // always reset specific app filters
-              for (const app of options.allApps) {
-                delete userSettingsJson['files.exclude'][app];
-                delete userSettingsJson['search.exclude'][app];
-              }
-            }
-            if (
-              !options.isFullstack &&
-              options.focusOnApps.length &&
-              options.allApps.length
-            ) {
-              // when focusing on projects, clear all specific app wildcards first if they exist
-              for (const wildcard of options.appWildcards) {
-                delete userSettingsJson['files.exclude'][wildcard];
-                delete userSettingsJson['search.exclude'][wildcard];
-              }
-              for (const focusApp of options.focusOnApps) {
-                userSettingsJson['files.exclude'][focusApp] = false;
-                userSettingsJson['search.exclude'][focusApp] = false;
-              }
-              // ensure all other apps are excluded (except for the one that's being focused on)
-              // also support focusing on apps/{subfolder}/*
-              // if focusing on specific apps but there's no direct match of the focus target in allApps listing, it's a subfolder
-              const isFocusingOnAppSubFolder =
-                options.focusOnApps.filter((a) => options.allApps.includes(a))
-                  .length === 0;
-
-              for (const app of options.allApps) {
-                if (!options.focusOnApps.includes(app)) {
-                  let skipExcluding = false;
-                  if (isFocusingOnAppSubFolder) {
-                    // see if beginning path of app is in the focused subfolder
-                    for (const focus of options.focusOnApps) {
-                      if (app.indexOf(focus) === 0) {
-                        // console.log('found app in focused folder:', app)
-                        skipExcluding = true;
-                      }
-                    }
-                  }
-                  if (!skipExcluding) {
-                    // console.log('hiding app:', app)
-                    userSettingsJson['files.exclude'][app] = true;
-                    userSettingsJson['search.exclude'][app] = true;
-                  }
-                }
-              }
-            }
-          }
-
-          writeFileSync(
-            userSettingsVSCodePath,
-            serializeJson(userSettingsJson)
-          );
+          writeFileSync(userSettingsVSCodePath, serializeJson(newSettings));
 
           // TODO: print out the updates made
           // Example of how the updates are represented
@@ -379,19 +392,20 @@ export namespace FocusHelpers {
           encoding: 'utf-8',
         });
         workspaceSettingsJson = jsonParse(workspaceSettings);
-        const exclude = workspaceSettingsJson['files.exclude'];
-        workspaceSettingsJson['files.exclude'] = Object.assign(
-          exclude,
-          options.workspaceUpdates
-        );
       } else {
         // console.log('creating workspace settings...');
-        mkdirSync('.vscode');
-        workspaceSettingsJson['files.exclude'] = options.workspaceUpdates;
+        mkdirSync('.vscode', {
+          recursive: true // ignore error if exists
+        });
       }
+      const newSettings = generateVSCodeUpdatedSettings(
+        workspaceSettingsJson,
+        options.workspaceUpdates,
+        options
+      );
       writeFileSync(
         workspaceSettingsPath,
-        serializeJson(workspaceSettingsJson)
+        serializeJson(newSettings)
       );
     }
     return isVsCode;
