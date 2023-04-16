@@ -37,13 +37,11 @@ import {
   parseProjectNameFromPath,
 } from '@nstudio/xplat-utils';
 import { addToFeature, adjustBarrelIndex } from './generator';
-import { updateJsonInTree, getWorkspacePath } from '@nrwl/workspace';
 import {
   ngxTranslateVersion,
   ngxTranslateHttpVersion,
   nxVersion,
   angularVersion,
-  coreJsVersion,
   rxjsVersion,
   zonejsVersion,
   angularDevkitVersion,
@@ -232,8 +230,9 @@ export namespace XplatAngularHelpers {
         dependencies[`@angular/platform-browser`] = ngVersion;
         dependencies[`@angular/platform-browser-dynamic`] = ngVersion;
         dependencies[`@angular/router`] = ngVersion;
-        dependencies[`core-js`] = coreJsVersion;
-        dependencies[`rxjs`] = rxjsVersion;
+        if (!dependencies[`rxjs`]) {
+          dependencies[`rxjs`] = rxjsVersion;
+        }
         dependencies[`zone.js`] = zonejsVersion;
 
         devDependencies[`@angular/compiler-cli`] = ngVersion;

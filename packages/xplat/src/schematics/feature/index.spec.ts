@@ -1,5 +1,4 @@
 import { Tree } from '@angular-devkit/schematics';
-import { createOrUpdate } from '@nrwl/workspace';
 import {
   isInModuleMetadata,
   getFileContent,
@@ -7,6 +6,7 @@ import {
 } from '../../utils/testing-utils';
 import { runSchematic } from '../../utils/testing';
 import { XplatFeatureHelpers } from '../../utils';
+import { updateFile } from '@nstudio/xplat-utils';
 
 xdescribe('feature schematic', () => {
   let appTree: Tree;
@@ -741,7 +741,7 @@ xdescribe('feature schematic', () => {
 
     // manually update home.component to prep for sandobx
     const homeCmpPath = `/apps/nativescript-viewer/src/features/home/components/home.component.html`;
-    createOrUpdate(appTree, homeCmpPath, sandboxHomeSetup());
+    updateFile(appTree, homeCmpPath, sandboxHomeSetup());
     // console.log('homecmp:', getFileContent(tree, homeCmpPath));
 
     options.onlyProject = true;

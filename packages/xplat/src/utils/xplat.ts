@@ -20,6 +20,7 @@ import {
   supportedSandboxPlatforms,
   updateTsConfig,
   IXplatSettings,
+  convertNgTreeToDevKit,
 } from './general';
 import {
   getPrefix,
@@ -44,10 +45,6 @@ import {
   parseProjectNameFromPath,
   toFileName,
 } from '@nstudio/xplat-utils';
-import {
-  updateJsonInTree, 
-  readJsonInTree,
-} from '@nrwl/workspace';
 import { insert, addGlobal } from './ast';
 import {
   platformAppPrefixError,
@@ -165,7 +162,7 @@ export namespace XplatHelpers {
     callSchematicIfAdded?: string
   ): Rule {
     return (host: Tree) => {
-      const { dependencies, devDependencies } = readJsonInTree(
+      const { dependencies, devDependencies } = getJsonFromFile(
         host,
         'package.json'
       );
@@ -1174,7 +1171,8 @@ export namespace XplatFeatureHelpers {
     options: Schema,
     indexFilePath: string
   ): Rule {
-    return (tree: Tree) => {
+    return (tree: Tree, context) => {
+      const devKitTree = convertNgTreeToDevKit(tree, context);
       // console.log('adjustBarrelIndex indexFilePath:', indexFilePath);
       // console.log('tree.exists(indexFilePath):', tree.exists(indexFilePath));
       const indexSource = tree.read(indexFilePath)!.toString('utf-8');
@@ -1185,17 +1183,27 @@ export namespace XplatFeatureHelpers {
         true
       );
 
-      insert(tree, indexFilePath, [
-        ...addGlobal(
-          indexSourceFile,
-          indexFilePath,
-          `export * from './${
-            options.directory ? options.directory + '/' : ''
-          }${options.name.toLowerCase()}';`,
-          true
-        ),
-      ]);
-      return tree;
+      // insert(tree, indexFilePath, [
+      //   ...addGlobal(
+      //     devKitTree,
+      //     indexSourceFile,
+      //     indexFilePath,
+      //     `export * from './${
+      //       options.directory ? options.directory + '/' : ''
+      //     }${options.name.toLowerCase()}';`,
+      //     true
+      //   ),
+      // ]);
+      addGlobal(
+        devKitTree,
+        indexSourceFile,
+        indexFilePath,
+        `export * from './${
+          options.directory ? options.directory + '/' : ''
+        }${options.name.toLowerCase()}';`,
+        true
+      );
+      return devKitTree.tree;
     };
   }
 

@@ -1,5 +1,4 @@
 import { Tree, SchematicContext, noop } from '@angular-devkit/schematics';
-import { createOrUpdate } from '@nrwl/workspace';
 import {
   updatePackageScripts,
   IHelperConfig,
@@ -10,6 +9,7 @@ import {
   updateJsonFile,
   PlatformTypes,
   isTesting,
+  updateFile,
 } from '@nstudio/xplat-utils';
 
 export const config: IHelperConfig = {
@@ -22,7 +22,7 @@ function applitools(helperChains: Array<any>, options: IHelperSchema) {
   return (tree: Tree, context: SchematicContext) => {
     // update support index
     helperChains.push(
-      createOrUpdate(
+      updateFile(
         tree,
         `/apps/${options.target}-e2e/src/support/index.ts`,
         updateCypressIndex()
@@ -30,7 +30,7 @@ function applitools(helperChains: Array<any>, options: IHelperSchema) {
     );
     // update plugin index
     helperChains.push(
-      createOrUpdate(
+      updateFile(
         tree,
         `/apps/${options.target}-e2e/src/plugins/index.ts`,
         updateCypressPlugins()
@@ -56,7 +56,7 @@ function applitools(helperChains: Array<any>, options: IHelperSchema) {
 
     // update sample test
     helperChains.push(
-      createOrUpdate(
+      updateFile(
         tree,
         `/apps/${options.target}-e2e/src/integration/app.spec.ts`,
         updateSampleTest()

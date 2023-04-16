@@ -20,7 +20,6 @@ import {
   missingArgument,
   getDefaultTemplateOptions,
   XplatHelpers,
-  readWorkspaceJson,
 } from '@nstudio/xplat';
 import {
   prerun,
@@ -71,7 +70,7 @@ export default function (options: XplatElectrontHelpers.SchemaApp) {
     XplatElectrontHelpers.addNpmScripts(options),
     (tree: Tree, context: SchematicContext) => {
       // grab the target app configuration
-      const workspaceConfig = readWorkspaceJson(tree);
+      const workspaceConfig = getJsonFromFile(tree, 'workspace.json');
       // find app
       const fullTargetAppName = options.target;
       let targetConfig;

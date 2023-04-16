@@ -24,13 +24,19 @@
 
 ```
 npx create-nx-workspace@latest
+
+// Choose "Integrated monorepo" at the prompt:
+
+? Choose what to create                 … 
+> Integrated monorepo:    Nx configures your favorite frameworks and lets you focus on shipping features.
+
+// Choose "apps" at the prompt: 
+
+? What to create in the new workspace   … 
+> apps              [an empty monorepo with no plugins with a layout that works best for building apps]
 ```
 
-At the prompts:
-
-> What to create in the new workspace
-
-> choose `apps`
+Install the tools:
 
 ```
 npm i @nstudio/xplat -D
@@ -39,7 +45,7 @@ npm i @nstudio/xplat -D
 You are now ready to create apps:
 
 ```
-nx g app
+npx nx g @nstudio/xplat:app
 ```
 
 **NOTE:** If you encounter any issue, you can try creating an Nx workspace with version specified, for example:
@@ -59,7 +65,7 @@ Electron app generator can use any web app in the workspace as it's target.
 If you don't have a web app yet, create one first:
 
 ```
-nx g app sample
+npx nx g @nstudio/xplat:app sample
 ```
 
 > choose `web`
@@ -67,7 +73,7 @@ nx g app sample
 You can now use the web app as the Electron target:
 
 ```
-nx g app desktop --target=web-sample
+npx nx g @nstudio/xplat:app desktop --target=web-sample
 ```
 
 > choose `electron`
@@ -81,7 +87,7 @@ npm run start.electron.desktop
 ### Ionic
 
 ```
-nx g app sample
+npx nx g @nstudio/xplat:app sample
 ```
 
 > choose `ionic`
@@ -89,13 +95,13 @@ nx g app sample
 Develop in browser with:
 
 ```
-nx serve ionic-sample
+npx nx serve ionic-sample
 ```
 
 Build Ionic app:
 
 ```
-nx build ionic-sample
+npx nx build ionic-sample
 ```
 
 A. **Capacitor iOS** - Prepare for development
@@ -125,7 +131,7 @@ npm run open.ionic.sample.android
 ### NativeScript
 
 ```
-nx g app mobile
+nx g @nstudio/xplat:app mobile
 ```
 
 > choose `nativescript`
@@ -133,13 +139,13 @@ nx g app mobile
 A. **iOS**
 
 ```
-nx run nativescript-mobile:ios
+npx nx run nativescript-mobile:ios
 ```
 
 B. **Android**
 
 ```
-nx run nativescript-mobile:android
+npx nx run nativescript-mobile:android
 ```
 
 ## Documentation

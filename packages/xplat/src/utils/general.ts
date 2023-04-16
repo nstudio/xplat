@@ -1,14 +1,9 @@
 import {
   SchematicsException,
-  Tree,
+  Tree as NgTree,
   SchematicContext,
 } from '@angular-devkit/schematics';
-import {
-  stringUtils as nxStringUtils,
-  updateWorkspaceInTree,
-  readJsonInTree,
-  getWorkspacePath,
-} from '@nrwl/workspace';
+import { stringUtils as nxStringUtils } from '@nrwl/workspace';
 import {
   supportedPlatforms,
   PlatformTypes,
@@ -22,6 +17,13 @@ import {
   getNpmScope,
   getPrefix,
 } from '@nstudio/xplat-utils';
+import { join, relative } from 'path';
+import type { Mode } from 'fs';
+import type {
+  FileChange,
+  Tree as DevKitTree,
+  TreeWriteOptions,
+} from 'nx/src/generators/tree';
 
 export interface NodeDependency {
   name: string;
@@ -72,7 +74,7 @@ export function hasWebPlatform(targetPlatforms: ITargetPlatforms) {
 }
 
 export function updatePackageForNgrx(
-  tree: Tree,
+  tree: NgTree,
   packagePath: string = 'package.json'
 ) {
   if (tree.exists(packagePath)) {
@@ -106,7 +108,7 @@ export function updatePackageForNgrx(
 }
 
 export function updateTsConfig(
-  tree: Tree,
+  tree: NgTree,
   callback: (data: any) => void,
   targetSuffix: string = '',
   prefixPath: string = ''
@@ -132,7 +134,7 @@ export function updateTsConfig(
   return updateJsonFile(tree, tsConfigPath, tsConfig);
 }
 
-export function updatePackageScripts(tree: Tree, scripts: any) {
+export function updatePackageScripts(tree: NgTree, scripts: any) {
   const path = 'package.json';
   const packageJson = getJsonFromFile(tree, path);
   const scriptsMap = Object.assign({}, packageJson.scripts);
@@ -140,20 +142,8 @@ export function updatePackageScripts(tree: Tree, scripts: any) {
   return updateJsonFile(tree, path, packageJson);
 }
 
-export function readWorkspaceJson(tree: Tree) {
-  return readJsonInTree(tree, getWorkspacePath(tree));
-}
-
-export function updateWorkspace(updates: any) {
-  return <any>updateWorkspaceInTree((json) => {
-    for (const key in updates) {
-      json[key] = {
-        ...(json[key] || {}),
-        ...updates[key],
-      };
-    }
-    return json;
-  });
+export function readWorkspaceJson(tree: NgTree) {
+  return getJsonFromFile(tree, 'workspace.json');
 }
 
 // export function persistPrefix(prefix: string) {
@@ -207,3 +197,168 @@ export const toComponentClassName = (name: string) =>
 
 export const toNgModuleClassName = (name: string) =>
   `${stringUtils.classify(name)}Module`;
+
+export const actionToFileChangeMap = {
+  c: 'CREATE',
+  o: 'UPDATE',
+  d: 'DELETE',
+};
+
+class RunCallbackTask {
+  constructor(private callback: any) {}
+
+  toConfiguration() {
+    return {
+      name: 'RunCallback',
+      options: {
+        callback: this.callback,
+      },
+    };
+  }
+}
+
+function createRunCallbackTask() {
+  return {
+    name: 'RunCallback',
+    create: () => {
+      return Promise.resolve(async ({ callback }: { callback: any }) => {
+        await callback();
+      });
+    },
+  };
+}
+
+export function convertNgTreeToDevKit(tree: NgTree, context: any): DevkitTreeFromAngularDevkitTree {
+  if (context.engine.workflow) {
+    const engineHost = (context.engine.workflow as any).engineHost;
+    engineHost.registerTaskExecutor(createRunCallbackTask());
+  }
+
+  const root =
+    context.engine.workflow && context.engine.workflow.engineHost.paths
+      ? context.engine.workflow.engineHost.paths[1]
+      : tree.root.path;
+
+  return new DevkitTreeFromAngularDevkitTree(tree, root, true);
+}
+
+export class DevkitTreeFromAngularDevkitTree implements DevKitTree {
+  private configFileName: string;
+
+  constructor(
+    public tree: NgTree,
+    private _root: any,
+    private skipWritingConfigInOldFormat?: boolean
+  ) {
+    /**
+     * When using the UnitTestTree from @angular-devkit/schematics/testing, the root is just `/`.
+     * This causes a massive issue if `getProjects()` is used in the underlying generator because it
+     * causes fast-glob to be set to work on the user's entire file system.
+     *
+     * Therefore, in this case, patch the root to match what Nx Devkit does and use /virtual instead.
+     */
+    try {
+      const { UnitTestTree } = require('@angular-devkit/schematics/testing');
+      if (tree instanceof UnitTestTree && _root === '/') {
+        this._root = '/virtual';
+      }
+    } catch {}
+  }
+
+  get root() {
+    return this._root;
+  }
+
+  children(dirPath: string): string[] {
+    const { subdirs, subfiles } = this.tree.getDir(dirPath);
+    return [...subdirs, ...subfiles];
+  }
+
+  delete(filePath: string): void {
+    this.tree.delete(filePath);
+  }
+
+  exists(filePath: string): boolean {
+    if (this.isFile(filePath)) {
+      return this.tree.exists(filePath);
+    } else {
+      return this.children(filePath).length > 0;
+    }
+  }
+
+  isFile(filePath: string): boolean {
+    return this.tree.exists(filePath) && !!this.tree.read(filePath);
+  }
+
+  listChanges(): FileChange[] {
+    const fileChanges = [];
+    for (const action of this.tree.actions) {
+      if (action.kind === 'r') {
+        fileChanges.push({
+          path: this.normalize(action.to),
+          type: 'CREATE',
+          content: this.read(action.to),
+        });
+        fileChanges.push({
+          path: this.normalize(action.path),
+          type: 'DELETE',
+          content: null,
+        });
+      } else if (action.kind === 'c' || action.kind === 'o') {
+        fileChanges.push({
+          path: this.normalize(action.path),
+          type: actionToFileChangeMap[action.kind],
+          content: action.content,
+        });
+      } else {
+        fileChanges.push({
+          path: this.normalize(action.path),
+          type: 'DELETE',
+          content: null,
+        });
+      }
+    }
+    return fileChanges;
+  }
+
+  private normalize(path: string): string {
+    return relative(this.root, join(this.root, path));
+  }
+
+  read(filePath: string): Buffer;
+  read(filePath: string, encoding: BufferEncoding): string;
+  read(filePath: string, encoding?: BufferEncoding) {
+    return encoding
+      ? this.tree.read(filePath).toString(encoding)
+      : this.tree.read(filePath);
+  }
+
+  rename(from: string, to: string): void {
+    this.tree.rename(from, to);
+  }
+
+  write(
+    filePath: string,
+    content: Buffer | string,
+    options?: TreeWriteOptions
+  ): void {
+    if (options?.mode) {
+      this.warnUnsupportedFilePermissionsChange(filePath, options.mode);
+    }
+
+    if (this.tree.exists(filePath)) {
+      this.tree.overwrite(filePath, content);
+    } else {
+      this.tree.create(filePath, content);
+    }
+  }
+
+  changePermissions(filePath: string, mode: Mode): void {
+    this.warnUnsupportedFilePermissionsChange(filePath, mode);
+  }
+
+  private warnUnsupportedFilePermissionsChange(filePath: string, mode: Mode) {
+    console.log(`The Angular DevKit tree does not support changing a file permissions.
+                    Ignoring changing ${filePath} permissions to ${mode}.`);
+  }
+}

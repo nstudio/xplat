@@ -21,7 +21,6 @@ import {
   missingArgument,
   getDefaultTemplateOptions,
   XplatHelpers,
-  readWorkspaceJson,
 } from '@nstudio/xplat';
 import {
   prerun,

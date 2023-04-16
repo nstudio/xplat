@@ -1,5 +1,5 @@
 export const xplatVersion = '*';
-export const nsCoreVersion = '~8.4.0';
+export const nsCoreVersion = '~8.5.0';
 export const nsNgScopedVersion = '^15.0.0';
 export const nsNgFonticonVersion = '~7.0.0';
 export const nsWebpackVersion = '~5.0.0';
@@ -13,7 +13,7 @@ export const angularVersion = '^15.0.0';
 export const ngToolsWebpack = '^15.0.0';
 export const ngxTranslateVersion = '~14.0.0';
 export const rxjsVersion = '^7.5.0';
-export const zonejsVersion = '~0.12.0';
+export const zonejsVersion = '~0.13.0';
 export const angularEsLintVersion = '^15.0.0';
 export const nsEsLintVersion = '~0.0.4';
 export const esLintVersion = '8.15.0';
