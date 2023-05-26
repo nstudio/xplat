@@ -12,7 +12,7 @@ import {
   SchematicContext,
   SchematicsException,
 } from '@angular-devkit/schematics';
-import { parseJson, serializeJson } from '@nrwl/devkit';
+import { parseJson, serializeJson } from '@nx/devkit';
 
 export const supportedPlatforms: Array<PlatformTypes> = [
   'web',

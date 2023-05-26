@@ -8,7 +8,7 @@ import {
   noop,
   externalSchematic,
 } from '@angular-devkit/schematics';
-import { formatFiles } from '@nrwl/workspace';
+import { formatFiles } from '@nx/workspace';
 import {
   unsupportedPlatformError,
   XplatFeatureHelpers,

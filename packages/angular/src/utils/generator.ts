@@ -13,7 +13,7 @@ import {
   SchematicsException,
   externalSchematic,
 } from '@angular-devkit/schematics';
-import { formatFiles } from '@nrwl/workspace';
+import { formatFiles } from '@nx/workspace';
 import {
   generateOptionError,
   unsupportedPlatformError,
@@ -48,7 +48,7 @@ import {
   getTsSourceFile,
 } from './ast';
 import * as ts from 'typescript';
-import { insertChange } from '@nrwl/js';
+import { insertChange } from '@nx/js';
 
 export type IGenerateType =
   | 'component'

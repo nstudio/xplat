@@ -65,24 +65,24 @@ import { xplatVersion, nxVersion } from './versions';
 import { output } from './output';
 
 export const packageInnerDependencies = {
-  '@nstudio/angular': ['@nrwl/angular'],
+  '@nstudio/angular': ['@nx/angular'],
   '@nstudio/electron-angular': [
-    '@nrwl/angular',
+    '@nx/angular',
     '@nstudio/electron',
     '@nstudio/angular',
   ],
   '@nstudio/ionic-angular': [
-    '@nrwl/angular',
+    '@nx/angular',
     '@nstudio/ionic',
     '@nstudio/angular',
     '@nstudio/web-angular',
   ],
   '@nstudio/nativescript-angular': [
-    '@nrwl/angular',
+    '@nx/angular',
     '@nstudio/nativescript',
     '@nstudio/angular',
   ],
-  '@nstudio/web-angular': ['@nrwl/angular', '@nstudio/web', '@nstudio/angular'],
+  '@nstudio/web-angular': ['@nx/angular', '@nstudio/web', '@nstudio/angular'],
 };
 
 export namespace XplatHelpers {
@@ -349,7 +349,7 @@ export namespace XplatHelpers {
               ) {
                 // platforms that are supported directly via Nx only right now
                 // 'app'/'application' is only schematic supported via xplat proxy at moment
-                const packageName = `@nrwl/${platform}`;
+                const packageName = `@nx/${platform}`;
                 devDependencies[packageName] = nxVersion;
                 packagesToRunXplat.push(packageName);
               } else {
@@ -377,7 +377,7 @@ export namespace XplatHelpers {
         ) {
           // platforms supported directly via Nx only right now
           // 'app'/'application' is only schematic supported via xplat proxy at moment
-          const packageName = `@nrwl/${platform}`;
+          const packageName = `@nx/${platform}`;
           devDependencies[packageName] = nxVersion;
           packagesToRunXplat.push(packageName);
         } else {
@@ -485,7 +485,7 @@ export namespace XplatHelpers {
         ) {
           // platforms supported directly via Nx only right now
           // 'app'/'application' is only schematic supported via xplat proxy at moment
-          const packageName = `@nrwl/${platform}`;
+          const packageName = `@nx/${platform}`;
           devDependencies[packageName] = nxVersion;
           packagesToRun.push(packageName);
         } else {
@@ -550,7 +550,7 @@ export namespace XplatHelpers {
       if (packagesToRun.length) {
         for (const packageName of packagesToRun) {
           const nxPlatform = <PlatformWithNxTypes>(
-            packageName.replace('@nrwl/', '')
+            packageName.replace('@nx/', '')
           );
           const { name, directory } = getAppNamingConvention(
             options,
@@ -595,7 +595,7 @@ export namespace XplatHelpers {
           // console.log('packagesToRunXplat:', packagesToRunXplat);
           for (const packageName of packagesToRun) {
             const nxPlatform = <PlatformWithNxTypes>(
-              packageName.replace('@nrwl/', '')
+              packageName.replace('@nx/', '')
             );
             const { name, directory } = getAppNamingConvention(
               options,
@@ -675,7 +675,7 @@ export namespace XplatHelpers {
           `libs/${directory ? directory + '/' : ''}${libName}/tsconfig.json`
         )
       ) {
-        // console.log(`externalSchematic('@nrwl/workspace', 'lib') ALREADY EXISTS for:`, `libs/${directory ? directory + '/' : ''}${libName}`)
+        // console.log(`externalSchematic('@nx/workspace', 'lib') ALREADY EXISTS for:`, `libs/${directory ? directory + '/' : ''}${libName}`)
         return noop()(tree, context);
       }
 
@@ -688,8 +688,8 @@ export namespace XplatHelpers {
       if (libName === 'scss') {
         libOptions.skipTsConfig = true;
       }
-      // console.log(`CALLING externalSchematic('@nrwl/workspace', 'lib') for:`, `libs/${directory ? directory + '/' : ''}${libName}`)
-      return chain([externalSchematic('@nrwl/workspace', 'lib', libOptions)]);
+      // console.log(`CALLING externalSchematic('@nx/workspace', 'lib') for:`, `libs/${directory ? directory + '/' : ''}${libName}`)
+      return chain([externalSchematic('@nx/workspace', 'lib', libOptions)]);
     };
   }
 

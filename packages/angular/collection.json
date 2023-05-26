@@ -1,7 +1,7 @@
 {
   "name": "nstudio/angular",
   "version": "0.1",
-  "extends": ["@nrwl/angular", "@nstudio/xplat"],
+  "extends": ["@nx/angular", "@nstudio/xplat"],
   "schematics": {
     "ng-add": {
       "factory": "./src/schematics/ng-add/ng-add",

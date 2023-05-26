@@ -3,7 +3,7 @@ import {
   Tree as NgTree,
   SchematicContext,
 } from '@angular-devkit/schematics';
-import { stringUtils as nxStringUtils } from '@nrwl/workspace';
+import { stringUtils as nxStringUtils } from '@nx/workspace';
 import {
   supportedPlatforms,
   PlatformTypes,

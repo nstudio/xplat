@@ -16,7 +16,7 @@ import {
 import {
   formatFiles,
   updateWorkspace,
-} from '@nrwl/workspace';
+} from '@nx/workspace';
 import {
   stringUtils,
   updatePackageScripts,
@@ -253,7 +253,7 @@ function updateWorkspaceSupport(
     json.devDependencies = {
       ...json.devDependencies,
       'http-server': '^14.1.1',
-      'ngx-build-plus': '^15.0.0',
+      'ngx-build-plus': '^16.0.0',
     };
     return updateJsonFile(tree, packagePath, json);
 }

@@ -44,7 +44,7 @@ import {
   typescriptVersion,
 } from '../../utils/versions';
 import { XplatNativeScriptHelpers } from '@nstudio/nativescript/src/utils';
-import { addInstallTask, updateWorkspace } from '@nrwl/workspace';
+import { addInstallTask, updateWorkspace } from '@nx/workspace';
 
 export default function (options: Schema) {
   if (!options.name) {
@@ -171,7 +171,7 @@ export default function (options: Schema) {
               },
             },
             lint: {
-              builder: '@nrwl/linter:eslint',
+              builder: '@nx/linter:eslint',
               options: {
                 lintFilePatterns: [
                   `apps/${directory}${options.name}/**/*.ts`,
@@ -180,7 +180,7 @@ export default function (options: Schema) {
               },
             },
             test: {
-              builder: '@nrwl/jest:jest',
+              builder: '@nx/jest:jest',
               options: {
                 jestConfig: `apps/${directory}${options.name}/jest.config.js`,
                 tsConfig: `apps/${directory}${options.name}/tsconfig.spec.json`,

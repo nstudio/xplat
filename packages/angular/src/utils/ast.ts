@@ -1,4 +1,4 @@
-import { ensureTypescript } from '@nrwl/js/src/utils/typescript/ensure-typescript';
+import { ensureTypescript } from '@nx/js/src/utils/typescript/ensure-typescript';
 import { findNodes } from 'nx/src/utils/typescript';
 import * as ts from 'typescript';
 import {
@@ -7,9 +7,9 @@ import {
   insertChange,
   removeChange,
   replaceChange,
-} from '@nrwl/js';
+} from '@nx/js';
 import { dirname, join } from 'path';
-import { names, readProjectConfiguration, Tree } from '@nrwl/devkit';
+import { names, readProjectConfiguration, Tree } from '@nx/devkit';
 
 let tsModule: typeof import('typescript');
 

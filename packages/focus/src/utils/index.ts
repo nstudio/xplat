@@ -25,7 +25,7 @@ import {
 import { join } from 'path';
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
 import * as xml2js from 'xml2js';
-import { serializeJson } from '@nrwl/devkit';
+import { serializeJson } from '@nx/devkit';
 
 export namespace FocusHelpers {
   export function updateIDESettings(options: {

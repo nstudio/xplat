@@ -41,8 +41,8 @@
     "postinstall": "node src/utils/postinstall.js"
   },
   "dependencies": {
-    "@nrwl/devkit": "^15.0.0",
-    "@nrwl/js": "^15.0.0",
+    "@nx/devkit": "^16.0.0",
+    "@nx/js": "^16.0.0",
     "@nstudio/focus": "*",
     "@nstudio/xplat-utils": "*"
   },

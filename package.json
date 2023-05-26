@@ -50,15 +50,15 @@
     "@ngrx/effects": "~15.4.0",
     "@ngrx/router-store": "~15.4.0",
     "@ngrx/store": "~15.4.0",
-    "@nrwl/angular": "~15.9.2",
-    "@nrwl/devkit": "~15.9.2",
-    "@nrwl/eslint-plugin-nx": "~15.9.2",
-    "@nrwl/express": "~15.9.2",
-    "@nrwl/jest": "~15.9.2",
-    "@nrwl/js": "~15.9.2",
-    "@nrwl/linter": "~15.9.2",
-    "@nrwl/nx-cloud": "~15.3.5",
-    "@nrwl/web": "~15.9.2",
+    "@nx/angular": "16.2.2",
+    "@nx/devkit": "16.2.2",
+    "@nx/eslint-plugin": "16.2.2",
+    "@nx/express": "16.2.2",
+    "@nx/jest": "16.2.2",
+    "@nx/js": "16.2.2",
+    "@nx/linter": "16.2.2",
+    "@nrwl/nx-cloud": "16.0.5",
+    "@nx/web": "16.2.2",
     "@schematics/angular": "~15.2.0",
     "@types/eslint": "~8.21.1",
     "@types/express": "4.17.13",
@@ -133,7 +133,7 @@
     "minimatch": "3.0.5",
     "ng-packagr": "~15.2.0",
     "node-fetch": "^2.6.7",
-    "nx": "^15.0.0",
+    "nx": "16.2.2",
     "open": "^8.4.0",
     "parse-markdown-links": "^1.0.4",
     "parse5": "4.0.0",
@@ -195,3 +195,4 @@
     ]
   }
 }
+

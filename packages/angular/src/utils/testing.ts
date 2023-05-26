@@ -1,8 +1,8 @@
 import { join } from 'path';
 import { SchematicTestRunner } from '@angular-devkit/schematics/testing';
 import { Tree, Rule } from '@angular-devkit/schematics';
-// import { createApp, createLib } from '@nrwl/angular/testing';
-// import { names, toFileName } from '@nrwl/workspace';
+// import { createApp, createLib } from '@nx/angular/testing';
+// import { names, toFileName } from '@nx/workspace';
 
 const testRunner = new SchematicTestRunner(
   '@nstudio/angular',

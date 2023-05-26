@@ -13,7 +13,7 @@ import {
   noop,
   externalSchematic,
 } from '@angular-devkit/schematics';
-import { formatFiles, updateWorkspace } from '@nrwl/workspace';
+import { formatFiles, updateWorkspace } from '@nx/workspace';
 import {
   stringUtils,
   updatePackageScripts,

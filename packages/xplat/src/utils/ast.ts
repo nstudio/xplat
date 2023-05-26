@@ -1,7 +1,7 @@
-import { insertChange } from '@nrwl/js';
+import { insertChange } from '@nx/js';
 import { findNodes } from 'nx/src/utils/typescript';
 import * as ts from 'typescript';
-import { Tree } from '@nrwl/devkit';
+import { Tree } from '@nx/devkit';
 import { Tree as NgTree } from '@angular-devkit/schematics';
 import { actionToFileChangeMap } from './general';
 
