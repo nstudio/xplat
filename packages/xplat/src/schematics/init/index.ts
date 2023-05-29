@@ -33,7 +33,7 @@ import {
 } from '@angular-devkit/schematics/tasks';
 import { xplatVersion, nxVersion } from '../../utils/versions';
 import { FocusHelpers } from '@nstudio/focus';
-import { addInstallTask } from '@nrwl/workspace';
+import { addInstallTask } from '@nx/workspace';
 
 let packagesToRunXplat: Array<string> = [];
 export default function (options: XplatHelpers.Schema) {

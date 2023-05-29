@@ -6,7 +6,6 @@ import {
 } from '@angular-devkit/schematics';
 import { join } from 'path';
 import * as fs from 'fs';
-import { updateJsonInTree, createOrUpdate } from '@nrwl/workspace';
 import { output } from '@nstudio/xplat';
 import {
   getAppPaths,
@@ -14,6 +13,7 @@ import {
   getNpmScope,
   getPrefix,
   prerun,
+  updateFile,
   updateJsonFile,
 } from '@nstudio/xplat-utils';
 
@@ -74,7 +74,7 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
     const webpackConfig = fs.readFileSync(webpackConfigPath, {
       encoding: 'utf-8',
     });
-    createOrUpdate(
+    updateFile(
       tree,
       `${dirPath}/webpack.config.js`,
       webpackConfig
@@ -136,7 +136,7 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
     if (tree.exists(`${dirPath}/tsconfig.tns.json`)) {
       tree.delete(`${dirPath}/tsconfig.tns.json`);
     }
-    createOrUpdate(
+    updateFile(
       tree,
       `${dirPath}/tools/xplat-postinstall.js`,
       `//#!/usr/bin/env node
@@ -164,7 +164,7 @@ child.on('close', (code) => {
 });
       `
     );
-    createOrUpdate(
+    updateFile(
       tree,
       `${dirPath}/tsconfig.app.json`,
       `{
@@ -184,7 +184,7 @@ child.on('close', (code) => {
   ]
 }`
     );
-    createOrUpdate(
+    updateFile(
       tree,
       `${dirPath}/tsconfig.editor.json`,
       `{
@@ -196,7 +196,7 @@ child.on('close', (code) => {
 }
       `
     );
-    createOrUpdate(
+    updateFile(
       tree,
       `${dirPath}/tsconfig.json`,
       `{
@@ -217,7 +217,7 @@ child.on('close', (code) => {
 }      
       `
     );
-    createOrUpdate(
+    updateFile(
       tree,
       `${dirPath}/tsconfig.spec.json`,
       `{
@@ -232,12 +232,12 @@ child.on('close', (code) => {
 }      
       `
     );
-    createOrUpdate(
+    updateFile(
       tree,
       `${dirPath}/src/test-setup.ts`,
       `import 'jest-preset-angular';`
     );
-    createOrUpdate(
+    updateFile(
       tree,
       `${dirPath}/src/polyfills.ts`,
       `/**
@@ -262,7 +262,7 @@ import 'zone.js';
 import '@nativescript/zone-js';
        `
     );
-    createOrUpdate(
+    updateFile(
       tree,
       `${dirPath}/.eslintrc.json`,
       `{
@@ -276,7 +276,7 @@ import '@nativescript/zone-js';
         "*.ts"
       ],
       "extends": [
-        "plugin:@nrwl/nx/angular",
+        "plugin:@nx/nx/angular",
         "plugin:@angular-eslint/template/process-inline-templates"
       ],
       "parserOptions": {
@@ -308,7 +308,7 @@ import '@nativescript/zone-js';
         "*.html"
       ],
       "extends": [
-        "plugin:@nrwl/nx/angular-template"
+        "plugin:@nx/nx/angular-template"
       ],
       "rules": {}
     }
@@ -333,48 +333,46 @@ import '@nativescript/zone-js';
 }
 
 function updateRootPackage(tree: Tree, context: SchematicContext) {
-  return <any>updateJsonInTree('package.json', (json) => {
-    json.scripts = json.scripts || {};
-    const nativeScriptDeps = {
-      '@nativescript/angular': nsNgScopedVersion,
-      '@nativescript/core': nsCoreVersion,
-    };
-    const nativeScriptDevDeps = {
-      '@nativescript/types': nsCoreVersion,
-      '@nativescript/webpack': nsWebpackVersion,
-    };
+  const json = getJsonFromFile(tree, 'package.json');
+  json.scripts = json.scripts || {};
+  const nativeScriptDeps = {
+    '@nativescript/angular': nsNgScopedVersion,
+    '@nativescript/core': nsCoreVersion,
+  };
+  const nativeScriptDevDeps = {
+    '@nativescript/types': nsCoreVersion,
+    '@nativescript/webpack': nsWebpackVersion,
+  };
 
-    json.scripts.clean =
-      'npx rimraf hooks node_modules package-lock.json && yarn config set ignore-engines true && yarn';
-    json.dependencies = json.dependencies || {};
-    json.dependencies = {
-      ...json.dependencies,
-      ...ngDeps,
-      ...(hasNativeScriptApps ? nativeScriptDeps : {}),
-      '@ngx-translate/core': ngxTranslateVersion,
-      rxjs: rxjsVersion,
-      'zone.js': zoneJsVersion,
-    };
-    delete json.dependencies['nativescript-angular'];
-    delete json.dependencies['tns-core-modules'];
-    delete json.devDependencies['tns-core-modules'];
-    delete json.dependencies['tns-platform-declarations'];
-    delete json.devDependencies['tns-platform-declarations'];
-    json.devDependencies = json.devDependencies || {};
-    json.devDependencies = {
-      ...json.devDependencies,
-      '@angular-devkit/architect': '^0.1200.0',
-      '@angular-devkit/build-angular': angularVersion,
-      '@angular-devkit/core': angularVersion,
-      '@angular-devkit/schematics': angularVersion,
-      '@angular/compiler-cli': angularVersion,
-      '@angular/language-service': angularVersion,
-      ...(hasNativeScriptApps ? nativeScriptDevDeps : {}),
-      typescript: typescriptVersion,
-    };
-
-    return json;
-  })(tree, <any>context);
+  json.scripts.clean =
+    'npx rimraf hooks node_modules package-lock.json && yarn config set ignore-engines true && yarn';
+  json.dependencies = json.dependencies || {};
+  json.dependencies = {
+    ...json.dependencies,
+    ...ngDeps,
+    ...(hasNativeScriptApps ? nativeScriptDeps : {}),
+    '@ngx-translate/core': ngxTranslateVersion,
+    rxjs: rxjsVersion,
+    'zone.js': zoneJsVersion,
+  };
+  delete json.dependencies['nativescript-angular'];
+  delete json.dependencies['tns-core-modules'];
+  delete json.devDependencies['tns-core-modules'];
+  delete json.dependencies['tns-platform-declarations'];
+  delete json.devDependencies['tns-platform-declarations'];
+  json.devDependencies = json.devDependencies || {};
+  json.devDependencies = {
+    ...json.devDependencies,
+    '@angular-devkit/architect': '^0.1200.0',
+    '@angular-devkit/build-angular': angularVersion,
+    '@angular-devkit/core': angularVersion,
+    '@angular-devkit/schematics': angularVersion,
+    '@angular/compiler-cli': angularVersion,
+    '@angular/language-service': angularVersion,
+    ...(hasNativeScriptApps ? nativeScriptDevDeps : {}),
+    typescript: typescriptVersion,
+  };
+  return <any>updateJsonFile(tree, 'package.json', json);
 }
 
 export default function (): Rule {

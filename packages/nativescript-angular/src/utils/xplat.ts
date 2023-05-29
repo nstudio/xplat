@@ -15,9 +15,7 @@ import {
   ngxTranslateVersion,
   rxjsVersion,
   zonejsVersion,
-  angularEsLintVersion,
   nsEsLintVersion,
-  esLintVersion,
   nsWebpackVersion,
 } from './versions';
 
@@ -54,19 +52,6 @@ export namespace XplatNativeScriptAngularHelpers {
         angularDevDeps[`@angular-devkit/build-angular`] = ngVersion;
         angularDevDeps['@angular/compiler-cli'] = ngVersion;
         angularDevDeps['@angular/language-service'] = ngVersion;
-
-        if (!angularDevDeps['@angular-eslint/eslint-plugin']) {
-          angularDevDeps['@angular-eslint/eslint-plugin'] =
-            angularEsLintVersion;
-        }
-        if (!angularDevDeps['@angular-eslint/eslint-plugin-template']) {
-          angularDevDeps['@angular-eslint/eslint-plugin-template'] =
-            angularEsLintVersion;
-        }
-        if (!angularDevDeps['@angular-eslint/template-parser']) {
-          angularDevDeps['@angular-eslint/template-parser'] =
-            angularEsLintVersion;
-        }
       }
 
       return XplatHelpers.updatePackageForXplat(options, {
@@ -81,7 +66,6 @@ export namespace XplatNativeScriptAngularHelpers {
           '@nativescript/eslint-plugin': nsEsLintVersion,
           '@nativescript/webpack': nsWebpackVersion,
           '@ngtools/webpack': ngToolsWebpack,
-          eslint: esLintVersion,
           sass: sassVersion
         },
       })(tree, context);

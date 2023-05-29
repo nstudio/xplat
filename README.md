@@ -24,16 +24,26 @@
 
 ```
 npx create-nx-workspace@latest
+
+// Choose "Integrated monorepo" at the prompt:
+? Choose what to create                 … 
+> Integrated monorepo:    Nx configures your favorite frameworks and lets you focus on shipping features.
+
+// Choose "apps" at the prompt: 
+? What to create in the new workspace   … 
+> apps              [an empty monorepo with no plugins with a layout that works best for building apps]
 ```
 
-At the prompts:
-
-> What to create in the new workspace
-
-> choose `apps`
+### Install TypeScript (if not already present)
 
 ```
-npm i @nstudio/xplat -D
+npm install typescript@4.9.5 -D
+```
+
+### Install the tools:
+
+```
+npm install @nstudio/xplat -D
 ```
 
 You are now ready to create apps:
@@ -42,10 +52,12 @@ You are now ready to create apps:
 nx g app
 ```
 
-**NOTE:** If you encounter any issue, you can try creating an Nx workspace with version specified, for example:
+**NOTE:** If you encounter any issue, you can try creating an Nx workspace with a version specified.
+
+We have tested with the following, for example:
 
 ```
-npx create-nx-workspace@14.1.7
+npx create-nx-workspace@15.9.2
 ```
 
 ## App generation examples

@@ -42,7 +42,9 @@
   },
   "dependencies": {
     "@nstudio/focus": "*",
-    "@nstudio/xplat-utils": "*"
+    "@nstudio/xplat-utils": "*",
+    "@nx/devkit": "^16.0.0",
+    "@nx/js": "^16.0.0"
   },
   "author": "Nathan Walker",
   "license": "MIT",

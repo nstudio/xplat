@@ -10,15 +10,18 @@ import {
   template,
   SchematicContext,
 } from '@angular-devkit/schematics';
-import { addInstallTask, formatFiles } from '@nrwl/workspace';
+import { addInstallTask, formatFiles } from '@nx/workspace';
 import {
   XplatHelpers,
+  convertNgTreeToDevKit,
   getDefaultTemplateOptions,
   updateTsConfig,
 } from '@nstudio/xplat';
 import { prerun, getNpmScope } from '@nstudio/xplat-utils';
 import { XplatAngularHelpers } from '../../utils/xplat';
 import { FocusHelpers } from '@nstudio/focus';
+import { convertNxGenerator } from '@nx/devkit';
+import { initGenerator } from '@nx/js';
 
 export default function (options: XplatHelpers.Schema) {
   // console.log(`Generating xplat angular support for: ${options.platforms}`);
@@ -26,6 +29,15 @@ export default function (options: XplatHelpers.Schema) {
 
   return chain([
     prerun(options, true),
+    // async (tree, context) => {
+    //   const nxTree = convertNgTreeToDevKit(tree, context);
+    //   await initGenerator(nxTree, { skipFormat: true });
+    //   console.log('here!!')
+    // },
+    (tree, context) => {
+      console.log('here!!')
+      return noop()(tree,context);
+    },
     // libs
     XplatHelpers.generateLib(options, 'core', 'xplat', 'node'),
     XplatHelpers.cleanupLib(options, 'core', 'xplat'),

@@ -7,7 +7,6 @@ import {
 } from '@angular-devkit/schematics';
 import { join } from 'path';
 import * as fs from 'fs';
-import { updateJsonInTree, createOrUpdate } from '@nrwl/workspace';
 import { output } from '@nstudio/xplat';
 import {
   getAppPaths,
@@ -15,6 +14,7 @@ import {
   getNpmScope,
   getPrefix,
   prerun,
+  updateFile,
   updateJsonFile,
 } from '@nstudio/xplat-utils';
 
@@ -27,7 +27,6 @@ const nsCoreVersion = '~8.1.0';
 let hasNativeScriptApps = false;
 
 function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
-
   const nativeScriptAppsPaths = getAppPaths(tree, 'nativescript');
   const npmScope = getNpmScope();
   const appsNames = [];
@@ -99,7 +98,7 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
     if (tree.exists(`${dirPath}/tsconfig.tns.json`)) {
       tree.delete(`${dirPath}/tsconfig.tns.json`);
     }
-    createOrUpdate(
+    updateFile(
       tree,
       `${dirPath}/tools/xplat-postinstall.js`,
       `//#!/usr/bin/env node
@@ -143,7 +142,7 @@ child.stdout.on('data', function (data) {
       
       `
     );
-    createOrUpdate(
+    updateFile(
       tree,
       `${dirPath}/tsconfig.app.json`,
       `{
@@ -163,7 +162,7 @@ child.stdout.on('data', function (data) {
   ]
 }`
     );
-    createOrUpdate(
+    updateFile(
       tree,
       `${dirPath}/tsconfig.editor.json`,
       `{
@@ -175,7 +174,7 @@ child.stdout.on('data', function (data) {
 }
       `
     );
-    createOrUpdate(
+    updateFile(
       tree,
       `${dirPath}/tsconfig.json`,
       `{
@@ -196,7 +195,7 @@ child.stdout.on('data', function (data) {
 }      
       `
     );
-    createOrUpdate(
+    updateFile(
       tree,
       `${dirPath}/tsconfig.spec.json`,
       `{
@@ -211,12 +210,12 @@ child.stdout.on('data', function (data) {
 }      
       `
     );
-    createOrUpdate(
+    updateFile(
       tree,
       `${dirPath}/src/test-setup.ts`,
       `import 'jest-preset-angular/setup-jest';`
     );
-    createOrUpdate(
+    updateFile(
       tree,
       `${dirPath}/src/polyfills.ts`,
       `/**
@@ -241,7 +240,7 @@ import 'zone.js';
 import '@nativescript/zone-js';
        `
     );
-    createOrUpdate(
+    updateFile(
       tree,
       `${dirPath}/.eslintrc.json`,
       `{
@@ -255,7 +254,7 @@ import '@nativescript/zone-js';
         "*.ts"
       ],
       "extends": [
-        "plugin:@nrwl/nx/angular",
+        "plugin:@nx/nx/angular",
         "plugin:@angular-eslint/template/process-inline-templates"
       ],
       "parserOptions": {
@@ -287,7 +286,7 @@ import '@nativescript/zone-js';
         "*.html"
       ],
       "extends": [
-        "plugin:@nrwl/nx/angular-template"
+        "plugin:@nx/nx/angular-template"
       ],
       "rules": {}
     }
@@ -312,46 +311,44 @@ import '@nativescript/zone-js';
 }
 
 function updateRootPackage(tree: Tree, context: SchematicContext) {
-  return <any>updateJsonInTree('package.json', (json) => {
-    json.scripts = json.scripts || {};
-    const nativeScriptDeps = {
-      '@nativescript/angular': nsNgScopedVersion,
-      '@nativescript/core': nsCoreVersion,
-    };
-    const nativeScriptDevDeps = {
-      '@nativescript/types': nsCoreVersion,
-      '@nativescript/webpack': nsWebpackVersion,
-    };
+  const json = getJsonFromFile(tree, 'package.json');
+  json.scripts = json.scripts || {};
+  const nativeScriptDeps = {
+    '@nativescript/angular': nsNgScopedVersion,
+    '@nativescript/core': nsCoreVersion,
+  };
+  const nativeScriptDevDeps = {
+    '@nativescript/types': nsCoreVersion,
+    '@nativescript/webpack': nsWebpackVersion,
+  };
 
-    json.dependencies = json.dependencies || {};
-    json.dependencies = {
-      ...json.dependencies,
-      ...(hasNativeScriptApps ? nativeScriptDeps : {}),
-      '@ngx-translate/core': ngxTranslateVersion,
-    };
-    let ngToolsDeps = {
-      '@ngtools/webpack': angularVersion
-    }
-    if (json.dependencies['@angular/core']) {
-      // make sure in sync with current angular versions
-      ngToolsDeps['@ngtools/webpack'] = json.dependencies['@angular/core'];
-    } else {
-      ngToolsDeps = null;
-    }
-    delete json.dependencies['nativescript-angular'];
-    delete json.dependencies['tns-core-modules'];
-    delete json.devDependencies['tns-core-modules'];
-    delete json.dependencies['tns-platform-declarations'];
-    delete json.devDependencies['tns-platform-declarations'];
-    json.devDependencies = json.devDependencies || {};
-    json.devDependencies = {
-      ...json.devDependencies,
-      ...(hasNativeScriptApps ? nativeScriptDevDeps : {}),
-      ...(ngToolsDeps ? ngToolsDeps : {}),
-    };
-
-    return json;
-  })(tree, <any>context);
+  json.dependencies = json.dependencies || {};
+  json.dependencies = {
+    ...json.dependencies,
+    ...(hasNativeScriptApps ? nativeScriptDeps : {}),
+    '@ngx-translate/core': ngxTranslateVersion,
+  };
+  let ngToolsDeps = {
+    '@ngtools/webpack': angularVersion,
+  };
+  if (json.dependencies['@angular/core']) {
+    // make sure in sync with current angular versions
+    ngToolsDeps['@ngtools/webpack'] = json.dependencies['@angular/core'];
+  } else {
+    ngToolsDeps = null;
+  }
+  delete json.dependencies['nativescript-angular'];
+  delete json.dependencies['tns-core-modules'];
+  delete json.devDependencies['tns-core-modules'];
+  delete json.dependencies['tns-platform-declarations'];
+  delete json.devDependencies['tns-platform-declarations'];
+  json.devDependencies = json.devDependencies || {};
+  json.devDependencies = {
+    ...json.devDependencies,
+    ...(hasNativeScriptApps ? nativeScriptDevDeps : {}),
+    ...(ngToolsDeps ? ngToolsDeps : {}),
+  };
+  return <any>updateJsonFile(tree, 'package.json', json);
 }
 
 export default function (): Rule {
@@ -365,8 +362,8 @@ export default function (): Rule {
     updateNativeScriptApps,
     updateRootPackage,
     (tree: Tree) => {
-      return externalSchematic('@nrwl/workspace', 'convert-to-nx-project', {
-        all: true
+      return externalSchematic('@nx/workspace', 'convert-to-nx-project', {
+        all: true,
       });
     },
   ]);

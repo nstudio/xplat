@@ -5,14 +5,19 @@ import {
   Tree,
   noop,
 } from '@angular-devkit/schematics';
-import { XplatHelpers } from '@nstudio/xplat';
+import { XplatHelpers, convertNgTreeToDevKit } from '@nstudio/xplat';
 import { prerun } from '@nstudio/xplat-utils';
 import { XplatAngularHelpers } from '@nstudio/angular';
 import { XplatIonicAngularHelpers } from '../../utils/xplat';
+import { initGenerator } from '@nx/js';
 
 export default function (options: XplatHelpers.Schema) {
   return chain([
     prerun(options, true),
+    async (tree, context) => {
+      const nxTree = convertNgTreeToDevKit(tree, context);
+      await initGenerator(nxTree, { skipFormat: true });
+    },
     (tree: Tree, context: SchematicContext) =>
       externalSchematic(
         '@nstudio/ionic',

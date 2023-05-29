@@ -1,23 +1,16 @@
 import * as ts from 'typescript';
-import {
-  findNodes,
-  Change,
-  getImport,
-  getProjectConfig,
-  getSourceNodes,
-  InsertChange,
-  RemoveChange,
-} from '@nrwl/workspace/src/utils/ast-utils';
+import { findNodes } from 'nx/src/utils/typescript';
 import { Tree } from '@angular-devkit/schematics';
 import * as path from 'path';
 import { toFileName } from '@nstudio/xplat-utils';
+import { InsertChange, RemoveChange, getImport, getProjectConfig, getSourceNodes } from '@nstudio/xplat';
 
 export function addToCollection(
   source: ts.SourceFile,
   barrelIndexPath: string,
   symbolName: string,
   insertSpaces: string = ''
-): Change[] {
+): any[] {
   const collection = getCollection(source);
   if (!collection) return [];
   // if (!collection) return [new NoopChange()];
@@ -176,7 +169,7 @@ export function addSymbolToNgModuleMetadata(
   ngModulePath: string,
   metadataField: string,
   expression: string
-): Change[] {
+): any[] {
   const nodes = getDecoratorMetadata(source, 'NgModule', '@angular/core');
   let node: any = nodes[0]; // tslint:disable-line:no-any
 
@@ -313,7 +306,7 @@ export function removeFromNgModule(
   source: ts.SourceFile,
   modulePath: string,
   property: string
-): Change[] {
+): any[] {
   const nodes = getDecoratorMetadata(source, 'NgModule', '@angular/core');
   let node: any = nodes[0]; // tslint:disable-line:no-any
 
@@ -346,7 +339,7 @@ export function addImportToModule(
   source: ts.SourceFile,
   modulePath: string,
   symbolName: string
-): Change[] {
+): any[] {
   return addSymbolToNgModuleMetadata(source, modulePath, 'imports', symbolName);
 }
 
@@ -354,7 +347,7 @@ export function addImportToTestBed(
   source: ts.SourceFile,
   specPath: string,
   symbolName: string
-): Change[] {
+): any[] {
   const allCalls: ts.CallExpression[] = <any>(
     findNodes(source, ts.SyntaxKind.CallExpression)
   );
@@ -425,7 +418,7 @@ export function addRoute(
   ngModulePath: string,
   source: ts.SourceFile,
   route: string
-): Change[] {
+): any[] {
   const routes = getListOfRoutes(source);
   if (!routes) return [];
 
@@ -471,7 +464,7 @@ export function addProviderToModule(
   source: ts.SourceFile,
   modulePath: string,
   symbolName: string
-): Change[] {
+): any[] {
   return addSymbolToNgModuleMetadata(
     source,
     modulePath,
@@ -484,7 +477,7 @@ export function addDeclarationToModule(
   source: ts.SourceFile,
   modulePath: string,
   symbolName: string
-): Change[] {
+): any[] {
   return addSymbolToNgModuleMetadata(
     source,
     modulePath,
@@ -497,7 +490,7 @@ export function addEntryComponents(
   source: ts.SourceFile,
   modulePath: string,
   symbolName: string
-): Change[] {
+): any[] {
   return addSymbolToNgModuleMetadata(
     source,
     modulePath,

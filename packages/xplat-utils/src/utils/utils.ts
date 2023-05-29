@@ -8,11 +8,11 @@ import type {
   PlatformWithNxTypes,
 } from './types';
 import {
-  Tree,
+  Tree as NgTree,
   SchematicContext,
   SchematicsException,
 } from '@angular-devkit/schematics';
-import { parseJson, serializeJson } from '@nrwl/devkit';
+import { parseJson, serializeJson } from '@nx/devkit';
 
 export const supportedPlatforms: Array<PlatformTypes> = [
   'web',
@@ -83,12 +83,12 @@ export function jsonParse(content: string) {
   return {};
 }
 
-export function getJsonFromFile(tree: Tree, path: string) {
+export function getJsonFromFile(tree: NgTree, path: string) {
   // console.log('getJsonFromFile:', path)
   return jsonParse(tree.get(path).content.toString());
 }
 
-export function updateJsonFile(tree: Tree, path: string, jsonData: any) {
+export function updateJsonFile(tree: NgTree, path: string, jsonData: any) {
   try {
     // if (tree.exists(path)) {
     tree.overwrite(path, serializeJson(jsonData));
@@ -100,11 +100,16 @@ export function updateJsonFile(tree: Tree, path: string, jsonData: any) {
   }
 }
 
-export function updateFile(tree: Tree, path: string, content: string) {
+export function updateFile(tree: NgTree, path: string, content: string) {
   try {
     // if (tree.exists(path)) {
-    tree.overwrite(path, content);
+    // tree.overwrite(path, content);
     // }
+    if (tree.exists(path)) {
+      tree.overwrite(path, content);
+    } else {
+      tree.create(path, content);
+    }
     return tree;
   } catch (err) {
     // console.warn(err);
@@ -112,7 +117,7 @@ export function updateFile(tree: Tree, path: string, content: string) {
   }
 }
 
-export function getNxWorkspaceConfig(tree: Tree): any {
+export function getNxWorkspaceConfig(tree: NgTree): any {
   const nxConfig = getJsonFromFile(tree, 'nx.json');
   const hasWorkspaceDirs = tree.exists('apps') && tree.exists('libs');
 
@@ -127,7 +132,7 @@ export function getNxWorkspaceConfig(tree: Tree): any {
   );
 }
 
-export const copy = (tree: Tree, from: string, to: string) => {
+export const copy = (tree: NgTree, from: string, to: string) => {
   const file = tree.get(from);
   if (!file) {
     throw new SchematicsException(`File ${from} does not exist!`);
@@ -141,7 +146,7 @@ export function getRootTsConfigPath() {
 }
 
 export function getAppPaths(
-  tree: Tree,
+  tree: NgTree,
   type?: PlatformTypes // by default, will return all app paths (considering folder nesting)
 ): Array<string> {
   const appsDir = tree.getDir('apps');
@@ -218,7 +223,7 @@ export function getAppPaths(
 }
 
 export function prerun(options?: any, init?: boolean) {
-  return (tree: Tree) => {
+  return (tree: NgTree) => {
     const nxJson = getNxWorkspaceConfig(tree);
     if (nxJson) {
       npmScope = nxJson.npmScope || 'workspace';

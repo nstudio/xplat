@@ -6,7 +6,7 @@ import {
 } from '@angular-devkit/schematics';
 import { FrameworkTypes } from '@nstudio/xplat-utils';
 
-export { getFileContent } from '@nrwl/workspace/testing';
+export { getFileContent } from '@nx/workspace/testing';
 
 export function createEmptyWorkspace(
   tree: Tree,

@@ -13,7 +13,7 @@ import {
   SchematicsException,
   externalSchematic,
 } from '@angular-devkit/schematics';
-import { formatFiles, createOrUpdate, readJsonInTree } from '@nrwl/workspace';
+import { formatFiles } from '@nx/workspace';
 import {
   addGlobal,
   insert,
@@ -35,6 +35,8 @@ import {
   sanitizeCommaDelimitedArg,
   PlatformTypes,
   parseProjectNameFromPath,
+  getJsonFromFile,
+  updateFile,
 } from '@nstudio/xplat-utils';
 import {
   addImportToModule,
@@ -44,6 +46,7 @@ import {
   addSymbolToNgModuleMetadata,
 } from './ast';
 import * as ts from 'typescript';
+import { readJson } from '@nx/devkit';
 
 export type IGenerateType =
   | 'component'
@@ -346,7 +349,7 @@ export function getFeatureName(options: IGenerateOptions) {
 }
 
 export function getNxFeaturePath(tree: Tree, featureName: string) {
-  const tsConfig = readJsonInTree(tree, 'tsconfig.base.json');
+  const tsConfig = getJsonFromFile(tree, 'tsconfig.base.json');
   if (tsConfig) {
     if (
       tsConfig.compilerOptions &&
@@ -988,7 +991,7 @@ export function adjustSandbox(
             homeTemplate.slice(buttonEndIndex + 9);
           break;
       }
-      createOrUpdate(tree, homeCmpPath, homeTemplate);
+      updateFile(tree, homeCmpPath, homeTemplate);
     } else {
       throw new SchematicsException(
         `The --adjustSandbox option is only supported on the following at the moment: ${supportedSandboxPlatforms}`

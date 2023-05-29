@@ -12,9 +12,14 @@ import {
   move,
 } from '@angular-devkit/schematics';
 import { XplatAngularHelpers } from '@nstudio/angular';
-import { XplatHelpers, getDefaultTemplateOptions } from '@nstudio/xplat';
+import {
+  XplatHelpers,
+  convertNgTreeToDevKit,
+  getDefaultTemplateOptions,
+} from '@nstudio/xplat';
 import { prerun } from '@nstudio/xplat-utils';
 import { XplatWebAngularHelpers } from '../../utils/xplat';
+import { initGenerator } from '@nx/js';
 
 export default function (options: XplatHelpers.Schema) {
   return chain([
@@ -28,6 +33,10 @@ export default function (options: XplatHelpers.Schema) {
     //     })(tree, context);
     //   }
     // },
+    async (tree, context) => {
+      const nxTree = convertNgTreeToDevKit(tree, context);
+      await initGenerator(nxTree, { skipFormat: true });
+    },
     XplatHelpers.generateLib(options, 'core', 'xplat/web', 'jsdom'),
     XplatHelpers.cleanupLib(options, 'core', 'xplat/web'),
     XplatHelpers.generateLib(options, 'features', 'xplat/web', 'jsdom'),

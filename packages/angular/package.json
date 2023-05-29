@@ -29,7 +29,7 @@
     "migrations": "./migrations.json"
   },
   "dependencies": {
-    "@nrwl/angular": "^15.0.0"
+    "@nx/angular": "^16.0.0"
   },
   "peerDependencies": {
     "@nstudio/xplat": "*"

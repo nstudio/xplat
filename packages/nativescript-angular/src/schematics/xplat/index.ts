@@ -5,16 +5,21 @@ import {
   SchematicContext,
   noop,
 } from '@angular-devkit/schematics';
-import { updateTsConfig, XplatHelpers } from '@nstudio/xplat';
+import { convertNgTreeToDevKit, updateTsConfig, XplatHelpers } from '@nstudio/xplat';
 import { getNpmScope, prerun } from '@nstudio/xplat-utils';
 import { XplatAngularHelpers } from '@nstudio/angular';
 import { XplatNativeScriptAngularHelpers } from '../../utils/xplat';
 import { XplatNativeScriptHelpers } from '@nstudio/nativescript';
+import { initGenerator } from '@nx/js';
 
 export default function (options: XplatHelpers.Schema) {
   return chain([
     prerun(options, true),
     XplatNativeScriptHelpers.addReferences(),
+    // async (tree, context) => {
+    //   const nxTree = convertNgTreeToDevKit(tree, context);
+    //   await initGenerator(nxTree, { skipFormat: true });
+    // },
     (tree: Tree, context: SchematicContext) =>
       externalSchematic(
         '@nstudio/nativescript',

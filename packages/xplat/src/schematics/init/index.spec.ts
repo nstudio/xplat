@@ -8,7 +8,7 @@ import {
 import { createEmptyWorkspace } from '@nstudio/xplat/testing';
 import { runSchematic } from '../../utils/testing';
 import { XplatHelpers, stringUtils } from '../../utils';
-import { getFileContent } from '@nrwl/workspace/testing';
+import { getFileContent } from '@nx/workspace/testing';
 setTest();
 
 describe('xplat init', () => {
@@ -35,7 +35,7 @@ describe('xplat init', () => {
     let packageJson = JSON.parse(getFileContent(tree, 'package.json'));
     // console.log(packageJson);
     const devDeps = [
-      '@nrwl/angular',
+      '@nx/angular',
       '@nstudio/angular',
       '@nstudio/web-angular',
       '@nstudio/web',

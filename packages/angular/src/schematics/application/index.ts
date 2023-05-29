@@ -14,7 +14,7 @@ import {
   noop,
   ExecutionOptions,
 } from '@angular-devkit/schematics';
-import { formatFiles, updateWorkspace, getWorkspace } from '@nrwl/workspace';
+import { formatFiles, updateWorkspace, getWorkspace } from '@nx/workspace';
 import {
   stringUtils,
   updatePackageScripts,
@@ -84,7 +84,7 @@ export default function (options: Schema) {
         // };
       }
       return externalSchematic(
-        '@nrwl/angular',
+        '@nx/angular',
         'app',
         nrwlWebOptions,
         executionOptions

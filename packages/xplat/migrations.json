@@ -1,30 +1,5 @@
 {
   "schematics": {
-    "update-to-10.2.0": {
-      "version": "10.2.0",
-      "description": "Migrate workspace to 10.2.0",
-      "factory": "./migrations/update-10-2-0/update-10-2-0"
-    },
-    "update-to-11.0.0": {
-      "version": "11.0.21",
-      "description": "Migrate workspace to 11.0.0",
-      "factory": "./migrations/update-11-0-0/update-11-0-0"
-    },
-    "update-to-11-imports": {
-      "version": "11.0.21",
-      "description": "Migrate workspace to use v11 import barrels",
-      "factory": "./migrations/update-11-0-0/update-to-11-imports"
-    },
-    "update-to-11-env-base": {
-      "version": "11.0.21",
-      "description": "Migrate workspace to use v11 env base option",
-      "factory": "./migrations/update-11-0-0/update-to-11-env-base"
-    },
-    "update-to-11-clean-old-dirs": {
-      "version": "11.0.21",
-      "description": "Remove old dirs",
-      "factory": "./migrations/update-11-0-0/clean-old-dirs"
-    },
     "update-to-12.4.3": {
       "version": "12.4.3",
       "description": "Migrate workspace to 12.4.3",

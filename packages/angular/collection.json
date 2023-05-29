@@ -1,7 +1,7 @@
 {
   "name": "nstudio/angular",
   "version": "0.1",
-  "extends": ["@nrwl/angular", "@nstudio/xplat"],
+  "extends": ["@nx/angular", "@nstudio/xplat"],
   "schematics": {
     "ng-add": {
       "factory": "./src/schematics/ng-add/ng-add",
@@ -48,16 +48,6 @@
       "factory": "./src/schematics/ngrx",
       "schema": "./src/schematics/ngrx/schema.json",
       "description": "Create a ngrx store."
-    },
-    "elements": {
-      "factory": "./src/schematics/elements",
-      "schema": "./src/schematics/elements/schema.json",
-      "description": "Create custom elements for the web with Angular."
-    },
-    "helpers": {
-      "factory": "./src/schematics/helpers",
-      "schema": "./src/schematics/helpers/schema.json",
-      "description": "Helpers for Angular."
     },
     "xplat": {
       "factory": "./src/schematics/xplat",

@@ -13,7 +13,7 @@ import {
   noop,
   externalSchematic,
 } from '@angular-devkit/schematics';
-import { formatFiles, updateWorkspace } from '@nrwl/workspace';
+import { formatFiles, updateWorkspace } from '@nx/workspace';
 import {
   stringUtils,
   updatePackageScripts,
@@ -21,6 +21,7 @@ import {
   getDefaultTemplateOptions,
   XplatHelpers,
   readWorkspaceJson,
+  convertNgTreeToDevKit,
 } from '@nstudio/xplat';
 import {
   prerun,
@@ -31,6 +32,7 @@ import {
   getAppName,
 } from '@nstudio/xplat-utils';
 import { XplatElectrontHelpers } from '../../utils';
+import { addProjectConfiguration, readProjectConfiguration } from '@nx/devkit';
 
 export default function (options: XplatElectrontHelpers.SchemaApp) {
   if (!options.name) {
@@ -57,14 +59,12 @@ export default function (options: XplatElectrontHelpers.SchemaApp) {
     XplatElectrontHelpers.addNpmScripts(options),
     (tree: Tree, context: SchematicContext) => {
       // grab the target app configuration
-      const workspaceConfig = readWorkspaceJson(tree);
       // find app
       const fullTargetAppName = options.target;
-      let targetConfig;
-      if (workspaceConfig && workspaceConfig.projects) {
-        targetConfig = workspaceConfig.projects[fullTargetAppName];
-      }
-      if (!targetConfig) {
+      const nxTree = convertNgTreeToDevKit(tree, context);
+      const projectConfig = readProjectConfiguration(nxTree, fullTargetAppName);
+      
+      if (!projectConfig) {
         throw new SchematicsException(
           `The target app name "${fullTargetAppName}" does not appear to be in the workspace. You may need to generate it first or perhaps check the spelling.`
         );
@@ -72,44 +72,39 @@ export default function (options: XplatElectrontHelpers.SchemaApp) {
 
       const electronAppName = options.name;
       const directory = options.directory ? `${options.directory}/` : '';
-      if (!targetConfig.root) {
-        targetConfig.root = `apps/${directory}${electronAppName}`;
+      if (!projectConfig.root) {
+        projectConfig.root = `apps/${directory}${electronAppName}`;
       }
       let targetProp = 'architect';
-      if (!targetConfig[targetProp]) {
+      if (!projectConfig[targetProp]) {
         targetProp = 'targets'; // nx 11 moved to 'targets'
       }
-      if (targetConfig[targetProp]) {
+      if (projectConfig[targetProp]) {
         // update to use electron module
-        targetConfig[
+        projectConfig[
           targetProp
         ].build.options.outputPath = `dist/apps/${directory}${electronAppName}`;
-        targetConfig[
+        projectConfig[
           targetProp
         ].build.options.main = `apps/${directory}${fullTargetAppName}/src/main.ts`;
-        targetConfig[targetProp].build.options.assets.push({
+        projectConfig[targetProp].build.options.assets.push({
           glob: '**/*',
           input: `apps/${directory}${electronAppName}/src/`,
           ignore: ['**/*.ts'],
           output: '',
         });
-        targetConfig[
+        projectConfig[
           targetProp
         ].serve.options.browserTarget = `${electronAppName}:build`;
-        targetConfig[
+        projectConfig[
           targetProp
         ].serve.configurations.production.browserTarget = `${electronAppName}:build:production`;
         // clear other settings (TODO: may need these in future), for now keep electron options minimal
-        delete targetConfig[targetProp]['extract-i18n'];
-        delete targetConfig[targetProp]['test'];
-        delete targetConfig[targetProp]['lint'];
+        delete projectConfig[targetProp]['extract-i18n'];
+        delete projectConfig[targetProp]['test'];
+        delete projectConfig[targetProp]['lint'];
       }
-      return updateWorkspace((workspace) => {
-        workspace.projects.add({
-          name: electronAppName,
-          ...targetConfig,
-        });
-      });
+      addProjectConfiguration(nxTree, electronAppName, projectConfig);
     },
 
     formatFiles({ skipFormat: options.skipFormat }),

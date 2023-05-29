@@ -24,10 +24,10 @@ describe('app', () => {
 
   it('should create all files of an app', async () => {
     const options: Schema = { ...defaultOptions };
-    // console.log('appTree:', appTree);
+    console.log('appTree:', appTree);
     const tree = await runSchematic('app', options, appTree);
     const files = tree.files;
-    // console.log(files);
+    console.log(files);
     expect(
       files.indexOf('/apps/nativescript-foo/.gitignore')
     ).toBeGreaterThanOrEqual(0);

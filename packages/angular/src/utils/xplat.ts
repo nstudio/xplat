@@ -37,7 +37,6 @@ import {
   parseProjectNameFromPath,
 } from '@nstudio/xplat-utils';
 import { addToFeature, adjustBarrelIndex } from './generator';
-import { updateJsonInTree, getWorkspacePath } from '@nrwl/workspace';
 import {
   ngxTranslateVersion,
   ngxTranslateHttpVersion,
@@ -240,11 +239,11 @@ export namespace XplatAngularHelpers {
         devDependencies[`@angular/language-service`] = ngVersion;
       }
 
-      if (!packageJson.devDependencies['@nrwl/angular']) {
-        packageJson.devDependencies['@nrwl/angular'] = nxVersion;
+      if (!packageJson.devDependencies['@nx/angular']) {
+        packageJson.devDependencies['@nx/angular'] = nxVersion;
       }
-      if (!packageJson.devDependencies['@nrwl/jest']) {
-        packageJson.devDependencies['@nrwl/jest'] = nxVersion;
+      if (!packageJson.devDependencies['@nx/jest']) {
+        packageJson.devDependencies['@nx/jest'] = nxVersion;
       }
       if (!packageJson.devDependencies['@nstudio/web']) {
         packageJson.devDependencies['@nstudio/web'] = xplatVersion;
