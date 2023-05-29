@@ -21,28 +21,29 @@ export function addToCollection(
   barrelIndexPath: string,
   symbolName: string,
   insertSpaces: string = ''
-) {
-  
+): ts.SourceFile {
   const collection = getCollection(source);
-  if (!collection) return [];
+  if (!collection) return source;
   // if (!collection) return [new NoopChange()];
   // return [new NoopChange()];
 
-  console.log('collection.hasTrailingComma:', collection.hasTrailingComma)
+  console.log('collection.hasTrailingComma:', collection.hasTrailingComma);
   if (collection.hasTrailingComma || collection.length === 0) {
-    return [
-      insertChange(tree, source, barrelIndexPath, collection.end, symbolName),
-    ];
+    return insertChange(
+      tree,
+      source,
+      barrelIndexPath,
+      collection.end,
+      symbolName
+    );
   } else {
-    return [
-      insertChange(
-        tree,
-        source,
-        barrelIndexPath,
-        collection.end,
-        `,\n${insertSpaces}${symbolName}`
-      ),
-    ];
+    return insertChange(
+      tree,
+      source,
+      barrelIndexPath,
+      collection.end,
+      `,\n${insertSpaces}${symbolName}`
+    );
   }
 }
 

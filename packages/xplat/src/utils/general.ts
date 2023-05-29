@@ -19,11 +19,8 @@ import {
 } from '@nstudio/xplat-utils';
 import { join, relative } from 'path';
 import type { Mode } from 'fs';
-import type {
-  FileChange,
-  Tree as DevKitTree,
-  TreeWriteOptions,
-} from 'nx/src/generators/tree';
+import { FileChange, Tree as DevKitTree } from '@nx/devkit';
+
 
 export interface NodeDependency {
   name: string;
@@ -340,7 +337,7 @@ export class DevkitTreeFromAngularDevkitTree implements DevKitTree {
   write(
     filePath: string,
     content: Buffer | string,
-    options?: TreeWriteOptions
+    options?: Parameters<DevKitTree['write']>[2]
   ): void {
     if (options?.mode) {
       this.warnUnsupportedFilePermissionsChange(filePath, options.mode);

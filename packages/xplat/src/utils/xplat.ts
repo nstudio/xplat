@@ -689,7 +689,7 @@ export namespace XplatHelpers {
         libOptions.skipTsConfig = true;
       }
       // console.log(`CALLING externalSchematic('@nx/workspace', 'lib') for:`, `libs/${directory ? directory + '/' : ''}${libName}`)
-      return chain([externalSchematic('@nx/workspace', 'lib', libOptions)]);
+      return chain([externalSchematic('@nx/js', 'library', libOptions)]);
     };
   }
 

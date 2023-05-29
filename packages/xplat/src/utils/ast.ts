@@ -10,27 +10,37 @@ export function addGlobal(
   source: ts.SourceFile,
   modulePath: string,
   statement: string,
-  isExport?: boolean,
-) {
+  isExport?: boolean
+): ts.SourceFile {
   if (isExport) {
     const allExports = findNodes(source, ts.SyntaxKind.ExportDeclaration);
     // console.log('allExports:', allExports.length);
     if (allExports.length > 0) {
       const lastExport = allExports[allExports.length - 1];
       // console.log('lastExport.end:', lastExport.end);
-      return [insertChange(tree, source, modulePath, lastExport.end, `\n${statement}\n`)];
+      return insertChange(
+        tree,
+        source,
+        modulePath,
+        lastExport.end,
+        `\n${statement}\n`
+      );
     } else {
-      return [insertChange(tree, source, modulePath, 0, `${statement}\n`)];
+      return insertChange(tree, source, modulePath, 0, `${statement}\n`);
     }
   } else {
     const allImports = findNodes(source, ts.SyntaxKind.ImportDeclaration);
     if (allImports.length > 0) {
       const lastImport = allImports[allImports.length - 1];
-      return [
-        insertChange(tree, source, modulePath, lastImport.end + 1, `\n${statement}\n`),
-      ];
+      return insertChange(
+        tree,
+        source,
+        modulePath,
+        lastImport.end + 1,
+        `\n${statement}\n`
+      );
     } else {
-      return [insertChange(tree, source, modulePath, 0, `${statement}\n`)];
+      return insertChange(tree, source, modulePath, 0, `${statement}\n`);
     }
   }
 }
