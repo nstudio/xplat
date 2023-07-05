@@ -29,7 +29,7 @@
     "migrations": "./migrations.json"
   },
   "dependencies": {
-    "@nativescript/nx": "16.0.0-beta.0"
+    "@nativescript/nx": "^16.0.0"
   },
   "peerDependencies": {
     "@nstudio/xplat": "*"
