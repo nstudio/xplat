@@ -22,24 +22,40 @@
 
 ## Quickstart
 
-```
+```sh
 npx create-nx-workspace@latest
 
-// Choose "Integrated monorepo" at the prompt:
+✔ Where would you like to create your workspace? · {your-workspace-name}
 
-? Choose what to create                 … 
-> Integrated monorepo:    Nx configures your favorite frameworks and lets you focus on shipping features.
+# Choose "None"
 
-// Choose "apps" at the prompt: 
+? Which stack do you want to use? … 
+None:          Configures a minimal structure without specific frameworks or technologies.
 
-? What to create in the new workspace   … 
-> apps              [an empty monorepo with no plugins with a layout that works best for building apps]
+# Choose "Integrated"
+
+? Package-based or integrated? … 
+Integrated:    Nx creates a workspace structure most suitable for building apps.
 ```
 
-Install the tools:
+### Init workspace
+
+Install the @nx/js plugin.
+
+```sh
+npm install @nx/js -D
+```
+
+Now initialize -- This will ensure a `tsconfig.base.json` is created to begin building your workspace.
+
+```sh
+npx nx g @nx/js:init
+```
+
+### Install the tools:
 
 ```
-npm i @nstudio/xplat -D
+npm install @nstudio/xplat -D
 ```
 
 You are now ready to create apps:
@@ -51,7 +67,7 @@ npx nx g @nstudio/xplat:app
 **NOTE:** If you encounter any issue, you can try creating an Nx workspace with version specified, for example:
 
 ```
-npx create-nx-workspace@14.1.7
+npx create-nx-workspace@16.5.0
 ```
 
 ## App generation examples

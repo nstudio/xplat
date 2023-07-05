@@ -143,14 +143,6 @@ export function readWorkspaceJson(tree: NgTree) {
   return getJsonFromFile(tree, 'workspace.json');
 }
 
-// export function persistPrefix(prefix: string) {
-//   return (tree: Tree) => {
-//     const nxConfig = getNxWorkspaceConfig(tree);
-//     ngConfig.defaults.prefix = prefix;
-//     return updateJsonFile(tree, 'angular.json', ngConfig);
-//   };
-// }
-
 export function getPrefixWarning(prefix: string) {
   return `A default prefix had already been set for your workspace: ${prefix}. Since xplat had already been configured we will be using '${prefix}' as the prefix.`;
 }

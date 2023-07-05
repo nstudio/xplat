@@ -12,7 +12,13 @@ import {
   SchematicContext,
   SchematicsException,
 } from '@angular-devkit/schematics';
-import { parseJson, serializeJson } from '@nx/devkit';
+import {
+  Tree,
+  parseJson,
+  readJson,
+  readNxJson,
+  serializeJson,
+} from '@nx/devkit';
 
 export const supportedPlatforms: Array<PlatformTypes> = [
   'web',
@@ -41,8 +47,24 @@ let groupByName = false;
 let isTest = false;
 let usingXplatWorkspace = false;
 
-export function getNpmScope() {
-  return npmScope;
+export function getNpmScope(tree?: NgTree) {
+  if (npmScope) {
+    return npmScope;
+  }
+  const nxJson = getJsonFromFile(tree, 'nx.json');
+
+  // TODO(v17): Remove reading this from nx.json
+  if (nxJson.npmScope) {
+    npmScope = nxJson.npmScope;
+    return npmScope;
+  }
+
+  const packageJson = getJsonFromFile(tree, 'package.json');
+
+  if (packageJson?.name?.startsWith('@')) {
+    npmScope = packageJson.name.split('/')[0].substring(1);
+    return npmScope;
+  }
 }
 
 export function getPrefix() {
@@ -114,21 +136,6 @@ export function updateFile(tree: NgTree, path: string, content: string) {
     // console.warn(err);
     throw new SchematicsException(`${path}: ${err}`);
   }
-}
-
-export function getNxWorkspaceConfig(tree: NgTree): any {
-  const nxConfig = getJsonFromFile(tree, 'nx.json');
-  const hasWorkspaceDirs = tree.exists('apps') && tree.exists('libs');
-
-  // determine if Nx workspace
-  if (nxConfig) {
-    if (nxConfig.npmScope || hasWorkspaceDirs) {
-      return nxConfig;
-    }
-  }
-  throw new SchematicsException(
-    '@nstudio/xplat must be used inside an Nx workspace. Create a workspace first. https://nx.dev'
-  );
 }
 
 export const copy = (tree: NgTree, from: string, to: string) => {
@@ -223,10 +230,7 @@ export function getAppPaths(
 
 export function prerun(options?: any, init?: boolean) {
   return (tree: NgTree) => {
-    const nxJson = getNxWorkspaceConfig(tree);
-    if (nxJson) {
-      npmScope = nxJson.npmScope || 'workspace';
-    }
+    npmScope = getNpmScope(tree) || 'workspace';
     // console.log('npmScope:', npmScope);
     const packageJson = getJsonFromFile(tree, 'package.json');
 
