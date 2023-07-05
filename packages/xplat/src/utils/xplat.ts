@@ -393,7 +393,7 @@ export namespace XplatHelpers {
               let version: string;
               // ensure inner schematic dependencies are installed
               for (const name of packageInnerDependencies[packageName]) {
-                if (name.indexOf('nrwl') > -1) {
+                if (name.indexOf('@nx/') > -1) {
                   // default to internally managed/supported nrwl version
                   version = nxVersion;
                   // look for existing nrwl versions if user already has them installed and use those
@@ -501,7 +501,7 @@ export namespace XplatHelpers {
               let version: string;
               // ensure inner schematic dependencies are installed
               for (const name of packageInnerDependencies[packageName]) {
-                if (name.indexOf('nrwl') > -1) {
+                if (name.indexOf('@nx/') > -1) {
                   // default to internally managed/supported nrwl version
                   version = nxVersion;
                   // look for existing nrwl versions if user already has them installed and use those
