@@ -64,11 +64,7 @@ You are now ready to create apps:
 npx nx g @nstudio/xplat:app
 ```
 
-**NOTE:** If you encounter any issue, you can try creating an Nx workspace with version specified, for example:
-
-```
-npx create-nx-workspace@16.5.0
-```
+**Potential schematics error:** If you encounter a `SchematicNameCollisionException` issue, you can see this gist to apply a patch: https://gist.github.com/NathanWalker/a8554c1e0bba700affeb0c4672d26b0e
 
 ## App generation examples
 

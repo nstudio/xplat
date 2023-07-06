@@ -61,6 +61,7 @@ export default function (options: Schema) {
     (tree: Tree, context: SchematicContext) => {
       const nrwlWebOptions = {
         ...options,
+        standalone: false,
         skipInstall: true,
       };
       // remove non schema validated properties

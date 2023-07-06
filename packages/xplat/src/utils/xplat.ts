@@ -344,9 +344,9 @@ export namespace XplatHelpers {
               ) {
                 // platforms that are supported directly via Nx only right now
                 // 'app'/'application' is only schematic supported via xplat proxy at moment
-                const packageName = `@nx/${platform}`;
-                devDependencies[packageName] = nxVersion;
-                packagesToRunXplat.push(packageName);
+                // const packageName = `@nx/${platform}`;
+                // devDependencies[packageName] = nxVersion;
+                // packagesToRunXplat.push(packageName);
               } else {
                 const packageName = `@nstudio/${platform}-${framework}`;
                 devDependencies[packageName] = xplatVersion;
@@ -372,9 +372,9 @@ export namespace XplatHelpers {
         ) {
           // platforms supported directly via Nx only right now
           // 'app'/'application' is only schematic supported via xplat proxy at moment
-          const packageName = `@nx/${platform}`;
-          devDependencies[packageName] = nxVersion;
-          packagesToRunXplat.push(packageName);
+          // const packageName = `@nx/${platform}`;
+          // devDependencies[packageName] = nxVersion;
+          // packagesToRunXplat.push(packageName);
         } else {
           throw new SchematicsException(unsupportedPlatformError(platform));
         }
@@ -480,9 +480,9 @@ export namespace XplatHelpers {
         ) {
           // platforms supported directly via Nx only right now
           // 'app'/'application' is only schematic supported via xplat proxy at moment
-          const packageName = `@nx/${platform}`;
-          devDependencies[packageName] = nxVersion;
-          packagesToRun.push(packageName);
+          // const packageName = `@nx/${platform}`;
+          // devDependencies[packageName] = nxVersion;
+          // packagesToRun.push(packageName);
         } else {
           throw new SchematicsException(unsupportedPlatformError(platform));
         }
@@ -679,6 +679,8 @@ export namespace XplatHelpers {
         directory,
         testEnvironment,
         interactive: false,
+        unitTestRunner: 'jest',
+        bundler: 'none',
       };
       if (libName === 'scss') {
         libOptions.skipTsConfig = true;
