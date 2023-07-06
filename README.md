@@ -22,31 +22,49 @@
 
 ## Quickstart
 
-```
+```sh
 npx create-nx-workspace@latest
+
+✔ Where would you like to create your workspace? · {your-workspace-name}
+
+# Choose "None"
+
+? Which stack do you want to use? … 
+None:          Configures a minimal structure without specific frameworks or technologies.
+
+# Choose "Integrated"
+
+? Package-based or integrated? … 
+Integrated:    Nx creates a workspace structure most suitable for building apps.
 ```
 
-At the prompts:
+### Init workspace
 
-> What to create in the new workspace
+Install the @nx/js plugin.
 
-> choose `apps`
+```sh
+npm install @nx/js -D
+```
+
+Now initialize -- This will ensure a `tsconfig.base.json` is created to begin building your workspace.
+
+```sh
+npx nx g @nx/js:init
+```
+
+### Install the tools:
 
 ```
-npm i @nstudio/xplat -D
+npm install @nstudio/xplat -D
 ```
 
 You are now ready to create apps:
 
 ```
-nx g app
+npx nx g @nstudio/xplat:app
 ```
 
-**NOTE:** If you encounter any issue, you can try creating an Nx workspace with version specified, for example:
-
-```
-npx create-nx-workspace@14.1.7
-```
+**Potential schematics error:** If you encounter a `SchematicNameCollisionException` issue, you can see this gist to apply a patch: https://gist.github.com/NathanWalker/a8554c1e0bba700affeb0c4672d26b0e
 
 ## App generation examples
 
@@ -59,7 +77,7 @@ Electron app generator can use any web app in the workspace as it's target.
 If you don't have a web app yet, create one first:
 
 ```
-nx g app sample
+npx nx g @nstudio/xplat:app sample
 ```
 
 > choose `web`
@@ -67,7 +85,7 @@ nx g app sample
 You can now use the web app as the Electron target:
 
 ```
-nx g app desktop --target=web-sample
+npx nx g @nstudio/xplat:app desktop --target=web-sample
 ```
 
 > choose `electron`
@@ -81,7 +99,7 @@ npm run start.electron.desktop
 ### Ionic
 
 ```
-nx g app sample
+npx nx g @nstudio/xplat:app sample
 ```
 
 > choose `ionic`
@@ -89,13 +107,13 @@ nx g app sample
 Develop in browser with:
 
 ```
-nx serve ionic-sample
+npx nx serve ionic-sample
 ```
 
 Build Ionic app:
 
 ```
-nx build ionic-sample
+npx nx build ionic-sample
 ```
 
 A. **Capacitor iOS** - Prepare for development
@@ -125,7 +143,7 @@ npm run open.ionic.sample.android
 ### NativeScript
 
 ```
-nx g app mobile
+nx g @nstudio/xplat:app mobile
 ```
 
 > choose `nativescript`
@@ -133,13 +151,13 @@ nx g app mobile
 A. **iOS**
 
 ```
-nx run nativescript-mobile:ios
+npx nx run nativescript-mobile:ios
 ```
 
 B. **Android**
 
 ```
-nx run nativescript-mobile:android
+npx nx run nativescript-mobile:android
 ```
 
 ## Documentation

@@ -14,10 +14,9 @@ import {
   noop,
 } from '@angular-devkit/schematics';
 import {
-  updateJsonInTree,
   formatFiles,
   updateWorkspace,
-} from '@nrwl/workspace';
+} from '@nx/workspace';
 import {
   stringUtils,
   updatePackageScripts,
@@ -240,8 +239,9 @@ function updateWorkspaceSupport(
   tree: Tree,
   context: SchematicContext
 ) {
-  return updateJsonInTree('package.json', (json) => {
-    json.scripts = json.scripts || {};
+  const packagePath = 'package.json';
+  const json = getJsonFromFile(tree, packagePath);
+  json.scripts = json.scripts || {};
     json.dependencies = json.dependencies || {};
     const angularVersion = json.dependencies['@angular/core'];
     json.dependencies = {
@@ -253,11 +253,9 @@ function updateWorkspaceSupport(
     json.devDependencies = {
       ...json.devDependencies,
       'http-server': '^14.1.1',
-      'ngx-build-plus': '^15.0.0',
+      'ngx-build-plus': '^16.0.0',
     };
-
-    return json;
-  })(tree, <any>context);
+    return updateJsonFile(tree, packagePath, json);
 }
 
 function createCustomElementList(componentSymbols) {

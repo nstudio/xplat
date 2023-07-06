@@ -30,7 +30,7 @@ import {
 } from '@nstudio/xplat-utils';
 import { Schema } from './schema';
 import { XplatNativeScriptHelpers } from '../../utils';
-import { addInstallTask, updateWorkspace } from '@nrwl/workspace';
+import { addInstallTask, updateWorkspace } from '@nx/workspace';
 import { nsCoreVersion } from '../../utils/versions';
 
 export default function (options: Schema) {

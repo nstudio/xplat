@@ -7,7 +7,6 @@ import {
 } from '@angular-devkit/schematics';
 import { join } from 'path';
 import * as fs from 'fs';
-import { updateJsonInTree, createOrUpdate } from '@nrwl/workspace';
 import { output } from '@nstudio/xplat';
 import {
   getAppPaths,
@@ -15,6 +14,7 @@ import {
   getNpmScope,
   getPrefix,
   prerun,
+  updateFile,
   updateJsonFile,
 } from '@nstudio/xplat-utils';
 
@@ -99,7 +99,7 @@ function updateNativeScriptApps(tree: Tree, context: SchematicContext) {
     if (tree.exists(`${dirPath}/tsconfig.tns.json`)) {
       tree.delete(`${dirPath}/tsconfig.tns.json`);
     }
-    createOrUpdate(
+    updateFile(
       tree,
       `${dirPath}/tools/xplat-postinstall.js`,
       `//#!/usr/bin/env node
@@ -143,7 +143,7 @@ child.stdout.on('data', function (data) {
       
       `
     );
-    createOrUpdate(
+    updateFile(
       tree,
       `${dirPath}/tsconfig.app.json`,
       `{
@@ -163,7 +163,7 @@ child.stdout.on('data', function (data) {
   ]
 }`
     );
-    createOrUpdate(
+    updateFile(
       tree,
       `${dirPath}/tsconfig.editor.json`,
       `{
@@ -175,7 +175,7 @@ child.stdout.on('data', function (data) {
 }
       `
     );
-    createOrUpdate(
+    updateFile(
       tree,
       `${dirPath}/tsconfig.json`,
       `{
@@ -196,7 +196,7 @@ child.stdout.on('data', function (data) {
 }      
       `
     );
-    createOrUpdate(
+    updateFile(
       tree,
       `${dirPath}/tsconfig.spec.json`,
       `{
@@ -211,12 +211,12 @@ child.stdout.on('data', function (data) {
 }      
       `
     );
-    createOrUpdate(
+    updateFile(
       tree,
       `${dirPath}/src/test-setup.ts`,
       `import 'jest-preset-angular/setup-jest';`
     );
-    createOrUpdate(
+    updateFile(
       tree,
       `${dirPath}/src/polyfills.ts`,
       `/**
@@ -241,7 +241,7 @@ import 'zone.js';
 import '@nativescript/zone-js';
        `
     );
-    createOrUpdate(
+    updateFile(
       tree,
       `${dirPath}/.eslintrc.json`,
       `{
@@ -312,8 +312,8 @@ import '@nativescript/zone-js';
 }
 
 function updateRootPackage(tree: Tree, context: SchematicContext) {
-  return <any>updateJsonInTree('package.json', (json) => {
-    json.scripts = json.scripts || {};
+  const json = getJsonFromFile(tree, 'package.json');
+  json.scripts = json.scripts || {};
     const nativeScriptDeps = {
       '@nativescript/angular': nsNgScopedVersion,
       '@nativescript/core': nsCoreVersion,
@@ -349,9 +349,7 @@ function updateRootPackage(tree: Tree, context: SchematicContext) {
       ...(hasNativeScriptApps ? nativeScriptDevDeps : {}),
       ...(ngToolsDeps ? ngToolsDeps : {}),
     };
-
-    return json;
-  })(tree, <any>context);
+    return updateJsonFile(tree, 'package.json', json)
 }
 
 export default function (): Rule {

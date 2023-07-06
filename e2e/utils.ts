@@ -98,7 +98,7 @@ export function npmInstall() {
 export function newProject(): void {
   cleanup();
   if (!directoryExists(`./tmp/${projectName}_backup`)) {
-    runNgNew(`--collection=@nrwl/workspace --npmScope=${projectName}`, true);
+    runNgNew(`--collection=@nx/workspace --npmScope=${projectName}`, true);
     npmInstall();
     execSync(`mv ./tmp/${projectName} ./tmp/${projectName}_backup`);
   }

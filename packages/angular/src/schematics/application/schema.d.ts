@@ -1,9 +1,9 @@
-// import { Schema as NrwlAngularSchema } from '@nrwl/angular/src/schematics/application/schema';
+// import { Schema as NrwlAngularSchema } from '@nx/angular/src/schematics/application/schema';
 
 export interface Schema {
   //extends NrwlAngularSchema {
-  // START from @nrwl/angular package
-  // TODO: submit PR to Nx to expose app schema so can be extended from @nrwl/angular
+  // START from @nx/angular package
+  // TODO: submit PR to Nx to expose app schema so can be extended from @nx/angular
   // Right now the schema.d.ts is not published alongside the schema.json
   name: string;
   skipFormat?: boolean;
@@ -18,7 +18,7 @@ export interface Schema {
   tags?: string;
   unitTestRunner?: UnitTestRunner;
   e2eTestRunner?: E2eTestRunner;
-  // END from @nrwl/angular package
+  // END from @nx/angular package
 
   // xplat additional options
   /**

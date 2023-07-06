@@ -6,7 +6,7 @@ import {
 import { prerun } from '@nstudio/xplat-utils';
 import { config as configApplitools } from './applitools';
 import { SchematicsException, chain, noop } from '@angular-devkit/schematics';
-import { addInstallTask } from '@nrwl/workspace';
+import { addInstallTask } from '@nx/workspace';
 
 const supportedHelpers = {
   applitools: configApplitools,

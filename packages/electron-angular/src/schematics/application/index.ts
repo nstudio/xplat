@@ -13,14 +13,13 @@ import {
   noop,
   externalSchematic,
 } from '@angular-devkit/schematics';
-import { formatFiles, updateWorkspace } from '@nrwl/workspace';
+import { formatFiles, updateWorkspace } from '@nx/workspace';
 import {
   stringUtils,
   updatePackageScripts,
   missingArgument,
   getDefaultTemplateOptions,
   XplatHelpers,
-  readWorkspaceJson,
 } from '@nstudio/xplat';
 import {
   prerun,
@@ -32,6 +31,7 @@ import {
 } from '@nstudio/xplat-utils';
 import { XplatElectronAngularHelpers } from '../../utils';
 import { XplatElectrontHelpers } from '@nstudio/electron';
+import { ProjectConfiguration, readProjectConfiguration, updateProjectConfiguration } from '@nx/devkit';
 
 export default function (options: XplatElectrontHelpers.SchemaApp) {
   if (!options.name) {
@@ -70,14 +70,11 @@ export default function (options: XplatElectrontHelpers.SchemaApp) {
     XplatElectronAngularHelpers.updateRootDeps(options),
     XplatElectrontHelpers.addNpmScripts(options),
     (tree: Tree, context: SchematicContext) => {
-      // grab the target app configuration
-      const workspaceConfig = readWorkspaceJson(tree);
-      // find app
       const fullTargetAppName = options.target;
-      let targetConfig;
-      if (workspaceConfig && workspaceConfig.projects) {
-        targetConfig = workspaceConfig.projects[fullTargetAppName];
-      }
+      let targetConfig: ProjectConfiguration;
+      try {
+        targetConfig = readProjectConfiguration(tree as any, fullTargetAppName);
+      } catch (e) {}
       if (!targetConfig) {
         throw new SchematicsException(
           `The target app name "${fullTargetAppName}" does not appear to be in the workspace. You may need to generate the app first or perhaps check the spelling.`
@@ -132,11 +129,9 @@ export default function (options: XplatElectrontHelpers.SchemaApp) {
         delete targetConfig[targetProp]['test'];
         delete targetConfig[targetProp]['lint'];
       }
-      return updateWorkspace((workspace) => {
-        workspace.projects.add({
-          name: electronAppName,
-          ...targetConfig,
-        });
+      return updateProjectConfiguration(tree as any, fullTargetAppName, {
+        name: electronAppName,
+        ...targetConfig,
       });
     },
     options.useXplat ? (tree: Tree) => adjustAppFiles(options, tree) : noop(),

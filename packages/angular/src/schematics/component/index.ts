@@ -35,7 +35,7 @@ import {
   ITargetPlatforms,
   PlatformTypes,
 } from '@nstudio/xplat-utils';
-import { formatFiles } from '@nrwl/workspace';
+import { formatFiles } from '@nx/workspace';
 import { addToFeature, adjustBarrelIndex } from '@nstudio/angular';
 import { ComponentHelpers } from '../../utils/xplat';
 

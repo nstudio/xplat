@@ -8,7 +8,7 @@ export namespace XplatElectronAngularHelpers {
       return XplatHelpers.updatePackageForXplat(options, {
         // nothing extra needed at moment
         devDependencies: {
-          '@nrwl/angular': nxVersion,
+          '@nx/angular': nxVersion,
           '@nstudio/angular': xplatVersion,
         },
       })(tree, context);

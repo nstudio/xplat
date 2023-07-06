@@ -14,14 +14,13 @@ import {
   noop,
   ExecutionOptions,
 } from '@angular-devkit/schematics';
-import { formatFiles, updateWorkspace, getWorkspace } from '@nrwl/workspace';
+import { formatFiles, updateWorkspace, getWorkspace } from '@nx/workspace';
 import {
   stringUtils,
   updatePackageScripts,
   missingArgument,
   getDefaultTemplateOptions,
   XplatHelpers,
-  readWorkspaceJson,
 } from '@nstudio/xplat';
 import {
   prerun,
@@ -62,6 +61,7 @@ export default function (options: Schema) {
     (tree: Tree, context: SchematicContext) => {
       const nrwlWebOptions = {
         ...options,
+        standalone: false,
         skipInstall: true,
       };
       // remove non schema validated properties
@@ -84,7 +84,7 @@ export default function (options: Schema) {
         // };
       }
       return externalSchematic(
-        '@nrwl/angular',
+        '@nx/angular',
         'app',
         nrwlWebOptions,
         executionOptions

@@ -20,6 +20,7 @@ import {
   supportedSandboxPlatforms,
   updateTsConfig,
   IXplatSettings,
+  convertNgTreeToDevKit,
 } from './general';
 import {
   getPrefix,
@@ -29,11 +30,6 @@ import {
   supportedPlatforms,
   getGroupByName,
   sanitizeCommaDelimitedArg,
-  updateFile,
-  getNxWorkspaceConfig,
-  PlatformModes,
-  isTesting,
-  jsonParse,
   FrameworkTypes,
   getFrontendFramework,
   supportedFrameworks,
@@ -44,10 +40,6 @@ import {
   parseProjectNameFromPath,
   toFileName,
 } from '@nstudio/xplat-utils';
-import {
-  updateJsonInTree, 
-  readJsonInTree,
-} from '@nrwl/workspace';
 import { insert, addGlobal } from './ast';
 import {
   platformAppPrefixError,
@@ -68,24 +60,24 @@ import { xplatVersion, nxVersion } from './versions';
 import { output } from './output';
 
 export const packageInnerDependencies = {
-  '@nstudio/angular': ['@nrwl/angular'],
+  '@nstudio/angular': ['@nx/angular'],
   '@nstudio/electron-angular': [
-    '@nrwl/angular',
+    '@nx/angular',
     '@nstudio/electron',
     '@nstudio/angular',
   ],
   '@nstudio/ionic-angular': [
-    '@nrwl/angular',
+    '@nx/angular',
     '@nstudio/ionic',
     '@nstudio/angular',
     '@nstudio/web-angular',
   ],
   '@nstudio/nativescript-angular': [
-    '@nrwl/angular',
+    '@nx/angular',
     '@nstudio/nativescript',
     '@nstudio/angular',
   ],
-  '@nstudio/web-angular': ['@nrwl/angular', '@nstudio/web', '@nstudio/angular'],
+  '@nstudio/web-angular': ['@nx/angular', '@nstudio/web', '@nstudio/angular'],
 };
 
 export namespace XplatHelpers {
@@ -165,7 +157,7 @@ export namespace XplatHelpers {
     callSchematicIfAdded?: string
   ): Rule {
     return (host: Tree) => {
-      const { dependencies, devDependencies } = readJsonInTree(
+      const { dependencies, devDependencies } = getJsonFromFile(
         host,
         'package.json'
       );
@@ -352,9 +344,9 @@ export namespace XplatHelpers {
               ) {
                 // platforms that are supported directly via Nx only right now
                 // 'app'/'application' is only schematic supported via xplat proxy at moment
-                const packageName = `@nrwl/${platform}`;
-                devDependencies[packageName] = nxVersion;
-                packagesToRunXplat.push(packageName);
+                // const packageName = `@nx/${platform}`;
+                // devDependencies[packageName] = nxVersion;
+                // packagesToRunXplat.push(packageName);
               } else {
                 const packageName = `@nstudio/${platform}-${framework}`;
                 devDependencies[packageName] = xplatVersion;
@@ -380,9 +372,9 @@ export namespace XplatHelpers {
         ) {
           // platforms supported directly via Nx only right now
           // 'app'/'application' is only schematic supported via xplat proxy at moment
-          const packageName = `@nrwl/${platform}`;
-          devDependencies[packageName] = nxVersion;
-          packagesToRunXplat.push(packageName);
+          // const packageName = `@nx/${platform}`;
+          // devDependencies[packageName] = nxVersion;
+          // packagesToRunXplat.push(packageName);
         } else {
           throw new SchematicsException(unsupportedPlatformError(platform));
         }
@@ -401,7 +393,7 @@ export namespace XplatHelpers {
               let version: string;
               // ensure inner schematic dependencies are installed
               for (const name of packageInnerDependencies[packageName]) {
-                if (name.indexOf('nrwl') > -1) {
+                if (name.indexOf('@nx/') > -1) {
                   // default to internally managed/supported nrwl version
                   version = nxVersion;
                   // look for existing nrwl versions if user already has them installed and use those
@@ -488,9 +480,9 @@ export namespace XplatHelpers {
         ) {
           // platforms supported directly via Nx only right now
           // 'app'/'application' is only schematic supported via xplat proxy at moment
-          const packageName = `@nrwl/${platform}`;
-          devDependencies[packageName] = nxVersion;
-          packagesToRun.push(packageName);
+          // const packageName = `@nx/${platform}`;
+          // devDependencies[packageName] = nxVersion;
+          // packagesToRun.push(packageName);
         } else {
           throw new SchematicsException(unsupportedPlatformError(platform));
         }
@@ -509,7 +501,7 @@ export namespace XplatHelpers {
               let version: string;
               // ensure inner schematic dependencies are installed
               for (const name of packageInnerDependencies[packageName]) {
-                if (name.indexOf('nrwl') > -1) {
+                if (name.indexOf('@nx/') > -1) {
                   // default to internally managed/supported nrwl version
                   version = nxVersion;
                   // look for existing nrwl versions if user already has them installed and use those
@@ -553,7 +545,7 @@ export namespace XplatHelpers {
       if (packagesToRun.length) {
         for (const packageName of packagesToRun) {
           const nxPlatform = <PlatformWithNxTypes>(
-            packageName.replace('@nrwl/', '')
+            packageName.replace('@nx/', '')
           );
           const { name, directory } = getAppNamingConvention(
             options,
@@ -598,7 +590,7 @@ export namespace XplatHelpers {
           // console.log('packagesToRunXplat:', packagesToRunXplat);
           for (const packageName of packagesToRun) {
             const nxPlatform = <PlatformWithNxTypes>(
-              packageName.replace('@nrwl/', '')
+              packageName.replace('@nx/', '')
             );
             const { name, directory } = getAppNamingConvention(
               options,
@@ -678,7 +670,7 @@ export namespace XplatHelpers {
           `libs/${directory ? directory + '/' : ''}${libName}/tsconfig.json`
         )
       ) {
-        // console.log(`externalSchematic('@nrwl/workspace', 'lib') ALREADY EXISTS for:`, `libs/${directory ? directory + '/' : ''}${libName}`)
+        // console.log(`externalSchematic('@nx/workspace', 'lib') ALREADY EXISTS for:`, `libs/${directory ? directory + '/' : ''}${libName}`)
         return noop()(tree, context);
       }
 
@@ -687,12 +679,14 @@ export namespace XplatHelpers {
         directory,
         testEnvironment,
         interactive: false,
+        unitTestRunner: 'jest',
+        bundler: 'none',
       };
       if (libName === 'scss') {
         libOptions.skipTsConfig = true;
       }
-      // console.log(`CALLING externalSchematic('@nrwl/workspace', 'lib') for:`, `libs/${directory ? directory + '/' : ''}${libName}`)
-      return chain([externalSchematic('@nrwl/workspace', 'lib', libOptions)]);
+      // console.log(`CALLING externalSchematic('@nx/workspace', 'lib') for:`, `libs/${directory ? directory + '/' : ''}${libName}`)
+      return chain([externalSchematic('@nx/js', 'library', libOptions)]);
     };
   }
 
@@ -1174,7 +1168,8 @@ export namespace XplatFeatureHelpers {
     options: Schema,
     indexFilePath: string
   ): Rule {
-    return (tree: Tree) => {
+    return (tree: Tree, context) => {
+      const devKitTree = convertNgTreeToDevKit(tree, context);
       // console.log('adjustBarrelIndex indexFilePath:', indexFilePath);
       // console.log('tree.exists(indexFilePath):', tree.exists(indexFilePath));
       const indexSource = tree.read(indexFilePath)!.toString('utf-8');
@@ -1185,17 +1180,27 @@ export namespace XplatFeatureHelpers {
         true
       );
 
-      insert(tree, indexFilePath, [
-        ...addGlobal(
-          indexSourceFile,
-          indexFilePath,
-          `export * from './${
-            options.directory ? options.directory + '/' : ''
-          }${options.name.toLowerCase()}';`,
-          true
-        ),
-      ]);
-      return tree;
+      // insert(tree, indexFilePath, [
+      //   ...addGlobal(
+      //     devKitTree,
+      //     indexSourceFile,
+      //     indexFilePath,
+      //     `export * from './${
+      //       options.directory ? options.directory + '/' : ''
+      //     }${options.name.toLowerCase()}';`,
+      //     true
+      //   ),
+      // ]);
+      addGlobal(
+        devKitTree,
+        indexSourceFile,
+        indexFilePath,
+        `export * from './${
+          options.directory ? options.directory + '/' : ''
+        }${options.name.toLowerCase()}';`,
+        true
+      );
+      return devKitTree.tree;
     };
   }
 

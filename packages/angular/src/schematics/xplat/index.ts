@@ -10,7 +10,7 @@ import {
   template,
   SchematicContext,
 } from '@angular-devkit/schematics';
-import { addInstallTask, formatFiles } from '@nrwl/workspace';
+import { addInstallTask, formatFiles } from '@nx/workspace';
 import {
   XplatHelpers,
   getDefaultTemplateOptions,

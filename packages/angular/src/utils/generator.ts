@@ -13,10 +13,8 @@ import {
   SchematicsException,
   externalSchematic,
 } from '@angular-devkit/schematics';
-import { formatFiles, createOrUpdate, readJsonInTree } from '@nrwl/workspace';
+import { formatFiles } from '@nx/workspace';
 import {
-  addGlobal,
-  insert,
   generateOptionError,
   unsupportedPlatformError,
   needFeatureModuleError,
@@ -26,6 +24,9 @@ import {
   XplatFeatureHelpers,
   supportedSandboxPlatforms,
   XplatHelpers,
+  addGlobal,
+  convertNgTreeToDevKit,
+  insert,
 } from '@nstudio/xplat';
 import {
   supportedPlatforms,
@@ -35,15 +36,19 @@ import {
   sanitizeCommaDelimitedArg,
   PlatformTypes,
   parseProjectNameFromPath,
+  getJsonFromFile,
+  updateFile,
 } from '@nstudio/xplat-utils';
 import {
   addImportToModule,
   addProviderToModule,
   addToCollection,
   addDeclarationToModule,
-  addSymbolToNgModuleMetadata,
+  _addSymbolToNgModuleMetadata,
+  getTsSourceFile,
 } from './ast';
 import * as ts from 'typescript';
+import { insertChange } from '@nx/js';
 
 export type IGenerateType =
   | 'component'
@@ -346,7 +351,7 @@ export function getFeatureName(options: IGenerateOptions) {
 }
 
 export function getNxFeaturePath(tree: Tree, featureName: string) {
-  const tsConfig = readJsonInTree(tree, 'tsconfig.base.json');
+  const tsConfig = getJsonFromFile(tree, 'tsconfig.base.json');
   if (tsConfig) {
     if (
       tsConfig.compilerOptions &&
@@ -518,12 +523,13 @@ export function adjustBarrelIndex(
   isBase?: boolean,
   importIfSubFolder?: boolean
 ): Rule {
-  return (host: Tree) => {
+  return (host: Tree, context: SchematicContext) => {
+    const devKitTree = convertNgTreeToDevKit(host, context);
     // console.log('adjustBarrelIndex:', indexFilePath);
     // console.log('host.exists(indexFilePath):', host.exists(indexFilePath));
     if (host.exists(indexFilePath)) {
       const indexSource = host.read(indexFilePath)!.toString('utf-8');
-      const indexSourceFile = ts.createSourceFile(
+      let indexSourceFile = ts.createSourceFile(
         indexFilePath,
         indexSource,
         ts.ScriptTarget.Latest,
@@ -540,32 +546,42 @@ export function adjustBarrelIndex(
           const symbolName = `${stringUtils
             .sanitize(options.subFolder)
             .toUpperCase()}_${type.toUpperCase()}S`;
-          changes.push(
-            ...addGlobal(
-              indexSourceFile,
-              indexFilePath,
-              `import { ${symbolName} } from './${options.subFolder}';`
-            ),
-            ...addToCollection(
-              indexSourceFile,
-              indexFilePath,
-              `...${symbolName}`,
-              '  '
-            )
+          indexSourceFile = addGlobal(
+            devKitTree,
+            indexSourceFile,
+            indexFilePath,
+            `import { ${symbolName} } from './${options.subFolder}';`,
+            false
           );
+          indexSourceFile = addToCollection(
+            devKitTree,
+            indexSourceFile,
+            indexFilePath,
+            `...${symbolName}`,
+            '  '
+          );
+          changes.push(indexSourceFile);
         } else {
           const symbolName = `${stringUtils.classify(
             name
           )}${stringUtils.capitalize(type)}`;
+          indexSourceFile = addGlobal(
+            devKitTree,
+            indexSourceFile,
+            indexFilePath,
+            `import { ${symbolName} } from './${
+              inSubFolder ? `${name}/` : ''
+            }${name}.${type}';`
+          );
+          indexSourceFile = addToCollection(
+            devKitTree,
+            indexSourceFile,
+            indexFilePath,
+            symbolName,
+            '  '
+          )
           changes.push(
-            ...addGlobal(
-              indexSourceFile,
-              indexFilePath,
-              `import { ${symbolName} } from './${
-                inSubFolder ? `${name}/` : ''
-              }${name}.${type}';`
-            ),
-            ...addToCollection(indexSourceFile, indexFilePath, symbolName, '  ')
+            indexSourceFile
           );
         }
       }
@@ -573,34 +589,38 @@ export function adjustBarrelIndex(
       if (type === 'component' || type === 'service' || type === 'pipe') {
         // export symbol from barrel
         if ((isBase || importIfSubFolder) && options.subFolder) {
+          indexSourceFile = addGlobal(
+            devKitTree,
+            indexSourceFile,
+            indexFilePath,
+            `export * from './${options.subFolder}';`,
+            true
+          );
           changes.push(
-            ...addGlobal(
-              indexSourceFile,
-              indexFilePath,
-              `export * from './${options.subFolder}';`,
-              true
-            )
+            indexSourceFile
           );
         } else {
           const subFolder = inSubFolder ? `${name}/` : '';
+          indexSourceFile = addGlobal(
+            devKitTree,
+            indexSourceFile,
+            indexFilePath,
+            `export * from './${subFolder}${name}.${
+              isBase ? 'base-' : ''
+            }${type}';`,
+            true
+          );
           changes.push(
-            ...addGlobal(
-              indexSourceFile,
-              indexFilePath,
-              `export * from './${subFolder}${name}.${
-                isBase ? 'base-' : ''
-              }${type}';`,
-              true
-            )
+            indexSourceFile
           );
         }
       }
 
-      insert(host, indexFilePath, changes);
+      // insert(devKitTree.tree, indexFilePath, changes);
     } else {
       options.needsIndex = true;
     }
-    return host;
+    return devKitTree.tree;
   };
 }
 
@@ -609,7 +629,8 @@ export function adjustBarrelIndexForType(
   options: IGenerateOptions,
   indexFilePath: string
 ): Rule {
-  return (host: Tree) => {
+  return (host: Tree, context) => {
+    const devKitTree = convertNgTreeToDevKit(host, context);
     if (host.exists(indexFilePath)) {
       const indexSource = host.read(indexFilePath)!.toString('utf-8');
       const indexSourceFile = ts.createSourceFile(
@@ -622,18 +643,19 @@ export function adjustBarrelIndexForType(
       const changes = [];
 
       changes.push(
-        ...addGlobal(
+        addGlobal(
+          devKitTree,
           indexSourceFile,
           indexFilePath,
           `export * from './${type}';`,
           true
         )
       );
-      insert(host, indexFilePath, changes);
+      // insert(devKitTree.tree, indexFilePath, changes);
     } else {
       options.needsIndex = true;
     }
-    return host;
+    return devKitTree.tree;
   };
 }
 
@@ -669,16 +691,12 @@ export function adjustFeatureModule(
   options: IGenerateOptions,
   modulePath: string
 ): Rule {
-  return (host: Tree) => {
+  return (host: Tree, context) => {
+    const devKitTree = convertNgTreeToDevKit(host, context);
     // console.log('adjustFeatureModule:', modulePath);
     if (host.exists(modulePath)) {
       const moduleSource = host.read(modulePath)!.toString('utf-8');
-      const moduleSourceFile = ts.createSourceFile(
-        modulePath,
-        moduleSource,
-        ts.ScriptTarget.Latest,
-        true
-      );
+      const moduleSourceFile = getTsSourceFile(devKitTree, modulePath);
 
       const changes = [];
       let featureName: string;
@@ -724,20 +742,19 @@ export function adjustFeatureModule(
         if (type !== 'service') {
           // add to module
           changes.push(
-            ...addGlobal(
-              moduleSourceFile,
-              modulePath,
-              `import { ${collectionName} } from './${type}s';`
-            )
-          );
-          changes.push(
-            ...addDeclarationToModule(
-              moduleSourceFile,
-              modulePath,
-              `...${collectionName}`
-            ),
-            ...addSymbolToNgModuleMetadata(
-              moduleSourceFile,
+            _addSymbolToNgModuleMetadata(
+              devKitTree,
+              addDeclarationToModule(
+                devKitTree,
+                addGlobal(
+                  devKitTree,
+                  moduleSourceFile,
+                  modulePath,
+                  `import { ${collectionName} } from './${type}s';`
+                ),
+                modulePath,
+                `...${collectionName}`
+              ),
               modulePath,
               'exports',
               `...${collectionName}`
@@ -745,10 +762,10 @@ export function adjustFeatureModule(
           );
         }
 
-        insert(host, modulePath, changes);
+        // insert(devKitTree.tree, modulePath, changes);
       }
     }
-    return host;
+    return devKitTree.tree;
   };
 }
 
@@ -756,11 +773,12 @@ export function adjustFeatureModuleForState(
   options: IGenerateOptions,
   modulePath: string
 ): Rule {
-  return (host: Tree) => {
+  return (host: Tree, context) => {
+    const devKitTree = convertNgTreeToDevKit(host, context);
     // console.log('adjustFeatureModuleForState:', modulePath);
     if (host.exists(modulePath)) {
       const moduleSource = host.read(modulePath)!.toString('utf-8');
-      const moduleSourceFile = ts.createSourceFile(
+      let moduleSourceFile = ts.createSourceFile(
         modulePath,
         moduleSource,
         ts.ScriptTarget.Latest,
@@ -772,108 +790,115 @@ export function adjustFeatureModuleForState(
       const name = options.name.toLowerCase();
       const changes = [];
       if (moduleSource.indexOf('StoreModule') === -1) {
-        changes.push(
-          ...addGlobal(
-            moduleSourceFile,
-            modulePath,
-            `import { StoreModule } from '@ngrx/store';`
-          )
+        moduleSourceFile = addGlobal(
+          devKitTree,
+          moduleSourceFile,
+          modulePath,
+          `import { StoreModule } from '@ngrx/store';`
         );
+        changes.push(moduleSourceFile);
       }
       if (moduleSource.indexOf('EffectsModule') === -1) {
-        changes.push(
-          ...addGlobal(
-            moduleSourceFile,
-            modulePath,
-            `import { EffectsModule } from '@ngrx/effects';`
-          )
+        moduleSourceFile = addGlobal(
+          devKitTree,
+          moduleSourceFile,
+          modulePath,
+          `import { EffectsModule } from '@ngrx/effects';`
         );
+        changes.push(moduleSourceFile);
       }
-
-      changes.push(
-        ...addGlobal(
-          moduleSourceFile,
-          modulePath,
-          `import { ${stringUtils.classify(
-            name
-          )}Effects } from './state/${name}.effects';`
-        ),
-        ...addGlobal(
-          moduleSourceFile,
-          modulePath,
-          `import { ${stringUtils.camelize(
-            name
-          )}Reducer } from './state/${name}.reducer';`
-        ),
-        ...addGlobal(
-          moduleSourceFile,
-          modulePath,
-          `import { ${stringUtils.classify(
-            name
-          )}State } from './state/${name}.state';`
-        )
+      moduleSourceFile = addGlobal(
+        devKitTree,
+        moduleSourceFile,
+        modulePath,
+        `import { ${stringUtils.classify(
+          name
+        )}Effects } from './state/${name}.effects';`
       );
+      moduleSourceFile = addGlobal(
+        devKitTree,
+        moduleSourceFile,
+        modulePath,
+        `import { ${stringUtils.camelize(
+          name
+        )}Reducer } from './state/${name}.reducer';`
+      );
+
+      moduleSourceFile = addGlobal(
+        devKitTree,
+        moduleSourceFile,
+        modulePath,
+        `import { ${stringUtils.classify(
+          name
+        )}State } from './state/${name}.state';`
+      );
+
+      changes.push(moduleSourceFile);
 
       if (options.root) {
         if (moduleSource.indexOf('environments/environment') === -1) {
           const envFrom = isInLibs
             ? './environments/environment'
             : `@${getNpmScope()}/xplat/core`;
-          changes.push(
-            ...addGlobal(
-              moduleSourceFile,
-              modulePath,
-              `import { environment } from '${envFrom}';`
-            )
+          moduleSourceFile = addGlobal(
+            devKitTree,
+            moduleSourceFile,
+            modulePath,
+            `import { environment } from '${envFrom}';`
           );
+          changes.push(moduleSourceFile);
         }
 
-        changes.push(
-          ...addImportToModule(
-            moduleSourceFile,
-            modulePath,
-            `StoreModule.forRoot(
-      { ${stringUtils.camelize(name)}: ${stringUtils.camelize(name)}Reducer },
-      {
-        initialState: { ${stringUtils.camelize(name)}: ${stringUtils.classify(
-              name
-            )}State.initialState }
-      }
-    ), EffectsModule.forRoot([${stringUtils.classify(name)}Effects])`
-          ),
-          ...addProviderToModule(
-            moduleSourceFile,
-            modulePath,
-            `${stringUtils.classify(name)}Effects`
-          )
+        moduleSourceFile = addImportToModule(
+          devKitTree,
+          moduleSourceFile,
+          modulePath,
+          `StoreModule.forRoot(
+    { ${stringUtils.camelize(name)}: ${stringUtils.camelize(name)}Reducer },
+    {
+      initialState: { ${stringUtils.camelize(name)}: ${stringUtils.classify(
+            name
+          )}State.initialState }
+    }
+  ), EffectsModule.forRoot([${stringUtils.classify(name)}Effects])`
         );
+
+        moduleSourceFile = addProviderToModule(
+          devKitTree,
+          moduleSourceFile,
+          modulePath,
+          `${stringUtils.classify(name)}Effects`
+        );
+
+        changes.push(moduleSourceFile);
       } else {
-        // feature state
-        changes.push(
-          ...addImportToModule(
-            moduleSourceFile,
-            modulePath,
-            `StoreModule.forFeature('${stringUtils.camelize(
-              name
-            )}', ${stringUtils.camelize(
-              name
-            )}Reducer, { initialState: ${stringUtils.classify(
-              name
-            )}State.initialState }), EffectsModule.forFeature([${stringUtils.classify(
-              name
-            )}Effects])`
-          ),
-          ...addProviderToModule(
-            moduleSourceFile,
-            modulePath,
-            `${stringUtils.classify(name)}Effects`
-          )
+        moduleSourceFile = addImportToModule(
+          devKitTree,
+          moduleSourceFile,
+          modulePath,
+          `StoreModule.forFeature('${stringUtils.camelize(
+            name
+          )}', ${stringUtils.camelize(
+            name
+          )}Reducer, { initialState: ${stringUtils.classify(
+            name
+          )}State.initialState }), EffectsModule.forFeature([${stringUtils.classify(
+            name
+          )}Effects])`
         );
+        moduleSourceFile = addProviderToModule(
+          devKitTree,
+          moduleSourceFile,
+          modulePath,
+          `${stringUtils.classify(name)}Effects`
+        );
+        // feature state
+        changes.push(moduleSourceFile);
       }
 
-      insert(host, modulePath, changes);
+      // insert(devKitTree.tree, modulePath, changes);
     }
-    return host;
+    return devKitTree.tree;
   };
 }
 
@@ -882,7 +907,8 @@ export function adjustRouting(
   routingModulePaths: Array<string>,
   platform: string
 ): Rule {
-  return (host: Tree) => {
+  return (host: Tree, context) => {
+    const devKitTree = convertNgTreeToDevKit(host, context);
     const featureName = options.name.toLowerCase();
     let routingModulePath: string;
     // check which routing naming convention might be in use
@@ -908,7 +934,8 @@ export function adjustRouting(
 
       // add component to route config
       changes.push(
-        ...addToCollection(
+        addToCollection(
+          devKitTree,
           routingSourceFile,
           routingModulePath,
           `{ 
@@ -922,9 +949,9 @@ export function adjustRouting(
         )
       );
 
-      insert(host, routingModulePath, changes);
+      // insert(devKitTree.tree, routingModulePath, changes);
     }
-    return host;
+    return devKitTree.tree;
   };
 }
 
@@ -988,7 +1015,7 @@ export function adjustSandbox(
             homeTemplate.slice(buttonEndIndex + 9);
           break;
       }
-      createOrUpdate(tree, homeCmpPath, homeTemplate);
+      updateFile(tree, homeCmpPath, homeTemplate);
     } else {
       throw new SchematicsException(
         `The --adjustSandbox option is only supported on the following at the moment: ${supportedSandboxPlatforms}`

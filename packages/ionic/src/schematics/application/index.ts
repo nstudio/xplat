@@ -22,7 +22,7 @@ import {
 import { Schema } from './schema';
 import { XplatIonicHelpers } from '../../utils';
 import { capacitorVersion } from '../../utils/versions';
-import { addInstallTask, formatFiles, updateWorkspace } from '@nrwl/workspace';
+import { addInstallTask, formatFiles, updateWorkspace } from '@nx/workspace';
 
 export default function (options: Schema) {
   if (!options.name) {
