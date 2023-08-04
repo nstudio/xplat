@@ -3,7 +3,7 @@ import { NgModule, Optional, SkipSelf } from '@angular/core';
 // nativescript
 import { NativeScriptModule, NativeScriptHttpClientModule } from '@nativescript/angular';
 import { Device } from '@nativescript/core';
-import { TNSFontIconModule, USE_STORE } from 'nativescript-ngx-fonticon';
+import { FontIconModule, USE_STORE } from 'nativescript-fonticon/angular';
 import { fontAwesomeIcons } from '@<%= npmScope %>/xplat/nativescript/utils';
 
 // libs
@@ -28,7 +28,7 @@ export function createTranslateLoader() {
   imports: [
     NativeScriptModule,
     NativeScriptHttpClientModule,
-    TNSFontIconModule.forRoot({}),
+    FontIconModule.forRoot({}),
     CoreModule.forRoot([
       {
         provide: PlatformLanguageToken,

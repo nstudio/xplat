@@ -74,7 +74,7 @@ export namespace XplatNativeScriptAngularHelpers {
           ...angularDeps,
           '@nativescript/angular': nsNgScopedVersion,
           '@nativescript/core': nsCoreVersion,
-          'nativescript-ngx-fonticon': nsNgFonticonVersion,
+          'nativescript-fonticon': nsNgFonticonVersion,
         },
         devDependencies: {
           ...angularDevDeps,

@@ -2,7 +2,7 @@ import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 
 import { NativeScriptCommonModule, NativeScriptFormsModule, NativeScriptRouterModule } from '@nativescript/angular';
 
-import { TNSFontIconModule } from 'nativescript-ngx-fonticon';
+import { FontIconModule } from 'nativescript-fonticon/angular';
 import { UISharedModule } from '@<%= npmScope %>/xplat/features';
 import { UI_COMPONENTS } from './components';
 
@@ -10,7 +10,7 @@ const MODULES = [
   NativeScriptCommonModule,
   NativeScriptFormsModule,
   NativeScriptRouterModule,
-  TNSFontIconModule,
+  FontIconModule,
   UISharedModule
 ];
 

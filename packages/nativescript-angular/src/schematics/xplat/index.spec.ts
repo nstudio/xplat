@@ -47,7 +47,7 @@ describe('xplat schematic', () => {
     expect(packageFile.dependencies[`nativescript-angular`]).toBeUndefined();
     expect(packageFile.dependencies[`@nativescript/angular`]).toBeDefined();
     expect(
-      packageFile.dependencies[`nativescript-ngx-fonticon`]
+      packageFile.dependencies[`nativescript-fonticon`]
     ).not.toBeUndefined();
     expect(
       packageFile.devDependencies[`@nativescript/types`]

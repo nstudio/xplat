@@ -1,7 +1,7 @@
 export const xplatVersion = '*';
 export const nsCoreVersion = '~8.5.0';
 export const nsNgScopedVersion = '^16.0.0';
-export const nsNgFonticonVersion = '~7.0.0';
+export const nsNgFonticonVersion = '~8.0.2';
 export const nsWebpackVersion = '~5.0.0';
 export const sassVersion = '^1.30.0';
 export const nsThemeCoreVersion = '^1.0.4';

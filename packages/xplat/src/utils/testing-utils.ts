@@ -220,7 +220,7 @@ export function createXplatNativeScriptAngular(
     // nativescript
     import { NativeScriptModule, NativeScriptHttpClientModule } from '@nativescript/angular';
     import { Device } from '@nativescript/core';
-    import { TNSFontIconModule } from 'nativescript-ngx-fonticon';
+    import { FontIconModule } from 'nativescript-fonticon/angular';
     
     // libs
     import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -244,7 +244,7 @@ export function createXplatNativeScriptAngular(
       imports: [
         NativeScriptModule,
         NativeScriptHttpClientModule,
-        TNSFontIconModule.forRoot({
+        FontIconModule.forRoot({
           fa: './assets/fontawesome.min.css'
         }),
         CoreModule.forRoot([
@@ -290,7 +290,7 @@ export function createXplatNativeScriptAngular(
 
   import { NativeScriptCommonModule, NativeScriptFormsModule, NativeScriptRouterModule } from '@nativescript/angular';
   
-  import { TNSFontIconModule } from 'nativescript-ngx-fonticon';
+  import { FontIconModule } from 'nativescript-fonticon/angular';
   import { UISharedModule } from '@<%= npmScope %>/xplat/features';
   import { UI_COMPONENTS } from './components';
   
@@ -298,7 +298,7 @@ export function createXplatNativeScriptAngular(
     NativeScriptCommonModule,
     NativeScriptFormsModule,
     NativeScriptRouterModule,
-    TNSFontIconModule,
+    FontIconModule,
     UISharedModule
   ];
   
