@@ -1,3 +1,18 @@
+## [16.5.9](https://github.com/nstudio/xplat/compare/15.0.3...16.5.9) (2023-08-04)
+
+
+### Bug Fixes
+
+* **nativescript:** FontIconModule Ivy compat build ([0cd196c](https://github.com/nstudio/xplat/commit/0cd196ca4e62dd283501ed8f5a5361c60184f368))
+
+
+### Features
+
+* nx with xplat dep updates ([#321](https://github.com/nstudio/xplat/issues/321)) ([50fc7ad](https://github.com/nstudio/xplat/commit/50fc7ad08410ed0ac81ab3a0df4d59a398bd410a))
+* update workspace settings instead of user settings ([#320](https://github.com/nstudio/xplat/issues/320)) ([fa70a33](https://github.com/nstudio/xplat/commit/fa70a337a1669f6231b5d6c3899ea10515a07881))
+
+
+
 ## [15.0.3](https://github.com/nstudio/xplat/compare/15.0.2...15.0.3) (2023-02-26)
 
 
