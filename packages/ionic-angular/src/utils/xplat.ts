@@ -10,7 +10,6 @@ import {
   ngDevKitCore,
   ngDevKitSchematics,
   angularVersion,
-  coreJsVersion,
   rxjsVersion,
   zonejsVersion,
   ngxTranslateVersion,
@@ -57,7 +56,6 @@ export namespace XplatIonicAngularHelpers {
         dependencies[`@angular/platform-browser`] = angularVersion;
         dependencies[`@angular/platform-browser-dynamic`] = angularVersion;
         dependencies[`@angular/router`] = angularVersion;
-        dependencies[`core-js`] = coreJsVersion;
         dependencies[`rxjs`] = rxjsVersion;
         dependencies[`zone.js`] = zonejsVersion;
 
