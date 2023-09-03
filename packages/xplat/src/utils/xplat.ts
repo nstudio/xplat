@@ -681,6 +681,7 @@ export namespace XplatHelpers {
         interactive: false,
         unitTestRunner: 'jest',
         bundler: 'none',
+        projectNameAndRootFormat: 'derived',
       };
       if (libName === 'scss') {
         libOptions.skipTsConfig = true;
