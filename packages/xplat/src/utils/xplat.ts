@@ -676,7 +676,7 @@ export namespace XplatHelpers {
 
       const libOptions: any = {
         name: libName,
-        directory,
+        directory: `libs/${directory ? directory + '/' : ''}${libName}`,
         testEnvironment,
         interactive: false,
         unitTestRunner: 'jest',
