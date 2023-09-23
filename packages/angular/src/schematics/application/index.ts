@@ -63,6 +63,7 @@ export default function (options: Schema) {
         ...options,
         standalone: false,
         skipInstall: true,
+        projectNameAndRootFormat: 'derived',
       };
       // remove non schema validated properties
       delete nrwlWebOptions.groupByName;
@@ -74,6 +75,13 @@ export default function (options: Schema) {
       delete (<any>nrwlWebOptions).target;
       delete (<any>nrwlWebOptions).npmScope;
       delete (<any>nrwlWebOptions).setupSandbox;
+      if (!options.directory) {
+        // default to apps
+        nrwlWebOptions.directory = 'apps';
+      } else if (options.directory.indexOf('apps/') === -1) {
+        // ensure ends up in apps directory
+        nrwlWebOptions.directory = `apps/${options.directory}`;
+      }
       let executionOptions: Partial<ExecutionOptions>;
       if (options.useXplat) {
         // when generating xplat architecture, ensure:
