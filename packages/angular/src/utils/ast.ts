@@ -27,7 +27,7 @@ export function addToCollection(
   // if (!collection) return [new NoopChange()];
   // return [new NoopChange()];
 
-  console.log('collection.hasTrailingComma:', collection.hasTrailingComma);
+  // console.log('collection.hasTrailingComma:', collection.hasTrailingComma);
   if (collection.hasTrailingComma || collection.length === 0) {
     return insertChange(
       tree,

@@ -1,11 +1,11 @@
 // angular
 import { TestBed, inject } from '@angular/core/testing';
 // app
-import { LogService } from './log.service';
+import { IDebug, LogService } from './log.service';
 
 const reset = () => {
   for (const key in LogService.DEBUG) {
-    LogService.DEBUG[key] = false;
+    LogService.DEBUG[key as keyof IDebug] = false;
   }
 };
 describe('core: LogService', () => {
