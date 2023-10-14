@@ -1,3 +1,19 @@
+# [16.8.0](https://github.com/nstudio/xplat/compare/16.7.0...16.8.0) (2023-10-14)
+
+
+### Bug Fixes
+
+* @nx/js lib directory option ([3884afc](https://github.com/nstudio/xplat/commit/3884afc07a1e2b1a9ad231cd6a8dfcb8b2346499))
+* **generators:** use 'derived' for projectNameAndRootFormat ([4a5f071](https://github.com/nstudio/xplat/commit/4a5f0714d03daa9bb25e91dc39a8fa5612077963))
+* include @nx/linter by default ([f0daed3](https://github.com/nstudio/xplat/commit/f0daed39e33a81fcdcc2bf5573e4d980d6e7bf50))
+
+
+### Features
+
+* support {N} 8.6 ([79a16fb](https://github.com/nstudio/xplat/commit/79a16fb035a483adc43bdbc78bf76d1e0a685174))
+
+
+
 # [16.7.0](https://github.com/nstudio/xplat/compare/16.5.9...16.7.0) (2023-09-03)
 
 
