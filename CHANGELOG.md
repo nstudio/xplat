@@ -1,3 +1,12 @@
+## [17.0.1](https://github.com/nstudio/xplat/compare/17.0.0...17.0.1) (2023-10-23)
+
+
+### Bug Fixes
+
+* use @nx/eslint ([0b17ed2](https://github.com/nstudio/xplat/commit/0b17ed24bd699a7e9f12dfdb56b9e8ab598071de))
+
+
+
 # [17.0.0](https://github.com/nstudio/xplat/compare/16.8.0...17.0.0) (2023-10-23)
 
 
