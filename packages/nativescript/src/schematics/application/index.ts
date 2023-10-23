@@ -21,6 +21,7 @@ import {
   XplatHelpers,
   updateTsConfig,
   output,
+  convertNgTreeToDevKit,
 } from '@nstudio/xplat';
 import {
   prerun,
@@ -30,8 +31,8 @@ import {
 } from '@nstudio/xplat-utils';
 import { Schema } from './schema';
 import { XplatNativeScriptHelpers } from '../../utils';
-import { addInstallTask, updateWorkspace } from '@nx/workspace';
 import { nsCoreVersion } from '../../utils/versions';
+import { addProjectConfiguration, updateProjectConfiguration } from '@nx/devkit';
 
 export default function (options: Schema) {
   if (!options.name) {
@@ -82,16 +83,13 @@ export default function (options: Schema) {
     (tree: Tree, context: SchematicContext) => {
       const platformApp = options.name.replace('-', '.');
       const directory = options.directory ? `${options.directory}/` : '';
-      return updateWorkspace((workspace) => {
-        workspace.projects.add({
-          name: options.name,
+      addProjectConfiguration(convertNgTreeToDevKit(tree,context), options.name, {
           root: `apps/${directory}${options.name}/`,
           sourceRoot: `apps/${directory}${options.name}/src`,
           projectType: 'application',
-          prefix: getPrefix(),
           targets: {
             build: {
-              builder: '@nativescript/nx:build',
+              executor: '@nativescript/nx:build',
               options: {
                 noHmr: true,
                 production: true,
@@ -101,7 +99,7 @@ export default function (options: Schema) {
               },
             },
             ios: {
-              builder: '@nativescript/nx:build',
+              executor: '@nativescript/nx:build',
               options: {
                 platform: 'ios',
               },
@@ -112,7 +110,7 @@ export default function (options: Schema) {
               },
             },
             android: {
-              builder: '@nativescript/nx:build',
+              executor: '@nativescript/nx:build',
               options: {
                 platform: 'android',
               },
@@ -123,13 +121,12 @@ export default function (options: Schema) {
               },
             },
             clean: {
-              builder: '@nativescript/nx:build',
+              executor: '@nativescript/nx:build',
               options: {
                 clean: true,
               },
             },
           },
-        });
       });
     },
     (tree: Tree) => {

@@ -1,10 +1,9 @@
 export const xplatVersion = '*';
-export const nxVersion = '^16.0.0';
+export const nxVersion = '^17.0.0';
 export const angularVersion = '^16.0.0';
 export const angularDevkitVersion = '^16.0.0';
 export const ngxTranslateVersion = '~14.0.0';
 export const ngxTranslateHttpVersion = '~7.0.0';
 export const rxjsVersion = '^7.8.0';
 export const zonejsVersion = '~0.13.0';
-export const jestPresetAngular = '^13.0.0';
-export const typesJest = '29.4.0';
+export const typesJest = '29.5.6';

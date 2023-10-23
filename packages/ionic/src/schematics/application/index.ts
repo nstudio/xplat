@@ -3,6 +3,7 @@ import {
   missingArgument,
   getDefaultTemplateOptions,
   updatePackageScripts,
+  convertNgTreeToDevKit,
 } from '@nstudio/xplat';
 import { prerun, getAppName, getPrefix } from '@nstudio/xplat-utils';
 import {
@@ -22,7 +23,7 @@ import {
 import { Schema } from './schema';
 import { XplatIonicHelpers } from '../../utils';
 import { capacitorVersion } from '../../utils/versions';
-import { addInstallTask, formatFiles, updateWorkspace } from '@nx/workspace';
+import { addProjectConfiguration, updateProjectConfiguration } from '@nx/devkit';
 
 export default function (options: Schema) {
   if (!options.name) {
@@ -81,17 +82,14 @@ export default function (options: Schema) {
     },
     (tree: Tree, context: SchematicContext) => {
       const directory = options.directory ? `${options.directory}/` : '';
-      return updateWorkspace((workspace) => {
-        workspace.projects.add({
-          name: options.name,
-          root: `apps/${directory}${options.name}/`,
-          sourceRoot: `apps/${directory}${options.name}/src`,
-          projectType: 'application',
-          prefix: getPrefix(),
-        });
+      addProjectConfiguration(convertNgTreeToDevKit(tree, context), options.name, {
+        name: options.name,
+        root: `apps/${directory}${options.name}/`,
+        sourceRoot: `apps/${directory}${options.name}/src`,
+        projectType: 'application',
       });
+      
     },
-    <any>formatFiles({ skipFormat: options.skipFormat }),
   ]);
 }
 

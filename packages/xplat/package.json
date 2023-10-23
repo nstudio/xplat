@@ -41,10 +41,10 @@
     "postinstall": "node src/utils/postinstall.js"
   },
   "dependencies": {
-    "@nx/angular": "^16.0.0",
-    "@nx/devkit": "^16.0.0",
-    "@nx/js": "^16.0.0",
-    "@nx/linter": "^16.0.0",
+    "@nx/angular": "^17.0.0",
+    "@nx/devkit": "^17.0.0",
+    "@nx/js": "^17.0.0",
+    "@nx/linter": "^17.0.0",
     "@nstudio/focus": "*",
     "@nstudio/xplat-utils": "*"
   },

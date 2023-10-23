@@ -8,7 +8,7 @@ import {
 import { createEmptyWorkspace } from '@nstudio/xplat/testing';
 import { runSchematic } from '../../utils/testing';
 import { XplatHelpers, stringUtils } from '../../utils';
-import { getFileContent } from '@nx/workspace/testing';
+import { getFileContent } from '@nstudio/xplat/testing';
 setTest();
 
 describe('xplat init', () => {

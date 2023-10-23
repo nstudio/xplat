@@ -13,13 +13,14 @@ import {
   noop,
   externalSchematic,
 } from '@angular-devkit/schematics';
-import { formatFiles, updateWorkspace } from '@nx/workspace';
+import { formatFiles } from '@nx/devkit';
 import {
   stringUtils,
   updatePackageScripts,
   missingArgument,
   getDefaultTemplateOptions,
   XplatHelpers,
+  convertNgTreeToDevKit,
 } from '@nstudio/xplat';
 import {
   prerun,
@@ -106,13 +107,12 @@ export default function (options: XplatElectrontHelpers.SchemaApp) {
         delete targetConfig[targetProp]['test'];
         delete targetConfig[targetProp]['lint'];
       }
-      return updateProjectConfiguration(tree as any, fullTargetAppName, {
+      updateProjectConfiguration(convertNgTreeToDevKit(tree, context), fullTargetAppName, {
         name: electronAppName,
         ...targetConfig,
       });
+      return noop();
     },
-
-    formatFiles({ skipFormat: options.skipFormat }),
   ]);
 }
 

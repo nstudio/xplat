@@ -21,6 +21,7 @@ import {
   XplatHelpers,
   updateTsConfig,
   output,
+  convertNgTreeToDevKit,
 } from '@nstudio/xplat';
 import {
   prerun,
@@ -44,7 +45,7 @@ import {
   typescriptVersion,
 } from '../../utils/versions';
 import { XplatNativeScriptHelpers } from '@nstudio/nativescript/src/utils';
-import { addInstallTask, updateWorkspace } from '@nx/workspace';
+import { addProjectConfiguration, updateProjectConfiguration } from '@nx/devkit';
 
 export default function (options: Schema) {
   if (!options.name) {
@@ -106,90 +107,87 @@ export default function (options: Schema) {
     (tree: Tree, context: SchematicContext) => {
       const platformApp = options.name.replace('-', '.');
       const directory = options.directory ? `${options.directory}/` : '';
-      return updateWorkspace((workspace) => {
-        workspace.projects.add({
-          name: `${options.name}`,
-          root: `apps/${directory}${options.name}/`,
-          sourceRoot: `apps/${directory}${options.name}/src`,
-          projectType: 'application',
-          prefix: getPrefix(),
-          targets: {
-            build: {
-              builder: '@nativescript/nx:build',
-              options: {
-                noHmr: true,
-                production: true,
-                uglify: true,
-                release: true,
-                forDevice: true,
-              },
-              configurations: {
-                prod: {
-                  fileReplacements: [
-                    {
-                      replace: `${
-                        directory ? '../../../' : '../../'
-                      }libs/xplat/core/src/lib/environments/environment.ts`,
-                      with: `./src/environments/environment.prod.ts`,
-                    },
-                  ],
-                },
-              },
+      addProjectConfiguration(convertNgTreeToDevKit(tree, context), options.name, {
+        root: `apps/${directory}${options.name}/`,
+        sourceRoot: `apps/${directory}${options.name}/src`,
+        projectType: 'application',
+        targets: {
+          build: {
+            executor: '@nativescript/nx:build',
+            options: {
+              noHmr: true,
+              production: true,
+              uglify: true,
+              release: true,
+              forDevice: true,
             },
-            ios: {
-              builder: '@nativescript/nx:build',
-              options: {
-                platform: 'ios',
-              },
-              configurations: {
-                build: {
-                  copyTo: './dist/build.ipa',
-                },
-                prod: {
-                  combineWithConfig: 'build:prod',
-                },
-              },
-            },
-            android: {
-              builder: '@nativescript/nx:build',
-              options: {
-                platform: 'android',
-              },
-              configurations: {
-                build: {
-                  copyTo: './dist/build.apk',
-                },
-                prod: {
-                  combineWithConfig: 'build:prod',
-                },
-              },
-            },
-            clean: {
-              builder: '@nativescript/nx:build',
-              options: {
-                clean: true,
-              },
-            },
-            lint: {
-              builder: '@nx/linter:eslint',
-              options: {
-                lintFilePatterns: [
-                  `apps/${directory}${options.name}/**/*.ts`,
-                  `apps/${directory}${options.name}/src/**/*.html`,
+            configurations: {
+              prod: {
+                fileReplacements: [
+                  {
+                    replace: `${
+                      directory ? '../../../' : '../../'
+                    }libs/xplat/core/src/lib/environments/environment.ts`,
+                    with: `./src/environments/environment.prod.ts`,
+                  },
                 ],
               },
             },
-            test: {
-              builder: '@nx/jest:jest',
-              options: {
-                jestConfig: `apps/${directory}${options.name}/jest.config.js`,
-                tsConfig: `apps/${directory}${options.name}/tsconfig.spec.json`,
-                passWithNoTests: true,
-                setupFile: `apps/${directory}${options.name}/src/test-setup.ts`,
+          },
+          ios: {
+            executor: '@nativescript/nx:build',
+            options: {
+              platform: 'ios',
+            },
+            configurations: {
+              build: {
+                copyTo: './dist/build.ipa',
+              },
+              prod: {
+                combineWithConfig: 'build:prod',
               },
             },
           },
-        });
+          android: {
+            executor: '@nativescript/nx:build',
+            options: {
+              platform: 'android',
+            },
+            configurations: {
+              build: {
+                copyTo: './dist/build.apk',
+              },
+              prod: {
+                combineWithConfig: 'build:prod',
+              },
+            },
+          },
+          clean: {
+            executor: '@nativescript/nx:build',
+            options: {
+              clean: true,
+            },
+          },
+          lint: {
+            executor: '@nx/linter:eslint',
+            options: {
+              lintFilePatterns: [
+                `apps/${directory}${options.name}/**/*.ts`,
+                `apps/${directory}${options.name}/src/**/*.html`,
+              ],
+            },
+          },
+          test: {
+            executor: '@nx/jest:jest',
+            options: {
+              jestConfig: `apps/${directory}${options.name}/jest.config.js`,
+              tsConfig: `apps/${directory}${options.name}/tsconfig.spec.json`,
+              passWithNoTests: true,
+              setupFile: `apps/${directory}${options.name}/src/test-setup.ts`,
+            },
+          },
+        }
+        
       });
     },
     (tree: Tree) => {

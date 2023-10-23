@@ -33,6 +33,6 @@
     "@angular-devkit/core": "^16.0.0",
     "@angular-devkit/schematics": "^16.0.0",
     "@nstudio/xplat-utils": "*",
-    "xml2js": "~0.4.23"
+    "xml2js": "~0.6.2"
   }
 }

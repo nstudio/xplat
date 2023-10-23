@@ -1,7 +1,6 @@
 {
   "name": "nstudio/xplat",
   "version": "0.1",
-  "extends": ["@nx/workspace"],
   "schematics": {
     "ng-add": {
       "factory": "./src/schematics/ng-add",

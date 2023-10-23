@@ -4,6 +4,7 @@ import { IHelperSchema } from '@nstudio/xplat';
 import { setTest, jsonParse } from '@nstudio/xplat-utils';
 import { createXplatWithApps, getFileContent } from '@nstudio/xplat/testing';
 import { runSchematic } from '../../utils/testing';
+import { UnitTestTree } from '@angular-devkit/schematics/testing';
 setTest();
 
 xdescribe('helpers schematic', () => {
@@ -32,7 +33,7 @@ xdescribe('helpers schematic', () => {
     appTree = await runSchematic('app', appOptions, appTree);
 
     const cypressJsonPath = '/apps/web-foo-e2e/cypress.json';
-    let fileContent = getFileContent(appTree, cypressJsonPath);
+    let fileContent = getFileContent(appTree as UnitTestTree, cypressJsonPath);
     let cypressJson = jsonParse(fileContent);
     expect(cypressJson.supportFile).toBe(false);
 
@@ -98,7 +99,7 @@ xdescribe('helpers schematic', () => {
     appTree = await runSchematic('app', appOptions, appTree);
 
     const cypressJsonPath = '/apps/web-foo-e2e/cypress.json';
-    let fileContent = getFileContent(appTree, cypressJsonPath);
+    let fileContent = getFileContent(appTree as UnitTestTree, cypressJsonPath);
     let cypressJson = jsonParse(fileContent);
     expect(cypressJson.supportFile).toBe(false);
 

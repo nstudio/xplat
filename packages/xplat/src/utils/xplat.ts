@@ -22,6 +22,7 @@ import {
   IXplatSettings,
   convertNgTreeToDevKit,
 } from './general';
+import { libraryGenerator } from '@nx/js';
 import {
   getPrefix,
   updateJsonFile,
@@ -58,6 +59,7 @@ import {
 } from '@angular-devkit/schematics/tasks';
 import { xplatVersion, nxVersion } from './versions';
 import { output } from './output';
+import { convertNxGenerator } from '@nx/devkit';
 
 export const packageInnerDependencies = {
   '@nstudio/angular': ['@nx/angular'],
@@ -670,7 +672,7 @@ export namespace XplatHelpers {
           `libs/${directory ? directory + '/' : ''}${libName}/tsconfig.json`
         )
       ) {
-        // console.log(`externalSchematic('@nx/workspace', 'lib') ALREADY EXISTS for:`, `libs/${directory ? directory + '/' : ''}${libName}`)
+        // console.log(`convertNxGenerator(libraryGenerator)(libOptions) ALREADY EXISTS for:`, `libs/${directory ? directory + '/' : ''}${libName}`)
         return noop()(tree, context);
       }
 
@@ -687,7 +689,7 @@ export namespace XplatHelpers {
         libOptions.skipTsConfig = true;
       }
       // console.log(`CALLING externalSchematic('@nx/workspace', 'lib') for:`, `libs/${directory ? directory + '/' : ''}${libName}`)
-      return chain([externalSchematic('@nx/js', 'library', libOptions)]);
+      return convertNxGenerator(libraryGenerator)(libOptions);
     };
   }
 

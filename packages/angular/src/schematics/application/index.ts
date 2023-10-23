@@ -14,13 +14,15 @@ import {
   noop,
   ExecutionOptions,
 } from '@angular-devkit/schematics';
-import { formatFiles, updateWorkspace, getWorkspace } from '@nx/workspace';
+import { convertNxGenerator } from '@nx/devkit';
+import { applicationGenerator } from '@nx/angular/generators';
 import {
   stringUtils,
   updatePackageScripts,
   missingArgument,
   getDefaultTemplateOptions,
   XplatHelpers,
+  convertNgTreeToDevKit,
 } from '@nstudio/xplat';
 import {
   prerun,
@@ -82,21 +84,13 @@ export default function (options: Schema) {
         // ensure ends up in apps directory
         nrwlWebOptions.directory = `apps/${options.directory}`;
       }
-      let executionOptions: Partial<ExecutionOptions>;
       if (options.useXplat) {
         // when generating xplat architecture, ensure:
         // 1. sass is used
         nrwlWebOptions.style = 'scss';
-        // executionOptions = {
-        //   interactive: false
-        // };
       }
-      return externalSchematic(
-        '@nx/angular',
-        'app',
-        nrwlWebOptions,
-        executionOptions
-      )(tree, context);
+      // NOTE: This is what this needs to be:
+      return convertNxGenerator(applicationGenerator)(nrwlWebOptions as any)
     },
     (tree: Tree, context: SchematicContext) =>
       addHeadlessE2e(options)(tree, context),
@@ -110,46 +104,9 @@ export default function (options: Schema) {
       : noop(),
     // adjust app files
     options.useXplat
-      ? (tree: Tree, context: SchematicContext) => adjustAppFiles(options, tree)
+      ? (tree: Tree, context: SchematicContext) => adjustAppFiles(options, tree, context)
       : noop(),
-    <any>formatFiles({ skipFormat: options.skipFormat }),
   ]);
-}
-
-/**
- * Add a Protractor config with headless Chrome and create a
- * target configuration to use the config created.
- *
- * @param options
- */
-function addProtractorCiConfig(options: Schema) {
-  return (tree: Tree, context: SchematicContext) => {
-    const config = `
-const defaultConfig = require('./protractor.conf').config;
-defaultConfig.capabilities.chromeOptions = {
-  args: ['--headless']
-};
-
-exports.config = defaultConfig;
-    `;
-    const directory = options.directory ? `${options.directory}/` : '';
-    const e2eProjectName = `${options.name}-e2e`;
-    const confFile = 'protractor.headless.js';
-    tree.create(`/apps/${directory}${e2eProjectName}/${confFile}`, config);
-
-    return updateWorkspace((workspace) => {
-      if (workspace.projects.has(e2eProjectName)) {
-        const projectDef = workspace.projects.get(e2eProjectName);
-        const e2eDef = projectDef.targets.get('e2e');
-        if (e2eDef) {
-          e2eDef.configurations.ci = {
-            protractorConfig: `apps/${directory}${e2eProjectName}/${confFile}`,
-          };
-          projectDef.targets.set('e2e', e2eDef);
-        }
-      }
-    });
-  };
 }
 
 /**
@@ -158,13 +115,7 @@ exports.config = defaultConfig;
  */
 function addHeadlessE2e(options: Schema): Rule {
   const framework: 'protractor' | 'cypress' | 'none' = options.e2eTestRunner;
-  switch (framework) {
-    case 'protractor':
-      return <any>addProtractorCiConfig(options);
-
-    default:
-      return noop();
-  }
+  return noop();
 }
 
 function addAppFiles(options: Schema, extra: string = ''): Rule {
@@ -184,7 +135,7 @@ function addAppFiles(options: Schema, extra: string = ''): Rule {
   );
 }
 
-async function adjustAppFiles(options: Schema, tree: Tree): Promise<Rule> {
+async function adjustAppFiles(options: Schema, tree: Tree, context: SchematicContext): Promise<Rule> {
   const directory = options.directory ? `${options.directory}/` : '';
   tree.overwrite(
     `/apps/${directory}${options.name}/src/index.html`,
@@ -223,24 +174,8 @@ async function adjustAppFiles(options: Schema, tree: Tree): Promise<Rule> {
     `/apps/${directory}${options.name}/src/app/app.module.ts`,
     appModuleContent(options)
   );
-  // update cli config for shared web specific scss
 
-  const workspace = await getWorkspace(tree);
-  const project = workspace.projects.get(options.name);
-  if (project && project.targets) {
-    const buildOptions = project.targets.get('build').options;
-    if (buildOptions) {
-      project.targets.get('build').options.styles = [
-        `libs/xplat/${XplatHelpers.getXplatFoldername(
-          'web',
-          'angular'
-        )}/scss/src/_index.scss`,
-        `apps/${directory}${options.name}/src/styles.scss`,
-      ];
-    }
-  }
-
-  return updateWorkspace(workspace);
+  return noop();
 }
 
 function indexContent(name: string) {

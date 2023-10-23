@@ -3,7 +3,7 @@ import {
   Tree as NgTree,
   SchematicContext,
 } from '@angular-devkit/schematics';
-import { stringUtils as nxStringUtils } from '@nx/workspace';
+import * as nxStringUtils from '@nx/devkit/src/utils/string-utils';
 import {
   supportedPlatforms,
   PlatformTypes,
@@ -84,9 +84,7 @@ export function updatePackageForNgrx(
         : null;
 
       const dependencies = {};
-      const devDependencies = {
-        'jasmine-marbles': '~0.6.0',
-      };
+      const devDependencies = {};
 
       packageJson.dependencies = {
         ...(packageJson.dependencies || {}),
