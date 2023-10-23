@@ -44,7 +44,7 @@
     "@nx/angular": "^17.0.0",
     "@nx/devkit": "^17.0.0",
     "@nx/js": "^17.0.0",
-    "@nx/linter": "^17.0.0",
+    "@nx/eslint": "17.0.0",
     "@nstudio/focus": "*",
     "@nstudio/xplat-utils": "*"
   },

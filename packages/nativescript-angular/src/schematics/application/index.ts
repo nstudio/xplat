@@ -169,7 +169,7 @@ export default function (options: Schema) {
             },
           },
           lint: {
-            executor: '@nx/linter:eslint',
+            executor: '@nx/eslint:lint',
             options: {
               lintFilePatterns: [
                 `apps/${directory}${options.name}/**/*.ts`,
