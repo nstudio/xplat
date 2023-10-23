@@ -5,10 +5,9 @@ import {
   jsonParse,
   supportedFrameworks,
 } from '@nstudio/xplat-utils';
-import { createEmptyWorkspace } from '@nstudio/xplat/testing';
+import { createEmptyWorkspace, getFileContent } from '@nstudio/xplat/testing';
 import { runSchematic } from '../../utils/testing';
 import { XplatHelpers, stringUtils } from '../../utils';
-import { getFileContent } from '@nx/workspace/testing';
 import { Schema } from './schema';
 setTest();
 

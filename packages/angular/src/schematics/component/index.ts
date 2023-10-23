@@ -35,7 +35,6 @@ import {
   ITargetPlatforms,
   PlatformTypes,
 } from '@nstudio/xplat-utils';
-import { formatFiles } from '@nx/workspace';
 import { addToFeature, adjustBarrelIndex } from '@nstudio/angular';
 import { ComponentHelpers } from '../../utils/xplat';
 
@@ -132,6 +131,5 @@ export default function (options: XplatComponentHelpers.Schema) {
 
     // add platform chains
     (tree: Tree, context: SchematicContext) => chain(externalChains),
-    formatFiles({ skipFormat: options.skipFormat }),
   ]);
 }

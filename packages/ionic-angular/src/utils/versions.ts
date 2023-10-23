@@ -1,6 +1,6 @@
 export const xplatVersion = '*';
 export const ionicAngularVersion = '^6.0.0';
-export const capacitorVersion = '^3.0.0';
+export const capacitorVersion = '^5.5.0';
 export const capacitorPluginsVersion = '~1.0.2';
 export const ngDevKitArchitect = '^0.1500.0';
 export const ngDevKitBuild = '^16.0.0';

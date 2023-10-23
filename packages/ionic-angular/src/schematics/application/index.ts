@@ -14,13 +14,13 @@ import {
   noop,
   externalSchematic,
 } from '@angular-devkit/schematics';
-import { addInstallTask, formatFiles, updateWorkspace } from '@nx/workspace';
 import {
   stringUtils,
   updatePackageScripts,
   missingArgument,
   getDefaultTemplateOptions,
   XplatHelpers,
+  convertNgTreeToDevKit,
 } from '@nstudio/xplat';
 import {
   prerun,
@@ -34,6 +34,7 @@ import {
   capacitorVersion,
   capacitorPluginsVersion,
 } from '../../utils/versions';
+import { addProjectConfiguration, updateProjectConfiguration } from '@nx/devkit';
 
 export default function (options: ApplicationOptions) {
   if (!options.name) {
@@ -70,7 +71,6 @@ export default function (options: ApplicationOptions) {
       )(tree, context),
     // add root package dependencies
     XplatIonicAngularHelpers.updateRootDeps(options),
-    // addInstallTask(),
     // XplatHelpers.addPackageInstallTask(options),
     // add start/clean scripts
     (tree: Tree) => {
@@ -105,21 +105,15 @@ export default function (options: ApplicationOptions) {
     (tree: Tree, context: SchematicContext) => {
       const directory = options.directory ? `${options.directory}/` : '';
       const appFolder = `apps/${directory}${options.name}/`;
-      return updateWorkspace((workspace) => {
-        workspace.projects.add({
+      addProjectConfiguration(convertNgTreeToDevKit(tree, context), options.name, {
+
           name: options.name,
           root: appFolder,
           sourceRoot: `${appFolder}src`,
           projectType: 'application',
-          prefix: getPrefix(),
-          schematics: {
-            '@schematics/angular:component': {
-              styleext: 'scss',
-            },
-          },
           targets: {
             build: {
-              builder: '@angular-devkit/build-angular:browser',
+              executor: '@angular-devkit/build-angular:browser',
               options: {
                 outputPath: `${appFolder}www`,
                 index: `${appFolder}src/index.html`,
@@ -185,7 +179,7 @@ export default function (options: ApplicationOptions) {
               },
             },
             serve: {
-              builder: '@angular-devkit/build-angular:dev-server',
+              executor: '@angular-devkit/build-angular:dev-server',
               options: {
                 browserTarget: `${options.name}:build`,
               },
@@ -199,13 +193,13 @@ export default function (options: ApplicationOptions) {
               },
             },
             'extract-i18n': {
-              builder: '@angular-devkit/build-angular:extract-i18n',
+              executor: '@angular-devkit/build-angular:extract-i18n',
               options: {
                 browserTarget: `${options.name}:build`,
               },
             },
             test: {
-              builder: '@angular-devkit/build-angular:karma',
+              executor: '@angular-devkit/build-angular:karma',
               options: {
                 main: `${appFolder}src/test.ts`,
                 polyfills: `${appFolder}src/polyfills.ts`,
@@ -234,7 +228,7 @@ export default function (options: ApplicationOptions) {
               },
             },
             lint: {
-              builder: '@angular-eslint/builder:lint',
+              executor: '@angular-eslint/builder:lint',
               options: {
                 tsConfig: [
                   `${appFolder}tsconfig.app.json`,
@@ -261,7 +255,7 @@ export default function (options: ApplicationOptions) {
             //   }
             // },
             'ionic-cordova-build': {
-              builder: '@ionic/angular-toolkit:cordova-build',
+              executor: '@ionic/angular-toolkit:cordova-build',
               options: {
                 browserTarget: `${options.name}:build`,
               },
@@ -272,7 +266,7 @@ export default function (options: ApplicationOptions) {
               },
             },
             'ionic-cordova-serve': {
-              builder: '@ionic/angular-toolkit:cordova-serve',
+              executor: '@ionic/angular-toolkit:cordova-serve',
               options: {
                 cordovaBuildTarget: `${options.name}:ionic-cordova-build`,
                 devServerTarget: `${options.name}:serve`,
@@ -285,10 +279,9 @@ export default function (options: ApplicationOptions) {
               },
             },
           },
-        });
+        
       });
     },
-    <any>formatFiles({ skipFormat: options.skipFormat }),
   ]);
 }
 

@@ -1,7 +1,7 @@
 import { Tree } from '@angular-devkit/schematics';
 import { Schema } from './schema';
 import { getRootTsConfigPath, jsonParse } from '@nstudio/xplat-utils';
-import { createEmptyWorkspace, getFileContent } from '@nstudio/xplat/testing';
+import { createEmptyWorkspace } from '@nstudio/xplat/testing';
 import { runSchematic } from '../../utils/testing';
 
 describe('app', () => {
@@ -44,7 +44,7 @@ describe('app', () => {
     expect(tree.exists('/libs/xplat/web/scss/src/package.json')).toBeTruthy();
 
     // let checkPath = 'angular.json'
-    // let checkFile = getFileContent(tree, checkPath);
+    // let checkFile = tree.readContent(checkPath)
     // console.log(checkPath, checkFile)
   });
 
@@ -59,7 +59,7 @@ describe('app', () => {
       0
     );
     let checkPath = getRootTsConfigPath();
-    let checkFile = getFileContent(tree, checkPath);
+    let checkFile = tree.readContent(checkPath)
     // console.log('tsconfig.base:', checkFile);
     expect(files.indexOf(checkPath)).toBeGreaterThanOrEqual(0);
     expect(files.indexOf('/tsconfig.base.json')).toBeGreaterThanOrEqual(0);

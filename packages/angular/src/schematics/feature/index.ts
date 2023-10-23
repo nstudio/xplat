@@ -8,7 +8,7 @@ import {
   noop,
   externalSchematic,
 } from '@angular-devkit/schematics';
-import { formatFiles } from '@nx/workspace';
+import { formatFiles } from '@nx/devkit';
 import {
   unsupportedPlatformError,
   XplatFeatureHelpers,
@@ -84,6 +84,5 @@ export default function (options: XplatFeatureHelpers.Schema) {
           ),
     // external schematic handling
     (tree: Tree, context: SchematicContext) => chain(externalChains),
-    formatFiles({ skipFormat: options.skipFormat }),
   ]);
 }

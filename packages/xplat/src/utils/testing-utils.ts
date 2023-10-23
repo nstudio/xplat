@@ -4,10 +4,12 @@ import {
   externalSchematic,
   SchematicsException,
 } from '@angular-devkit/schematics';
+import { UnitTestTree } from '@angular-devkit/schematics/testing';
 import { FrameworkTypes } from '@nstudio/xplat-utils';
 
-export { getFileContent } from '@nx/workspace/testing';
-
+export function getFileContent(tree: UnitTestTree, filePath: string) {
+  return tree.readContent(filePath);
+}
 export function createEmptyWorkspace(
   tree: Tree,
   framework?: FrameworkTypes

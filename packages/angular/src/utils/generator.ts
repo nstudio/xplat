@@ -13,7 +13,7 @@ import {
   SchematicsException,
   externalSchematic,
 } from '@angular-devkit/schematics';
-import { formatFiles } from '@nx/workspace';
+import { formatFiles } from '@nx/devkit';
 import {
   generateOptionError,
   unsupportedPlatformError,
@@ -319,7 +319,6 @@ export function generate(type: IGenerateType, options) {
         ? // ensure ngrx dependencies are added to root package
           updatePackageForNgrx(tree)
         : noop()(tree, context),
-    formatFiles({ skipFormat: options.skipFormat }),
   ]);
 }
 

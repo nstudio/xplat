@@ -46,7 +46,6 @@ import {
   zonejsVersion,
   angularDevkitVersion,
   xplatVersion,
-  jestPresetAngular,
   typesJest,
 } from './versions';
 
@@ -260,7 +259,6 @@ export namespace XplatAngularHelpers {
         devDependencies: {
           ...devDependencies,
           '@types/jest': typesJest,
-          'jest-preset-angular': jestPresetAngular,
         },
       })(tree, context);
     };

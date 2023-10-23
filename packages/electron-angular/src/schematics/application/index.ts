@@ -13,7 +13,6 @@ import {
   noop,
   externalSchematic,
 } from '@angular-devkit/schematics';
-import { formatFiles, updateWorkspace } from '@nx/workspace';
 import {
   stringUtils,
   updatePackageScripts,
@@ -136,7 +135,6 @@ export default function (options: XplatElectrontHelpers.SchemaApp) {
     },
     options.useXplat ? (tree: Tree) => adjustAppFiles(options, tree) : noop(),
 
-    formatFiles({ skipFormat: options.skipFormat }),
     XplatElectrontHelpers.noteAppCommands(options),
   ]);
 }

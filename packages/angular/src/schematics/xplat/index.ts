@@ -10,7 +10,7 @@ import {
   template,
   SchematicContext,
 } from '@angular-devkit/schematics';
-import { addInstallTask, formatFiles } from '@nx/workspace';
+import { formatFiles } from '@nx/devkit';
 import {
   XplatHelpers,
   getDefaultTemplateOptions,
@@ -61,7 +61,6 @@ export default function (options: XplatHelpers.Schema) {
         }
       });
     },
-    formatFiles({ skipFormat: options.skipFormat }),
     // clean shared code script - don't believe need this anymore
     // (tree: Tree) => {
     //   const scripts = {};
