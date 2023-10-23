@@ -1,3 +1,12 @@
+# [17.0.0](https://github.com/nstudio/xplat/compare/16.8.0...17.0.0) (2023-10-23)
+
+
+### Features
+
+* Nx 17 support ([#326](https://github.com/nstudio/xplat/issues/326)) ([540c755](https://github.com/nstudio/xplat/commit/540c7558e687f98c821230f7b127ec24705e9603))
+
+
+
 # [16.8.0](https://github.com/nstudio/xplat/compare/16.7.0...16.8.0) (2023-10-14)
 
 
