@@ -1,5 +1,4 @@
-import { insertChange } from '@nx/js';
-import { findNodes } from 'nx/src/utils/typescript';
+import { insertChange, findNodes } from '@nx/js';
 import * as ts from 'typescript';
 import { Tree } from '@nx/devkit';
 import { Tree as NgTree } from '@angular-devkit/schematics';
