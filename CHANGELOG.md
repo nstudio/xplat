@@ -1,3 +1,12 @@
+# [19.0.0](https://github.com/nstudio/xplat/compare/17.0.1...19.0.0) (2024-05-27)
+
+
+### Features
+
+* Nx 19 and Angular 18 support ([#328](https://github.com/nstudio/xplat/issues/328)) ([3ce3191](https://github.com/nstudio/xplat/commit/3ce3191852bdff05345d4e754fe902304b852bf8))
+
+
+
 ## [17.0.1](https://github.com/nstudio/xplat/compare/17.0.0...17.0.1) (2023-10-23)
 
 
