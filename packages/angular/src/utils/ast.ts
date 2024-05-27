@@ -1,5 +1,5 @@
 import { ensureTypescript } from '@nx/js/src/utils/typescript/ensure-typescript';
-import { findNodes } from 'nx/src/utils/typescript';
+import { findNodes } from '@nx/js';
 import * as ts from 'typescript';
 import {
   getImport,

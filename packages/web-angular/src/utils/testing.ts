@@ -8,7 +8,7 @@ const testRunner = new SchematicTestRunner(
 );
 
 export function runSchematic(schematicName: string, options: any, tree: Tree) {
-  return testRunner.runSchematicAsync(schematicName, options, tree).toPromise();
+  return testRunner.runSchematic(schematicName, options, tree);
 }
 
 export function callRule(rule: Rule, tree: Tree) {
