@@ -65,7 +65,6 @@ export default function (options: Schema) {
         ...options,
         standalone: false,
         skipInstall: true,
-        projectNameAndRootFormat: 'derived',
       };
       // remove non schema validated properties
       delete nrwlWebOptions.groupByName;

@@ -14,5 +14,5 @@ export const ngToolsWebpack = '^18.0.0';
 export const ngxTranslateVersion = '~15.0.0';
 export const rxjsVersion = '^7.8.0';
 export const zonejsVersion = '~0.14.0';
-export const angularEsLintVersion = '^18.0.0';
+export const angularEsLintVersion = '17.5.1';
 export const esLintVersion = '8.57.0';
