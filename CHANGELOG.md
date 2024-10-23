@@ -1,3 +1,12 @@
+# [12.0.0](https://github.com/nstudio/xplat/compare/19.0.0...12.0.0) (2024-10-23)
+
+
+### Features
+
+* Nx 20+ ([1fbd971](https://github.com/nstudio/xplat/commit/1fbd971cdebf99b9b13b71ed48a70cc75ffd7916))
+
+
+
 # [19.0.0](https://github.com/nstudio/xplat/compare/17.0.1...19.0.0) (2024-05-27)
 
 
