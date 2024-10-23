@@ -41,10 +41,10 @@
     "postinstall": "node src/utils/postinstall.js"
   },
   "dependencies": {
-    "@nx/angular": "^19.0.0",
-    "@nx/devkit": "^19.0.0",
-    "@nx/js": "^19.0.0",
-    "@nx/eslint": "19.0.0",
+    "@nx/angular": "^20.0.0",
+    "@nx/devkit": "^20.0.0",
+    "@nx/js": "^20.0.0",
+    "@nx/eslint": "^20.0.0",
     "@nstudio/focus": "*",
     "@nstudio/xplat-utils": "*"
   },
