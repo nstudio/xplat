@@ -1,11 +1,12 @@
-# [12.0.0](https://github.com/nstudio/xplat/compare/19.0.0...12.0.0) (2024-10-23)
+## [20.0.2](https://github.com/nstudio/xplat/compare/20.0.0...20.0.2) (2024-11-02)
 
+* Update transient dependencies
+  
+## [20.0.0](https://github.com/nstudio/xplat/compare/19.0.0...20.0.0) (2024-10-22)
 
 ### Features
 
 * Nx 20+ ([1fbd971](https://github.com/nstudio/xplat/commit/1fbd971cdebf99b9b13b71ed48a70cc75ffd7916))
-
-
 
 # [19.0.0](https://github.com/nstudio/xplat/compare/17.0.1...19.0.0) (2024-05-27)
 

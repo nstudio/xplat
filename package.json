@@ -1,6 +1,6 @@
 {
   "name": "@nstudio/xplat-source",
-  "version": "12.0.0",
+  "version": "20.0.2",
   "description": "Cross-platform (xplat) tools for Nx workspaces.",
   "homepage": "https://nstudio.io/xplat",
   "private": true,
