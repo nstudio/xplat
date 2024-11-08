@@ -1,3 +1,12 @@
+## [20.0.3](https://github.com/nstudio/xplat/compare/20.0.2...20.0.3) (2024-11-08)
+
+
+### Bug Fixes
+
+* ensure using @nativescript/nx v20 ([6c5455f](https://github.com/nstudio/xplat/commit/6c5455fcb7c9f4fd85ca5f4f3d279a60fa26ce1b))
+
+
+
 ## [20.0.2](https://github.com/nstudio/xplat/compare/20.0.0...20.0.2) (2024-11-02)
 
 * Update transient dependencies
