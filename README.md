@@ -63,8 +63,6 @@ You are now ready to create apps:
 npx nx g @nstudio/xplat:app
 ```
 
-**Potential schematics error:** If you encounter a `SchematicNameCollisionException` issue, you can see this gist to apply a patch: https://gist.github.com/NathanWalker/a8554c1e0bba700affeb0c4672d26b0e
-
 ## App generation examples
 
 The additional app generators can be used as follows:
@@ -158,14 +156,6 @@ B. **Android**
 ```
 npx nx run nativescript-mobile:android
 ```
-
-## Documentation
-
-- [Getting Started](https://nstudio.io/xplat/getting-started)
-- [Fundamentals](https://nstudio.io/xplat/fundamentals)
-- [API Documentation](https://nstudio.io/xplat/api)
-- [Design Doc](https://t.co/z2lRxOBFAg)
-- [Wiki](https://github.com/nstudio/xplat/wiki/FAQ)
 
 ## Talks
 
