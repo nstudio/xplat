@@ -21,8 +21,10 @@
 
 ## Quickstart
 
+Note: Nx 19.x.x compatible.
+
 ```sh
-npx create-nx-workspace@latest
+npx create-nx-workspace@19
 
 ✔ Where would you like to create your workspace? · {your-workspace-name}
 
